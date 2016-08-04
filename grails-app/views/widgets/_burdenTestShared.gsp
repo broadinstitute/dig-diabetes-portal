@@ -20,6 +20,9 @@ div.corvariateDisplay [class*="span"] {  /* TWBS v2 */
 .metana {
     text-align: center;
 }
+input[type=checkbox][disabled] + label {
+    color: #ccc;
+}
 .stratumName{
     font-weight: bold;
 }
@@ -81,12 +84,13 @@ ul.strataResults {
     border-right: solid 1px black;
     border-radius: 4px 4px 0px 0px;
 }
+
 .stratsTabs li.active {
     border-radius: 4px 4px 0px 0px;
     margin-right: 5px;
-    border-top: solid 1px black;
-    border-left: solid 1px black;
-    border-right: solid 1px black;
+    /*border-top: solid 1px black;*/
+    /*border-left: solid 1px black;*/
+    /*border-right: solid 1px black;*/
 }
 .stratsTabs a.filterCohort.ALL {
     margin-bottom: -3px;
@@ -469,6 +473,28 @@ var storeFilterData = function (data){
         };
 
 
+        var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator) {
+            var sampleMetadata = getStoredSampleMetadata();
+            var phenotypeFilterValue = $(phenotypeFilter).val();
+            var stratifyDesignationValue = $(stratifyDesignation).val();
+            var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
+            var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames;})
+            if (typeof filterDetails !== 'undefined'){
+                if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
+                    $(caseControlDesignator).prop('checked', false);
+                    $(caseControlDesignator).prop('disabled', true);
+                } else {
+                    $(caseControlDesignator).prop('disabled', false);
+                }
+            }
+            populateSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters);
+            displayTestResultsSection(false);
+        }
+
+
+
+
+
         /***
         *
         * If the user must choose between different data sets then use this call instead of preloadInteractiveAnalysisData
@@ -476,48 +502,48 @@ var storeFilterData = function (data){
         * @param dropdownSel
         * @param dropDownSelector
         */
-        var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {
-           $('.caatSpinner').show();
-            var domSelector = $(dropdownSel);
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",
-                        data: {dataset:domSelector.val()},
-                        async: true,
-                        success: function (data) {
-                    storeSampleMetadata(data);
-                    var phenotypeDropdown = $(dropDownSelector);
-                    phenotypeDropdown.empty();
-                    if ( ( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.phenotypes !== 'undefined' ) &&
-                            (  data.phenotypes !==  null ) ) {
-                        var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
-                        var weHaveADefaultFirstElement = false;
-                        if ((t2d) &&
-                            (typeof t2d !== 'undefined') &&
-                            (typeof t2d.trans !== 'undefined')){
-                             weHaveADefaultFirstElement = true;
-                        }
-                        if (weHaveADefaultFirstElement){
-                           phenotypeDropdown.append( new Option(t2d.trans, t2d.name));
-                        }
-                        _.forEach(data.phenotypes,function(d){
-                           if (d.name !== 't2d'){
-                              phenotypeDropdown.append( new Option(d.trans, d.name));
-                           }
-                        });
-                    }
-                     populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val(),data.filters);
-                     displayTestResultsSection(false);
-                     $('.caatSpinner').hide();                        },
-                        error: function (jqXHR, exception) {
-                            loading.hide();
-                            core.errorReporter(jqXHR, exception);
-                        }
-                });
-        };
+        %{--var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {--}%
+           %{--$('.caatSpinner').show();--}%
+            %{--var domSelector = $(dropdownSel);--}%
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",--}%
+                        %{--data: {dataset:domSelector.val()},--}%
+                        %{--async: true,--}%
+                        %{--success: function (data) {--}%
+                    %{--storeSampleMetadata(data);--}%
+                    %{--var phenotypeDropdown = $(dropDownSelector);--}%
+                    %{--phenotypeDropdown.empty();--}%
+                    %{--if ( ( data !==  null ) &&--}%
+                            %{--( typeof data !== 'undefined') &&--}%
+                            %{--( typeof data.phenotypes !== 'undefined' ) &&--}%
+                            %{--(  data.phenotypes !==  null ) ) {--}%
+                        %{--var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first--}%
+                        %{--var weHaveADefaultFirstElement = false;--}%
+                        %{--if ((t2d) &&--}%
+                            %{--(typeof t2d !== 'undefined') &&--}%
+                            %{--(typeof t2d.trans !== 'undefined')){--}%
+                             %{--weHaveADefaultFirstElement = true;--}%
+                        %{--}--}%
+                        %{--if (weHaveADefaultFirstElement){--}%
+                           %{--phenotypeDropdown.append( new Option(t2d.trans, t2d.name));--}%
+                        %{--}--}%
+                        %{--_.forEach(data.phenotypes,function(d){--}%
+                           %{--if (d.name !== 't2d'){--}%
+                              %{--phenotypeDropdown.append( new Option(d.trans, d.name));--}%
+                           %{--}--}%
+                        %{--});--}%
+                    %{--}--}%
+                     %{--populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val(),data.filters);--}%
+                     %{--displayTestResultsSection(false);--}%
+                     %{--$('.caatSpinner').hide();                        },--}%
+                        %{--error: function (jqXHR, exception) {--}%
+                            %{--loading.hide();--}%
+                            %{--core.errorReporter(jqXHR, exception);--}%
+                        %{--}--}%
+                %{--});--}%
+        %{--};--}%
 
 
 
@@ -671,7 +697,10 @@ var storeFilterData = function (data){
                     _.forEach(stratificationProperty,function(stratumHolder){
                        totalSamples += stratumHolder.samples;
                     });
-                    stratificationProperty.splice(0,0,{name:'ALL',val:'ALL',samples:totalSamples, category:convertPhenotypeNames(strataProperty)});
+                    var allPropertyIndex = _.findIndex(stratificationProperty, function(o) { return o.name== 'ALL'; });
+                    if (allPropertyIndex === -1) { // we need an artificial strata to hold everything. However, don't insert it more than once!
+                        stratificationProperty.splice(0,0,{name:'ALL',val:'ALL',samples:totalSamples, category:convertPhenotypeNames(strataProperty)});
+                    }
                 } else {
                      stratificationProperty = [{name:stratumName, val:stratumName, category:convertPhenotypeNames(phenotype) }];
                 }
@@ -1673,7 +1702,7 @@ var storeFilterData = function (data){
                     var multiParm = filterRowDom.find('.multiSelect');
                     if (filterCheck.is(':checked')&&(filterName.indexOf("{{")==-1)){
                         var allSelected = [];
-                        _.forEach($('#multi_'+filterName+' option:selected'),function(d){
+                        _.forEach($('#multi_'+filterName+'_'+strataCategory+' option:selected'),function(d){
                             allSelected.push($(d).val());
                         });
                         var  dataSetMap = {"name":filterName,
@@ -1727,7 +1756,7 @@ var storeFilterData = function (data){
             _.forEach(sampleMetadata.filters,function(d,i){
                 if (d.type !== 'FLOAT') {
                     if (optionsPerFilter[d.name]!==undefined){
-                       var dropdownId = '#multi_'+stratum+"_"+d.name;
+                       var dropdownId = '#multi_'+stratum+"_"+d.name+"_strata1";
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
                            $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
@@ -1974,7 +2003,8 @@ var storeFilterData = function (data){
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
-            retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
+         //   retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
+            refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
             carryCovChanges:carryCovChanges,
             populateSampleAndCovariateSection:populateSampleAndCovariateSection,
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
@@ -2134,8 +2164,9 @@ $( document ).ready( function (){
                 <div class="row" style="display:none">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');"
-                                onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">
+                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering');"
+                                onclick="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
+                                %{--onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">--}%
                         </select>
                     </div>
 
@@ -2148,7 +2179,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata ($('#datasetFilter'), '#phenotypeFilter', $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
                         </select>
                     </div>
                 </div>
@@ -2162,7 +2193,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), '#phenotypeFilter', $('#stratifyDesignation').val() );">
+                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
                                     <option value="none">none</option>
                                     <option value="origin">ancestry</option>
                         </select>
@@ -2173,12 +2204,12 @@ $( document ).ready( function (){
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        <div class="checkbox" style="margin:0">
-                            <label>
+                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:0 0 0 20px">
                                 <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
                                        value="caseControlFiltering"
-                                        onchange="mpgSoftware.burdenTestShared.retrieveSampleMetadata  ($('#datasetFilter'), '#phenotypeFilter', $('#stratifyDesignation').val() );"/>Filter cases and controls separately
-                            </label>
+                                        onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
+                                        <label style="padding-left:0">Filter cases and controls separately</label>
+                                </input>
                         </div>
                     </div>
                 </div>
@@ -2393,7 +2424,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <script id="filterCategoricalTemplate" type="x-tmpl-mustache">
                                 {{ #categoricalFilters }}
-                                <div class="row categoricalFilter considerFilter {{stratum}}" id="filter_{{stratum}}_{{name}}">
+                                <div class="row categoricalFilter considerFilter {{stratum}} {{phenoLevelName}}" id="filter_{{stratum}}_{{name}}">
                                    %{-- <div class="col-sm-1">--}%
                                         <input class="utilize" id="use_{{stratum}}_{{name}}" type="checkbox" name="use_{{stratum}}_{{name}}"
                                                value="{{stratum}}_{{name}}" checked  style="display: none"/></td>
