@@ -168,7 +168,7 @@ button.burden-test-btn {
 }
 
 div.burden-test-result {
-    font-size: 18px;
+    font-size: 14px;
     padding: 0 0 5px 0;
     display: none;
 }
@@ -1134,32 +1134,33 @@ var storeFilterData = function (data){
                     domElement.append('<div class="orValue_'+stratum+'"></div>');
                     domElement.append('<div class="ciValue_'+stratum+'"></div>');
                 };
-          var printFullResultsSection = function(stats,pValue,beta,oddsRatio,currentStratum,additionalText){
-                var isDichotomousTrait = false;
-                if ((typeof stats.numCases === 'undefined') ||
-                    (typeof stats.numControls === 'undefined') ||
-                    (typeof stats.numCaseCarriers === 'undefined') ||
-                    (typeof stats.numControlCarriers === 'undefined')) {
-                   isDichotomousTrait = false;
-                } else {
-                   isDichotomousTrait = true;
-                }
+         // var printFullResultsSection = function(stats,pValue,beta,oddsRatio,currentStratum,additionalText){
+          var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,additionalText){
+//                var isDichotomousTrait = false;
+//                if ((typeof stats.numCases === 'undefined') ||
+//                    (typeof stats.numControls === 'undefined') ||
+//                    (typeof stats.numCaseCarriers === 'undefined') ||
+//                    (typeof stats.numControlCarriers === 'undefined')) {
+//                   isDichotomousTrait = false;
+//                } else {
+//                   isDichotomousTrait = true;
+//                }
 
 
                 var ciDisplay = '';
-                if (!((typeof stats.ciLower === 'undefined') ||
-                    (typeof stats.ciUpper === 'undefined') ||
-                    (typeof stats.ciLevel === 'undefined'))) {
-                   var ciUpper = stats.ciUpper;
-                   var ciLower = stats.ciLower;
-                   var ciLevel = stats.ciLevel;
+                if (!((typeof ciLower === 'undefined') ||
+                    (typeof ciUpper === 'undefined') ||
+                    (typeof ciLevel === 'undefined'))) {
+                   var ciUpper = ciUpper;
+                   var ciLower = ciLower;
+                   var ciLevel = ciLevel;
 
                    if (isDichotomousTrait) {
-                        ciLower = UTILS.realNumberFormatter(Math.exp(stats.ciLower));
-                        ciUpper = UTILS.realNumberFormatter(Math.exp(stats.ciUpper));
+                        ciLower = UTILS.realNumberFormatter(Math.exp(ciLower));
+                        ciUpper = UTILS.realNumberFormatter(Math.exp(ciUpper));
                    } else {
-                        ciLower = UTILS.realNumberFormatter(stats.ciLower);
-                        ciUpper = UTILS.realNumberFormatter(stats.ciUpper);
+                        ciLower = UTILS.realNumberFormatter(ciLower);
+                        ciUpper = UTILS.realNumberFormatter(ciUpper);
                    }
                    ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
                 }
@@ -1236,6 +1237,9 @@ var storeFilterData = function (data){
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
+                            var ciLevel = data.stats.ciLevel;
+                            var ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
+                            var ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
                             var isCategorical = isCategoricalF (data.stats);
 
                             var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
@@ -1246,7 +1250,7 @@ var storeFilterData = function (data){
                                 $('.strataResults').append('<div class="'+currentStratum+' strataHolder"></div>');
                                 var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                                 addStrataSection(strataDomIdentifierClass,currentStratum);
-                                printFullResultsSection(data.stats,pValue,beta,oddsRatio,currentStratum,'');
+                                printFullResultsSection(data.stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isCategorical,currentStratum,'');
                             } else {
 
                                     $('.strataResults').append('<div class="strataJar">'+
@@ -1254,6 +1258,9 @@ var storeFilterData = function (data){
                                                                 '<span class="hider pv '+currentStratum+'">'+pValue+'</span>'+
                                                                 '<span class="hider be '+currentStratum+'">'+beta+'</span>'+
                                                                 '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>'+
+                                                                '<span class="hider ciLevel '+currentStratum+'" >'+ciLevel+'</span>'+
+                                                                '<span class="hider ciLower '+currentStratum+'" >'+ciLower+'</span>'+
+                                                                '<span class="hider ciUpper '+currentStratum+'" >'+ciUpper+'</span>'+
                                                                 '<span class="hider ca '+currentStratum+'" >'+(isCategorical?"1":"0")+'</span>'+
                                                                 '</div>');
 
@@ -1313,12 +1320,17 @@ var storeFilterData = function (data){
                    'be': $(eachStratum).find('.be').text(),
                    'st': $(eachStratum).find('.st').text(),
                    'ca': $(eachStratum).find('.ca').text(),
+                   'ciLevel': $(eachStratum).find('.ciLevel').text(),
+                   'ciLower': $(eachStratum).find('.ciLower').text(),
+                   'ciUpper': $(eachStratum).find('.ciUpper').text(),
                    'stratum': $(eachStratum).find('.stratum').text()});
                });
                // create JSON we can send to the server
                var jsonHolder = [];
                 _.forEach(allElements, function(stratum){
-                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+'}');
+                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+
+                    ',"ciLevel":'+stratum.ciLevel+',"ciLower":'+stratum.ciLower+',"ciUpper":'+stratum.ciUpper+
+                    '}');
                 });
                 var json = '['+jsonHolder.join(',')+']';
                 var sortedElements = allElements.sort(function(a, b) {
@@ -1340,14 +1352,18 @@ var storeFilterData = function (data){
                     var beta = UTILS.realNumberFormatter(el.be);
                     var stdErr = UTILS.realNumberFormatter(el.st);
                     var pValue = UTILS.realNumberFormatter(el.pv);
+                    var ciLevel = UTILS.realNumberFormatter(el.ciLevel);
+                    var ciLower = UTILS.realNumberFormatter(el.ciLower);
+                    var ciUpper = UTILS.realNumberFormatter(el.ciUpper);
                     var isCategorical = el.ca;
                      $('.strataResults ul').append('<li><div class="'+currentStratum+' strataHolder"></div></li>');
                     var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                     addStrataSection(strataDomIdentifierClass,currentStratum);
                     var isDichotomousTrait=(isCategorical==='1');
-                    fillInResultsSection(currentStratum,'pValue = '+ pValue,
-                    (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
-                    'std. err. = '+stdErr, isDichotomousTrait,currentStratum);
+//                    fillInResultsSection(currentStratum,'pValue = '+ pValue,
+//                    (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
+//                    'std. err. = '+stdErr, isDichotomousTrait,currentStratum);
+                    printFullResultsSection('',pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,currentStratum);
                     //printFullResultsSection(data.stats,pValue,beta,oddsRatio,currentStratum,'');
                 });
 
@@ -1454,20 +1470,6 @@ var storeFilterData = function (data){
                                                         strataPropertyName: strataPropertyName,
                                                         stratumName:stratumName
                                     });
-//                                if (phenoPropertySpecifier!==translatedPhenotypeName){
-//                                    nonPhenotypeTabs.push({
-//                                                        phenoPropertyName:phenoPropertyName,
-//                                                        phenoInstanceSpecifier:phenoInstanceSpecifier,
-//                                                        strataPropertyName: strataPropertyName,
-//                                                        stratumName:stratumName
-//                                    });
-//                                } else {
-//                                    phenotypeTabs.push({
-//                                                        phenoPropertyName:phenoPropertyName,
-//                                                        phenoInstanceSpecifier:phenoInstanceSpecifier,
-//                                                        stratumName:stratumName
-//                                    });
-//                                 }
                            }
 
                         }
@@ -2087,7 +2089,7 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-10 col-xs-12">
+        <div class="col-sm-11 col-xs-12">
             <div class="row burden-test-specific-results burden-test-result">
 
 
@@ -2124,7 +2126,7 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-2 col-xs-12 vcenter burden-test-btn-wrapper">
+        <div class="col-sm-1 col-xs-12 vcenter burden-test-btn-wrapper">
             {{{singleRunButtonDisplay}}}
         </div>
 
