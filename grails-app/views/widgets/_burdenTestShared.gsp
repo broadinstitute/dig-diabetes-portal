@@ -341,6 +341,22 @@ var storeFilterData = function (data){
        convertedName = 'CASE';
     } else if (untranslatedPhenotype === 'No'){
        convertedName = 'CONTROL';
+    }  else if (untranslatedPhenotype === 'CHOL'){
+       convertedName = 'CHOL_ANAL';
+    } else if (untranslatedPhenotype === 'DBP'){
+       convertedName = 'DBP_ANAL';
+    } else if (untranslatedPhenotype === 'SBP'){
+       convertedName = 'SBP_ANAL';
+    } else if (untranslatedPhenotype === 'FAST_GLU'){
+       convertedName = 'FAST_GLU_ANAL';
+    } else if (untranslatedPhenotype === 'FAST_INS'){
+       convertedName = 'FAST_INS_ANAL';
+    } else if (untranslatedPhenotype === 'HDL'){
+       convertedName = 'HDL_ANAL';
+    } else if (untranslatedPhenotype === 'LDL'){
+       convertedName = 'LDL_ANAL';
+    } else if (untranslatedPhenotype === 'TG'){
+       convertedName = 'TG_ANAL';
     }
     return convertedName;
  };
@@ -492,87 +508,72 @@ var storeFilterData = function (data){
         }
 
 
-
-
-
         /***
-        *
-        * If the user must choose between different data sets then use this call instead of preloadInteractiveAnalysisData
-        *
-        * @param dropdownSel
-        * @param dropDownSelector
+        *   We need to clone filter definitions so that we can change them and then pass them to mustache
+        * @param incomingDefinition
+        * @returns {{name: *, trans: (*|string), type: *}}
         */
-        %{--var retrieveSampleMetadata = function (dropdownSel, dropDownSelector) {--}%
-           %{--$('.caatSpinner').show();--}%
-            %{--var domSelector = $(dropdownSel);--}%
-            %{--$.ajax({--}%
-                %{--cache: false,--}%
-                %{--type: "post",--}%
-                %{--url: "${createLink(controller:'VariantInfo', action:'sampleMetadataAjax')}",--}%
-                        %{--data: {dataset:domSelector.val()},--}%
-                        %{--async: true,--}%
-                        %{--success: function (data) {--}%
-                    %{--storeSampleMetadata(data);--}%
-                    %{--var phenotypeDropdown = $(dropDownSelector);--}%
-                    %{--phenotypeDropdown.empty();--}%
-                    %{--if ( ( data !==  null ) &&--}%
-                            %{--( typeof data !== 'undefined') &&--}%
-                            %{--( typeof data.phenotypes !== 'undefined' ) &&--}%
-                            %{--(  data.phenotypes !==  null ) ) {--}%
-                        %{--var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first--}%
-                        %{--var weHaveADefaultFirstElement = false;--}%
-                        %{--if ((t2d) &&--}%
-                            %{--(typeof t2d !== 'undefined') &&--}%
-                            %{--(typeof t2d.trans !== 'undefined')){--}%
-                             %{--weHaveADefaultFirstElement = true;--}%
-                        %{--}--}%
-                        %{--if (weHaveADefaultFirstElement){--}%
-                           %{--phenotypeDropdown.append( new Option(t2d.trans, t2d.name));--}%
-                        %{--}--}%
-                        %{--_.forEach(data.phenotypes,function(d){--}%
-                           %{--if (d.name !== 't2d'){--}%
-                              %{--phenotypeDropdown.append( new Option(d.trans, d.name));--}%
-                           %{--}--}%
-                        %{--});--}%
-                    %{--}--}%
-                     %{--populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val(),data.filters);--}%
-                     %{--displayTestResultsSection(false);--}%
-                     %{--$('.caatSpinner').hide();                        },--}%
-                        %{--error: function (jqXHR, exception) {--}%
-                            %{--loading.hide();--}%
-                            %{--core.errorReporter(jqXHR, exception);--}%
-                        %{--}--}%
-                %{--});--}%
-        %{--};--}%
+        var filterDefinition = function (incomingDefinition){
+            var returnValue = { name:incomingDefinition.name,
+                                trans:incomingDefinition.trans,
+                                type:incomingDefinition.type };
+            if(typeof incomingDefinition.levels !== 'undefined'){
+                returnValue['levels'] = [];
+                _.forEach(incomingDefinition.levels, function(level){
+                    returnValue['levels'].push({name:level.name, samples:level.samples});
+                });
+            }
+            return returnValue;
+        }
 
 
 
-       var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
+
+
+        var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
             var returnValue = {};
             if ( ( typeof dataFilters !== 'undefined' ) &&
                          (  dataFilters !==  null ) ) {
                 var categoricalFilters = [];
                 var realValuedFilters = [];
-                var phenotypeUppercase  =   phenotype.toUpperCase();
                 _.forEach(dataFilters,function(d,i){
-                  if ((d.name!==phenotype)&&
-                      (d.name.substr(0,phenotype.length)!==phenotypeUppercase)){
-                      if (d.type === 'FLOAT') {
-                         realValuedFilters.push(d);
-                      } else {
-                         if ((optionsPerFilter[d.name]!==undefined)&&
-                         (optionsPerFilter[d.name].length<3)&&
-                             (d.name!==phenotype)){
-                                 categoricalFilters.push(d);
-                         }
-                      }
-
-                  }
+                    var clonedFilter = new filterDefinition(d);
+                    if (clonedFilter.type === 'FLOAT') {
+                        if (convertPhenotypeNames(clonedFilter.name)===phenotype) {
+                            clonedFilter['bold'] = "font-weight: bold";
+                        }
+                        realValuedFilters.push(clonedFilter);
+                    } else {
+                        if (undoConversionPhenotypeNames(clonedFilter.name)!==phenotype) { // categorical traits are displayed only if they are not the modeled phenotype
+                            if ((optionsPerFilter[clonedFilter.name]!==undefined)&&
+                                (optionsPerFilter[clonedFilter.name].length<3)&&
+                                (clonedFilter.name!==phenotype)){
+                                    categoricalFilters.push(clonedFilter);
+                            }
+                        }
+                    }
 
                 });
+                // put selected filter first.  Shouldn't there be a lodash function for this?
+                var sortedRealValuedFilters = [];
+                var phenoIndex = -1;
+                for( var i = 0 ; i < realValuedFilters.length ; i++ ){
+                    if (convertPhenotypeNames(realValuedFilters[i].name) ===  phenotype) {
+                        phenoIndex = i;
+                        break;
+                    }
+                }
+                if (phenoIndex>-1){
+                    sortedRealValuedFilters.push(realValuedFilters[phenoIndex]);
+                }
+                for( var i = 0 ; i < realValuedFilters.length ; i++ ){
+                    if(i!==phenoIndex){
+                        sortedRealValuedFilters.push(realValuedFilters[i]);
+                    }
+                }
                 returnValue = {
                     categoricalFilters: categoricalFilters,
-                    realValuedFilters: realValuedFilters,
+                    realValuedFilters: sortedRealValuedFilters,
                     stratum: stratumName
                 };
             }
@@ -2005,7 +2006,6 @@ var storeFilterData = function (data){
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
             getStoredSampleData:getStoredSampleData, // retrieve stored sample data
-         //   retrieveSampleMetadata:retrieveSampleMetadata, // if user changes data set reset phenotype (and potentially reload samples)
             refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
             carryCovChanges:carryCovChanges,
             populateSampleAndCovariateSection:populateSampleAndCovariateSection,
@@ -2379,8 +2379,8 @@ the individual filters themselves. That work is handled later as part of a loop-
 
             <script id="allFiltersTemplate"  type="x-tmpl-mustache">
                             {{ #filterDetails }}
-                                {{>filterCategoricalTemplate}}
                                 {{>filterFloatTemplate}}
+                                {{>filterCategoricalTemplate}}
                             {{/filterDetails }}
             </script>
 
@@ -2394,7 +2394,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     %{--</div>--}%
 
                                     <div class="col-sm-6">
-                                        <span>{{trans}}</span>
+                                        <span style="{{bold}}">{{trans}}</span>
                                     </div>
 
                                     <div class="col-sm-2">
