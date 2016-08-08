@@ -1896,6 +1896,27 @@ var storeFilterData = function (data){
 
 
 
+        var parseEncodedFilterStrataName = function (encodedFilterStrataName){
+            var stringPrefix = "inp_";
+            var stringPostfix = "_strata1";
+            var returnVals = [];
+            if (encodedFilterStrataName.indexOf(stringPrefix)==0){
+                var  encodedFilterName = encodedFilterStrataName.substr(stringPrefix.length);
+                var nextDelim = encodedFilterName.indexOf("_");
+                if ((nextDelim>-1)&&
+                    (nextDelim<(encodedFilterName.length-stringPostfix.length))){
+                    var strataName = encodedFilterName.substr(0,nextDelim);
+                    var propertyName = encodedFilterName.substr(nextDelim+1,encodedFilterName.length-stringPostfix.length-nextDelim-1);
+                    returnVals.push(stringPrefix.substr(0,stringPrefix.length-1));
+                    returnVals.push(strataName);
+                    returnVals.push(propertyName);
+                 }
+             }
+            return returnVals;
+        }
+
+
+
 
         /***
         * Make sure every distribution plot is hidden, then display the one we want
@@ -1923,7 +1944,7 @@ var storeFilterData = function (data){
                _.forEach(realValueFilters,function(oneFilter){
                     var filterDom = $(oneFilter);
                     var id = filterDom.attr('id');
-                    var idKeys = id.split('_');
+                    var idKeys = parseEncodedFilterStrataName(id);
                     if (idKeys.length > 2){
                         if ((idKeys[0]==='inp') &&
                             (idKeys[1]!=='ALL')  &&
