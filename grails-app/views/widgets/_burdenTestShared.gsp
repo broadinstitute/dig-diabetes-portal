@@ -1896,9 +1896,10 @@ var storeFilterData = function (data){
 
 
 
-        var parseEncodedFilterStrataName = function (encodedFilterStrataName){
+        var parseEncodedFilterStrataName = function (encodedFilterStrataName,modeledPhenotype){
             var stringPrefix = "inp_";
-            var stringPostfix = "_strata1";
+            //var stringPostfix = "_strata1";
+            var stringPostfix = "_"+modeledPhenotype;
             var returnVals = [];
             if (encodedFilterStrataName.indexOf(stringPrefix)==0){
                 var  encodedFilterName = encodedFilterStrataName.substr(stringPrefix.length);
@@ -1913,10 +1914,78 @@ var storeFilterData = function (data){
                  }
              }
             return returnVals;
-        }
+        };
+
+        var conditionallyAppendModeledPhenotype = function (className,propertyName,modeledPhenotype,delim){
+            var returnValue = className+propertyName;
+            if ((typeof modeledPhenotype !== 'undefined') &&
+                ( modeledPhenotype.length > 0)){
+                    returnValue += (delim+modeledPhenotype);
+               }
+            return returnValue;
+        };
 
 
+        var carryALLFloatFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName, modeledPhenotype){
+            var realValueFilters = $(filterIdentifier);
+            _.forEach(realValueFilters,function(oneFilter){
+                var filterDom = $(oneFilter);
+                var id = filterDom.attr('id');
+                var idKeys = parseEncodedFilterStrataName(id,modeledPhenotype);
+                if (idKeys.length > 2){
+                    if ((idKeys[0]==='inp') &&
+                        (idKeys[1]!=='ALL')  &&
+                        (idKeys[2]===propertyName)){
+                            var templateFilter = $(inputIdentifier);
+                            filterDom.val(templateFilter.val());
+                    }
+               }
+            });
+        };
 
+        var carryAllCategoricalFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName,modeledPhenotype){
+            var categoricalValueFilters =   $(filterIdentifier);
+            _.forEach(categoricalValueFilters,function(oneFilter){
+                var filterRowDom = $(oneFilter);
+                var  filterId = filterRowDom.attr('id');
+                if (filterId.indexOf("filter_")==0){
+                   // var  filterName = filterId.substr(7);
+                    var  filterName = conditionallyAppendModeledPhenotype(filterId.substr(7),'',modeledPhenotype,'_')
+                    var locationOfSecondBreak = filterName.indexOf('_');
+                    if ((locationOfSecondBreak>-1)&&
+                        (locationOfSecondBreak<(filterName.length-1))&&
+                        (filterName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
+                        (filterName.substr(0,3)!=='ALL')){
+                        $('#multi_'+filterName).val($('.'+inputIdentifier).val());
+                    }
+                }
+
+            });
+        };
+
+        /***
+        *  Change a comparator or on the ALL tab and see that change carried across the other strata
+        * @param filterIdentifier
+        * @param inputIdentifier
+        * @param propertyName
+        */
+        var carryAllComparatorsAcrossOtherStrata = function (filterIdentifier,inputIdentifier,propertyName){
+            var realValueComparators =   $(filterIdentifier);
+            _.forEach(realValueComparators,function(oneComparator){
+                var cmpRowDom = $(oneComparator);
+                var  cmpId = cmpRowDom.attr('id');
+                if (cmpId.indexOf("cmp_")==0){
+                    var  cmpName = cmpId.substr(4);
+                    var locationOfSecondBreak = cmpName.indexOf('_');
+                    if ((locationOfSecondBreak>-1)&&
+                        (locationOfSecondBreak<(cmpName.length-1))&&
+                        (cmpName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
+                        (cmpName.substr(0,3)!=='ALL')){
+                        $('#cmp_'+cmpName).val($(inputIdentifier).val());
+                        }
+                }
+            });
+        };
 
         /***
         * Make sure every distribution plot is hidden, then display the one we want
@@ -1932,80 +2001,20 @@ var storeFilterData = function (data){
             // carry 'ALL' filters across to everyone else
             if ((locationOfFirstBreak> -1) &&(strataName==='ALL')) {
 
-               //real valued
-               var filterIdentifier = '.filterParm';
-               var inputIdentifier = '.inp_ALL_'+propertyName;
-               if ((typeof modeledPhenotype !== 'undefined') &&
-                    ( modeledPhenotype.length > 0)){
-                    filterIdentifier += ('.'+modeledPhenotype);
-                    inputIdentifier += ('_'+modeledPhenotype);
-               }
-               var realValueFilters = $(filterIdentifier);
-               _.forEach(realValueFilters,function(oneFilter){
-                    var filterDom = $(oneFilter);
-                    var id = filterDom.attr('id');
-                    var idKeys = parseEncodedFilterStrataName(id);
-                    if (idKeys.length > 2){
-                        if ((idKeys[0]==='inp') &&
-                            (idKeys[1]!=='ALL')  &&
-                            (idKeys[2]===propertyName)){
-                                var templateFilter = $(inputIdentifier);
-                                filterDom.val(templateFilter.val());
-                        }
-                   }
-               });
+                //real valued
+                carryALLFloatFiltersAcrossOtherStrata(  conditionallyAppendModeledPhenotype('.filterParm','',modeledPhenotype,'.'),
+                                                        conditionallyAppendModeledPhenotype('.inp_ALL_',propertyName,modeledPhenotype,'_'),
+                                                        propertyName, modeledPhenotype  );
 
+                // categorical
+                carryAllCategoricalFiltersAcrossOtherStrata(  conditionallyAppendModeledPhenotype('.categoricalFilter','',modeledPhenotype,'.'),
+                                                        conditionallyAppendModeledPhenotype('multi_ALL_',propertyName,modeledPhenotype,'_'),
+                                                        propertyName, modeledPhenotype );
 
-
-               // categorical
-               filterIdentifier = '.categoricalFilter';
-               inputIdentifier = '.multi_ALL_'+propertyName;
-               if ((typeof modeledPhenotype !== 'undefined') &&
-                    ( modeledPhenotype.length > 0)){
-                    filterIdentifier += ('.'+modeledPhenotype);
-                    inputIdentifier += ('_'+modeledPhenotype);
-               }
-                var categoricalValueFilters =   $(filterIdentifier);
-                _.forEach(categoricalValueFilters,function(oneFilter){
-                    var filterRowDom = $(oneFilter);
-                    var  filterId = filterRowDom.attr('id');
-                    if (filterId.indexOf("filter_")==0){
-                        var  filterName = filterId.substr(7);
-                        var locationOfSecondBreak = filterName.indexOf('_');
-                        if ((locationOfSecondBreak>-1)&&
-                            (locationOfSecondBreak<(filterName.length-1))&&
-                            (filterName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
-                            (filterName.substr(0,3)!=='ALL')){
-                            $('#multi_'+filterName).val($(inputIdentifier).val());
-                            }
-                    }
-
-                });
-
-                // comparators
-               filterIdentifier = '.filterCmp';
-               inputIdentifier = '.cmp_ALL_'+propertyName;
-               if ((typeof modeledPhenotype !== 'undefined') &&
-                    ( modeledPhenotype.length > 0)){
-                    filterIdentifier += ('.'+modeledPhenotype);
-                    inputIdentifier += ('_'+modeledPhenotype);
-               }
-               var realValueComparators =   $(filterIdentifier);
-                _.forEach(realValueComparators,function(oneComparator){
-                    var cmpRowDom = $(oneComparator);
-                    var  cmpId = cmpRowDom.attr('id');
-                    if (cmpId.indexOf("cmp_")==0){
-                        var  cmpName = cmpId.substr(4);
-                        var locationOfSecondBreak = cmpName.indexOf('_');
-                        if ((locationOfSecondBreak>-1)&&
-                            (locationOfSecondBreak<(cmpName.length-1))&&
-                            (cmpName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
-                            (cmpName.substr(0,3)!=='ALL')){
-                            $('#cmp_'+cmpName).val($(inputIdentifier).val());
-                            }
-                    }
-
-                });
+                 // comparators
+                carryAllComparatorsAcrossOtherStrata(  conditionallyAppendModeledPhenotype('.filterCmp','',modeledPhenotype,'.'),
+                                                        conditionallyAppendModeledPhenotype('.cmp_ALL_',propertyName,modeledPhenotype,'_'),
+                                                        propertyName, modeledPhenotype  );
 
            }
 
