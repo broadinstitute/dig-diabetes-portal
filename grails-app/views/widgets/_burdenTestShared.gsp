@@ -249,79 +249,63 @@ line.center{
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
 
-    mpgSoftware.burdenInfo = (function () {
-
-        var delayedBurdenDataPresentation = {};
-
-        // burden testing hypothesis testing section
-        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
-            var retainBarchartPtr;
-
-            // The bar chart graphic
-            if ((caseNumerator) ||
-                (caseDenominator) &&
-                (controlNumerator) &&
-                (controlDenominator)) {
-                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.variantInfo.fillUpBarChart,
-                    barchartPtr: retainBarchartPtr,
-                    launch: function () {
-//                        retainBarchartPtr = mpgSoftware.variantInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
-//                        return retainBarchartPtr;
-                    },
-                    removeBarchart: function () {
-//                        if ((typeof retainBarchartPtr !== 'undefined') &&
-//                            (typeof retainBarchartPtr.clear !== 'undefined')) {
-//                            retainBarchartPtr.clear('T2D');
-//                        }
-                    }
-                };
-            }
-        };
-
-        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
-            return delayedBurdenDataPresentation;
-        };
-
-        return {
-            // public routines
-            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
-            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
-        }
-    }());
+//    mpgSoftware.burdenInfo = (function () {
+//
+//        var delayedBurdenDataPresentation = {};
+//
+//        // burden testing hypothesis testing section
+//        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
+//            var retainBarchartPtr;
+//
+//            // The bar chart graphic
+//            if ((caseNumerator) ||
+//                (caseDenominator) &&
+//                (controlNumerator) &&
+//                (controlDenominator)) {
+//                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.variantInfo.fillUpBarChart,
+//                    barchartPtr: retainBarchartPtr,
+//                    launch: function () {
+//                    },
+//                    removeBarchart: function () {
+//                    }
+//                };
+//            }
+//        };
+//
+//        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
+//            return delayedBurdenDataPresentation;
+//        };
+//
+//        return {
+//            // public routines
+//            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
+//            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
+//        }
+//    }());
 
     mpgSoftware.burdenTestShared = (function () {
         var loading = $('#rSpinner');
         var storedSampleMetadata;
-        var storedSampleData;
-        var storedFilterData;
         var minimumNumberOfSamples = 100;
-        var backendFiltering = true;
         var portalTypeWithAncestry = true;
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
         portalTypeWithAncestry = false;
         </g:if>
 
 
-var storeFilterData = function (data){
-     storedFilterData = data;
- };
-
- var getStoredFilterData  = function (){
-     return storedFilterData;
- };
 
 
- var storeSampleData = function (data){
-     storedSampleData = data;
- };
 
  /***
  *  Get sample data from our local storage.  This routine presumably disappears in v0.2
  * @returns {*}
  */
- var getStoredSampleData  = function (){
-     return storedSampleData;
+
+var displayBurdenVariantSelector = function (){
+     return true;
  };
+
+
 
  var storeSampleMetadata = function (metadata){
      storedSampleMetadata = metadata;
@@ -433,17 +417,14 @@ var storeFilterData = function (data){
         var preloadInteractiveAnalysisData = function () {
            $('.caatSpinner').show();
             var dropDownSelector = '#phenotypeFilter';
-
+            var strataChooserMarker = [];
             if (portalTypeWithAncestry){
-                $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
-                                        {strataChooser:[1]}));
-
-            } else {
-                $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
-                                            {strataChooser:[]}));
+                strataChooserMarker.push(1);
             }
 
-
+            // build the top of the GAIT display
+            $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
+                                    {strataChooser:strataChooserMarker}));
 
             $.ajax({
                 cache: false,
@@ -739,28 +720,47 @@ var storeFilterData = function (data){
 
             // For each strata create the necessary data. Handle the case of a single strata as a special case.
             var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype){
-                var renderData;
-                if (multipleStrataExist){
-                    renderData  = {
-                        strataProperty:strataProperty,
-                        phenotypeProperty:convertPhenotypeNames(phenotype),
-                        tabDisplay:"",
-                        modeledPhenotype:modeledPhenotype,
-                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
-                    };
-                } else {
-                     renderData  = {
-                        strataProperty:strataProperty,
-                        phenotypeProperty:convertPhenotypeNames(phenotype),
-                        defaultDisplay: ' active',
-                        tabDisplay: 'display: none',
-                        modeledPhenotype:modeledPhenotype,
-                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
-                    };
+//                var renderData;
+//                if (multipleStrataExist){
+//                    renderData  = {
+//                        strataProperty:strataProperty,
+//                        phenotypeProperty:convertPhenotypeNames(phenotype),
+//                        tabDisplay:"",
+//                        modeledPhenotype:modeledPhenotype,
+//                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
+//                    };
+//                } else {
+//                     renderData  = {
+//                        strataProperty:strataProperty,
+//                        phenotypeProperty:convertPhenotypeNames(phenotype),
+//                        defaultDisplay: ' active',
+//                        tabDisplay: 'display: none',
+//                        modeledPhenotype:modeledPhenotype,
+//                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
+//                    };
+//                }
+
+                var defaultDisplayString  = '';
+                var tabDisplayString;
+                var displayBurdenVariantSelectorString = (displayBurdenVariantSelector())?[1]:[];
+                if (!multipleStrataExist){
+                    defaultDisplayString  = ' active';
+                    tabDisplayString  = ' display: none';
                 }
+
+                var renderData  = {
+                    strataProperty:strataProperty,
+                    phenotypeProperty:convertPhenotypeNames(phenotype),
+                    defaultDisplay : defaultDisplayString,
+                    tabDisplay:tabDisplayString,
+                    modeledPhenotype:modeledPhenotype,
+                    modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}},
+                    displayBurdenVariantSelector:displayBurdenVariantSelectorString
+                };
+
                 return renderData;
             };
-
+//displayBurdenVariantSelector
 
             var sampleMetadata = getStoredSampleMetadata();
             if ( ( sampleMetadata !==  null ) &&
@@ -826,6 +826,13 @@ var storeFilterData = function (data){
                         fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
 
                     });
+
+
+
+                    $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+
+
+
 
                     //
                     // display the results section
@@ -1129,23 +1136,15 @@ var storeFilterData = function (data){
             }
          }
 
-                var addStrataSection = function(domElement,stratum){
-                    domElement.append('<div class="stratum_'+stratum+' stratumName"></div>');
-                    domElement.append('<div class="pValue_'+stratum+'"></div>');
-                    domElement.append('<div class="orValue_'+stratum+'"></div>');
-                    domElement.append('<div class="ciValue_'+stratum+'"></div>');
-                };
-         // var printFullResultsSection = function(stats,pValue,beta,oddsRatio,currentStratum,additionalText){
+            var addStrataSection = function(domElement,stratum){
+                domElement.append('<div class="stratum_'+stratum+' stratumName"></div>');
+                domElement.append('<div class="pValue_'+stratum+'"></div>');
+                domElement.append('<div class="orValue_'+stratum+'"></div>');
+                domElement.append('<div class="ciValue_'+stratum+'"></div>');
+            };
+
+
           var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,additionalText){
-//                var isDichotomousTrait = false;
-//                if ((typeof stats.numCases === 'undefined') ||
-//                    (typeof stats.numControls === 'undefined') ||
-//                    (typeof stats.numCaseCarriers === 'undefined') ||
-//                    (typeof stats.numControlCarriers === 'undefined')) {
-//                   isDichotomousTrait = false;
-//                } else {
-//                   isDichotomousTrait = true;
-//                }
 
 
                 var ciDisplay = '';
@@ -1793,7 +1792,6 @@ var storeFilterData = function (data){
                     data: {'data':data},
                     async: true,
                     success: function (returnedData) {
-                        storeSampleData(returnedData);
                         callback(returnedData,passThru);
                     },
                     error: function (jqXHR, exception) {
@@ -2063,7 +2061,6 @@ var storeFilterData = function (data){
             retrieveExperimentMetadata:retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
-            getStoredSampleData:getStoredSampleData, // retrieve stored sample data
             refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
             carryCovChanges:carryCovChanges,
             populateSampleAndCovariateSection:populateSampleAndCovariateSection,
@@ -2109,6 +2106,7 @@ $( document ).ready( function (){
                         <div class="panel-group" id="accordion_iat" style="margin-bottom: 0px">%{--start accordion --}%
                             <div id="chooseFiltersLocation"></div>
                             <div id="chooseCovariatesLocation"></div>
+                            <div id="chooseVariantFilterSelection"></div>
                         </div>
 
                     </div>
@@ -2642,6 +2640,88 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
 
+<script id="variantFilterSelectionTemplate"  type="x-tmpl-mustache">
+        <div class="panel panel-default">%{--should hold the initiate analysis set panel--}%
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#variantFilterSelection"
+                       href="#variantFilterSelection">Step 4: Manage variant selection</a>
+                </h4>
+            </div>
+
+
+            <div id="variantFilterSelection" class="panel-collapse collapse">
+                <div class="panel-body secBody">
+
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <p>
+                                Choose a collection of variants which will be analyzed together to assess disease burden
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                    <div class="container">
+                        <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
+
+                        <div class="row burden-test-wrapper-options">
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <div  class="row">
+                                    <div class="col-md-4 col-sm-4 col-xs-4">
+
+                                        <label><g:message code="gene.burdenTesting.label.available_traits"/>:
+                                            <select id="burdenTraitFilter" class="burdenTraitFilter form-control">
+                                            </select>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 col-sm-8 col-xs-8">
+                                        <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
+                                            <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control">
+                                                <option selected value="0"><g:message code="gene.burdenTesting.label.select_filter"/></option>
+                                            </select>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div  class="row">
+                                      <div style="margin:15px 8px 15px 10px" class="separator"></div>
+                                </div>
+                                <div  class="row">
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
+                                        <div class="labelAndInput">
+                                            MAF &lt;&nbsp;
+                                            <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value">
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                        <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
+                                        <div class="form-inline mafOptionChooser">
+                                            <div class="radio">
+                                                <label><input type="radio" name="mafOption" value="1" />&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" name="mafOption"  value="2" checked />&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div  class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
+                                <button id="singlebutton" name="singlebutton" style="height: 80px"
+                                        class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()"><g:message code="gene.burdenTesting.label.run"/></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>%{--end id=initiateAnalysis panel--}%
+</script>
 
 
 
