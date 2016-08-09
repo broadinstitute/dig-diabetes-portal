@@ -1895,10 +1895,16 @@ var storeFilterData = function (data){
        }
 
 
-
+        /***
+        *  Taking apart the information contained in a div ID and breaking it into three pieces.  (I used to do most of this with a split,
+        *    but some of the phenotype names have an under score in them which was leading to trouble)
+        *
+        * @param encodedFilterStrataName
+        * @param modeledPhenotype
+        * @returns {Array}
+        */
         var parseEncodedFilterStrataName = function (encodedFilterStrataName,modeledPhenotype){
             var stringPrefix = "inp_";
-            //var stringPostfix = "_strata1";
             var stringPostfix = "_"+modeledPhenotype;
             var returnVals = [];
             if (encodedFilterStrataName.indexOf(stringPrefix)==0){
@@ -1916,6 +1922,14 @@ var storeFilterData = function (data){
             return returnVals;
         };
 
+        /***
+        * Sometimes these IDs have strata and or the modeled phenotype appended to them
+        * @param className
+        * @param propertyName
+        * @param modeledPhenotype
+        * @param delim
+        * @returns {*}
+        */
         var conditionallyAppendModeledPhenotype = function (className,propertyName,modeledPhenotype,delim){
             var returnValue = className+propertyName;
             if ((typeof modeledPhenotype !== 'undefined') &&
@@ -1925,7 +1939,13 @@ var storeFilterData = function (data){
             return returnValue;
         };
 
-
+        /***
+        * change a real valued filter or on the ALL tab and see that change carried across the other strata
+        * @param filterIdentifier
+        * @param inputIdentifier
+        * @param propertyName
+        * @param modeledPhenotype
+        */
         var carryALLFloatFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName, modeledPhenotype){
             var realValueFilters = $(filterIdentifier);
             _.forEach(realValueFilters,function(oneFilter){
@@ -1943,6 +1963,14 @@ var storeFilterData = function (data){
             });
         };
 
+
+        /***
+        * change a categorical filter or on the ALL tab and see that change carried across the other strata
+        * @param filterIdentifier
+        * @param inputIdentifier
+        * @param propertyName
+        * @param modeledPhenotype
+        */
         var carryAllCategoricalFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName,modeledPhenotype){
             var categoricalValueFilters =   $(filterIdentifier);
             _.forEach(categoricalValueFilters,function(oneFilter){
