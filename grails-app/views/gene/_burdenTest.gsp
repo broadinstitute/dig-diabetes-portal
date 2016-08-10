@@ -34,6 +34,13 @@
         font-weight: bold;
     }
 
+    div.burdenEndpoint {
+        white-space: nowrap;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+    }
+
     div.labelAndInput {
         white-space: nowrap;
     }
@@ -254,7 +261,7 @@
          */
         var runBurdenTest = function (){
 
-             var fillInResultsSection = function (pValue, oddsRatio, stdError, numberVariants, variantArray, urlLink, isDichotomousTrait){
+             var fillInResultsSection = function (pValue, oddsRatio, stdError, numberVariants, burdenServerAddress, variantArray, urlLink, isDichotomousTrait){
                 var test = "";
                  // $('.burden-test-result').empty();  // clear out whatever was there before
                  if ((typeof variantArray === 'undefined') ||
@@ -273,16 +280,20 @@
                     $('.orValue').text(oddsRatio);
                     $('.ciValue').text(stdError);
                     $('.variantList').html(variantAnchors.join('\n'));
+                    $('.burdenEndpoint').html(burdenServerAddress);
+
 
                     // show the results
                     if (isDichotomousTrait) {
                         $('#variantLabel').text(numberVariants);
                         $('#burden-test-some-results-reduced').hide();
                         $('#burden-test-some-results').show();
+                        $('#burden-test-rest-endpoint').show();
                     } else {
                         $('#variantLabelReduced').text(numberVariants);
                         $('#burden-test-some-results').hide();
                         $('#burden-test-some-results-reduced').show();
+                        $('#burden-test-rest-endpoint').show();
                     }
 
                     // show the results
@@ -340,6 +351,7 @@
             $.ajax({
                 cache: false,
                 type: "post",
+                timeout: 900000,
                 url: "${createLink(controller:'gene',action: 'burdenTestAjax')}",
                 data: {geneName: '<%=geneName%>',
                        filterNum: selectedFilterValueId,
@@ -396,11 +408,14 @@
                                             ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
                                        }
                                        ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
+
+                                       // added for Intel demo
+                                       var burdenServerAddress = 'The burden test was run on REST server: <br/>' + data.burden_endpoint;
                                    }
 
                                    fillInResultsSection('p-Value = '+ pValue,
                                         (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
-                                        ciDisplay, numberVariants,
+                                        ciDisplay, numberVariants, burdenServerAddress,
                                         data.variants,"${createLink(controller: 'variantInfo', action: 'variantInfo')}", isDichotomousTrait);
 
                                    if (!isDichotomousTrait) {
@@ -568,5 +583,14 @@ $( document ).ready( function (){
         <div class="col-md-3 col-sm-1">
         </div>
     </div>
+
+    <div id="burden-test-rest-endpoint" class="row burden-test-result">
+        <div class="col-md-12 col-sm-12">
+            <div>
+                <div id="burdenEndpoint" class="burdenEndpoint"></div>
+            </div>
+        </div>
+    </div>
+
     <g:render template="/widgets/dataWarning" />
 </div>

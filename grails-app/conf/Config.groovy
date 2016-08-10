@@ -1,8 +1,5 @@
 import grails.util.Environment
-import org.apache.log4j.DailyRollingFileAppender
-import org.apache.log4j.PatternLayout
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
-
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -218,6 +215,8 @@ experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
 burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 burdenRestServerProd = new ServerBean("prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerIntelUnSecure = new ServerBean("Unsecure Intel non RP burden server", "http://dig-dev.broadinstitute.org:8087/intel/burden");
+burdenRestServerIntelSecure = new ServerBean("Secure Intel ReliancePoint burden server", "http://rp-t2d-client.broadinstitute.org:8087/burden");
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
@@ -341,7 +340,8 @@ environments {
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"                    // Intel demo server
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"

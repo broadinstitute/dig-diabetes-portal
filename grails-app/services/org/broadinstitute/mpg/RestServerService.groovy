@@ -239,6 +239,8 @@ class RestServerService {
             this.burdenServerList = new ArrayList<ServerBean>();
             this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerIntelUnSecure);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerIntelSecure);
         }
 
         return this.burdenServerList;

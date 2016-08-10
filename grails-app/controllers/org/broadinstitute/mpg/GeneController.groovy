@@ -2,6 +2,7 @@ package org.broadinstitute.mpg
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
@@ -314,6 +315,14 @@ class GeneController {
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
+
+        // Intel - add burden rest endpoint to response
+        ServerBean serverBean = this.restServerService.getCurrentBurdenServer();
+        String serverName = serverBean.name;
+        if (result != null) {
+//            result?.put("burden_endpoint", "http://dig-dev.broadinstitute.org:8085/intel/burden/v1")
+            result?.put("burden_endpoint", serverName)
+        }
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
