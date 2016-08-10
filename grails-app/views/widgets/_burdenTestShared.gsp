@@ -359,23 +359,23 @@ var displayBurdenVariantSelector = function (){
 
 
 
- /***
- * Get back data sets based on phenotype and insert them into a drop-down box
- * @param selPhenotypeSelector
- * @param selDataSetSelector
- */
- var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
-     var processReturnedDataSets = function (phenotypeName,matchingDataSets){
-        var dataSetDropDown = $(selDataSetSelector);
-        if ((typeof dataSetDropDown !== 'undefined') &&
-          (typeof matchingDataSets !== 'undefined') &&
-          (matchingDataSets.length > 0)) {
-          for ( var i = 0 ; i < matchingDataSets.length; i++ )
-             dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
-          }
-     };
-     UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq','WGS'],selPhenotypeSelector.value,
-     "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
+         /***
+         * Get back data sets based on phenotype and insert them into a drop-down box
+         * @param selPhenotypeSelector
+         * @param selDataSetSelector
+         */
+         var retrieveMatchingDataSets = function (selPhenotypeSelector,selDataSetSelector){
+             var processReturnedDataSets = function (phenotypeName,matchingDataSets){
+                var dataSetDropDown = $(selDataSetSelector);
+                if ((typeof dataSetDropDown !== 'undefined') &&
+                  (typeof matchingDataSets !== 'undefined') &&
+                  (matchingDataSets.length > 0)) {
+                  for ( var i = 0 ; i < matchingDataSets.length; i++ )
+                     dataSetDropDown.append(new Option(matchingDataSets[i].translation,matchingDataSets[i].name,matchingDataSets[i].translation));
+                  }
+             };
+             UTILS.retrieveSampleGroupsbyTechnologyAndPhenotype(['GWAS','ExChip','ExSeq','WGS'],selPhenotypeSelector.value,
+             "${createLink(controller: 'VariantSearch', action: 'retrieveTopSGsByTechnologyAndPhenotypeAjax')}",processReturnedDataSets );
         };
 
 
@@ -424,7 +424,8 @@ var displayBurdenVariantSelector = function (){
 
             // build the top of the GAIT display
             $("#chooseDataSetAndPhenotypeLocation").empty().append(Mustache.render( $('#chooseDataSetAndPhenotypeTemplate')[0].innerHTML,
-                                    {strataChooser:strataChooserMarker}));
+                                    {strataChooser:strataChooserMarker,
+                                    sectionNumber:1}));
 
             $.ajax({
                 cache: false,
@@ -457,7 +458,7 @@ var displayBurdenVariantSelector = function (){
                         });
                     }
 
-                     populateSampleAndCovariateSection($('#datasetFilter'), $('#phenotypeFilter').val(), $('#stratifyDesignation').val(),data.filters);
+                     refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering');
                      displayTestResultsSection(false);
                      $('.caatSpinner').hide();
 
@@ -484,9 +485,12 @@ var displayBurdenVariantSelector = function (){
                     $(caseControlDesignator).prop('disabled', false);
                 }
             }
-            populateSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters);
+            //populateSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters);
+            $('#stratsTabs').empty();
+            var caseControlFiltering = $('#caseControlFiltering').prop('checked');
+            stratifiedSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering);
             displayTestResultsSection(false);
-        }
+        };
 
 
         /***
@@ -505,103 +509,7 @@ var displayBurdenVariantSelector = function (){
                 });
             }
             return returnValue;
-        }
-
-
-
-
-
-        var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
-            var returnValue = {};
-            if ( ( typeof dataFilters !== 'undefined' ) &&
-                         (  dataFilters !==  null ) ) {
-                var categoricalFilters = [];
-                var realValuedFilters = [];
-                _.forEach(dataFilters,function(d,i){
-                    var clonedFilter = new filterDefinition(d);
-                    if (clonedFilter.type === 'FLOAT') {
-                        if (convertPhenotypeNames(clonedFilter.name)===phenotype) {
-                            clonedFilter['bold'] = "font-weight: bold";
-                        }
-                        realValuedFilters.push(clonedFilter);
-                    } else {
-                        if (undoConversionPhenotypeNames(clonedFilter.name)!==phenotype) { // categorical traits are displayed only if they are not the modeled phenotype
-                            if ((optionsPerFilter[clonedFilter.name]!==undefined)&&
-                                (optionsPerFilter[clonedFilter.name].length<3)&&
-                                (clonedFilter.name!==phenotype)){
-                                    categoricalFilters.push(clonedFilter);
-                            }
-                        }
-                    }
-
-                });
-                // put selected filter first.  Shouldn't there be a lodash function for this?
-                var sortedRealValuedFilters = [];
-                var phenoIndex = -1;
-                for( var i = 0 ; i < realValuedFilters.length ; i++ ){
-                    if (convertPhenotypeNames(realValuedFilters[i].name) ===  phenotype) {
-                        phenoIndex = i;
-                        break;
-                    }
-                }
-                if (phenoIndex>-1){
-                    sortedRealValuedFilters.push(realValuedFilters[phenoIndex]);
-                }
-                for( var i = 0 ; i < realValuedFilters.length ; i++ ){
-                    if(i!==phenoIndex){
-                        sortedRealValuedFilters.push(realValuedFilters[i]);
-                    }
-                }
-                returnValue = {
-                    categoricalFilters: categoricalFilters,
-                    realValuedFilters: sortedRealValuedFilters,
-                    stratum: stratumName
-                };
-            }
-            return returnValue;
-       }
-
-       var generateCovariateRenderData = function(dataCovariates,phenotype,stratumName){
-            var returnValue = {};
-            if ( ( typeof dataCovariates !== 'undefined' ) &&
-                         (  dataCovariates !==  null ) ) {
-               var covariateSpecifiers = [];
-               var covariateSpecifiersC1 = [];
-               var covariateSpecifiersC2 = [];
-                 _.forEach(dataCovariates,function(d,i){
-                     if (d.name !== phenotype){
-                        covariateSpecifiers.push(d);
-                        if (d.trans.substr(0,2)==='PC'){
-                            covariateSpecifiersC1.push(d);
-                        } else {
-                            covariateSpecifiersC2.push(d);
-
-                        }
-                     }
-                });
-                returnValue = {
-                        covariateSpecifiers: covariateSpecifiers,
-                        covariateSpecifiersC1: covariateSpecifiersC1,
-                        covariateSpecifiersC2: covariateSpecifiersC2,
-                        defaultCovariate: function(){
-                             if (this.def) {
-                                return " checked";
-                             } else {
-                                return "";
-                             }
-                        },
-                        stratum: stratumName
-                };
-            }
-            return returnValue;
-       }
-
-
-      var populateSampleAndCovariateSection = function (dataSetId, phenotype, stratificationProperty, filterSpec) {
-          $('#stratsTabs').empty();
-          var caseControlFiltering = $('#caseControlFiltering').prop('checked');
-          stratifiedSampleAndCovariateSection(dataSetId, phenotype, stratificationProperty, filterSpec, caseControlFiltering);
-      }
+        };
 
 
 
@@ -616,6 +524,98 @@ var displayBurdenVariantSelector = function (){
             if (!multipleStrataExist){
                stratumName = 'strat1';
             }
+
+
+            var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
+                var returnValue = {};
+                if ( ( typeof dataFilters !== 'undefined' ) &&
+                             (  dataFilters !==  null ) ) {
+                    var categoricalFilters = [];
+                    var realValuedFilters = [];
+                    _.forEach(dataFilters,function(d,i){
+                        var clonedFilter = new filterDefinition(d);
+                        if (clonedFilter.type === 'FLOAT') {
+                            if (convertPhenotypeNames(clonedFilter.name)===phenotype) {
+                                clonedFilter['bold'] = "font-weight: bold";
+                            }
+                            realValuedFilters.push(clonedFilter);
+                        } else {
+                            if (undoConversionPhenotypeNames(clonedFilter.name)!==phenotype) { // categorical traits are displayed only if they are not the modeled phenotype
+                                if ((optionsPerFilter[clonedFilter.name]!==undefined)&&
+                                    (optionsPerFilter[clonedFilter.name].length<3)&&
+                                    (clonedFilter.name!==phenotype)){
+                                        categoricalFilters.push(clonedFilter);
+                                }
+                            }
+                        }
+
+                    });
+                    // put selected filter first.  Shouldn't there be a lodash function for this?
+                    var sortedRealValuedFilters = [];
+                    var phenoIndex = -1;
+                    for( var i = 0 ; i < realValuedFilters.length ; i++ ){
+                        if (convertPhenotypeNames(realValuedFilters[i].name) ===  phenotype) {
+                            phenoIndex = i;
+                            break;
+                        }
+                    }
+                    if (phenoIndex>-1){
+                        sortedRealValuedFilters.push(realValuedFilters[phenoIndex]);
+                    }
+                    for( var i = 0 ; i < realValuedFilters.length ; i++ ){
+                        if(i!==phenoIndex){
+                            sortedRealValuedFilters.push(realValuedFilters[i]);
+                        }
+                    }
+                    returnValue = {
+                        categoricalFilters: categoricalFilters,
+                        realValuedFilters: sortedRealValuedFilters,
+                        stratum: stratumName
+                    };
+                }
+                return returnValue;
+            }
+
+
+
+
+
+            var generateCovariateRenderData = function(dataCovariates,phenotype,stratumName){
+                var returnValue = {};
+                if ( ( typeof dataCovariates !== 'undefined' ) &&
+                             (  dataCovariates !==  null ) ) {
+                   var covariateSpecifiers = [];
+                   var covariateSpecifiersC1 = [];
+                   var covariateSpecifiersC2 = [];
+                     _.forEach(dataCovariates,function(d,i){
+                         if (d.name !== phenotype){
+                            covariateSpecifiers.push(d);
+                            if (d.trans.substr(0,2)==='PC'){
+                                covariateSpecifiersC1.push(d);
+                            } else {
+                                covariateSpecifiersC2.push(d);
+
+                            }
+                         }
+                    });
+                    returnValue = {
+                            covariateSpecifiers: covariateSpecifiers,
+                            covariateSpecifiersC1: covariateSpecifiersC1,
+                            covariateSpecifiersC2: covariateSpecifiersC2,
+                            defaultCovariate: function(){
+                                 if (this.def) {
+                                    return " checked";
+                                 } else {
+                                    return "";
+                                 }
+                            },
+                            stratum: stratumName
+                    };
+                }
+                return returnValue;
+            }
+
+
 
             var generateModeledPhenotypeElements = function ( optionsPerFilter, phenotype, caseControlFiltering, strataContentArray ){
                 var modeledPhenotypeElements;
@@ -720,25 +720,6 @@ var displayBurdenVariantSelector = function (){
 
             // For each strata create the necessary data. Handle the case of a single strata as a special case.
             var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype){
-//                var renderData;
-//                if (multipleStrataExist){
-//                    renderData  = {
-//                        strataProperty:strataProperty,
-//                        phenotypeProperty:convertPhenotypeNames(phenotype),
-//                        tabDisplay:"",
-//                        modeledPhenotype:modeledPhenotype,
-//                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
-//                    };
-//                } else {
-//                     renderData  = {
-//                        strataProperty:strataProperty,
-//                        phenotypeProperty:convertPhenotypeNames(phenotype),
-//                        defaultDisplay: ' active',
-//                        tabDisplay: 'display: none',
-//                        modeledPhenotype:modeledPhenotype,
-//                        modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}}
-//                    };
-//                }
 
                 var defaultDisplayString  = '';
                 var tabDisplayString;
@@ -755,12 +736,13 @@ var displayBurdenVariantSelector = function (){
                     tabDisplay:tabDisplayString,
                     modeledPhenotype:modeledPhenotype,
                     modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}},
-                    displayBurdenVariantSelector:displayBurdenVariantSelectorString
+                    displayBurdenVariantSelector:displayBurdenVariantSelectorString,
+                    sectionNumber: 1
                 };
 
                 return renderData;
             };
-//displayBurdenVariantSelector
+
 
             var sampleMetadata = getStoredSampleMetadata();
             if ( ( sampleMetadata !==  null ) &&
@@ -780,6 +762,7 @@ var displayBurdenVariantSelector = function (){
                     //
                     // set up the section where the filters will go
                     //
+                    renderData.sectionNumber++;
                     $("#chooseFiltersLocation").empty().append(Mustache.render( $('#chooseFiltersTemplate')[0].innerHTML,renderData,
                                                                                 {   allFiltersTemplate: $('#allFiltersTemplate')[0].innerHTML,
                                                                                     filterFloatTemplate:$('#filterFloatTemplate')[0].innerHTML,
@@ -805,6 +788,7 @@ var displayBurdenVariantSelector = function (){
                     //
                     // set up the section where the covariates will go
                     //
+                    renderData.sectionNumber++;
                     $("#chooseCovariatesLocation").empty().append(Mustache.render( $('#chooseCovariatesTemplate')[0].innerHTML,renderData,
                                                                                 {   allCovariateSpecifierTemplate: $('#allCovariateSpecifierTemplate')[0].innerHTML,
                                                                                     covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
@@ -829,6 +813,7 @@ var displayBurdenVariantSelector = function (){
 
 
 
+                    renderData.sectionNumber++;
                     $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
 
 
@@ -850,7 +835,8 @@ var displayBurdenVariantSelector = function (){
                                  } else {
                                     return "";
                                  }
-                            }
+                            },
+                        sectionNumber: (renderData.sectionNumber+1)
                     };
                     $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
 
@@ -1937,84 +1923,130 @@ var displayBurdenVariantSelector = function (){
             return returnValue;
         };
 
+
+
         /***
-        * change a real valued filter or on the ALL tab and see that change carried across the other strata
-        * @param filterIdentifier
-        * @param inputIdentifier
-        * @param propertyName
+        * Change a comparator or on the ALL tab and see that change carried across the other strata
+        *
         * @param modeledPhenotype
-        */
-        var carryALLFloatFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName, modeledPhenotype){
-            var realValueFilters = $(filterIdentifier);
-            _.forEach(realValueFilters,function(oneFilter){
-                var filterDom = $(oneFilter);
-                var id = filterDom.attr('id');
-                var idKeys = parseEncodedFilterStrataName(id,modeledPhenotype);
-                if (idKeys.length > 2){
-                    if ((idKeys[0]==='inp') &&
-                        (idKeys[1]!=='ALL')  &&
-                        (idKeys[2]===propertyName)){
-                            var templateFilter = $(inputIdentifier);
-                            filterDom.val(templateFilter.val());
-                    }
-               }
-            });
-        };
-
-
-        /***
-        * change a categorical filter or on the ALL tab and see that change carried across the other strata
-        * @param filterIdentifier
-        * @param inputIdentifier
         * @param propertyName
-        * @param modeledPhenotype
+        * @param locationOfFirstBreak
+        * @param strataName
+        * @param realValuedFilterClassName
+        * @param realValuedFilterInputClassName
+        * @param categoricalFilterClassName
+        * @param categoricalFilterInputClassName
+        * @param comparatorFilterClassName
+        * @param comparatorFilterInputClassName
         */
-        var carryAllCategoricalFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName,modeledPhenotype){
-            var categoricalValueFilters =   $(filterIdentifier);
-            _.forEach(categoricalValueFilters,function(oneFilter){
-                var filterRowDom = $(oneFilter);
-                var  filterId = filterRowDom.attr('id');
-                if (filterId.indexOf("filter_")==0){
-                   // var  filterName = filterId.substr(7);
-                    var  filterName = conditionallyAppendModeledPhenotype(filterId.substr(7),'',modeledPhenotype,'_')
-                    var locationOfSecondBreak = filterName.indexOf('_');
-                    if ((locationOfSecondBreak>-1)&&
-                        (locationOfSecondBreak<(filterName.length-1))&&
-                        (filterName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
-                        (filterName.substr(0,3)!=='ALL')){
-                        $('#multi_'+filterName).val($('.'+inputIdentifier).val());
-                    }
-                }
+        var carryTheAllFiltersAcrossStrata = function ( modeledPhenotype,propertyName,locationOfFirstBreak,strataName,
+                                                        realValuedFilterClassName,realValuedFilterInputClassName,
+                                                        categoricalFilterClassName,categoricalFilterInputClassName,
+                                                        comparatorFilterClassName,comparatorFilterInputClassName){
 
-            });
-        };
-
-        /***
-        *  Change a comparator or on the ALL tab and see that change carried across the other strata
-        * @param filterIdentifier
-        * @param inputIdentifier
-        * @param propertyName
-        */
-        var carryAllComparatorsAcrossOtherStrata = function (filterIdentifier,inputIdentifier,propertyName){
-            var realValueComparators =   $(filterIdentifier);
-            _.forEach(realValueComparators,function(oneComparator){
-                var cmpRowDom = $(oneComparator);
-                var  cmpId = cmpRowDom.attr('id');
-                if (cmpId.indexOf("cmp_")==0){
-                    var  cmpName = cmpId.substr(4);
-                    var locationOfSecondBreak = cmpName.indexOf('_');
-                    if ((locationOfSecondBreak>-1)&&
-                        (locationOfSecondBreak<(cmpName.length-1))&&
-                        (cmpName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
-                        (cmpName.substr(0,3)!=='ALL')){
-                        $('#cmp_'+cmpName).val($(inputIdentifier).val());
+            /***
+            * change a real valued filter or on the ALL tab and see that change carried across the other strata
+            * @param filterIdentifier
+            * @param inputIdentifier
+            * @param propertyName
+            * @param modeledPhenotype
+            */
+            var carryALLFloatFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName, modeledPhenotype){
+                var realValueFilters = $(filterIdentifier);
+                _.forEach(realValueFilters,function(oneFilter){
+                    var filterDom = $(oneFilter);
+                    var id = filterDom.attr('id');
+                    var idKeys = parseEncodedFilterStrataName(id,modeledPhenotype);
+                    if (idKeys.length > 2){
+                        if ((idKeys[0]==='inp') &&
+                            (idKeys[1]!=='ALL')  &&
+                            (idKeys[2]===propertyName)){
+                                var templateFilter = $(inputIdentifier);
+                                filterDom.val(templateFilter.val());
                         }
-                }
-            });
-        };
+                   }
+                });
+            };
+
+
+            /***
+            * change a categorical filter or on the ALL tab and see that change carried across the other strata
+            * @param filterIdentifier
+            * @param inputIdentifier
+            * @param propertyName
+            * @param modeledPhenotype
+            */
+            var carryAllCategoricalFiltersAcrossOtherStrata = function(filterIdentifier,inputIdentifier,propertyName,modeledPhenotype){
+                var categoricalValueFilters =   $(filterIdentifier);
+                _.forEach(categoricalValueFilters,function(oneFilter){
+                    var filterRowDom = $(oneFilter);
+                    var  filterId = filterRowDom.attr('id');
+                    if (filterId.indexOf("filter_")==0){
+                       // var  filterName = filterId.substr(7);
+                        var  filterName = conditionallyAppendModeledPhenotype(filterId.substr(7),'',modeledPhenotype,'_')
+                        var locationOfSecondBreak = filterName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(filterName.length-1))&&
+                            (filterName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
+                            (filterName.substr(0,3)!=='ALL')){
+                            $('#multi_'+filterName).val($('.'+inputIdentifier).val());
+                        }
+                    }
+
+                });
+            };
+
+            /***
+            *  Change a comparator or on the ALL tab and see that change carried across the other strata
+            * @param filterIdentifier
+            * @param inputIdentifier
+            * @param propertyName
+            */
+            var carryAllComparatorsAcrossOtherStrata = function (filterIdentifier,inputIdentifier,propertyName){
+                var realValueComparators =   $(filterIdentifier);
+                _.forEach(realValueComparators,function(oneComparator){
+                    var cmpRowDom = $(oneComparator);
+                    var  cmpId = cmpRowDom.attr('id');
+                    if (cmpId.indexOf("cmp_")==0){
+                        var  cmpName = cmpId.substr(4);
+                        var locationOfSecondBreak = cmpName.indexOf('_');
+                        if ((locationOfSecondBreak>-1)&&
+                            (locationOfSecondBreak<(cmpName.length-1))&&
+                            (cmpName.substr(locationOfSecondBreak+1,propertyName.length)==propertyName)&&
+                            (cmpName.substr(0,3)!=='ALL')){
+                            $('#cmp_'+cmpName).val($(inputIdentifier).val());
+                            }
+                    }
+                });
+            };
+
+            // carry 'ALL' filters across to everyone else
+            if ((locationOfFirstBreak> -1) &&(strataName==='ALL')) {
+
+                //real valued
+                carryALLFloatFiltersAcrossOtherStrata(  conditionallyAppendModeledPhenotype(realValuedFilterClassName,'',modeledPhenotype,'.'),
+                                                        conditionallyAppendModeledPhenotype(realValuedFilterInputClassName,propertyName,modeledPhenotype,'_'),
+                                                        propertyName, modeledPhenotype  );
+
+                // categorical
+                carryAllCategoricalFiltersAcrossOtherStrata(  conditionallyAppendModeledPhenotype(categoricalFilterClassName,'',modeledPhenotype,'.'),
+                                                        conditionallyAppendModeledPhenotype(categoricalFilterInputClassName,propertyName,modeledPhenotype,'_'),
+                                                        propertyName, modeledPhenotype );
+
+                 // comparators
+                carryAllComparatorsAcrossOtherStrata(  conditionallyAppendModeledPhenotype(comparatorFilterClassName,'',modeledPhenotype,'.'),
+                                                        conditionallyAppendModeledPhenotype(comparatorFilterInputClassName,propertyName,modeledPhenotype,'_'),
+                                                        propertyName, modeledPhenotype  );
+
+           }
+        }
+
+
 
         /***
-        * Make sure every distribution plot is hidden, then display the one we want
+        * The user has changed a filter.  We need to potentially update that filter across multiple strata. Then, we need
+        * the performer round-trip with the revised filter ( plus any other existing filters) and generate a distribution plot
+        * of all samples that satisfy this filter combination.
         *
         * @param propertyName
         * @param holderSection
@@ -2023,26 +2055,11 @@ var displayBurdenVariantSelector = function (){
             var locationOfFirstBreak = holderSection.indexOf('_');
             var strataName = holderSection.substring(locationOfFirstBreak+1);
 
+            carryTheAllFiltersAcrossStrata( modeledPhenotype,propertyName,locationOfFirstBreak,strataName,
+                                            '.filterParm','.inp_ALL_',
+                                            '.categoricalFilter','multi_ALL_',
+                                            '.filterCmp','.cmp_ALL_');
 
-            // carry 'ALL' filters across to everyone else
-            if ((locationOfFirstBreak> -1) &&(strataName==='ALL')) {
-
-                //real valued
-                carryALLFloatFiltersAcrossOtherStrata(  conditionallyAppendModeledPhenotype('.filterParm','',modeledPhenotype,'.'),
-                                                        conditionallyAppendModeledPhenotype('.inp_ALL_',propertyName,modeledPhenotype,'_'),
-                                                        propertyName, modeledPhenotype  );
-
-                // categorical
-                carryAllCategoricalFiltersAcrossOtherStrata(  conditionallyAppendModeledPhenotype('.categoricalFilter','',modeledPhenotype,'.'),
-                                                        conditionallyAppendModeledPhenotype('multi_ALL_',propertyName,modeledPhenotype,'_'),
-                                                        propertyName, modeledPhenotype );
-
-                 // comparators
-                carryAllComparatorsAcrossOtherStrata(  conditionallyAppendModeledPhenotype('.filterCmp','',modeledPhenotype,'.'),
-                                                        conditionallyAppendModeledPhenotype('.cmp_ALL_',propertyName,modeledPhenotype,'_'),
-                                                        propertyName, modeledPhenotype  );
-
-           }
 
             refreshSampleDistribution( '#datasetFilter', utilizeDistributionInformationToCreatePlot, {
                                                                                                         propertyName:propertyName,
@@ -2060,10 +2077,9 @@ var displayBurdenVariantSelector = function (){
             preloadInteractiveAnalysisData:preloadInteractiveAnalysisData, // assuming there is only one data set we can get most everything at page load
             retrieveExperimentMetadata:retrieveExperimentMetadata, //Retrieve sample metadata only to get the experiment list
             immediateFilterAndRun:immediateFilterAndRun, // apply filters locally and then launch IAT
-            retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype
+            retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype.  not currently used
             refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
-            carryCovChanges:carryCovChanges,
-            populateSampleAndCovariateSection:populateSampleAndCovariateSection,
+            carryCovChanges:carryCovChanges, // Terry across strata.  Similar to carryTheAllFiltersAcrossStrata but much simpler
             displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
         }
 
@@ -2128,7 +2144,7 @@ $( document ).ready( function (){
 
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a>Step 4: Launch analysis</a>
+                <a>Step {{sectionNumber}}: Launch analysis</a>
             </h4>
         </div>
 
@@ -2197,7 +2213,7 @@ $( document ).ready( function (){
 
         <div class="panel-heading">
             <h4 class="panel-title">
-                <a>Step 1: Select a phenotype to test for association</a>
+                <a>Step {{sectionNumber}}: Select a phenotype to test for association</a>
             </h4>
         </div>
 
@@ -2287,7 +2303,7 @@ the individual filters themselves. That work is handled later as part of a loop-
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#filterSamples"
-                       href="#filterSamples">Step 2: Select a subset of samples based on phenotypic criteria</a>
+                       href="#filterSamples">Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>
                 </h4>
             </div>
 
@@ -2522,7 +2538,7 @@ the individual filters themselves. That work is handled later as part of a loop-
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#initiateAnalysis_{{stratum}}"
-                       href="#initiateAnalysis_{{stratum}}">Step 3: Control for covariates</a>
+                       href="#initiateAnalysis_{{stratum}}">Step {{sectionNumber}}: Control for covariates</a>
                 </h4>
             </div>
 
@@ -2646,7 +2662,7 @@ the individual filters themselves. That work is handled later as part of a loop-
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#variantFilterSelection"
-                       href="#variantFilterSelection">Step 4: Manage variant selection</a>
+                       href="#variantFilterSelection">Step {{sectionNumber}}: Manage variant selection</a>
                 </h4>
             </div>
 
