@@ -1,8 +1,5 @@
 import grails.util.Environment
-import org.apache.log4j.DailyRollingFileAppender
-import org.apache.log4j.PatternLayout
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
-
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -178,6 +175,15 @@ t2dAws01RestServer {
 //    name =  'dig-genome-store/'
     base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
     name =  'aws/'
+    path = 'gs/'
+}
+
+
+t2dAwsStage01RestServer {
+//    base = 'http://localhost:8888/'
+//    name =  'dig-genome-store/'
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
+    name =  'aws01/'
     path = 'gs/'
 }
 

@@ -84,6 +84,14 @@
 
                             <div class="radio">
                                 <label>
+                                    <input id="testserver" type="radio" name="datatype" value="aws02restserver"
+                                        <%=restServer.getCurrentServer()==restServer.getAws02RestServer()?" checked ":"" %> />
+                                    <g:message code="system.radio.rest_server.AWS02" /> (${restServer.getAws02RestServer()})
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
                                     <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
                                     <g:message code="system.radio.rest_server.dev" /> (${restServer.getDevLoadBalanced()})

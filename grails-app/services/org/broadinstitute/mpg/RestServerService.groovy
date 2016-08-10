@@ -33,6 +33,7 @@ class RestServerService {
     private String QA_LOAD_BALANCED_SERVER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
     private String AWS01_REST_SERVER = ""
+    private String AWS02_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
@@ -134,6 +135,9 @@ class RestServerService {
         // 'aws01'
         AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
 
+        // 'stage aws01'
+        AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
+
         //
         //
         BASE_URL = grailsApplication.config.server.URL
@@ -154,6 +158,10 @@ class RestServerService {
 
     public String getAws01RestServer() {
         return AWS01_REST_SERVER;
+    }
+
+    public String getAws02RestServer() {
+        return AWS02_REST_SERVER;
     }
 
     public String getProdLoadBalanced() {
@@ -222,6 +230,10 @@ class RestServerService {
 
     public void goWithTheAws01RestServer() {
         pickADifferentRestServer(AWS01_REST_SERVER)
+    }
+
+    public void goWithTheAws02RestServer() {
+        pickADifferentRestServer(AWS02_REST_SERVER)
     }
 
     public void goWithTheDevServer() {
