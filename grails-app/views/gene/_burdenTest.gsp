@@ -348,6 +348,10 @@
                   }
              }
             var dataSet =  'samples_17k_mdv2';
+
+            // disable the button
+            $('#singlebutton').prop("disabled", true);
+
             $.ajax({
                 cache: false,
                 type: "post",
@@ -447,11 +451,16 @@
 
                                }
                             }
+
                         $('#rSpinner').hide();
                     },
                     error: function (jqXHR, exception) {
                         $('#rSpinner').hide();
                         core.errorReporter(jqXHR, exception);
+                    },
+                    complete: function () {
+                        // reenable the button
+                        $('#singlebutton').prop("disabled", false);
                     }
                 });
         }; // runBurdenTest
