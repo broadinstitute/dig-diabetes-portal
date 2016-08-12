@@ -188,10 +188,17 @@ public class BurdenJsonBuilder {
 
         // add in the query properties
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_DBSNP_ID));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
-        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN_PRED));
-        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_SIFT_PRED));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_PROTEIN_CHANGE));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
+
+
 
         // add in the filters
         query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, geneString);
@@ -210,34 +217,6 @@ public class BurdenJsonBuilder {
         // return
         return jsonString;
 
-        /*
-        StringBuilder stringBuilder = new StringBuilder();
-
-        // build the header of the search query
-        stringBuilder.append("{\"passback\": \"123abc\", \"entity\": \"variant\", \"page_number\": 0, \"page_size\": 100, \"limit\": 1000, \"count\": false,");
-
-        // add in the properties
-       stringBuilder.append("\"properties\": { \"cproperty\": [\"VAR_ID\"], \"orderBy\": [\"CHROM\"], \"dproperty\": {}, \"pproperty\": {}},");
-
-        // add in the filters
-        // phenotype filter
-        stringBuilder.append("\"filters\": [{\"dataset_id\": \"");
-        stringBuilder.append(sampleGroup);
-        stringBuilder.append("\", \"phenotype\": \"T2D\", \"operand\": \"P_FIRTH_FE_IV\", \"operator\": \"LTE\", \"value\": 0.05, \"operand_type\": \"FLOAT\"},");
-
-        // gene filter
-        stringBuilder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"GENE\", \"operator\": \"EQ\", \"value\": \"");
-        stringBuilder.append(geneString);
-        stringBuilder.append("\", \"operand_type\": \"STRING\"},");
-
-        // most del score filter
-        stringBuilder.append("{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"MOST_DEL_SCORE\", \"operator\": \"LT\", \"value\": ");
-        stringBuilder.append(mostDelScore);
-        stringBuilder.append(", \"operand_type\": \"FLOAT\"}]}");
-
-        // return
-        return stringBuilder.toString();
-        */
     }
 
     /**

@@ -204,13 +204,14 @@ class BurdenService {
 
 
 
-    public List<Variant>  generateListOfVariantsFromFilters(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
+    public String  generateListOfVariantsFromFilters(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
         List<String> burdenVariantList;
         int dataVersionId = this.sharedToolsService.getDataVersion();
         List<QueryFilter> queryFilterList;
+        String retval
 
         // log
         log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
@@ -233,15 +234,16 @@ class BurdenService {
             log.info("got burden getData results: " + jsonObject);
 
             // get the list of variants back
-            variantList = this.getBurdenJsonBuilder().getVariantListFromJson(jsonObject);
-            log.info("got first pass variant list of size: " + variantList.size());
+            retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "" )
+//            variantList = this.getBurdenJsonBuilder().getVariantListFromJson(jsonObject);
+//            log.info("got first pass variant list of size: " + variantList.size());
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
         }
 
         // return
-        return variantList;
+        return retval;
     }
 
 

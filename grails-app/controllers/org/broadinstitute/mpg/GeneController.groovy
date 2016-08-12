@@ -341,12 +341,12 @@ class GeneController {
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> result = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
-        String stringForVariantTable = "["+result.collect{org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant v->"{\"name\":\"${v.getVariantId()}\"}"}.join(",")+"]"
+        String codedVariantList = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
+//        String stringForVariantTable = "["+result.collect{org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant v->"{\"name\":\"${v.getVariantId()}\"}"}.join(",")+"]"
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray sampleCallSpecifics = slurper.parseText(stringForVariantTable)
+        JSONObject sampleCallSpecifics = slurper.parseText(codedVariantList)
         // send json response back
-        render(status: 200, contentType: "application/json") {sampleCallSpecifics}
+        render(status: 200, contentType: "application/json") {variantInfo:sampleCallSpecifics}
     }
 
 

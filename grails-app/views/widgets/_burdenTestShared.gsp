@@ -1178,9 +1178,16 @@ var displayBurdenVariantSelector = function (){
            var phenotypeToPredict = $('#phenotypeFilter').val();
            var datasetUse = $('#datasetFilter').val();
            var listOfVariantsToCheck = [];
-           _.forEach($('.variantsToCheck'),function(eachVariantDom){
-                listOfVariantsToCheck.push('"'+$(eachVariantDom).text()+'"');
-           });
+           if ($('#gaitTable').children().length>0){ // check that we have a table
+                var gaitTable = $('#gaitTable').DataTable();
+               _.forEach(gaitTable.rows().data(),function(eachVariantDom){
+                    var variantSelector = $(eachVariantDom[0]).attr('href').split('/');
+                    if ((variantSelector)&&
+                        (variantSelector.length>1)){
+                        listOfVariantsToCheck.push('"'+variantSelector[variantSelector.length-1]+'"');
+                    }
+               });
+           }
            return $.ajax({
                 cache: false,
                 type: "post",
@@ -1317,7 +1324,17 @@ var displayBurdenVariantSelector = function (){
                  promise.done(
                   function (data) {
                     if ((typeof data !== 'undefined') &&
-                         (data)){
+                         (data)&&
+                         (typeof data.results !== 'undefined') &&
+                         (data.results)){
+                         var variantListHolder = [];
+                         _.forEach(data.results, function(oneVariant){
+                            var variant = {};
+                             _.forEach(oneVariant.pVals, function(fieldHolder){
+                                variant[fieldHolder.level] = fieldHolder.count;
+                             });
+                             variantListHolder.push(variant);
+                         });
                          $('#gaitTable').DataTable({
                                 "bDestroy": true,
                                 "columnDefs": [
@@ -1335,16 +1352,22 @@ var displayBurdenVariantSelector = function (){
                                 "bProcessing": true
                         } );
                         $('#gaitTable').DataTable().clear();
-                         _.forEach(data,function(variantRec){
-                            $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.name+'</span>')
+                         _.forEach(variantListHolder,function(variantRec){
+                       //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                             var arrayOfRows = [];
-                            arrayOfRows.push('<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantRec.name+'" class="boldItlink">'+variantRec.name+'</a>');
-                            arrayOfRows.push('<span class="variantsToCheck">'+variantRec.name+'</span>');
-                            arrayOfRows.push('8');
-                            arrayOfRows.push('118184783');
-                            arrayOfRows.push('<a href="/dig-diabetes-portal/gene/geneInfo/SLC30A8" class="boldItlink">SLC30A8</a>');
-                            arrayOfRows.push('p.R325W');
-                            arrayOfRows.push('missense variant');
+                            var variantID = variantRec.VAR_ID;
+                            if ((variantRec.CHROM)&&(variantRec.POS)){
+                                variantID = variantRec.CHROM+":"+variantRec.POS;
+                            }
+                            arrayOfRows.push('<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantRec.VAR_ID+'" class="boldItlink">'+variantID+'</a>');
+                            var DBSNP_ID = (variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'';
+                            arrayOfRows.push(DBSNP_ID);
+                            arrayOfRows.push(variantRec.CHROM);
+                            arrayOfRows.push(variantRec.POS);
+                            arrayOfRows.push('<a href="/dig-diabetes-portal/gene/geneInfo/SLC30A8" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
+                            var protein_change= (variantRec.Protein_change)?variantRec.Protein_change:'';
+                            arrayOfRows.push(protein_change);
+                            arrayOfRows.push(variantRec.Consequence);
                             $('#gaitTable').dataTable().fnAddData( arrayOfRows );
                          });
 
@@ -2799,9 +2822,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                             </p>
                             <table id="gaitTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;" role="grid"
                             aria-describedby="variantTable_info">
-                                <tbody id="gaitTableBody" role="alert" aria-live="polite" aria-relevant="all">
 
-                                </tbody>
                             </table>
 
 
