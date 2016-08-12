@@ -297,6 +297,7 @@ line.center{
         var storedSampleMetadata;
         var minimumNumberOfSamples = 100;
         var portalTypeWithAncestry = true;
+        var geneForGaitStr = '';
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
         portalTypeWithAncestry = false;
         </g:if>
@@ -313,6 +314,18 @@ line.center{
 var displayBurdenVariantSelector = function (){
      return true;
  };
+
+
+
+ var storeGeneForGait = function (geneForGaitStr){
+     geneForGait = geneForGaitStr;
+ };
+
+
+ var getGeneForGait  = function (){
+     return geneForGait;
+ };
+
 
 
 
@@ -827,9 +840,12 @@ var displayBurdenVariantSelector = function (){
                     //
                     //  display the variant selection filtering tools
                     //
-                    renderData.sectionNumber++;
-                    $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-                    mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
+                    if (getGeneForGait().length>0){
+                        renderData.sectionNumber++;
+                        $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+                        mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
+                        $('#singlebutton').click();//if we have a gene then we must generate a list of variants
+                    }
 
                     //
                     // display the results section
@@ -1312,7 +1328,7 @@ var displayBurdenVariantSelector = function (){
                     cache: false,
                     type: "post",
                     url: "${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}",
-                    data: {geneName: 'SLC30A8',
+                    data: {geneName: getGeneForGait(),
                        filterNum: selectedFilterValueId,
                        burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
                        mafValue: specifiedMafValueId,
@@ -2166,14 +2182,16 @@ var displayBurdenVariantSelector = function (){
             refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
             carryCovChanges:carryCovChanges, // Terry across strata.  Similar to carryTheAllFiltersAcrossStrata but much simpler
             displayTestResultsSection: displayTestResultsSection,  // simply display results section (show() or hide()
-            generateListOfVariantsFromFilters: generateListOfVariantsFromFilters
+            generateListOfVariantsFromFilters: generateListOfVariantsFromFilters,
+            storeGeneForGait: storeGeneForGait
         }
 
     }());
 
 $( document ).ready( function (){
-  mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
-  mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData();
+    mpgSoftware.burdenTestShared.storeGeneForGait('<%=geneName%>');
+    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
+    mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData();
 } );
 
 </g:javascript>
@@ -2181,7 +2199,13 @@ $( document ).ready( function (){
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
-            <h2><strong>Genetic Association Interactive Tool</strong></h2>
+            <g:if test="${modifiedTitle}">
+                <h2><strong>${modifiedTitle}</strong></h2>
+            </g:if>
+            <g:else>
+                <h2><strong>Genetic Association Interactive Tool</strong></h2>
+            </g:else>
+
         </a>
     </div>
 

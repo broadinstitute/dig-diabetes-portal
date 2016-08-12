@@ -17,20 +17,23 @@
 
 <script>
     var loading = $('#spinner').show();
-    $.ajax({
-        cache: false,
-        type: "get",
-        url: "../../trait/traitVariantCrossGetDataAjax/" + "${regionSpecification}",
-        async: true,
-        success: function (data) {
-            fillTraitVariantCross(data);
-            loading.hide();
-        },
-        error: function (jqXHR, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
-        }
-    });
+    if ("${regionSpecification}"){
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: "../../trait/traitVariantCrossGetDataAjax/" + "${regionSpecification}",
+            async: true,
+            success: function (data) {
+                fillTraitVariantCross(data);
+                loading.hide();
+            },
+            error: function (jqXHR, exception) {
+                loading.hide();
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    }
     var phenotypeMap = new UTILS.phenotypeListConstructor(decodeURIComponent("${phenotypeList}"));
     function fillTraitVariantCross(data) {
         var margin = { top: 175, right: 100, bottom: -50, left: 10 },
