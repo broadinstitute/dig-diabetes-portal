@@ -1,10 +1,13 @@
 package org.broadinstitute.mpg
+
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -320,7 +323,39 @@ class GeneController {
     }
 
 
-    /***
+
+    def generateListOfVariantsFromFiltersAjax() {
+        // log parameters received
+        // Here are some example parameters, as they show up in the params variable
+        // params.filterNum=="2" // value=id from burdenTestVariantSelectionOptionsAjax, or 0 if no selection was made (which is a legal choice)
+        // params.mafOption=="1" // where 1->apply maf across all samples, 2->apply maf to each ancestry"
+        // params.mafValue=="0.47" // where value= real number x (where 0 <= x <= 1), and x is the MAF you'll pass into the REST call"
+        // params.geneName=="SLC30A8" // string representing gene name
+
+        Boolean explicitlySelectSamples = false
+        String geneName = params.geneName
+        String dataSet = params.dataSet
+        int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
+        String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
+        int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
+        Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
+
+        // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
+        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> result = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
+        String stringForVariantTable = "["+result.collect{org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant v->"{\"name\":\"${v.getVariantId()}\"}"}.join(",")+"]"
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray sampleCallSpecifics = slurper.parseText(stringForVariantTable)
+        // send json response back
+        render(status: 200, contentType: "application/json") {sampleCallSpecifics}
+    }
+
+
+
+
+
+
+
+        /***
      * Get the contents for the filter drop-down box on the burden test section of the gene info page
      * @return
      */

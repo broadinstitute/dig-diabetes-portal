@@ -249,39 +249,48 @@ line.center{
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
 
-//    mpgSoftware.burdenInfo = (function () {
-//
-//        var delayedBurdenDataPresentation = {};
-//
-//        // burden testing hypothesis testing section
-//        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
-//            var retainBarchartPtr;
-//
-//            // The bar chart graphic
-//            if ((caseNumerator) ||
-//                (caseDenominator) &&
-//                (controlNumerator) &&
-//                (controlDenominator)) {
-//                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.variantInfo.fillUpBarChart,
-//                    barchartPtr: retainBarchartPtr,
-//                    launch: function () {
-//                    },
-//                    removeBarchart: function () {
-//                    }
-//                };
-//            }
-//        };
-//
-//        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
-//            return delayedBurdenDataPresentation;
-//        };
-//
-//        return {
-//            // public routines
-//            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
-//            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
-//        }
-//    }());
+    mpgSoftware.gaitBackgroundData = (function () {
+
+        var fillVariantOptionFilterDropDown = function ( burdenProteinEffectFilterName ){
+            var burdenProteinEffectFilter = burdenProteinEffectFilterName;
+            var promise =  $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}",
+                    data: {},
+                    async: true
+                });
+                promise.done(
+                 function (data) {
+                       if ((typeof data !== 'undefined') && (data)){
+                               //first check for error conditions
+                                if (!data){
+                                    console.log('null return data from burdenTestVariantSelectionOptionsAjax');
+                                } else if (data.is_error) {
+                                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
+                                }
+                                else if ((typeof data.options === 'undefined') ||
+                                         (data.options.length <= 0)){
+                                     console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+                               }else {
+                                   var optionList = data.options;
+                                   var dropDownHolder = $(burdenProteinEffectFilter);
+                                   for ( var i = 0 ; i < optionList.length ; i++ ){
+                                        dropDownHolder.append('<option value="'+optionList[i].id+'">'+optionList[i].name+'</option>')
+                                   }
+                                }
+                            }
+
+                    });
+                    promise.fail() ;
+        }; // fillFilterDropDown
+
+
+        return {
+            // public routines
+            fillVariantOptionFilterDropDown: fillVariantOptionFilterDropDown
+        }
+    }());
 
     mpgSoftware.burdenTestShared = (function () {
         var loading = $('#rSpinner');
@@ -468,6 +477,9 @@ var displayBurdenVariantSelector = function (){
                     core.errorReporter(jqXHR, exception);
                 }
             });
+
+
+
         };
 
 
@@ -812,33 +824,18 @@ var displayBurdenVariantSelector = function (){
                     });
 
 
-
+                    //
+                    //  display the variant selection filtering tools
+                    //
                     renderData.sectionNumber++;
                     $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-
-
-
+                    mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
 
                     //
                     // display the results section
                     //
-                    var renderRunData = {
-                        strataProperty:strataProperty,
-                        phenotypeProperty:convertPhenotypeNames(phenotype),
-                        stratum:stratumName,
-                        singleRunButtonDisplay: function(){
-                                 var singleRunButton = $('#singleRunButton');
-                                 if (singleRunButton.text().length===0) {
-                                    return ('<button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton" '+
-                                                   'class="btn btn-primary btn-lg burden-test-btn vcenter" '+
-                                                   'onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>');
-                                 } else {
-                                    return "";
-                                 }
-                            },
-                        sectionNumber: (renderData.sectionNumber+1)
-                    };
-                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderRunData));
+                    renderData.sectionNumber++;
+                    $("#displayResultsLocation").empty().append(Mustache.render( $('#displayResultsTemplate')[0].innerHTML,renderData));
 
                     if (multipleStrataExist) {
                         $('.filterCohort.ALL').click();
@@ -1180,18 +1177,23 @@ var displayBurdenVariantSelector = function (){
 
            var phenotypeToPredict = $('#phenotypeFilter').val();
            var datasetUse = $('#datasetFilter').val();
+           var listOfVariantsToCheck = [];
+           _.forEach($('.variantsToCheck'),function(eachVariantDom){
+                listOfVariantsToCheck.push('"'+$(eachVariantDom).text()+'"');
+           });
            return $.ajax({
                 cache: false,
                 type: "post",
                 url: "${createLink(controller: 'variantInfo', action: 'burdenTestAjax')}",
-                data: {variantName: '<%=variantIdentifier%>',
-                       covariates: covariateValues,
-                       samples: "{\"samples\":[]}",
-                       filters: "{\"filters\":"+filterValues+"}",
-                       compoundedFilterValues: compoundedFilterValues,
-                       traitFilterSelectedOption: phenotypeToPredict,
-                       dataset: datasetUse,
-                       stratum: stratum
+                data: { variantName: '<%=variantIdentifier%>',
+                        variantList: "["+listOfVariantsToCheck.join(',')+"]",
+                        covariates: covariateValues,
+                        samples: "{\"samples\":[]}",
+                        filters: "{\"filters\":"+filterValues+"}",
+                        compoundedFilterValues: compoundedFilterValues,
+                        traitFilterSelectedOption: phenotypeToPredict,
+                        dataset: datasetUse,
+                        stratum: stratum
                 },
                 async: true
             }).success(
@@ -1288,6 +1290,70 @@ var displayBurdenVariantSelector = function (){
 
 
 
+            var generateListOfVariantsFromFilters = function (){
+
+             var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+             selectedFilterValueId = parseInt(selectedFilterValue),
+             selectedMafOption = $('input[name=mafOption]:checked').val(),
+             selectedMafOptionId =  parseInt(selectedMafOption),
+             specifiedMafValue = $('#mafInput').val(),
+             specifiedMafValueId  = parseFloat(specifiedMafValue),
+             burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val();
+              var dataSet =  'samples_17k_mdv2';
+
+                var promise =  $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}",
+                    data: {geneName: 'SLC30A8',
+                       filterNum: selectedFilterValueId,
+                       burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+                       mafValue: specifiedMafValueId,
+                       mafOption: selectedMafOptionId,
+                       dataSet: dataSet
+                     },
+                    async: true
+                 });
+                 promise.done(
+                  function (data) {
+                    if ((typeof data !== 'undefined') &&
+                         (data)){
+                         $('#gaitTable').DataTable({
+                                "bDestroy": true,
+                                "columnDefs": [
+                                        { "name": "VAR_ID",   "targets": [0], "title":"Variant ID"  },
+                                        { "name": "DBSNP_ID",   "targets": [1], "title":"dbDNP ID"  },
+                                        { "name": "CHROM",   "targets": [2], "title":"Chromosome"  },
+                                        { "name": "POS",   "targets": [3], "title":"Position" },
+                                        { "name": "CLOSEST_GENE",   "targets": [4], "title":"Nearest gene"  },
+                                        { "name": "Protein_change",   "targets": [5], "title":"Protein change"  },
+                                        { "name": "Consequence",   "targets": [6], "title":"Consequence"  }
+                                    ],
+                                "sPaginationType": "full_numbers",
+                                "iDisplayLength": 10,
+                                "bFilter": false,
+                                "bProcessing": true
+                        } );
+                        $('#gaitTable').DataTable().clear();
+                         _.forEach(data,function(variantRec){
+                            $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.name+'</span>')
+                            var arrayOfRows = [];
+                            arrayOfRows.push('<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantRec.name+'" class="boldItlink">'+variantRec.name+'</a>');
+                            arrayOfRows.push('<span class="variantsToCheck">'+variantRec.name+'</span>');
+                            arrayOfRows.push('8');
+                            arrayOfRows.push('118184783');
+                            arrayOfRows.push('<a href="/dig-diabetes-portal/gene/geneInfo/SLC30A8" class="boldItlink">SLC30A8</a>');
+                            arrayOfRows.push('p.R325W');
+                            arrayOfRows.push('missense variant');
+                            $('#gaitTable').dataTable().fnAddData( arrayOfRows );
+                         });
+
+                        }
+                    }
+                 );
+
+                 promise.fail();
+            }
 
 
         /**
@@ -1346,11 +1412,7 @@ var displayBurdenVariantSelector = function (){
                     var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                     addStrataSection(strataDomIdentifierClass,currentStratum);
                     var isDichotomousTrait=(isCategorical==='1');
-//                    fillInResultsSection(currentStratum,'pValue = '+ pValue,
-//                    (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
-//                    'std. err. = '+stdErr, isDichotomousTrait,currentStratum);
                     printFullResultsSection('',pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,currentStratum);
-                    //printFullResultsSection(data.stats,pValue,beta,oddsRatio,currentStratum,'');
                 });
 
 
@@ -2080,7 +2142,8 @@ var displayBurdenVariantSelector = function (){
             retrieveMatchingDataSets:retrieveMatchingDataSets, // retrieve data set matching phenotype.  not currently used
             refreshGaitDisplay: refreshGaitDisplay, // refresh the filters, covariates, and results sections
             carryCovChanges:carryCovChanges, // Terry across strata.  Similar to carryTheAllFiltersAcrossStrata but much simpler
-            displayTestResultsSection: displayTestResultsSection  // simply display results section (show() or hide()
+            displayTestResultsSection: displayTestResultsSection,  // simply display results section (show() or hide()
+            generateListOfVariantsFromFilters: generateListOfVariantsFromFilters
         }
 
     }());
@@ -2199,7 +2262,9 @@ $( document ).ready( function (){
         </div>
 
         <div class="col-sm-1 col-xs-12 vcenter burden-test-btn-wrapper">
-            {{{singleRunButtonDisplay}}}
+            <button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton"
+                                                   class="btn btn-primary btn-lg burden-test-btn vcenter"
+                                                   onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
         </div>
 
     </div>
@@ -2683,16 +2748,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                         <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
 
                         <div class="row burden-test-wrapper-options">
-                            <div class="col-md-8 col-sm-8 col-xs-12">
+                            <div class="col-md-10 col-sm-10 col-xs-12">
                                 <div  class="row">
-                                    <div class="col-md-4 col-sm-4 col-xs-4">
 
-                                        <label><g:message code="gene.burdenTesting.label.available_traits"/>:
-                                            <select id="burdenTraitFilter" class="burdenTraitFilter form-control">
-                                            </select>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-8 col-sm-8 col-xs-8">
+                                    <div class="col-md-12 col-sm-12 col-xs-12">
                                         <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
                                             <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control">
                                                 <option selected value="0"><g:message code="gene.burdenTesting.label.select_filter"/></option>
@@ -2725,12 +2784,28 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     </div>
                                 </div>
                             </div>
-                            <div  class="col-md-4 col-sm-4 col-xs-12 burden-test-btn-wrapper vcenter">
+                            <div  class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
                                 <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                        class="btn btn-primary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTest.runBurdenTest()"><g:message code="gene.burdenTesting.label.run"/></button>
+                                        class="btn btn-secondary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()">Retrieve variants</button>
                             </div>
                         </div>
 
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 col-xs-12">
+                            <p>
+                                Filtered variant set:
+                                <div id="gaitTableDataHolder" style="display: none"></div>
+                            </p>
+                            <table id="gaitTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;" role="grid"
+                            aria-describedby="variantTable_info">
+                                <tbody id="gaitTableBody" role="alert" aria-live="polite" aria-relevant="all">
+
+                                </tbody>
+                            </table>
+
+
+                        </div>
                     </div>
 
                 </div>

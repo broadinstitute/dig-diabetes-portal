@@ -200,6 +200,74 @@ class BurdenService {
 
 
 
+
+
+
+
+    public List<Variant>  generateListOfVariantsFromFilters(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
+        // local variables
+        JSONObject jsonObject, returnJson;
+        List<Variant> variantList;
+        List<String> burdenVariantList;
+        int dataVersionId = this.sharedToolsService.getDataVersion();
+        List<QueryFilter> queryFilterList;
+
+        // log
+        log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
+        log.info("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
+        // when the phenotypes no longer have multiple names each then we can remove this kludgefest
+        String convertedPhenotype = phenotype
+        switch (phenotype){
+            case "t2d": convertedPhenotype = "T2D"; break
+            default: break
+        }
+
+        try {
+
+            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(dataVersionId, mafSampleGroupOption, mafValue);
+            String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_mdv2", "T2D", "P_VALUE" )
+            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_mdv2",1.0,"T2D",pValueName))
+
+            // get the getData results payload
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
+            log.info("got burden getData results: " + jsonObject);
+
+            // get the list of variants back
+            variantList = this.getBurdenJsonBuilder().getVariantListFromJson(jsonObject);
+            log.info("got first pass variant list of size: " + variantList.size());
+
+        } catch (PortalException exception) {
+            log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
+        }
+
+        // return
+        return variantList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * method to return the burden test REST payload
      *
@@ -319,7 +387,7 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, String burdenVariantDbSnpId,
+    protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, List <String> burdenVariantList,
                                                           JSONObject covariateJsonObject,
                                                           JSONObject sampleJsonObject,
                                                           JSONObject filtersJsonObject,
@@ -329,18 +397,20 @@ class BurdenService {
         org.broadinstitute.mpg.Variant burdenVariant;
         JSONObject returnJson = null;
 
-        String variantId = ""
-        if (burdenVariantDbSnpId)      {
-           JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (burdenVariantDbSnpId)
+        List<String> variantIds = []
+        if ((burdenVariantList)&& (burdenVariantList.size()==1))      {
+           JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (burdenVariantList[0])
             if ((jsonObject) &&
                     (!jsonObject.is_error)&&
                     (jsonObject.variants.size()>0)){
-                variantId = jsonObject.variants[0]*.find{key,value->key=="VAR_ID"}.value[0]
+                variantIds << jsonObject.variants[0]*.find{key,value->key=="VAR_ID"}.value[0]
             }
+        } else {
+            variantIds = burdenVariantList
         }
 
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantId, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset );
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantIds, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset );
 
         // return
         return returnJson;
@@ -354,24 +424,16 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
-    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, String burdenVariantId,
+    protected JSONObject callBurdenTestForTraitAndVariantId(String traitOption, List<String> burdenVariantList,
                                                             JSONObject covariateJsonObject,
                                                             JSONObject sampleJsonObject,
                                                             JSONObject filtersJsonObject,
                                                             JSONArray phenotypeFilterValues,
                                                             String dataset) throws PortalException {
         // local variables
-        List<String> burdenVariantList = new ArrayList<String>();
         JSONObject returnJson = null;
         //int dataVersion = this.sharedToolsService.getDataVersion();
         String stringDataVersion = metaDataService.getDataVersion()
-
-        // if the variant is not null, add it in (empty list will throw exception in next call)
-        if (burdenVariantId != null) {
-            burdenVariantList.add(burdenVariantId);
-        } else {
-            throw new PortalException("got null variantId for single variant burden call")
-        }
 
         returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject, phenotypeFilterValues, dataset, false );
 
