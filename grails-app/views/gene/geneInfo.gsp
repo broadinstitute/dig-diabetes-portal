@@ -219,7 +219,7 @@
                 </p>
 
 
-                <div class="accordion" id="accordion2">
+                <sec class="accordion" id="accordion2">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
@@ -330,12 +330,12 @@
 
                     </g:if>
 
-
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="separator"></div>
 
                         <g:render template="/widgets/locusZoomPlot"/>
 
+                        <sec:ifAllGranted roles="ROLE_SYSTEM">
                         <div class="separator"></div>
 
                         <div class="accordion-group">
@@ -353,6 +353,7 @@
                                 </div>
                             </div>
                         </div>
+                        </sec:ifAllGranted>
                     </g:if>
 
                     <div class="separator"></div>
