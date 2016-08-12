@@ -8,6 +8,7 @@
     <r:require modules="crossMap"/>
     <r:require modules="igv"/>
     <r:require module="locusZoom"/>
+    <r:require module="mustache"/>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
@@ -338,21 +339,9 @@
 
                         <div class="separator"></div>
 
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
-                                   href="#collapseFour">
-                                    <h2><strong><g:message code="gene.burdenTesting.title"
-                                                           default="Run a burden test"/></strong></h2>
-                                </a>
-                            </div>
+                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '', 'modifiedTitle': 'Interactive burden test (GAIT for genes)' ]"/>
 
-                            <div id="collapseFour" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <g:render template="burdenTest"/>
-                                </div>
-                            </div>
-                        </div>
+
                     </g:if>
 
                     <div class="separator"></div>

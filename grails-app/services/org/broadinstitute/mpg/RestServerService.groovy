@@ -1787,7 +1787,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param apiResults
      * @return
      */
-    private String processInfoFromGetDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
+    public String processInfoFromGetDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         List<String> crossVariantData = []
         if (!apiResults["is_error"]){
