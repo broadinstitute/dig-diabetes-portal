@@ -452,16 +452,16 @@ var displayBurdenVariantSelector = function (){
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",
-                data: {},
+                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",%{--var gaitTable = $('#gaitTable').DataTable();--}%
+               %{--_.forEach(gaitTable.rows().data(),function(eachVariantDom){--}% data: {},
                 async: true,
-                success: function (data) {
-                    storeSampleMetadata(data);
+                success: function (data) {%{--var variantSelector = $(eachVariantDom[0]).attr('href').split('/');--}%
+                    %{--if ((variantSelector)&&--}%storeSampleMetadata(data);
                     var phenotypeDropdown = $(dropDownSelector);
                     phenotypeDropdown.empty();
-                    if ( ( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.phenotypes !== 'undefined' ) &&
+                    if ( ( data !==  null ) &&%{--(variantSelector.length>1)){--}%
+                        %{--listOfVariantsToCheck.push('"'+variantSelector[variantSelector.length-1]+'"');--}%    ( typeof data !== 'undefined') &&%{--}--}%
+               %{--});--}%             ( typeof data.phenotypes !== 'undefined' ) &&
                             (  data.phenotypes !==  null ) ) {
                         var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
                         var weHaveADefaultFirstElement = false;
@@ -1195,15 +1195,14 @@ var displayBurdenVariantSelector = function (){
            var datasetUse = $('#datasetFilter').val();
            var listOfVariantsToCheck = [];
            if ($('#gaitTable').children().length>0){ // check that we have a table
-                var gaitTable = $('#gaitTable').DataTable();
-               _.forEach(gaitTable.rows().data(),function(eachVariantDom){
-                    var variantSelector = $(eachVariantDom[0]).attr('href').split('/');
-                    if ((variantSelector)&&
-                        (variantSelector.length>1)){
-                        listOfVariantsToCheck.push('"'+variantSelector[variantSelector.length-1]+'"');
-                    }
-               });
-           }
+
+
+                var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td.sorting_1 input:checked');
+                _.forEach(gaitTableCheckboxes,function(eachVariantId){
+                    var gaitTableCheckboxId = $(eachVariantId).attr('id');
+                    listOfVariantsToCheck.push('"'+gaitTableCheckboxId.substr(12)+'"');
+                });
+               }
            return $.ajax({
                 cache: false,
                 type: "post",
@@ -1354,19 +1353,26 @@ var displayBurdenVariantSelector = function (){
                          $('#gaitTable').DataTable({
                                 "bDestroy": true,
                                 "columnDefs": [
-                                        { "name": "VAR_ID",   "targets": [0], "title":"Variant ID"  },
-                                        { "name": "DBSNP_ID",   "targets": [1], "title":"dbDNP ID"  },
-                                        { "name": "CHROM",   "targets": [2], "title":"Chromosome"  },
-                                        { "name": "POS",   "targets": [3], "title":"Position" },
-                                        { "name": "CLOSEST_GENE",   "targets": [4], "title":"Nearest gene"  },
-                                        { "name": "Protein_change",   "targets": [5], "title":"Protein change"  },
-                                        { "name": "Consequence",   "targets": [6], "title":"Consequence"  }
+                                        { "name": "IncludeCheckbox",   "targets": [0], "title":"Include?",
+                                                    "render": function (data, type, full, meta){
+                                                        return "<input type='checkbox' id='variant_sel_"+data+"' class='geneGaitVariantSelector' checked>";
+                                                    }
+                                        },
+                                        { "name": "VAR_ID",   "targets": [1], "title":"Variant ID"  },
+                                        { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID"  },
+                                        { "name": "CHROM",   "targets": [3], "title":"Chromosome"  },
+                                        { "name": "POS",   "targets": [4], "title":"Position" },
+                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene"  },
+                                        { "name": "Protein_change",   "targets": [6], "title":"Protein change"  },
+                                        { "name": "Consequence",   "targets": [7], "title":"Consequence"  }
+
                                     ],
-                                "sPaginationType": "full_numbers",
-                                "iDisplayLength": 10,
-                                "bFilter": false,
-                                "bProcessing": true
-                        } );
+                                    "sPaginationType": "full_numbers",
+                                    "iDisplayLength": 10,
+                                    "bFilter": false,
+                                    "bProcessing": true
+                            }
+                         );
                         $('#gaitTable').DataTable().clear();
                          _.forEach(variantListHolder,function(variantRec){
                        //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
@@ -1375,6 +1381,7 @@ var displayBurdenVariantSelector = function (){
                             if ((variantRec.CHROM)&&(variantRec.POS)){
                                 variantID = variantRec.CHROM+":"+variantRec.POS;
                             }
+                            arrayOfRows.push(variantRec.VAR_ID);
                             arrayOfRows.push('<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantRec.VAR_ID+'" class="boldItlink">'+variantID+'</a>');
                             var DBSNP_ID = (variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'';
                             arrayOfRows.push(DBSNP_ID);
