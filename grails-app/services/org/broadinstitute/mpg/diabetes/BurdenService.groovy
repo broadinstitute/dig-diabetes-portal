@@ -235,8 +235,6 @@ class BurdenService {
 
             // get the list of variants back
             retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "" )
-//            variantList = this.getBurdenJsonBuilder().getVariantListFromJson(jsonObject);
-//            log.info("got first pass variant list of size: " + variantList.size());
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
@@ -400,7 +398,7 @@ class BurdenService {
         JSONObject returnJson = null;
 
         List<String> variantIds = []
-        if ((burdenVariantList)&& (burdenVariantList.size()==1))      {
+        if ((burdenVariantList)&& (burdenVariantList.size()==1) && (burdenVariantList[0].size()>0))      {
            JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (burdenVariantList[0])
             if ((jsonObject) &&
                     (!jsonObject.is_error)&&

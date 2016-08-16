@@ -342,9 +342,25 @@ class GeneController {
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         String codedVariantList = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
-//        String stringForVariantTable = "["+result.collect{org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant v->"{\"name\":\"${v.getVariantId()}\"}"}.join(",")+"]"
+
         JsonSlurper slurper = new JsonSlurper()
         JSONObject sampleCallSpecifics = slurper.parseText(codedVariantList)
+
+        if (sampleCallSpecifics.results) {
+            for (Map result in sampleCallSpecifics.results){
+                for (Map pval in result.pVals){
+                    if (pval.level == "Consequence"){
+                        List<String> consequenceList = pval.count.tokenize(",")
+                        List<String> translatedConsequenceList = []
+                        for (String consequence in consequenceList){
+                            translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+                        }
+                        pval.count = translatedConsequenceList.join(", ")
+                    }
+                }
+            }
+        }
+
         // send json response back
         render(status: 200, contentType: "application/json") {variantInfo:sampleCallSpecifics}
     }

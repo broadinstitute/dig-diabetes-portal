@@ -9,6 +9,7 @@
     <r:require modules="igv"/>
     <r:require module="locusZoom"/>
     <r:require module="mustache"/>
+    <r:require modules="boxwhisker"/>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 

@@ -209,7 +209,7 @@
         var lzVarId = '';
         // need to process the varId to match the IDs that LZ is getting, so that
         // the correct reference variant is displayed
-        if (page == 'variantInfo') {
+        if ((page == 'variantInfo')&& (typeof variantId !== 'undefined') ) {
             lzVarId = variantId;
             // we have format: 8_118184783_C_T
             // need to get format like: 8:118184783_C/T
@@ -217,24 +217,27 @@
             lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
         }
 
-        var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1', lzVarId);
-        locusZoomPlot = returned.locusZoomPlot;
-        dataSources = returned.dataSources;
+        if (lzVarId.length > 0) {
 
-        // default panel
-        addLZPhenotype({
-            phenotype: 'T2D',
-            description: 'Type 2 Diabetes'
-        });
+            var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1', lzVarId);
+            locusZoomPlot = returned.locusZoomPlot;
+            dataSources = returned.dataSources;
 
-        $("#collapseLZ").on("shown.bs.collapse", function () {
-            locusZoomPlot.rescaleSVG();
-        });
+            // default panel
+            addLZPhenotype({
+                phenotype: 'T2D',
+                description: 'Type 2 Diabetes'
+            });
 
-        var clearCurtain = function() {
-            locusZoomPlot.curtain.hide();
-        };
-        locusZoomPlot.on('data_rendered', clearCurtain);
+            $("#collapseLZ").on("shown.bs.collapse", function () {
+                locusZoomPlot.rescaleSVG();
+            });
+
+            var clearCurtain = function() {
+                locusZoomPlot.curtain.hide();
+            };
+            locusZoomPlot.on('data_rendered', clearCurtain);
+        }
     };
 
     mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;

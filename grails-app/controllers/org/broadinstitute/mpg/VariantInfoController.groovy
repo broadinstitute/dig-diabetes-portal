@@ -303,7 +303,12 @@ def retrieveSampleSummary (){
         }
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantNameList, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset  );
+        JSONObject result
+        try {
+            result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantNameList, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset  );
+        } catch (Exception e){
+            e.printStackTrace()
+        }
 
         // send json response back
         if (!result){

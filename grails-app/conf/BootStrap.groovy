@@ -107,12 +107,11 @@ class BootStrap {
                                 (username == 'tgreen@broadinstitute.org') ||
                                 (username == 'mvg@broadinstitute.org') ||
                                 (username == 'ryank@broadinstitute.org') ||
-                                (username == 'msanders@broadinstitute.org') ) {
+                                (username == 'mariacos@broadinstitute.org') ) {
                             UserRole.create user, adminRole
                             UserRole.create user, systemRole
                         }
-                        if ((username == 'dsiedzik@broadinstitute.org') ||
-                            (username == 'maryc@broadinstitute.org')) {
+                        if (username == 'dsiedzik@broadinstitute.org') {
                             UserRole.create user, adminRole
                         }
                     } else {

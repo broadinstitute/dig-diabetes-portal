@@ -1226,7 +1226,11 @@ var displayBurdenVariantSelector = function (){
                              $('.iatErrorText').text('No data returned from burden test module!');
                             $('.iatErrorFailure').show();
                         } else if (data.is_error) {
-                            if (data.error_msg !== "Regression results could not be retrieved"){ // Not a message users need to see
+                            if (data.error_msg === "Variants must specify chromosome and position as in 10_19436862_G_A. Received: "){ // Replace with a message that make sense for users
+                                $('.iatErrorText').text('Error: no valid variants provided for analysis');
+                                $('.iatErrorFailure').show();
+                            }
+                            else { //if (data.error_msg !== "Regression results could not be retrieved"){ // Not a message users need to see
                                 $('.iatErrorText').text('Error: '+data.error_msg);
                                 $('.iatErrorFailure').show();
                             }
@@ -1352,19 +1356,29 @@ var displayBurdenVariantSelector = function (){
                          });
                          $('#gaitTable').DataTable({
                                 "bDestroy": true,
+                                "bAutoWidth" : false,
                                 "columnDefs": [
-                                        { "name": "IncludeCheckbox",   "targets": [0], "title":"Include?",
+                                        { "name": "IncludeCheckbox",   "targets": [0], "title":"Use?",
                                                     "render": function (data, type, full, meta){
                                                         return "<input type='checkbox' id='variant_sel_"+data+"' class='geneGaitVariantSelector' checked>";
-                                                    }
+                                                    },
+                                          "width": "50px"
+
                                         },
-                                        { "name": "VAR_ID",   "targets": [1], "title":"Variant ID"  },
-                                        { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID"  },
-                                        { "name": "CHROM",   "targets": [3], "title":"Chromosome"  },
-                                        { "name": "POS",   "targets": [4], "title":"Position" },
-                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene"  },
-                                        { "name": "Protein_change",   "targets": [6], "title":"Protein change"  },
-                                        { "name": "Consequence",   "targets": [7], "title":"Consequence"  }
+                                        { "name": "VAR_ID",   "targets": [1], "type":"allAnchor", "title":"Variant ID",
+                "width": "auto"  },
+                                        { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID",
+                "width": "auto"  },
+                                        { "name": "CHROM",   "targets": [3], "title":"Chrom.",
+                "width": "auto"  },
+                                        { "name": "POS",   "targets": [4], "title":"Position",
+                "width": "auto" },
+                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene",
+                "width": "auto"  },
+                                        { "name": "Protein_change",   "targets": [6], "title":"Protein change",
+                                          "width": "60px"  },
+                                        { "name": "Consequence",   "targets": [7], "title":"Consequence",
+                                          "width": "100px"  }
 
                                     ],
                                     "sPaginationType": "full_numbers",
@@ -1387,7 +1401,7 @@ var displayBurdenVariantSelector = function (){
                             arrayOfRows.push(DBSNP_ID);
                             arrayOfRows.push(variantRec.CHROM);
                             arrayOfRows.push(variantRec.POS);
-                            arrayOfRows.push('<a href="/dig-diabetes-portal/gene/geneInfo/SLC30A8" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
+                            arrayOfRows.push('<a href="/dig-diabetes-portal/gene/geneInfo/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
                             var protein_change= (variantRec.Protein_change)?variantRec.Protein_change:'';
                             arrayOfRows.push(protein_change);
                             arrayOfRows.push(variantRec.Consequence);
@@ -2848,8 +2862,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
                             <p>
-                                Filtered variant set:
-                                <div id="gaitTableDataHolder" style="display: none"></div>
+                                <div id="gaitTableDataHolder" style="margin-top: 20px"></div>
                             </p>
                             <table id="gaitTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;" role="grid"
                             aria-describedby="variantTable_info">
