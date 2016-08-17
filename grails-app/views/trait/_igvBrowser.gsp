@@ -365,7 +365,8 @@
 
         div = $("#myDiv")[0];
         options = {
-            showKaryo: false,
+            showKaryo: true,
+            showRuler: true,
             showCommandBar: false,
             fastaURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta",
             cytobandURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/cytoBand.txt",

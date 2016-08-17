@@ -709,8 +709,7 @@ var mpgSoftware = mpgSoftware || {};
             return geneInfoJsonMap.fieldSymbol();
         };
 
-        var fillTheGeneFields = function ( data, show_gwas, show_exchp, show_exseq,
-                                          rootRegionUrl, rootTraitUrl, rootVariantUrl, textStringObject) {
+        var fillTheGeneFields = function ( data ) {
             var rawGeneInfo = data['geneInfo'];
             fillUniprotSummary(rawGeneInfo);
         };
