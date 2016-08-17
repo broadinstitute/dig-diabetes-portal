@@ -217,7 +217,7 @@
             lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
         }
 
-        if (lzVarId.length > 0) {
+        if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
             var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1', lzVarId);
             locusZoomPlot = returned.locusZoomPlot;

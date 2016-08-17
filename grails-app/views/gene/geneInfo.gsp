@@ -22,14 +22,7 @@
 
 
     <style>
-    b, strong {
-        color: #052090;
-    }
-    .parentsFont {
-        font-family: inherit;
-        font-weight: inherit;
-        font-size: inherit;
-    }
+
 </style>
 </head>
 

@@ -1,3 +1,11 @@
+b, strong {
+    color: #052090;
+}
+.parentsFont {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
 a.page-nav-link {
     color: white;
     background: #052090;
