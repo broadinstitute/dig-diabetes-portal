@@ -1357,24 +1357,31 @@ var displayBurdenVariantSelector = function (){
                          $('#gaitTable').DataTable({
                                 "bDestroy": true,
                                 "bAutoWidth" : false,
+                                "order": [[ 1, "asc" ]],
                                 "columnDefs": [
-                                        { "name": "IncludeCheckbox",   "targets": [0], "title":"Use?",
+                                        { "name": "IncludeCheckbox",   "targets": [0],  "type":"checkBoxGait",  "title":"Use?",
                                                     "render": function (data, type, full, meta){
+                                                        if (data.indexOf('input')>-1){
+                                                        return data;
+                                                        } else {
                                                         return "<input type='checkbox' id='variant_sel_"+data+"' class='geneGaitVariantSelector' checked>";
+                                                        }
+
                                                     },
+                                          "bSortable":false,
                                           "width": "50px"
 
                                         },
                                         { "name": "VAR_ID",   "targets": [1], "type":"allAnchor", "title":"Variant ID",
-                "width": "auto"  },
+                                            "width": "auto"  },
                                         { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID",
-                "width": "auto"  },
+                                            "width": "auto"  },
                                         { "name": "CHROM",   "targets": [3], "title":"Chrom.",
-                "width": "auto"  },
+                                            "width": "auto"  },
                                         { "name": "POS",   "targets": [4], "title":"Position",
-                "width": "auto" },
+                                            "width": "auto" },
                                         { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene",
-                "width": "auto"  },
+                                            "width": "auto"  },
                                         { "name": "Protein_change",   "targets": [6], "title":"Protein change",
                                           "width": "60px"  },
                                         { "name": "Consequence",   "targets": [7], "title":"Consequence",
@@ -2821,7 +2828,8 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                     <div class="col-md-12 col-sm-12 col-xs-12">
                                         <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
-                                            <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control">
+                                            <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control"
+                                            onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()">
                                                 <option selected value="0"><g:message code="gene.burdenTesting.label.select_filter"/></option>
                                             </select>
                                         </label>
