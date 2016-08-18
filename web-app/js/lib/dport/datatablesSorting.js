@@ -26,6 +26,39 @@
         return ((x < y) ? 1 : ((x > y) ? -1 : 0));
     };
 
+    jQuery.fn.dataTableExt.oSort['checkBoxGait-asc'] = function (a, b) {
+        var x = $(a);
+        var y = $(b);
+        var xCmp = true;
+        var yCmp = true;
+        if (x) {
+            xCmp = $('#'+x.attr('id')).prop('checked');
+        }
+        if (y) {
+            yCmp = $('#'+y.attr('id')).prop('checked');
+        }
+        if (xCmp===yCmp) { return 0 }
+        else if ((!xCmp)&&yCmp) {return 1}
+        else if (xCmp&&(!yCmp)) {return -1};
+    };
+
+    jQuery.fn.dataTableExt.oSort['checkBoxGait-desc'] = function (a, b) {
+        var x = $(a);
+        var y = $(b);
+        var xCmp = true;
+        var yCmp = true;
+        if (x) {
+            xCmp = $('#'+x.attr('id')).prop('checked');
+        }
+        if (y) {
+            yCmp = $('#'+y.attr('id')).prop('checked');
+        }
+        if (xCmp===yCmp) { return 0 }
+        else if (xCmp&&(!yCmp)) {return 1}
+        else if ((!xCmp)&&yCmp) {return -1};
+    };
+
+
     jQuery.fn.dataTableExt.oSort['stringAnchor-asc'] = function (a, b) {
         var x = UTILS.extractAnchorTextAsString(a);
         var y = UTILS.extractAnchorTextAsString(b);

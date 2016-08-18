@@ -558,13 +558,19 @@ var UTILS = {
     extractAnchorTextAsInteger : function (fullAnchor){
         var returnValue = 0;
         var re = new RegExp("\>[0-9]+\<"); // retrieve text, but with angle brackets
+        var posRe = new RegExp(":[0-9]+\<"); // retrieve text, but with angle brackets
         var re2 = new RegExp("[0-9]+"); // specifically get the presumed integer
         if (typeof fullAnchor !== 'undefined') {
             var textWithAngles = fullAnchor.match(re);
+            if ( textWithAngles === null ) {
+                textWithAngles = fullAnchor.match(posRe);
+            }
             if ( (typeof textWithAngles !== 'undefined') &&
+                ( textWithAngles !== null ) &&
                 (textWithAngles.length > 0) ) {
                 var textWithoutAngles = textWithAngles[0].match(re2);
                 if ( (typeof textWithoutAngles !== 'undefined') &&
+                    ( textWithoutAngles !== null ) &&
                     (textWithoutAngles.length > 0) ) {
                     var textWeWant = textWithoutAngles[0];
                     returnValue = parseInt (textWeWant,10);
