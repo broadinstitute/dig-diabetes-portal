@@ -1197,7 +1197,7 @@ var displayBurdenVariantSelector = function (){
            if ($('#gaitTable').children().length>0){ // check that we have a table
 
 
-                var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td.sorting_1 input:checked');
+                var gaitTableCheckboxes = $($('#gaitTable').DataTable().rows().nodes()).find('td input.geneGaitVariantSelector:checked');
                 _.forEach(gaitTableCheckboxes,function(eachVariantId){
                     var gaitTableCheckboxId = $(eachVariantId).attr('id');
                     listOfVariantsToCheck.push('"'+gaitTableCheckboxId.substr(12)+'"');
