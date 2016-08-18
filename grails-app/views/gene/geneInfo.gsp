@@ -94,6 +94,8 @@
 
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
+                <g:render template="geneSignalSummary"  model="[signalLevel:2]"/>
+
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
                         <div class="accordion-heading">
