@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
