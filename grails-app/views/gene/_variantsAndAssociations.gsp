@@ -83,57 +83,16 @@
         }
         variantsAndAssociationTable(phenotype, dataSetMaps);
     }
+
     $(document).ready(function () {
-        // initialize the v and a adjuster widget
-        $(function () {
-            $("#dialog").dialog({
-                autoOpen: false,
-                show: {
-                    effect: "fade",
-                    duration: 500
-                },
-                hide: {
-                    effect: "fade",
-                    duration: 500
-                },
-                width: 560,
-                modal: true
-            });
-            $(".ui-dialog-titlebar").hide();
-        });
-
-        // initialize the main phenotype drop-down
-        $(function () {
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
-                data: {},
-                async: true,
-                success: function (data) {
-                    if (( data !== null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !== null )) {
-
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeTableChooser', true);
-                        // Can we set the default option on the phenotype list?
-                        $('#phenotypeTableChooser').val('${g.defaultPhenotype()}');
-                        refreshVAndAByPhenotype({'value': '${g.defaultPhenotype()}'});
-                    }
-                },
-                error: function (jqXHR, exception) {
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        });
-
-        // open the v and a adjuster widget
-        var popUpVAndAExtender = function () {
-            $("#dialog").dialog("open");
-        };
-        $("#opener").click(popUpVAndAExtender);
+        mpgSoftware.geneInfo.prepVAndADisplay ("#dialog","#opener");
+        mpgSoftware.geneInfo.fillPhenotypeDropDown('#phenotypeTableChooser',
+                '${g.defaultPhenotype()}',
+                "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
+                refreshVAndAByPhenotype );
     });
+
+
 
     var insertVandARow = function (name, value) {
         var counter = 100;

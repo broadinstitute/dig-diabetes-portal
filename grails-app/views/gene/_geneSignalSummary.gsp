@@ -15,8 +15,17 @@
 }
 </style>
 
+<div class="row">
+    <div class="pull-right">
+        <label for="signalPhenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"
+                                                            default="Change phenotype choice"/></label>
+        &nbsp;
+        <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
+                onchange="refreshVAndAByPhenotype(this)">
+        </select>
+    </div>
+</div>
 <div class="panel panel-default">%{--should hold the Choose data set panel--}%
-
     <div class="panel-heading" style="background-color: #E0F3FD">
         <div class="row">
             <div class="col-md-2 col-xs-12">
@@ -220,9 +229,15 @@
                 updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel
             }
         }());
+
+
     })();
 
     $( document ).ready(function() {
+        mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
+                '${g.defaultPhenotype()}',
+                "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
+                refreshVAndAByPhenotype );
         mpgSoftware.geneSignalSummary.updateDisplayBasedOnSignificanceLevel (${signalLevel});
     });
 </script>

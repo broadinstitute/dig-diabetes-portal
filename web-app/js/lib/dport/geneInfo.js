@@ -9,6 +9,62 @@ var mpgSoftware = mpgSoftware || {};
 
         var delayedDataPresentation = {},
 
+        prepVAndADisplay = function (dialogSelector,openerSelector){
+            $(dialogSelector).dialog({
+                autoOpen: false,
+                show: {
+                    effect: "fade",
+                    duration: 500
+                },
+                hide: {
+                    effect: "fade",
+                    duration: 500
+                },
+                width: 560,
+                modal: true
+            });
+            $(".ui-dialog-titlebar").hide();
+
+            // open the v and a adjuster widget
+            var popUpVAndAExtender = function () {
+                $("#dialog").dialog("open");
+            };
+            $("#opener").click(popUpVAndAExtender);
+
+        },
+
+
+        // initialize the main phenotype drop-down
+        fillPhenotypeDropDown = function (phenotypeTableChooser,defaultPhenotype,retrievePhenotypesUrl,callbackFn){
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: retrievePhenotypesUrl,
+                data: {},
+                async: true,
+                success: function (data) {
+                    if (( data !== null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !== null )) {
+
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, phenotypeTableChooser, true);
+                        // Can we set the default option on the phenotype list?
+                        $(phenotypeTableChooser).val(defaultPhenotype);
+                        callbackFn({'value': defaultPhenotype});
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+
+
+        },
+
+
+
+
         /***
          *    geneInfoJsonMap:  Access the interior of the JSON records  symbolically
          */
@@ -240,37 +296,6 @@ var mpgSoftware = mpgSoftware || {};
             }
         },
 
-        /***
-         * Access an expected field in the JSON.  If the expected result is absent  or undefined
-         * then return a numeric zero.
-         *
-         * @param geneInfo
-         * @param filedNumber
-         * @param defaultValue
-         * @returns {number}
-         */
-//        geneFieldOrZero = function (geneInfo, filedNumber, defaultValue) {
-//            var retval = 0;
-//            var fieldName = geneInfoJsonMap.fieldName(filedNumber);
-//            if ((geneInfo) && (fieldName.length > 0)) {
-//                var fieldBreakdown = fieldName.split("."); // step into complex fields
-//                retval = geneInfo[fieldBreakdown[0]];
-//                if ((retval) && (fieldBreakdown.length > 1)) {
-//                    for (var i = 1; i < fieldBreakdown.length; i++) {
-//                        var nextLevelSpec = fieldBreakdown[i];
-//                        retval = retval[nextLevelSpec];
-//                    }
-//                }
-//            }
-//            if (!retval) {    // deal with a null.  Use a zero unless we are given an explicit alternative
-//                if (typeof defaultValue !== "undefined") {
-//                    retval = defaultValue;
-//                } else {
-//                    retval = 0;
-//                }
-//            }
-//            return retval;
-//        },
 
         /***
          *  Fill out some DOM structures conditionally. Used in the  variant and associations table on the gene info page
@@ -598,97 +623,7 @@ var mpgSoftware = mpgSoftware || {};
             }
 
         };
-//        var fillBiologicalHypothesisTesting = function (geneInfo, show_gwas, show_exchp, show_exseq, rootVariantUrl, fillBiologicalHypothesisTesting) {
-//            var // raw values
-//                bhtPeopleWithVariant = 0,
-//                bhtPeopleWithoutVariant = 0,
-//                numberOfVariants,
-//                proportionsWithDisease,
-//                bhtMetaBurdenForDiabetes,
-//            // temp values
-//                arrayOfProportionsWithDisease,
-//            // useful values
-//                peopleWithDiseaseDenominator,
-//                peopleWithDiseaseNumerator,
-//                peopleWithoutDiseaseDenominator,
-//                peopleWithoutDiseaseNumerator,
-//                retainBarchartPtr;
-//
-//            if (show_exseq) {
-//                numberOfVariants = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_NVAR);
-//                proportionsWithDisease = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_MINA_MINU_RET);
-//                bhtPeopleWithVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_OBSA);
-//                bhtPeopleWithoutVariant = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_OBSU);
-//                bhtMetaBurdenForDiabetes = geneFieldOrZero(geneInfo, geneInfoJsonMap.fieldSymbol()._17k_T2D_lof_P_METABURDEN);
-//
-//                // this one value comes back in the form of a very inconvenient string.  Break it down.
-//                if (proportionsWithDisease) {
-//                    arrayOfProportionsWithDisease = proportionsWithDisease.split('/');
-//                    if (arrayOfProportionsWithDisease.length > 1) {
-//                        peopleWithDiseaseNumerator = arrayOfProportionsWithDisease[0];
-//                        peopleWithoutDiseaseNumerator = arrayOfProportionsWithDisease[1];
-//                        peopleWithDiseaseDenominator = bhtPeopleWithVariant*2;
-//                        peopleWithoutDiseaseDenominator = bhtPeopleWithoutVariant*2;
-//                    }
-//                }
-//
-//            }
-//
-//            // String describing whether or not we have variants.  If we do then provide a link.
-//            if (numberOfVariants > 0) {
-//                $('#possibleCarrierVariantsLink').append("<a class='variantlink' id='linkToVariantsPredictedToTruncate' " +
-//                        "href='" + rootVariantUrl + "/" + (geneInfo["ID"]) + "?filter=ptv" + "'>" +
-//                        numberOfVariants + "</a> " + fillBiologicalHypothesisTesting.question1explanation
-//                );
-//            } else {
-//                $('#possibleCarrierVariantsLink').append(fillBiologicalHypothesisTesting.question1insufficient);
-//            }
-//
-//
-//            // The bar chart graphic
-//            if ((peopleWithDiseaseNumerator) ||
-//                (peopleWithDiseaseDenominator) &&
-//                (peopleWithoutDiseaseNumerator) &&
-//                (peopleWithoutDiseaseDenominator)) {
-//                delayedDataPresentation = {functionToRun: fillUpBarChart,
-//                    peopleWithDiseaseNumerator: peopleWithDiseaseNumerator,
-//                    peopleWithDiseaseDenominator: peopleWithDiseaseDenominator,
-//                    peopleWithoutDiseaseNumerator: peopleWithoutDiseaseNumerator,
-//                    peopleWithoutDiseaseDenominator: peopleWithoutDiseaseDenominator,
-//                    barchartPtr: retainBarchartPtr,
-//                    launch: function () {
-//                        retainBarchartPtr = fillUpBarChart(peopleWithDiseaseNumerator, peopleWithDiseaseDenominator, peopleWithoutDiseaseNumerator, peopleWithoutDiseaseDenominator, 'T2D');
-//                        return retainBarchartPtr;
-//                    },
-//                    removeBarchart: function () {
-//                        if ((typeof retainBarchartPtr !== 'undefined') &&
-//                            (typeof retainBarchartPtr.clear !== 'undefined')) {
-//                            retainBarchartPtr.clear();
-//                        }
-//                        $('#significanceDescriptorFormatter').empty();
-//                        $('#possibleCarrierVariantsLink').empty();
-//                    }
-//                };
-//            }
-//
-//            // Colorful square describing significance
-//            if (bhtMetaBurdenForDiabetes > 0) {
-//                var degreeOfSignificance = '';
-//                if (bhtMetaBurdenForDiabetes < 5e-8) {
-//                    degreeOfSignificance = fillBiologicalHypothesisTesting.question1significant;
-//                } else if (bhtMetaBurdenForDiabetes < 5e-2) {
-//                    degreeOfSignificance = fillBiologicalHypothesisTesting.question1nominal;
-//                }
-//                $('#significanceDescriptorFormatter').append("<div class='significantDifference'>" +
-//                    "<div id='describePValueInBiologicalHypothesis' class='significantDifferenceText'>" +
-//                    "<p class='slimDescription'>" + degreeOfSignificance + "</p>\n" +
-//                    "<p  id='bhtMetaBurdenForDiabetes' class='slimDescription'>p=" + (bhtMetaBurdenForDiabetes.toPrecision(3)) +
-//                    fillBiologicalHypothesisTesting.question1significantQ+ "</p>" +
-//                    "</div>" +
-//                    "</div>");
-//            }
-//
-//        };
+
 
 
         var fillUniprotSummary = function (geneInfo) {
@@ -719,7 +654,6 @@ var mpgSoftware = mpgSoftware || {};
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
             expandRegionBegin: expandRegionBegin,
             expandRegionEnd: expandRegionEnd,
-//            geneFieldOrZero: geneFieldOrZero,
             fillVarianceAndAssociations: fillVarianceAndAssociations,
             retrieveGeneInfoRec: retrieveGeneInfoRec,
             buildAnchorForVariantSearches: buildAnchorForVariantSearches,
@@ -728,7 +662,8 @@ var mpgSoftware = mpgSoftware || {};
 
             // public routines
             fillTheGeneFields: fillTheGeneFields,
-//            fillBiologicalHypothesisTesting: fillBiologicalHypothesisTesting,
+            prepVAndADisplay:prepVAndADisplay,
+            fillPhenotypeDropDown:fillPhenotypeDropDown,
             fillVariationAcrossEthnicityTable:fillVariationAcrossEthnicityTable,
             retrieveDelayedBiologicalHypothesisOneDataPresenter: retrieveDelayedBiologicalHypothesisOneDataPresenter,
             fillVariantsAndAssociationsTable: fillVariantsAndAssociationsTable,
