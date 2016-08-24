@@ -2,6 +2,8 @@ package org.broadinstitute.mpg.diabetes.metadata.query;
 
 import org.broadinstitute.mpg.diabetes.metadata.Property;
 
+import java.util.List;
+
 /**
  * Interface to be implemented by objects that will create query strings for the getData calls
  */
@@ -21,6 +23,8 @@ public interface QueryFilter {
     public String getOperator();
 
     public String getValue();
+
+    public List<QueryFilter>  getListOfQueryFilter();
 
     public String getRequestedPhenotype();
 }

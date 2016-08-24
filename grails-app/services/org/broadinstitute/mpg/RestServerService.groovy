@@ -5,6 +5,7 @@ import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
@@ -12,6 +13,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -26,6 +28,7 @@ class RestServerService {
     MetaDataService metaDataService
     MetadataUtilityService metadataUtilityService
     SearchBuilderService searchBuilderService
+    BurdenService burdenService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
 
@@ -1705,6 +1708,80 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject gatherTopVariantsPerSg(  String phenotype, float pValueSignificance, String sampleGroupName ) {
+        List<String> queryFilterStrings = []
+        String pValueName = filterManagementService.findFavoredMeaningValue ( sampleGroupName, phenotype, "P_VALUE" )
+        queryFilterStrings << "17=${phenotype}[${sampleGroupName}]${pValueName}<${pValueSignificance.toString()}"
+
+        String technology = ""
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR", technology, sampleGroupName )
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology, sampleGroupName)
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology, sampleGroupName)
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE", technology, sampleGroupName)
+        List<String> sampleGroupsWithMaf =
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion(), technology, false).collect {
+                    it.parent.systemId
+                }
+        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+            if (sampleGroupWithMaf == sampleGroupName){
+                addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
+            }
+        }
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(queryFilterStrings, searchBuilderService, metaDataService )
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
+
+
+
+    public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype, float pValueSignificance) {
+        JSONObject dataJsonObject
+        List varaints = []
+        for (SampleGroup  sampleGroup in fullListOfSampleGroups){
+            dataJsonObject =  gatherTopVariantsPerSg(  phenotype,  pValueSignificance, sampleGroup.systemId )
+            varaints.addAll( dataJsonObject.variants )
+        }
+        dataJsonObject.variants = varaints
+
+        return dataJsonObject
+    }
+
+
+
+
+    public JSONObject gatherTopVariantsAcrossSgsWhenORsWork( List<SampleGroup> fullListOfSampleGroups, String phenotype, float pValueSignificance) {
+        List<QueryFilter> queryFilterList = []
+        for (SampleGroup  sampleGroup in fullListOfSampleGroups){
+            String pValueName = filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotype, "P_VALUE" )
+            queryFilterList.addAll( burdenService.getBurdenJsonBuilder().getPValueFilters(sampleGroup.systemId,pValueSignificance,phenotype,pValueName))
+        }
+
+        String technology = ""
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR", technology)
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology)
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology)
+        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE", technology)
+        List<String> sampleGroupsWithMaf =
+                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion(), technology, false).collect {
+                    it.parent.systemId
+                }
+        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
+        }
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolderFromFilters(queryFilterList, searchBuilderService, metaDataService,true)
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
 
     /***
      * starting with a property name OR a meaning, produce a list of triplets mapping the name/meaning to phenotype and sample group name
@@ -1748,6 +1825,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         for (LinkedHashMap dirMatcher in matchers) {
             addColumnsForPProperties(resultColumnsToDisplay, dirMatcher.pheno, dirMatcher.ds, dirMatcher.pname)
+        }
+        return resultColumnsToDisplay
+    }
+    private LinkedHashMap buildColumnsRequestForPProperties(LinkedHashMap resultColumnsToDisplay, String propertyOrMeaning, String technology, String datasetName ) {
+
+        List<LinkedHashMap<String, String>> matchers = identifyMatchers( propertyOrMeaning, technology )
+
+        for (LinkedHashMap dirMatcher in matchers) {
+            if (dirMatcher.ds == datasetName){
+                addColumnsForPProperties(resultColumnsToDisplay, dirMatcher.pheno, dirMatcher.ds, dirMatcher.pname)
+            }
         }
         return resultColumnsToDisplay
     }

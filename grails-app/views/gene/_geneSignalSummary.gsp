@@ -21,7 +21,7 @@
                                                             default="Change phenotype choice"/></label>
         &nbsp;
         <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
-                onchange="refreshVAndAByPhenotype(this)">
+                onchange="mpgSoftware.geneSignalSummary.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay)">
         </select>
     </div>
 </div>
@@ -217,6 +217,10 @@
 
 
         mpgSoftware.geneSignalSummary = (function () {
+            var updateSignificantVariantDisplay = function (x) {
+                alert('updateSignificantVariantDisplay');
+             };
+
 
             var updateDisplayBasedOnSignificanceLevel = function (significanceLevel) {
                 var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
@@ -224,9 +228,30 @@
                     significanceLevelDom.addClass('emphasize');
                 }
             };
+
+            var refreshTopVariantsByPhenotype = function (sel, callBack) {
+                var rememberCallBack = callBack;
+                var phenotypeName = sel.value;
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
+                    data: {phenotype: phenotypeName},
+                    async: true,
+                    success: function (data) {
+                        rememberCallBack(data);
+                    },
+                    error: function (jqXHR, exception) {
+                        core.errorReporter(jqXHR, exception);
+                    }
+                });
+
+            };
+
             return {
-                // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
-                updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel
+                updateSignificantVariantDisplay:updateSignificantVariantDisplay,
+                updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
+                refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype
             }
         }());
 

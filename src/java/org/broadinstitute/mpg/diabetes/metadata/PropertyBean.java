@@ -215,7 +215,11 @@ public class PropertyBean implements Property, Comparable {
         builder.append("\", \"value\": ");
 
         // no quotes for numbers
-        if (this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_FLOAT) || this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_INTEGER)) {
+        if (this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_FLOAT) ||
+                this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_INTEGER) ||
+                this.getVariableType().equals(PortalConstants.NAME_COMMON_METAFILTER_OR)  ||
+        this.getVariableType().equals(PortalConstants.NAME_COMMON_METAFILTER_AND)
+                ) {
             builder.append(value);
             builder.append(", ");
 

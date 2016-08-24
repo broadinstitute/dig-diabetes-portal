@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -392,6 +393,32 @@ class VariantSearchController {
             [technologyList: technologyListJsonObject]
         }
     }
+
+
+
+    def retrieveTopVariantsAcrossSgs (){
+        String phenotypeName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
+
+        String currentVersion = metaDataService.getDataVersion()
+        List<String> allTechnologies =  metaDataService.getTechnologyListByVersion(currentVersion)
+        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
+
+        JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName, 0.0000001f )
+
+        render(status: 200, contentType: "application/json") {
+            [variants: dataJsonObject]
+        }
+
+    }
+
+
+
+
+
 
     /***
      * Given one phenotype and one or more technologies, return every matching sample group

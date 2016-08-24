@@ -357,23 +357,13 @@ public class BurdenJsonBuilder {
 
 
 
-    protected List<QueryFilter> getPValueFilters(String sampleGroupName,  Float pValue, String phenotypeName, String pValueName ) throws PortalException {
-        // local variables
+    public List<QueryFilter> getPValueFilters(String sampleGroupName,  Float pValue, String phenotypeName, String pValueName ) throws PortalException {
         List<QueryFilter> queryFilterList = new ArrayList<QueryFilter>();
-        List<DataSet> dataSetList = new ArrayList<DataSet>();
-        DataSet rootDataSet = null;
         JsonParser parser = JsonParser.getService();
-        List<Property> propertyList = new ArrayList<Property>();
-        Property rootProperty = null;
 
+        Property rootProperty =  parser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(pValueName, phenotypeName, sampleGroupName);
+        queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, pValue.toString()));
 
-        rootProperty = parser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames(pValueName, phenotypeName, sampleGroupName);
-        queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, "1.0"));
-
-
-
-
-        // return
         return queryFilterList;
     }
 

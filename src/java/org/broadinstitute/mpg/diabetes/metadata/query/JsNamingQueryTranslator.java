@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.metadata.query;
 
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean;
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.Property;
@@ -255,6 +256,33 @@ public class JsNamingQueryTranslator {
         // return
         return filterList;
     }
+
+
+
+
+    public List<QueryFilter> getQueryFilters(String metaFilterDesignator, List<QueryFilter> incomingFilterList) throws PortalException {
+        // local variables
+        List<QueryFilter> filterList = new ArrayList<QueryFilter>();
+        String[] tempArray;
+        QueryFilter queryFilter;
+
+        PropertyBean property = new PropertyBean();
+
+        property.setName(metaFilterDesignator);
+
+        // for each filter string, convert to a query filter
+        queryFilter = new QueryFilterBean(property, PortalConstants.OPERATOR_EQUALS, incomingFilterList);
+
+        // add to the list
+        filterList.add(queryFilter);
+
+
+        // return
+        return filterList;
+    }
+
+
+
 
     /**
      * create a query filter given a js naming property filter; throws exception if formatting is not as expected

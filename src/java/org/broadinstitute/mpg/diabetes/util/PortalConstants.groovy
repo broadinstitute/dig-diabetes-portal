@@ -58,6 +58,10 @@ class PortalConstants {
     public final static String NAME_PHENOTYPE_PROPERTY_P_VALUE          = "P_VALUE";
     public final static String NAME_PHENOTYPE_PROPERTY_TRANSCRIPT_ANNOT = "TRANSCRIPT_ANNOT";
 
+    // constant strings for the commonly used properties
+    public final static String NAME_COMMON_METAFILTER_OR                 = "ORBLOCK";
+    public final static String NAME_COMMON_METAFILTER_AND                = "ANDBLOCK";
+
     // trait-search emulation keys
     public final static String KEY_PHENOTYPE_FOR_TRAIT_SEARCH            = "TRAIT";
 
@@ -83,6 +87,7 @@ class PortalConstants {
     public final static String OPERATOR_TYPE_FLOAT                        = "FLOAT";
     public final static String OPERATOR_TYPE_INTEGER                      = "INTEGER";
     public final static String OPERATOR_TYPE_STRING                       = "STRING";
+    public final static String OPERATOR_TYPE_META                         = "META";
 
 
     // constants of property id keys (these are automatically generated, but caching often used ones here)

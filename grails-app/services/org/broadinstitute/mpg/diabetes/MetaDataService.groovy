@@ -884,7 +884,7 @@ class MetaDataService {
 
     public List<String> getTechnologyListByVersion(String dataVersion) {
         if(dataVersion == null) {
-            dataVersion = 'mdv2'
+            dataVersion = getDataVersion()
         }
         List<String> technologyList = this.jsonParser.getTechnologyListByVersion(dataVersion);
         return technologyList

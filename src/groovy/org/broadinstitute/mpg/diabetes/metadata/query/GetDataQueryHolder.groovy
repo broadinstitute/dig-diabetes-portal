@@ -3,6 +3,7 @@ package org.broadinstitute.mpg.diabetes.metadata.query
 import org.broadinstitute.mpg.SearchBuilderService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.apache.commons.logging.LogFactory
@@ -74,6 +75,10 @@ class GetDataQueryHolder {
         return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService)
     }
 
+    public static GetDataQueryHolder createGetDataQueryHolderFromFilters(List<QueryFilter> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService, boolean orFlag) {
+        return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService, orFlag)
+    }
+
     /***
      * Sometimes we don't need the full object, so we can use this abbreviated factory method
      * @return
@@ -94,6 +99,16 @@ class GetDataQueryHolder {
         this.metaDataService = metaDataService
         getDataQuery = generateGetDataQuery(filterList)
     }
+
+
+    public GetDataQueryHolder(List<QueryFilter> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService, boolean orFlag) {
+        this()
+        this.searchBuilderService = searchBuilderService
+        this.metaDataService = metaDataService
+        getDataQuery = generateGetDataQuery(filterList,orFlag)
+    }
+
+
 
     /***
      * constructor
@@ -153,6 +168,32 @@ class GetDataQueryHolder {
         }
         return query
     }
+
+
+
+
+
+    public GetDataQuery generateGetDataQuery(List<String> listOfCodedFilters, boolean orFlag) {
+        GetDataQuery query = new GetDataQueryBean()
+        JsNamingQueryTranslator jsNamingQueryTranslator = new JsNamingQueryTranslator()
+        List<QueryFilter> combinedQueryFilterList = listOfCodedFilters
+
+        if (orFlag) {
+            PropertyBean propertyBean = new PropertyBean();
+            propertyBean.setName(PortalConstants.NAME_COMMON_METAFILTER_OR);
+            propertyBean.setVariableType(PortalConstants.NAME_COMMON_METAFILTER_OR);
+            query.addQueryFilter(new QueryFilterBean(propertyBean,PortalConstants.OPERATOR_EQUALS,combinedQueryFilterList))
+        } else {
+            PropertyBean propertyBean = new PropertyBean();
+            propertyBean.setName(PortalConstants.NAME_COMMON_METAFILTER_AND);
+            propertyBean.setVariableType(PortalConstants.NAME_COMMON_METAFILTER_AND);
+            query.addQueryFilter(new QueryFilterBean(propertyBean,PortalConstants.OPERATOR_EQUALS,combinedQueryFilterList))
+        }
+        return query
+    }
+
+
+
 
     /***
      * add C properties. The incoming data structure is built by the getColumnsToDisplayStructure method in SharedToolsService

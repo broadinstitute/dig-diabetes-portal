@@ -278,18 +278,22 @@ public class QueryJsonBuilder {
         return stringBuilder.toString();
     }
 
+
+
+
+
     /**
      * get the filter string for the getData call
      * @param filterList
      * @return
      */
-    protected String getFilterString(List<QueryFilter> filterList) {
+    public String getFilterStringForListOfFilters(List<QueryFilter> filterList) {
         // local variables
         StringBuilder stringBuilder = new StringBuilder();
         String queryComma = "";
 
         // add in the query header
-        stringBuilder.append("\"filters\": [ ");
+        stringBuilder.append(" [ ");
 
         // add in the filters
         for (QueryFilter filter: filterList) {
@@ -304,6 +308,70 @@ public class QueryJsonBuilder {
         // return
         return stringBuilder.toString();
     }
+
+
+
+
+
+
+    /**
+     * indicate that we are specifying the filter section of the API call
+     * @return
+     */
+    protected String prependFilterSpecifier() {
+        // local variables
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // add in the query header
+        stringBuilder.append("\"filters\": ");
+
+        // return
+        return stringBuilder.toString();
+    }
+
+
+
+
+
+
+
+
+    /**
+     * get the filter string for the getData call
+     * @param filterList
+     * @return
+     */
+    protected String getFilterString(List<QueryFilter> filterList) {
+        // local variables
+
+        return prependFilterSpecifier()+getFilterStringForListOfFilters(filterList);
+    }
+
+
+
+//    protected String getFilterString(List<QueryFilter> filterList) {
+//        // local variables
+//        StringBuilder stringBuilder = new StringBuilder();
+//        String queryComma = "";
+//
+//        // add in the query header
+//        stringBuilder.append("\"filters\": [ ");
+//
+//        // add in the filters
+//        for (QueryFilter filter: filterList) {
+//            stringBuilder.append(queryComma);
+//            stringBuilder.append(filter.getFilterString());
+//            queryComma = ", ";
+//        }
+//
+//        // close out the query header
+//        stringBuilder.append(" ] ");
+//
+//        // return
+//        return stringBuilder.toString();
+//    }
+
+
 
 
     /**
