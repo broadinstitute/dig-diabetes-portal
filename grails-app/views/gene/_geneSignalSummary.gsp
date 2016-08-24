@@ -67,6 +67,8 @@
 </div>
 <div class="collapse" id="collapseExample">
     <div class="well">
+        <div id="highImpactVariantsLocation"></div>
+        <script id="highImpactTemplate"  type="x-tmpl-mustache">
         <div class="row">
             <div class="col-lg-12">
                 <h3 style="">High impact variants</h3>
@@ -80,47 +82,22 @@
                 <div class="row">
                     <div class="col-lg-offset-2 col-lg-8">
                         <div class="boxOfVariants">
+                            {{ #variants }}
                             <div class="row">
-                                <div class="col-lg-2">2:1234567</div>
+                                <div class="col-lg-2">{{id}}</div>
 
-                                <div class="col-lg-2">r1234567</div>
+                                <div class="col-lg-2">{{rsId}}</div>
 
-                                <div class="col-lg-2">synonymous</div>
+                                <div class="col-lg-2">{{impact}}</div>
 
-                                <div class="col-lg-2"></div>
+                                <div class="col-lg-2">{{deleteriousness}}</div>
 
-                                <div class="col-lg-2">T</div>
+                                <div class="col-lg-2">{{referenceAllele}}</div>
 
-                                <div class="col-lg-2">C</div>
+                                <div class="col-lg-2">{{effectAllele}}</div>
                             </div>
+                            {{ /variants }}
 
-                            <div class="row">
-                                <div class="col-lg-2">2:1234567</div>
-
-                                <div class="col-lg-2">r56723</div>
-
-                                <div class="col-lg-2">missense</div>
-
-                                <div class="col-lg-2">deleterious</div>
-
-                                <div class="col-lg-2">T</div>
-
-                                <div class="col-lg-2">C</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-2">2:1234567</div>
-
-                                <div class="col-lg-2">r1234567</div>
-
-                                <div class="col-lg-2">synonymous</div>
-
-                                <div class="col-lg-2"></div>
-
-                                <div class="col-lg-2">T</div>
-
-                                <div class="col-lg-2">C</div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -155,6 +132,7 @@
 
             </div>
         </div>
+        </script>
 
         <div class="row">
             <div class="col-lg-12">
@@ -217,9 +195,53 @@
 
 
         mpgSoftware.geneSignalSummary = (function () {
-            var updateSignificantVariantDisplay = function (x) {
-                alert('updateSignificantVariantDisplay');
-             };
+            var updateSignificantVariantDisplay = function (data) {
+//                var renderData = {variants:[{id:'2:1234567',
+//                                             rsId:'r1234567',
+//                                             impact:'synonymous',
+//                                             deleteriousness:'',
+//                                             referenceAllele:'T',
+//                                             effectAllele:'C'},
+//                    {id:'2:1234567',
+//                        rsId:'r56723',
+//                        impact:'missense',
+//                        deleteriousness:'deleterious',
+//                        referenceAllele:'T',
+//                        effectAllele:'C'}]};
+                var renderData = {variants:[]};
+                if ((typeof data !== 'undefined') &&
+                        (typeof data.variants !== 'undefined')&&
+                        (typeof data.variants.variants !== 'undefined')&&
+                        (data.variants.variants.length > 0)){
+                    var obj;
+                    _.forEach(data.variants.variants,function(v,index,y){
+                        obj = {};
+                        _.forEach(v,function(actObj){
+                            _.forEach(actObj,function(val,key){
+                                if (key==='VAR_ID'){
+                                    obj['id']= (val)?val:'';
+                                } else if (key==='DBSNP_ID'){
+                                    obj['rsId']= (val)?val:'';
+                                } else if (key==='CHROM'){
+                                    obj['impact']= (val)?val:'';
+                                } else if (key==='VAR_ID'){
+                                    obj['deleteriousness']= (val)?val:'';
+                                } else if (key==='DBSNP_ID'){
+                                    obj['referenceAllele']= (val)?val:'';
+                                } else if (key==='CHROM') {
+                                    obj['effectAllele'] = (val)?val:'';
+                                }
+                                });
+                            });
+                            if (index < 10 ){
+                                renderData.variants.push(obj);
+                            }
+                        });
+
+                    };
+                $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
+                };
+
 
 
             var updateDisplayBasedOnSignificanceLevel = function (significanceLevel) {
