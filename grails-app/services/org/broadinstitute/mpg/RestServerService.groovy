@@ -15,6 +15,7 @@ import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -1714,7 +1715,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         queryFilterStrings << "17=${phenotype}[${sampleGroupName}]${pValueName}<${pValueSignificance.toString()}"
 
         String technology = ""
-        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS",
+                                                                         "MOST_DEL_SCORE",
+                                                                         "Consequence",
+                                                                         "Reference_Allele",
+                                                                         "Effect_Allele",
+                                                                         "Protein_change"])
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR", technology, sampleGroupName )
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology, sampleGroupName)
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology, sampleGroupName)

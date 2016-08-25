@@ -84,17 +84,17 @@
                         <div class="boxOfVariants">
                             {{ #variants }}
                             <div class="row">
-                                <div class="col-lg-2">{{id}}</div>
+                                <div class="col-lg-3">{{id}}</div>
 
                                 <div class="col-lg-2">{{rsId}}</div>
 
                                 <div class="col-lg-2">{{impact}}</div>
 
-                                <div class="col-lg-2">{{deleteriousness}}</div>
+                                <div class="col-lg-3">{{deleteriousness}}</div>
 
-                                <div class="col-lg-2">{{referenceAllele}}</div>
+                                <div class="col-lg-1">{{referenceAllele}}</div>
 
-                                <div class="col-lg-2">{{effectAllele}}</div>
+                                <div class="col-lg-1">{{effectAllele}}</div>
                             </div>
                             {{ /variants }}
 
@@ -196,18 +196,6 @@
 
         mpgSoftware.geneSignalSummary = (function () {
             var updateSignificantVariantDisplay = function (data) {
-//                var renderData = {variants:[{id:'2:1234567',
-//                                             rsId:'r1234567',
-//                                             impact:'synonymous',
-//                                             deleteriousness:'',
-//                                             referenceAllele:'T',
-//                                             effectAllele:'C'},
-//                    {id:'2:1234567',
-//                        rsId:'r56723',
-//                        impact:'missense',
-//                        deleteriousness:'deleterious',
-//                        referenceAllele:'T',
-//                        effectAllele:'C'}]};
                 var renderData = {variants:[]};
                 if ((typeof data !== 'undefined') &&
                         (typeof data.variants !== 'undefined')&&
@@ -222,13 +210,13 @@
                                     obj['id']= (val)?val:'';
                                 } else if (key==='DBSNP_ID'){
                                     obj['rsId']= (val)?val:'';
-                                } else if (key==='CHROM'){
+                                } else if (key==='Protein_change'){
                                     obj['impact']= (val)?val:'';
-                                } else if (key==='VAR_ID'){
+                                } else if (key==='Consequence'){
                                     obj['deleteriousness']= (val)?val:'';
-                                } else if (key==='DBSNP_ID'){
+                                } else if (key==='Reference_Allele'){
                                     obj['referenceAllele']= (val)?val:'';
-                                } else if (key==='CHROM') {
+                                } else if (key==='Effect_Allele') {
                                     obj['effectAllele'] = (val)?val:'';
                                 }
                                 });
