@@ -114,7 +114,7 @@ class FilterManagementService {
             List<Property> propertyList = metaDataService.getSpecificPhenotypeProperties(dataSetName,phenotypeName)
             List<Property> sortedPValueProps = propertyList.
                     findAll{Property property->property.hasMeaning(meaningWeWant)}.
-                    sort{Property property1,Property property2->property1.sortOrder<=>property2.sortOrder}
+                    sort{Property property1,Property property2->property1?.sortOrder<=>property2?.sortOrder}
             if (sortedPValueProps.size()>0){
                 favoredPValue = sortedPValueProps[0]?.name
             }

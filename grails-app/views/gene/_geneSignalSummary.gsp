@@ -69,120 +69,106 @@
     <div class="well">
         <div id="highImpactVariantsLocation"></div>
         <script id="highImpactTemplate"  type="x-tmpl-mustache">
-        <div class="row">
-            <div class="col-lg-12">
-                <h3 style="">High impact variants</h3>
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3 style="">High impact variants</h3>
 
-                <div class="row">
-                    <div class="col-lg-offset-1">
-                        <h4>Individual variants</h4>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-offset-2 col-lg-8">
-                        <div class="boxOfVariants">
-                            {{ #variants }}
-                            <div class="row">
-                                <div class="col-lg-3">{{id}}</div>
-
-                                <div class="col-lg-2">{{rsId}}</div>
-
-                                <div class="col-lg-2">{{impact}}</div>
-
-                                <div class="col-lg-3">{{deleteriousness}}</div>
-
-                                <div class="col-lg-1">{{referenceAllele}}</div>
-
-                                <div class="col-lg-1">{{effectAllele}}</div>
-                            </div>
-                            {{ /variants }}
-
+                    <div class="row">
+                        <div class="col-lg-offset-1">
+                            <h4>Individual variants</h4>
                         </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-lg-offset-1">
-                        <h4>Aggregate variants</h4>
-                    </div>
-                </div>
+                    <div class="row">
+                        <div class="col-lg-offset-2 col-lg-8">
+                            <div class="boxOfVariants">
+                                {{ #variants }}
+                                    <div class="row">
+                                        <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                <div class="row">
-                    <div class="col-lg-offset-2  col-lg-8">
-                        <div class="boxOfVariants">
-                            <div class="row">
-                                <div class="col-lg-1"></div>
+                                        <div class="col-lg-2">{{rsId}}</div>
 
-                                <div class="col-lg-2">all coding</div>
+                                        <div class="col-lg-2">{{impact}}</div>
 
-                                <div class="col-lg-2">all missense</div>
+                                        <div class="col-lg-3">{{deleteriousness}}</div>
 
-                                <div class="col-lg-2">possibly damaging</div>
+                                        <div class="col-lg-1">{{referenceAllele}}</div>
 
-                                <div class="col-lg-2">probably damaging</div>
+                                        <div class="col-lg-1">{{effectAllele}}</div>
+                                    </div>
+                                {{ /variants }}
 
-                                <div class="col-lg-2">protein truncating</div>
-
-                                <div class="col-lg-1"></div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                    <div class="row">
+                        <div class="col-lg-offset-1">
+                            <h4>Aggregate variants</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-offset-2  col-lg-8">
+                            <div class="boxOfVariants">
+                                <div class="row">
+                                    <div class="col-lg-1"></div>
+
+                                    <div class="col-lg-2">all coding</div>
+
+                                    <div class="col-lg-2">all missense</div>
+
+                                    <div class="col-lg-2">possibly damaging</div>
+
+                                    <div class="col-lg-2">probably damaging</div>
+
+                                    <div class="col-lg-2">protein truncating</div>
+
+                                    <div class="col-lg-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
         </script>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <h3>Common variants</h3>
+        <div id="commonVariantsLocation"></div>
+        <script id="commonVariantTemplate"  type="x-tmpl-mustache">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h3>Common variants</h3>
 
-                <div class="row">
-                    <div class="col-lg-offset-1">
-                        <h4>Individual variants</h4>
+                    <div class="row">
+                        <div class="col-lg-offset-1">
+                            <h4>Individual variants</h4>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-lg-offset-2 col-lg-6">
-                        <div class="boxOfVariants">
-                            <div class="row">
-                                <div class="col-lg-3">2:1234567</div>
+                    <div class="row">
+                        <div class="col-lg-offset-2 col-lg-6">
+                            <div class="boxOfVariants">
+                                {{ #variants }}
+                                <div class="row">
+                                        <div class="col-lg-4"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                                <div class="col-lg-3">r1234567</div>
+                                        <div class="col-lg-4">{{rsId}}</div>
 
-                                <div class="col-lg-3">T</div>
+                                        <div class="col-lg-2">{{referenceAllele}}</div>
 
-                                <div class="col-lg-3">C</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3">2:1234567</div>
-
-                                <div class="col-lg-3">r1234567</div>
-
-                                <div class="col-lg-3">T</div>
-
-                                <div class="col-lg-3">C</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-3">2:1234567</div>
-
-                                <div class="col-lg-3">r1234567</div>
-
-                                <div class="col-lg-3">T</div>
-
-                                <div class="col-lg-3">C</div>
+                                        <div class="col-lg-2">{{effectAllele}}</div>
+                                </div>
+                                {{ /variants }}
                             </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
+        </script>
 
-        </div>
     </div>
 </div>
 
@@ -195,7 +181,7 @@
 
 
         mpgSoftware.geneSignalSummary = (function () {
-            var updateSignificantVariantDisplay = function (data) {
+            var buildRenderData = function (data)  {
                 var renderData = {variants:[]};
                 if ((typeof data !== 'undefined') &&
                         (typeof data.variants !== 'undefined')&&
@@ -219,16 +205,25 @@
                                 } else if (key==='Effect_Allele') {
                                     obj['effectAllele'] = (val)?val:'';
                                 }
-                                });
                             });
-                            if (index < 10 ){
-                                renderData.variants.push(obj);
-                            }
                         });
+                        if (index < 10 ){
+                            renderData.variants.push(obj);
+                        }
+                    });
 
-                    };
-                $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 };
+                return renderData;
+            };
+
+
+
+
+            var updateSignificantVariantDisplay = function (data) {
+                var renderData = buildRenderData (data);
+                $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
+                $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
+            };
 
 
 
