@@ -5,7 +5,7 @@
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
 
-        <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Massachusetts General Hospital Cardiology and Metabolic Patient cohort (CAMP MGH)</a>
+        <tr><td>540</td><td>2,913</td><td><a onclick="showSection(event)">Massachusetts General Hospital Cardiology and Metabolic Patient cohort (CAMP MGH)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
