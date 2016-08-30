@@ -337,7 +337,7 @@ class WidgetService {
             }
 //        }
 
-
+        log.debug("generated filters=${filterDesignation}.")
         return filterDesignation
     }
 

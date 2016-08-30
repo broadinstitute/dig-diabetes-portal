@@ -13,6 +13,27 @@
     border: 1px solid black;
     padding: 10px;
 }
+span.aggregatingVariantsColumnHeader {
+    font-weight: bold;
+}
+ul.aggregatingVariantsLabels>li {
+    padding: 18px 0 0 0;
+    font-weight: bold;
+}
+ul.aggregatingVariantsLabels {
+    list-style-type: none;
+    padding: 18px 0 0 0;
+}
+.aggregateVariantsDescr {
+    font-size: 12px;
+}
+.aggregateVariantsDescr+li {
+    list-style-type: none;
+    font-size: 11px;
+}
+.specialTitle {
+    font-weight: bold;
+}
 </style>
 
 <div class="row">
@@ -70,7 +91,7 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 style="">High impact variants</h3>
+                    <h3 class="specialTitle">High impact variants</h3>
                         <div id="highImpactVariantsLocation"></div>
                         <script id="highImpactTemplate"  type="x-tmpl-mustache">
                             <div class="row">
@@ -82,7 +103,7 @@
                             <div class="row">
                                 <div class="col-lg-offset-2 col-lg-8">
                                     <div class="boxOfVariants">
-                                        {{ #variants }}
+                                        {{ #rvar }}
                                             <div class="row">
                                                 <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
@@ -96,7 +117,7 @@
 
                                                 <div class="col-lg-1">{{effectAllele}}</div>
                                             </div>
-                                        {{ /variants }}
+                                        {{ /rvar }}
 
                                     </div>
                                 </div>
@@ -112,22 +133,40 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-offset-2  col-lg-8">
+                                <div class="col-lg-1">
+                                            <ul class='aggregatingVariantsLabels'>
+                                              <li style="text-align: right">beta</li>
+                                              <li style="text-align: right">pValue</li>
+                                              <li style="text-align: right">CI (95%)</li>
+                                            </ul>
+                                </div>
+                                <div class="col-lg-11">
                                     <div class="boxOfVariants">
                                         <div class="row">
-                                            <div class="col-lg-1"></div>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">all variants</span>
+                                                <div id="allVariants"></div>
+                                            </div>
 
-                                            <div class="col-lg-2">all coding</div>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">all coding</span>
+                                                <div id="allCoding"></div>
+                                            </div>
 
-                                            <div class="col-lg-2">all missense</div>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">all missense</span>
+                                                <div id="allMissense"></div>
+                                            </div>
 
-                                            <div class="col-lg-2">possibly damaging</div>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">possibly damaging</span>
+                                                <div id="possiblyDamaging"></div>
+                                            </div>
 
-                                            <div class="col-lg-2">probably damaging</div>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">probably damaging</span>
+                                                <div id="probablyDamaging"></div>
+                                            </div>
 
-                                            <div class="col-lg-2">protein truncating</div>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">protein truncating</span>
+                                                <div id="proteinTruncating"></div>
+                                            </div>
 
-                                            <div class="col-lg-1"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -141,7 +180,7 @@
         <script id="commonVariantTemplate"  type="x-tmpl-mustache">
             <div class="row">
                 <div class="col-lg-12">
-                    <h3>Common variants</h3>
+                    <h3 class="specialTitle">Common variants</h3>
 
                     <div class="row">
                         <div class="col-lg-offset-1">
@@ -152,7 +191,7 @@
                     <div class="row">
                         <div class="col-lg-offset-2 col-lg-6">
                             <div class="boxOfVariants">
-                                {{ #variants }}
+                                {{ #cvar }}
                                 <div class="row">
                                         <div class="col-lg-4"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
@@ -162,7 +201,7 @@
 
                                         <div class="col-lg-2">{{effectAllele}}</div>
                                 </div>
-                                {{ /variants }}
+                                {{ /cvar }}
                             </div>
                         </div>
                     </div>
@@ -184,8 +223,10 @@
 
 
         mpgSoftware.geneSignalSummary = (function () {
-            var buildRenderData = function (data)  {
-                var renderData = {variants:[]};
+            var buildRenderData = function (data,mafCutoff)  {
+                var renderData = {variants:[],
+                                    rvar:[],
+                                    cvar:[]};
                 if ((typeof data !== 'undefined') &&
                         (typeof data.variants !== 'undefined')&&
                         (typeof data.variants.variants !== 'undefined')&&
@@ -193,6 +234,7 @@
                     var obj;
                     _.forEach(data.variants.variants,function(v,index,y){
                         obj = {};
+                        var mafValue;
                         _.forEach(v,function(actObj){
                             _.forEach(actObj,function(val,key){
                                 if (key==='VAR_ID'){
@@ -207,11 +249,21 @@
                                     obj['referenceAllele']= (val)?val:'';
                                 } else if (key==='Effect_Allele') {
                                     obj['effectAllele'] = (val)?val:'';
+                                } else if (key==='MAF') {
+                                    _.forEach(val,function(mafval,mafkey){
+                                        mafValue = (mafval)?mafval:'';
+                                    });
+
                                 }
                             });
                         });
                         if (index < 10 ){
                             renderData.variants.push(obj);
+                            if (mafValue<mafCutoff){
+                                renderData.rvar.push(obj);
+                            } else {
+                                renderData.cvar.push(obj);
+                            }
                         }
                     });
 
@@ -222,17 +274,33 @@
 
 
             var updateAggregateVariantsDisplay = function (data,locToUpdate) {
-                console.log('lll');
+                var updateHere = $(locToUpdate);
+                updateHere.empty();
+                if ((data)&&
+                        (data.stats)){
+                    updateHere.append("<ul class='aggregateVariantsDescr list-group'>"+
+                                        "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.beta)+"</li>"+
+                                        "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.pValue)+"</li>"+
+                                        "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.ciLower)+" - "+UTILS.realNumberFormatter(data.stats.ciUpper)+"</li>"+
+                                    "</ul>");
+                }
             };
 
 
 
             var updateSignificantVariantDisplay = function (data) {
-                var renderData = buildRenderData (data);
+                var renderData = buildRenderData (data,0.05);
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                 $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"1","ExSeq_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"")
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"0","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"1","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"2","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"3","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"4","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"5","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+
+
             };
 
 

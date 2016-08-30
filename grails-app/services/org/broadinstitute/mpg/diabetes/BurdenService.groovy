@@ -84,7 +84,7 @@ class BurdenService {
         if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING) {
             mostDelScore = 1;
             operand = PortalConstants.OPERATOR_EQUALS;
-        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
+        } else  if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
             mostDelScore = 3;
         } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
             mostDelScore = 5;
