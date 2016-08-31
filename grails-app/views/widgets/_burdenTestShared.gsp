@@ -595,7 +595,7 @@ var displayBurdenVariantSelector = function (){
             }
 
 
-            var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
+            var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype, strataCategory){
                 var returnValue = {};
                 if ( ( typeof dataFilters !== 'undefined' ) &&
                              (  dataFilters !==  null ) ) {
@@ -609,7 +609,8 @@ var displayBurdenVariantSelector = function (){
                             }
                             realValuedFilters.push(clonedFilter);
                         } else {
-                            if (undoConversionPhenotypeNames(clonedFilter.name)!==phenotype) { // categorical traits are displayed only if they are not the modeled phenotype
+                            var unconvertedPhenotype = undoConversionPhenotypeNames(clonedFilter.name);
+                            if ((unconvertedPhenotype!==phenotype) &&(unconvertedPhenotype!=strataCategory)){ // categorical traits are displayed only if they are not the modeled phenotype AND we aren't stratifying on it
                                 if ((optionsPerFilter[clonedFilter.name]!==undefined)&&
 //                                    (optionsPerFilter[clonedFilter.name].length<3)&&
                                     (clonedFilter.name!==phenotype)){
@@ -762,6 +763,12 @@ var displayBurdenVariantSelector = function (){
 
              var generateStrataContent = function(optionsPerFilter,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, multipleStrataExist){
                 var strataContent = [];
+                var strataCategory;
+                if ((multipleStrataExist)  &&
+                    (stratificationProperty) &&
+                    (stratificationProperty.length>0)) {
+                    strataCategory = stratificationProperty[0].category;
+                }
                 if (multipleStrataExist){
                     _.forEach(stratificationProperty,function(stratumHolder){
                        var stratum=stratumHolder.name;
@@ -773,12 +780,12 @@ var displayBurdenVariantSelector = function (){
                                                         val:val,
                                                         category:category,
                                                         count:strataContent.length,
-                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype,strataCategory),
                                                         covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
                      });
                 } else {
                    strataContent = [{name:'strat1',trans:'strat1',category:'strat1',count:0,
-                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype,strataCategory),
                                                         covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }];
 
                 }
