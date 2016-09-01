@@ -1361,7 +1361,7 @@ var displayBurdenVariantSelector = function (){
                                 "columnDefs": [
                                         { "name": "IncludeCheckbox",   "targets": [0],  "type":"checkBoxGait",  "title":"Use?",
                                                     "render": function (data, type, full, meta){
-                                                        if (data.indexOf('input')>-1){
+                                                        if ((data)&&(data.indexOf('input')>-1)){
                                                         return data;
                                                         } else {
                                                         return "<input type='checkbox' id='variant_sel_"+data+"' class='geneGaitVariantSelector' checked>";
@@ -1403,7 +1403,6 @@ var displayBurdenVariantSelector = function (){
                                 variantID = variantRec.CHROM+":"+variantRec.POS;
                             }
                             arrayOfRows.push(variantRec.VAR_ID);
-
                             arrayOfRows.push('<a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/'+variantRec.VAR_ID+'" class="boldItlink">'+variantID+'</a>');
                             var DBSNP_ID = (variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'';
                             arrayOfRows.push(DBSNP_ID);

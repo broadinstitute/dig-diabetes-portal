@@ -233,6 +233,19 @@ class BurdenService {
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
             log.info("got burden getData results: " + jsonObject);
 
+
+            // get the list of variants back
+            variantList = this.getBurdenJsonBuilder().getVariantListFromJson(jsonObject);
+            log.info("got first pass variant list of size: " + variantList.size());
+
+            // filter variant list based on polyphen/sift
+            burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId);
+            log.info("got filtered variant list of size: " + burdenVariantList.size());
+
+            // filter the larger json object based on the variants that passed the above
+            jsonObject.variants = jsonObject.variants.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
+            jsonObject.numRecords = jsonObject.variants.size()
+
             // get the list of variants back
             retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "" )
 

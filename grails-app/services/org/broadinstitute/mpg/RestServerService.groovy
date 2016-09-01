@@ -1888,7 +1888,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
-                for (int i = 0; i < apiResults.variants[j].size(); i++) {
+                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
                     keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
                 }
                 List<String> variantSpecificList = []

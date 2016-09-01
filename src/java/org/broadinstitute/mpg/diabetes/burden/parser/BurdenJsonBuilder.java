@@ -197,6 +197,8 @@ public class BurdenJsonBuilder {
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_PROTEIN_CHANGE));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN_PRED));
+        query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_SIFT_PRED));
 
 
 
