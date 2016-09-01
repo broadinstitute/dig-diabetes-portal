@@ -958,14 +958,18 @@ var displayBurdenVariantSelector = function (){
 
         var convertBifurcatedFiltersIntoArraysOfStrings = function(filterKey,filterGrouping){
            var filterStrings = [];
+           var sampleMetadata = getStoredSampleMetadata();
+           var optionsPerFilter = generateOptionsPerFilter(sampleMetadata.filters) ;
            _.forEach( extractFilters(filterKey,filterGrouping), function(filterObject){
                var oneFilter = [];
+               var lastFilter;
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
                        if (key==="cat"){
                           oneFilter.push("\""+key+"\": \""+value+"\"");
                        }else{
                           var divider = value.indexOf('_');
+                          lastFilter = key;
                            if (divider>-1){
                                var propName = value.substr(divider+1,value.length-divider);
                                oneFilter.push("\""+key+"\": \""+propName+"\"");
@@ -975,7 +979,8 @@ var displayBurdenVariantSelector = function (){
                        }
                     }
                 });
-
+               // if ivery filter is checked then there is no need to add it
+               var optionForFilter = optionsPerFilter[lastFilter];
                filterStrings.push("{"+oneFilter.join(",\n")+"}");
            } );
         return filterStrings;
