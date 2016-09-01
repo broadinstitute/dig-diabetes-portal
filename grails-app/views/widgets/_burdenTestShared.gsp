@@ -92,6 +92,9 @@ ul.strataResults {
     /*border-left: solid 1px black;*/
     /*border-right: solid 1px black;*/
 }
+.filterCohort {
+    cursor: pointer;
+}
 .stratsTabs a.filterCohort.ALL {
     margin-bottom: -3px;
     margin-right: 5px;
@@ -962,26 +965,39 @@ var displayBurdenVariantSelector = function (){
            var optionsPerFilter = generateOptionsPerFilter(sampleMetadata.filters) ;
            _.forEach( extractFilters(filterKey,filterGrouping), function(filterObject){
                var oneFilter = [];
-               var lastFilter;
+               var lastFilterName;
+               var lastFilterParms = [];
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
-                       if (key==="cat"){
-                          oneFilter.push("\""+key+"\": \""+value+"\"");
-                       }else{
-                          var divider = value.indexOf('_');
-                          lastFilter = key;
-                           if (divider>-1){
-                               var propName = value.substr(divider+1,value.length-divider);
-                               oneFilter.push("\""+key+"\": \""+propName+"\"");
-                           } else {
-                                oneFilter.push("\""+key+"\": \""+value+"\"");
+                        if (key==="cat"){
+                            oneFilter.push("\""+key+"\": \""+value+"\"");
+                        }else{
+                            var propName;
+                            var divider = value.indexOf('_');
+                            if (divider>-1){
+                                propName = value.substr(divider+1,value.length-divider);
+                            } else {
+                                propName = value;
                            }
-                       }
+                            if (key==="name"){
+                                lastFilterName = propName;
+                            } else if (key==="parm"){
+                                lastFilterParms = propName
+                            }
+                            oneFilter.push("\""+key+"\": \""+propName+"\"");
+
+                        }
                     }
                 });
-               // if ivery filter is checked then there is no need to add it
-               var optionForFilter = optionsPerFilter[lastFilter];
-               filterStrings.push("{"+oneFilter.join(",\n")+"}");
+                // if every filter is checked then there is no need to add it
+                var optionForFilter = optionsPerFilter[lastFilterName];
+                var numberOfFilterOptions = ((lastFilterParms)?lastFilterParms:[]);
+                if (!((optionForFilter)&&
+                    ((optionForFilter.length==numberOfFilterOptions.length)||
+                     (lastFilterParms.length===0)))){
+                    filterStrings.push("{"+oneFilter.join(",\n")+"}");
+                }
+
            } );
         return filterStrings;
         };
