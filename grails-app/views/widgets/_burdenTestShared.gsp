@@ -92,6 +92,9 @@ ul.strataResults {
     /*border-left: solid 1px black;*/
     /*border-right: solid 1px black;*/
 }
+.filterCohort {
+    cursor: pointer;
+}
 .stratsTabs a.filterCohort.ALL {
     margin-bottom: -3px;
     margin-right: 5px;
@@ -363,6 +366,50 @@ var displayBurdenVariantSelector = function (){
        convertedName = 'LDL_ANAL';
     } else if (untranslatedPhenotype === 'TG'){
        convertedName = 'TG_ANAL';
+    }else if (untranslatedPhenotype === 'Admission_CT_Available'){
+       convertedName = 'Admission_CT_Available';
+    }else if (untranslatedPhenotype === 'Aspirin'){
+       convertedName = 'Aspirin';
+    }else if (untranslatedPhenotype === 'Coronary_Artery_Disease'){
+       convertedName = 'Coronary_Artery_Disease';
+    }else if (untranslatedPhenotype === 'Deep_ICH'){
+       convertedName = 'Deep_ICH';
+    }else if (untranslatedPhenotype === 'Discharge_mRS_gt_2'){
+       convertedName = 'Discharge_mRS_gt_2_readable';
+    }else if (untranslatedPhenotype === 'Ethnicity'){
+       convertedName = 'Ethnicity_readable';
+    }else if (untranslatedPhenotype === 'Follow_up_mRS_gt_2'){
+       convertedName = 'Follow_up_mRS_gt_2_readable';
+    }else if (untranslatedPhenotype === 'Hemorrhage_Location'){
+       convertedName = 'Hemorrhage_Location_readable';
+    }else if (untranslatedPhenotype === 'History_of_Diabetes_mellitus'){
+       convertedName = 'History_of_Diabetes_mellitus_readable';
+    }else if (untranslatedPhenotype === 'History_of_Hypercholesterolemia'){
+       convertedName = 'History_of_Hypercholesterolemia_readable';
+    }else if (untranslatedPhenotype === 'History_of_Hypertension'){
+       convertedName = 'History_of_Hypertension_readable';
+    }else if (untranslatedPhenotype === 'History_of_TIA_Ischemic_Stroke'){
+       convertedName = 'History_of_TIA_Ischemic_Stroke_readable';
+    }else if (untranslatedPhenotype === 'ICH_Status'){
+       convertedName = 'ICH_Status_readable';
+    }else if (untranslatedPhenotype === 'INR_gt_2'){
+       convertedName = 'INR_gt_2_readable';
+    }else if (untranslatedPhenotype === 'Lobar_ICH'){
+       convertedName = 'Lobar_ICH_readable';
+    }else if (untranslatedPhenotype === 'MRI_Available'){
+       convertedName = 'MRI_Available_readable';
+    }else if (untranslatedPhenotype === 'Number_of_Previous_Hemhorrhages'){
+       convertedName = 'Number_of_Previous_Hemhorrhages_readable';
+    }else if (untranslatedPhenotype === 'Other_Antiplatelet'){
+       convertedName = 'Other_Antiplatelet_readable';
+    }else if (untranslatedPhenotype === 'Race'){
+       convertedName = 'Race_readable';
+    }else if (untranslatedPhenotype === 'SEX'){
+       convertedName = 'SEX_readable';
+    }else if (untranslatedPhenotype === 'Statins'){
+       convertedName = 'Statins_readable';
+    }else if (untranslatedPhenotype === 'Warfarin_readable'){
+       convertedName = 'Warfarin';
     }
     return convertedName;
  };
@@ -545,13 +592,13 @@ var displayBurdenVariantSelector = function (){
         */
         var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo, caseControlFiltering) {
             var stratumName;
-            var multipleStrataExist = (strataProperty !== 'none');
+            var multipleStrataExist = ((strataProperty !== 'none')&&( typeof strataProperty !== 'undefined'));
             if (!multipleStrataExist){
                stratumName = 'strat1';
             }
 
 
-            var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype){
+            var generateFilterRenderData = function(dataFilters,optionsPerFilter,stratumName, phenotype, strataCategory){
                 var returnValue = {};
                 if ( ( typeof dataFilters !== 'undefined' ) &&
                              (  dataFilters !==  null ) ) {
@@ -565,9 +612,10 @@ var displayBurdenVariantSelector = function (){
                             }
                             realValuedFilters.push(clonedFilter);
                         } else {
-                            if (undoConversionPhenotypeNames(clonedFilter.name)!==phenotype) { // categorical traits are displayed only if they are not the modeled phenotype
+                            var unconvertedPhenotype = undoConversionPhenotypeNames(clonedFilter.name);
+                            if ((unconvertedPhenotype!==phenotype) &&(unconvertedPhenotype!=strataCategory)){ // categorical traits are displayed only if they are not the modeled phenotype AND we aren't stratifying on it
                                 if ((optionsPerFilter[clonedFilter.name]!==undefined)&&
-                                    (optionsPerFilter[clonedFilter.name].length<3)&&
+//                                    (optionsPerFilter[clonedFilter.name].length<3)&&
                                     (clonedFilter.name!==phenotype)){
                                         categoricalFilters.push(clonedFilter);
                                 }
@@ -718,6 +766,12 @@ var displayBurdenVariantSelector = function (){
 
              var generateStrataContent = function(optionsPerFilter,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, multipleStrataExist){
                 var strataContent = [];
+                var strataCategory;
+                if ((multipleStrataExist)  &&
+                    (stratificationProperty) &&
+                    (stratificationProperty.length>0)) {
+                    strataCategory = stratificationProperty[0].category;
+                }
                 if (multipleStrataExist){
                     _.forEach(stratificationProperty,function(stratumHolder){
                        var stratum=stratumHolder.name;
@@ -729,12 +783,12 @@ var displayBurdenVariantSelector = function (){
                                                         val:val,
                                                         category:category,
                                                         count:strataContent.length,
-                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype),
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter,stratum, phenotype,strataCategory),
                                                         covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype,stratum)});
                      });
                 } else {
                    strataContent = [{name:'strat1',trans:'strat1',category:'strat1',count:0,
-                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype),
+                                                        filterDetails:generateFilterRenderData(specificsAboutFilters,optionsPerFilter, 'strat1', phenotype,strataCategory),
                                                         covariateDetails:generateCovariateRenderData(specificsAboutCovariates,phenotype, 'strat1' ) }];
 
                 }
@@ -760,7 +814,14 @@ var displayBurdenVariantSelector = function (){
                     defaultDisplay : defaultDisplayString,
                     tabDisplay:tabDisplayString,
                     modeledPhenotype:modeledPhenotype,
-                    modeledPhenotypeDisplay: function(){if (modeledPhenotype.levels.length<2) {return 'display: none'; } else {return '' ;}},
+                    modeledPhenotypeDisplay: function(){
+                                    if ( ( typeof modeledPhenotype === 'undefined') ||
+                                        (modeledPhenotype.levels.length<2)) {
+                                        return 'display: none';
+                                    } else {
+                                        return '' ;
+                                    }
+                    },
                     displayBurdenVariantSelector:displayBurdenVariantSelectorString,
                     sectionNumber: 1
                 };
@@ -819,7 +880,7 @@ var displayBurdenVariantSelector = function (){
                                                                                     covariateTemplateC1:$('#covariateTemplateC1')[0].innerHTML,
                                                                                     covariateTemplateC2:$('#covariateTemplateC2')[0].innerHTML }));
 
-                    // do a few things in an old-fashioned, looping way
+                    // we only need to display one image, shared between cases and controls
                      _.forEach(stratificationProperty,function(stratumHolder){
                         var stratumName=stratumHolder.name;
 
@@ -832,7 +893,12 @@ var displayBurdenVariantSelector = function (){
                               });
                          });
 
-                        fillCategoricalDropDownBoxes({},phenotype,stratumName,optionsPerFilter);
+
+                            _.forEach(renderData.modeledPhenotype.levels,function(modPhenoHolder){
+
+                                fillCategoricalDropDownBoxes({},phenotype,stratumName,modPhenoHolder.name,optionsPerFilter);
+
+                            });
 
                     });
 
@@ -895,25 +961,43 @@ var displayBurdenVariantSelector = function (){
 
         var convertBifurcatedFiltersIntoArraysOfStrings = function(filterKey,filterGrouping){
            var filterStrings = [];
+           var sampleMetadata = getStoredSampleMetadata();
+           var optionsPerFilter = generateOptionsPerFilter(sampleMetadata.filters) ;
            _.forEach( extractFilters(filterKey,filterGrouping), function(filterObject){
                var oneFilter = [];
+               var lastFilterName;
+               var lastFilterParms = [];
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
-                       if (key==="cat"){
-                          oneFilter.push("\""+key+"\": \""+value+"\"");
-                       }else{
-                          var divider = value.indexOf('_');
-                           if (divider>-1){
-                               var propName = value.substr(divider+1,value.length-divider);
-                               oneFilter.push("\""+key+"\": \""+propName+"\"");
-                           } else {
-                                oneFilter.push("\""+key+"\": \""+value+"\"");
+                        if (key==="cat"){
+                            oneFilter.push("\""+key+"\": \""+value+"\"");
+                        }else{
+                            var propName;
+                            var divider = value.indexOf('_');
+                            if (divider>-1){
+                                propName = value.substr(divider+1,value.length-divider);
+                            } else {
+                                propName = value;
                            }
-                       }
+                            if (key==="name"){
+                                lastFilterName = propName;
+                            } else if (key==="parm"){
+                                lastFilterParms = propName
+                            }
+                            oneFilter.push("\""+key+"\": \""+propName+"\"");
+
+                        }
                     }
                 });
+                // if every filter is checked then there is no need to add it
+                var optionForFilter = optionsPerFilter[lastFilterName];
+                var numberOfFilterOptions = ((lastFilterParms)?lastFilterParms:[]);
+                if (!((optionForFilter)&&
+                    ((optionForFilter.length==numberOfFilterOptions.length)||
+                     (lastFilterParms.length===0)))){
+                    filterStrings.push("{"+oneFilter.join(",\n")+"}");
+                }
 
-               filterStrings.push("{"+oneFilter.join(",\n")+"}");
            } );
         return filterStrings;
         };
@@ -1867,13 +1951,13 @@ var displayBurdenVariantSelector = function (){
 
 
 
-        var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum,optionsPerFilter){
+        var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum,modPhenoHolder,optionsPerFilter){
              // make dist plots
             var sampleMetadata = getStoredSampleMetadata();
             _.forEach(sampleMetadata.filters,function(d,i){
                 if (d.type !== 'FLOAT') {
                     if (optionsPerFilter[d.name]!==undefined){
-                       var dropdownId = '#multi_'+stratum+"_"+d.name+"_strata1";
+                       var dropdownId = '#multi_'+stratum+"_"+d.name+"_"+modPhenoHolder;
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
                            $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
