@@ -93,7 +93,7 @@ ul.strataResults {
     /*border-right: solid 1px black;*/
 }
 .filterCohort {
-    cursor: pointer;
+    cursor: pointer;you
 }
 .stratsTabs a.filterCohort.ALL {
     margin-bottom: -3px;
@@ -1464,11 +1464,11 @@ var displayBurdenVariantSelector = function (){
                                             "width": "auto"  },
                                         { "name": "POS",   "targets": [4], "title":"Position",
                                             "width": "auto" },
-                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene",
-                                            "width": "auto"  },
-                                        { "name": "Protein_change",   "targets": [6], "title":"Protein change",
+//                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene",
+//                                            "width": "auto"  },
+                                        { "name": "Protein_change",   "targets": [5], "title":"Protein change",
                                           "width": "60px"  },
-                                        { "name": "Consequence",   "targets": [7], "title":"Consequence",
+                                        { "name": "Consequence",   "targets": [6], "title":"Consequence",
                                           "width": "100px"  }
 
                                     ],
@@ -1492,7 +1492,7 @@ var displayBurdenVariantSelector = function (){
                             arrayOfRows.push(DBSNP_ID);
                             arrayOfRows.push(variantRec.CHROM);
                             arrayOfRows.push(variantRec.POS);
-                            arrayOfRows.push('<a href="${createLink(controller: 'gene', action: 'geneInfo')}/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
+                            //arrayOfRows.push('<a href="${createLink(controller: 'gene', action: 'geneInfo')}/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
                             var protein_change= (variantRec.Protein_change)?variantRec.Protein_change:'';
                             arrayOfRows.push(protein_change);
                             arrayOfRows.push(variantRec.Consequence);
@@ -1958,21 +1958,33 @@ var displayBurdenVariantSelector = function (){
                 if (d.type !== 'FLOAT') {
                     if (optionsPerFilter[d.name]!==undefined){
                        var dropdownId = '#multi_'+stratum+"_"+d.name+"_"+modPhenoHolder;
+
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
                            $(dropdownId).append(new Option(filterVal.name,filterVal.name));
                        });
+                       if ($(dropdownId).children().length>0){
                        $(dropdownId).multiselect({includeSelectAllOption: true,
                                                    allSelectedText: 'All Selected',
-                                                   multiselectclose: function(event, ui){
-                                                            console.log('event');
-                                                        },
-                                                   open: function(event, ui){
-                                                            console.log('event2');
-                                                        },
                                                    buttonWidth: '100%'
                                                    });
-                       $(dropdownId).multiselect('selectAll', false);
-                       $(dropdownId).multiselect('updateButtonText');
+                        $(dropdownId).change(function(event, ui){
+                                              // Begin kludge alert!----
+                                              // I've spent a lot of time trying to figure out how to capture a jquery multi-select window close, but the event
+                                              // never seems to get triggered.  Strange.  Until I can get a real answer here is a workaround: when we
+                                              // see any change (an event I CAN capture for some reason)  pull the adjacent arrow to launch a redraw.
+                                              // ----end kludge alert
+                                              var holder = $(dropdownId).parent().parent().parent();
+                                              var adjacentColumn = $(holder.children()[3]);
+                                              var adjacentCorrespondingArrow = $(adjacentColumn.children()[0]);
+                                              if (adjacentCorrespondingArrow) {
+                                                eval(adjacentCorrespondingArrow.attr('onclick'));
+                                              }
+                                            });
+
+                        $(dropdownId).multiselect('selectAll', false);
+                        $(dropdownId).multiselect('updateButtonText');
+
+                       }
 
                     }
                  }
