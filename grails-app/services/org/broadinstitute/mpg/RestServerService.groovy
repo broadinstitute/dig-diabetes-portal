@@ -251,6 +251,7 @@ class RestServerService {
             this.burdenServerList = new ArrayList<ServerBean>();
             this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
         }
 
         return this.burdenServerList;
@@ -1274,9 +1275,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public String getSampleMetadata() {
         String retdat
-        retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, "http://dig-api-qa.broadinstitute.org/qa/gs/")
-        //retdat = getRestCall(GET_SAMPLE_METADATA_URL)
-        //currentRestServer()
+        retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, currentRestServer())
         return retdat
     }
 

@@ -224,6 +224,7 @@ experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
 burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 burdenRestServerProd = new ServerBean("prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-dev.broadinstitute.org:8087/stage/burden");
 
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
