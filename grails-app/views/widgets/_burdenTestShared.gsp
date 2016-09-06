@@ -910,7 +910,8 @@ var displayBurdenVariantSelector = function (){
                         renderData.sectionNumber++;
                         $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
                         mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
-                        $('#singlebutton').click();//if we have a gene then we must generate a list of variants
+                        mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
+                       // $('#singlebutton').click();//if we have a gene then we must generate a list of variants
                     }
 
                     //
@@ -1427,17 +1428,19 @@ var displayBurdenVariantSelector = function (){
                  promise.done(
                   function (data) {
                     if ((typeof data !== 'undefined') &&
-                         (data)&&
-                         (typeof data.results !== 'undefined') &&
+                         (data)){
+                         var variantListHolder = [];
+                         if ((typeof data.results !== 'undefined') &&
                          (data.results)){
                          var variantListHolder = [];
-                         _.forEach(data.results, function(oneVariant){
-                            var variant = {};
-                             _.forEach(oneVariant.pVals, function(fieldHolder){
-                                variant[fieldHolder.level] = fieldHolder.count;
+                             _.forEach(data.results, function(oneVariant){
+                                var variant = {};
+                                 _.forEach(oneVariant.pVals, function(fieldHolder){
+                                    variant[fieldHolder.level] = fieldHolder.count;
+                                 });
+                                 variantListHolder.push(variant);
                              });
-                             variantListHolder.push(variant);
-                         });
+                         }
                          $('#gaitTable').DataTable({
                                 "bDestroy": true,
                                 "bAutoWidth" : false,
@@ -1461,12 +1464,16 @@ var displayBurdenVariantSelector = function (){
                                         { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID",
                                             "width": "auto"  },
                                         { "name": "CHROM",   "targets": [3], "title":"Chrom.",
-                                            "width": "auto"  },
+                                            "width": "40px"  },
                                         { "name": "POS",   "targets": [4], "title":"Position",
                                             "width": "auto" },
-                                        { "name": "Protein_change",   "targets": [5], "title":"Protein change",
+                                        { "name": "PolyPhen_PRED",   "targets": [5], "title":"Polyphen",
+                                            "width": "auto" },
+                                        { "name": "SIFT_PRED",   "targets": [6], "title":"SIFT",
+                                            "width": "auto" },
+                                        { "name": "Protein_change",   "targets": [7], "title":"Protein change",
                                           "width": "60px"  },
-                                        { "name": "Consequence",   "targets": [6], "title":"Consequence",
+                                        { "name": "Consequence",   "targets": [8], "title":"Consequence",
                                           "width": "100px"  }
 
                                     ],
@@ -1490,6 +1497,8 @@ var displayBurdenVariantSelector = function (){
                             arrayOfRows.push(DBSNP_ID);
                             arrayOfRows.push(variantRec.CHROM);
                             arrayOfRows.push(variantRec.POS);
+                            arrayOfRows.push((variantRec.PolyPhen_PRED)?variantRec.PolyPhen_PRED:'');
+                            arrayOfRows.push((variantRec.SIFT_PRED)?variantRec.SIFT_PRED:'');
                             //arrayOfRows.push('<a href="${createLink(controller: 'gene', action: 'geneInfo')}/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
                             var protein_change= (variantRec.Protein_change)?variantRec.Protein_change:'';
                             arrayOfRows.push(protein_change);
@@ -2916,7 +2925,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                         <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
 
                         <div class="row burden-test-wrapper-options">
-                            <div class="col-md-10 col-sm-10 col-xs-12">
+
+                            <div class="col-md-11 col-sm-11 col-xs-12">
                                 <div  class="row">
 
                                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -2936,7 +2946,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
                                         <div class="labelAndInput">
                                             MAF &lt;&nbsp;
-                                            <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value">
+                                            <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value"
+                                            onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()">
                                         </div>
 
                                     </div>
@@ -2944,18 +2955,16 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                                         <div class="form-inline mafOptionChooser">
                                             <div class="radio">
-                                                <label><input type="radio" name="mafOption" value="1" />&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                                <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="mafOption"  value="2" checked />&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                                <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div  class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
-                                <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                        class="btn btn-secondary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()">Retrieve variants</button>
+                            <div  class="col-md-1 col-sm-1 col-xs-12 burden-test-btn-wrapper vcenter">
                             </div>
                         </div>
 
