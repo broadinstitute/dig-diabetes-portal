@@ -1464,8 +1464,6 @@ var displayBurdenVariantSelector = function (){
                                             "width": "auto"  },
                                         { "name": "POS",   "targets": [4], "title":"Position",
                                             "width": "auto" },
-//                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene",
-//                                            "width": "auto"  },
                                         { "name": "Protein_change",   "targets": [5], "title":"Protein change",
                                           "width": "60px"  },
                                         { "name": "Consequence",   "targets": [6], "title":"Consequence",
@@ -1625,21 +1623,19 @@ var displayBurdenVariantSelector = function (){
             var phenotypeTabs = [];
             // compile unique strata names
             var uniqueStrataNames = [];
-            if (modeledPhenotypes.length>0){
-                for ( var i = 0 ; i < modeledPhenotypes.length ; i++ ) {
-                    var modeledPhenotype = modeledPhenotypes[i];
-                    var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
-                    for ( var i = 0 ; i < stratsTabs.length ; i++ ) {
-                        var currentStratumName = $(stratsTabs[i]).text();
-                        if (uniqueStrataNames.indexOf(currentStratumName)<0){
-                            if (currentStratumName !== 'ALL'){
-                                uniqueStrataNames.push(currentStratumName);
-                            }
+            _.forEach(modeledPhenotypes,function(modeledPhenotype){
+                 var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
+                for ( var i = 0 ; i < stratsTabs.length ; i++ ) {
+                    var currentStratumName = $(stratsTabs[i]).text();
+                    if (uniqueStrataNames.indexOf(currentStratumName)<0){
+                        if (currentStratumName !== 'ALL'){
+                            uniqueStrataNames.push(currentStratumName);
                         }
                     }
                 }
-            }
-             $('.strataResults').empty(); // clear stata reporting section
+            });
+
+            $('.strataResults').empty(); // clear stata reporting section
             if (uniqueStrataNames.length>0){
                 for ( var i = 0 ; i < uniqueStrataNames.length ; i++ ) {
                     var stratumName = uniqueStrataNames[i];
@@ -1652,13 +1648,13 @@ var displayBurdenVariantSelector = function (){
                         for ( var j = 0 ; j < modeledPhenotypes.length ; j++ ) {
                             var modeledPhenotype = modeledPhenotypes[j];
 
-                            var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
-                            if (stratsTabs.length===0){
-                               var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
-                               $.when(f).then(function() {
-                                      //alert('all done with 1');
-                                });
-                            } else {
+                            %{--var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');--}%
+                            %{--if (stratsTabs.length===0){--}%
+                               %{--var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');--}%
+                               %{--$.when(f).then(function() {--}%
+                                      %{--//alert('all done with 1');--}%
+                                %{--});--}%
+                            %{--} else {--}%
                                 strataPropertyName = $('div.stratsTabs_property').attr("id");
                                 phenoPropertyName = $('div.phenoSplitTabs_property.'+modeledPhenotype).attr("id");
                                 phenoPropertySpecifier = $('a[data-target=#'+stratumName+'_'+modeledPhenotype+']+div.strataPhenoIdent div.phenoCategory').text();
@@ -1669,7 +1665,7 @@ var displayBurdenVariantSelector = function (){
                                                         strataPropertyName: strataPropertyName,
                                                         stratumName:stratumName
                                     });
-                           }
+ //                          }
 
                         }
                         nonPhenotypeTabs.push(caseAndControlArray);
@@ -1958,9 +1954,10 @@ var displayBurdenVariantSelector = function (){
                 if (d.type !== 'FLOAT') {
                     if (optionsPerFilter[d.name]!==undefined){
                        var dropdownId = '#multi_'+stratum+"_"+d.name+"_"+modPhenoHolder;
-
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
-                           $(dropdownId).append(new Option(filterVal.name,filterVal.name));
+                           if ('ALL'!==filterVal.name){ // we provide a 'select all' option, so there is never a call for a category == 'ALL'
+                              $(dropdownId).append(new Option(filterVal.name,filterVal.name));
+                           }
                        });
                        if ($(dropdownId).children().length>0){
                        $(dropdownId).multiselect({includeSelectAllOption: true,
