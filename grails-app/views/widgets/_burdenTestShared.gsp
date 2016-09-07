@@ -245,12 +245,59 @@ text.whisker{
 line.center{
       display: none; /*if you don't want text labels on your boxes*/
 }
-
+span.metaAnalysis {
+    font-size: 18px;
+}
+span.stratumName.meta {
+    font-size: 20px;
+}
 </style>
 
 
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
+
+    mpgSoftware.burdenInfo = (function () {
+
+        var delayedBurdenDataPresentation = {};
+
+        // burden testing hypothesis testing section
+        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
+            var retainBarchartPtr;
+
+            // The bar chart graphic
+            if ((caseNumerator) ||
+                (caseDenominator) &&
+                (controlNumerator) &&
+                (controlDenominator)) {
+                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.geneInfo.fillUpBarChart,
+                    barchartPtr: retainBarchartPtr,
+                    launch: function () {
+                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
+                        return retainBarchartPtr;
+                    },
+                    removeBarchart: function () {
+                        if ((typeof retainBarchartPtr !== 'undefined') &&
+                            (typeof retainBarchartPtr.clear !== 'undefined')) {
+                            retainBarchartPtr.clear('T2D');
+                        }
+//                        $('#significanceDescriptorFormatter').empty();
+//                        $('#possibleCarrierVariantsLink').empty();
+                    }
+                };
+            }
+        };
+
+        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
+            return delayedBurdenDataPresentation;
+        };
+
+        return {
+            // public routines
+            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
+            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
+        }
+    }());
 
     mpgSoftware.gaitBackgroundData = (function () {
 
@@ -548,7 +595,7 @@ var displayBurdenVariantSelector = function (){
             var phenotypeFilterValue = $(phenotypeFilter).val();
             var stratifyDesignationValue = $(stratifyDesignation).val();
             var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
-            var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames;})
+            var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames||o.name===phenotypeFilterValue;})
             if (typeof filterDetails !== 'undefined'){
                 if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
                     $(caseControlDesignator).prop('checked', false);
@@ -1045,7 +1092,7 @@ var displayBurdenVariantSelector = function (){
                     if (phenoPropertyInstanceExtracted !== 'strata1' ) { // placeholder implying we have no phenotype grouping
                         arraysOfStrings.push("{\"name\":\""+phenoPropertyNameExtracted+"\",\n\"parm\":\""+undoConversionPhenotypeNames(phenoPropertyInstanceExtracted)+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
                     }
-                    if (stratumName !== 'strat1' ) { // placeholder implying we have no strata
+                    if ((stratumName !== 'strat1' )&&(stratumName !== 'ALL')) { // placeholder implying we have no strata
                         arraysOfStrings.push("{\"name\":\""+stratumPropertyNameExtracted+"\",\n\"parm\":\""+stratumName+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
                     }
                    arrayOfArrayOfFilters.push(arraysOfStrings);
@@ -1230,7 +1277,9 @@ var displayBurdenVariantSelector = function (){
 
           var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,additionalText){
 
-
+                if (currentStratum==='ALL'){// We may have to calculate an ALL stratum, but we don't want to display it
+                    return;
+                }
                 var ciDisplay = '';
                 if (!((typeof ciLower === 'undefined') ||
                     (typeof ciUpper === 'undefined') ||
@@ -1340,30 +1389,51 @@ var displayBurdenVariantSelector = function (){
                             var ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
                             var ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
                             var isCategorical = isCategoricalF (data.stats);
+                            var numCases,numControls,numCaseCarriers,numControlCarriers;
+                            if (isCategorical){
+                                numCases=data.stats.numCases;
+                                numControls=data.stats.numControls;
+                                numCaseCarriers=data.stats.numCaseCarriers;
+                                numControlCarriers=data.stats.numControlCarriers;
+                            }
 
                             var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
                             if (typeof data.stratum !== 'undefined'){
                                currentStratum = data.stratum;
                             }
                             if (currentStratum==='strat1'){
+                                $('.strataResults').empty();
                                 $('.strataResults').append('<div class="'+currentStratum+' strataHolder"></div>');
                                 var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                                 addStrataSection(strataDomIdentifierClass,currentStratum);
+                                strataDomIdentifierClass.append('<div id="chart"></div>')
                                 printFullResultsSection(data.stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isCategorical,currentStratum,'');
-                            } else {
+                                if ((typeof numCases !== 'undefined')  && (numCases!=='')){
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
 
-                                    $('.strataResults').append('<div class="strataJar">'+
+                                       // launch
+                                       mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
+                                }
+                            } else {
+                                var fieldsToStoreInTheDom = '<div class="strataJar">'+
                                                                 '<span class="hider stratum '+currentStratum+'">'+currentStratum+'</span>'+
                                                                 '<span class="hider pv '+currentStratum+'">'+pValue+'</span>'+
                                                                 '<span class="hider be '+currentStratum+'">'+beta+'</span>'+
-                                                                '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>'+
-                                                                '<span class="hider ciLevel '+currentStratum+'" >'+ciLevel+'</span>'+
-                                                                '<span class="hider ciLower '+currentStratum+'" >'+ciLower+'</span>'+
-                                                                '<span class="hider ciUpper '+currentStratum+'" >'+ciUpper+'</span>'+
-                                                                '<span class="hider ca '+currentStratum+'" >'+(isCategorical?"1":"0")+'</span>'+
-                                                                '</div>');
+                                                                '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>';
+                                if (isCategorical){
+                                    fieldsToStoreInTheDom += ('<span class="hider numCases '+currentStratum+'">'+numCases+'</span>'+
+                                                                '<span class="hider numControls '+currentStratum+'">'+numControls+'</span>'+
+                                                                '<span class="hider numCaseCarriers '+currentStratum+'">'+numCaseCarriers+'</span>'+
+                                                                '<span class="hider numControlCarriers '+currentStratum+'" >'+numControlCarriers+'</span>');
+                                }
+                                fieldsToStoreInTheDom += ('<span class="hider ciLevel '+currentStratum+'" >'+ciLevel+'</span>'+
+                                                            '<span class="hider ciLower '+currentStratum+'" >'+ciLower+'</span>'+
+                                                            '<span class="hider ciUpper '+currentStratum+'" >'+ciUpper+'</span>'+
+                                                            '<span class="hider ca '+currentStratum+'" >'+(isCategorical?"1":"0")+'</span>'+
+                                                            '</div>');
+                                $('.strataResults').append(fieldsToStoreInTheDom);
 
-                            displayTestResultsSection(true);
+                                displayTestResultsSection(true);
 
                        }}
                     }
@@ -1538,9 +1608,11 @@ var displayBurdenVariantSelector = function (){
                // create JSON we can send to the server
                var jsonHolder = [];
                 _.forEach(allElements, function(stratum){
-                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+
-                    ',"ciLevel":'+stratum.ciLevel+',"ciLower":'+stratum.ciLower+',"ciUpper":'+stratum.ciUpper+
-                    '}');
+                    if (stratum.stratum !== 'ALL'){
+                        jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+
+                        ',"ciLevel":'+stratum.ciLevel+',"ciLower":'+stratum.ciLower+',"ciUpper":'+stratum.ciUpper+
+                        '}');
+                    }
                 });
                 var json = '['+jsonHolder.join(',')+']';
                 var sortedElements = allElements.sort(function(a, b) {
@@ -1593,10 +1665,21 @@ var displayBurdenVariantSelector = function (){
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
-                             $('.strataResults').append( '<div clas="metana" style="text-align: center"><span class="stratumName">Meta-analysis:</span> &nbsp;&nbsp;&nbsp;pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
+                            var numCases = $('.strataResults div.strataJar span.numCases.ALL').text();
+                            var numControls = $('.strataResults div.strataJar span.numControls.ALL').text();
+                            var numCaseCarriers = $('.strataResults div.strataJar span.numCaseCarriers.ALL').text();
+                            var numControlCarriers = $('.strataResults div.strataJar span.numControlCarriers.ALL').text();
+
+                             $('.strataResults').append( '<div clas="metana" style="text-align: center"><span class="stratumName meta">Meta-analysis:</span> &nbsp;&nbsp;&nbsp;<span class="pv metaAnalysis">pValue = '+pValue+'</span>'+
 ((categorical==='1')?('<span class="be metaAnalysis">Odds ratio='+oddsRatio+'</span>'):('<span class="be metaAnalysis">Beta='+beta+'</span>'))+
 '<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
-'</div>');
+'</div><div id="chart"></div>');
+                            if ((typeof numCases !== 'undefined')  &&(numCases!=='')){
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
+
+                                       // launch
+                                       mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
+                            }
                        }
                     }
                  );
@@ -1637,9 +1720,9 @@ var displayBurdenVariantSelector = function (){
                 for ( var i = 0 ; i < stratsTabs.length ; i++ ) {
                     var currentStratumName = $(stratsTabs[i]).text();
                     if (uniqueStrataNames.indexOf(currentStratumName)<0){
-                        if (currentStratumName !== 'ALL'){
+                       // if (currentStratumName !== 'ALL'){
                             uniqueStrataNames.push(currentStratumName);
-                        }
+                       // }
                     }
                 }
             });
