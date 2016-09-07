@@ -184,7 +184,9 @@
 
                         <div class="separator"></div>
 
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '', 'modifiedTitle': 'Interactive burden test (GAIT for genes)' ]"/>
+                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
+                                                                               'modifiedTitle': 'Interactive burden test',
+                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
 
 
                     </g:if>

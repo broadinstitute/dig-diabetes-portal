@@ -251,6 +251,9 @@ span.metaAnalysis {
 span.stratumName.meta {
     font-size: 20px;
 }
+.strat1.strataHolder {
+    font-size: 18px;
+}
 </style>
 
 
@@ -546,16 +549,15 @@ var displayBurdenVariantSelector = function (){
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",%{--var gaitTable = $('#gaitTable').DataTable();--}%
-               %{--_.forEach(gaitTable.rows().data(),function(eachVariantDom){--}% data: {},
+                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",
+                data: {},
                 async: true,
-                success: function (data) {%{--var variantSelector = $(eachVariantDom[0]).attr('href').split('/');--}%
-                    %{--if ((variantSelector)&&--}%storeSampleMetadata(data);
+                success: function (data) {
+                    storeSampleMetadata(data);
                     var phenotypeDropdown = $(dropDownSelector);
                     phenotypeDropdown.empty();
-                    if ( ( data !==  null ) &&%{--(variantSelector.length>1)){--}%
-                        %{--listOfVariantsToCheck.push('"'+variantSelector[variantSelector.length-1]+'"');--}%    ( typeof data !== 'undefined') &&%{--}--}%
-               %{--});--}%             ( typeof data.phenotypes !== 'undefined' ) &&
+                    if ( ( data !==  null ) &&
+                        ( typeof data.phenotypes !== 'undefined' ) &&
                             (  data.phenotypes !==  null ) ) {
                         var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
                         var weHaveADefaultFirstElement = false;
@@ -892,6 +894,20 @@ var displayBurdenVariantSelector = function (){
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
 
+
+
+                    //
+                    //  display the variant selection filtering tools
+                    //
+                    if (getGeneForGait().length>0){
+                        renderData.sectionNumber++;
+                        $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+                        mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
+                        mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
+                     }
+
+
+
                     //
                     // set up the section where the filters will go
                     //
@@ -949,17 +965,6 @@ var displayBurdenVariantSelector = function (){
 
                     });
 
-
-                    //
-                    //  display the variant selection filtering tools
-                    //
-                    if (getGeneForGait().length>0){
-                        renderData.sectionNumber++;
-                        $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-                        mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
-                        mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
-                       // $('#singlebutton').click();//if we have a gene then we must generate a list of variants
-                    }
 
                     //
                     // display the results section
@@ -1481,7 +1486,7 @@ var displayBurdenVariantSelector = function (){
              specifiedMafValueId  = parseFloat(specifiedMafValue),
              burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val();
               var dataSet =  'samples_17k_mdv2';
-
+               $('#rSpinner').show();
                 var promise =  $.ajax({
                     cache: false,
                     type: "post",
@@ -1496,7 +1501,9 @@ var displayBurdenVariantSelector = function (){
                     async: true
                  });
                  promise.done(
+
                   function (data) {
+                  $('#rSpinner').hide();
                     if ((typeof data !== 'undefined') &&
                          (data)){
                          var variantListHolder = [];
@@ -2426,8 +2433,18 @@ $( document ).ready( function (){
         <div class="accordion-inner">
 
             <div class="container">
-                <h5>The Genetic Association Interactive Tool allows you to compute custom association statistics for this
-                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h5>
+                <h5>
+                    <g:if test="${modifiedGaitSummary}">
+                        ${modifiedGaitSummary}
+                    </g:if>
+                    <g:else>
+                        The Genetic Association Interactive Tool allows you to compute custom association statistics for this
+                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
+                         GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy,
+                            GAIT will only allow visualization or analysis of data from more than 100 individuals.
+                    </g:else>
+
+                </h5>
 
 
                 <div class="row burden-test-wrapper-options">
@@ -2443,9 +2460,9 @@ $( document ).ready( function (){
                         <div class="stratified-user-interaction"></div>
 
                         <div class="panel-group" id="accordion_iat" style="margin-bottom: 0px">%{--start accordion --}%
+                            <div id="chooseVariantFilterSelection"></div>
                             <div id="chooseFiltersLocation"></div>
                             <div id="chooseCovariatesLocation"></div>
-                            <div id="chooseVariantFilterSelection"></div>
                         </div>
 
                     </div>
@@ -2470,6 +2487,9 @@ $( document ).ready( function (){
                 <a>Step {{sectionNumber}}: Launch analysis</a>
             </h4>
         </div>
+
+
+
 
     <div class="row burden-test-some-results burden-test-some-results_{{stratum}}">
         <div class="row iatErrorFailure" style="display:none">
@@ -2552,9 +2572,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12">
                         <p>
-                            The Genetic Association Interactive Tool (GAIT) allows you to compute custom association statistics for this variant by specifying a phenotype to test,
-                            a subset of samples, and a collection of covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy,
-                            GAIT will only allow visualization or analysis of data from more than 100 individuals.
+                            Select a phenotype to test for association and optionally choose to stratify samples by ancestry and/or filter cases and controls separately.
                         </p>
 
                     </div>
@@ -2998,14 +3016,15 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
                             <p>
-                                Choose a collection of variants which will be analyzed together to assess disease burden
+                                Choose a collection of variants which will be analyzed together to assess disease burden.
+                                You may choose a set of variants with a specific consequence or minor allele frequency, and
+                                potentially remove variants from this set by using the check boxes at the left of the table.
                             </p>
                         </div>
                     </div>
 
                     <div class="row">
                     <div class="container">
-                        <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
 
                         <div class="row burden-test-wrapper-options">
 
