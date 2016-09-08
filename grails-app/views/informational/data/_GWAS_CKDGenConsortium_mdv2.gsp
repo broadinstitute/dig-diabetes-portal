@@ -36,7 +36,7 @@ PP, Rettig R, Hastie N, Chasman DI, Kao WH, Heid IM, Fox CS.
         </div></p>
 
     <h6 style="color:#ccc;">Project</h6>
-    <h4>Chronic Kidney Disease Genetics Consortium (CDKGen)</h4>
+    <h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
 
-    <p>CDKGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
+    <p>CKDGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
 </div>

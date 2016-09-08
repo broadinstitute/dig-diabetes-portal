@@ -344,13 +344,20 @@ class GeneController {
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         String codedVariantList = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
 
+        if (codedVariantList == null) {
+            render(status: 200, contentType: "application/json"){variantInfo:{results:[]}}
+            return
+        }
+
         JsonSlurper slurper = new JsonSlurper()
         JSONObject sampleCallSpecifics = slurper.parseText(codedVariantList)
 
         if (sampleCallSpecifics.results) {
             for (Map result in sampleCallSpecifics.results){
                 for (Map pval in result.pVals){
-                    if (pval.level == "Consequence"){
+                    if ((pval.level == "Consequence")||
+                            (pval.level == "SIFT_PRED")||
+                            (pval.level == "PolyPhen_PRED")){
                         List<String> consequenceList = pval.count.tokenize(",")
                         List<String> translatedConsequenceList = []
                         for (String consequence in consequenceList){

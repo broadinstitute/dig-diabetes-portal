@@ -93,7 +93,7 @@ ul.strataResults {
     /*border-right: solid 1px black;*/
 }
 .filterCohort {
-    cursor: pointer;
+    cursor: pointer;you
 }
 .stratsTabs a.filterCohort.ALL {
     margin-bottom: -3px;
@@ -245,12 +245,62 @@ text.whisker{
 line.center{
       display: none; /*if you don't want text labels on your boxes*/
 }
-
+span.metaAnalysis {
+    font-size: 18px;
+}
+span.stratumName.meta {
+    font-size: 20px;
+}
+.strat1.strataHolder {
+    font-size: 18px;
+}
 </style>
 
 
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
+
+    mpgSoftware.burdenInfo = (function () {
+
+        var delayedBurdenDataPresentation = {};
+
+        // burden testing hypothesis testing section
+        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
+            var retainBarchartPtr;
+
+            // The bar chart graphic
+            if ((caseNumerator) ||
+                (caseDenominator) &&
+                (controlNumerator) &&
+                (controlDenominator)) {
+                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.geneInfo.fillUpBarChart,
+                    barchartPtr: retainBarchartPtr,
+                    launch: function () {
+                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
+                        return retainBarchartPtr;
+                    },
+                    removeBarchart: function () {
+                        if ((typeof retainBarchartPtr !== 'undefined') &&
+                            (typeof retainBarchartPtr.clear !== 'undefined')) {
+                            retainBarchartPtr.clear('T2D');
+                        }
+//                        $('#significanceDescriptorFormatter').empty();
+//                        $('#possibleCarrierVariantsLink').empty();
+                    }
+                };
+            }
+        };
+
+        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
+            return delayedBurdenDataPresentation;
+        };
+
+        return {
+            // public routines
+            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
+            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
+        }
+    }());
 
     mpgSoftware.gaitBackgroundData = (function () {
 
@@ -499,16 +549,15 @@ var displayBurdenVariantSelector = function (){
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",%{--var gaitTable = $('#gaitTable').DataTable();--}%
-               %{--_.forEach(gaitTable.rows().data(),function(eachVariantDom){--}% data: {},
+                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",
+                data: {},
                 async: true,
-                success: function (data) {%{--var variantSelector = $(eachVariantDom[0]).attr('href').split('/');--}%
-                    %{--if ((variantSelector)&&--}%storeSampleMetadata(data);
+                success: function (data) {
+                    storeSampleMetadata(data);
                     var phenotypeDropdown = $(dropDownSelector);
                     phenotypeDropdown.empty();
-                    if ( ( data !==  null ) &&%{--(variantSelector.length>1)){--}%
-                        %{--listOfVariantsToCheck.push('"'+variantSelector[variantSelector.length-1]+'"');--}%    ( typeof data !== 'undefined') &&%{--}--}%
-               %{--});--}%             ( typeof data.phenotypes !== 'undefined' ) &&
+                    if ( ( data !==  null ) &&
+                        ( typeof data.phenotypes !== 'undefined' ) &&
                             (  data.phenotypes !==  null ) ) {
                         var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
                         var weHaveADefaultFirstElement = false;
@@ -548,7 +597,7 @@ var displayBurdenVariantSelector = function (){
             var phenotypeFilterValue = $(phenotypeFilter).val();
             var stratifyDesignationValue = $(stratifyDesignation).val();
             var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
-            var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames;})
+            var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames||o.name===phenotypeFilterValue;})
             if (typeof filterDetails !== 'undefined'){
                 if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
                     $(caseControlDesignator).prop('checked', false);
@@ -845,6 +894,20 @@ var displayBurdenVariantSelector = function (){
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
 
+
+
+                    //
+                    //  display the variant selection filtering tools
+                    //
+                    if (getGeneForGait().length>0){
+                        renderData.sectionNumber++;
+                        $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+                        mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
+                        mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
+                     }
+
+
+
                     //
                     // set up the section where the filters will go
                     //
@@ -902,16 +965,6 @@ var displayBurdenVariantSelector = function (){
 
                     });
 
-
-                    //
-                    //  display the variant selection filtering tools
-                    //
-                    if (getGeneForGait().length>0){
-                        renderData.sectionNumber++;
-                        $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-                        mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
-                        $('#singlebutton').click();//if we have a gene then we must generate a list of variants
-                    }
 
                     //
                     // display the results section
@@ -1044,7 +1097,7 @@ var displayBurdenVariantSelector = function (){
                     if (phenoPropertyInstanceExtracted !== 'strata1' ) { // placeholder implying we have no phenotype grouping
                         arraysOfStrings.push("{\"name\":\""+phenoPropertyNameExtracted+"\",\n\"parm\":\""+undoConversionPhenotypeNames(phenoPropertyInstanceExtracted)+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
                     }
-                    if (stratumName !== 'strat1' ) { // placeholder implying we have no strata
+                    if ((stratumName !== 'strat1' )&&(stratumName !== 'ALL')) { // placeholder implying we have no strata
                         arraysOfStrings.push("{\"name\":\""+stratumPropertyNameExtracted+"\",\n\"parm\":\""+stratumName+"\",\n\"cmp\":\"3\",\n\"cat\":\"1\"}");
                     }
                    arrayOfArrayOfFilters.push(arraysOfStrings);
@@ -1229,7 +1282,9 @@ var displayBurdenVariantSelector = function (){
 
           var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,additionalText){
 
-
+                if (currentStratum==='ALL'){// We may have to calculate an ALL stratum, but we don't want to display it
+                    return;
+                }
                 var ciDisplay = '';
                 if (!((typeof ciLower === 'undefined') ||
                     (typeof ciUpper === 'undefined') ||
@@ -1339,30 +1394,51 @@ var displayBurdenVariantSelector = function (){
                             var ciLower = UTILS.realNumberFormatter(data.stats.ciLower);
                             var ciUpper = UTILS.realNumberFormatter(data.stats.ciUpper);
                             var isCategorical = isCategoricalF (data.stats);
+                            var numCases,numControls,numCaseCarriers,numControlCarriers;
+                            if (isCategorical){
+                                numCases=data.stats.numCases;
+                                numControls=data.stats.numControls;
+                                numCaseCarriers=data.stats.numCaseCarriers;
+                                numControlCarriers=data.stats.numControlCarriers;
+                            }
 
                             var currentStratum = 'stratum'; // 'strat1' marks no distinct strata used
                             if (typeof data.stratum !== 'undefined'){
                                currentStratum = data.stratum;
                             }
                             if (currentStratum==='strat1'){
+                                $('.strataResults').empty();
                                 $('.strataResults').append('<div class="'+currentStratum+' strataHolder"></div>');
                                 var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                                 addStrataSection(strataDomIdentifierClass,currentStratum);
+                                strataDomIdentifierClass.append('<div id="chart"></div>')
                                 printFullResultsSection(data.stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isCategorical,currentStratum,'');
-                            } else {
+                                if ((typeof numCases !== 'undefined')  && (numCases!=='')){
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
 
-                                    $('.strataResults').append('<div class="strataJar">'+
+                                       // launch
+                                       mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
+                                }
+                            } else {
+                                var fieldsToStoreInTheDom = '<div class="strataJar">'+
                                                                 '<span class="hider stratum '+currentStratum+'">'+currentStratum+'</span>'+
                                                                 '<span class="hider pv '+currentStratum+'">'+pValue+'</span>'+
                                                                 '<span class="hider be '+currentStratum+'">'+beta+'</span>'+
-                                                                '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>'+
-                                                                '<span class="hider ciLevel '+currentStratum+'" >'+ciLevel+'</span>'+
-                                                                '<span class="hider ciLower '+currentStratum+'" >'+ciLower+'</span>'+
-                                                                '<span class="hider ciUpper '+currentStratum+'" >'+ciUpper+'</span>'+
-                                                                '<span class="hider ca '+currentStratum+'" >'+(isCategorical?"1":"0")+'</span>'+
-                                                                '</div>');
+                                                                '<span class="hider st '+currentStratum+'" >'+stdErr+'</span>';
+                                if (isCategorical){
+                                    fieldsToStoreInTheDom += ('<span class="hider numCases '+currentStratum+'">'+numCases+'</span>'+
+                                                                '<span class="hider numControls '+currentStratum+'">'+numControls+'</span>'+
+                                                                '<span class="hider numCaseCarriers '+currentStratum+'">'+numCaseCarriers+'</span>'+
+                                                                '<span class="hider numControlCarriers '+currentStratum+'" >'+numControlCarriers+'</span>');
+                                }
+                                fieldsToStoreInTheDom += ('<span class="hider ciLevel '+currentStratum+'" >'+ciLevel+'</span>'+
+                                                            '<span class="hider ciLower '+currentStratum+'" >'+ciLower+'</span>'+
+                                                            '<span class="hider ciUpper '+currentStratum+'" >'+ciUpper+'</span>'+
+                                                            '<span class="hider ca '+currentStratum+'" >'+(isCategorical?"1":"0")+'</span>'+
+                                                            '</div>');
+                                $('.strataResults').append(fieldsToStoreInTheDom);
 
-                            displayTestResultsSection(true);
+                                displayTestResultsSection(true);
 
                        }}
                     }
@@ -1410,7 +1486,7 @@ var displayBurdenVariantSelector = function (){
              specifiedMafValueId  = parseFloat(specifiedMafValue),
              burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val();
               var dataSet =  'samples_17k_mdv2';
-
+               $('#rSpinner').show();
                 var promise =  $.ajax({
                     cache: false,
                     type: "post",
@@ -1425,19 +1501,23 @@ var displayBurdenVariantSelector = function (){
                     async: true
                  });
                  promise.done(
+
                   function (data) {
+                  $('#rSpinner').hide();
                     if ((typeof data !== 'undefined') &&
-                         (data)&&
-                         (typeof data.results !== 'undefined') &&
+                         (data)){
+                         var variantListHolder = [];
+                         if ((typeof data.results !== 'undefined') &&
                          (data.results)){
                          var variantListHolder = [];
-                         _.forEach(data.results, function(oneVariant){
-                            var variant = {};
-                             _.forEach(oneVariant.pVals, function(fieldHolder){
-                                variant[fieldHolder.level] = fieldHolder.count;
+                             _.forEach(data.results, function(oneVariant){
+                                var variant = {};
+                                 _.forEach(oneVariant.pVals, function(fieldHolder){
+                                    variant[fieldHolder.level] = fieldHolder.count;
+                                 });
+                                 variantListHolder.push(variant);
                              });
-                             variantListHolder.push(variant);
-                         });
+                         }
                          $('#gaitTable').DataTable({
                                 "bDestroy": true,
                                 "bAutoWidth" : false,
@@ -1461,14 +1541,16 @@ var displayBurdenVariantSelector = function (){
                                         { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID",
                                             "width": "auto"  },
                                         { "name": "CHROM",   "targets": [3], "title":"Chrom.",
-                                            "width": "auto"  },
+                                            "width": "40px"  },
                                         { "name": "POS",   "targets": [4], "title":"Position",
                                             "width": "auto" },
-                                        { "name": "CLOSEST_GENE",   "targets": [5], "title":"Nearest gene",
-                                            "width": "auto"  },
-                                        { "name": "Protein_change",   "targets": [6], "title":"Protein change",
+                                        { "name": "PolyPhen_PRED",   "targets": [5], "title":"Polyphen",
+                                            "width": "auto" },
+                                        { "name": "SIFT_PRED",   "targets": [6], "title":"SIFT",
+                                            "width": "auto" },
+                                        { "name": "Protein_change",   "targets": [7], "title":"Protein change",
                                           "width": "60px"  },
-                                        { "name": "Consequence",   "targets": [7], "title":"Consequence",
+                                        { "name": "Consequence",   "targets": [8], "title":"Consequence",
                                           "width": "100px"  }
 
                                     ],
@@ -1492,7 +1574,9 @@ var displayBurdenVariantSelector = function (){
                             arrayOfRows.push(DBSNP_ID);
                             arrayOfRows.push(variantRec.CHROM);
                             arrayOfRows.push(variantRec.POS);
-                            arrayOfRows.push('<a href="${createLink(controller: 'gene', action: 'geneInfo')}/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
+                            arrayOfRows.push((variantRec.PolyPhen_PRED)?variantRec.PolyPhen_PRED:'');
+                            arrayOfRows.push((variantRec.SIFT_PRED)?variantRec.SIFT_PRED:'');
+                            //arrayOfRows.push('<a href="${createLink(controller: 'gene', action: 'geneInfo')}/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');
                             var protein_change= (variantRec.Protein_change)?variantRec.Protein_change:'';
                             arrayOfRows.push(protein_change);
                             arrayOfRows.push(variantRec.Consequence);
@@ -1531,9 +1615,11 @@ var displayBurdenVariantSelector = function (){
                // create JSON we can send to the server
                var jsonHolder = [];
                 _.forEach(allElements, function(stratum){
-                    jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+
-                    ',"ciLevel":'+stratum.ciLevel+',"ciLower":'+stratum.ciLower+',"ciUpper":'+stratum.ciUpper+
-                    '}');
+                    if (stratum.stratum !== 'ALL'){
+                        jsonHolder.push('{"pv":'+stratum.pv+',"be":'+stratum.be+',"st":'+stratum.st+',"ca":'+stratum.ca+
+                        ',"ciLevel":'+stratum.ciLevel+',"ciLower":'+stratum.ciLower+',"ciUpper":'+stratum.ciUpper+
+                        '}');
+                    }
                 });
                 var json = '['+jsonHolder.join(',')+']';
                 var sortedElements = allElements.sort(function(a, b) {
@@ -1586,10 +1672,21 @@ var displayBurdenVariantSelector = function (){
                             var beta = UTILS.realNumberFormatter(data.stats.beta);
                             var stdErr = UTILS.realNumberFormatter(data.stats.stdError);
                             var pValue = UTILS.realNumberFormatter(data.stats.pValue);
-                             $('.strataResults').append( '<div clas="metana" style="text-align: center"><span class="stratumName">Meta-analysis:</span> &nbsp;&nbsp;&nbsp;pValue = <span class="pv metaAnalysis">'+pValue+'</span>'+
+                            var numCases = $('.strataResults div.strataJar span.numCases.ALL').text();
+                            var numControls = $('.strataResults div.strataJar span.numControls.ALL').text();
+                            var numCaseCarriers = $('.strataResults div.strataJar span.numCaseCarriers.ALL').text();
+                            var numControlCarriers = $('.strataResults div.strataJar span.numControlCarriers.ALL').text();
+
+                             $('.strataResults').append( '<div clas="metana" style="text-align: center"><span class="stratumName meta">Meta-analysis:</span> &nbsp;&nbsp;&nbsp;<span class="pv metaAnalysis">pValue = '+pValue+'</span>'+
 ((categorical==='1')?('<span class="be metaAnalysis">Odds ratio='+oddsRatio+'</span>'):('<span class="be metaAnalysis">Beta='+beta+'</span>'))+
 '<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
-'</div>');
+'</div><div id="chart"></div>');
+                            if ((typeof numCases !== 'undefined')  &&(numCases!=='')){
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
+
+                                       // launch
+                                       mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
+                            }
                        }
                     }
                  );
@@ -1625,21 +1722,19 @@ var displayBurdenVariantSelector = function (){
             var phenotypeTabs = [];
             // compile unique strata names
             var uniqueStrataNames = [];
-            if (modeledPhenotypes.length>0){
-                for ( var i = 0 ; i < modeledPhenotypes.length ; i++ ) {
-                    var modeledPhenotype = modeledPhenotypes[i];
-                    var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
-                    for ( var i = 0 ; i < stratsTabs.length ; i++ ) {
-                        var currentStratumName = $(stratsTabs[i]).text();
-                        if (uniqueStrataNames.indexOf(currentStratumName)<0){
-                            if (currentStratumName !== 'ALL'){
-                                uniqueStrataNames.push(currentStratumName);
-                            }
-                        }
+            _.forEach(modeledPhenotypes,function(modeledPhenotype){
+                 var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
+                for ( var i = 0 ; i < stratsTabs.length ; i++ ) {
+                    var currentStratumName = $(stratsTabs[i]).text();
+                    if (uniqueStrataNames.indexOf(currentStratumName)<0){
+                       // if (currentStratumName !== 'ALL'){
+                            uniqueStrataNames.push(currentStratumName);
+                       // }
                     }
                 }
-            }
-             $('.strataResults').empty(); // clear stata reporting section
+            });
+
+            $('.strataResults').empty(); // clear stata reporting section
             if (uniqueStrataNames.length>0){
                 for ( var i = 0 ; i < uniqueStrataNames.length ; i++ ) {
                     var stratumName = uniqueStrataNames[i];
@@ -1652,13 +1747,13 @@ var displayBurdenVariantSelector = function (){
                         for ( var j = 0 ; j < modeledPhenotypes.length ; j++ ) {
                             var modeledPhenotype = modeledPhenotypes[j];
 
-                            var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');
-                            if (stratsTabs.length===0){
-                               var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');
-                               $.when(f).then(function() {
-                                      //alert('all done with 1');
-                                });
-                            } else {
+                            %{--var stratsTabs  = $('#'+modeledPhenotype+'_stratsTabs li a.filterCohort');--}%
+                            %{--if (stratsTabs.length===0){--}%
+                               %{--var f=executeAssociationTest(collectingFilterValues(),collectingCovariateValues(),'none','strat1');--}%
+                               %{--$.when(f).then(function() {--}%
+                                      %{--//alert('all done with 1');--}%
+                                %{--});--}%
+                            %{--} else {--}%
                                 strataPropertyName = $('div.stratsTabs_property').attr("id");
                                 phenoPropertyName = $('div.phenoSplitTabs_property.'+modeledPhenotype).attr("id");
                                 phenoPropertySpecifier = $('a[data-target=#'+stratumName+'_'+modeledPhenotype+']+div.strataPhenoIdent div.phenoCategory').text();
@@ -1669,7 +1764,7 @@ var displayBurdenVariantSelector = function (){
                                                         strataPropertyName: strataPropertyName,
                                                         stratumName:stratumName
                                     });
-                           }
+ //                          }
 
                         }
                         nonPhenotypeTabs.push(caseAndControlArray);
@@ -1959,20 +2054,33 @@ var displayBurdenVariantSelector = function (){
                     if (optionsPerFilter[d.name]!==undefined){
                        var dropdownId = '#multi_'+stratum+"_"+d.name+"_"+modPhenoHolder;
                        _.forEach(optionsPerFilter[d.name],function(filterVal){
-                           $(dropdownId).append(new Option(filterVal.name,filterVal.name));
+                           if ('ALL'!==filterVal.name){ // we provide a 'select all' option, so there is never a call for a category == 'ALL'
+                              $(dropdownId).append(new Option(filterVal.name,filterVal.name));
+                           }
                        });
+                       if ($(dropdownId).children().length>0){
                        $(dropdownId).multiselect({includeSelectAllOption: true,
                                                    allSelectedText: 'All Selected',
-                                                   multiselectclose: function(event, ui){
-                                                            console.log('event');
-                                                        },
-                                                   open: function(event, ui){
-                                                            console.log('event2');
-                                                        },
                                                    buttonWidth: '100%'
                                                    });
-                       $(dropdownId).multiselect('selectAll', false);
-                       $(dropdownId).multiselect('updateButtonText');
+                        $(dropdownId).change(function(event, ui){
+                                              // Begin kludge alert!----
+                                              // I've spent a lot of time trying to figure out how to capture a jquery multi-select window close, but the event
+                                              // never seems to get triggered.  Strange.  Until I can get a real answer here is a workaround: when we
+                                              // see any change (an event I CAN capture for some reason)  pull the adjacent arrow to launch a redraw.
+                                              // ----end kludge alert
+                                              var holder = $(dropdownId).parent().parent().parent();
+                                              var adjacentColumn = $(holder.children()[3]);
+                                              var adjacentCorrespondingArrow = $(adjacentColumn.children()[0]);
+                                              if (adjacentCorrespondingArrow) {
+                                                eval(adjacentCorrespondingArrow.attr('onclick'));
+                                              }
+                                            });
+
+                        $(dropdownId).multiselect('selectAll', false);
+                        $(dropdownId).multiselect('updateButtonText');
+
+                       }
 
                     }
                  }
@@ -2325,8 +2433,18 @@ $( document ).ready( function (){
         <div class="accordion-inner">
 
             <div class="container">
-                <h5>The Genetic Association Interactive Tool allows you to compute custom association statistics for this
-                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.</h5>
+                <h5>
+                    <g:if test="${modifiedGaitSummary}">
+                        ${modifiedGaitSummary}
+                    </g:if>
+                    <g:else>
+                        The Genetic Association Interactive Tool allows you to compute custom association statistics for this
+                variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
+                         GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy,
+                            GAIT will only allow visualization or analysis of data from more than 100 individuals.
+                    </g:else>
+
+                </h5>
 
 
                 <div class="row burden-test-wrapper-options">
@@ -2342,9 +2460,9 @@ $( document ).ready( function (){
                         <div class="stratified-user-interaction"></div>
 
                         <div class="panel-group" id="accordion_iat" style="margin-bottom: 0px">%{--start accordion --}%
+                            <div id="chooseVariantFilterSelection"></div>
                             <div id="chooseFiltersLocation"></div>
                             <div id="chooseCovariatesLocation"></div>
-                            <div id="chooseVariantFilterSelection"></div>
                         </div>
 
                     </div>
@@ -2369,6 +2487,9 @@ $( document ).ready( function (){
                 <a>Step {{sectionNumber}}: Launch analysis</a>
             </h4>
         </div>
+
+
+
 
     <div class="row burden-test-some-results burden-test-some-results_{{stratum}}">
         <div class="row iatErrorFailure" style="display:none">
@@ -2451,9 +2572,7 @@ $( document ).ready( function (){
                 <div class="row">
                     <div class="col-sm-12 col-xs-12">
                         <p>
-                            The Genetic Association Interactive Tool (GAIT) allows you to compute custom association statistics for this variant by specifying a phenotype to test,
-                            a subset of samples, and a collection of covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy,
-                            GAIT will only allow visualization or analysis of data from more than 100 individuals.
+                            Select a phenotype to test for association and optionally choose to stratify samples by ancestry and/or filter cases and controls separately.
                         </p>
 
                     </div>
@@ -2897,17 +3016,19 @@ the individual filters themselves. That work is handled later as part of a loop-
                     <div class="row">
                         <div class="col-sm-12 col-xs-12">
                             <p>
-                                Choose a collection of variants which will be analyzed together to assess disease burden
+                                Choose a collection of variants which will be analyzed together to assess disease burden.
+                                You may choose a set of variants with a specific consequence or minor allele frequency, and
+                                potentially remove variants from this set by using the check boxes at the left of the table.
                             </p>
                         </div>
                     </div>
 
                     <div class="row">
                     <div class="container">
-                        <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
 
                         <div class="row burden-test-wrapper-options">
-                            <div class="col-md-10 col-sm-10 col-xs-12">
+
+                            <div class="col-md-11 col-sm-11 col-xs-12">
                                 <div  class="row">
 
                                     <div class="col-md-12 col-sm-12 col-xs-12">
@@ -2927,7 +3048,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
                                         <div class="labelAndInput">
                                             MAF &lt;&nbsp;
-                                            <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value">
+                                            <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value"
+                                            onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()">
                                         </div>
 
                                     </div>
@@ -2935,18 +3057,16 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                                         <div class="form-inline mafOptionChooser">
                                             <div class="radio">
-                                                <label><input type="radio" name="mafOption" value="1" />&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                                <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
                                             </div>
                                             <div class="radio">
-                                                <label><input type="radio" name="mafOption"  value="2" checked />&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                                <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div  class="col-md-2 col-sm-2 col-xs-12 burden-test-btn-wrapper vcenter">
-                                <button id="singlebutton" name="singlebutton" style="height: 80px"
-                                        class="btn btn-secondary btn-lg burden-test-btn" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()">Retrieve variants</button>
+                            <div  class="col-md-1 col-sm-1 col-xs-12 burden-test-btn-wrapper vcenter">
                             </div>
                         </div>
 
