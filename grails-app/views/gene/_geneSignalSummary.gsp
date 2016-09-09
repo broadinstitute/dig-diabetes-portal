@@ -339,9 +339,8 @@ ul.aggregatingVariantsLabels {
             };
 
 
-            var refreshTopVariantsByPhenotype = function (sel, callBack) {
+            var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack) {
                 var rememberCallBack = callBack;
-                var phenotypeName = sel.value;
                 $.ajax({
                     cache: false,
                     type: "post",
@@ -357,10 +356,15 @@ ul.aggregatingVariantsLabels {
                 });
 
             };
+            var refreshTopVariantsByPhenotype = function (sel, callBack) {
+                var phenotypeName = sel.value;
+                refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
+            };
 
             return {
                 updateSignificantVariantDisplay:updateSignificantVariantDisplay,
                 updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
+                refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
                 refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype
             }
         }());
@@ -372,7 +376,11 @@ ul.aggregatingVariantsLabels {
         mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
                 '${g.defaultPhenotype()}',
                 "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
-                refreshVAndAByPhenotype );
+                function(){
+                    // retrieve the top value in the phenotype drop-down
+                    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype($($('#signalPhenotypeTableChooser>option')[1]).attr('value'),
+                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
+                } );
         mpgSoftware.geneSignalSummary.updateDisplayBasedOnSignificanceLevel (${signalLevel});
     });
 </script>
