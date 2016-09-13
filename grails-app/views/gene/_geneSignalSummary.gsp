@@ -9,9 +9,15 @@
 .trafficExplanations.emphasize {
     font-weight: 900;
 }
+.trafficExplanations.unemphasize {
+    font-weight: normal;
+}
 .boxOfVariants {
     border: 1px solid black;
     padding: 10px;
+    max-height: 200px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 span.aggregatingVariantsColumnHeader {
     font-weight: bold;
@@ -50,15 +56,11 @@ ul.aggregatingVariantsLabels {
     <div class="panel-heading" style="background-color: #E0F3FD">
         <div class="row">
             <div class="col-md-2 col-xs-12">
-                <g:if test="${signalLevel == 1}">
-                    <r:img uri="/images/redlight.png"/>
-                </g:if>
-                <g:elseif test="${signalLevel == 2}">
-                    <r:img uri="/images/yellowlight.png"/>
-                </g:elseif>
-                <g:elseif test="${signalLevel == 3}">
-                    <r:img uri="/images/greenlight.png"/>
-                </g:elseif>
+                <div id='trafficLightHolder'>
+                    <r:img uri="/images/undeterminedlight.png"/>
+                    <span id="signalLevelHolder" style="display:none"></span>
+                </div>
+
             </div>
 
             <div class="col-md-8 col-xs-12">
@@ -222,6 +224,75 @@ ul.aggregatingVariantsLabels {
         "use strict";
 
 
+        var convertPhenotypeNames  = function (untranslatedPhenotype){
+            var convertedName = untranslatedPhenotype;
+            if (untranslatedPhenotype === 'T2D'){
+                convertedName = 't2d';
+            } else if (untranslatedPhenotype === '2hrG'){
+                convertedName = 'CHOL_ANAL';
+            } else if (untranslatedPhenotype === 'DBP'){
+                convertedName = 'DBP_ANAL';
+            } else if (untranslatedPhenotype === 'SBP'){
+                convertedName = 'SBP_ANAL';
+            } else if (untranslatedPhenotype === 'FG'){
+                convertedName = 'FAST_GLU_ANAL';
+            } else if (untranslatedPhenotype === 'FI'){
+                convertedName = 'FAST_INS_ANAL';
+            } else if (untranslatedPhenotype === 'HDL'){
+                convertedName = 'HDL_ANAL';
+            } else if (untranslatedPhenotype === 'LDL'){
+                convertedName = 'LDL_ANAL';
+            } else if (untranslatedPhenotype === 'TG'){
+                convertedName = 'TG_ANAL';
+            }else if (untranslatedPhenotype === 'Admission_CT_Available'){
+                convertedName = 'Admission_CT_Available';
+            }else if (untranslatedPhenotype === 'Aspirin'){
+                convertedName = 'Aspirin';
+            }else if (untranslatedPhenotype === 'Coronary_Artery_Disease'){
+                convertedName = 'Coronary_Artery_Disease';
+            }else if (untranslatedPhenotype === 'Deep_ICH'){
+                convertedName = 'Deep_ICH';
+            }else if (untranslatedPhenotype === 'Discharge_mRS_gt_2'){
+                convertedName = 'Discharge_mRS_gt_2_readable';
+            }else if (untranslatedPhenotype === 'Ethnicity'){
+                convertedName = 'Ethnicity_readable';
+            }else if (untranslatedPhenotype === 'Follow_up_mRS_gt_2'){
+                convertedName = 'Follow_up_mRS_gt_2_readable';
+            }else if (untranslatedPhenotype === 'Hemorrhage_Location'){
+                convertedName = 'Hemorrhage_Location_readable';
+            }else if (untranslatedPhenotype === 'History_of_Diabetes_mellitus'){
+                convertedName = 'History_of_Diabetes_mellitus_readable';
+            }else if (untranslatedPhenotype === 'History_of_Hypercholesterolemia'){
+                convertedName = 'History_of_Hypercholesterolemia_readable';
+            }else if (untranslatedPhenotype === 'History_of_Hypertension'){
+                convertedName = 'History_of_Hypertension_readable';
+            }else if (untranslatedPhenotype === 'History_of_TIA_Ischemic_Stroke'){
+                convertedName = 'History_of_TIA_Ischemic_Stroke_readable';
+            }else if (untranslatedPhenotype === 'ICH_Status'){
+                convertedName = 'ICH_Status_readable';
+            }else if (untranslatedPhenotype === 'INR_gt_2'){
+                convertedName = 'INR_gt_2_readable';
+            }else if (untranslatedPhenotype === 'Lobar_ICH'){
+                convertedName = 'Lobar_ICH_readable';
+            }else if (untranslatedPhenotype === 'MRI_Available'){
+                convertedName = 'MRI_Available_readable';
+            }else if (untranslatedPhenotype === 'Number_of_Previous_Hemhorrhages'){
+                convertedName = 'Number_of_Previous_Hemhorrhages_readable';
+            }else if (untranslatedPhenotype === 'Other_Antiplatelet'){
+                convertedName = 'Other_Antiplatelet_readable';
+            }else if (untranslatedPhenotype === 'Race'){
+                convertedName = 'Race_readable';
+            }else if (untranslatedPhenotype === 'SEX'){
+                convertedName = 'SEX_readable';
+            }else if (untranslatedPhenotype === 'Statins'){
+                convertedName = 'Statins_readable';
+            }else if (untranslatedPhenotype === 'Warfarin_readable'){
+                convertedName = 'Warfarin';
+            }
+            return convertedName;
+        };
+
+
         mpgSoftware.geneSignalSummary = (function () {
             var buildRenderData = function (data,mafCutoff)  {
                 var renderData = {variants:[],
@@ -249,23 +320,36 @@ ul.aggregatingVariantsLabels {
                                     obj['referenceAllele']= (val)?val:'';
                                 } else if (key==='Effect_Allele') {
                                     obj['effectAllele'] = (val)?val:'';
-                                } else if (key==='MAF') {
+                                } else if (key==='MOST_DEL_SCORE') {
+                                    obj['MOST_DEL_SCORE'] = (val)?val:'';
+                                }  else if (key==='MAF') {
                                     _.forEach(val,function(mafval,mafkey){
                                         mafValue = (mafval)?mafval:'';
+                                        obj['MAF'] = mafValue;
+                                    })
+                                } else if (key==='P_FIRTH_FE_IV') {
+                                    _.forEach(val,function(dsetval,dsetkey){
+                                        _.forEach(dsetval,function(pval,pkey) {
+                                            obj['P_VALUE'] = (pval)?pval:1;
+                                        });
+
                                     });
 
                                 }
                             });
                         });
-                        if (index < 10 ){
+                        //if (index < 100 ){
                             renderData.variants.push(obj);
                             if (mafValue<mafCutoff){
                                 renderData.rvar.push(obj);
                             } else {
                                 renderData.cvar.push(obj);
                             }
-                        }
+                        //}
+
                     });
+                    _.sortBy(renderData.rvar,function(o){return o.P_VALUE});
+                    _.sortBy(renderData.cvar,function(o){return o.P_VALUE});
 
                 };
                 return renderData;
@@ -283,6 +367,12 @@ ul.aggregatingVariantsLabels {
                                         "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.pValue)+"</li>"+
                                         "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.ciLower)+" - "+UTILS.realNumberFormatter(data.stats.ciUpper)+"</li>"+
                                     "</ul>");
+                    if (data.stats.pValue<0.000001){
+                        updateDisplayBasedOnStoredSignificanceLevel(3);//green light
+                    } else if (data.stats.pValue<0.01){
+                        updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
+                    }
+
                 }
             };
 
@@ -290,33 +380,80 @@ ul.aggregatingVariantsLabels {
 
             var updateSignificantVariantDisplay = function (data) {
                 var renderData = buildRenderData (data,0.05);
+                var signalLevel = assessSignalSignificance(renderData);
+                updateDisplayBasedOnSignificanceLevel (signalLevel);
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                 $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"0","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"1","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"2","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"3","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"4","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"5","samples_17k_mdv2","1","0.47","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"0","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"1","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"2","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"3","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"4","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"5","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
 
 
             };
+
+
+            var assessSignalSignificance = function (renderData){
+               var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
+                _.forEach(renderData.variants,function(v){
+                    if ((signalCategory < 3)&&(v.P_VALUE < 0.00000001)){
+                        signalCategory = 1;
+                    } else if ((signalCategory < 2)&&(v.P_VALUE < 0.0001)) {
+                        signalCategory = 2;
+                    }
+                });
+                return signalCategory;
+            }
+
 
 
 
             var updateDisplayBasedOnSignificanceLevel = function (significanceLevel) {
+
+
+                    var significanceLevelDoms = $('.trafficExplanations');
+
+                                significanceLevelDoms.removeClass('emphasize');
+                                significanceLevelDoms.addClass('unemphasize');
+
+
+                $('#trafficLightHolder').empty();
                 var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
-                if (typeof significanceLevelDom !== 'undefined') {
-                    significanceLevelDom.addClass('emphasize');
+                significanceLevelDom.removeClass('unemphasize');
+                significanceLevelDom.addClass('emphasize');
+                if (significanceLevel == 1){
+                    $('#trafficLightHolder').append('<r:img uri="/images/redlight.png"/>');
+                } else if (significanceLevel == 2){
+                    $('#trafficLightHolder').append('<r:img uri="/images/yellowlight.png"/>');
+                } else if (significanceLevel == 3){
+                    $('#trafficLightHolder').append('<r:img uri="/images/greenlight.png"/>');
                 }
+                $('#signalLevelHolder').text = significanceLevel;
             };
+
+
+
+
+
+            var updateDisplayBasedOnStoredSignificanceLevel = function (newSignificanceLevel) {
+                var currentSignificanceLevel = $('#signalLevelHolder').text;
+                if (newSignificanceLevel>=currentSignificanceLevel){
+                    return;
+                }
+                updateDisplayBasedOnSignificanceLevel(newSignificanceLevel);
+            };
+
+
 
 
             var refreshVariantAggregates = function (sel, filterNum, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
                 var rememberCallBack = callBack;
                 var rememberCallBackParameter = callBackParameter;
-                var phenotypeName = sel.value;
+                var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
+
                 $.ajax({
                     cache: false,
                     type: "post",
@@ -324,7 +461,7 @@ ul.aggregatingVariantsLabels {
                     data: { geneName:geneName,
                             dataSet:dataSet,
                             filterNum:filterNum,
-                            burdenTraitFilterSelectedOption: phenotypeName,
+                            burdenTraitFilterSelectedOption: convertPhenotypeNames(phenotypeName),
                             mafOption:mafOption,
                             mafValue:mafValue   },
                     async: true,
@@ -381,7 +518,6 @@ ul.aggregatingVariantsLabels {
                     mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype($($('#signalPhenotypeTableChooser>option')[1]).attr('value'),
                             mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
                 } );
-        mpgSoftware.geneSignalSummary.updateDisplayBasedOnSignificanceLevel (${signalLevel});
     });
 </script>
 
