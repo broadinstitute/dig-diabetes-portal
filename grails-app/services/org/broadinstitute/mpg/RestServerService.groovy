@@ -28,6 +28,7 @@ class RestServerService {
     FilterManagementService filterManagementService
     MetaDataService metaDataService
     MetadataUtilityService metadataUtilityService
+    GeneManagementService geneManagementService
     SearchBuilderService searchBuilderService
     BurdenService burdenService
     private static final log = LogFactory.getLog(this)
@@ -1708,10 +1709,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsPerSg(  String phenotype, float pValueSignificance, String sampleGroupName ) {
+    public JSONObject gatherTopVariantsPerSg(  String phenotype, String geneName, float pValueSignificance, SampleGroup  sampleGroup  ) {
         List<String> queryFilterStrings = []
+        String sampleGroupName = sampleGroup.systemId
+        Experiment experiment = sampleGroup.parent
         String pValueName = filterManagementService.findFavoredMeaningValue ( sampleGroupName, phenotype, "P_VALUE" )
+        String betaName = filterManagementService.findFavoredMeaningValue ( sampleGroupName, phenotype, "BETA" )
+        String orName = filterManagementService.findFavoredMeaningValue ( sampleGroupName, phenotype, "ODDS_RATIO" )
         queryFilterStrings << "17=${phenotype}[${sampleGroupName}]${pValueName}<${pValueSignificance.toString()}"
+        if ((experiment?.technology == 'ExSeq')||(experiment?.technology == 'WGS')){
+            queryFilterStrings << "7=${geneName}"
+        } else {
+            LinkedHashMap  regionSpecification = geneManagementService?.getRegionSpecificationDetailsForGene(geneName, 100000)
+            queryFilterStrings << "8=${regionSpecification.chromosome}"
+            queryFilterStrings << "9=${regionSpecification.startPosition}"
+            queryFilterStrings << "10=${regionSpecification.endPosition}"
+        }
+
+
 
         String technology = ""
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS",
@@ -1738,20 +1753,60 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        // would be handy to replace all of the assorted P values with just 1 string
+        if (pValueName != 'P_VALUE'){
+            for (List variant in dataJsonObject.variants) {
+                Map holder = variant.find{p->p.keySet().contains(pValueName)}
+                holder['P_VALUE'] = holder[pValueName]
+                holder.remove(pValueName)
+            }
+        }
+
         return dataJsonObject
     }
 
 
 
 
-    public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype, float pValueSignificance) {
+    public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
         JSONObject dataJsonObject
-        List varaints = []
+        List variants = []
         for (SampleGroup  sampleGroup in fullListOfSampleGroups){
-            dataJsonObject =  gatherTopVariantsPerSg(  phenotype,  pValueSignificance, sampleGroup.systemId )
-            varaints.addAll( dataJsonObject.variants )
+            dataJsonObject =  gatherTopVariantsPerSg(  phenotype,  geneName, pValueSignificance, sampleGroup )
+            variants.addAll( dataJsonObject.variants )
         }
-        dataJsonObject.variants = varaints
+        Map<String,List> allVariants = [:]
+        // first get a list of all variants indexed by var ID
+        for (List variant in variants) {
+            Map varId = variant.find{p->p.keySet().contains('VAR_ID')}
+            String varIdVal = varId["VAR_ID"]
+            if (!allVariants.containsKey(varIdVal)){
+                allVariants[varIdVal] = []
+            }
+            allVariants[varIdVal] << variant
+        }
+        List uniqueVariants = []
+        // Now go through the map and select the variants that have the lowest P value to keep
+        for (String varId in allVariants.keySet()){
+            List instancesOfVariant = allVariants[varId]
+            if (instancesOfVariant.size()==1) {
+                uniqueVariants << instancesOfVariant[0]
+            } else {
+                List<String> pValueString = []
+                for (Map pMaps in instancesOfVariant*.find{p->p.keySet().contains('P_VALUE')} ) {
+                    Map dsMap = pMaps["P_VALUE"]
+                    //Map dsMap = pMap[0]
+                    for (Map phenoMaps in dsMap.values()){
+                       // Map valueMap = phenoMaps[0]
+                        for (String value in phenoMaps.values()){
+                            pValueString << value
+                        }
+                    }
+                }
+                 uniqueVariants << instancesOfVariant[pValueString.indexOf(pValueString.sort{a,b->a as Float<=>b as Float}[0])]
+            }
+        }
+        dataJsonObject.variants = uniqueVariants
 
         return dataJsonObject
     }

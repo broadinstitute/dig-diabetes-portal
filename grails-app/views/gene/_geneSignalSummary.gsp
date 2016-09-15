@@ -113,11 +113,11 @@ ul.aggregatingVariantsLabels {
 
                                                 <div class="col-lg-2">{{impact}}</div>
 
-                                                <div class="col-lg-3">{{deleteriousness}}</div>
+                                                <div class="col-lg-2">{{deleteriousness}}</div>
 
-                                                <div class="col-lg-1">{{referenceAllele}}</div>
+                                                <div class="col-lg-2">{{P_VALUE}}</div>
 
-                                                <div class="col-lg-1">{{effectAllele}}</div>
+                                                <div class="col-lg-1">{{BETA}}</div>
                                             </div>
                                         {{ /rvar }}
 
@@ -126,9 +126,9 @@ ul.aggregatingVariantsLabels {
                             </div>
                         </script>
 
-                    <div id="aggregateVariantsLocation"></div>
+                    <div id="aggregateVariantsLocation" style="display: none"></div>
                         <script id="aggregateVariantsTemplate"  type="x-tmpl-mustache">
-                            <div class="row">
+                            <div class="row" style="margin-top: 15px;">
                                 <div class="col-lg-offset-1">
                                     <h4>Aggregate variants</h4>
                                 </div>
@@ -177,6 +177,14 @@ ul.aggregatingVariantsLabels {
                 </div>
             </div>
 
+        <div id="noAggregatedVariantsLocation">
+            <div class="row" style="margin-top: 15px;">
+                <div class="col-lg-offset-1">
+                    <h4>No information about aggregated variants exists for this phenotype</h4>
+                </div>
+            </div>
+        </div>
+
 
         <div id="commonVariantsLocation"></div>
         <script id="commonVariantTemplate"  type="x-tmpl-mustache">
@@ -191,17 +199,21 @@ ul.aggregatingVariantsLabels {
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-offset-2 col-lg-6">
+                        <div class="col-lg-offset-1 col-lg-11">
                             <div class="boxOfVariants">
                                 {{ #cvar }}
                                 <div class="row">
-                                        <div class="col-lg-4"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
+                                        <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                                        <div class="col-lg-4">{{rsId}}</div>
+                                        <div class="col-lg-3">{{rsId}}</div>
 
-                                        <div class="col-lg-2">{{referenceAllele}}</div>
+                                        <div class="col-lg-2">{{P_VALUE}}</div>
 
-                                        <div class="col-lg-2">{{effectAllele}}</div>
+                                        <div class="col-lg-2">{{BETA}}</div>
+
+                                        <div class="col-lg-1">{{referenceAllele}}</div>
+
+                                        <div class="col-lg-1">{{effectAllele}}</div>
                                 </div>
                                 {{ /cvar }}
                             </div>
@@ -222,76 +234,31 @@ ul.aggregatingVariantsLabels {
 
     (function () {
         "use strict";
-
-
-        var convertPhenotypeNames  = function (untranslatedPhenotype){
-            var convertedName = untranslatedPhenotype;
-            if (untranslatedPhenotype === 'T2D'){
+        var phenotypeNameForSampleData  = function (untranslatedPhenotype) {
+            var convertedName = '';
+            if (untranslatedPhenotype === 'T2D') {
                 convertedName = 't2d';
-            } else if (untranslatedPhenotype === '2hrG'){
-                convertedName = 'CHOL_ANAL';
-            } else if (untranslatedPhenotype === 'DBP'){
-                convertedName = 'DBP_ANAL';
-            } else if (untranslatedPhenotype === 'SBP'){
-                convertedName = 'SBP_ANAL';
-            } else if (untranslatedPhenotype === 'FG'){
+            } else if (untranslatedPhenotype === 'FG') {
                 convertedName = 'FAST_GLU_ANAL';
-            } else if (untranslatedPhenotype === 'FI'){
+            } else if (untranslatedPhenotype === 'FI') {
                 convertedName = 'FAST_INS_ANAL';
-            } else if (untranslatedPhenotype === 'HDL'){
-                convertedName = 'HDL_ANAL';
-            } else if (untranslatedPhenotype === 'LDL'){
-                convertedName = 'LDL_ANAL';
-            } else if (untranslatedPhenotype === 'TG'){
+            } else if (untranslatedPhenotype === 'BMI') {
+                convertedName = 'BMI';
+            } else if (untranslatedPhenotype === 'CHOL') {
+                convertedName = 'CHOL_ANAL';
+            } else if (untranslatedPhenotype === 'TG') {
                 convertedName = 'TG_ANAL';
-            }else if (untranslatedPhenotype === 'Admission_CT_Available'){
-                convertedName = 'Admission_CT_Available';
-            }else if (untranslatedPhenotype === 'Aspirin'){
-                convertedName = 'Aspirin';
-            }else if (untranslatedPhenotype === 'Coronary_Artery_Disease'){
-                convertedName = 'Coronary_Artery_Disease';
-            }else if (untranslatedPhenotype === 'Deep_ICH'){
-                convertedName = 'Deep_ICH';
-            }else if (untranslatedPhenotype === 'Discharge_mRS_gt_2'){
-                convertedName = 'Discharge_mRS_gt_2_readable';
-            }else if (untranslatedPhenotype === 'Ethnicity'){
-                convertedName = 'Ethnicity_readable';
-            }else if (untranslatedPhenotype === 'Follow_up_mRS_gt_2'){
-                convertedName = 'Follow_up_mRS_gt_2_readable';
-            }else if (untranslatedPhenotype === 'Hemorrhage_Location'){
-                convertedName = 'Hemorrhage_Location_readable';
-            }else if (untranslatedPhenotype === 'History_of_Diabetes_mellitus'){
-                convertedName = 'History_of_Diabetes_mellitus_readable';
-            }else if (untranslatedPhenotype === 'History_of_Hypercholesterolemia'){
-                convertedName = 'History_of_Hypercholesterolemia_readable';
-            }else if (untranslatedPhenotype === 'History_of_Hypertension'){
-                convertedName = 'History_of_Hypertension_readable';
-            }else if (untranslatedPhenotype === 'History_of_TIA_Ischemic_Stroke'){
-                convertedName = 'History_of_TIA_Ischemic_Stroke_readable';
-            }else if (untranslatedPhenotype === 'ICH_Status'){
-                convertedName = 'ICH_Status_readable';
-            }else if (untranslatedPhenotype === 'INR_gt_2'){
-                convertedName = 'INR_gt_2_readable';
-            }else if (untranslatedPhenotype === 'Lobar_ICH'){
-                convertedName = 'Lobar_ICH_readable';
-            }else if (untranslatedPhenotype === 'MRI_Available'){
-                convertedName = 'MRI_Available_readable';
-            }else if (untranslatedPhenotype === 'Number_of_Previous_Hemhorrhages'){
-                convertedName = 'Number_of_Previous_Hemhorrhages_readable';
-            }else if (untranslatedPhenotype === 'Other_Antiplatelet'){
-                convertedName = 'Other_Antiplatelet_readable';
-            }else if (untranslatedPhenotype === 'Race'){
-                convertedName = 'Race_readable';
-            }else if (untranslatedPhenotype === 'SEX'){
-                convertedName = 'SEX_readable';
-            }else if (untranslatedPhenotype === 'Statins'){
-                convertedName = 'Statins_readable';
-            }else if (untranslatedPhenotype === 'Warfarin_readable'){
-                convertedName = 'Warfarin';
+            } else if (untranslatedPhenotype === 'HDL') {
+                convertedName = 'HDL_ANAL';
+            } else if (untranslatedPhenotype === 'LDL') {
+                convertedName = 'LDL_ANAL';
+            } else if (untranslatedPhenotype === 'SBP') {
+                convertedName = 'SBP_ANAL';
+            } else if (untranslatedPhenotype === 'DBP') {
+                convertedName = 'DBP_ANAL';
             }
             return convertedName;
         };
-
 
         mpgSoftware.geneSignalSummary = (function () {
             var buildRenderData = function (data,mafCutoff)  {
@@ -327,10 +294,37 @@ ul.aggregatingVariantsLabels {
                                         mafValue = (mafval)?mafval:'';
                                         obj['MAF'] = mafValue;
                                     })
-                                } else if (key==='P_FIRTH_FE_IV') {
+                                } else if ((key==='P_FIRTH_FE_IV')||
+                                        (key==='P_VALUE')||
+                                        (key==='P_FE_INV')||
+                                        (key==='P_FIRTH')
+                                        ){
                                     _.forEach(val,function(dsetval,dsetkey){
                                         _.forEach(dsetval,function(pval,pkey) {
-                                            obj['P_VALUE'] = (pval)?pval:1;
+                                            obj['P_VALUE'] = UTILS.realNumberFormatter((pval)?pval:1);
+                                            obj['P_VALUEV'] = (pval)?pval:1;
+                                        });
+
+                                    });
+
+                                }  else if ((key==='ODDS_RATIO')||
+                                        (key==='OR_FIRTH')||
+                                        (key==='OR_FIRTH_FE_IV')||
+                                        (key==='OR_FIRTH')
+                                        ){
+                                    _.forEach(val,function(dsetval,dsetkey){
+                                        _.forEach(dsetval,function(pval,pkey) {
+                                            obj['BETA'] = UTILS.realNumberFormatter((pval)?pval:1);
+                                            obj['BETAV'] = (pval)?pval:1;
+                                        });
+
+                                    });
+
+                                } else if (key==='BETA') {
+                                    _.forEach(val,function(dsetval,dsetkey){
+                                        _.forEach(dsetval,function(pval,pkey) {
+                                            obj['BETA'] = UTILS.realNumberFormatter(Math.exp((pval)?pval:1));
+                                            obj['BETAV'] = Math.exp((pval)?pval:1);
                                         });
 
                                     });
@@ -348,8 +342,8 @@ ul.aggregatingVariantsLabels {
                         //}
 
                     });
-                    _.sortBy(renderData.rvar,function(o){return o.P_VALUE});
-                    _.sortBy(renderData.cvar,function(o){return o.P_VALUE});
+                    renderData.rvar = _.sortBy(renderData.rvar,function(o){return o.P_VALUEV});
+                    renderData.cvar = _.sortBy(renderData.cvar,function(o){return o.P_VALUEV});
 
                 };
                 return renderData;
@@ -385,12 +379,22 @@ ul.aggregatingVariantsLabels {
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                 $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"0","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"1","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"2","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"3","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"4","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                refreshVariantAggregates($('#signalPhenotypeTableChooser'),"5","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
+                var sampleBasedPhenotypeName = phenotypeNameForSampleData(phenotypeName);
+                if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
+                     ( sampleBasedPhenotypeName.length > 0)) {
+                    $('#aggregateVariantsLocation').css('display','block');
+                    $('#noAggregatedVariantsLocation').css('display','none');
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"2","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"3","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"4","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                } else {
+                    $('#aggregateVariantsLocation').css('display','none');
+                    $('#noAggregatedVariantsLocation').css('display','block');
+                }
 
 
             };
@@ -400,7 +404,7 @@ ul.aggregatingVariantsLabels {
                var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
                 _.forEach(renderData.variants,function(v){
                     if ((signalCategory < 3)&&(v.P_VALUE < 0.00000001)){
-                        signalCategory = 1;
+                        signalCategory = 3;
                     } else if ((signalCategory < 2)&&(v.P_VALUE < 0.0001)) {
                         signalCategory = 2;
                     }
@@ -449,10 +453,9 @@ ul.aggregatingVariantsLabels {
 
 
 
-            var refreshVariantAggregates = function (sel, filterNum, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
+            var refreshVariantAggregates = function (phenotypeName, filterNum, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
                 var rememberCallBack = callBack;
                 var rememberCallBackParameter = callBackParameter;
-                var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
 
                 $.ajax({
                     cache: false,
@@ -461,7 +464,7 @@ ul.aggregatingVariantsLabels {
                     data: { geneName:geneName,
                             dataSet:dataSet,
                             filterNum:filterNum,
-                            burdenTraitFilterSelectedOption: convertPhenotypeNames(phenotypeName),
+                            burdenTraitFilterSelectedOption: phenotypeName,
                             mafOption:mafOption,
                             mafValue:mafValue   },
                     async: true,
@@ -482,7 +485,8 @@ ul.aggregatingVariantsLabels {
                     cache: false,
                     type: "post",
                     url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
-                    data: {phenotype: phenotypeName},
+                    data: {phenotype: phenotypeName,
+                        geneToSummarize:"${geneName}"},
                     async: true,
                     success: function (data) {
                         rememberCallBack(data);

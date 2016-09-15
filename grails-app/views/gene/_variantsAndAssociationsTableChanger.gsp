@@ -84,7 +84,7 @@
             '<g:message code="gene.variantassociations.table.colhdr.5b" default="locus wide"/>',
             nominalSig: '<g:helpText title="gene.variantassociations.table.colhdr.6.help.header" placement="top"
                                             body="gene.variantassociations.table.colhdr.6.help.text" qplacer="2px 0 0 6px"/>' +
-            '<g:message code="gene.variantassociations.table.colhdr.6b" default="nominal"/>'
+            '<g:message code="gene.variantassociations.table.colhdr.6b" default="nominallly"/>'
         };
         var variantsAndAssociationsRowHelpText = {
             genomeWide: '<g:message code="gene.variantassociations.table.rowhdr.gwas" default="gwas"/>',

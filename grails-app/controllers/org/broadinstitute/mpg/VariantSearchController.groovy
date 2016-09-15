@@ -398,16 +398,22 @@ class VariantSearchController {
 
     def retrieveTopVariantsAcrossSgs (){
         String phenotypeName
+        String geneName
         if (params.phenotype) {
             phenotypeName = params.phenotype
             log.debug "variantSearch params.phenotype = ${params.phenotype}"
         }
+        if (params.geneToSummarize) {
+            geneName = params.geneToSummarize
+            log.debug "variantSearch params.geneToSummarize = ${params.geneToSummarize}"
+        }
+
 
         String currentVersion = metaDataService.getDataVersion()
         List<String> allTechnologies =  metaDataService.getTechnologyListByVersion(currentVersion)
         List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
 
-        JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName, 0.0000001f )
+        JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
         if (dataJsonObject.variants) {
                 for (List result in dataJsonObject.variants){
