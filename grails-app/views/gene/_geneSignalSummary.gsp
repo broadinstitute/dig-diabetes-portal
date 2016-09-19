@@ -58,7 +58,7 @@ ul.aggregatingVariantsLabels {
             <div class="col-md-2 col-xs-12">
                 <div id='trafficLightHolder'>
                     <r:img uri="/images/undeterminedlight.png"/>
-                    <span id="signalLevelHolder" style="display:none"></span>
+                    <div id="signalLevelHolder" style="display:none"></div>
                 </div>
 
             </div>
@@ -103,21 +103,22 @@ ul.aggregatingVariantsLabels {
                             </div>
 
                             <div class="row">
-                                <div class="col-lg-offset-2 col-lg-8">
+                                <div class="col-lg-12">
                                     <div class="boxOfVariants">
                                         {{ #rvar }}
                                             <div class="row">
-                                                <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
+                                                <div class="col-lg-2"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
                                                 <div class="col-lg-2">{{rsId}}</div>
 
-                                                <div class="col-lg-2">{{impact}}</div>
+                                                <div class="col-lg-1">{{impact}}</div>
 
                                                 <div class="col-lg-2">{{deleteriousness}}</div>
 
-                                                <div class="col-lg-2">{{P_VALUE}}</div>
+                                                <div class="col-lg-1">{{P_VALUE}}</div>
 
                                                 <div class="col-lg-1">{{BETA}}</div>
+                                                <div class="col-lg-3">{{ds}}</div>
                                             </div>
                                         {{ /rvar }}
 
@@ -193,13 +194,13 @@ ul.aggregatingVariantsLabels {
                     <h3 class="specialTitle">Common variants</h3>
 
                     <div class="row">
-                        <div class="col-lg-offset-1">
+                        <div>
                             <h4>Individual variants</h4>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-offset-1 col-lg-11">
+                        <div class="col-sm-12">
                             <div class="boxOfVariants">
                                 {{ #cvar }}
                                 <div class="row">
@@ -209,11 +210,11 @@ ul.aggregatingVariantsLabels {
 
                                         <div class="col-lg-2">{{P_VALUE}}</div>
 
-                                        <div class="col-lg-2">{{BETA}}</div>
+                                        <div class="col-lg-1">{{BETA}}</div>
 
-                                        <div class="col-lg-1">{{referenceAllele}}</div>
+                                        <div class="col-lg-3">{{ds}}</div>
 
-                                        <div class="col-lg-1">{{effectAllele}}</div>
+
                                 </div>
                                 {{ /cvar }}
                             </div>
@@ -289,6 +290,8 @@ ul.aggregatingVariantsLabels {
                                     obj['effectAllele'] = (val)?val:'';
                                 } else if (key==='MOST_DEL_SCORE') {
                                     obj['MOST_DEL_SCORE'] = (val)?val:'';
+                                } else if (key==='ds') {
+                                    obj['ds'] = (val)?val:'';
                                 }  else if (key==='MAF') {
                                     _.forEach(val,function(mafval,mafkey){
                                         mafValue = (mafval)?mafval:'';
@@ -435,7 +438,7 @@ ul.aggregatingVariantsLabels {
                 } else if (significanceLevel == 3){
                     $('#trafficLightHolder').append('<r:img uri="/images/greenlight.png"/>');
                 }
-                $('#signalLevelHolder').text = significanceLevel;
+                $('#signalLevelHolder').text(significanceLevel);
             };
 
 
@@ -443,7 +446,7 @@ ul.aggregatingVariantsLabels {
 
 
             var updateDisplayBasedOnStoredSignificanceLevel = function (newSignificanceLevel) {
-                var currentSignificanceLevel = $('#signalLevelHolder').text;
+                var currentSignificanceLevel = $('#signalLevelHolder').text();
                 if (newSignificanceLevel>=currentSignificanceLevel){
                     return;
                 }

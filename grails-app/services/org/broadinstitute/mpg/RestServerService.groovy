@@ -1769,10 +1769,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject dataJsonObject
         List variants = []
         for (SampleGroup  sampleGroup in fullListOfSampleGroups){
             dataJsonObject =  gatherTopVariantsPerSg(  phenotype,  geneName, pValueSignificance, sampleGroup )
+            for (List variant in dataJsonObject.variants) {
+                variant << ['ds':g.message(code: "metadata." + sampleGroup.systemId, default: phenotype)]
+            }
             variants.addAll( dataJsonObject.variants )
         }
         Map<String,List> allVariants = [:]

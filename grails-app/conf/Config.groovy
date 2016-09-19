@@ -214,6 +214,7 @@ t2dNewDevRestServer { //current 'dev'
 
 //server.URL = 'http://localhost:8888/dig-genome-store/gs/'
 server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
+//server.URL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //server.URL = 'http://dig-qa-01.broadinstitute.org:8888/qa/gs/'
 
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
@@ -341,14 +342,14 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
