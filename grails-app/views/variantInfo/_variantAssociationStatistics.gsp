@@ -17,7 +17,7 @@
     // this lives here so that the correct strings can be loaded by the server
     var toggleOtherAssociations = function () {
         var toggle = $('#toggleButton');
-        var text = toggle.text();
+        var text = toggle.text();/
 
         if (text == '${g.message(code:"variant.variantAssociations.expandAssociations", default:"expand associations for all traits")}') {
             // content is hidden
@@ -50,16 +50,20 @@
                 style="float: left;display:block; margin-right: 5px;"><g:message
                     code="variant.variantAssociations.legend.down" default="down"/></span><span
                 style="float:left; display:block; background-color: #90f; color:#fff;width: 10px; text-align:center;">&#8595</span>
+            <span
+                    style="float:left; display:block; width: 10px; ">&nbsp;</span>
+            <g:helpText title="variant.variantAssociations.direction.help.header" placement="bottom" body="variant.variantAssociations.direction.help.text"/>
             </td>
             <td><g:message code="variant.variantAssociations.legend.dataset" default="Dataset"/>:</td><td style="padding-right: 20px;"><div
                 style="background-color: #ccc; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
                     style="color: #333; font-size: 12px;"><g:message code="variant.variantAssociations.legend.sampleSize"
-                                                                     default="sample size"/></span> | <span
+                                                                     default="sample size"/>  <g:helpText title="variant.variantAssociations.size.help.header" placement="bottom" body="variant.variantAssociations.size.help.text"/></span> | <span
                     style="color: #F00; font-size: 12px;"><g:message code="variant.variantAssociations.legend.frequency"
-                                                                     default="frequency"/></span> | <span
+                                                                     default="frequency"/>  <g:helpText title="variant.variantAssociations.frequency.help.header" placement="bottom" body="variant.variantAssociations.frequency.help.text"/></span> | <span
                     style="color:#33F; font-size: 12px;"><g:message code="variant.variantAssociations.legend.count"
-                                                                    default="count"/></span></div>
-            </td>
+                                                                    default="count"/>  <g:helpText title="variant.variantAssociations.count.help.header" placement="bottom" body="variant.variantAssociations.count.help.text"/></span>
+            </div>
+        </td>
         </tr>
     </table>
 
