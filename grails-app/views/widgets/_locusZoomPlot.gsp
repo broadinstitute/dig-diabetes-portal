@@ -194,15 +194,23 @@
     }
 
 
-    var initializeLZPage = function (page, variantId, positionInfo) {
+    var initializeLZPage = function (page, variantId, positionInfo,domId1,phenoTypeName) {
         var loading = $('#spinner').show();
+        var lzGraphicDomId = "#lz-1";
+        var defaultPhenotypeName = "T2D";
+        if (typeof domId1 !== 'undefined') {
+            lzGraphicDomId = domId1;
+        }
+        if (typeof phenoTypeName !== 'undefined') {
+            defaultPhenotypeName = phenoTypeName;
+        }
         var chromosome = positionInfo.chromosome;
         // make sure we don't get a negative start point
         var startPosition = Math.max(0, positionInfo.startPosition);
         var endPosition = positionInfo.endPosition;
 
         var locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
-        $("#lz-1").attr("data-region", locusZoomInput);
+        $(lzGraphicDomId).attr("data-region", locusZoomInput);
         $("#lzRegion").text(locusZoomInput);
         loading.hide();
 
@@ -219,13 +227,13 @@
 
         if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
-            var returned = mpgSoftware.locusZoom.initLocusZoom('#lz-1', lzVarId);
+            var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
             locusZoomPlot = returned.locusZoomPlot;
             dataSources = returned.dataSources;
 
             // default panel
             addLZPhenotype({
-                phenotype: 'T2D',
+                phenotype: defaultPhenotypeName,
                 description: 'Type 2 Diabetes'
             });
 
@@ -241,7 +249,10 @@
     };
 
     mpgSoftware.locusZoom.initializeLZPage = initializeLZPage;
-
+   // $( document ).ready(function() {
+//        var renderData = {};
+//        $("#defaultLocusZoomSection").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
+   // });
 </script>
 
 <div class="accordion-group">

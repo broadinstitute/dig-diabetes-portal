@@ -226,6 +226,67 @@ ul.aggregatingVariantsLabels {
             </div>
         </script>
 
+        %{--<div class="row">--}%
+            %{--<div class="col-sm-12">--}%
+                %{--<div id="geneSummaryLz" class="lz-container-responsive"></div>--}%
+            %{--</div>--}%
+        %{--</div>--}%
+        <div class="accordion-group">
+            <div class="accordion-heading">
+                <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion3"
+                   href="#collapseLZ">
+                    <h2><strong><g:message code="variant.locusZoom.title" default="Locus Zoom"/></strong></h2>
+                </a>
+            </div>
+
+            %{--<div id="collapseLZ" class="accordion-body collapse">--}%
+                %{--<p><g:message code="variant.locusZoom.text"/></p>--}%
+
+                %{--<div style="display: flex; justify-content: space-around;">--}%
+                    %{--<p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>--}%
+
+                    %{--<p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>--}%
+                %{--</div>--}%
+                %{--<ul class="nav navbar-nav navbar-left" style="display: flex;">--}%
+                    %{--<li class="dropdown" id="tracks-menu-dropdown">--}%
+                        %{--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>--}%
+                        %{--<ul id="trackList" class="dropdown-menu">--}%
+                            %{--<g:each in="${lzOptions}">--}%
+                                %{--<li><a onclick="addLZPhenotype({--}%
+                                    %{--phenotype: '${it.key}',--}%
+                                    %{--description: '${it.description}'--}%
+                                %{--})">--}%
+                                    %{--${g.message(code: "metadata." + it.name)}--}%
+                                %{--</a></li>--}%
+                            %{--</g:each>--}%
+                        %{--</ul>--}%
+                    %{--</li>--}%
+                    %{--<li style="margin: auto;">--}%
+                        %{--<b>Region: <span id="lzRegion"></span></b>--}%
+                    %{--</li>--}%
+                %{--</ul>--}%
+
+                %{--<div class="accordion-inner">--}%
+                    %{--<div id="lz-1" class="lz-container-responsive"></div>--}%
+                %{--</div>--}%
+
+            </div>
+        </div>
+
+
+
     </div>
 </div>
 
@@ -505,26 +566,75 @@ ul.aggregatingVariantsLabels {
                 refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
             };
 
-            return {
-                updateSignificantVariantDisplay:updateSignificantVariantDisplay,
-                updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
-                refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
-                refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype
+
+
+            var refreshLZ = function ( geneName, portalType, chromosome, startPosition, endPosition, varId ) {
+
+                    var genePageExtent = 100000;
+
+                    var positioningInformation = {
+                        chromosome: chromosome,
+                        startPosition: startPosition,
+                        endPosition: endPosition
+                    };
+
+                    // call this inside the ready function because the page is still loading when the the parent
+                    // ajax calls returns
+                    var portalType = "t2d";
+
+                    if (portalType === 't2d') {
+                        mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation, varId);
+                    }
+                    $('span[data-textfield="variantName"]').append(varId);
+                    $('#variantPageText').hide();
+                    $('#genePageText').show();
+
+
+
+                    $(".pop-top").popover({placement: 'top'});
+                    $(".pop-right").popover({placement: 'right'});
+                    $(".pop-bottom").popover({placement: 'bottom'});
+                    $(".pop-left").popover({placement: 'left'});
+                    $(".pop-auto").popover({placement: 'auto'});
+
+
             }
-        }());
 
 
-    })();
 
-    $( document ).ready(function() {
-        mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
-                '${g.defaultPhenotype()}',
+
+return {
+    updateSignificantVariantDisplay:updateSignificantVariantDisplay,
+    updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
+    refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
+    refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
+    refreshLZ:refreshLZ
+}
+}());
+
+
+})();
+    //
+//var loading = $('#spinner').show();
+//loading.hide();
+$( document ).ready(function() {
+mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
+    '${g.defaultPhenotype()}',
                 "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
                 function(){
                     // retrieve the top value in the phenotype drop-down
                     mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype($($('#signalPhenotypeTableChooser>option')[1]).attr('value'),
                             mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
                 } );
+   // mpgSoftware.geneSignalSummary.refreshLZ( "${geneName}", "${g.portalTypeString()}", "10", 500000, 2500000, '#geneSummaryLz', 'BMI_adj_withincohort_invn' );
+    //mpgSoftware.geneSignalSummary.refreshLZ( "${geneName}", "${g.portalTypeString()}", "10", 500000, 2500000, '#geneSummaryLz', 'T2D' );
     });
+//var genePageExtent = 100000;
+//
+//var positioningInformation = {
+//chromosome: data.geneInfo.CHROM,
+//startPosition: data.geneInfo.BEG - genePageExtent,
+//endPosition: data.geneInfo.END + genePageExtent
+//};
 </script>
 
