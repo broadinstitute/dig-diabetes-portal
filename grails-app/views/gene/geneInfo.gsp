@@ -61,7 +61,11 @@
             portalType = "stroke";
             </g:if>
             if (portalType === 't2d'){
-                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation);
+                %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,--}%
+                        %{--"#lz-47","#collapseLZ",'T2D',--}%
+                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
+                        %{--'${createLink(controller:"variantInfo", action:"variant")}',--}%
+                        %{--mpgSoftware.locusZoom.broadAssociationSource);--}%
             }
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();
