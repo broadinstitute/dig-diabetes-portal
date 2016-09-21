@@ -17,7 +17,7 @@
     // this lives here so that the correct strings can be loaded by the server
     var toggleOtherAssociations = function () {
         var toggle = $('#toggleButton');
-        var text = toggle.text();/
+        var text = toggle.text();
 
         if (text == '${g.message(code:"variant.variantAssociations.expandAssociations", default:"expand associations for all traits")}') {
             // content is hidden
@@ -48,19 +48,19 @@
             <td style="padding-right: 20px;"><div
                     style="background-color: #006633; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
                         style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.genomewide"
-                                                                            default="p &lt; 5e-8"/>  <g:helpText title="variant.variantAssociations.colorkeyGenomewide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyGenomewide.help.text"/></span>
+                                                                            default="p &lt; 5e-8" />  <g:helpText title="variant.variantAssociations.colorkeyGenomewide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyGenomewide.help.text"/></span>
             </div>
             </td>
             <td style="padding-right: 20px;"><div
                     style="background-color: #7AB317; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
                         style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.locuswide"
-                                                                            default="p &lt; 5e-5"/>  <g:helpText title="variant.variantAssociations.colorkeyLocuswide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyLocuswide.help.text"/></span>
+                                                                            default="p &lt; 5e-5" />  <g:helpText title="variant.variantAssociations.colorkeyLocuswide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyLocuswide.help.text"/></span>
             </div>
             </td>
             <td style="padding-right: 20px;"><div
                     style="background-color: #9ED54C; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
                         style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.nominal"
-                                                                            default="p &lt; 0.05"/>  <g:helpText title="variant.variantAssociations.colorkeyNominal.help.header" placement="bottom" body="variant.variantAssociations.colorkeyNominal.help.text"/></span>
+                                                                            default="p &lt; 0.05" />  <g:helpText title="variant.variantAssociations.colorkeyNominal.help.header" placement="bottom" body="variant.variantAssociations.colorkeyNominal.help.text"/></span>
             </div>
             </td>
             <td><g:message code="variant.variantAssociations.legend.directionOfEffect"
