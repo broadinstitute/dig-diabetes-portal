@@ -42,6 +42,27 @@
     <h5><g:message code="variant.info.associations.description"/></h5>
     <table>
         <tr>
+            <td>
+                <g:message code="variant.variantAssociations.legend.colorkey" default="Color key"/>:
+            </td>
+            <td style="padding-right: 20px;"><div
+                    style="background-color: #006633; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                        style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.genomewide"
+                                                                            default="p &lt; 5e-8"/>  <g:helpText title="variant.variantAssociations.colorkeyGenomewide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyGenomewide.help.text"/></span>
+            </div>
+            </td>
+            <td style="padding-right: 20px;"><div
+                    style="background-color: #7AB317; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                        style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.locuswide"
+                                                                            default="p &lt; 5e-5"/>  <g:helpText title="variant.variantAssociations.colorkeyLocuswide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyLocuswide.help.text"/></span>
+            </div>
+            </td>
+            <td style="padding-right: 20px;"><div
+                    style="background-color: #9ED54C; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                        style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.nominal"
+                                                                            default="p &lt; 0.05"/>  <g:helpText title="variant.variantAssociations.colorkeyNominal.help.header" placement="bottom" body="variant.variantAssociations.colorkeyNominal.help.text"/></span>
+            </div>
+            </td>
             <td><g:message code="variant.variantAssociations.legend.directionOfEffect"
                        default="Direction of effect"/>:</td><td style="padding-right: 20px;"><span
                 style="float: left;display:block; margin-right: 5px; margin-left: 5px;"><g:message
@@ -64,6 +85,7 @@
                                                                     default="count"/>  <g:helpText title="variant.variantAssociations.count.help.header" placement="bottom" body="variant.variantAssociations.count.help.text"/></span>
             </div>
         </td>
+
         </tr>
     </table>
 
@@ -77,7 +99,6 @@
         </h4>
         <a id="toggleButton" class="btn btn-primary btn-sm" onClick="toggleOtherAssociations()"><g:message
                 code="variant.variantAssociations.expandAssociations" default="expand associations for all traits"/></a>
-
         <div id="otherTraitsSection" class="col-md-12 other-traits-info-box-wrapper"
              style="display: none; flex-wrap: wrap; padding-left:0; padding-right: 0;">
         </div>

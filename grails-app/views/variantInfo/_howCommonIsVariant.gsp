@@ -99,7 +99,7 @@
             <div id="howCommonIsExists" style="display: block">
 
                 <p>
-            <g:message code="variant.alleleFrequency.subtitle" default="Relative allele frequencies"/>
+            <g:message code="variant.alleleFrequency.subtitleA" default="Effect allele frequencies"/> <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/> <g:message code="variant.alleleFrequency.subtitleB" default="in ancestry-specific data sets"/>
             <button id="summaryAncestryData" type="button" class="btn  btn-md btn-primary" disabled
                     onclick="mpgSoftware.howCommonIsVariant.loadSummaryAncestryData()">Largest sample only</button>
             <button id="allAncestryData" type="button" class="btn  btn-md btn-primary"
