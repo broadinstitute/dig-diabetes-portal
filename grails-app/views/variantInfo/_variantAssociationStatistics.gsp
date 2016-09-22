@@ -39,7 +39,12 @@
 
 
 <div class="container content-wrapper">
-    <h5><g:message code="variant.info.associations.description"/></h5>
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+    <h5><g:message code="variant.info.stroke.associations.description"/></h5>
+    </g:if>
+    <g:else>
+        <h5><g:message code="variant.info.associations.description"/></h5>
+    </g:else>
     <table>
         <tr>
             <td>
