@@ -12,6 +12,12 @@
 .trafficExplanations.unemphasize {
     font-weight: normal;
 }
+.linkEmulator{
+    text-decoration: underline;
+    cursor: pointer;
+    font-style: italic;
+    color: #588fd3;
+}
 .boxOfVariants {
     border: 1px solid black;
     padding: 10px;
@@ -206,7 +212,7 @@ ul.aggregatingVariantsLabels {
                                 <div class="row">
                                         <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                                        <div class="col-lg-3">{{rsId}}</div>
+                                        <div class="col-lg-3"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}')" class="boldItlink">{{rsId}}</a></div>
 
                                         <div class="col-lg-2">{{P_VALUE}}</div>
 
@@ -257,8 +263,7 @@ ul.aggregatingVariantsLabels {
                                                     description: '${it.description}'
                                                 },
                                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                                '${createLink(controller:"variantInfo", action:"variant")}',
-                                                mpgSoftware.locusZoom.broadAssociationSource)">
+                                                '${createLink(controller:"variantInfo", action:"variant")}')">
                                     ${g.message(code: "metadata." + it.name)}
                                 </a></li>
                             </g:each>
@@ -326,6 +331,7 @@ ul.aggregatingVariantsLabels {
                     _.forEach(data.variants.variants,function(v,index,y){
                         obj = {};
                         var mafValue;
+                        var mdsValue;
                         _.forEach(v,function(actObj){
                             _.forEach(actObj,function(val,key){
                                 if (key==='VAR_ID'){
@@ -342,6 +348,7 @@ ul.aggregatingVariantsLabels {
                                     obj['effectAllele'] = (val)?val:'';
                                 } else if (key==='MOST_DEL_SCORE') {
                                     obj['MOST_DEL_SCORE'] = (val)?val:'';
+                                    //mdsValue =
                                 } else if (key==='ds') {
                                     obj['ds'] = (val)?val:'';
                                 }  else if (key==='MAF') {
@@ -557,41 +564,25 @@ ul.aggregatingVariantsLabels {
                 refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
             };
 
-
-
-            %{--var refreshLZ = function ( geneName, portalType, chromosome, startPosition, endPosition, varId ) {--}%
-
-                    %{--var genePageExtent = 100000;--}%
-
-                    %{--var positioningInformation = {--}%
-                        %{--chromosome: chromosome,--}%
-                        %{--startPosition: startPosition,--}%
-                        %{--endPosition: endPosition--}%
-                    %{--};--}%
-
-                    %{--// call this inside the ready function because the page is still loading when the the parent--}%
-                    %{--// ajax calls returns--}%
-                    %{--var portalType = "t2d";--}%
-
-                    %{--if (portalType === 't2d') {--}%
-                        %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation, varId,'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-                                %{--'${createLink(controller:"variantInfo", action:"variant")}',--}%
-                                %{--broadAssociationSource);--}%
-                    %{--}--}%
-                    %{--$('span[data-textfield="variantName"]').append(varId);--}%
-                    %{--$('#variantPageText').hide();--}%
-                    %{--$('#genePageText').show();--}%
-
-
-
-                    %{--$(".pop-top").popover({placement: 'top'});--}%
-                    %{--$(".pop-right").popover({placement: 'right'});--}%
-                    %{--$(".pop-bottom").popover({placement: 'bottom'});--}%
-                    %{--$(".pop-left").popover({placement: 'left'});--}%
-                    %{--$(".pop-auto").popover({placement: 'auto'});--}%
-
-
-            %{--}--}%
+    var refreshLZ = function(varId){
+        var parseId = varId.split("_");
+        var locusZoomRange = 80000;
+        var variantPos = parseInt(parseId[1]);
+        var begPos = 0;
+        var endPos =  variantPos + locusZoomRange;
+        if (variantPos > locusZoomRange ){
+            begPos =  variantPos - locusZoomRange;
+        }
+        var positioningInformation = {
+            chromosome: parseId[0],
+            startPosition: begPos,
+            endPosition: endPos
+        };
+        mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,
+                "#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',
+                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                '${createLink(controller:"variantInfo", action:"variantInfo")}');
+    };
 
 
 
@@ -600,8 +591,8 @@ return {
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
     updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
-    refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype
-//    refreshLZ:refreshLZ
+    refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
+    refreshLZ:refreshLZ
 }
 }());
 
@@ -620,23 +611,16 @@ mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
                             mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
                 } );
     var positioningInformation = {
-        chromosome: "8",
-        startPosition:  117862462,
-        endPosition:  118289003
+        chromosome: '${geneChromosome}'.replace(/chr/g, ""),
+        startPosition:  ${geneExtentBegin},
+        endPosition:  ${geneExtentEnd}
     };
     mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
             "#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',
             '${createLink(controller:"gene", action:"getLocusZoom")}',
-            '${createLink(controller:"variantInfo", action:"variantInfo")}',
-            mpgSoftware.locusZoom.broadAssociationSource);
+            '${createLink(controller:"variantInfo", action:"variantInfo")}');
     });
 
-//var genePageExtent = 100000;
-//
-//var positioningInformation = {
-//chromosome: data.geneInfo.CHROM,
-//startPosition: data.geneInfo.BEG - genePageExtent,
-//endPosition: data.geneInfo.END + genePageExtent
-//};
+
 </script>
 

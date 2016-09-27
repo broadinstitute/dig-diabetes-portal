@@ -184,9 +184,9 @@
 
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <div class="separator"></div>
+                        %{--<div class="separator"></div>--}%
 
-                        <g:render template="/widgets/locusZoomPlot"/>
+                        %{--<g:render template="/widgets/locusZoomPlot"/>--}%
 
                         <div class="separator"></div>
 

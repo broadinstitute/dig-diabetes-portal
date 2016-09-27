@@ -11,38 +11,6 @@ var mpgSoftware = mpgSoftware || {};
     var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
 
 
-//        var SingletonClass = (function(){
-//            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
-//                this.parseInit(init);
-//                this.getURL = function (state, chain, fields) {
-//                    var url = this.url + "?" +
-//                        "chromosome=" + state.chr + "&" +
-//                        "start=" + state.start + "&" +
-//                        "end=" + state.end + "&" +
-//                        "phenotype=" + phenotype;
-//                    if (state.condition_on_variant){
-//                        url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
-//                    }
-//                    return url;
-//                }
-//            }, "BroadT2D");
-//            function SingletonClass() {
-//                //do stuff
-//            }
-//            var instance;
-//            return {
-//                getInstance: function(){
-//                    if (instance == null) {
-//                        instance = new SingletonClass();
-//                        // Hide the constructor so the returned objected can't be new'd...
-//                        instance.broadAssociationSource = broadAssociationSource;
-//                        instance.constructor = null;
-//                    }
-//                    return instance;
-//                }
-//            };
-//        })();
-
     // standard layout
     var StandardLayout = {
         resizable: "responsive",
@@ -52,6 +20,14 @@ var mpgSoftware = mpgSoftware || {};
                 id: 'genes',
                 margin: { top: 20, right: 50, bottom: 20, left: 50 },
                 axes: {},
+                interaction: {
+                    drag_background_to_pan: true,
+                    drag_x_ticks_to_scale: true,
+                    drag_y1_ticks_to_scale: true,
+                    drag_y2_ticks_to_scale: true,
+                    scroll_to_zoom: true,
+                    x_linked: true
+                },
                 data_layers: [
                     {
                         id: 'genes',
@@ -97,7 +73,10 @@ var mpgSoftware = mpgSoftware || {};
                 ldrefvar: variantIdString
             };
         }
-        
+//        var layout = {
+//            resizable: "manual"
+//        };
+//        layout = LocusZoom.mergeLayouts(layout, StandardLayout);
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
@@ -105,6 +84,18 @@ var mpgSoftware = mpgSoftware || {};
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
             .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
         var lzp = LocusZoom.populate(selector, ds, StandardLayout);
+
+        // Create event hooks to clear the loader whenever a panel renders new data
+        lzp.layout.panels.forEach(function(panel){
+            lzp.panels[panel.id].loader.show("Loading...").animate();
+            lzp.panels[panel.id].on("data_requested", function(){
+                this.loader.show("Loading...").animate();
+            });
+            lzp.panels[panel.id].on("data_rendered", function(){
+                this.loader.hide();
+            });
+        });
+
         return {
             locusZoomPlot: lzp,
             dataSources: ds
@@ -137,7 +128,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        function addLZPhenotype(lzParameters, geneGetLZ,variantInfoUrl,broadAssociationSourceFn) {
+        function addLZPhenotype(lzParameters, geneGetLZ,variantInfoUrl) {
             var phenotype = lzParameters.phenotype;
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
                 this.parseInit(init);
@@ -180,6 +171,14 @@ var mpgSoftware = mpgSoftware || {};
                             label: "Recombination Rate (cM/Mb)",
                             label_offset: 40
                         }
+                    },
+                    interaction: {
+                        drag_background_to_pan: true,
+                        drag_x_ticks_to_scale: true,
+                        drag_y1_ticks_to_scale: true,
+                        drag_y2_ticks_to_scale: true,
+                        scroll_to_zoom: true,
+                        x_linked: true
                     },
                     data_layers: [
                         {
@@ -308,9 +307,9 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
+        var resetLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,
-                                         geneGetLZ,variantInfoUrl,broadAssociationSourceFn) {
+                                         geneGetLZ,variantInfoUrl) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -320,6 +319,65 @@ var mpgSoftware = mpgSoftware || {};
             if (typeof phenoTypeName !== 'undefined') {
                 defaultPhenotypeName = phenoTypeName;
             }
+
+            var chromosome = positionInfo.chromosome;
+            // make sure we don't get a negative start point
+            var startPosition = Math.max(0, positionInfo.startPosition);
+            var endPosition = positionInfo.endPosition;
+
+            var locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
+            $(lzGraphicDomId).attr("data-region", locusZoomInput);
+            $("#lzRegion").text(locusZoomInput);
+            loading.hide();
+
+            var lzVarId = '';
+            // need to process the varId to match the IDs that LZ is getting, so that
+            // the correct reference variant is displayed
+            if ((page == 'variantInfo')&& (typeof variantId !== 'undefined') ) {
+                lzVarId = variantId;
+                // we have format: 8_118184783_C_T
+                // need to get format like: 8:118184783_C/T
+                var splitVarId = variantId.split('_');
+                lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
+            }
+
+            if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
+
+//                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
+//                locusZoomPlot = returned.locusZoomPlot;
+//                dataSources = returned.dataSources;
+
+//                // default panel
+//                addLZPhenotype({
+//                    phenotype: defaultPhenotypeName,
+//                    description: 'Type 2 Diabetes'
+//                },geneGetLZ,variantInfoUrl);
+//
+//                $(collapsingDom).on("shown.bs.collapse", function () {
+//                    locusZoomPlot.rescaleSVG();
+//                });
+//
+//                var clearCurtain = function() {
+//                    locusZoomPlot.curtain.hide();
+//                };
+//                locusZoomPlot.on('data_rendered', clearCurtain);
+            }
+        };
+
+
+        var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
+                                         phenoTypeName,
+                                         geneGetLZ,variantInfoUrl) {
+            var loading = $('#spinner').show();
+            var lzGraphicDomId = "#lz-1";
+            var defaultPhenotypeName = "T2D";
+            if (typeof domId1 !== 'undefined') {
+                lzGraphicDomId = domId1;
+            }
+            if (typeof phenoTypeName !== 'undefined') {
+                defaultPhenotypeName = phenoTypeName;
+            }
+            $(domId1).empty();
             var chromosome = positionInfo.chromosome;
             // make sure we don't get a negative start point
             var startPosition = Math.max(0, positionInfo.startPosition);
@@ -351,7 +409,7 @@ var mpgSoftware = mpgSoftware || {};
                 addLZPhenotype({
                     phenotype: defaultPhenotypeName,
                     description: 'Type 2 Diabetes'
-                },geneGetLZ,variantInfoUrl,broadAssociationSourceFn);
+                },geneGetLZ,variantInfoUrl);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {
                     locusZoomPlot.rescaleSVG();
@@ -374,6 +432,7 @@ var mpgSoftware = mpgSoftware || {};
     return {
         initLocusZoom : initLocusZoom,
         initializeLZPage:initializeLZPage,
+        resetLZPage:resetLZPage,
         addLZPhenotype:addLZPhenotype,
         changeLDReference:changeLDReference,
         conditionOnVariant:conditionOnVariant,

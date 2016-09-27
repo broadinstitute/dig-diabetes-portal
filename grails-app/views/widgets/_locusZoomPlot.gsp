@@ -1,27 +1,3 @@
-<script type="text/javascript">
-    var mpgSoftware = mpgSoftware || {};
-
-    // objects needed for both initialization and for adding more phenotypes
-    var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
-        this.parseInit(init);
-        this.getURL = function (state, chain, fields) {
-            var url = this.url + "?" +
-                    "chromosome=" + state.chr + "&" +
-                    "start=" + state.start + "&" +
-                    "end=" + state.end + "&" +
-                    "phenotype=" + phenotype;
-            if (state.condition_on_variant){
-                url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
-            }
-            return url;
-        }
-    }, "BroadT2D");
-    mpgSoftware.locusZoom.broadAssociationSource = broadAssociationSource;
-   // $( document ).ready(function() {
-//        var renderData = {};
-//        $("#defaultLocusZoomSection").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
-   // });
-</script>
 
 <div class="accordion-group">
     <div class="accordion-heading">
