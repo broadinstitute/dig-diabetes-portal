@@ -285,7 +285,7 @@ button.expandoButton:visited {
 
             <thead>
             <tr>
-                <th><g:message code="variantTable.columnHeaders.shared.dataSet"/></th>
+                <th><g:message code="variantTable.columnHeaders.shared.dataSet"/> <g:helpText title="variantTable.columnHeaders.shared.dataSet.help.header" placement="bottom" body="variantTable.columnHeaders.shared.dataSet.help.text"/></th>
                 <th><g:message code="informational.shared.header.trait"/></th>
                 <th><g:message code="variantTable.columnHeaders.sigma.pValue"/> <g:helpText title="variantTable.columnHeaders.sigma.pValue.help.header" placement="bottom" body="variantTable.columnHeaders.sigma.pValue.help.text"/></th>
                 <th><g:message code="variantTable.columnHeaders.shared.direction"/> <g:helpText title="variantTable.columnHeaders.shared.direction.help.header" placement="bottom" body="variantTable.columnHeaders.shared.direction.help.text"/></th>
