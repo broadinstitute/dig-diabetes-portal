@@ -25,6 +25,9 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+div.variantCategoryLabel{
+    margin-left:20px;
+}
 span.aggregatingVariantsColumnHeader {
     font-weight: bold;
 }
@@ -45,6 +48,10 @@ ul.aggregatingVariantsLabels {
 }
 .specialTitle {
     font-weight: bold;
+}
+div.variantBoxHeaders {
+    padding: 10px;
+    font-size: 16px;
 }
 </style>
 
@@ -97,44 +104,78 @@ ul.aggregatingVariantsLabels {
 <div class="collapse" id="collapseExample">
     <div class="well">
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <h3 class="specialTitle">High impact variants</h3>
-                        <div id="highImpactVariantsLocation"></div>
-                        <script id="highImpactTemplate"  type="x-tmpl-mustache">
-                            <div class="row">
-                                <div class="col-lg-offset-1">
-                                    <h4>Individual variants</h4>
-                                </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="boxOfVariants">
-                                        {{ #rvar }}
-                                            <div class="row">
-                                                <div class="col-lg-2"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
+        %{--<div id="highImpactVariantsLocation"></div>--}%
 
-                                                <div class="col-lg-2">{{rsId}}</div>
+        %{--<div id="commonVariantsLocation"></div>--}%
 
-                                                <div class="col-lg-1">{{impact}}</div>
+        %{--<div id="aggregateVariantsLocation" style="display: none"></div>--}%
 
-                                                <div class="col-lg-2">{{deleteriousness}}</div>
 
-                                                <div class="col-lg-1">{{P_VALUE}}</div>
 
-                                                <div class="col-lg-1">{{BETA}}</div>
-                                                <div class="col-lg-3">{{ds}}</div>
-                                            </div>
-                                        {{ /rvar }}
 
-                                    </div>
-                                </div>
-                            </div>
-                        </script>
+    <div id="noAggregatedVariantsLocation">
+        <div class="row" style="margin-top: 15px;">
+            <div class="col-lg-offset-1">
+                <h4>No information about aggregated variants exists for this phenotype</h4>
+            </div>
+        </div>
+    </div>
 
-                    <div id="aggregateVariantsLocation" style="display: none"></div>
-                        <script id="aggregateVariantsTemplate"  type="x-tmpl-mustache">
+
+    </div>
+</div>
+
+<div id="locusZoomTemplate"  type="x-tmpl-mustache" style="display:none">
+        <div style="margin-top: 20px">
+
+            <div style="display: flex; justify-content: space-around;">
+                <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
+
+                <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
+
+                <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
+
+                <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
+
+                <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
+
+                <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
+
+                <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
+
+                <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
+            </div>
+            <ul class="nav navbar-nav navbar-left" style="display: flex;">
+                <li class="dropdown" id="tracks-menu-dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
+                    <ul id="trackList" class="dropdown-menu">
+                        <g:each in="${lzOptions}">
+    <li><a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                phenotype: '${it.key}',
+                                        description: '${it.description}'
+                                    },
+                                    '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                    '${createLink(controller:"variantInfo", action:"variant")}')">
+    ${g.message(code: "metadata." + it.name)}
+    </a></li>
+</g:each>
+                    </ul>
+                </li>
+                <li style="margin: auto;">
+                    <b>Region: <span id="lzRegion"></span></b>
+                </li>
+            </ul>
+
+            <div class="accordion-inner">
+                <div id="lz-1" class="lz-container-responsive"></div>
+            </div>
+
+        </div>
+ </div>
+
+
+<script id="aggregateVariantsTemplate"  type="x-tmpl-mustache">
                             <div class="row" style="margin-top: 15px;">
                                 <div class="col-lg-offset-1">
                                     <h4>Aggregate variants</h4>
@@ -181,38 +222,98 @@ ul.aggregatingVariantsLabels {
                                 </div>
                             </div>
                         </script>
+
+
+<script id="highImpactTemplate"  type="x-tmpl-mustache">
+            <div class="row">
+                <div class="col-lg-12">
+                            <h3 class="specialTitle">High impact variants</h3>
+                            <div class="row">
+                                <div class="variantCategoryLabel">
+                                    <h4>Individual variants</h4>
+                                </div>
+                            </div>
+                            <div class="row variantBoxHeaders">
+                                <div class="col-lg-2">Variant ID</div>
+
+                                <div class="col-lg-2">dbSNP Id</div>
+
+                                <div class="col-lg-1">Protein<br/>change</div>
+
+                                <div class="col-lg-2">Predicted<br/>impact</div>
+
+                                <div class="col-lg-1">p-Value</div>
+
+                                <div class="col-lg-1">Effect</div>
+                                <div class="col-lg-3">Data set</div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="boxOfVariants">
+                                        {{ #rvar }}
+                                            <div class="row">
+                                                <div class="col-lg-2"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
+
+                                                <div class="col-lg-2">{{rsId}}</div>
+
+                                                <div class="col-lg-1">{{impact}}</div>
+
+                                                <div class="col-lg-2">{{deleteriousness}}</div>
+
+                                                <div class="col-lg-1">{{P_VALUE}}</div>
+
+                                                <div class="col-lg-1">{{BETA}}</div>
+                                                <div class="col-lg-3">{{ds}}</div>
+                                            </div>
+                                        {{ /rvar }}
+                                        {{ ^rvar }}
+                                            <div class="row">
+                                                <div class="col-xs-offset-4 col-xs-4">No high impact variants</div>
+                                            </div>
+                                        {{ /rvar }}
+
+                                    </div>
+                                </div>
+                            </div>
                 </div>
             </div>
-
-        <div id="noAggregatedVariantsLocation">
-            <div class="row" style="margin-top: 15px;">
-                <div class="col-lg-offset-1">
-                    <h4>No information about aggregated variants exists for this phenotype</h4>
-                </div>
-            </div>
-        </div>
+       </script>
 
 
-        <div id="commonVariantsLocation"></div>
-        <script id="commonVariantTemplate"  type="x-tmpl-mustache">
+
+
+<script id="commonVariantTemplate"  type="x-tmpl-mustache">
             <div class="row">
                 <div class="col-lg-12">
                     <h3 class="specialTitle">Common variants</h3>
 
                     <div class="row">
-                        <div>
+                        <div class="variantCategoryLabel">
                             <h4>Individual variants</h4>
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-sm-12">
+                         <div class="row variantBoxHeaders" >
+                                <div class="col-lg-3">Variant ID</div>
+
+                                <div class="col-lg-3">dbSNP Id</div>
+
+                                <div class="col-lg-2">p-Value</div>
+
+                                <div class="col-lg-1">Effect</div>
+
+                                <div class="col-lg-3">Data set</div>
+                            </div>
                             <div class="boxOfVariants">
                                 {{ #cvar }}
                                 <div class="row">
+
                                         <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                                        <div class="col-lg-3"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}')" class="boldItlink">{{rsId}}</a></div>
+                                        <div class="col-lg-3"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}','{{dsr}}')" class="boldItlink">{{rsId}}</a></div>
 
                                         <div class="col-lg-2">{{P_VALUE}}</div>
 
@@ -220,7 +321,11 @@ ul.aggregatingVariantsLabels {
 
                                         <div class="col-lg-3">{{ds}}</div>
 
-
+                                </div>
+                                {{ /cvar }}
+                                {{ ^cvar }}
+                                <div class="row">
+                                    <div class="col-xs-offset-4 col-xs-4">No common variants</div>
                                 </div>
                                 {{ /cvar }}
                             </div>
@@ -233,58 +338,7 @@ ul.aggregatingVariantsLabels {
         </script>
 
 
-            <div style="margin-top: 20px">
 
-
-                <div style="display: flex; justify-content: space-around;">
-                    <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
-
-                    <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
-
-                    <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
-
-                    <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
-
-                    <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
-
-                    <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
-
-                    <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
-
-                    <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
-                </div>
-                <ul class="nav navbar-nav navbar-left" style="display: flex;">
-                    <li class="dropdown" id="tracks-menu-dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
-                        <ul id="trackList" class="dropdown-menu">
-                            <g:each in="${lzOptions}">
-                                <li><a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                                                    phenotype: '${it.key}',
-                                                    description: '${it.description}'
-                                                },
-                                                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                                '${createLink(controller:"variantInfo", action:"variant")}')">
-                                    ${g.message(code: "metadata." + it.name)}
-                                </a></li>
-                            </g:each>
-                        </ul>
-                    </li>
-                    <li style="margin: auto;">
-                        <b>Region: <span id="lzRegion"></span></b>
-                    </li>
-                </ul>
-
-                <div class="accordion-inner">
-                    <div id="lz-1" class="lz-container-responsive"></div>
-                </div>
-
-            </div>
-
-
-
-
-    </div>
-</div>
 
 <script>
     var mpgSoftware = mpgSoftware || {};
@@ -332,6 +386,7 @@ ul.aggregatingVariantsLabels {
                         obj = {};
                         var mafValue;
                         var mdsValue;
+                        var pValue;
                         _.forEach(v,function(actObj){
                             _.forEach(actObj,function(val,key){
                                 if (key==='VAR_ID'){
@@ -348,7 +403,9 @@ ul.aggregatingVariantsLabels {
                                     obj['effectAllele'] = (val)?val:'';
                                 } else if (key==='MOST_DEL_SCORE') {
                                     obj['MOST_DEL_SCORE'] = (val)?val:'';
-                                    //mdsValue =
+                                    if (obj['MOST_DEL_SCORE'].length > 0){
+                                        mdsValue = parseInt(obj['MOST_DEL_SCORE']);
+                                    }
                                 } else if (key==='ds') {
                                     obj['ds'] = (val)?val:'';
                                 }  else if (key==='MAF') {
@@ -365,6 +422,7 @@ ul.aggregatingVariantsLabels {
                                         _.forEach(dsetval,function(pval,pkey) {
                                             obj['P_VALUE'] = UTILS.realNumberFormatter((pval)?pval:1);
                                             obj['P_VALUEV'] = (pval)?pval:1;
+                                            pValue = obj['P_VALUEV'];
                                         });
 
                                     });
@@ -394,20 +452,46 @@ ul.aggregatingVariantsLabels {
                                 }
                             });
                         });
-                        //if (index < 100 ){
-                            renderData.variants.push(obj);
-                            if (mafValue<mafCutoff){
-                                renderData.rvar.push(obj);
-                            } else {
-                                renderData.cvar.push(obj);
-                            }
-                        //}
-
-                    });
-                    renderData.rvar = _.sortBy(renderData.rvar,function(o){return o.P_VALUEV});
-                    renderData.cvar = _.sortBy(renderData.cvar,function(o){return o.P_VALUEV});
-
+                        renderData.variants.push(obj);
+                     });
                 };
+                return renderData;
+            };
+            var refineRenderData = function (renderData,significanceLevel)  {
+                renderData.rvar=[];
+                renderData.cvar=[];
+                var pValueCutoffHighImpact = 0;
+                var pValueCutoffCommon = 0;
+                switch (significanceLevel){
+                    case 3:
+                        pValueCutoffHighImpact = 0.00000005;
+                        pValueCutoffCommon = 0.000005;
+                        break;
+                    case 2:
+                        pValueCutoffHighImpact = 0.0001;
+                        pValueCutoffCommon = 0.0001;
+                        break;
+                    case 1:
+                        pValueCutoffHighImpact = 1;
+                        pValueCutoffCommon = 1;
+                        break;
+                    default: break;
+                }
+                _.forEach(renderData.variants,function(v){
+                    var mafValue = v['MAF']
+                    var mdsValue = v['MOST_DEL_SCORE'];
+                    var pValue = v['P_VALUE'];
+                    if ((typeof mdsValue !== 'undefined') && (mdsValue<=2) &&
+                            (typeof pValue !== 'undefined') && (pValue<=pValueCutoffHighImpact)){
+                        renderData.rvar.push(v);
+                    }
+                    if ((typeof mafValue !== 'undefined') && (mafValue>0.05)&&
+                                (typeof pValue !== 'undefined') && (pValue<=pValueCutoffCommon)) {
+                        renderData.cvar.push(v);
+                    }
+                });
+                renderData.rvar = _.sortBy(renderData.rvar,function(o){return o.P_VALUEV});
+                renderData.cvar = _.sortBy(renderData.cvar,function(o){return o.P_VALUEV});
                 return renderData;
             };
 
@@ -433,11 +517,39 @@ ul.aggregatingVariantsLabels {
             };
 
 
+            var commonSectionComesFirst = function (renderData) { // returns true or false
+                var returnValue;
+                var sortedVariants = _.sortBy(renderData.variants,function(o){return o.P_VALUEV});
+                for ( var i = 0 ; (i < sortedVariants.length)  && (typeof returnValue === 'undefined') ; i++ ){
+                    var oneVariant  = sortedVariants[i];
+                    if (typeof oneVariant.MAF !== 'undefined'){
+                        if (oneVariant.MAF < 0.05){
+                            returnValue = false;
+                        }else {
+                            returnValue = true;
+                        }
+                    }
+                }
+                return returnValue;
+            }
+
 
             var updateSignificantVariantDisplay = function (data) {
                 var renderData = buildRenderData (data,0.05);
                 var signalLevel = assessSignalSignificance(renderData);
+                var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
+                renderData = refineRenderData(renderData,signalLevel);
                 updateDisplayBasedOnSignificanceLevel (signalLevel);
+                if (commonSectionShouldComeFirst){
+                    $('#collapseExample div.well').append('<div id="commonVariantsLocation"></div>'+
+                            '<div id="highImpactVariantsLocation"></div>');
+                } else {
+                    $('#collapseExample div.well').append('<div id="highImpactVariantsLocation"></div>'+
+                            '<div id="commonVariantsLocation"></div>');
+                }
+                $('#collapseExample div.well').append('<div id="aggregateVariantsLocation" style="display: none"></div>');
+                $('#collapseExample div.well').append('<div id="locusZoomLocation"></div>');
+                $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                 $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
@@ -457,7 +569,15 @@ ul.aggregatingVariantsLabels {
                     $('#aggregateVariantsLocation').css('display','none');
                     $('#noAggregatedVariantsLocation').css('display','block');
                 }
-
+                var positioningInformation = {
+                    chromosome: '${geneChromosome}'.replace(/chr/g, ""),
+                    startPosition:  ${geneExtentBegin},
+                    endPosition:  ${geneExtentEnd}
+                };
+                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                        "#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}');
 
             };
 
@@ -465,10 +585,20 @@ ul.aggregatingVariantsLabels {
             var assessSignalSignificance = function (renderData){
                var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
                 _.forEach(renderData.variants,function(v){
-                    if ((signalCategory < 3)&&(v.P_VALUE < 0.00000001)){
-                        signalCategory = 3;
-                    } else if ((signalCategory < 2)&&(v.P_VALUE < 0.0001)) {
-                        signalCategory = 2;
+                    var mdsValue = parseInt(v['MOST_DEL_SCORE']);
+                    var mafValue = parseFloat(v['MAF']);
+                    var pValue = parseFloat(v['P_VALUEV']);
+                    if (signalCategory < 3){
+                        if ( ((pValue < 0.00000005)&&
+                              (mdsValue < 3))||
+                             ((pValue < 0.000005)&&
+                              (mafValue > 0.05)) ){
+                            signalCategory = 3;
+                        }
+                    } else if (signalCategory < 2){
+                        if (pValue < 0.0001){
+                            signalCategory = 2;
+                        }
                     }
                 });
                 return signalCategory;
@@ -564,7 +694,7 @@ ul.aggregatingVariantsLabels {
                 refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
             };
 
-    var refreshLZ = function(varId){
+    var refreshLZ = function(varId,dataSetName){
         var parseId = varId.split("_");
         var locusZoomRange = 80000;
         var variantPos = parseInt(parseId[1]);
@@ -615,10 +745,10 @@ mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
         startPosition:  ${geneExtentBegin},
         endPosition:  ${geneExtentEnd}
     };
-    mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-            "#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',
-            '${createLink(controller:"gene", action:"getLocusZoom")}',
-            '${createLink(controller:"variantInfo", action:"variantInfo")}');
+    %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,--}%
+            %{--"#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',--}%
+            %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
+            %{--'${createLink(controller:"variantInfo", action:"variantInfo")}');--}%
     });
 
 

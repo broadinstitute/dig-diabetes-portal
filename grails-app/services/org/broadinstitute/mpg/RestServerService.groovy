@@ -1776,6 +1776,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             dataJsonObject =  gatherTopVariantsPerSg(  phenotype,  geneName, pValueSignificance, sampleGroup )
             for (List variant in dataJsonObject.variants) {
                 variant << ['ds':g.message(code: "metadata." + sampleGroup.systemId, default: phenotype)]
+                variant << ['dsr':"${ sampleGroup.systemId}".toString() ]
             }
             variants.addAll( dataJsonObject.variants )
         }
