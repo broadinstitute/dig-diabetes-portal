@@ -239,7 +239,7 @@
 
     <div class="container dk-t2d-back-to-search">
         <div style="text-align: right;">
-            <a href="https://s3.amazonaws.com/broad-portal-resources/searchResultsHelp.pdf" target="_blank">
+            <a href="https://s3.amazonaws.com/broad-portal-resources/Variant_results_table_guide_09-15-2016.pdf" target="_blank">
                 <g:message code="variantSearch.results.helpText" />
             </a>
         </div>

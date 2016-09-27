@@ -184,7 +184,7 @@ rect.legendHolder {
                 </p>
 
                 <p>
-                    <g:message code="variant.messages.GWAS_variants_region_4" />..
+                    <g:message code="variant.messages.GWAS_variants_region_4" />.
         </p>
 
 

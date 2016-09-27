@@ -85,6 +85,11 @@ class MetaDataService {
         // get the data version based on user session portal type; default to t2d
         dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
 
+        // DIGP-391: quick fix for Marcin testing; for t2d, get the version from the system manager setting
+        if ("t2d".equals(portalType)) {
+            dataVersion = "mdv" + this.sharedToolsService.getDataVersion();
+        }
+
         // return
         return dataVersion;
     }

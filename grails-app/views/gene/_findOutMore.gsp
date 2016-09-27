@@ -1,7 +1,7 @@
 
 
 <div class="linkout">
-    <a target="_blank" href="http://www.gtexportal.org/home/?page=geneSearchAction&id=<%=geneName%>">GTEx</a>
+    <a target="_blank" href="http://www.gtexportal.org/home/gene/<%=geneName%>">GTEx</a>
     <g:message code="findoutmore.gtex.descr" default="Explore"/>
 </div>
 

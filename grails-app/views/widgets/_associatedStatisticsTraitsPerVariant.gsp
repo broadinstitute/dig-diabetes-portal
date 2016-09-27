@@ -287,11 +287,11 @@ button.expandoButton:visited {
             <tr>
                 <th><g:message code="variantTable.columnHeaders.shared.dataSet"/></th>
                 <th><g:message code="informational.shared.header.trait"/></th>
-                <th><g:message code="variantTable.columnHeaders.sigma.pValue"/></th>
-                <th><g:message code="variantTable.columnHeaders.shared.direction"/></th>
-                <th><g:message code="variantTable.columnHeaders.shared.oddsRatio"/></th>
-                <th><g:message code="variantTable.columnHeaders.shared.maf"/></th>
-                <th><g:message code="variantTable.columnHeaders.shared.effect"/></th>
+                <th><g:message code="variantTable.columnHeaders.sigma.pValue"/> <g:helpText title="variantTable.columnHeaders.sigma.pValue.help.header" placement="bottom" body="variantTable.columnHeaders.sigma.pValue.help.text"/></th>
+                <th><g:message code="variantTable.columnHeaders.shared.direction"/> <g:helpText title="variantTable.columnHeaders.shared.direction.help.header" placement="bottom" body="variantTable.columnHeaders.shared.direction.help.text"/></th>
+                <th><g:message code="variantTable.columnHeaders.shared.oddsRatio"/> <g:helpText title="variantTable.columnHeaders.shared.oddsRatio.help.header" placement="bottom" body="variantTable.columnHeaders.shared.oddsRatio.help.text"/></th>
+                <th><g:message code="variantTable.columnHeaders.shared.maf"/> <g:helpText title="variantTable.columnHeaders.shared.maf.help.header" placement="bottom" body="variantTable.columnHeaders.shared.maf.help.text"/></th>
+                <th><g:message code="variantTable.columnHeaders.shared.effect"/> <g:helpText title="variantTable.columnHeaders.shared.effect.help.header" placement="bottom" body="variantTable.columnHeaders.shared.effect.help.text"/></th>
             </tr>
             </thead>
             <tbody id="traitsPerVariantTableBody">
