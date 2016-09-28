@@ -1,6 +1,8 @@
 package org.broadinstitute.mpg
 import grails.transaction.Transactional
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.Covariate
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
@@ -16,6 +18,7 @@ class WidgetService {
     JsonParser jsonParser = JsonParser.getService();
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     RestServerService restServerService;
+    MetaDataService metaDataService
 
     // setting variables
     private final String LOCUSZOOM_17K_ENDPOINT = "17k data";
@@ -467,8 +470,14 @@ class WidgetService {
         KnowledgeBaseResultParser knowledgeBaseResultParser;
         List<Covariate> covariateList = null;
 
+        Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
+
         // build the LZ json builder
-        locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype);
+        if (property) {
+            locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, property.name);
+        } else { // option while we get real refs working
+            locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype);
+        }
 
         // adding covariates for variant
         if (covariateVariants?.size() > 0) {
@@ -479,7 +488,9 @@ class WidgetService {
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList);
 
         // submit the post request
-        if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT) {
+        if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)
+              //  ||(dataset !="WGS_GoT2Dimputed_mdv2")
+        ) {
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
         } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_DEV) {
@@ -508,14 +519,15 @@ class WidgetService {
      * @param endPosition
      * @return
      */
-    public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition, String dataset, String phenotype, List<String> covariateVariants) {
+    public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition,
+                                                   String dataset, String phenotype, List<String> covariateVariants) {
         // local variables
         List<Variant> variantList = null;
         JSONObject jsonResultObject = null;
         KnowledgeBaseFlatSearchTranslator knowledgeBaseFlatSearchTranslator;
         String jsonResultString = null;
 
-        if(dataset == null) {
+        if((dataset == null) || (dataset == "default")) {
             dataset = this.dataSetKey
         }
         if(phenotype == null) {

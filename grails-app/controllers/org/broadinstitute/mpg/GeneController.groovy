@@ -420,15 +420,13 @@ class GeneController {
      * @return
      */
     def getLocusZoom() {
-        // local variables
         String jsonReturn;
-        String chromosome = params.chromosome;
-//        chromosome = "22"
-        String startString = params.start;
-//        startString = "29737203"
-        String endString = params.end;
-//        endString = "29937203"
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
         String phenotype = params.phenotype;
+        String dataSet = params.dataset
+
         int startInteger;
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
@@ -452,7 +450,7 @@ class GeneController {
             endInteger = Integer.parseInt(endString);
 
             if (chromosome != null) {
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, null, phenotype, conditionVariants);
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype, conditionVariants);
             } else {
                 jsonReturn = errorJson;
             }

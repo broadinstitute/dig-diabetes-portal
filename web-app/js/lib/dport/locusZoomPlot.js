@@ -73,10 +73,6 @@ var mpgSoftware = mpgSoftware || {};
                 ldrefvar: variantIdString
             };
         }
-//        var layout = {
-//            resizable: "manual"
-//        };
-//        layout = LocusZoom.mergeLayouts(layout, StandardLayout);
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
@@ -128,8 +124,9 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        function addLZPhenotype(lzParameters, geneGetLZ,variantInfoUrl) {
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl) {
             var phenotype = lzParameters.phenotype;
+            var dataSet = dataSetName;
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
@@ -137,7 +134,8 @@ var mpgSoftware = mpgSoftware || {};
                         "chromosome=" + state.chr + "&" +
                         "start=" + state.start + "&" +
                         "end=" + state.end + "&" +
-                        "phenotype=" + phenotype;
+                        "phenotype=" + phenotype + "&" +
+                        "dataset=" + dataSet;
                     if (state.condition_on_variant){
                         url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
                     }
@@ -308,7 +306,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var resetLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,
+                                         phenoTypeName,phenoTypeDescr,dataSetName,
                                          geneGetLZ,variantInfoUrl) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
@@ -343,24 +341,16 @@ var mpgSoftware = mpgSoftware || {};
 
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
-//                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
-//                locusZoomPlot = returned.locusZoomPlot;
-//                dataSources = returned.dataSources;
+                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
+                locusZoomPlot = returned.locusZoomPlot;
+                dataSources = returned.dataSources;
 
-//                // default panel
-//                addLZPhenotype({
-//                    phenotype: defaultPhenotypeName,
-//                    description: 'Type 2 Diabetes'
-//                },geneGetLZ,variantInfoUrl);
-//
-//                $(collapsingDom).on("shown.bs.collapse", function () {
-//                    locusZoomPlot.rescaleSVG();
-//                });
-//
-//                var clearCurtain = function() {
-//                    locusZoomPlot.curtain.hide();
-//                };
-//                locusZoomPlot.on('data_rendered', clearCurtain);
+                // default panel
+                addLZPhenotype({
+                    phenotype: defaultPhenotypeName,
+                    description: phenoTypeDescr
+                },dataSetName,geneGetLZ,variantInfoUrl);
+
             }
         };
 
@@ -371,6 +361,7 @@ var mpgSoftware = mpgSoftware || {};
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
+            var dataSetName = 'default';
             if (typeof domId1 !== 'undefined') {
                 lzGraphicDomId = domId1;
             }
@@ -409,7 +400,7 @@ var mpgSoftware = mpgSoftware || {};
                 addLZPhenotype({
                     phenotype: defaultPhenotypeName,
                     description: 'Type 2 Diabetes'
-                },geneGetLZ,variantInfoUrl);
+                },dataSetName,geneGetLZ,variantInfoUrl);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {
                     locusZoomPlot.rescaleSVG();
@@ -426,6 +417,21 @@ var mpgSoftware = mpgSoftware || {};
         locusZoomPlot.rescaleSVG();
     };
 
+    var removePanel = function (panelId){
+        locusZoomPlot.removePanel(panelId);
+    }
+    var removeAllPanels = function (){
+        _.forEach(locusZoomPlot.panel_ids_by_y_index,function(o){
+            if ((typeof o !== 'undefined') && (o !== 'genes')){
+                locusZoomPlot.removePanel(o);
+            }
+        });
+
+    }
+
+    var plotAlreadyExists = function (){
+        return (typeof locusZoomPlot !== 'undefined');
+    }
 
 
 
@@ -436,7 +442,10 @@ var mpgSoftware = mpgSoftware || {};
         addLZPhenotype:addLZPhenotype,
         changeLDReference:changeLDReference,
         conditionOnVariant:conditionOnVariant,
-        rescaleSVG:rescaleSVG
+        rescaleSVG:rescaleSVG,
+        removePanel:removePanel,
+        removeAllPanels:removeAllPanels,
+        plotAlreadyExists: plotAlreadyExists
        // broadAssociationSource:broadAssociationSource
     }
 

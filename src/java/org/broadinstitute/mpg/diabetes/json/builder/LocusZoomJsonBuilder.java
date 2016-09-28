@@ -27,8 +27,9 @@ public class LocusZoomJsonBuilder {
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     QueryJsonBuilder jsonBuilder = new QueryJsonBuilder();
-    private String rootDataSetString;
+    private String rootDataSetString = "ExSeq_17k_mdv2";
     private String phenotypeString;
+    private String propertyName = "P_VALUE";
 
     /**
      * default constructor
@@ -39,6 +40,13 @@ public class LocusZoomJsonBuilder {
     public LocusZoomJsonBuilder(String rootDataSetString, String phenotype) {
         this.rootDataSetString = rootDataSetString;
         this.phenotypeString = phenotype;
+
+    }
+
+    public LocusZoomJsonBuilder(String rootDataSetString, String phenotype, String propertyName) {
+        this.rootDataSetString = rootDataSetString;
+        this.phenotypeString = phenotype;
+        this.propertyName = propertyName;
     }
 
     /**
@@ -80,17 +88,18 @@ public class LocusZoomJsonBuilder {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
-        System.out.println(this.phenotypeString + " " + this.rootDataSetString);
+        System.out.println(this.phenotypeString + " " + this.rootDataSetString+" "+this.propertyName);
         // get a dummy p-value property--we don't want to look it up because we don't know (or care) about
         // dataset, we just need to add a p-value property to the query
         // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
         pValueProperty = new PropertyBean();
-        pValueProperty.setName("P_VALUE");
+        pValueProperty.setName(this.propertyName);
         pValueProperty.setVariableType(PortalConstants.OPERATOR_TYPE_FLOAT);
         PhenotypeBean phenotypeBean = new PhenotypeBean();
         phenotypeBean.setName(this.phenotypeString);
         SampleGroupBean sgBean = new SampleGroupBean();
-        sgBean.setName("ExSeq_17k_mdv2");
+        sgBean.setName(this.rootDataSetString);
+        sgBean.setSystemId(this.rootDataSetString);
         phenotypeBean.setParent(sgBean);
         pValueProperty.setParent(phenotypeBean);
         // end property spoofing
@@ -179,8 +188,8 @@ public class LocusZoomJsonBuilder {
         filterList.add(new QueryFilterBean(tempProperty, PortalConstants.OPERATOR_EQUALS, chromosome));
 
         // DIGKB-83: adding minimum MAC of 20 for the LZ plot; or else get large values for singletons
-        tempProperty = this.jsonParser.buildPropertyFromScratch(PortalConstants.PROPERTY_NAME_MINOR_ALLELE_COUNT, PortalConstants.OPERATOR_TYPE_INTEGER);
-        filterList.add(new QueryFilterBean(tempProperty, PortalConstants.OPERATOR_MORE_THAN_EQUALS, "20"));
+//        tempProperty = this.jsonParser.buildPropertyFromScratch(PortalConstants.PROPERTY_NAME_MINOR_ALLELE_COUNT, PortalConstants.OPERATOR_TYPE_INTEGER);
+//        filterList.add(new QueryFilterBean(tempProperty, PortalConstants.OPERATOR_MORE_THAN_EQUALS, "20"));
 
         // add start position filter
         tempProperty = this.jsonParser.findCommonPropertyWithName(PortalConstants.PROPERTY_NAME_POSITION);

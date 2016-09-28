@@ -155,6 +155,7 @@ div.variantBoxHeaders {
                 phenotype: '${it.key}',
                                         description: '${it.description}'
                                     },
+                                    'ExSeq_17k_mdv2',
                                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                                     '${createLink(controller:"variantInfo", action:"variant")}')">
     ${g.message(code: "metadata." + it.name)}
@@ -177,9 +178,7 @@ div.variantBoxHeaders {
 
 <script id="aggregateVariantsTemplate"  type="x-tmpl-mustache">
                             <div class="row" style="margin-top: 15px;">
-                                <div class="col-lg-offset-1">
-                                    <h4>Aggregate variants</h4>
-                                </div>
+                                <h3 class="specialTitle">Aggregate variants</h3>
                             </div>
 
                             <div class="row">
@@ -225,14 +224,13 @@ div.variantBoxHeaders {
 
 
 <script id="highImpactTemplate"  type="x-tmpl-mustache">
+            <div class="row" style="margin-top: 15px;">
+                <h3 class="specialTitle">High impact variants</h3>
+            </div>
+
             <div class="row">
                 <div class="col-lg-12">
-                            <h3 class="specialTitle">High impact variants</h3>
-                            <div class="row">
-                                <div class="variantCategoryLabel">
-                                    <h4>Individual variants</h4>
-                                </div>
-                            </div>
+
                             <div class="row variantBoxHeaders">
                                 <div class="col-lg-2">Variant ID</div>
 
@@ -284,15 +282,13 @@ div.variantBoxHeaders {
 
 
 <script id="commonVariantTemplate"  type="x-tmpl-mustache">
+            <div class="row" style="margin-top: 15px;">
+                <h3 class="specialTitle">Common variants</h3>
+            </div>
+
             <div class="row">
                 <div class="col-lg-12">
-                    <h3 class="specialTitle">Common variants</h3>
 
-                    <div class="row">
-                        <div class="variantCategoryLabel">
-                            <h4>Individual variants</h4>
-                        </div>
-                    </div>
 
                     <div class="row">
                         <div class="col-sm-12">
@@ -371,7 +367,33 @@ div.variantBoxHeaders {
             }
             return convertedName;
         };
-
+        var phenotypeNameForHailData  = function (untranslatedPhenotype) {
+            var convertedName;
+            if (untranslatedPhenotype === 'T2D') {
+                convertedName = {key: "T2D", description: "Type 2 Diabetes"};
+            } else if (untranslatedPhenotype === 'BMI') {
+                convertedName = {key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index"};
+            } else if (untranslatedPhenotype === 'LDL') {
+                convertedName = {key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol"};
+            } else if (untranslatedPhenotype === 'HDL') {
+                convertedName = {key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol"};
+            } else if (untranslatedPhenotype === 'FI') {
+                convertedName = {key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin"};
+            } else if (untranslatedPhenotype === 'FG') {
+                convertedName = {key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose"};
+            } else if (untranslatedPhenotype === 'HIPC') {
+                convertedName = {key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference"};
+            } else if (untranslatedPhenotype === 'WAIST') {
+                convertedName = {key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference"};
+            } else if (untranslatedPhenotype === 'WHR') {
+                convertedName = {key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio"};
+            } else if (untranslatedPhenotype === 'SBP') {
+                convertedName = {key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol"};
+            } else if (untranslatedPhenotype === 'DBP') {
+                convertedName = {key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides"};
+            }
+            return convertedName;
+        };
         mpgSoftware.geneSignalSummary = (function () {
             var buildRenderData = function (data,mafCutoff)  {
                 var renderData = {variants:[],
@@ -408,6 +430,8 @@ div.variantBoxHeaders {
                                     }
                                 } else if (key==='ds') {
                                     obj['ds'] = (val)?val:'';
+                                } else if (key==='dsr') {
+                                    obj['dsr'] = (val)?val:'';
                                 }  else if (key==='MAF') {
                                     _.forEach(val,function(mafval,mafkey){
                                         mafValue = (mafval)?mafval:'';
@@ -522,11 +546,16 @@ div.variantBoxHeaders {
                 var sortedVariants = _.sortBy(renderData.variants,function(o){return o.P_VALUEV});
                 for ( var i = 0 ; (i < sortedVariants.length)  && (typeof returnValue === 'undefined') ; i++ ){
                     var oneVariant  = sortedVariants[i];
-                    if (typeof oneVariant.MAF !== 'undefined'){
+                    if ((typeof oneVariant.MAF !== 'undefined')&&(oneVariant.MAF.length>0)){
                         if (oneVariant.MAF < 0.05){
                             returnValue = false;
                         }else {
                             returnValue = true;
+                        }
+                    }
+                    if ((typeof oneVariant.MOST_DEL_SCORE !== 'undefined')){
+                        if (oneVariant.MOST_DEL_SCORE < 3){
+                            returnValue = false;
                         }
                     }
                 }
@@ -540,6 +569,10 @@ div.variantBoxHeaders {
                 var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
                 renderData = refineRenderData(renderData,signalLevel);
                 updateDisplayBasedOnSignificanceLevel (signalLevel);
+                if (mpgSoftware.locusZoom.plotAlreadyExists()) {
+                    mpgSoftware.locusZoom.removeAllPanels();
+                }
+                $('#collapseExample div.well').empty();
                 if (commonSectionShouldComeFirst){
                     $('#collapseExample div.well').append('<div id="commonVariantsLocation"></div>'+
                             '<div id="highImpactVariantsLocation"></div>');
@@ -555,6 +588,7 @@ div.variantBoxHeaders {
                 $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
                 var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
                 var sampleBasedPhenotypeName = phenotypeNameForSampleData(phenotypeName);
+                var hailPhenotypeInfo = phenotypeNameForHailData(phenotypeName);
                 if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
                      ( sampleBasedPhenotypeName.length > 0)) {
                     $('#aggregateVariantsLocation').css('display','block');
@@ -574,11 +608,21 @@ div.variantBoxHeaders {
                     startPosition:  ${geneExtentBegin},
                     endPosition:  ${geneExtentEnd}
                 };
-                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}');
-
+                if (!mpgSoftware.locusZoom.plotAlreadyExists()){
+                    mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                            "#lz-1", "#collapseExample", 'T2D',//'BMI_adj_withincohort_invn',
+                            '${createLink(controller:"gene", action:"getLocusZoom")}',
+                            '${createLink(controller:"variantInfo", action:"variantInfo")}');
+                } else {
+                    if (typeof hailPhenotypeInfo !== 'undefined') {
+                        mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
+                                "#lz-1","#collapseExample",hailPhenotypeInfo.key,hailPhenotypeInfo.description,'ExSeq_17k_mdv2',//'BMI_adj_withincohort_invn',
+                                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                '${createLink(controller:"variantInfo", action:"variantInfo")}');
+                    } else {
+                        $("#locusZoomLocation").css('display','none');
+                    }
+                }
             };
 
 
@@ -708,10 +752,16 @@ div.variantBoxHeaders {
             startPosition: begPos,
             endPosition: endPos
         };
-        mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,
-                "#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',
-                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                '${createLink(controller:"variantInfo", action:"variantInfo")}');
+        mpgSoftware.locusZoom.removeAllPanels();
+
+                mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
+                        "#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,//'BMI_adj_withincohort_invn',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}');
+        %{--mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,--}%
+                %{--"#lz-1","#collapseExample",'T2D',dataSetName,//'BMI_adj_withincohort_invn',--}%
+                %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
+                %{--'${createLink(controller:"variantInfo", action:"variantInfo")}');--}%
     };
 
 
