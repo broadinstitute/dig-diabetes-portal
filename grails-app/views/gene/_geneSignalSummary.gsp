@@ -13,10 +13,10 @@
     font-weight: normal;
 }
 .linkEmulator{
-    text-decoration: underline;
-    cursor: pointer;
-    font-style: italic;
-    color: #588fd3;
+    /*text-decoration: underline;*/
+    /*cursor: pointer;*/
+    /*font-style: italic;*/
+    /*color: #588fd3;*/
 }
 .boxOfVariants {
     border: 1px solid black;
