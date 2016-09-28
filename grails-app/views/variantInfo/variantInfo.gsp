@@ -292,7 +292,7 @@
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionVariant"
                                href="#collapseIgv">
                                 <h2><strong><g:message code="variant.igvBrowser.title"
-                                                       default="Explorer with IGV"/></strong></h2>
+                                                       default="Explore with IGV"/></strong></h2>
                             </a>
                         </div>
 
