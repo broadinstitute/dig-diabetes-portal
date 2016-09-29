@@ -740,7 +740,7 @@ div.variantBoxHeaders {
 
     var refreshLZ = function(varId,dataSetName){
         var parseId = varId.split("_");
-        var locusZoomRange = 80000;
+        var locusZoomRange = 200000;
         var variantPos = parseInt(parseId[1]);
         var begPos = 0;
         var endPos =  variantPos + locusZoomRange;
@@ -754,14 +754,14 @@ div.variantBoxHeaders {
         };
         mpgSoftware.locusZoom.removeAllPanels();
 
-                mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                        "#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,//'BMI_adj_withincohort_invn',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}');
-        %{--mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,--}%
-                %{--"#lz-1","#collapseExample",'T2D',dataSetName,//'BMI_adj_withincohort_invn',--}%
-                %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-                %{--'${createLink(controller:"variantInfo", action:"variantInfo")}');--}%
+                %{--mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,--}%
+                        %{--"#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,//'BMI_adj_withincohort_invn',--}%
+                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
+                        %{--'${createLink(controller:"variantInfo", action:"variantInfo")}');--}%
+        mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,
+                "#lz-1","#collapseExample",'T2D',dataSetName,'Type 2 Diabetes',//'BMI_adj_withincohort_invn',
+                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                '${createLink(controller:"variantInfo", action:"variantInfo")}');
     };
 
 

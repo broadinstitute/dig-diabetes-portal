@@ -489,7 +489,7 @@ class WidgetService {
 
         // submit the post request
         if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)
-              //  ||(dataset !="WGS_GoT2Dimputed_mdv2")
+                ||(dataset !="ExSeq_17k_mdv2")
         ) {
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
