@@ -20,6 +20,13 @@ div.corvariateDisplay [class*="span"] {  /* TWBS v2 */
 .metana {
     text-align: center;
 }
+.filterCmp {
+    padding: 0;
+    font-size: 11px;
+}
+#gaitButtons a.dt-button{
+    padding: 0 10px 0 10px;
+}
 input[type=checkbox][disabled] + label {
     color: #ccc;
 }
@@ -1518,7 +1525,36 @@ var displayBurdenVariantSelector = function (){
                                  variantListHolder.push(variant);
                              });
                          }
-                         $('#gaitTable').DataTable({
+//                                    "language": {
+//                                    "buttons": {
+//                                        selectAll: "Select all items",
+//                                        selectNone: "Select none"
+//                                    }
+//                                }
+                         var gaitTable  = $('#gaitTable').DataTable({
+                                "select": {
+                                    style:    'none',
+                                    selector: 'td:first-child'
+                                },
+                                dom:'<"#gaitButtons"B>rt<"bottom"iflp><"clear">',
+                               "buttons": [
+                                     {
+                                        text: 'Select all',
+                                        class: 'gaitButtons',
+                                        action: function () {
+                                            //gaitTable.rows().select();
+                                            $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked",true);
+                                        }
+                                    },
+                                    {
+                                        text: 'Select none',
+                                        class: 'gaitButtons',
+                                        action: function () {
+                                           // gaitTable.rows().deselect();
+                                            $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked",false);
+                                        }
+                                    }
+                                ],
                                 "bDestroy": true,
                                 "bAutoWidth" : false,
                                 "order": [[ 1, "asc" ]],
@@ -1538,7 +1574,7 @@ var displayBurdenVariantSelector = function (){
                                         },
                                         { "name": "VAR_ID",   "targets": [1], "type":"allAnchor", "title":"Variant ID",
                                             "width": "auto"  },
-                                        { "name": "DBSNP_ID",   "targets": [2], "title":"dbDNP ID",
+                                        { "name": "DBSNP_ID",   "targets": [2], "title":"dbSNP ID",
                                             "width": "auto"  },
                                         { "name": "CHROM",   "targets": [3], "title":"Chrom.",
                                             "width": "40px"  },
@@ -1581,6 +1617,7 @@ var displayBurdenVariantSelector = function (){
                             arrayOfRows.push(protein_change);
                             arrayOfRows.push(variantRec.Consequence);
                             $('#gaitTable').dataTable().fnAddData( arrayOfRows );
+//                            $('#gaitTable').dataTable().rows().select();
                          });
 
                         }
@@ -1979,8 +2016,14 @@ var displayBurdenVariantSelector = function (){
                     if (filterCheck.is(':checked')&&
                         (filterName.indexOf("{{")===-1)&&
                         (filterParm.val().length>0)){
+                        var refinedFilterParm = filterParm.val();
+                        if (filterCmp.val()==3){
+                            refinedFilterParm = "["+ refinedFilterParm+"]";
+                        } if (filterCmp.val()==4){
+                            refinedFilterParm = "]"+ refinedFilterParm+"[";
+                        }
                         var  dataSetMap = {"name":filterName,
-                                           "parm":filterParm.val(),
+                                           "parm":refinedFilterParm,
                                            "cmp":filterCmp.val(),
                                            "cat":0};
                         requestedFilters.push(dataSetMap);
@@ -2818,6 +2861,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
+                                            <option value="3">internal</option>
+                                            <option value="4">external</option>
                                         </select>
                                     </div>
 
@@ -3076,6 +3121,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                             <p>
                                 <div id="gaitTableDataHolder" style="margin-top: 20px"></div>
                             </p>
+                            <div id="gaitButtons"></div>
                             <table id="gaitTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;" role="grid"
                             aria-describedby="variantTable_info">
 

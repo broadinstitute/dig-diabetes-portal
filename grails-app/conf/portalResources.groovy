@@ -14,9 +14,11 @@ modules = {
         resource url: 'js/lib/datatables/buttons.html5.js'
         resource url: 'js/lib/datatables/buttons.print.js'
         resource url: 'js/lib/datatables/dataTables.buttons.js'
+        resource url: 'js/lib/datatables/dataTables.select.js'
 
         resource url: 'css/lib/datatables/buttons.dataTables.css'
         resource url: 'css/lib/datatables/jquery.dataTables.css'
+        resource url: 'css/lib/datatables/select.dataTables.css'
 
     }
     scroller {
