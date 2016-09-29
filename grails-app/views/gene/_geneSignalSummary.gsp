@@ -12,6 +12,15 @@
 .trafficExplanations.unemphasize {
     font-weight: normal;
 }
+div.redline {
+    background-color: #ffb3b3;
+}
+div.yellowline {
+     background-color: #ffffb3;
+}
+div.greenline {
+      background-color: #ccffcc;
+  }
 .linkEmulator{
     /*text-decoration: underline;*/
     /*cursor: pointer;*/
@@ -250,7 +259,7 @@ div.variantBoxHeaders {
                                 <div class="col-lg-12">
                                     <div class="boxOfVariants">
                                         {{ #rvar }}
-                                            <div class="row">
+                                            <div class="row  {{CAT}}">
                                                 <div class="col-lg-2"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
                                                 <div class="col-lg-2">{{rsId}}</div>
@@ -305,7 +314,7 @@ div.variantBoxHeaders {
                             </div>
                             <div class="boxOfVariants">
                                 {{ #cvar }}
-                                <div class="row">
+                                <div class="row {{CAT}}">
 
                                         <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
@@ -486,6 +495,7 @@ div.variantBoxHeaders {
                 renderData.cvar=[];
                 var pValueCutoffHighImpact = 0;
                 var pValueCutoffCommon = 0;
+                var maxNumberOfVariants = 100;
                 switch (significanceLevel){
                     case 3:
                         pValueCutoffHighImpact = 0.00000005;
@@ -507,11 +517,21 @@ div.variantBoxHeaders {
                     var pValue = v['P_VALUEV'];
                     if ((typeof mdsValue !== 'undefined') && (mdsValue!=='') && (mdsValue<=2) &&
                             (typeof pValue !== 'undefined') && (pValue<=pValueCutoffHighImpact)){
-                        renderData.rvar.push(v);
+                        if (renderData.rvar.length < maxNumberOfVariants){
+                            if (pValue < 0.00000005) {v['CAT'] = 'greenline'}
+                            else if (pValue < 0.0001) {v['CAT'] = 'yellowline'}
+                            else {v['CAT'] = 'redline'}
+                            renderData.rvar.push(v);
+                        }
                     }
-                    if ((typeof mafValue !== 'undefined') && (mdsValue!=='') && (mafValue>0.05)&&
+                    if ((typeof mafValue !== 'undefined') && (mafValue!=='') && (mafValue>0.05)&&
                                 (typeof pValue !== 'undefined') && (pValue<=pValueCutoffCommon)) {
-                        renderData.cvar.push(v);
+                        if (renderData.cvar.length < maxNumberOfVariants) {
+                            if (pValue < 0.00000005) {v['CAT'] = 'greenline'}
+                            else if (pValue < 0.0001) {v['CAT'] = 'yellowline'}
+                            else {v['CAT'] = 'redline'}
+                            renderData.cvar.push(v);
+                        }
                     }
                 });
                 renderData.rvar = _.sortBy(renderData.rvar,function(o){return o.P_VALUEV});
@@ -567,7 +587,7 @@ div.variantBoxHeaders {
                 var renderData = buildRenderData (data,0.05);
                 var signalLevel = assessSignalSignificance(renderData);
                 var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
-                renderData = refineRenderData(renderData,signalLevel);
+                renderData = refineRenderData(renderData,1);
                 updateDisplayBasedOnSignificanceLevel (signalLevel);
                 if (mpgSoftware.locusZoom.plotAlreadyExists()) {
                     mpgSoftware.locusZoom.removeAllPanels();

@@ -1798,17 +1798,21 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 uniqueVariants << instancesOfVariant[0]
             } else {
                 List<String> pValueString = []
-                for (Map pMaps in instancesOfVariant*.find{p->p.keySet().contains('P_VALUE')} ) {
+                Map<Float,Map> sortHelper = [:]
+                for (List instanceOfVariant in instancesOfVariant ){
+                    Map pMaps = instanceOfVariant.find{p->p.keySet().contains('P_VALUE')}
                     Map dsMap = pMaps["P_VALUE"]
-                    //Map dsMap = pMap[0]
                     for (Map phenoMaps in dsMap.values()){
-                       // Map valueMap = phenoMaps[0]
                         for (String value in phenoMaps.values()){
+                            if (!sortHelper.containsKey()){
+                                sortHelper[value as Float] = instanceOfVariant
+                            }
                             pValueString << value
                         }
                     }
+
                 }
-                 uniqueVariants << instancesOfVariant[pValueString.indexOf(pValueString.sort{a,b->a as Float<=>b as Float}[0])]
+                uniqueVariants << sortHelper.sort{ it.key }.values().first()
             }
         }
         dataJsonObject.variants = uniqueVariants
