@@ -504,12 +504,12 @@ div.variantBoxHeaders {
                 _.forEach(renderData.variants,function(v){
                     var mafValue = v['MAF']
                     var mdsValue = v['MOST_DEL_SCORE'];
-                    var pValue = v['P_VALUE'];
-                    if ((typeof mdsValue !== 'undefined') && (mdsValue<=2) &&
+                    var pValue = v['P_VALUEV'];
+                    if ((typeof mdsValue !== 'undefined') && (mdsValue!=='') && (mdsValue<=2) &&
                             (typeof pValue !== 'undefined') && (pValue<=pValueCutoffHighImpact)){
                         renderData.rvar.push(v);
                     }
-                    if ((typeof mafValue !== 'undefined') && (mafValue>0.05)&&
+                    if ((typeof mafValue !== 'undefined') && (mdsValue!=='') && (mafValue>0.05)&&
                                 (typeof pValue !== 'undefined') && (pValue<=pValueCutoffCommon)) {
                         renderData.cvar.push(v);
                     }
