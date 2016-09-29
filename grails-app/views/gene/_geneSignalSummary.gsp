@@ -566,7 +566,7 @@ div.variantBoxHeaders {
                 var sortedVariants = _.sortBy(renderData.variants,function(o){return o.P_VALUEV});
                 for ( var i = 0 ; (i < sortedVariants.length)  && (typeof returnValue === 'undefined') ; i++ ){
                     var oneVariant  = sortedVariants[i];
-                    if ((typeof oneVariant.MAF !== 'undefined')&&(oneVariant.MAF.length>0)){
+                    if ((typeof oneVariant.MAF !== 'undefined')&&(oneVariant.MAF!=="")){
                         if (oneVariant.MAF < 0.05){
                             returnValue = false;
                         }else {
@@ -595,13 +595,18 @@ div.variantBoxHeaders {
                 $('#collapseExample div.well').empty();
                 if (commonSectionShouldComeFirst){
                     $('#collapseExample div.well').append('<div id="commonVariantsLocation"></div>'+
-                            '<div id="highImpactVariantsLocation"></div>');
+                            '<div id="locusZoomLocation"></div>'+
+                            '<div id="highImpactVariantsLocation"></div>'+
+                            '<div id="aggregateVariantsLocation"></div>'
+                    );
                 } else {
                     $('#collapseExample div.well').append('<div id="highImpactVariantsLocation"></div>'+
+                            '<div id="locusZoomLocation"></div>'+
+                            '<div id="aggregateVariantsLocation"></div>'+
                             '<div id="commonVariantsLocation"></div>');
                 }
-                $('#collapseExample div.well').append('<div id="aggregateVariantsLocation" style="display: none"></div>');
-                $('#collapseExample div.well').append('<div id="locusZoomLocation"></div>');
+               // $('#collapseExample div.well').append('<div id="aggregateVariantsLocation"></div>');
+               // $('#collapseExample div.well').append('<div id="locusZoomLocation"></div>');
                 $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
