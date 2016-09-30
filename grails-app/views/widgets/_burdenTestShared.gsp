@@ -964,14 +964,16 @@ var displayBurdenVariantSelector = function (){
                          });
 
 
-                            _.forEach(renderData.modeledPhenotype.levels,function(modPhenoHolder){
+                        _.forEach(renderData.modeledPhenotype.levels,function(modPhenoHolder){
 
-                                fillCategoricalDropDownBoxes({},phenotype,stratumName,modPhenoHolder.name,optionsPerFilter);
+                            fillCategoricalDropDownBoxes({},phenotype,stratumName,modPhenoHolder.name,optionsPerFilter);
 
-                            });
+                        });
 
                     });
 
+                    // Create a default display
+                    $($('.distPlotter')[0]).click()
 
                     //
                     // display the results section
@@ -1842,7 +1844,7 @@ var displayBurdenVariantSelector = function (){
         var predefinedBoxWhiskerPlot = function (inData,selector) {
             var margin = {top: 50, right: 50, bottom: 20, left: 50},
             width = 700 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
+            height = 475 - margin.top - margin.bottom;
 
             var defaultInterquartileMultiplier = 1.5,
                     defaultHistogramBarSize = 1;
@@ -1919,7 +1921,7 @@ var displayBurdenVariantSelector = function (){
 
     var margin = {top: 20, right: 50, bottom: 30, left: 15},
             width = 700 - margin.left - margin.right,
-            height = 350 - margin.top - margin.bottom;
+            height = 440 - margin.top - margin.bottom;
 
 
 
@@ -2793,8 +2795,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                         <div class="sampleNumberReporter text-center">
                                                             <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
 
-                                                            <div style="display:none">number of samples for <span
-                                                                    class="phenotypeSpecifier"></span>: <span
+                                                            <div><span style="display:none"
+                                                                    class="phenotypeSpecifier" style="font-weight:bold"></span><span
                                                                     class="numberOfPhenotypeSpecificSamples"></span></div>
                                                         </div>
 

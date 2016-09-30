@@ -213,6 +213,17 @@ class VariantInfoController {
         if (sampleGroupList.size()>0){
             SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
             JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
+            List filtersOfTypeString = jsonObject?.filters?.findAll{it.type=="STRING"}
+            for (Map allLevels in filtersOfTypeString){
+                List filteredLevels = []
+                for (def eachLevel in allLevels.levels){
+                    if ((eachLevel.name!="null")||
+                            (eachLevel.samples!=0)){
+                        filteredLevels << eachLevel
+                    }
+                }
+                allLevels.levels = filteredLevels
+            }
             render(status: 200, contentType: "application/json") {jsonObject}
             return
         }
