@@ -49,7 +49,7 @@
         <g:message code="informational.policies.data_release.process.section_5"/>
         <g:message code="informational.policies.data_release.process.section_6"/>
         <h4><g:message code="informational.policies.data_release.timeline.header"/>:</h4>
-        <img src="${resource(dir: 'images', file: g.message(code: "files.dataReleaseImage"))}"/>
+        <img src="${resource(dir: 'images', file: g.message(code: "files.dataReleaseImage"))}" width="950"/>
         <h4><g:message code="informational.policies.conduct.availability.header"/></h4>
         <g:message code="informational.policies.conduct.section_1"/>
         <h4><g:message code="informational.policies.conduct.registration.header"/></h4>
