@@ -254,6 +254,7 @@ button.expandoButton:visited {
         function reviseTraitsTableRows() {
             // get the boxes for which the cohorts have been requested
             var clickedBoxes = $('#traitsPerVariantTable .jstree-clicked');
+
             var dataSetNames = [];
             var dataSetMaps = [];
             for (var i = 0; i < clickedBoxes.length; i++) {
