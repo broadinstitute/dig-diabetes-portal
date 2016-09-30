@@ -60,7 +60,7 @@ ul.strataResults {
     margin: 50px 0 0 0;
 }
 .burden-test-some-results{
-    background: #eee;
+//    background: #eee;
 }
 #stratsCovTabs li.active {
     border-radius: 4px 4px 0px 0px;
@@ -136,10 +136,10 @@ div.secHeader {
     text-decoration: underline;
 }
 div.secBody {
-    background-color: #eee;
+   // background-color: #eee;
 }
 div.burden-test-wrapper-options {
-    background-color: #eee;
+    //background-color: #eee;
     font-size: 16px;
     padding: 0;
 }
@@ -147,7 +147,7 @@ div.burden-test-wrapper-options .row {
     margin: 0 0 1px 0;
 }
 div.burden-test-btn-wrapper {
-    padding: 0 10px 10px;
+    padding: 0px 10px 25px 10px;
     margin-top: 0;
 }
 div.burden-test-specific-results{
@@ -879,7 +879,7 @@ var displayBurdenVariantSelector = function (){
                                     }
                     },
                     displayBurdenVariantSelector:displayBurdenVariantSelectorString,
-                    sectionNumber: 1
+                    sectionNumber: 0
                 };
 
                 return renderData;
@@ -1525,18 +1525,12 @@ var displayBurdenVariantSelector = function (){
                                  variantListHolder.push(variant);
                              });
                          }
-//                                    "language": {
-//                                    "buttons": {
-//                                        selectAll: "Select all items",
-//                                        selectNone: "Select none"
-//                                    }
-//                                }
                          var gaitTable  = $('#gaitTable').DataTable({
                                 "select": {
                                     style:    'none',
                                     selector: 'td:first-child'
                                 },
-                                dom:'<"#gaitButtons"B>rt<"bottom"iflp><"clear">',
+                                dom:'<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
                                "buttons": [
                                      {
                                         text: 'Select all',
@@ -1555,6 +1549,7 @@ var displayBurdenVariantSelector = function (){
                                         }
                                     }
                                 ],
+                                "aLengthMenu":[[10, 50, -1], [10, 50, "All"]],
                                 "bDestroy": true,
                                 "bAutoWidth" : false,
                                 "order": [[ 1, "asc" ]],
@@ -1593,6 +1588,8 @@ var displayBurdenVariantSelector = function (){
                                     "sPaginationType": "full_numbers",
                                     "iDisplayLength": 10,
                                     "bFilter": false,
+                                    "bLengthChange" : true,
+                                    "bInfo":true,
                                     "bProcessing": true
                             }
                          );
@@ -2523,16 +2520,7 @@ $( document ).ready( function (){
 
 %{--IAT results section--}%
 <script id="displayResultsTemplate"  type="x-tmpl-mustache">
-    <div class="panel panel-default">%{--should hold the Choose data set panel--}%
-
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a>Step {{sectionNumber}}: Launch analysis</a>
-            </h4>
-        </div>
-
-
-
+    <div class="">%{--should hold the Choose data set panel--}%
 
     <div class="row burden-test-some-results burden-test-some-results_{{stratum}}">
         <div class="row iatErrorFailure" style="display:none">
@@ -2547,7 +2535,14 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-11 col-xs-12">
+        <div class="col-sm-offset-5 col-sm-2 col-xs-12 vcenter center burden-test-btn-wrapper">
+            <button name="singlebutton" style="height: 50px; z-index: 10" id="singleRunButton"
+                                                   class="btn btn-primary btn-lg burden-test-btn vcenter"
+                                                   onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Launch analysis</button>
+        </div>
+
+
+        <div class="col-sm-12 col-xs-12">
             <div class="row burden-test-specific-results burden-test-result">
 
 
@@ -2584,11 +2579,6 @@ $( document ).ready( function (){
             </div>
         </div>
 
-        <div class="col-sm-1 col-xs-12 vcenter burden-test-btn-wrapper">
-            <button name="singlebutton" style="height: 80px; z-index: 10" id="singleRunButton"
-                                                   class="btn btn-primary btn-lg burden-test-btn vcenter"
-                                                   onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun()">Run</button>
-        </div>
 
     </div>
 </div>
@@ -2597,22 +2587,22 @@ $( document ).ready( function (){
 
 %{--Choose the phenotype and stratification options. Currently the top section in the interface--}%
 <script id="chooseDataSetAndPhenotypeTemplate"  type="x-tmpl-mustache">
-    <div class="panel panel-default">%{--should hold the Choose data set panel--}%
+    <div class="">%{--should hold the Choose data set panel--}%
 
-        <div class="panel-heading">
-            <h4 class="panel-title">
-                <a>Step {{sectionNumber}}: Select a phenotype to test for association</a>
-            </h4>
+        <div class="">
+            <h3>
+                Choose a phenotype and partitioning strategy
+            </h3>
         </div>
 
-        <div id="chooseSamples" class="panel-collapse collapse in">
-            <div class="panel-body secBody">
+        <div id="chooseSamples" class="">
+            <div class="secBody">
 
                 <div class="row secHeader" style="display:none">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
                 </div>
 
-                <div class="row">
+                <div class="row" style="display:none">
                     <div class="col-sm-12 col-xs-12">
                         <p>
                             Select a phenotype to test for association and optionally choose to stratify samples by ancestry and/or filter cases and controls separately.
@@ -2664,7 +2654,8 @@ $( document ).ready( function (){
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
-                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:0 0 0 20px">
+                        <div  id="caseControlFilteringWithLabel" class="checkbox" style="margin:20px 0 10px 0">
+                                <span style="margin: 0 25px 0 0; font-weight: bold">Samples:</span>
                                 <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
                                        value="caseControlFiltering"
                                         onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
@@ -2773,7 +2764,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                         <div class="row" style="padding: 10px 0 0 0">
                                                             <div class="col-sm-12 col-xs-12 text-left">
 
-                                                                <div style="direction: rtl; height: 320px; padding: 4px 0 0 10px; overflow-y: auto;">
+                                                                <div style="direction: rtl; max-height: 620px; padding: 4px 0 0 10px; overflow-y: auto;">
                                                                     <div style="direction: ltr; margin: 10px 0 0 5px">
                                                                         <div>
                                                                             <div class="row">
@@ -3121,7 +3112,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                             <p>
                                 <div id="gaitTableDataHolder" style="margin-top: 20px"></div>
                             </p>
-                            <div id="gaitButtons"></div>
+                            <div id="gaitButtons"></div><div id="gaitVariantTableLength"></div>
                             <table id="gaitTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;" role="grid"
                             aria-describedby="variantTable_info">
 
