@@ -311,6 +311,7 @@ public class BurdenJsonBuilder {
         JsonParser parser = JsonParser.getService();
         List<Property> propertyList = new ArrayList<Property>();
         Property rootProperty = null;
+        Boolean unexpectedData = false;
 
         // get root data set
         if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_13K) {
@@ -319,15 +320,20 @@ public class BurdenJsonBuilder {
             rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_17k_ID);
         } else {
             rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_26k_ID);
+            unexpectedData = true;
         }
 
         // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
-        rootProperty = parser.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
-        queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
+        try {
+            rootProperty = parser.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
+            queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
+        } catch (PortalException e) {
+            unexpectedData = true;
+        }
 
 
         // if mafValue not null, then look at mafSampleGroupOption
-        if (mafValue != null) {
+        if ((!unexpectedData)&&(mafValue != null)) {
             // populate the sample group list
             if (mafSampleGroupOption == PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY) {
                 // if ancestry, get the list of child sample groups

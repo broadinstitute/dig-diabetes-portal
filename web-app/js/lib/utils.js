@@ -366,8 +366,10 @@ var UTILS = {
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
             var keys = Object.keys(groupList);
-            keys.splice(keys.indexOf("GLYCEMIC"), 1);
-            keys.unshift("GLYCEMIC");
+            if (keys.indexOf("GLYCEMIC")>-1){
+                keys.splice(keys.indexOf("GLYCEMIC"), 1);
+                keys.unshift("GLYCEMIC");
+            }
 
             // if the OTHER key is defined, then move it to the bottom of the list
             // currently, this should only appear on the variant search page, and will be going away soon

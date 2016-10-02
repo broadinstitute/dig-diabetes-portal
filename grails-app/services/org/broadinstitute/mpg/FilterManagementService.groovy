@@ -67,37 +67,43 @@ class FilterManagementService {
     public JSONObject convertSampleGroupListToJson (List <SampleGroup> sampleGroupList,String phenotypeName){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         LinkedHashMap<String,LinkedHashMap<String,String>> mapSampleGroupsToProperties = [:]
+        String technologyListAsJson = "{}"
+
+        if ((sampleGroupList)&&(phenotypeName)){
+
+            String phenotypeGroup = sampleGroupList[0].getPhenotypes().findAll {
+                it.name == phenotypeName
+            }[0].group
+
+            List<SampleGroup> uniqueSampleGroupList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
+            for (SampleGroup sampleGroup in uniqueSampleGroupList){
+                LinkedHashMap<String,String> sampleGroupProperties = [:]
+                sampleGroupProperties["name"] =  sampleGroup.systemId
+                sampleGroupProperties["value"] =  sampleGroup.systemId
+                sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "P_VALUE" )
+                sampleGroupProperties["orvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "ODDS_RATIO" )
+                sampleGroupProperties["betavalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "BETA" )
+                sampleGroupProperties["mina"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MINA" )
+                sampleGroupProperties["minu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MINU" )
+                sampleGroupProperties["obs"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBS" )
+                sampleGroupProperties["obsa"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBSA" )
+                sampleGroupProperties["obsu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBSU" )
+                sampleGroupProperties["mafa"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFA" )
+                sampleGroupProperties["mafu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFU" )
+
+                sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
+                sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName() ?: ""
+                sampleGroupProperties["mac"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAC")?.getName() ?: ""
+                sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
+                sampleGroupProperties["phenotypeGroup"] = phenotypeGroup
+                mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
+            }
+            technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)
+
+        }
 
         // get the phenotype group here so that the effort isn't duplicated for
         // every dataset
-        String phenotypeGroup = sampleGroupList[0].getPhenotypes().findAll {
-            it.name == phenotypeName
-        }[0].group
-
-        List<SampleGroup> uniqueSampleGroupList = sampleGroupList.unique{ a,b -> a.getSystemId() <=> b.getSystemId() }
-        for (SampleGroup sampleGroup in uniqueSampleGroupList){
-            LinkedHashMap<String,String> sampleGroupProperties = [:]
-            sampleGroupProperties["name"] =  sampleGroup.systemId
-            sampleGroupProperties["value"] =  sampleGroup.systemId
-            sampleGroupProperties["pvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "P_VALUE" )
-            sampleGroupProperties["orvalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "ODDS_RATIO" )
-            sampleGroupProperties["betavalue"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "BETA" )
-            sampleGroupProperties["mina"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MINA" )
-            sampleGroupProperties["minu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MINU" )
-            sampleGroupProperties["obs"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBS" )
-            sampleGroupProperties["obsa"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBSA" )
-            sampleGroupProperties["obsu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "OBSU" )
-            sampleGroupProperties["mafa"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFA" )
-            sampleGroupProperties["mafu"] =  filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotypeName, "MAFU" )
-
-            sampleGroupProperties["technology"] =  metaDataService.getTechnologyPerSampleGroup( sampleGroup.systemId )
-            sampleGroupProperties["maf"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAF")?.getName() ?: ""
-            sampleGroupProperties["mac"] = metaDataService.getSampleGroupProperty(sampleGroup.systemId, "MAC")?.getName() ?: ""
-            sampleGroupProperties["count"] =  "${sampleGroup.subjectsNumber}"
-            sampleGroupProperties["phenotypeGroup"] = phenotypeGroup
-            mapSampleGroupsToProperties[sampleGroup.systemId] = sampleGroupProperties
-        }
-        String technologyListAsJson = sharedToolsService.packageUpASingleLevelTreeAsJson(mapSampleGroupsToProperties)
         JsonSlurper slurper = new JsonSlurper()
         return slurper.parseText(technologyListAsJson)
     }
