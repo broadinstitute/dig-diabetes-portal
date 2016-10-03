@@ -50,7 +50,22 @@ var mpgSoftware = mpgSoftware || {};
 
                         UTILS.fillPhenotypeCompoundDropdown(data.datasets, phenotypeTableChooser, true);
                         // Can we set the default option on the phenotype list?
-                        $(phenotypeTableChooser).val(defaultPhenotype);
+                        //$(phenotypeTableChooser).val(defaultPhenotype);
+                        // Can we set the default option on the phenotype list?  If not simply pick the first phenotype
+                        var availPhenotypes = [];
+                        _.forEach( $(phenotypeTableChooser+" option"), function(a){
+                            availPhenotypes.push($(a).val());
+                        });
+                        if (availPhenotypes.indexOf(defaultPhenotype)>-1){
+                            $(phenotypeTableChooser).val(defaultPhenotype);
+                        } else if (availPhenotypes.length>0){
+                            if ((availPhenotypes[0]==='default')||(availPhenotypes.length>1)){
+                                $(phenotypeTableChooser).val(availPhenotypes[1]);
+                            } else {
+                                $(phenotypeTableChooser).val(availPhenotypes[0]);
+                            }
+                        }
+
                         callbackFn({'value': defaultPhenotype});
                     }
                 },

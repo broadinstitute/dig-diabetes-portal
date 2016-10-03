@@ -87,7 +87,15 @@
                             ( typeof data.datasets !== 'undefined' ) &&
                             (  data.datasets !==  null ) ) {
                         UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input');
-                        $("select#trait-input").val("${g.defaultPhenotype()}");
+                        var availPhenotypes = [];
+                        _.forEach( $("select#trait-input option"), function(a){
+                            availPhenotypes.push($(a).val());
+                        });
+                        if (availPhenotypes.indexOf('${g.defaultPhenotype()}')>-1){
+                            $('#trait-input').val('${g.defaultPhenotype()}');
+                        } else if (availPhenotypes.length>0){
+                            $('#trait-input').val(availPhenotypes[0]);
+                        }
                     }
                     loading.hide();
                 },

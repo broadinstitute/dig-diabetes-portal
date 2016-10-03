@@ -168,8 +168,16 @@
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !== null )) {
                     UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeChooser', true);
-                    // Can we set the default option on the phenotype list?
-                    $('#phenotypeChooser').val('${phenotype}');
+                    // Can we set the default option on the phenotype list?  If not simply pick the first phenotype
+                    var availPhenotypes = [];
+                    _.forEach( $("select#phenotypeChooser option"), function(a){
+                        availPhenotypes.push($(a).val());
+                    });
+                    if (availPhenotypes.indexOf('${phenotype}')>-1){
+                        $('#phenotypeChooser').val('${phenotype}');
+                    } else if (availPhenotypes.length>0){
+                        $('#phenotypeChooser').val(availPhenotypes[0]);
+                    }
                     // resetting the phenotype clears all boxes except for the technology chooser
                     var dataSetChooser = $('#dataSetChooser');
                     dataSetChooser.empty();
