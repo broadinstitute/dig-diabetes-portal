@@ -171,8 +171,6 @@ t2dDev02BehindLoadBalancer {
 
 // individual servers
 t2dAws01RestServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
     base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
     name =  'aws/'
     path = 'gs/'
@@ -184,6 +182,12 @@ t2dAwsStage01RestServer {
 //    name =  'dig-genome-store/'
     base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
     name =  'aws01/'
+    path = 'gs/'
+}
+
+t2dLocalhostRestServer {
+    base = 'http://localhost:8888/'
+    name =  'dig-genome-store/'
     path = 'gs/'
 }
 
@@ -223,10 +227,13 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
+burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs//burden");
 burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-burdenRestServerProd = new ServerBean("prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-dev.broadinstitute.org:8087/stage/burden");
-
+burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
+burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
+burdenRestServerProd = new ServerBean("direct prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 

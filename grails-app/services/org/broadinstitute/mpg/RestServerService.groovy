@@ -15,7 +15,6 @@ import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
-import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -254,9 +253,13 @@ class RestServerService {
             // add in all known servers
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws01);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws02);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerQa);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
         }
 
         return this.burdenServerList;
