@@ -247,7 +247,7 @@ class MetadataUtilityService {
      * @param pprops
      * @return
      */
-    public LinkedHashMap<String, LinkedHashMap<List<String>>> fullPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops, Boolean pprops) {
+    public LinkedHashMap<String, LinkedHashMap> fullPropertyTree(List<PhenotypeBean>  phenotypeList, Boolean dprops, Boolean pprops) {
         LinkedHashMap<String, List<String>>  returnValue = [:]
         if (phenotypeList){
             List<String> allUniquePhenotypes = phenotypeList.sort{ a, b -> a.sortOrder <=> b.sortOrder }.name.unique()
