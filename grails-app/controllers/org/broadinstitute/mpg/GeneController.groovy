@@ -129,7 +129,8 @@ class GeneController {
                                              columnInformation:sortedColumnInformation,
                                              phenotype:phenotype,
                                              locale:locale,
-                                             lzOptions:lzOptions
+                                             lzOptions:lzOptions,
+                                             burdenDataSet:"samples_17k_"+metaDataService.getDataVersion()
             ] )
         }
      }

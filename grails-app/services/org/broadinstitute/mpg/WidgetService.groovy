@@ -29,7 +29,7 @@ class WidgetService {
     final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
 
     // constants for now
-    private final String dataSetKey = "ExSeq_17k_mdv2";
+   // private final String dataSetKey = "ExSeq_17k_mdv2";
     private final String phenotypeKey = "T2D";
     private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
@@ -528,7 +528,7 @@ class WidgetService {
         String jsonResultString = null;
 
         if((dataset == null) || (dataset == "default")) {
-            dataset = this.dataSetKey
+            dataset = "ExSeq_17k_"+metaDataService.getDataVersion()
         }
         if(phenotype == null) {
             phenotype = this.phenotypeKey

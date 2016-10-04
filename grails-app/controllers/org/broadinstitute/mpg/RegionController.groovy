@@ -1,9 +1,10 @@
 package org.broadinstitute.mpg
 
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
-
+    MetaDataService metaDataService
     RestServerService   restServerService
     SharedToolsService sharedToolsService
 
@@ -34,7 +35,7 @@ class RegionController {
                     ] as JSONObject).toString(),
                     ([
                         phenotype: 'T2D',
-                        dataset: 'GWAS_DIAGRAM_mdv2',
+                        dataset: 'GWAS_DIAGRAM_'+metaDataService.getDataVersion(),
                         prop: 'P_VALUE',
                         value: '1',
                         comparator:'<'

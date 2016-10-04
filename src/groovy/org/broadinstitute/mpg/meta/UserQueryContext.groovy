@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.meta
 
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 
 /**
  * Created by balexand on 8/6/2015.
@@ -14,9 +15,9 @@ import org.apache.juli.logging.LogFactory
 class UserQueryContext {
     private static final log = LogFactory.getLog(this)
 
-    private String exomeSequence  = "ExSeq_17k_mdv2"
-    private String gwasData  = "GWAS_DIAGRAM_mdv2"
-    private String exomeChip  = "ExChip_82k_mdv2"
+    private String exomeSequence  = "ExSeq_17k_"
+    private String gwasData  = "GWAS_DIAGRAM_"
+    private String exomeChip  = "ExChip_82k_"
     private String sigmaData  = "unknown"
 
     String technology = ""
@@ -28,6 +29,9 @@ class UserQueryContext {
     String propertyCategory = "PVALUE"
     String phenotype = "blah"
     String operator = "LT"
+
+    MetaDataService metaDataService
+
     public UserQueryContext(){
     }
     public static generateUserQueryContext(){
@@ -36,10 +40,10 @@ class UserQueryContext {
     public String getDataSetId (){
         String returnValue
         switch (this.sampleGroup) {
-            case "gwas": returnValue = gwasData; break;
-            case "sigma": returnValue = sigmaData; break;
-            case "exomeseq": returnValue = exomeSequence; break;
-            case "exomechip": returnValue = exomeChip; break;
+            case "gwas": returnValue = gwasData+metaDataService.getDataVersion(); break;
+            case "sigma": returnValue = sigmaData+metaDataService.getDataVersion(); break;
+            case "exomeseq": returnValue = exomeSequence+metaDataService.getDataVersion(); break;
+            case "exomechip": returnValue = exomeChip+metaDataService.getDataVersion(); break;
             case "custom": returnValue = customSampleGroup; break;
             default:
                 returnValue = "blah";

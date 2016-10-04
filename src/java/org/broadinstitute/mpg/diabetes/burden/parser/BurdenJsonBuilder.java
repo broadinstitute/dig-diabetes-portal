@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg.diabetes.burden.parser;
 
+import org.broadinstitute.mpg.diabetes.MetaDataService;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.DataSet;
@@ -294,6 +295,74 @@ public class BurdenJsonBuilder {
         return map;
     }
 
+
+
+
+
+
+
+    protected List<QueryFilter> getMinorAlleleFrequencyFiltersByString(String versionString, int mafSampleGroupOption, Float mafValue, MetaDataService metaDataService) throws PortalException {
+        // local variables
+        List<QueryFilter> queryFilterList = new ArrayList<QueryFilter>();
+        List<DataSet> dataSetList = new ArrayList<DataSet>();
+        DataSet rootDataSet = null;
+        JsonParser parser = JsonParser.getService();
+        List<Property> propertyList = new ArrayList<Property>();
+        Property rootProperty = null;
+        Boolean unexpectedData = false;
+
+        // get root data set.  We need to get this from the metadata, but we will use a workaround for now.
+        if (("mdv2".equals("mdv2"))||
+                (versionString.equals("mdv21") )||
+                (versionString.equals("mdv22") )||
+                (versionString.equals("mdv23") )) {
+            rootDataSet = metaDataService.getSampleGroupByName("ExSeq_17k_" + versionString );
+        }
+
+        // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
+        try {
+            rootProperty = parser.getExpectedUniquePropertyFromSampleGroup("MAF", rootDataSet);
+            queryFilterList.add(new QueryFilterBean(rootProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, "0.0"));
+        } catch (PortalException e) {
+            unexpectedData = true;
+        }
+
+
+        // if mafValue not null, then look at mafSampleGroupOption
+        if ((!unexpectedData)&&(mafValue != null)) {
+            // populate the sample group list
+            if (mafSampleGroupOption == PortalConstants.BURDEN_MAF_OPTION_ID_ANCESTRY) {
+                // if ancestry, get the list of child sample groups
+                dataSetList = parser.getImmediateChildrenOfType(rootDataSet, PortalConstants.TYPE_SAMPLE_GROUP_KEY);
+
+            } else {
+                // if not ancestry, then only specified root sample group
+                dataSetList.add(rootDataSet);
+            }
+
+            // for all sample groups in the list, find their MAF property and add it to the list
+            for (DataSet sampleGroup: dataSetList) {
+                propertyList.add(parser.getExpectedUniquePropertyFromSampleGroup("MAF", sampleGroup));
+            }
+
+            // for all properties, add a new filter
+            for (Property property: propertyList) {
+                queryFilterList.add(new QueryFilterBean(property, PortalConstants.OPERATOR_LESS_THAN_NOT_EQUALS, mafValue.toString()));
+            }
+
+            // return
+            return queryFilterList;
+        }
+
+
+        // return
+        return queryFilterList;
+    }
+
+
+
+
+
     /**
      * builds a list of minor allele frequency filters as required by the inputs given
      *
@@ -313,7 +382,7 @@ public class BurdenJsonBuilder {
         Property rootProperty = null;
         Boolean unexpectedData = false;
 
-        // get root data set
+        // get root data set.  We need to get this from the metadata, but we will use a workaround for now.
         if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_13K) {
             rootDataSet = parser.getMapOfAllDataSetNodes().get(PortalConstants.BURDEN_SAMPLE_GROUP_ROOT_13k_ID);
         } else if (samplegGroupId == PortalConstants.BURDEN_DATASET_OPTION_ID_17K) {

@@ -618,12 +618,12 @@ div.variantBoxHeaders {
                      ( sampleBasedPhenotypeName.length > 0)) {
                     $('#aggregateVariantsLocation').css('display','block');
                     $('#noAggregatedVariantsLocation').css('display','none');
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"2","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"3","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"4","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","samples_17k_mdv2","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=burdenDataSet%>","1","0.95","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"2","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"3","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"4","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
                 } else {
                     $('#aggregateVariantsLocation').css('display','none');
                     $('#noAggregatedVariantsLocation').css('display','block');
@@ -641,7 +641,7 @@ div.variantBoxHeaders {
                 } else {
                     if (typeof hailPhenotypeInfo !== 'undefined') {
                         mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1","#collapseExample",hailPhenotypeInfo.key,hailPhenotypeInfo.description,'ExSeq_17k_mdv2',//'BMI_adj_withincohort_invn',
+                                "#lz-1","#collapseExample",hailPhenotypeInfo.key,hailPhenotypeInfo.description,"<%=burdenDataSet%>",//'BMI_adj_withincohort_invn',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                                 '${createLink(controller:"variantInfo", action:"variantInfo")}');
                     } else {
