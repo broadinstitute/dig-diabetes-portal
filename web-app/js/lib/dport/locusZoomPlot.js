@@ -25,7 +25,7 @@ var mpgSoftware = mpgSoftware || {};
                     drag_x_ticks_to_scale: true,
                     drag_y1_ticks_to_scale: true,
                     drag_y2_ticks_to_scale: true,
-                    scroll_to_zoom: true,
+                    scroll_to_zoom: false,
                     x_linked: true
                 },
                 data_layers: [

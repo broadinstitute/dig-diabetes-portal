@@ -9,6 +9,8 @@
     }
 </script>
 
+
+
 <div id="myVariantDiv">
 <p>
     <g:message code="variant.messages.igv.section_1" />
