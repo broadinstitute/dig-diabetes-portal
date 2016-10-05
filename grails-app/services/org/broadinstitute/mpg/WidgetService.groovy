@@ -29,7 +29,7 @@ class WidgetService {
     final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
 
     // constants for now
-   // private final String dataSetKey = "ExSeq_17k_mdv2";
+    private final String dataSetKey = "ExSeq_17k_mdv2";
     private final String phenotypeKey = "T2D";
     private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
@@ -470,6 +470,11 @@ class WidgetService {
         KnowledgeBaseResultParser knowledgeBaseResultParser;
         List<Covariate> covariateList = null;
 
+        //TODO: Fix this hack.  Currently we are using different 17k data sets, but hail can only take V2
+//        if (getLocusZoomEndpointSelectionIsHail()) {
+//            dataset = dataSetKey;
+//        }
+
         Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
 
         // build the LZ json builder
@@ -541,7 +546,9 @@ class WidgetService {
 
             // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
             // translate to json string
+            //
             knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(dataset, "T2D", this.propertyKey);
+
             jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
 
             // translate to json string
@@ -562,6 +569,9 @@ class WidgetService {
 
     public String getLocusZoomEndpointSelection() {
         return locusZoomEndpointSelection
+    }
+    public Boolean getLocusZoomEndpointSelectionIsHail() {
+        return ((locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT_DEV)||(locusZoomEndpointSelection == this.LOCUSZOOM_HAIL_ENDPOINT_QA))
     }
 
     /**
