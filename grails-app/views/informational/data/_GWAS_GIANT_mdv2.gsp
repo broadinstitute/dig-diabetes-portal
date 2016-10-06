@@ -56,7 +56,14 @@ Abecasis GR, Stefansson K, Frayling TM, Hirschhorn JN.
 2010 Oct 14;467(7317):832-8. doi: 10.1038/nature09410. Epub 2010 Sep 29.</div>
 
         </div></p>
-
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>BMI</li>
+<li>Waist-hip ratio</li>
+<li>Waist circumference</li>
+<li>Hip circumference</li>
+<li>Height</li>
+</ul>
 
   
     <h6 style="color:#ccc;">Project</h6>

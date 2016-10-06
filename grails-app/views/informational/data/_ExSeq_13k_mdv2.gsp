@@ -7,7 +7,22 @@ Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C
 <div class="citation">Nature. 2016 Aug 4;536(7614):41-7. doi: 10.1038/nature18642.</div>
 </div>
 
-<h4>Data Set Subjects</h4>
+    <h6 style="color:#ccc;">Data set phenotypes</h6>
+    <ul>
+        <li>Type 2 diabetes</li>
+        <li>HbA1c</li>
+        <li>Fasting glucose</li>
+        <li>Fasting insulin</li>
+        <li>Cholesterol</li>
+        <li>LDL cholesterol</li>
+        <li>Triglycerides</li>
+        <li>HDL cholesterol</li>
+        <li>Diastolic blood pressure</li>
+        <li>Systolic blood pressure</li>
+    </ul>
+
+
+    <h4>Data Set Subjects</h4>
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small>
     </th><th>Ethnicity</th></tr>

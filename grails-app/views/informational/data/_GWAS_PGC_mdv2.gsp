@@ -45,6 +45,16 @@ Weilburg JB, Willemsen G, Zitman FG, Neale B, Daly M, Levinson DF, Sullivan PF.
 
     </p>
 
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>Bipolar disorder</li>
+<li>Major depressive disorder</li>
+<li>Schizophrenia</li>
+</ul>
+
+
+
+
     <h6 style="color:#ccc;">Project</h6>
     <h4>Psychiatric GWAS Consortium (PGC) <small><a href="https://www.nimhgenetics.org/available_data/data_biosamples/pgc_public.php" target="_blank">Learn more ></a>
     </small></h4>

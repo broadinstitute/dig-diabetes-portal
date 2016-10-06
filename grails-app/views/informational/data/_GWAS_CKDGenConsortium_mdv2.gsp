@@ -35,6 +35,15 @@ PP, Rettig R, Hastie N, Chasman DI, Kao WH, Heid IM, Fox CS.
 
         </div></p>
 
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>Chronic kidney disease</li>
+<li>eGFR-creat (serum creatinine)</li>
+<li>eGFR-cys (serum cystatin C)</li>
+<li>Urinary albumin-to-creatinine ratio</li>
+<li>Microalbuminuria</li>
+</ul>
+
     <h6 style="color:#ccc;">Project</h6>
     <h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
 

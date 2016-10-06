@@ -49,7 +49,10 @@ And Meta-analysis (DIAGRAM) Consortium.
 
         </div></p>
 
-
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>Type 2 diabetes</li>
+</ul>
     <h6 style="color:#ccc;">Project</h6>
     <h4>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
     </small></h4>
