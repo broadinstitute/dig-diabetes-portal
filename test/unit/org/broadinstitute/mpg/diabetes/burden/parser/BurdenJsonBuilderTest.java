@@ -72,7 +72,7 @@ public class BurdenJsonBuilderTest extends TestCase {
 
         // create the new json object from the builder call
         try {
-            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataVertsion, phenotype, variantList, covariatesList, sampleList, filters);
+            generatedJson = this.burdenJsonBuilder.getBurdenPostJson(dataVertsion, phenotype, variantList, covariatesList, sampleList, filters,"ExSeq_17k_mdv2");
 
         } catch (PortalException exception) {
             fail("Got exception generating burden call json payload: " + exception.getMessage());

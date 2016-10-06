@@ -2600,7 +2600,7 @@ $( document ).ready( function (){
         <div id="chooseSamples" class="">
             <div class="secBody">
 
-                <div class="row secHeader" style="display:none">
+                <div class="row secHeader"">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
                 </div>
 
@@ -2613,7 +2613,7 @@ $( document ).ready( function (){
                     </div>
                 </div>
 
-                <div class="row" style="display:none">
+                <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering');"

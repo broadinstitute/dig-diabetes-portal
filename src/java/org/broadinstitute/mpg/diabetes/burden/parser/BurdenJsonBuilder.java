@@ -51,13 +51,14 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public JSONObject getBurdenPostJson(String stringDataVersion, String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList, String filters) throws PortalException {
+    public JSONObject getBurdenPostJson(String stringDataVersion, String phenotype, List<String> variantList, List<String> covariatesList,
+                                        List<String> sampleList, String filters, String dataSet) throws PortalException {
         // local variables
         JSONObject finalObject;
 
         // create the json object
         try {
-            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters));
+            finalObject = new JSONObject(this.getBurdenPostJsonString( stringDataVersion, phenotype, variantList, covariatesList,  sampleList, filters, dataSet));
 
         } catch (JSONException exception) {
             throw new PortalException(("got json creation exception for burden test payload generation: " + exception.getMessage()));
@@ -75,7 +76,8 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getBurdenPostJsonString(String stringDataVersion , String phenotype, List<String> variantList, List<String> covariatesList, List<String> sampleList, String filters) throws PortalException {
+    public String getBurdenPostJsonString(String stringDataVersion , String phenotype, List<String> variantList, List<String> covariatesList,
+                                          List<String> sampleList, String filters, String dataSet) throws PortalException {
         // local variables
         String finalString;
         StringBuilder stringBuilder = new StringBuilder();
@@ -84,12 +86,19 @@ public class BurdenJsonBuilder {
         stringBuilder.append("{");
 
         // add in the data version
-        // DIGP-195: changed "mdv" field from integer 2 to "mdv2" string to stay consistent with KB versioning
         stringBuilder.append("\"");
         stringBuilder.append(PortalConstants.JSON_BURDEN_DATA_VERSION_KEY);
         stringBuilder.append("\": \"");
         stringBuilder.append(stringDataVersion);
         stringBuilder.append("\", ");
+
+        if (dataSet!= null) {
+            stringBuilder.append("\"");
+            stringBuilder.append(PortalConstants.JSON_BURDEN_DATASET_ID_KEY);
+            stringBuilder.append("\": \"");
+            stringBuilder.append(dataSet);
+            stringBuilder.append("\", ");
+        }
 
         // add in the phenotype
         stringBuilder.append("\"");

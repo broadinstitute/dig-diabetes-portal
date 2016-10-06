@@ -83,7 +83,7 @@
                     </div>
                     <div id="${sg[0].systemId}Collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="${sg[0].systemId}">
                         <div class="panel-body">
-                            <g:render template="data/${sg[0].systemId}" />
+                            <g:render template="data/${sg[0].systemId.replaceAll(/mdv\d+/,"mdv2")}" />
                         </div>
                     </div>
                 </div>
