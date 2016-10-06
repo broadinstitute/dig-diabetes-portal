@@ -130,7 +130,9 @@ class GeneController {
                                              phenotype:phenotype,
                                              locale:locale,
                                              lzOptions:lzOptions,
-                                             burdenDataSet:"samples_17k_"+metaDataService.getDataVersion()
+                                             burdenDataSet:"samples_17k_"+metaDataService.getDataVersion(),
+                                             dataVersion: metaDataService.getDataVersion(),
+                                             locusZoomDataset:"ExSeq_17k_"+metaDataService.getDataVersion()
             ] )
         }
      }

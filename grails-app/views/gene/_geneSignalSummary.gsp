@@ -164,7 +164,7 @@ div.variantBoxHeaders {
                 phenotype: '${it.key}',
                                         description: '${it.description}'
                                     },
-                                    'ExSeq_17k_mdv2',
+                                    'ExSeq_17k_${dataVersion}',
                                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                                     '${createLink(controller:"variantInfo", action:"variant")}')">
     ${g.message(code: "metadata." + it.name)}
@@ -641,7 +641,7 @@ div.variantBoxHeaders {
                 } else {
                     if (typeof hailPhenotypeInfo !== 'undefined') {
                         mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1","#collapseExample",hailPhenotypeInfo.key,hailPhenotypeInfo.description,"<%=burdenDataSet%>",//'BMI_adj_withincohort_invn',
+                                "#lz-1","#collapseExample",hailPhenotypeInfo.key,hailPhenotypeInfo.description,"<%=locusZoomDataset%>",//'BMI_adj_withincohort_invn',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                                 '${createLink(controller:"variantInfo", action:"variantInfo")}');
                     } else {
