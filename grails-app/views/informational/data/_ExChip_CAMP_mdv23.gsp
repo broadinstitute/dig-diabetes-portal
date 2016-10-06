@@ -1,5 +1,12 @@
 <div class="panel-body">
 
+    <h6 style="color:#ccc;">Data set phenotypes</h6>
+    <ul>
+        <li>Type 2 diabetes</li>
+        <li>Fasting glucose</li>
+        <li>Fasting insulin</li>
+    </ul>
+
     <h4>Data Set Subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">

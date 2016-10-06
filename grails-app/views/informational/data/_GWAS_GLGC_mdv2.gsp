@@ -43,6 +43,16 @@ van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
 
         </div>
 </p>
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>Cholesterol</li>
+<li>LDL cholesterol</li>
+<li>Triglycerides</li>
+<li>HDL cholesterol</li>
+<li>Diastolic blood pressure</li>
+<li>Systolic blood pressure</li>
+</ul>
+
 
     <h6 style="color:#ccc;">Project</h6>
     <h4>Global Lipids Genetics Consortium (GLGC) <small><a href="http://www.kathiresanlab.org/collaborators/global-lipids-genetic-consortium/" target="_blank">Learn more ></a>

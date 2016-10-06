@@ -50,6 +50,10 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
         <div class="citation">Proc Natl Acad Sci U S A. 2014 Sep 9;111(36):13127-32. doi: 10.1073/pnas.1410428111.</div>
 
         </div></p>
+        <h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>Type 2 diabetes</li>
+</ul>
 
 <h4>Data Set Subjects</h4>
 

@@ -1,3 +1,7 @@
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+    <li>Type 2 diabetes</li>
+</ul>
 <div class="panel-body">
 
     <h4>Data Set Subjects</h4>

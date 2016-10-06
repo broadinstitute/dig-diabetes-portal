@@ -71,7 +71,18 @@ Hamsten A, Florez JC.
 
         </div>
 
-    
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+<li>Type 2 diabetes</li>
+<li>HbA1c</li>
+<li>Fasting glucose</li>
+<li>Two-hour glucose</li>
+<li>HOMA-B</li>
+<li>Fasting insulin</li>
+<li>Two-hour insulin</li>
+<li>HOMA-IR</li>
+<li>Proinsulin levels</li>
+</ul>
     
     </p>
 

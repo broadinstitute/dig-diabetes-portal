@@ -38,7 +38,10 @@ O'Donnell CJ, McPherson R, Erdmann J; CARDIoGRAM Consortium, Samani NJ.
         </div>
 
 
-
+<h6 style="color:#ccc;">Data set phenotypes</h6>
+<ul>
+    <li>Coronary artery disease</li>
+</ul>
 
 
 
