@@ -1,8 +1,5 @@
 import grails.util.Environment
-import org.apache.log4j.DailyRollingFileAppender
-import org.apache.log4j.PatternLayout
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
-
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -340,8 +337,8 @@ environments {
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-//      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -555,8 +552,9 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 // placeholder for data version
 diabetes.data.version = "mdv2";
-portal.data.version.map = ["t2d": "mdv2", "stroke": "mdv5", "mi" : "mdv2"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
-portal.type.override = "t2d"     // options are "t2d" or "stroke"
+portal.data.version.map = ["t2d": "mdv2", "stroke": "mdv70", "mi" : "mdv2"];
+// portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "allstroke", "mi" : "MI"];
+portal.type.override = "stroke"     // options are "t2d" or "stroke"
 
 
