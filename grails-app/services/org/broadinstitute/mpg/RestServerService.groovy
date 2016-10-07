@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import grails.plugin.cache.Cacheable
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -541,19 +542,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param jsonString
      * @return
      */
+    @Cacheable("variantsCache")
     public JSONObject postGetDataCall(String jsonString) {
+        log.info("the variants call will be cached");
         return this.postRestCall(jsonString, this.GET_DATA_URL);
     }
 
+    @Cacheable("hailCache")
     public JSONObject postGetHailDataCall(String jsonString, String URL) {
+        log.info("the hail call will be cached");
         // TODO - hard code to QA server for now
 //        return postRestCallBase(drivingJson, this.GET_HAIL_DATA_URL, currentRestServer())
 //        return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, "http://dig-api-dev.broadinstitute.org/dev/gs/")
         return postRestCallBase(jsonString, this.GET_HAIL_DATA_URL, URL)
     }
 
-
+    @Cacheable("sampleCache")
     public JSONObject postGetSampleDataCall(String jsonString, String URL) {
+        log.info("the samples call will be cached");
          return postRestCallBase(jsonString, this.GET_SAMPLE_DATA_URL, currentRestServer())
     }
 
@@ -620,7 +626,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param variantId
      * @return
      */
+    @Cacheable("variantInfoCache")
     JSONObject retrieveVariantInfoByName(String variantId) {
+        log.info("the variants info call will be cached");
         String filters = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM",
                                                                          "POS",
@@ -1138,11 +1146,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param geneName
      * @return
      */
+    @Cacheable("variantCountCache")
     public JSONObject combinedVariantCountByGeneNameAndPValue(String geneName,
                                                               String dataset,
                                                               List<Float> significanceList,
                                                               String phenotype) {
 
+        log.info("the variants count call will be cached");
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataset)
         String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
         JSONObject returnValue = [

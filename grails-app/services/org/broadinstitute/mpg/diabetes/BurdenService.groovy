@@ -1,14 +1,13 @@
 package org.broadinstitute.mpg.diabetes
 
+import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.RestServerService
-import grails.transaction.Transactional
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
-import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
@@ -18,6 +17,7 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.json.JSONTokener
+import org.springframework.cache.annotation.Cacheable
 
 @Transactional
 class BurdenService {
@@ -293,6 +293,7 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
+    @Cacheable("burdenCache")
     public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
         // local variables
         JSONObject jsonObject, returnJson;
@@ -303,6 +304,7 @@ class BurdenService {
         List<QueryFilter> queryFilterList;
 
         // log
+        log.info("the burden call will be cached");
         log.info("called burden test for gene: " + geneString + " and variant select option: " + variantSelectionOptionId + " and data version id: " + dataVersionId);
         log.info("also had MAF option: " + mafSampleGroupOption + " and MAF value: " + mafValue);
         // when the phenotypes no longer have multiple names each then we can remove this kludgefest
@@ -311,10 +313,6 @@ class BurdenService {
             case "t2d": convertedPhenotype = "T2D"; break
             default: break
         }
-
-
-
-
 
         try {
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, metaDataService);
@@ -405,6 +403,7 @@ class BurdenService {
      * @return
      * @throws PortalException
      */
+    @Cacheable("budenTestTrait")
     protected JSONObject callBurdenTestForTraitAndDbSnpId(String traitOption, List <String> burdenVariantList,
                                                           JSONObject covariateJsonObject,
                                                           JSONObject sampleJsonObject,

@@ -97,6 +97,12 @@ grails.project.dependency.resolution = {
        // compile ":clover:4.0.1"
         test ":code-coverage:2.0.3-2"
 
+        // DIGP-400: adding caching for REST calls
+        // compile "org.grails.plugins:springcache:1.3.1"
+
+                compile "org.grails.plugins:cache:1.1.8"
+//        compile ':cache:1.1.7'
+//        compile ':cache-ehcache:1.0.1'
 
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.7.4"

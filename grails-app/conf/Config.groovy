@@ -553,6 +553,33 @@ log4j = { root ->
     }
 }
 
+// DIGP-400: settings for the burden and variants caches
+springcache {
+    defaults {
+        // set default cache properties that will apply to all caches that do not override them
+        eternal = false
+        diskPersistent = false
+    }
+    caches {
+        variantsCache {
+            // set any properties unique to this cache
+            memoryStoreEvictionPolicy = "LRU"
+        }
+        samplesCache {
+            // set any properties unique to this cache
+            memoryStoreEvictionPolicy = "LRU"
+        }
+        hailCache {
+            // set any properties unique to this cache
+            memoryStoreEvictionPolicy = "LRU"
+        }
+        burdenCache {
+            // set any properties unique to this cache
+            memoryStoreEvictionPolicy = "LRU"
+        }
+    }
+}
+
 codenarc {
     reportName = 'target/test-reports/CodeNarcReport.xml'
     reportType = 'xml'

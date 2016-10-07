@@ -3,6 +3,7 @@ package org.broadinstitute.mpg.diabetes
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import groovy.json.internal.LazyMap
+import org.broadinstitute.mpg.CacheService
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
@@ -39,6 +40,7 @@ class MetaDataService {
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
     FilterManagementService filterManagementService
+    CacheService cacheService
     def grailsApplication
 
     def serviceMethod() {
@@ -152,6 +154,14 @@ class MetaDataService {
         if (this.forceProcessedMetadataOverride != 0) {
             String jsonString = this.restServerService.getMetadata();
             this.jsonParser.forceMetadataReload(jsonString);
+
+            // DIGP-400: evict the burden and variants caches
+            this.cacheService.evictVariantsCache()
+            this.cacheService.evictVariantsInfoCache()
+            this.cacheService.evictVariantsCountCache()
+            this.cacheService.evictBurdenCache();
+            this.cacheService.evictHailCache();
+            this.cacheService.evictSampleCache();
         }
 
         // reset reload indicator
