@@ -42,8 +42,8 @@
 
 <h6 style="color:#ccc;">Detailed reports</h6>
 
-AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_CAMP_Phase1_2016_1003.pdf">download PDF</a>)
-Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_T2DKP_CAMP_QC_Results.pdf">download PDF</a>)
+<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_CAMP_Phase1_2016_1003.pdf">download PDF</a>)</p>
+<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_T2DKP_CAMP_QC_Results.pdf">download PDF</a>)</p>
 
 <h6 style="color:#ccc;">Accessing CAMP data in the T2D Knowledge Portal</h6>
 <p>CAMP data are available:
