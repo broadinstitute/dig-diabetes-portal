@@ -192,7 +192,7 @@
 
                         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                                'modifiedTitle': 'Interactive burden test',
-                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. GAIT queries the 17K exome sequence analysis data set. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
+                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
 
 
                     </g:if>
