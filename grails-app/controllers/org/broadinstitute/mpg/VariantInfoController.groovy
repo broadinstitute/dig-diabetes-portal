@@ -199,6 +199,17 @@ class VariantInfoController {
         String dataset = params.dataset
         SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(dataset)
         JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
+        List filtersOfTypeString = jsonObject?.filters?.findAll{it.type=="STRING"}
+        for (Map allLevels in filtersOfTypeString){
+            List filteredLevels = []
+            for (def eachLevel in allLevels.levels){
+                if ((eachLevel.name!="null")||
+                        (eachLevel.samples!=0)){
+                    filteredLevels << eachLevel
+                }
+            }
+            allLevels.levels = filteredLevels
+        }
 
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}

@@ -537,6 +537,66 @@ var displayBurdenVariantSelector = function (){
             });
         };
 
+
+
+        var refreshTopOfGaitDisplay = function (data,params){
+            var phenotypeDropdown = $(params.dropDownPhenoSelector);
+            var stratifyDesignationDropdown = $(params.stratifyDesignation);
+            phenotypeDropdown.empty();
+            if ( ( data !==  null ) &&
+                ( typeof data.phenotypes !== 'undefined' ) &&
+                    (  data.phenotypes !==  null ) ) {
+                var t2d = _.find(data.phenotypes, { 'name': 't2d'});  // force t2d first
+                var weHaveADefaultFirstElement = false;
+                if ((t2d) &&
+                    (typeof t2d !== 'undefined') &&
+                    (typeof t2d.trans !== 'undefined')){
+                     weHaveADefaultFirstElement = true;
+                }
+                if (weHaveADefaultFirstElement){
+                   phenotypeDropdown.append( new Option(t2d.trans, t2d.name));
+                }
+                _.forEach(data.phenotypes,function(d){
+                   if (d.name !== 't2d'){
+                      phenotypeDropdown.append( new Option(d.trans, d.name));
+                   }
+                });
+                stratifyDesignationDropdown.val('none')
+            }
+            refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering');
+            displayTestResultsSection(false);
+            $('.caatSpinner').hide();
+        };
+
+
+
+        var loadExperimentMetadata = function (datasetName, callback, callbackParameters){
+           $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjax')}",
+                data: {dataset:datasetName},
+                async: true,
+                success: function (data) {
+                    storeSampleMetadata(data);
+                    if (typeof callback !== 'undefined') {
+                        callback( data, callbackParameters );
+                    }
+
+
+
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+
+        };
+
+
+
+
         /***
         *  Use this if you have only one data set, since then we don't need to burden the user with the choice
         */
@@ -599,7 +659,11 @@ var displayBurdenVariantSelector = function (){
         };
 
 
-        var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator) {
+        var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator,changeExperiment) {
+            if ((typeof changeExperiment !== 'undefined') &&
+                (changeExperiment)){
+                loadExperimentMetadata($(datasetFilter).val(),refreshTopOfGaitDisplay,{dropDownPhenoSelector:phenotypeFilter,stratifyDesignation:stratifyDesignation})
+            }
             var sampleMetadata = getStoredSampleMetadata();
             var phenotypeFilterValue = $(phenotypeFilter).val();
             var stratifyDesignationValue = $(stratifyDesignation).val();
@@ -897,6 +961,13 @@ var displayBurdenVariantSelector = function (){
                     var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
                     var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements);
 
+                    // kludge alert!  Currently we have no way of specifying whether or not a data set can be used for stratification.
+                    //  For now I will erase the hide the stratification section if it doesn't apply to a data set, but clearly we need to do better
+                    if ($('#datasetFilter').val()==="samples_camp_mdv23"){
+                        $('.stratificationHolder').css('display','none');
+                    } else {
+                        $('.stratificationHolder').css('display','block');
+                    }
 
                     $("#chooseFiltersLocation").empty();
                     $("#chooseCovariatesLocation").empty();
@@ -1493,8 +1564,16 @@ var displayBurdenVariantSelector = function (){
              selectedMafOptionId =  parseInt(selectedMafOption),
              specifiedMafValue = $('#mafInput').val(),
              specifiedMafValueId  = parseFloat(specifiedMafValue),
-             burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val();
-              var dataSet =  'samples_17k_mdv2';
+             burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val(),
+             datasetFilter = $('#datasetFilter').val();
+             var dataSet;
+             //kludge alert!!!
+             if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
+                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+             } else {
+                dataSet = 'ExChip_CAMP_mdv23';
+             }
+
                $('#rSpinner').show();
                 var promise =  $.ajax({
                     cache: false,
@@ -2614,10 +2693,9 @@ $( document ).ready( function (){
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-12 col-xs-12 text-left">
+                    <div class="col-sm-12 col-xs-12 text-left"  style="padding-top: 8px; padding-bottom: 15px">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering');"
-                                onclick="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
+                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true);">
                                 %{--onclick="mpgSoftware.burdenTestShared.retrieveSampleMetadata(this, '#phenotypeFilter');">--}%
                         </select>
                     </div>
@@ -2638,11 +2716,11 @@ $( document ).ready( function (){
 
 
                 {{ #strataChooser }}
-                <div class="row secHeader" style="margin: 20px 0 0 0">
+                <div class="row secHeader stratificationHolder" style="margin: 20px 0 0 0">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
                 </div>
 
-                <div class="row">
+                <div class="row stratificationHolder">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering' );">
