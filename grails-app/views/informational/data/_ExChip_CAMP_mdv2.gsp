@@ -34,7 +34,11 @@
 <h6 style="color:#ccc;">Overview of analysis results</h6>
 <p>Data were analyzed by the Analysis Team at the Accelerating Medicines Partnership Data Coordinating Center (AMP-DCC), Broad Institute. After removing related samples and samples flagged for non-type 2 diabetes, 3,453 samples (540 type 2 diabetes cases and 2,913 controls) were analyzed. Two different statistical models were applied to analyze associations of variants with type 2 diabetes, fasting glucose levels, and fasting insulin levels.</p>
 
-<p>The strongest signal observed for association with T2D was on chromosome 6 near <i>HLA-C</i>, which is a known T1D-associated locus. Its detection in the CAMP data is not currently explicable, since type 1 diabetics had been removed from the sample set that was analyzed. Further work will be done to investigate the specific samples that are driving this signal. Other than the <i>HLA-C</i> signal, additional signals of nominal significance were detected at previously reported T2D-associated loci.
+<p>The strongest association with T2D, at genome-wide significance, was observed for the variant rs9468919 on chromosome 6 near <i>HLA-C</i>i>. Detection of an association with this locus was unexpected because it is known to be associated with T1D, but type 1 diabetics had been removed from the sample set before analysis. To evaluate this result further, we investigated the linkage disequilibrium (LD) relationships of this SNP with others in the region. rs9468919 is not in LD with any variants known to be associated with T1D, but is in moderate LD with SNPs in the region that are reported to be associated with T2D. Supporting its potential association with T2D, this SNP displays a T2D association of nominal significance (p = 0.055) in the DIAGRAM Transethnic meta-analysis data set.</p>p>
+
+<p>While we cannot fully explain this signal, it is unlikely that the result at rs9468919 is due to T1D sample contamination, known confounders, or to poor quality of the SNP genotyping. In any first-pass, cohort-specific analysis such as this, some results may be inflated or even spurious due to limited sample size or cohort-specific effects. However, the high quality of the data, QC, and analysis methods applied are consistent with all standards within T2D genetics community.</p>
+
+<p>Other than the <i>HLA-C</i> signal, additional signals of nominal significance were detected at previously reported T2D-associated loci.</p>
 
 <p>A variant associated with fasting glucose levels at genome-wide significance was detected near <i>MTNR1B</i> on chromosome 11. Additional signals of nominal significance were detected at loci previously reported to be associated with fasting glucose levels, and several rare variants with significant effects were also seen.</p>
 
@@ -42,7 +46,7 @@
 
 <h6 style="color:#ccc;">Detailed reports</h6>
 
-<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_CAMP_Phase1_2016_1003.pdf">download PDF</a>)</p>
+<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_CAMP_Phase1_2016_1004_v2.pdf">download PDF</a>)</p>
 <p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_T2DKP_CAMP_QC_Results.pdf">download PDF</a>)</p>
 
 <h6 style="color:#ccc;">Accessing CAMP data in the T2D Knowledge Portal</h6>

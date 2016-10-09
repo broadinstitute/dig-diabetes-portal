@@ -2553,7 +2553,7 @@ $( document ).ready( function (){
     <div id="collapseBurden" class="accordion-body collapse">
         <div class="accordion-inner">
             <div style="text-align: right;">
-                <a href="https://s3.amazonaws.com/broad-portal-resources/GAIT_guide_10-06-2016.pdf" target="_blank">GAIT guide</a>
+                <a href="https://s3.amazonaws.com/broad-portal-resources/GAIT_guide_10-07-2016.pdf" target="_blank">GAIT guide</a>
             </div>
             <div class="container">
                 <h5>
