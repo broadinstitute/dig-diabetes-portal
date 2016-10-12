@@ -38,7 +38,12 @@ class SectionSelectorTagLib {
     }
 
 
+    def renderNotBetaFeaturesDisplayedValue = { attrs,body ->
+        if (!sharedToolsService.getBetaFeaturesDisplayedValue ()){
+            out << body()
+        }
 
+    }
 
 
     def renderExomeChipSection = { attrs,body ->

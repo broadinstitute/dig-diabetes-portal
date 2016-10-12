@@ -61,11 +61,11 @@
             portalType = "stroke";
             </g:if>
             if (portalType === 't2d'){
-                %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,--}%
-                        %{--"#lz-47","#collapseLZ",'T2D',--}%
-                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-                        %{--'${createLink(controller:"variantInfo", action:"variant")}',--}%
-                        %{--mpgSoftware.locusZoom.broadAssociationSource);--}%
+                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                        "#lz-47","#collapseLZ",'T2D',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variant")}',
+                        mpgSoftware.locusZoom.broadAssociationSource);
             }
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();
@@ -98,7 +98,10 @@
 
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
-                <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                <g:renderBetaFeaturesDisplayedValue>
+                    <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                </g:renderBetaFeaturesDisplayedValue>
+
 
                 <div class="accordion" id="accordion2">
                     <div class="accordion-group">
@@ -184,9 +187,15 @@
 
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        %{--<div class="separator"></div>--}%
 
-                        %{--<g:render template="/widgets/locusZoomPlot"/>--}%
+                        <g:renderNotBetaFeaturesDisplayedValue>
+
+                            <div class="separator"></div>
+
+                            <g:render template="/widgets/locusZoomPlot"/>
+
+                        </g:renderNotBetaFeaturesDisplayedValue>
+
 
                         <div class="separator"></div>
 
