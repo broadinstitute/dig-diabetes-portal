@@ -49,7 +49,8 @@ class VariantInfoController {
                             locale:locale,
                             phenotypeDatasetMapping: (phenotypeDatasetMapping as JSON),
                             restServer: restServerService.currentRestServer(),
-                            lzOptions   : lzOptions
+                            lzOptions   : lzOptions,
+                            locusZoomDataset:"ExSeq_17k_"+metaDataService.getDataVersion()
                     ])
 
         }

@@ -35,7 +35,7 @@
                         <li><a onclick="mpgSoftware.locusZoom.addLZPhenotype({
                             phenotype: '${it.key}',
                             description: '${it.description}'
-                        },'ExSeq_17k_mdv2','${createLink(controller:"gene", action:"getLocusZoom")}',
+                        },'<%=locusZoomDataset%>','${createLink(controller:"gene", action:"getLocusZoom")}',
                           '${createLink(controller:"variantInfo", action:"variant")}',
                            mpgSoftware.locusZoom.broadAssociationSource)">
                             ${g.message(code: "metadata." + it.name)}
