@@ -1,7 +1,8 @@
 package org.broadinstitute.mpg.diabetes
+
+import grails.test.spock.IntegrationSpec
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
-import grails.test.spock.IntegrationSpec
 import org.broadinstitute.mpg.diabetes.metadata.Phenotype
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -10,8 +11,6 @@ import org.codehaus.groovy.grails.web.json.JSONObject
 import org.junit.After
 import org.junit.Before
 import spock.lang.Unroll
-import org.codehaus.groovy.grails.web.util.WebUtils
-
 /**
  * Created by balexand on 8/18/2014.
  */
@@ -125,7 +124,9 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         String chromosome = "9";
         int startPosition = 21000000;
         int endPosition = 21050000;
-        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D"));
+//        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D"));
+        String version = this.jsonParser.getVersionListForExperimentTypeAndPhnotype("GWAS", "T2D").get(0);
+        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", version).get("T2D"));
         JSONObject resultJson = this.metaDataService.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
 
         then:
@@ -140,9 +141,14 @@ class MetaDataServiceIntegrationSpec extends IntegrationSpec {
         String chromosome = "9";
         int startPosition = 21000000;
         int endPosition = 21050000;
-        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("WHR"));
-        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D"));
-        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("BMI"));
+        // TODO - get a version string list for each phenotype and find a common version string in all lists
+        String version = this.jsonParser.getVersionListForExperimentTypeAndPhnotype("GWAS", "WHR").get(0);
+//        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", version).get("WHR"));
+        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", version).get("T2D"));
+//        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", version).get("BMI"));
+//        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", this.jsonParser.getVersionListForExperimentTypeAndPhnotype("GWAS", "WHR").get(0)).get("WHR"));
+//        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", this.jsonParser.getVersionListForExperimentTypeAndPhnotype("GWAS", "T2D").get(0)).get("T2D"));
+//        phenotypeList.add(this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", this.jsonParser.getVersionListForExperimentTypeAndPhnotype("GWAS", "BMI").get(0)).get("BMI"));
         JSONObject resultJson = this.metaDataService.getTraitSearchResultForChromosomeAndPositionAndPhenotypes(phenotypeList, chromosome, startPosition, endPosition);
 
         then:

@@ -214,7 +214,31 @@ public class JsonParser {
     }
 
 
+    /**
+     * find all experiments with a particular experiment type and phenotype combination
+     *
+     * @param experimentType
+     * @param phenotype
+     * @return
+     * @throws PortalException
+     */
+    public List<String> getVersionListForExperimentTypeAndPhnotype(String experimentType, String phenotype) throws PortalException {
+        // local variables
+        List<String> versionList = null;
 
+        // get the visitor and visit the root
+        VersionByExperimentTypeAndPhenotypeVisitor visitor = new VersionByExperimentTypeAndPhenotypeVisitor(phenotype, experimentType);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+
+        // get the version list
+        versionList = visitor.getVersionList();
+
+        // sort
+        Collections.sort(versionList);
+
+        // return
+        return versionList;
+    }
 
 
 
