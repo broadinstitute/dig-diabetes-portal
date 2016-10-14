@@ -56,6 +56,10 @@
         color: #393;
     }
 
+    .data-status-early-phase1-access {
+        color: red;
+    }
+
     .dataset-info {
         color: #777;
     }
