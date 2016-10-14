@@ -1,11 +1,13 @@
 <h6 style="color:#ccc;">Data set</h6>
 
-<p>Publication: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21378990" target="_blank>PMID: 21378990</a></p>
+Download URL: <a href="http://www.cardiogramplusc4d.org/data-downloads/" target="_blank">http://www.cardiogramplusc4d.org/data-downloads/</a><br />
+Download date: October 2016<br />
+Publication: <a href="http://www.ncbi.nlm.nih.gov/pubmed/21378990" target="_blank">PMID: 21378990</a>
 <div class="paper">
 
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21378990" target="_blank">
 
-            Large-scale association analysis identifies 13 new susceptibility loci for coronary artery disease.</a> <br/>
+
+            Large-scale association analysis identifies 13 new susceptibility loci for coronary artery disease. <br/>
 
         Schunkert H, König IR, Kathiresan S, Reilly MP, Assimes TL, Holm H, Preuss M, 
 Stewart AF, Barbalic M, Gieger C, Absher D, Aherrahrou Z, Allayee H, Altshuler D,
@@ -36,6 +38,10 @@ O'Donnell CJ, McPherson R, Erdmann J; CARDIoGRAM Consortium, Samani NJ.
         <div class="citation">Nat Genet. 2011 Mar 6;43(4):333-8. doi: 10.1038/ng.784.</div>
 
         </div>
+Publication: <a href="http://www.ncbi.nlm.nih.gov/pubmed/26343387" target="_blank">  PMID: 26343387</a>
+<div class="paper">  A comprehensive 1,000 Genomes-based genome-wide association meta-analysis of coronary artery disease. <br/>  
+Nikpay M, Goel A, Won HH, Hall LM, Willenborg C, Kanoni S, Saleheen D, Kyriakou T, Nelson CP, Hopewell JC, Webb TR, Zeng L, Dehghan A, Alver M, Armasu SM, Auro K, Bjonnes A, Chasman DI, Chen S, Ford I, Franceschini N, Gieger C, Grace C, Gustafsson S, Huang J, Hwang SJ, Kim YK, Kleber ME, Lau KW, Lu X, Lu Y, Lyytikäinen LP, Mihailov E, Morrison AC, Pervjakova N, Qu L, Rose LM, Salfati E, Saxena R, Scholz M, Smith AV, Tikkanen E, Uitterlinden A, Yang X, Zhang W, Zhao W, de Andrade M, de Vries PS, van Zuydam NR, Anand SS, Bertram L, Beutner F, Dedoussis G, Frossard P, Gauguier D, Goodall AH, Gottesman O, Haber M, Han BG, Huang J, Jalilzadeh S, Kessler T, König IR, Lannfelt L, Lieb W, Lind L, Lindgren CM, Lokki ML, Magnusson PK, Mallick NH, Mehra N, Meitinger T, Memon FU, Morris AP, Nieminen MS, Pedersen NL, Peters A, Rallidis LS, Rasheed A, Samuel M, Shah SH, Sinisalo J, Stirrups KE, Trompet S, Wang L, Zaman KS, Ardissino D, Boerwinkle E, Borecki IB, Bottinger EP, Buring JE, Chambers JC, Collins R, Cupples LA, Danesh J, Demuth I, Elosua R, Epstein SE, Esko T, Feitosa MF, Franco OH, Franzosi MG, Granger CB, Gu D, Gudnason V, Hall AS, Hamsten A, Harris TB, Hazen SL, Hengstenberg C, Hofman A, Ingelsson E, Iribarren C, Jukema JW, Karhunen PJ, Kim BJ, Kooner JS, Kullo IJ, Lehtimäki T, Loos RJ, Melander O, Metspalu A, März W, Palmer CN, Perola M, Quertermous T, Rader DJ, Ridker PM, Ripatti S, Roberts R, Salomaa V, Sanghera DK, Schwartz SM, Seedorf U, Stewart AF, Stott DJ, Thiery J, Zalloua PA, O'Donnell CJ, Reilly MP, Assimes TL, Thompson JR, Erdmann J, Clarke R, Watkins H, Kathiresan S, McPherson R, Deloukas P, Schunkert H, Samani NJ, Farrall M; CARDIoGRAMplusC4D Consortium.</div>
+         <div class="citation">Nat Genet. 2015 Oct;47(10):1121-30. doi: 10.1038/ng.3396.</div>  
 
 
 <h6 style="color:#ccc;">Data set phenotypes</h6>
@@ -49,5 +55,7 @@ O'Donnell CJ, McPherson R, Erdmann J; CARDIoGRAM Consortium, Samani NJ.
 <h4>CARDIoGRAMplusC4D Consortium <small><a href="http://www.cardiogramplusc4d.org/" target="_blank">Learn more ></a></small></h4>
 
 <p><img src="${resource(dir: 'images/organizations', file: 'cgplusc4d-logo200-manhpl.png')}" style="width: 80px; margin-right: 15px"
-        align="left">Meta-analysis of 14 GWAS studies of coronary artery disease comprising 22,233 cases and 64,762 controls of European descent, followed by genotyping of top association signals in 60,738 additional individuals.
+        align="left">
 </p>
+<h6 style="color:#ccc;">Experiment summary</h6>
+<p>ARDIoGRAMplusC4D 1000 Genomes-based GWAS is a meta-analysis of GWAS studies of mainly European, South Asian, and East Asian, descent imputed using the 1000 Genomes phase 1 v3 training set with 38 million variants. The study interrogated 9.4 million variants and involved 60,801 CAD cases and 123,504 controls.</p>
