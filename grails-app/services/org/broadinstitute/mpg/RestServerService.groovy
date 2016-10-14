@@ -1929,9 +1929,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), technology, false ).collect {
                     it.parent.systemId
                 }
-        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
-            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
-        }
+//        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+//            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
+//        }
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()
