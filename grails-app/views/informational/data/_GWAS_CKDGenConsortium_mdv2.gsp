@@ -33,7 +33,8 @@ PP, Rettig R, Hastie N, Chasman DI, Kao WH, Heid IM, Fox CS.
 
         <div class="citation">Nat Genet. 2010 May;42(5):376-84. doi: 10.1038/ng.568. Epub 2010 Apr 11.</div>
 
-        </div></p>
+
+</p>
 
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>

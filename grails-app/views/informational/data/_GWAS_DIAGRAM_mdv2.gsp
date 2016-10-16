@@ -1,7 +1,8 @@
 <div class="panel-body">
     <h6 style="color:#ccc;">Data set</h6>
 
-    <p>Download date: 5/10/2016<br/>
+    <p>Download URL: <a href="http://diagram-consortium.org/downloads.html">http://diagram-consortium.org/downloads.html</a><br/>
+    Download date: 5/10/2016<br/>
         Data set version: dv1, dv2 (as European subset)<br/>
         Publication: <div class="paper">
 
@@ -47,7 +48,11 @@ And Meta-analysis (DIAGRAM) Consortium.
 
         <div class="citation">Nat Genet. 2012 Sep;44(9):981-90. doi: 10.1038/ng.2383. Epub 2012 Aug 12.</div>
 
-        </div></p>
+        </div>
+<div class="paper">          <a href="http://www.ncbi.nlm.nih.gov/pubmed/26551672" target="_blank">PMID: 26551672</a>  
+Genetic fine mapping and genomic annotation defines causal mechanisms at type 2 diabetes susceptibility loci. <br/>  
+Gaulton KJ, Ferreira T, Lee Y, Raimondo A, Mägi R, Reschen ME, Mahajan A, Locke A, Rayner NW, Robertson N, Scott RA, Prokopenko I, Scott LJ, Green T, Sparso T, Thuillier D, Yengo L, Grallert H, Wahl S, Frånberg M, Strawbridge RJ, Kestler H, Chheda H, Eisele L, Gustafsson S, Steinthorsdottir V, Thorleifsson G, Qi L, Karssen LC, van Leeuwen EM, Willems SM, Li M, Chen H, Fuchsberger C, Kwan P, Ma C, Linderman M, Lu Y, Thomsen SK, Rundle JK, Beer NL, van de Bunt M, Chalisey A, Kang HM, Voight BF, Abecasis GR, Almgren P, Baldassarre D, Balkau B, Benediktsson R, Blüher M, Boeing H, Bonnycastle LL, Bottinger EP, Burtt NP, Carey J, Charpentier G, Chines PS, Cornelis MC, Couper DJ, Crenshaw AT, van Dam RM, Doney AS, Dorkhan M, Edkins S, Eriksson JG, Esko T, Eury E, Fadista J, Flannick J, Fontanillas P, Fox C, Franks PW, Gertow K, Gieger C, Gigante B, Gottesman O, Grant GB, Grarup N, Groves CJ, Hassinen M, Have CT, Herder C, Holmen OL, Hreidarsson AB, Humphries SE, Hunter DJ, Jackson AU, Jonsson A, Jørgensen ME, Jørgensen T, Kao WH, Kerrison ND, Kinnunen L, Klopp N, Kong A, Kovacs P, Kraft P, Kravic J, Langford C, Leander K, Liang L, Lichtner P, Lindgren CM, Lindholm E, Linneberg A, Liu CT, Lobbens S, Luan J, Lyssenko V, Männistö S, McLeod O, Meyer J, Mihailov E, Mirza G, Mühleisen TW, Müller-Nurasyid M, Navarro C, Nöthen MM, Oskolkov NN, Owen KR, Palli D, Pechlivanis S, Peltonen L, Perry JR, Platou CG, Roden M, Ruderfer D, Rybin D, van der Schouw YT, Sennblad B, Sigurðsson G, Stančáková A, Steinbach G, Storm P, Strauch K, Stringham HM, Sun Q, Thorand B, Tikkanen E, Tonjes A, Trakalo J, Tremoli E, Tuomi T, Wennauer R, Wiltshire S, Wood AR, Zeggini E, Dunham I, Birney E, Pasquali L, Ferrer J, Loos RJ, Dupuis J, Florez JC, Boerwinkle E, Pankow JS, van Duijn C, Sijbrands E, Meigs JB, Hu FB, Thorsteinsdottir U, Stefansson K, Lakka TA, Rauramaa R, Stumvoll M, Pedersen NL, Lind L, Keinanen-Kiukaanniemi SM, Korpi-Hyövälti E, Saaristo TE, Saltevo J, Kuusisto J, Laakso M, Metspalu A, Erbel R, Jöcke KH, Moebus S, Ripatti S, Salomaa V, Ingelsson E, Boehm BO, Bergman RN, Collins FS, Mohlke KL, Koistinen H, Tuomilehto J, Hveem K, Njølstad I, Deloukas P, Donnelly PJ, Frayling TM, Hattersley AT, de Faire U, Hamsten A, Illig T, Peters A, Cauchi S, Sladek R, Froguel P, Hansen T, Pedersen O, Morris AD, Palmer CN, Kathiresan S, Melander O, Nilsson PM, Groop LC, Barroso I, Langenberg C, Wareham NJ, O'Callaghan CA, Gloyn AL, Altshuler D, Boehnke M, Teslovich TM, McCarthy MI, Morris AP; DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) Consortium.
+         <div class="citation">Nat Genet. 2015 Dec;47(12):1415-25. doi: 10.1038/ng.3437.</div>          </div></p>
 
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>
@@ -58,5 +63,39 @@ And Meta-analysis (DIAGRAM) Consortium.
     </small></h4>
 
     <p>The DIAGRAM consortium performs large-scale studies to characterize the genetic basis of type 2 diabetes, primarily focusing on samples of European descent.</p>
+
+    <h6 style="color:#ccc;">Experiment summary</h6>
+    <p>With data updates in October 2016, total sample size for DIAGRAM data in the Portal increased to 149,821. New gender-stratified subsets were added \
+    as well as Metabochip and fine-mapping results.
+    </p>
+
+    <p>Please see <a href="http://diagram-consortium.org/downloads.html">this page</a> for more details on the DIAGRAM data sets. Data set names on the DIAGRAM \
+    download page correspond to names used in the Portal as follows:</p>
+
+<p>
+DIAGRAM name: Stage 1 GWAS: Summary Statistics<br/>
+Portal name: DIAGRAM Transethnic meta-analysis<br/>
+</p>
+
+<p>
+DIAGRAM name: Stage 1 GWAS & Stage 2 Metabochip: Summary Statistics<br/>
+Portal name: DIAGRAM GWAS + MetaboChip<br/>
+</p>
+
+<p>
+DIAGRAM name: Stage 1 GWAS & Stage 2 Metabochip: Sex-Specific Summary Statistics<br/>
+Portal name: DIAGRAM GWAS + MetaboChip: females; DIAGRAM GWAS + MetaboChip: males<br/>
+</p>
+
+<p>
+DIAGRAM name: Stage 2 Metabochip: Summary Statistics<br/>
+Portal name: DIAGRAM MetaboChip<br/>
+</p>
+
+<p>
+DIAGRAM name: DIAGRAM Metabochip meta-analysis of T2D: Credible Sets<br/>
+Portal name: DIAGRAM MetaboChip fine mapping<br/>
+</p>
+
 </div>
 
