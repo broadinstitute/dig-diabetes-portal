@@ -1,37 +1,12 @@
 <div class="panel-body">
     <h6 style="color:#ccc;">Data set</h6>
 
-    <p>Download URL - eGFRcrea: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv</a><br/>
-    Download URL - eGFRcyse: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv</a><br/>
-    Download URL - CKD: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv</a><br/>
-    Download URL - UACR: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-UACR_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-UACR_meta_post.csv</a><br/>
-    Download URL - MA: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-MA_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-MA_meta_post.csv</a><br/>
-        Download date: 5/10/2016<br/>
-        Data set version: dv1<br/>
+    <p>Download URL - Download URL: <a href="https://fox.nhlbi.nih.gov/CKDGen/">https://fox.nhlbi.nih.gov/CKDGen/</a><br/>
+        Download date: October 2016<br/>
+        Data set version: dv2<br/>
         Publication: <div class="paper">
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20383146" target="_blank">New loci associated with kidney function and chronic kidney disease.</a> <br/>
-
-        Köttgen A, Pattaro C, Böger CA, Fuchsberger C, Olden M, Glazer NL, Parsa A,
-Gao X, Yang Q, Smith AV, O'Connell JR, Li M, Schmidt H, Tanaka T, Isaacs A,
-Ketkar S, Hwang SJ, Johnson AD, Dehghan A, Teumer A, Paré G, Atkinson EJ, Zeller 
-T, Lohman K, Cornelis MC, Probst-Hensch NM, Kronenberg F, Tönjes A, Hayward C,
-Aspelund T, Eiriksdottir G, Launer LJ, Harris TB, Rampersaud E, Mitchell BD,
-Arking DE, Boerwinkle E, Struchalin M, Cavalieri M, Singleton A, Giallauria F,
-Metter J, de Boer IH, Haritunians T, Lumley T, Siscovick D, Psaty BM, Zillikens
-MC, Oostra BA, Feitosa M, Province M, de Andrade M, Turner ST, Schillert A,
-Ziegler A, Wild PS, Schnabel RB, Wilde S, Munzel TF, Leak TS, Illig T, Klopp N,
-Meisinger C, Wichmann HE, Koenig W, Zgaga L, Zemunik T, Kolcic I, Minelli C, Hu
-FB, Johansson A, Igl W, Zaboli G, Wild SH, Wright AF, Campbell H, Ellinghaus D,
-Schreiber S, Aulchenko YS, Felix JF, Rivadeneira F, Uitterlinden AG, Hofman A,
-Imboden M, Nitsch D, Brandstätter A, Kollerits B, Kedenko L, Mägi R, Stumvoll M, 
-Kovacs P, Boban M, Campbell S, Endlich K, Völzke H, Kroemer HK, Nauck M, Völker
-U, Polasek O, Vitart V, Badola S, Parker AN, Ridker PM, Kardia SL, Blankenberg S,
-Liu Y, Curhan GC, Franke A, Rochat T, Paulweber B, Prokopenko I, Wang W, Gudnason
-V, Shuldiner AR, Coresh J, Schmidt R, Ferrucci L, Shlipak MG, van Duijn CM,
-Borecki I, Krämer BK, Rudan I, Gyllensten U, Wilson JF, Witteman JC, Pramstaller 
-PP, Rettig R, Hastie N, Chasman DI, Kao WH, Heid IM, Fox CS.
-
-        <div class="citation">Nat Genet. 2010 May;42(5):376-84. doi: 10.1038/ng.568. Epub 2010 Apr 11.</div>
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/26631737” target="_blank">PMID: 26631737</a>              Genome-wide Association Studies Identify Genetic Loci Associated With Albuminuria in Diabetes. <br/>          Teumer A, Tin A, Sorice R, Gorski M, Yeo NC, Chu AY, Li M, Li Y, Mijatovic V, Ko YA, Taliun D, Luciani A, Chen MH, Yang Q, Foster MC, Olden M, Hiraki LT, Tayo BO, Fuchsberger C, Dieffenbach AK, Shuldiner AR, Smith AV, Zappa AM, Lupo A, Kollerits B, Ponte B, Stengel B, Krämer BK, Paulweber B, Mitchell BD, Hayward C, Helmer C, Meisinger C, Gieger C, Shaffer CM, Müller C, Langenberg C, Ackermann D, Siscovick D; DCCT/EDIC, Boerwinkle E, Kronenberg F, Ehret GB, Homuth G, Waeber G, Navis G, Gambaro G, Malerba G, Eiriksdottir G, Li G, Wichmann HE, Grallert H, Wallaschofski H, Völzke H, Brenner H, Kramer H, Mateo Leach I, Rudan I, Hillege HL, Beckmann JS, Lambert JC, Luan J, Zhao JH, Chalmers J, Coresh J, Denny JC, Butterbach K, Launer LJ, Ferrucci L, Kedenko L, Haun M, Metzger M, Woodward M, Hoffman MJ, Nauck M, Waldenberger M, Pruijm M, Bochud M, Rheinberger M, Verweij N, Wareham NJ, Endlich N, Soranzo N, Polasek O, van der Harst P, Pramstaller PP, Vollenweider P, Wild PS, Gansevoort RT, Rettig R, Biffar R, Carroll RJ, Katz R, Loos RJ, Hwang SJ, Coassin S, Bergmann S, Rosas SE, Stracke S, Harris TB, Corre T, Zeller T, Illig T, Aspelund T, Tanaka T, Lendeckel U, Völker U, Gudnason V, Chouraki V, Koenig W, Kutalik Z, O'Connell JR, Parsa A, Heid IM, Paterson AD, de Boer IH, Devuyst O, Lazar J, Endlich K, Susztak K, Tremblay J, Hamet P, Jacob HJ, Böger CA, Fox CS, Pattaro C, Köttgen A.
+         <div class="citation">Diabetes. 2016 Mar;65(3):803-17. doi: 10.2337/db15-1313.</div> 
 
         </div></p>
 

@@ -1,51 +1,33 @@
 <div class="panel-body">
     <h6 style="color:#ccc;">Data set</h6>
 
-    <p>Download URL - eGFRcrea: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv</a><br/>
-    Download URL - eGFRcyse: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv</a><br/>
-    Download URL - CKD: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv</a><br/>
-    Download URL - UACR: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-UACR_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-UACR_meta_post.csv</a><br/>
-    Download URL - MA: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-MA_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-MA_meta_post.csv</a><br/>
-        Download date: 5/10/2016<br/>
-        Data set version: dv1<br/>
+    <p>Download URL - Download URL: <a href="https://fox.nhlbi.nih.gov/CKDGen/">https://fox.nhlbi.nih.gov/CKDGen/</a><br/>
+        Download date: October 2016<br/>
+        Data set version: dv2<br/>
         Publication: <div class="paper">
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20383146" target="_blank">New loci associated with kidney function and chronic kidney disease.</a> <br/>
-
-        Köttgen A, Pattaro C, Böger CA, Fuchsberger C, Olden M, Glazer NL, Parsa A,
-Gao X, Yang Q, Smith AV, O'Connell JR, Li M, Schmidt H, Tanaka T, Isaacs A,
-Ketkar S, Hwang SJ, Johnson AD, Dehghan A, Teumer A, Paré G, Atkinson EJ, Zeller 
-T, Lohman K, Cornelis MC, Probst-Hensch NM, Kronenberg F, Tönjes A, Hayward C,
-Aspelund T, Eiriksdottir G, Launer LJ, Harris TB, Rampersaud E, Mitchell BD,
-Arking DE, Boerwinkle E, Struchalin M, Cavalieri M, Singleton A, Giallauria F,
-Metter J, de Boer IH, Haritunians T, Lumley T, Siscovick D, Psaty BM, Zillikens
-MC, Oostra BA, Feitosa M, Province M, de Andrade M, Turner ST, Schillert A,
-Ziegler A, Wild PS, Schnabel RB, Wilde S, Munzel TF, Leak TS, Illig T, Klopp N,
-Meisinger C, Wichmann HE, Koenig W, Zgaga L, Zemunik T, Kolcic I, Minelli C, Hu
-FB, Johansson A, Igl W, Zaboli G, Wild SH, Wright AF, Campbell H, Ellinghaus D,
-Schreiber S, Aulchenko YS, Felix JF, Rivadeneira F, Uitterlinden AG, Hofman A,
-Imboden M, Nitsch D, Brandstätter A, Kollerits B, Kedenko L, Mägi R, Stumvoll M, 
-Kovacs P, Boban M, Campbell S, Endlich K, Völzke H, Kroemer HK, Nauck M, Völker
-U, Polasek O, Vitart V, Badola S, Parker AN, Ridker PM, Kardia SL, Blankenberg S,
-Liu Y, Curhan GC, Franke A, Rochat T, Paulweber B, Prokopenko I, Wang W, Gudnason
-V, Shuldiner AR, Coresh J, Schmidt R, Ferrucci L, Shlipak MG, van Duijn CM,
-Borecki I, Krämer BK, Rudan I, Gyllensten U, Wilson JF, Witteman JC, Pramstaller 
-PP, Rettig R, Hastie N, Chasman DI, Kao WH, Heid IM, Fox CS.
-
-        <div class="citation">Nat Genet. 2010 May;42(5):376-84. doi: 10.1038/ng.568. Epub 2010 Apr 11.</div>
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/26831199" target="_blank">PMID: 26831199</a>  
+        Genetic associations at 53 loci highlight cell types and biological pathways relevant for kidney function. <br/>  
+                Pattaro C, Teumer A, Gorski M, Chu AY, Li M, Mijatovic V, Garnaas M, Tin A, Sorice R, Li Y, Taliun D, Olden M, Foster M, Yang Q, Chen MH, Pers TH, Johnson AD, Ko YA, Fuchsberger C, Tayo B, Nalls M, Feitosa MF, Isaacs A, Dehghan A, d'Adamo P, Adeyemo A, Dieffenbach AK, Zonderman AB, Nolte IM, van der Most PJ, Wright AF, Shuldiner AR, Morrison AC, Hofman A, Smith AV, Dreisbach AW, Franke A, Uitterlinden AG, Metspalu A, Tonjes A, Lupo A, Robino A, Johansson Å, Demirkan A, Kollerits B, Freedman BI, Ponte B, Oostra BA, Paulweber B, Krämer BK, Mitchell BD, Buckley BM, Peralta CA, Hayward C, Helmer C, Rotimi CN, Shaffer CM, Müller C, Sala C, van Duijn CM, Saint-Pierre A, Ackermann D, Shriner D, Ruggiero D, Toniolo D, Lu Y, Cusi D, Czamara D, Ellinghaus D, Siscovick DS, Ruderfer D, Gieger C, Grallert H, Rochtchina E, Atkinson EJ, Holliday EG, Boerwinkle E, Salvi E, Bottinger EP, Murgia F, Rivadeneira F, Ernst F, Kronenberg F, Hu FB, Navis GJ, Curhan GC, Ehret GB, Homuth G, Coassin S, Thun GA, Pistis G, Gambaro G, Malerba G, Montgomery GW, Eiriksdottir G, Jacobs G, Li G, Wichmann HE, Campbell H, Schmidt H, Wallaschofski H, Völzke H, Brenner H, Kroemer HK, Kramer H, Lin H, Leach IM, Ford I, Guessous I, Rudan I, Prokopenko I, Borecki I, Heid IM, Kolcic I, Persico I, Jukema JW, Wilson JF, Felix JF, Divers J, Lambert JC, Stafford JM, Gaspoz JM, Smith JA, Faul JD, Wang JJ, Ding J, Hirschhorn JN, Attia J, Whitfield JB, Chalmers J, Viikari J, Coresh J, Denny JC, Karjalainen J, Fernandes JK, Endlich K, Butterbach K, Keene KL, Lohman K, Portas L, Launer LJ, Lyytikäinen LP, Yengo L, Franke L, Ferrucci L, Rose LM, Kedenko L, Rao M, Struchalin M, Kleber ME, Cavalieri M, Haun M, Cornelis MC, Ciullo M, Pirastu M, de Andrade M, McEvoy MA, Woodward M, Adam M, Cocca M, Nauck M, Imboden M, Waldenberger M, Pruijm M, Metzger M, Stumvoll M, Evans MK, Sale MM, Kähönen M, Boban M, Bochud M, Rheinberger M, Verweij N, Bouatia-Naji N, Martin NG, Hastie N, Probst-Hensch N, Soranzo N, Devuyst O, Raitakari O, Gottesman O, Franco OH, Polasek O, Gasparini P, Munroe PB, Ridker PM, Mitchell P, Muntner P, Meisinger C, Smit JH; ICBP Consortium; AGEN Consortium; CARDIOGRAM; CHARGe-Heart Failure Group; ECHOGen Consortium, Kovacs P, Wild PS, Froguel P, Rettig R, Mägi R, Biffar R, Schmidt R, Middelberg RP, Carroll RJ, Penninx BW, Scott RJ, Katz R, Sedaghat S, Wild SH, Kardia SL, Ulivi S, Hwang SJ, Enroth S, Kloiber S, Trompet S, Stengel B, Hancock SJ, Turner ST, Rosas SE, Stracke S, Harris TB, Zeller T, Zemunik T, Lehtimäki T, Illig T, Aspelund T, Nikopensius T, Esko T, Tanaka T, Gyllensten U, Völker U, Emilsson V, Vitart V, Aalto V, Gudnason V, Chouraki V, Chen WM, Igl W, März W, Koenig W, Lieb W, Loos RJ, Liu Y, Snieder H, Pramstaller PP, Parsa A, O'Connell JR, Susztak K, Hamet P, Tremblay J, de Boer IH, Böger CA, Goessling W, Chasman DI, Köttgen A, Kao WH, Fox CS.
+         <div class="citation">Nat Commun. 2016 Jan 21;7:10023.</div> 
 
         </div></p>
 
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>
-<li>Chronic kidney disease</li>
 <li>eGFR-creat (serum creatinine)</li>
+<li>eGFR-creat  (serum creatinine): individuals with type 2 diabetes</li>
+<li>eGFR-creat  (serum creatinine): individuals without type 2 diabetes</li>
 <li>eGFR-cys (serum cystatin C)</li>
-<li>Urinary albumin-to-creatinine ratio</li>
-<li>Microalbuminuria</li>
+<li>Chronic kidney disease</li>
+<li>eGFR-creat  (serum creatinine): African Americans</li>
 </ul>
 
     <h6 style="color:#ccc;">Project</h6>
     <h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
 
     <p>CKDGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
+
+<h6 style="color:#ccc;">Experiment summary</h6><p>Summary meta-analysis data are provided for the phenotypes listed above. Unless otherwise specified, analyses were performed among participants of European ancestry. Analyses were performed on the entire group except for those indicated to include only participants with or without T2D, or participants of African ancestry.</p>
+
+
 </div>

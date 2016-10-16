@@ -58,4 +58,4 @@ Nikpay M, Goel A, Won HH, Hall LM, Willenborg C, Kanoni S, Saleheen D, Kyriakou 
         align="left">
 </p>
 <h6 style="color:#ccc;">Experiment summary</h6>
-<p>ARDIoGRAMplusC4D 1000 Genomes-based GWAS is a meta-analysis of GWAS studies of mainly European, South Asian, and East Asian, descent imputed using the 1000 Genomes phase 1 v3 training set with 38 million variants. The study interrogated 9.4 million variants and involved 60,801 CAD cases and 123,504 controls.</p>
+<p>CARDIoGRAMplusC4D 1000 Genomes-based GWAS is a meta-analysis of GWAS studies of mainly European, South Asian, and East Asian, descent imputed using the 1000 Genomes phase 1 v3 training set with 38 million variants. The study interrogated 9.4 million variants and involved 60,801 CAD cases and 123,504 controls.</p>
