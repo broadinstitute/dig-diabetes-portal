@@ -74,7 +74,7 @@ Gaulton KJ, Ferreira T, Lee Y, Raimondo A, Mägi R, Reschen ME, Mahajan A, Locke
 
 <p>
 DIAGRAM name: Stage 1 GWAS: Summary Statistics<br/>
-Portal name: DIAGRAM Transethnic meta-analysis<br/>
+Portal name: DIAGRAM GWAS<br/>
 </p>
 
 <p>
@@ -90,6 +90,11 @@ Portal name: DIAGRAM GWAS + MetaboChip: females; DIAGRAM GWAS + MetaboChip: male
 <p>
 DIAGRAM name: Stage 2 Metabochip: Summary Statistics<br/>
 Portal name: DIAGRAM MetaboChip<br/>
+</p>
+
+<p>
+DIAGRAM name: Trans-ethnic T2D GWAS meta-analysis<br/>
+Portal name: DIAGRAM Transethnic meta-analysis<br/>
 </p>
 
 <p>
