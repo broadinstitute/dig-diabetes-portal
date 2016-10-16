@@ -750,7 +750,7 @@ var UTILS = {
 
 
     },
-    jsTreeDataRetrieverPhenoSpec : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax){
+    jsTreeDataRetrieverPhenoSpec : function (divId,tableId,phenotypeName,sampleGroupName,retrieveJSTreeAjax,executeWhenDone,executeWhenDoneParm,ewdArray){
         var dataPasser = {phenotype:phenotypeName,sampleGroup:sampleGroupName};
         $(divId).jstree({
             "core" : {
@@ -799,6 +799,9 @@ var UTILS = {
             }
             for ( var i = 0 ; i < listToDelete.length ; i++ )  {
                 $(divId).jstree("delete_node", listToDelete[i]);
+            }
+            if (typeof executeWhenDone !== 'undefined'){
+                executeWhenDone(executeWhenDoneParm,ewdArray);
             }
 
         });

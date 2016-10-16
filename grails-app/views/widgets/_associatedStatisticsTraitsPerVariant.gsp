@@ -116,15 +116,28 @@ button.expandoButton:visited {
                                 '<g:message code="table.buttons.copyText" default="Copy" />',
                                 '<g:message code="table.buttons.printText" default="Print me!" />');
                         var sgLinks = $('.sgIdentifierInTraitTable');
-
+                        var deferreds = [];
+                        var defCount = [];
                         for (var i = 0; i < sgLinks.length; i++) {
                             var jqueryObj = $(sgLinks[i]);
-                            UTILS.jsTreeDataRetrieverPhenoSpec('#' + jqueryObj.attr('id'), '#traitsPerVariantTable',
+                            // TODO: remove this work around
+                            // prog note: there must be a way to to this with proper promises.  I'm not sure that
+                            //  my hack below is any worse, but I'd rather use the standard technique.
+                            var fwd = function(i,ewdArray){
+                                ewdArray.push('done'+i);
+                                if (ewdArray.length>=sgLinks.length){
+                                    $('#reviser').click(); // click button to refresh all rows
+                                }
+
+                            };
+                            deferreds.push(UTILS.jsTreeDataRetrieverPhenoSpec('#' + jqueryObj.attr('id'), '#traitsPerVariantTable',
                                     jqueryObj.attr('phenotypename'),
                                     jqueryObj.attr('datasetname'),
-                                    "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}");
+                                    "${createLink(controller: 'VariantSearch', action: 'retrieveJSTreeAjax')}",fwd,i,defCount));
                         }
-
+                        $.when.apply($,deferreds).then(function() {
+                            //console.log('really, really done');
+                        });
                         loading.hide();
                     },
                     error: function (jqXHR, exception) {
