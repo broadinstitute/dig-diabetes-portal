@@ -4,9 +4,9 @@
     <p>Download URL: <a href="https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files" target="_blank">https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files</a><br/>
        Publication: <div class="paper">
 
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20881960" target="_blank">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/20881960" target="_blank">PMID: 20881960</a>
 
-            Hundreds of variants clustered in genomic loci and biological pathways affect human height.</a> <br/>
+            Hundreds of variants clustered in genomic loci and biological pathways affect human height. <br/>
 
         Lango Allen H, Estrada K, Lettre G, Berndt SI, Weedon MN, Rivadeneira F,
 Willer CJ, Jackson AU, Vedantam S, Raychaudhuri S, Ferreira T, Wood AR, Weyant
@@ -56,6 +56,30 @@ Abecasis GR, Stefansson K, Frayling TM, Hirschhorn JN.
 2010 Oct 14;467(7317):832-8. doi: 10.1038/nature09410. Epub 2010 Sep 29.</div>
 
         </div></p>
+        <p><div class="paper">          <a href="http://www.ncbi.nlm.nih.gov/pubmed/22982992" target="_blank">  PMID: 22982992</a>
+       FTO genotype is associated with phenotypic variability of body mass index. <br/>  
+       Yang J, Loos RJ, Powell JE, Medland SE, Speliotes EK, Chasman DI, Rose LM, Thorleifsson G, \
+       Steinthorsdottir V, Mägi R, Waite L, Smith AV, Yerges-Armstrong LM, Monda KL, Hadley D, Mahajan A, \
+       Li G, Kapur K, Vitart V, Huffman JE, Wang SR, Palmer C, Esko T, Fischer K, Zhao JH, Demirkan A, \
+       Isaacs A, Feitosa MF, Luan J, Heard-Costa NL, White C, Jackson AU, Preuss M, Ziegler A, Eriksson J, \
+       Kutalik Z, Frau F, Nolte IM, Van Vliet-Ostaptchouk JV, Hottenga JJ, Jacobs KB, Verweij N, Goel A, \
+       Medina-Gomez C, Estrada K, Bragg-Gresham JL, Sanna S, Sidore C, Tyrer J, Teumer A, Prokopenko I, \
+       Mangino M, Lindgren CM, Assimes TL, Shuldiner AR, Hui J, Beilby JP, McArdle WL, Hall P, Haritunians T, \
+       Zgaga L, Kolcic I, Polasek O, Zemunik T, Oostra BA, Junttila MJ, Grönberg H, Schreiber S, Peters A, \
+       Hicks AA, Stephens J, Foad NS, Laitinen J, Pouta A, Kaakinen M, Willemsen G, Vink JM, Wild SH, Navis G, \
+       Asselbergs FW, Homuth G, John U, Iribarren C, Harris T, Launer L, Gudnason V, O'Connell JR, Boerwinkle E, \
+       Cadby G, Palmer LJ, James AL, Musk AW, Ingelsson E, Psaty BM, Beckmann JS, Waeber G, Vollenweider P, \
+       Hayward C, Wright AF, Rudan I, Groop LC, Metspalu A, Khaw KT, van Duijn CM, Borecki IB, Province MA, \
+       Wareham NJ, Tardif JC, Huikuri HV, Cupples LA, Atwood LD, Fox CS, Boehnke M, Collins FS, Mohlke KL, \
+       Erdmann J, Schunkert H, Hengstenberg C, Stark K, Lorentzon M, Ohlsson C, Cusi D, Staessen JA, Van der Klauw MM, \
+       Pramstaller PP, Kathiresan S, Jolley JD, Ripatti S, Jarvelin MR, de Geus EJ, Boomsma DI, Penninx B, Wilson JF, \
+       Campbell H, Chanock SJ, van der Harst P, Hamsten A, Watkins H, Hofman A, Witteman JC, Zillikens MC, \
+       Uitterlinden AG, Rivadeneira F, Zillikens MC, Kiemeney LA, Vermeulen SH, Abecasis GR, Schlessinger D, Schipf S, \
+       Stumvoll M, Tönjes A, Spector TD, North KE, Lettre G, McCarthy MI, Berndt SI, Heath AC, Madden PA, Nyholt DR, \
+       Montgomery GW, Martin NG, McKnight B, Strachan DP, Hill WG, Snieder H, Ridker PM, Thorsteinsdottir U, \
+       Stefansson K, Frayling TM, Hirschhorn JN, Goddard ME, Visscher PM.
+         <div class="citation">Nature. 2012 Oct 11;490(7419):267-72. doi: 10.1038/nature11401.</div>          </div>
+</p>
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>
 <li>BMI</li>
@@ -73,3 +97,8 @@ Abecasis GR, Stefansson K, Frayling TM, Hirschhorn JN.
     <p>An international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</p>
 </div>
 
+<h6 style="color:#ccc;">Experiment summary</h6>
+<p>
+Data were updated in October 2016, including the addition of European cohorts for BMI and height (published in the Yang \
+et al. article cited above).
+</p>

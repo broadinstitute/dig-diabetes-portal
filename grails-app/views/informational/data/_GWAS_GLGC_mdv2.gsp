@@ -1,7 +1,8 @@
 <div class="panel-body">
     <h6 style="color:#ccc;">Data set</h6>
 
-    <p>Publication: <div class="paper">
+    <p>Download URL: <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/">http://csg.sph.umich.edu//abecasis/public/lipids2013/</a>
+    Publication: <div class="paper">
 
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/20686565" target="_blank">
 
@@ -42,6 +43,39 @@ van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
         <div class="citation">Nature. 2010 Aug 5;466(7307):707-13. doi: 10.1038/nature09270.</div>
 
         </div>
+        <div class="paper">          <a href="http://www.ncbi.nlm.nih.gov/pubmed/24097068" target="_blank">PMID: 24097068</a>  
+        Discovery and refinement of loci associated with lipid levels. <br/>  
+        Global Lipids Genetics Consortium, Willer CJ, Schmidt EM, Sengupta S, Peloso GM, Gustafsson S, Kanoni S, \
+        Ganna A, Chen J, Buchkovich ML, Mora S, Beckmann JS, Bragg-Gresham JL, Chang HY, Demirkan A, Den Hertog HM, \
+        Do R, Donnelly LA, Ehret GB, Esko T, Feitosa MF, Ferreira T, Fischer K, Fontanillas P, Fraser RM, Freitag DF, \
+        Gurdasani D, Heikkilä K, Hyppönen E, Isaacs A, Jackson AU, Johansson A, Johnson T, Kaakinen M, Kettunen J, \
+        Kleber ME, Li X, Luan J, Lyytikäinen LP, Magnusson PK, Mangino M, Mihailov E, Montasser ME, Müller-Nurasyid M, \
+        Nolte IM, O'Connell JR, Palmer CD, Perola M, Petersen AK, Sanna S, Saxena R, Service SK, Shah S, Shungin D, \
+        Sidore C, Song C, Strawbridge RJ, Surakka I, Tanaka T, Teslovich TM, Thorleifsson G, Van den Herik EG, \
+        Voight BF, Volcik KA, Waite LL, Wong A, Wu Y, Zhang W, Absher D, Asiki G, Barroso I, Been LF, Bolton JL, \
+        Bonnycastle LL, Brambilla P, Burnett MS, Cesana G, Dimitriou M, Doney AS, Döring A, Elliott P, Epstein SE, \
+        Eyjolfsson GI, Gigante B, Goodarzi MO, Grallert H, Gravito ML, Groves CJ, Hallmans G, Hartikainen AL, \
+        Hayward C, Hernandez D, Hicks AA, Holm H, Hung YJ, Illig T, Jones MR, Kaleebu P, Kastelein JJ, Khaw KT, \
+        Kim E, Klopp N, Komulainen P, Kumari M, Langenberg C, Lehtimäki T, Lin SY, Lindström J, Loos RJ, Mach F, \
+        McArdle WL, Meisinger C, Mitchell BD, Müller G, Nagaraja R, Narisu N, Nieminen TV, Nsubuga RN, Olafsson I, \
+        Ong KK, Palotie A, Papamarkou T, Pomilla C, Pouta A, Rader DJ, Reilly MP, Ridker PM, Rivadeneira F, Rudan I, \
+        Ruokonen A, Samani N, Scharnagl H, Seeley J, Silander K, Stancáková A, Stirrups K, Swift AJ, Tiret L, \
+        Uitterlinden AG, van Pelt LJ, Vedantam S, Wainwright N, Wijmenga C, Wild SH, Willemsen G, Wilsgaard T, \
+        Wilson JF, Young EH, Zhao JH, Adair LS, Arveiler D, Assimes TL, Bandinelli S, Bennett F, Bochud M, Boehm BO, \
+        Boomsma DI, Borecki IB, Bornstein SR, Bovet P, Burnier M, Campbell H, Chakravarti A, Chambers JC, Chen YD, \
+        Collins FS, Cooper RS, Danesh J, Dedoussis G, de Faire U, Feranil AB, Ferrières J, Ferrucci L, Freimer NB, \
+        Gieger C, Groop LC, Gudnason V, Gyllensten U, Hamsten A, Harris TB, Hingorani A, Hirschhorn JN, Hofman A, \
+        Hovingh GK, Hsiung CA, Humphries SE, Hunt SC, Hveem K, Iribarren C, Järvelin MR, Jula A, Kähönen M, Kaprio J, \
+        Kesäniemi A, Kivimaki M, Kooner JS, Koudstaal PJ, Krauss RM, Kuh D, Kuusisto J, Kyvik KO, Laakso M, Lakka TA, \
+        Lind L, Lindgren CM, Martin NG, März W, McCarthy MI, McKenzie CA, Meneton P, Metspalu A, Moilanen L, \
+        Morris AD, Munroe PB, Njølstad I, Pedersen NL, Power C, Pramstaller PP, Price JF, Psaty BM, Quertermous T, \
+        Rauramaa R, Saleheen D, Salomaa V, Sanghera DK, Saramies J, Schwarz PE, Sheu WH, Shuldiner AR, Siegbahn A, \
+        Spector TD, Stefansson K, Strachan DP, Tayo BO, Tremoli E, Tuomilehto J, Uusitupa M, van Duijn CM, \
+        Vollenweider P, Wallentin L, Wareham NJ, Whitfield JB, Wolffenbuttel BH, Ordovas JM, Boerwinkle E, Palmer CN, \
+        Thorsteinsdottir U, Chasman DI, Rotter JI, Franks PW, Ripatti S, Cupples LA, Sandhu MS, Rich SS, Boehnke M, \
+        Deloukas P, Kathiresan S, Mohlke KL, Ingelsson E, Abecasis GR.
+         <div class="citation">Nat Genet. 2013 Nov;45(11):1274-83. doi: 10.1038/ng.2797.</div>          </div>
+
 </p>
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>
@@ -59,5 +93,11 @@ van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
     </small></h4>
 
     <p>A consortium to study the genetic determinants of  blood low-density lipoprotein cholesterol, high-density lipoprotein cholesterol, and triglycerides.</p>
+<h6 style="color:#ccc;">Experiment summary</h6><p>
+<p>With updates to the data in October 2016, the sample size for GLGC GWAS increased to 188,577. Associations for \
+triglyceride, cholesterol, HDL, and LDL levels were updated from a joint analysis of GWAS and MetaboChip data, \
+described <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/">here</a> and published in Willer et al. 2013 (see above).</p>
+
+
 </div>
 
