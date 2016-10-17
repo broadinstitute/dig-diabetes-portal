@@ -65,12 +65,10 @@ Gaulton KJ, Ferreira T, Lee Y, Raimondo A, Mägi R, Reschen ME, Mahajan A, Locke
     <p>The DIAGRAM consortium performs large-scale studies to characterize the genetic basis of type 2 diabetes, primarily focusing on samples of European descent.</p>
 
     <h6 style="color:#ccc;">Experiment summary</h6>
-    <p>With data updates in October 2016, total sample size for DIAGRAM data in the Portal increased to 149,821. New gender-stratified subsets were added \
-    as well as Metabochip and fine-mapping results.
+    <p>With data updates in October 2016, total sample size for DIAGRAM data in the Portal increased to 149,821. New gender-stratified subsets were added as well as Metabochip and fine-mapping results.
     </p>
 
-    <p>Please see <a href="http://diagram-consortium.org/downloads.html">this page</a> for more details on the DIAGRAM data sets. Data set names on the DIAGRAM \
-    download page correspond to names used in the Portal as follows:</p>
+    <p>Please see <a href="http://diagram-consortium.org/downloads.html">this page</a> for more details on the DIAGRAM data sets. Data set names on the DIAGRAM download page correspond to names used in the Portal as follows:</p>
 
 <p>
 DIAGRAM name: Stage 1 GWAS: Summary Statistics<br/>
