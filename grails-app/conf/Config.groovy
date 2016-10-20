@@ -171,7 +171,8 @@ t2dDev02BehindLoadBalancer {
 
 // individual servers
 t2dAws01RestServer {
-    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+//    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
     name =  'aws/'
     path = 'gs/'
 }
@@ -228,12 +229,12 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
 burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs//burden");
+burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
 burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
 burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
-burdenRestServerProd = new ServerBean("direct prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -347,9 +348,9 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgenetics.org"
+      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
