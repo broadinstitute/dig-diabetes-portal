@@ -21,6 +21,8 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.codehaus.groovy.grails.web.mapping.LinkGenerator
 
+import javax.annotation.PostConstruct
+
 @Transactional
 class SharedToolsService {
 
@@ -84,6 +86,14 @@ class SharedToolsService {
     LinkedHashMap convertPhenotypesFlipped = null;
 
     Integer helpTextSetting = 1 // 0== never display, 1== display conditionally, 2== always display
+
+    @PostConstruct
+    def init(){
+        String portalType = this.grailsApplication.config.portal.type.override;
+
+        // get the data version based on user session portal type; default to t2d
+        dataVersion = (this.grailsApplication.config.portal.data.version.map[portalType]-"mdv") as Integer;
+    }
 
     public String retrieveCurrentGeneChromosome() {
         return currentGeneChromosome

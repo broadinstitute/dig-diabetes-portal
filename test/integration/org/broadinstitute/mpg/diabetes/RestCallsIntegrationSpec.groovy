@@ -68,7 +68,7 @@ class RestCallsIntegrationSpec extends IntegrationSpec {
 
     void "test common property query builder call"() {
         setup:
-        Phenotype phenotype = this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv2").get("T2D")
+        Phenotype phenotype = this.jsonParser.getPhenotypeMapByTechnologyAndVersion("GWAS", "mdv23").get("T2D")
         String chromosome = "9";
         int startPosition = 100000;
         int endPosition = 2000000;

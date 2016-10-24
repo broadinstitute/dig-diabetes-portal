@@ -965,10 +965,16 @@ class MetaDataService {
             // call the rest server
             jsonObject = this.restServerService.postGetDataCall(this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
 
-            // for the result, translate into a variant and add to the list
-            KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
-            List<Variant> tempList = knowledgeBaseResultParser.parseResult();
-            variantList.addAll(tempList);
+            if (jsonObject["is_error"]) {
+                println("error from KB: ${jsonObject["error_msg"]}")
+            } else {
+                // for the result, translate into a variant and add to the list
+                KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
+                List<Variant> tempList = knowledgeBaseResultParser.parseResult();
+                variantList.addAll(tempList);
+            }
+
+
         }
 
         // for all the variants found, translate into trait-search format

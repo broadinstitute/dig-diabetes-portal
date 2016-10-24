@@ -218,8 +218,9 @@ t2dNewDevRestServer { //current 'dev'
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 
 //server.URL = 'http://localhost:8888/dig-genome-store/gs/'
+// qa is probably right, the right now we need the tests to pass
 server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
-//server.URL = "http://type2diabetes-dev.elasticbeanstalk.com"
+server.URL = "http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/aws/gs/"
 //server.URL = 'http://dig-qa-01.broadinstitute.org:8888/qa/gs/'
 
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
@@ -571,8 +572,8 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 // placeholder for data version
-diabetes.data.version = "mdv2";
-portal.data.version.map = ["t2d": "mdv2", "stroke": "mdv5", "mi" : "mdv2"];
+diabetes.data.version = "mdv23";
+portal.data.version.map = ["t2d": "mdv23", "stroke": "mdv10", "mi" : "mdv23"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
 portal.type.override = "t2d"     // options are "t2d" or "stroke"
 
