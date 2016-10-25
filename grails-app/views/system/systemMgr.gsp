@@ -75,11 +75,14 @@
                     <div class="col-md-7">
                         <div id="datatypes-form">
                             <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="aws01restserver"
-                                        <%=restServer.getCurrentServer()==restServer.getAws01RestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS01" /> (${restServer.getAws01RestServer()})
-                                </label>
+                                <span>
+                                    <label>
+                                        <input id="testserver" type="radio" name="datatype" value="aws01restserver"
+                                            <%=restServer.getCurrentServer()==restServer.getAws01RestServer()?" checked ":"" %> />
+                                        <g:message code="system.radio.rest_server.AWS01" /> (${restServer.getAws01RestServer()})
+                                    </label>
+
+                                </span>
                             </div>
 
                             <div class="radio">
@@ -88,6 +91,7 @@
                                         <%=restServer.getCurrentServer()==restServer.getAws02RestServer()?" checked ":"" %> />
                                     <g:message code="system.radio.rest_server.AWS02" /> (${restServer.getAws02RestServer()})
                                 </label>
+
                             </div>
 
                             <div class="radio">
@@ -96,6 +100,7 @@
                                         <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
                                     <g:message code="system.radio.rest_server.dev" /> (${restServer.getDevLoadBalanced()})
                                 </label>
+
                             </div>
 
                             <div class="radio">
@@ -104,6 +109,7 @@
                                         <%=restServer.getCurrentServer()==restServer.getQaLoadBalanced()?" checked ":"" %>  />
                                     <g:message code="system.radio.rest_server.qa" /> (${restServer.getQaLoadBalanced()})
                                 </label>
+
                             </div>
 
                             <div class="radio">
@@ -112,6 +118,7 @@
                                         <%=restServer.getCurrentServer()==restServer.getProdLoadBalanced()?" checked ":"" %>  />
                                     <g:message code="system.radio.rest_server.prod" /> (${restServer.getProdLoadBalanced()})
                                 </label>
+
                             </div>
 
                          </div>
@@ -131,6 +138,20 @@
                     </div>
 
                 </div>
+                    <div class="row clearfix" style="margin: 10px; border: 1px solid grey; padding: 10px">
+                        <div class="col-md-2">Immediate cache reset</div>
+                        <div class="col-md-10">
+                            <ul>
+                                <li style="padding: 10px"><a href="http://dig-dev-01.broadinstitute.org:8888/dev/gs/reloadCache" class="btn btn-warning">reset http://dig-dev-01.broadinstitute.org:8888/dev/gs cache</a></li>
+                                <li style="padding: 10px"><a href="http://dig-dev-02.broadinstitute.org:8888/dev/gs/reloadCache" class="btn btn-warning">reset http://dig-dev-02.broadinstitute.org:8888/dev/gs cache</a></li>
+                                <li style="padding: 10px"><a href="${restServer.getAws01RestServer()}reloadCache" class="btn btn-warning">reset ${restServer.getAws01RestServer()} cache</a></li>
+                                <li style="padding: 10px"><a href="${restServer.getAws02RestServer()}reloadCache" class="btn btn-warning">reset ${restServer.getAws02RestServer()} cache</a></li>
+                                <li style="padding: 10px"><a href="${restServer.getDevLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getDevLoadBalanced()} cache</a></li>
+                                <li style="padding: 10px"><a href="${restServer.getQaLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getQaLoadBalanced()} cache</a></li>
+                                <li style="padding: 10px"><a href="${restServer.getProdLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getProdLoadBalanced()} cache</a></li>
+                            </ul>
+                        </div>
+                    </div>
                 <div class="row clearfix">
                     <div class="col-md-2"></div>
                     <div class="col-md-8">

@@ -1161,6 +1161,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     level: significanceList[i],
                     count: apiData.numRecords
                 ] as JSONObject)
+            } else {
+                log.error("error in requestGeneCountByPValue = '${apiData.error_msg}', code = ${apiData.error_code}")
             }
             // in the case that numRecords < 1000, then just get the whole variant list and process on that
             // otherwise proceed to the next significance value
@@ -1320,6 +1322,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         pValObject = [level: i, count: apiResults.numRecords]
                     }
                     pValsArray << pValObject
+                } else {
+                    log.error("error in combinedEthnicityTable = '${apiData.error_msg}', code = ${apiData.error_code}")
                 }
             }
 
@@ -2050,6 +2054,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject returnValue
         JSONObject apiResults = gatherTraitPerVariantResults( variantName, technology )
+        if (apiResults.is_error){
+            log.error("error in getTraitPerVariant = '${apiResults.error_msg}'")
+        }
 
         String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "\"openPhenotypes\": []", "" )
         def slurper = new JsonSlurper()

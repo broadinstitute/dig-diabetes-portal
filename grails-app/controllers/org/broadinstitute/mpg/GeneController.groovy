@@ -270,7 +270,7 @@ class GeneController {
         numericBounds << ["lowerValue":0.0f,"higherValue":0.0005f]
 
 
-        JSONObject jsonObject =  restServerService.combinedEthnicityTable ( geneToStartWith.trim().toUpperCase(), uniqueRowMaps, numericBounds)
+        JSONObject jsonObject =  restServerService.'s' ( geneToStartWith.trim().toUpperCase(), uniqueRowMaps, numericBounds)
         render(status:200, contentType:"application/json") {
             [ethnicityInfo:jsonObject]
         }
