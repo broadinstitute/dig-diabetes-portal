@@ -12,6 +12,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
@@ -54,8 +55,6 @@ class RestServerService {
     public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
-    public static String GWASDATAPVALUE = "P_VALUE"
-    public static String EXOMECHIPPVALUE = "P_VALUE"
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -67,10 +66,10 @@ class RestServerService {
     private String HOMOZYGOTE_UNAFFECTED = "HOMU"
     private String OBSERVED_AFFECTED = "OBSA"
     private String OBSERVED_UNAFFECTED = "OBSU"
+    private Integer MAXIMUM_NUMBER_DB_JOINS = 60
 
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
     public static final String HAIL_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
-    //public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
     public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
 
 
@@ -566,6 +565,79 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
     }
+
+
+
+    public JSONObject postMultiJoinProtectedDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
+        QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
+        GetDataQueryBean getDataQueryBean = getDataQueryHolder.getGetDataQuery()
+        List<HashMap> listOfPropertyMaps = []
+        JSONObject retValue = null
+        if (getDataQueryBean.queryPropertyList.size()>this.MAXIMUM_NUMBER_DB_JOINS){
+            int loopCounter = 0
+            listOfPropertyMaps << [:]
+            List <String> propertyListKeys = getDataQueryBean.queryPropertyMap.keySet() as List<String>
+            for (int i = 0; i < propertyListKeys.size(); i++){
+                String keyName = propertyListKeys[i]
+                listOfPropertyMaps[loopCounter][keyName] = getDataQueryBean.queryPropertyMap[keyName]
+                if (i == (this.MAXIMUM_NUMBER_DB_JOINS*(loopCounter+1))-1){ // end of batch
+                    loopCounter++
+                    listOfPropertyMaps << [:]
+                }
+            }
+            List<JSONObject> returnJSONObjectList = []
+            def slurper = new JsonSlurper()
+            for (Map propertyMap in listOfPropertyMaps){
+                getDataQueryBean.queryPropertyMap = propertyMap
+                String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryBean)
+                String returnString = postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
+                returnJSONObjectList << slurper.parseText(returnString)
+            }
+            for (Map returnJSONObject in returnJSONObjectList){
+                if (retValue == null){
+                    retValue = returnJSONObject
+                } else {
+                    List newResults = returnJSONObject['variants']
+                    for (def resultCategories in newResults){
+                        for (def resultCategory in resultCategories){
+                            Map result = resultCategory as Map
+                            List keys = result.keySet() as List
+                            String key  = keys.first() as String
+                            int existingIndex = -1
+                            int existingIndexCounter = 0
+                            for (def existingResult in retValue['variants'][0]){
+                                Map resultExisting = existingResult as Map
+                                List keysExisting = resultExisting.keySet() as List
+                                String keyExisting  = keysExisting.first() as String
+                                if (key==keyExisting){
+                                    existingIndex = existingIndexCounter
+                                }
+                                existingIndexCounter++
+                            }
+                            if (existingIndex==-1){
+                                HashMap newEntry = [:]
+                                newEntry[key] = resultCategory[key]
+                                retValue['variants'][0] << newEntry
+                            } else { // must merge
+                                Map everythingToAdd = result[key] as Map
+                                List keysToAdd = everythingToAdd.keySet() as List
+                                for (def keyToAdd in keysToAdd) {
+                                    HashMap newEntryToAdd = [:]
+                                    newEntryToAdd[keyToAdd] = result[key][keyToAdd]
+                                    retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
+                                }
+
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return retValue
+    }
+
+
 
 
     private String getRestCall(String targetUrl) {
@@ -1933,14 +2005,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), technology, false ).collect {
                     it.parent.systemId
                 }
-//        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
-//            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
-//        }
+        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
+            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
+        }
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        JsonSlurper slurper = new JsonSlurper()
-        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
-        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        //JsonSlurper slurper = new JsonSlurper()
+        JSONObject dataJsonObject = postMultiJoinProtectedDataQueryRestCall(getDataQueryHolder)
+        //String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+//        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
         return dataJsonObject
     }
 

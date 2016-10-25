@@ -126,7 +126,7 @@ button.expandoButton:visited {
                             var fwd = function(i,ewdArray){
                                 ewdArray.push('done'+i);
                                 if (ewdArray.length>=sgLinks.length){
-                                    $('#reviser').click(); // click button to refresh all rows
+                                   // $('#reviser').click(); // click button to refresh all rows
                                 }
 
                             };

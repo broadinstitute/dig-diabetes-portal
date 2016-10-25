@@ -35,6 +35,16 @@ public class GetDataQueryBean implements GetDataQuery {
     // creating log
     Log queryLog = new Log4JLogger(this.getClass().getName());
 
+
+    public Map<String, Property> getQueryPropertyMap() {
+        return queryPropertyMap;
+    }
+
+    public void setQueryPropertyMap(Map<String, Property> queryPropertyMap) {
+        this.queryPropertyMap = queryPropertyMap;
+    }
+
+
     public void addQueryProperty(Property property) {
         if (!(this.queryPropertyMap.containsKey(property.getId()))){
             this.queryPropertyMap.put(property.getId(), property);
