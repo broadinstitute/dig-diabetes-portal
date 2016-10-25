@@ -962,16 +962,21 @@ class MetaDataService {
         for (Phenotype phenotype : phenotypeList) {
             getDataQuery = commonGetDataQueryBuilder.getDataQueryForPhenotype(phenotype, chromosome, startPosition, endPosition, "0.05");
 
-            // call the rest server
-            jsonObject = this.restServerService.postGetDataCall(this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
 
-            if (jsonObject["is_error"]) {
-                println("error from KB: ${jsonObject["error_msg"]}")
-            } else {
-                // for the result, translate into a variant and add to the list
-                KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
-                List<Variant> tempList = knowledgeBaseResultParser.parseResult();
-                variantList.addAll(tempList);
+
+            // call the rest server
+            if (((GetDataQueryBean) getDataQuery).queryPropertyMap.size()==3){
+                jsonObject = this.restServerService.postGetDataCall(this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
+
+                if (jsonObject["is_error"]) {
+                    println("error from KB: ${jsonObject["error_msg"]}")
+                } else {
+                    // for the result, translate into a variant and add to the list
+                    KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
+                    List<Variant> tempList = knowledgeBaseResultParser.parseResult();
+                    variantList.addAll(tempList);
+                }
+
             }
 
 

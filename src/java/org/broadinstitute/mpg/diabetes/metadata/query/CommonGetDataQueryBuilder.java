@@ -45,7 +45,18 @@ public class CommonGetDataQueryBuilder {
         Property property = null;
 
         // build the getData query for the phenotype first
-        queryBean = this.getDataQueryForPhenotype(phenotype, pValueString);
+        //queryBean = this.getDataQueryForPhenotype(phenotype, pValueString);
+        queryBean = new GetDataQueryBean();
+        for (Property tempProperty : phenotype.getProperties()) {
+            if (tempProperty.hasMeaning("P_VALUE")||
+                    tempProperty.hasMeaning("ODDS_RATIO")||
+                    tempProperty.hasMeaning("BETA")||
+                    tempProperty.hasMeaning("DIR")) {
+                queryBean.addQueryProperty(tempProperty);
+            }
+        }
+
+
 
         // add in the filter properties
         property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_CHROMOSOME, PortalConstants.TYPE_COMMON_PROPERTY_KEY);

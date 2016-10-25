@@ -125,11 +125,11 @@
 
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <g:renderBetaFeaturesDisplayedValue>
+                        %{--<g:renderBetaFeaturesDisplayedValue>--}%
                         <div class="separator"></div>
                         <g:render template="/widgets/gwasRegionSummary"
                                   model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
-                        </g:renderBetaFeaturesDisplayedValue>
+                        %{--</g:renderBetaFeaturesDisplayedValue>--}%
                     </g:if>
                     <g:if test="${1}">
 
