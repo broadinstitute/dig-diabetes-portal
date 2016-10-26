@@ -1205,8 +1205,12 @@ var displayBurdenVariantSelector = function (){
            if(typeof alternateValue !== 'undefined') {
                 searchValue = alternateValue;
            }
+           var sampleMetadata = getStoredSampleMetadata();
+           var optionsPerFilter = generateOptionsPerFilter(sampleMetadata.filters) ;
            _.forEach( extractFilters(searchValue,modeledPropertyInstanceRaw), function(filterObject){
                var oneFilter = [];
+               var lastFilterParms = [];
+               var lastFilterName = "";
                _.forEach( filterObject, function(value, key){
                    if (typeof value !== 'undefined'){
                        if (key==="cat"){
@@ -1219,11 +1223,21 @@ var displayBurdenVariantSelector = function (){
                            } else {
                                 oneFilter.push("\""+key+"\": \""+value+"\"");
                            }
+                            if (key==="name"){
+                                lastFilterName = propName;
+                            } else if (key==="parm"){
+                                lastFilterParms = value;
+                            }
                        }
                     }
                 });
-
-               filterStrings.push("{"+oneFilter.join(",\n")+"}");
+                var optionForFilter = optionsPerFilter[lastFilterName];
+                var numberOfFilterOptions = ((lastFilterParms)?lastFilterParms:[]);
+                if (!((optionForFilter)&&
+                    ((optionForFilter.length==numberOfFilterOptions.length)||
+                     (lastFilterParms.length===0)))){
+                    filterStrings.push("{"+oneFilter.join(",\n")+"}");
+               }
            } );
            if ((typeof additionalKey !== 'undefined') &&
                    (additionalKey.length > 0) &&
@@ -1564,13 +1578,15 @@ var displayBurdenVariantSelector = function (){
              selectedMafOptionId =  parseInt(selectedMafOption),
              specifiedMafValue = $('#mafInput').val(),
              specifiedMafValueId  = parseFloat(specifiedMafValue),
-             burdenTraitFilterSelectedOption = $('#burdenTraitFilter').val(),
+             burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
              datasetFilter = $('#datasetFilter').val();
              var dataSet;
              //kludge alert!!!
              if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
                  dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
-             } else {
+             } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
+                dataSet = 'ExChip_CAMP_mdv23';
+             }else {
                 dataSet = 'ExChip_CAMP_mdv23';
              }
 

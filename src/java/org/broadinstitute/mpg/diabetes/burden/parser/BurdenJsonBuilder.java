@@ -310,7 +310,7 @@ public class BurdenJsonBuilder {
 
 
 
-    protected List<QueryFilter> getMinorAlleleFrequencyFiltersByString(String versionString, int mafSampleGroupOption, Float mafValue, MetaDataService metaDataService) throws PortalException {
+    protected List<QueryFilter> getMinorAlleleFrequencyFiltersByString(String versionString, int mafSampleGroupOption, Float mafValue, String dataSet, MetaDataService metaDataService) throws PortalException {
         // local variables
         List<QueryFilter> queryFilterList = new ArrayList<QueryFilter>();
         List<DataSet> dataSetList = new ArrayList<DataSet>();
@@ -321,12 +321,13 @@ public class BurdenJsonBuilder {
         Boolean unexpectedData = false;
 
         // get root data set.  We need to get this from the metadata, but we will use a workaround for now.
-        if (("mdv2".equals("mdv2"))||
-                (versionString.equals("mdv21") )||
-                (versionString.equals("mdv22") )||
-                (versionString.equals("mdv23") )) {
-            rootDataSet = metaDataService.getSampleGroupByName("ExSeq_17k_" + versionString );
-        }
+//        if (("mdv2".equals("mdv2"))||
+//                (versionString.equals("mdv21") )||
+//                (versionString.equals("mdv22") )||
+//                (versionString.equals("mdv23") )) {
+//            rootDataSet = metaDataService.getSampleGroupByName("ExSeq_17k_" + versionString );
+//        }
+        rootDataSet = metaDataService.getSampleGroupByName( dataSet );
 
         // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur
         try {

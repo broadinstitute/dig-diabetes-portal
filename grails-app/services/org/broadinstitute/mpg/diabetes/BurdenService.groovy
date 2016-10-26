@@ -224,15 +224,17 @@ class BurdenService {
         String convertedPhenotype = phenotype
         switch (phenotype){
             case "t2d": convertedPhenotype = "T2D"; break
-            default: break
+            default:
+                convertedPhenotype = phenotype;
+                break
         }
 
         try {
-            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, metaDataService);
+            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 //            String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_"+metaDataService.getDataVersion(), "T2D", "P_VALUE" )
 //            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))
-            String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, "T2D", "P_VALUE" )
-            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataSet,1.0,"T2D",pValueName))
+            String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, convertedPhenotype,  "P_VALUE" )
+            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataSet,1.0,convertedPhenotype,pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
@@ -318,7 +320,7 @@ class BurdenService {
 
 
         try {
-            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, metaDataService);
+            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 //            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(dataVersionId, mafSampleGroupOption, mafValue);
             String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_"+metaDataService.getDataVersion(), "T2D", "P_VALUE" )
             queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))

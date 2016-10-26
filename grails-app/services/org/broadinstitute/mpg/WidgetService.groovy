@@ -206,7 +206,7 @@ class WidgetService {
     private List<String> processSingleFilter(Map map, String dataset, List<String> existingFilterList) {
         if (map.name) {
             String filterParameter = map.parm
-            filterParameter = filterParameter.replaceAll("\\s", "")
+         //   filterParameter = filterParameter.replaceAll("\\s", "")
             if (filterParameter ==~ /\[.+\,.+\]/) {
                 // this could be a range filter -- it has square brackets under, and a "," in the middle
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, true, existingFilterList)
