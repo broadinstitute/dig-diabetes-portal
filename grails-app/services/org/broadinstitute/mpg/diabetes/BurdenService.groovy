@@ -224,6 +224,7 @@ class BurdenService {
         String convertedPhenotype = phenotype
         switch (phenotype){
             case "t2d": convertedPhenotype = "T2D"; break
+            case "ICH_Status": convertedPhenotype = "ICH"; break
             default:
                 convertedPhenotype = phenotype;
                 break
@@ -233,8 +234,8 @@ class BurdenService {
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 //            String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_"+metaDataService.getDataVersion(), "T2D", "P_VALUE" )
 //            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))
-            String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, convertedPhenotype,  "P_VALUE" )
-            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataSet,1.0,convertedPhenotype,pValueName))
+//            String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, convertedPhenotype,  "P_VALUE" )
+//            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataSet,1.0,convertedPhenotype,pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);

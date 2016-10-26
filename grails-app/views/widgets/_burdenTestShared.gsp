@@ -1585,7 +1585,7 @@ var displayBurdenVariantSelector = function (){
              if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
                  dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
              } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
-                dataSet = 'ExChip_CAMP_mdv23';
+                dataSet = 'GWAS_Stroke_mdv70';
              }else {
                 dataSet = 'ExChip_CAMP_mdv23';
              }
