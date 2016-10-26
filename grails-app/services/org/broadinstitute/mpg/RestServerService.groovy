@@ -622,9 +622,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                 Map everythingToAdd = result[key] as Map
                                 List keysToAdd = everythingToAdd.keySet() as List
                                 for (def keyToAdd in keysToAdd) {
-                                    HashMap newEntryToAdd = [:]
-                                    newEntryToAdd[keyToAdd] = result[key][keyToAdd]
-                                    retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
+                                    if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
+                                        List keysToAppend = result[key][keyToAdd].keySet() as List
+                                        for (String keyToAppend in keysToAppend){
+                                            retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                        }
+                                    } else {
+                                        HashMap newEntryToAdd = [:]
+                                        newEntryToAdd[keyToAdd] = result[key][keyToAdd]
+                                        retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
+                                    }
                                 }
 
                             }
