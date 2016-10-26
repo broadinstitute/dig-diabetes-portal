@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
+import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -22,6 +23,7 @@ class GeneController {
     SqlService sqlService
     BurdenService burdenService
     WidgetService widgetService
+    GrailsApplication grailsApplication
 
     /***
      * return partial matches as Json for the purposes of the twitter typeahead handler
@@ -115,6 +117,16 @@ class GeneController {
         List<PhenotypeBean> lzOptions = getHailPhenotypeMap()
 
         if (geneToStartWith)  {
+            String portalType = g.portalTypeString() as String
+            String locusZoomDataset = ""
+            // kludge alert
+            if (portalType=='t2d'){
+                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            }else if (portalType=='stroke'){
+                locusZoomDataset = "samples_stroke_"+metaDataService.getDataVersion()
+            } else {
+                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            }
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -132,7 +144,7 @@ class GeneController {
                                              lzOptions:lzOptions,
                                              burdenDataSet:"samples_17k_"+metaDataService.getDataVersion(),
                                              dataVersion: metaDataService.getDataVersion(),
-                                             locusZoomDataset:"ExSeq_17k_"+metaDataService.getDataVersion()
+                                             locusZoomDataset:locusZoomDataset
             ] )
         }
      }

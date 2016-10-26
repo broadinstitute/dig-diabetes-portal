@@ -635,7 +635,7 @@ div.variantBoxHeaders {
                 };
                 if (!mpgSoftware.locusZoom.plotAlreadyExists()){
                     mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                            "#lz-1", "#collapseExample", 'T2D',//'BMI_adj_withincohort_invn',
+                            "#lz-1", "#collapseExample", 'T2D','lzdataset',
                             '${createLink(controller:"gene", action:"getLocusZoom")}',
                             '${createLink(controller:"variantInfo", action:"variantInfo")}');
                 } else {
@@ -820,10 +820,7 @@ mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
         startPosition:  ${geneExtentBegin},
         endPosition:  ${geneExtentEnd}
     };
-    %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,--}%
-            %{--"#lz-1","#collapseExample",'T2D',//'BMI_adj_withincohort_invn',--}%
-            %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-            %{--'${createLink(controller:"variantInfo", action:"variantInfo")}');--}%
+
     });
 
 

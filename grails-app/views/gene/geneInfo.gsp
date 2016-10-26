@@ -61,13 +61,13 @@
             portalType = "stroke";
             </g:if>
             <g:renderNotBetaFeaturesDisplayedValue>
-            if (portalType === 't2d'){
+//            if (portalType === 't2d'){
                 mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-47","#collapseLZ",'T2D',
+                        "#lz-47","#collapseLZ",'${phenotype}','${locusZoomDataset}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
                         mpgSoftware.locusZoom.broadAssociationSource);
-            }
+//            }
 
             </g:renderNotBetaFeaturesDisplayedValue>
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
@@ -189,7 +189,7 @@
 
 
 
-                    %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
+
 
                         <g:renderNotBetaFeaturesDisplayedValue>
 
@@ -199,6 +199,7 @@
 
                         </g:renderNotBetaFeaturesDisplayedValue>
 
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
 
                         <div class="separator"></div>
 
@@ -207,7 +208,7 @@
                                                                                'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
 
 
-                    %{--</g:if>--}%
+                    </g:if>
 
                     <div class="separator"></div>
 

@@ -134,7 +134,7 @@ var mpgSoftware = mpgSoftware || {};
 
             if (portalType === 't2d'){
                 mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
-                    lzDomHolder,collapseDomHolder,phenotypeName,
+                    lzDomHolder,collapseDomHolder,phenotypeName,'datasetname',
                     geneLocusZoomUrl,
                     variantInfoUrl);
             }

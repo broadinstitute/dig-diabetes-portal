@@ -356,7 +356,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,
+                                         phenoTypeName,locusZoomDataset,
                                          geneGetLZ,variantInfoUrl) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
