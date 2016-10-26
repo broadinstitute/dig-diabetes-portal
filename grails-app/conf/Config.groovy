@@ -212,6 +212,12 @@ t2dNewDevRestServer { //current 'dev'
     name =  'prod/'
     path = 'gs/'
 }
+// EBI KB
+t2dEBIRestServer { //current 'dev'
+    base = 'https://www.ebi.ac.uk/ega/t2d/'
+    name =  'dig-genome-store/'
+    path = 'gs/'
+}
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
@@ -348,7 +354,7 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-      grails.serverURL = "http://www.type2diabetesgenetics.org"
+//      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
@@ -359,6 +365,7 @@ environments {
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
+      grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // temp for intel portal
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false

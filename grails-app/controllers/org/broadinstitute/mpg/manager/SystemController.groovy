@@ -352,6 +352,13 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
+        } else  if (restServer == 'ebirestserver')  {
+            if (!(currentServer == 'ebirestserver')) {
+                restServerService.goWithTheEbiRestServer()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
         } else  if (restServer == 'aws02restserver')  {
             if (!(currentServer == 'aws02restserver')) {
                 restServerService.goWithTheAws02RestServer()

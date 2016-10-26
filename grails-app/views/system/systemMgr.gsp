@@ -114,6 +114,14 @@
                                 </label>
                             </div>
 
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="ebirestserver"
+                                        <%=restServer.getCurrentServer()==restServer.getEbiRestServer()?" checked ":"" %> />
+                                    <g:message code="system.radio.rest_server.ebi" /> (${restServer.getEbiRestServer()})
+                                </label>
+                            </div>
+
                          </div>
                     </div>
                     <div class="col-md-3"></div>
