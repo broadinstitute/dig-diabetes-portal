@@ -224,7 +224,8 @@ t2dEBIRestServer { //current 'dev'
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 
 //server.URL = 'http://localhost:8888/dig-genome-store/gs/'
-server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
+// server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
+server.URL = t2dEBIRestServer.base + t2dEBIRestServer.name + t2dEBIRestServer.path
 //server.URL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //server.URL = 'http://dig-qa-01.broadinstitute.org:8888/qa/gs/'
 
