@@ -235,7 +235,7 @@
                                     <div class="form-inline">
                                         <input id="geneInput" type="text" class="form-control"
                                                style="width:50%;"
-                                               placeholder="gene (e.g. SLC30A8)" data-type="advancedFilterInput"
+                                               placeholder="gene (e.g. SLC30A8, HDAC9)" data-type="advancedFilterInput"
                                                data-prop="gene" data-translatedname="gene"
                                                oninput="mpgSoftware.firstResponders.updateBuildSearchRequestButton('independent');
                                                mpgSoftware.firstResponders.controlGeneAndChromosomeInputs();
