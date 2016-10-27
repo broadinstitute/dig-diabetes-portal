@@ -215,7 +215,7 @@
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <a class="btn btn-default" style="width:100%; margin-right: 2%; margin-bottom: 10px;"
-                   href="https://docs.google.com/forms/d/1r5q_DFKzYDT8YtN7jHY-kvmDX74KfOXAIxC0sGCN2j8/viewform"
+                   href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1"
                    target="_blank">
                     <g:message code="portal.home.mailsignup" default="Get email updates"/>
                 </a>
