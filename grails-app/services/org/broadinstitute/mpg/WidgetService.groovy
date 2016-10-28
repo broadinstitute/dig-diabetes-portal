@@ -9,6 +9,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTranslator
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
 import org.broadinstitute.mpg.diabetes.util.PortalException
+import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -601,4 +602,42 @@ class WidgetService {
     public List<String> getLocusZoomEndpointList() {
         return locusZoomEndpointList
     }
+
+    /**
+     * returns a list of phenotypes to select from for the LZ plot display
+     *
+     * @return
+     */
+    public List<PhenotypeBean> getHailPhenotypeMap() {
+        // local variables
+        List<PhenotypeBean> beanList = new ArrayList<PhenotypeBean>();
+        String portalType = this.metaDataService?.getPortalTypeFromSession();
+
+        // DIGKB-136: get different phenotype list for stroke portal
+        if (portalType.equals("stroke")) {
+            // build the phenotype list
+            beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", defaultSelected: true));
+            beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", defaultSelected: false));
+
+        } else {
+            // build the phenotype list
+            beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", defaultSelected: true));
+            beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", defaultSelected: false));
+        }
+
+        // return
+        return beanList
+    }
+
 }
