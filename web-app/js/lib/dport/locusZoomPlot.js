@@ -361,7 +361,7 @@ var mpgSoftware = mpgSoftware || {};
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
-            var dataSetName = 'default';
+            var dataSetName = locusZoomDataset;
             if (typeof domId1 !== 'undefined') {
                 lzGraphicDomId = domId1;
             }

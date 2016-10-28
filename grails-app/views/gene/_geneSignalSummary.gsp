@@ -635,7 +635,7 @@ div.variantBoxHeaders {
                 };
                 if (!mpgSoftware.locusZoom.plotAlreadyExists()){
                     mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                            "#lz-1", "#collapseExample", 'T2D','lzdataset',
+                            "#lz-1", "#collapseExample", '${phenotype}','${locusZoomDataset}',
                             '${createLink(controller:"gene", action:"getLocusZoom")}',
                             '${createLink(controller:"variantInfo", action:"variantInfo")}');
                 } else {

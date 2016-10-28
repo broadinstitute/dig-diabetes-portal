@@ -122,8 +122,10 @@ class GeneController {
             // kludge alert
             if (portalType=='t2d'){
                 locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+                phenotype = 'T2D'
             }else if (portalType=='stroke'){
-                locusZoomDataset = "samples_stroke_"+metaDataService.getDataVersion()
+                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
+                phenotype = 'Stroke_all'
             } else {
                 locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
             }

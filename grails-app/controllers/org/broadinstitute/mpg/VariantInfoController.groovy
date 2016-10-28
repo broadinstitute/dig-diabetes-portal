@@ -29,7 +29,19 @@ class VariantInfoController {
         String locale = RequestContextUtils.getLocale(request)
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
-
+        String portalType = g.portalTypeString() as String
+        String locusZoomDataset = ""
+        String phenotype
+        // kludge alert
+        if (portalType=='t2d'){
+            locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            phenotype = 'T2D'
+        }else if (portalType=='stroke'){
+            locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
+            phenotype = 'Stroke_all'
+        } else {
+            locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+        }
         // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
             // if defined, lzId will look like: 8:118184783_C/T
@@ -50,7 +62,8 @@ class VariantInfoController {
                             phenotypeDatasetMapping: (phenotypeDatasetMapping as JSON),
                             restServer: restServerService.currentRestServer(),
                             lzOptions   : lzOptions,
-                            locusZoomDataset:"ExSeq_17k_"+metaDataService.getDataVersion()
+                            locusZoomDataset:locusZoomDataset,
+                            phenotype:phenotype
                     ])
 
         }
