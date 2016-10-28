@@ -77,13 +77,12 @@
 <div id="main">
     <div class="container">
         <div class="row">
-            <p style="font-weight: 300; font-size: 25px;">
-            <g:message code="aboutTheData.title" default="about the data"/></p>
 
-            <p style="font-weight: 300; line-height: 20px; font-size: 16px;">
+            <p style="font-weight: 300; font-size: 25px;">
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="aboutTheData.stroke.descr" default="about the data"/>
                 </g:if>
+                <g:else><g:message code="aboutTheData.title" default="about the data"/></g:else>
             </p>
         </div>
 
@@ -283,17 +282,6 @@
 
             </g:if>
             <g:else>
-                <div class="row pull-left consortium-spacing">
-                    <div class="medText">
-                        <strong><g:message code="aboutTheData.stroke.datasets.isgc.title"/></strong>
-                    </div>
-                </div>
-
-                <div class="row pull-left medText consortium-spacing col-xs-12">
-                    <div class="medText">
-                        <g:message code="aboutTheData.stroke.datasets.isgc" default="about the data"/>
-                    </div>
-                </div>
 
                 <div class="row pull-left consortium-spacing">
                     <div class="medText">
@@ -496,6 +484,182 @@
                 <div class="row pull-left medText consortium-spacing col-xs-12">
                     <g:message code="aboutTheData.stroke.datasets.for_published_results"/><br/>
                     <g:message code="aboutTheData.stroke.datasets.metastroke.pi.reference" default="about the data"/>
+                </div>
+
+                <div class="row pull-left col-xs-12" style="margin-top: 10px">
+                    <div class="separator"></div>
+                </div>
+
+                <div class="row pull-left consortium-spacing">
+                    <div class="medText">
+                        <strong><g:message code="aboutTheData.stroke.datasets.CADISP.title"/></strong>
+                    </div>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+     <div class="pull-left col-xs-1"></div>
+     </div>
+
+                <div class="pull-left medText col-xs-11">
+                <g:message code="aboutTheData.stroke.datasets.CADISP.project"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+     <div class="pull-left col-xs-1"></div>
+     </div>
+
+ <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.CADISP.publications"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+     <div class="pull-left col-xs-1"></div>
+     </div>
+
+     <div class="pull-left medText col-xs-11">
+                <g:message code="aboutTheData.stroke.datasets.CADISP.phenotypes"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+     <div class="pull-left col-xs-1"></div>
+     </div>
+
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.CADISP.subjects"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+     <div class="pull-left col-xs-1"></div>
+     </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.CADISP.criteria"></g:message>
+                </div>
+
+
+                <div class="row pull-left col-xs-12" style="margin-top: 10px">
+                    <div class="separator"></div>
+                </div>
+
+                <div class="row pull-left consortium-spacing">
+                    <div class="medText">
+                        <strong><g:message code="aboutTheData.stroke.datasets.Cincinnati.title"/></strong>
+                    </div>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.Cincinnati.project"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.Cincinnati.phenotypes"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.Cincinnati.subjects"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.Cincinnati.criteria"></g:message>
+                </div>
+
+                <div class="row pull-left col-xs-12" style="margin-top: 10px">
+                    <div class="separator"></div>
+                </div>
+
+                <div class="row pull-left consortium-spacing">
+                    <div class="medText">
+                        <strong><g:message code="aboutTheData.stroke.datasets.SIGN.title"/></strong>
+                    </div>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.SIGN.project"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.SIGN.publications"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.SIGN.phenotypes"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.SIGN.subjects1"></g:message>
+                    <g:message code="aboutTheData.stroke.datasets.SIGN.subjects2"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.SIGN.criteria"></g:message>
+                </div>
+
+                <div class="row pull-left col-xs-12" style="margin-top: 10px">
+                    <div class="separator"></div>
+                </div>
+
+                <div class="row pull-left consortium-spacing">
+                    <div class="medText">
+                        <strong><g:message code="aboutTheData.stroke.datasets.MEGASTROKE.title"/></strong>
+                    </div>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.MEGASTROKE.phenotypes"></g:message>
+                </div>
+
+                <div class="row pull-left medText consortium-spacing col-xs-12">
+                    <div class="pull-left col-xs-1"></div>
+                </div>
+
+                <div class="pull-left medText col-xs-11">
+                    <g:message code="aboutTheData.stroke.datasets.MEGASTROKE.subjects1"></g:message>
+                    <g:message code="aboutTheData.stroke.datasets.MEGASTROKE.subjects2"></g:message>
+                    <g:message code="aboutTheData.stroke.datasets.MEGASTROKE.subjects3"></g:message>
+                </div>
+                <div class="row pull-left col-xs-12" style="margin-top: 10px">
+                    <div class="separator"></div>
                 </div>
 
             </g:else>

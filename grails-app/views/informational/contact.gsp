@@ -64,7 +64,6 @@
                         Todd Green<br>
                         Dong-Keun Jang<br>
                         Oliver Ruebenacker<br>
-                        Michael Sanders<br>
                         David Siedzik<br>
                         Kaan Yuksel</p>
                     <h4>Computational biologists</h4>
@@ -150,12 +149,14 @@
                         </div>
 
                     </ul>
-
-                    <div class="content">
-                        <div id="contactContent">
-                            <g:render template="contact/${specifics}"/>
-                        </div>
-                    </div>
+                    <g:render template="contact/stroke_consortium"/>
+                    <g:render template="contact/stroke_studies"/>
+                    <g:render template="contact/stroke_portal"/>
+                    %{--<div class="content">--}%
+                        %{--<div id="contactContent">--}%
+                            %{--<g:render template="contact/${specifics}"/>--}%
+                        %{--</div>--}%
+                    %{--</div>--}%
                 </div>
             </g:else>
         </div>
