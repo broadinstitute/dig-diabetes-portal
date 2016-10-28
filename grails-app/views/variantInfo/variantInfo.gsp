@@ -179,6 +179,7 @@
             async: true
         }).done(function (data, textStatus, jqXHR) {
             var portalType = "t2d";
+            var defaultPhenotypeDescription = "Type 2 diabetes";
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 portalType = "stroke";
             </g:if>
@@ -187,7 +188,7 @@
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    portalType,"#lz-47","#collapseLZ",'${phenotype}','${locusZoomDataset}',
+                    portalType,"#lz-47","#collapseLZ",'${phenotype}',defaultPhenotypeDescription,'${locusZoomDataset}',
                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}');
         }).fail(function (jqXHR, textStatus, errorThrown) {

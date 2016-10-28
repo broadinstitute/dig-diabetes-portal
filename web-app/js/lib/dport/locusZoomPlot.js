@@ -356,7 +356,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,locusZoomDataset,
+                                         phenoTypeName,phenoTypeDescription,locusZoomDataset,
                                          geneGetLZ,variantInfoUrl) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
@@ -399,7 +399,7 @@ var mpgSoftware = mpgSoftware || {};
                 // default panel
                 addLZPhenotype({
                     phenotype: defaultPhenotypeName,
-                    description: 'Type 2 Diabetes'
+                    description: phenoTypeDescription
                 },dataSetName,geneGetLZ,variantInfoUrl);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {

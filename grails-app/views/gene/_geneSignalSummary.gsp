@@ -633,9 +633,15 @@ div.variantBoxHeaders {
                     startPosition:  ${geneExtentBegin},
                     endPosition:  ${geneExtentEnd}
                 };
+                var portalType = "t2d";
+                var portalDescription = 'Type 2 Diabetes';
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                portalType = "stroke";
+                portalDescription = 'All stroke';
+                </g:if>
                 if (!mpgSoftware.locusZoom.plotAlreadyExists()){
                     mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                            "#lz-1", "#collapseExample", '${phenotype}','${locusZoomDataset}',
+                            "#lz-1", "#collapseExample", '${phenotype}',portalDescription,'${locusZoomDataset}',
                             '${createLink(controller:"gene", action:"getLocusZoom")}',
                             '${createLink(controller:"variantInfo", action:"variantInfo")}');
                 } else {

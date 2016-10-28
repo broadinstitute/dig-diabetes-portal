@@ -20,6 +20,7 @@ class WidgetService {
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     RestServerService restServerService;
     MetaDataService metaDataService
+    def grailsApplication
 
     // setting variables
     private final String LOCUSZOOM_17K_ENDPOINT = "17k data";
@@ -476,8 +477,25 @@ class WidgetService {
 //            dataset = dataSetKey;
 //        }
 
-        Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
+        // Super hack: If we are looking at one of four different stroke data sets then we can make a dynamic call on the 17 K, but we have to
+        //  insert a fake data set, property name, and phenotype
+        Property property
+        Boolean attemptDynamicCall
+        if (phenotype=="ICH_Status"){
+            phenotype = "Stroke_all"
+        } else if (phenotype=="Lobar_ICH"){
+            phenotype = "Stroke_deep"
+        } else if (phenotype=="Deep_ICH"){
+            phenotype = "Stroke_lobar"
+        }
 
+
+//            property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,'ExSeq_17k_mdv70','P_FIRTH_FE_IV')
+        if (metaDataService.portalTypeFromSession!='t2d'){
+            attemptDynamicCall = false
+        }
+
+        property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
         // build the LZ json builder
         if (property) {
             locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, property.name);
@@ -494,9 +512,7 @@ class WidgetService {
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList);
 
         // submit the post request
-        if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)
-                ||(dataset.contains('Stroke'))
-        ) {
+        if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
         } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_DEV) {
@@ -547,8 +563,10 @@ class WidgetService {
 
             // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
             // translate to json string
+
+            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
             //
-            knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(dataset, "T2D", this.propertyKey);
+            knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(dataset, phenotype, property.name);
 
             jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
 
@@ -616,10 +634,10 @@ class WidgetService {
         // DIGKB-136: get different phenotype list for stroke portal
         if (portalType.equals("stroke")) {
             // build the phenotype list
-            beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", defaultSelected: true));
-            beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "Stroke_all", name: "Stroke_all", description: "ICH Status", defaultSelected: true));
+            beanList.add(new PhenotypeBean(key: "Stroke_lobar", name: "Stroke_lobar", description: "Lobar ICH", defaultSelected: false));
+            beanList.add(new PhenotypeBean(key: "Stroke_deep", name: "Stroke_deep", description: "Deep ICH", defaultSelected: false));
+//            beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", defaultSelected: false));
 
         } else {
             // build the phenotype list

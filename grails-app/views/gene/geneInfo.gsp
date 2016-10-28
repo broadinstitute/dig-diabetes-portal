@@ -57,13 +57,15 @@
             // call this inside the ready function because the page is still loading when the the parent
             // ajax calls returns
             var portalType = "t2d";
+            var portalDescription = 'Type 2 Diabetes';
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
             portalType = "stroke";
+            portalDescription = 'All stroke';
             </g:if>
             <g:renderNotBetaFeaturesDisplayedValue>
 //            if (portalType === 't2d'){
                 mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-47","#collapseLZ",'${phenotype}','${locusZoomDataset}',
+                        "#lz-47","#collapseLZ",'${phenotype}',portalDescription,'${locusZoomDataset}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
                         mpgSoftware.locusZoom.broadAssociationSource);
