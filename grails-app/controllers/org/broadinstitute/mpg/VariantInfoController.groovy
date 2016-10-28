@@ -1,9 +1,9 @@
 package org.broadinstitute.mpg
+
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -49,7 +49,7 @@ class VariantInfoController {
             variantToStartWith = params.lzId.replaceAll(/\:|\//, '_')
         }
 
-        List<PhenotypeBean> lzOptions = GeneController.getHailPhenotypeMap()
+        List<PhenotypeBean> lzOptions = this.widgetService?.getHailPhenotypeMap()
 
         if (variantToStartWith) {
 

@@ -246,7 +246,7 @@
 
                     <div class="separator"></div>
 
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    <g:if test="${true}">
                         <g:render template="/widgets/locusZoomPlot"/>
 
                         <div class="separator"></div>
