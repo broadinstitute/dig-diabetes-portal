@@ -14,9 +14,6 @@
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Ethnicity</th><th>Study name</th><th>PI</th><th>Cases - all stroke</th><th>Cases - Ischemic stroke</th><th>Cases - LAS</th><th>Cases - CE</th><th>Cases - SVD</th><th>Controls_IS</th></tr>
-
-        <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-
         <tr><td>European</td><td>DECODE</td><td>Kari Stefansson</td><td>5520</td><td>4483</td><td>512</td><td>1346</td><td>615</td><td>255213</td></tr>
         <tr><td>European</td><td>SIFAP</td><td>Arndt Rolfs</td><td>981</td><td>981</td><td>184</td><td>170</td><td>104</td><td>1824</td></tr>
         <tr><td>European</td><td>CHARGE</td><td>Stephanie Debette / Sudha Seshadri</td><td>4348</td><td>3028</td><td></td><td>602</td><td></td><td>84961</td></tr>

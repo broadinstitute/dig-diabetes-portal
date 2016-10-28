@@ -26,6 +26,7 @@
 <tr>
 <td valign="top">
 <ul>
+    <li>Only individuals of European ancestry, aged <18 years by the time of enrollment, are included.</li>
 <li>CAD subjects: Typical radiological aspect of dissection in a cervical artery (carotid, vertebral)
 </li>
     <li>CAD subject exclusion criteria:</li>
