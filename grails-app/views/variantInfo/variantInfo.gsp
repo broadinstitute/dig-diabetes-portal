@@ -182,6 +182,7 @@
             var defaultPhenotypeDescription = "Type 2 diabetes";
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 portalType = "stroke";
+                defaultPhenotypeDescription = "All stroke";
             </g:if>
             mpgSoftware.variantInfo.initializePage(data,
                     "<%=variantToSearch%>",

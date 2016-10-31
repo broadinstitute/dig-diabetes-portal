@@ -20,7 +20,10 @@ var mpgSoftware = mpgSoftware || {};
             'PSYCHIATRIC': '#32fd2f',
             'RENAL': '#28e4fd',
             'ANTHROPOMETRIC': '#5025fb',
-            'LIPIDS': '#fc1680'
+            'LIPIDS': '#fc1680',
+            'ISCHEMIC STROKE' : '#0099cc',
+            'INTRACEREBRAL HEMORRHAGE': '#663300',
+            'BLOOD PRESSURE': '#660066'
         };
 
         var setVariantTitleAndSummary = function (varId, dbsnpId, chrom, pos, gene, closestGene, refAllele, effectAllele) {
@@ -132,12 +135,12 @@ var mpgSoftware = mpgSoftware || {};
                 endPosition: variantObject.POS + locusZoomRange
             };
 
-            if (portalType === 't2d'){
+//            if (portalType === 't2d'){
                 mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
                     lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,locusZoomDataset,
                     geneLocusZoomUrl,
                     variantInfoUrl);
-            }
+//            }
 
             $('[data-toggle="popover"]').popover();
 

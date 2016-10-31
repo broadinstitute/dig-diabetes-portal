@@ -429,8 +429,6 @@ var displayBurdenVariantSelector = function (){
        convertedName = 'Aspirin';
     }else if (untranslatedPhenotype === 'Coronary_Artery_Disease'){
        convertedName = 'Coronary_Artery_Disease';
-    }else if (untranslatedPhenotype === 'Deep_ICH'){
-       convertedName = 'Deep_ICH';
     }else if (untranslatedPhenotype === 'Discharge_mRS_gt_2'){
        convertedName = 'Discharge_mRS_gt_2_readable';
     }else if (untranslatedPhenotype === 'Ethnicity'){
@@ -467,6 +465,40 @@ var displayBurdenVariantSelector = function (){
        convertedName = 'Statins_readable';
     }else if (untranslatedPhenotype === 'Warfarin_readable'){
        convertedName = 'Warfarin';
+    }else if (untranslatedPhenotype === 'Admission_CT_Available'){
+       convertedName = 'Admission_CT_Available_readable';
+    }else if (untranslatedPhenotype === 'Aspirin'){
+       convertedName = 'Aspirin_readable';
+    }else if (untranslatedPhenotype === 'Coronary_Artery_Disease'){
+       convertedName = 'Coronary_Artery_Disease_readable';
+    }else if (untranslatedPhenotype === 'Deep_ICH'){
+       convertedName = 'Deep_ICH_readable';
+    }else if (untranslatedPhenotype === 'Discharge_mRS_gt_2'){
+       convertedName = 'Discharge_mRS_gt_2_readable';
+    }else if (untranslatedPhenotype === 'Ethnicity'){
+       convertedName = 'Ethnicity_readable';
+    }else if (untranslatedPhenotype === 'Follow_up_mRS_gt_2'){
+       convertedName = 'Follow_up_mRS_gt_2_readable';
+    }else if (untranslatedPhenotype === 'History_of_Diabetes_mellitus'){
+       convertedName = 'History_of_Diabetes_mellitus_readable';
+    }else if (untranslatedPhenotype === 'History_of_Hypercholesterolemia'){
+       convertedName = 'History_of_Hypercholesterolemia_readable';
+    }else if (untranslatedPhenotype === 'History_of_Hypertension'){
+       convertedName = 'History_of_Hypertension_readable';
+    }else if (untranslatedPhenotype === 'History_of_TIA_Ischemic_Stroke'){
+       convertedName = 'History_of_TIA_Ischemic_Stroke_readable';
+    }else if (untranslatedPhenotype === 'INR_gt_2'){
+       convertedName = 'INR_gt_2_readable';
+    }else if (untranslatedPhenotype === 'MRI_Available'){
+       convertedName = 'MRI_Available_readable';
+    }else if (untranslatedPhenotype === 'Number_of_Previous_Hemhorrhages'){
+       convertedName = 'Number_of_Previous_Hemhorrhages_readable';
+    }else if (untranslatedPhenotype === 'Other_Antiplatelet'){
+       convertedName = 'Other_Antiplatelet_readable';
+    }else if (untranslatedPhenotype === 'Race'){
+       convertedName = 'Race_readable';
+    }else if (untranslatedPhenotype === 'Statins'){
+       convertedName = 'Statins_readable';
     }
     return convertedName;
  };
