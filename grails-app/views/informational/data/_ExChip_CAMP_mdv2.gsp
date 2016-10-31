@@ -34,9 +34,9 @@
 <h6 style="color:#ccc;">Overview of analysis results</h6>
 <p>Data were analyzed by the Analysis Team at the Accelerating Medicines Partnership Data Coordinating Center (AMP-DCC), Broad Institute. After removing related samples and samples flagged for non-type 2 diabetes, 3,453 samples (540 type 2 diabetes cases and 2,913 controls) were analyzed. Two different statistical models were applied to analyze associations of variants with type 2 diabetes, fasting glucose levels, and fasting insulin levels.</p>
 
-<p>The strongest association with T2D, at genome-wide significance, was observed for the variant rs9468919 on chromosome 6 near <i>HLA-C</i>i>. Detection of an association with this locus was unexpected because it is known to be associated with T1D, but type 1 diabetics had been removed from the sample set before analysis. To evaluate this result further, we investigated the linkage disequilibrium (LD) relationships of this SNP with others in the region. rs9468919 is not in LD with any variants known to be associated with T1D, but is in moderate LD with SNPs in the region that are reported to be associated with T2D. Supporting its potential association with T2D, this SNP displays a T2D association of nominal significance (p = 0.055) in the DIAGRAM Transethnic meta-analysis data set.</p>
+<p>The strongest association with T2D, at genome-wide significance, was observed for the variant rs9468919 on chromosome 6 near <i>HLA-C</i>. Detection of an association with this locus was unexpected because it is known to be associated with T1D, but type 1 diabetics had been removed from the sample set before analysis. To evaluate this result further, we investigated the linkage disequilibrium (LD) relationships of this SNP with others in the region. rs9468919 is not in LD with any variants known to be associated with T1D, but is in moderate LD with SNPs in the region that are reported to be associated with T2D. Supporting its potential association with T2D, this SNP displays a T2D association of nominal significance (p = 0.055) in the DIAGRAM Transethnic meta-analysis data set.</p>
 
-<p>While we cannot fully explain this signal, it is unlikely that the result at rs9468919 is due to T1D sample contamination, known confounders, or to poor quality of the SNP genotyping. In any first-pass, cohort-specific analysis such as this, some results may be inflated or even spurious due to limited sample size or cohort-specific effects. However, the high quality of the data, QC, and analysis methods applied are consistent with all standards within T2D genetics community.</p>
+<p>While we cannot fully explain this signal, it is unlikely that the result at rs9468919 is due to T1D sample contamination, known confounders, or to poor quality of the SNP genotyping. In any first-pass, cohort-specific analysis such as this, some results may be inflated or even spurious due to limited sample size or cohort-specific effects. However, the high quality of the data, QC, and analysis methods applied are consistent with all standards within the T2D genetics community.</p>
 
 <p>Other than the <i>HLA-C</i> signal, additional signals of nominal significance were detected at previously reported T2D-associated loci.</p>
 
@@ -55,15 +55,13 @@
 <li>On Gene Pages in the Variants & Associations table</li>
 <li>On Variant Pages in the Associations at a glance section and in the Association statistics across traits table</li>
 <li>Via the Variant Finder tool, for the phenotypes T2D, fasting glucose, and fasting insulin</li>
+<li>Via the Genetic Association Interactive Tool (GAIT), which enables custom association analysis for either single variants (available on Variant Pages) or for the set of variants in and near a gene (Interactive burden test, available on Gene Pages)</li>
 </ul></p>
 
 <h6 style="color:#ccc;">Future plans for CAMP data in the T2D Knowledge Portal</h6>
-<p>Associations of variants with T2D, fasting glucose, and fasting insulin from the CAMP data will be made available via two additional analysis tools in the Portal:</p>
 <ul>
-<li>LocusZoom, an interactive visualization of variants and associations that is displayed on both Gene Pages and Variant Pages</li>
-<li>Genetic Association Interactive Tool (GAIT), which enables custom association analysis for either single variants (available on Variant Pages) or for the set of variants in and near a gene (Interactive burden test, available on Gene Pages)</li>
+<li>Associations of variants with T2D, fasting glucose, and fasting insulin from the CAMP data will be made available via LocusZoom, an interactive visualization of variants and associations that is displayed on both Gene Pages and Variant Pages</li>
+<li>CAMP data will be analyzed for associations of variants with additional phenotypes, and these results will be made available in the Portal via the pages and tools listed above.</li>
 </ul></p>
-
-<p>CAMP data will be analyzed for associations of variants with additional phenotypes, and these results will be made available in the Portal via the pages and tools listed above.</p>
 
 </div>
