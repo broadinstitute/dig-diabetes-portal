@@ -4,13 +4,13 @@
 }
 text.barChartLabel  {
     font-family: 'Lato';
-    font-weight: 300;
-    font-size: 14pt;
+    font-weight: bold;
+    font-size: 11pt;
 }
 text.barSubChartLabel  {
     font-family: 'Lato';
     font-weight: 200;
-    font-size: 12pt;
+    font-size: 10pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;
 }

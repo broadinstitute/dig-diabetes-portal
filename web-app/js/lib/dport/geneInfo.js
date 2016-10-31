@@ -600,13 +600,13 @@ var mpgSoftware = mpgSoftware || {};
                     proportionWithoutDiseaseDescriptiveString = "(" + peopleWithoutDiseaseNumerator + " out of " + peopleWithoutDiseaseDenominator + ")";
                     var dataForBarChart = [
                             { value: calculatedPercentWithDisease,
-                                barname: 'have ' + traitString,
+                                barname: '' + traitString,
                                 barsubname: '(cases)',
                                 barsubnamelink: '',
                                 inbar: '',
                                 descriptor: proportionWithDiseaseDescriptiveString},
                             {value: calculatedPercentWithoutDisease,
-                                barname: 'do not have ' + traitString,
+                                barname: 'no ' + traitString,
                                 barsubname: '(controls)',
                                 barsubnamelink: '',
                                 inbar: '',

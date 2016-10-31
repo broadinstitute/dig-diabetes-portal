@@ -1,7 +1,7 @@
 text.barChartLabel  {
     font-family: 'Lato';
-    font-weight: 400;
-    font-size: 14pt;
+    font-weight: bold;
+    font-size: 12pt;
 }
 text.barChartLabel.valueQualifiersSmall  {
     font-size: 12pt;
@@ -14,7 +14,7 @@ text.rightBarChartLabel{
 }
 text.barSubChartLabel  {
     font-family: 'Lato';
-    font-weight: 200;
+    font-weight: 300;
     font-size: 12pt;
     stroke: #aaaaaa;
     fill: #aaaaaa;

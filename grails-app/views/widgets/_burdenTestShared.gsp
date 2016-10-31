@@ -1540,7 +1540,8 @@ var displayBurdenVariantSelector = function (){
                                 strataDomIdentifierClass.append('<div id="chart"></div>')
                                 printFullResultsSection(data.stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isCategorical,currentStratum,'');
                                 if ((typeof numCases !== 'undefined')  && (numCases!=='')){
-                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
+                                       var phenoName = $('#phenotypeFilter option:selected').text()
+                                       mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, phenoName);
 
                                        // launch
                                        mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
