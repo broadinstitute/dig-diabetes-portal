@@ -1076,7 +1076,14 @@ var displayBurdenVariantSelector = function (){
                     });
 
                     // Create a default display
-                    $($('.distPlotter')[0]).click()
+                    if ( renderData.modeledPhenotype.levels.length < 2){
+                       $($('.distPlotter')[0]).click();
+                    } else {
+                        $($('.distPlotter.CONTROL')[0]).click();
+                        $($('.distPlotter.CASE')[0]).click();
+
+                    }
+
 
                     //
                     // display the results section
@@ -2217,6 +2224,12 @@ var displayBurdenVariantSelector = function (){
 
 
         var fillCategoricalDropDownBoxes = function (sampleData,phenotype,stratum,modPhenoHolder,optionsPerFilter){
+            var rememberCurrentScrollHeight = 0;
+            var currentScrollHeight = function(x){
+               if (typeof x === 'undefined')  return rememberCurrentScrollHeight;
+               rememberCurrentScrollHeight = x;
+            };
+
              // make dist plots
             var sampleMetadata = getStoredSampleMetadata();
             _.forEach(sampleMetadata.filters,function(d,i){
@@ -2231,7 +2244,16 @@ var displayBurdenVariantSelector = function (){
                        if ($(dropdownId).children().length>0){
                        $(dropdownId).multiselect({includeSelectAllOption: true,
                                                    allSelectedText: 'All Selected',
-                                                   buttonWidth: '100%'
+                                                   buttonWidth: '100%',
+                                                   onDropdownShow: function(values){ // Record the current length of the scrolling region
+                                                        currentScrollHeight($('.filterscroller').prop('scrollHeight'));
+                                                    },
+                                                    onDropdownShown: function(values){// Has the length of the scrolling region changed?
+                                                    //  If so then go to the bottom of the scrolling region
+                                                    if ($('.filterscroller').prop('scrollHeight')!=currentScrollHeight())
+                                                        $('.filterscroller').prop('scrollTop',$('.filterscroller').prop('scrollHeight'));
+                                                    }
+
                                                    });
                         $(dropdownId).change(function(event, ui){
                                               // Begin kludge alert!----
@@ -2894,7 +2916,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                         <div class="row" style="padding: 10px 0 0 0">
                                                             <div class="col-sm-12 col-xs-12 text-left">
 
-                                                                <div style="direction: rtl; max-height: 620px; padding: 4px 0 0 10px; overflow-y: auto;">
+                                                                <div class='filterscroller' style="direction: rtl; max-height: 620px; padding: 4px 0 0 10px; overflow-y: auto;">
                                                                     <div style="direction: ltr; margin: 10px 0 0 5px">
                                                                         <div>
                                                                             <div class="row">
@@ -2998,7 +3020,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                     <div class="col-sm-1">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',0,'{{phenoLevelName}}')"
-                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter" id="distPlotter_{{stratum}}_{{name}}"></span>
+                                              class="glyphicon glyphicon-arrow-right pull-right distPlotter {{phenoLevelName}}" id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
                                 </div>

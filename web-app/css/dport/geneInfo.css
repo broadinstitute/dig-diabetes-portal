@@ -1,6 +1,9 @@
 b, strong {
     color: #052090;
 }
+span.extra-info>strong {
+    color: inherit;
+}
 .parentsFont {
     font-family: inherit;
     font-weight: inherit;
