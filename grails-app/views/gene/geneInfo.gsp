@@ -65,7 +65,7 @@
             <g:renderNotBetaFeaturesDisplayedValue>
 //            if (portalType === 't2d'){
                 mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-47","#collapseLZ",'${phenotype}',portalDescription,'${locusZoomDataset}',
+                        "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
                         mpgSoftware.locusZoom.broadAssociationSource);

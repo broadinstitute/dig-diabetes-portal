@@ -3,6 +3,7 @@ import grails.transaction.Transactional
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.Covariate
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
@@ -451,6 +452,55 @@ class WidgetService {
 
 
 
+    public HashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
+        LinkedHashMap<String,HashMap<String,String>> returnValue = []
+//                ['ICH_Status':[phenotype:"Stroke_all", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
+//                                     'Deep_ICH':[phenotype:"Stroke_deep", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
+//                                     'Lobar_ICH':[phenotype:"Stroke_lobar", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
+//                                     'FG':[phenotype:"FG", dataSet:'GWAS_MAGIC_'+metaDataService.getDataVersion()],
+//                                     '2hrI':[phenotype:"2hrI", dataSet:'GWAS_MAGIC_'+metaDataService.getDataVersion()],
+//                                     'CAD':[phenotype:"CAD", dataSet:'GWAS_CARDIoGRAM_'+metaDataService.getDataVersion()],
+//                                     'UACR':[phenotype:"UACR", dataSet:'GWAS_CKDGenConsortium-UACR_'+metaDataService.getDataVersion()]
+//        ];
+        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        // kludge to reorder for stroke demo
+        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
+            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
+            if (sampleGroup.size()>0){
+                SampleGroup chosenSampleGroup = sampleGroup.first()
+                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
+            }
+        }
+        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
+            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
+            if (sampleGroup.size()>0){
+                SampleGroup chosenSampleGroup = sampleGroup.first()
+                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
+            }
+        }
+        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
+            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
+            if (sampleGroup.size()>0){
+                SampleGroup chosenSampleGroup = sampleGroup.first()
+                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
+            }
+        }
+        return returnValue
+    }
+
+
+
+    public HashMap<String,String> retrievePhenotypeDataSetCombo( String defaultPhenotype,
+                                                                 String defaultDataSet ){
+        LinkedHashMap returnValue = [phenotype:defaultPhenotype, dataSet:defaultDataSet]
+        HashMap<String,HashMap<String,String>> allPhenotypeDataSetCombos =  retrieveAllPhenotypeDataSetCombos()
+        if (allPhenotypeDataSetCombos.containsKey(defaultPhenotype)){
+            returnValue = allPhenotypeDataSetCombos[defaultPhenotype]
+        }
+        return returnValue
+    }
+
 
 
 
@@ -472,27 +522,17 @@ class WidgetService {
         KnowledgeBaseResultParser knowledgeBaseResultParser;
         List<Covariate> covariateList = null;
 
-        //TODO: Fix this hack.  Currently we are using different 17k data sets, but hail can only take V2
-//        if (getLocusZoomEndpointSelectionIsHail()) {
-//            dataset = dataSetKey;
-//        }
-
         // Super hack: If we are looking at one of four different stroke data sets then we can make a dynamic call on the 17 K, but we have to
         //  insert a fake data set, property name, and phenotype
         Property property
-        Boolean attemptDynamicCall
-        if (phenotype=="ICH_Status"){
-            phenotype = "Stroke_all"
-        } else if (phenotype=="Lobar_ICH"){
-            phenotype = "Stroke_deep"
-        } else if (phenotype=="Deep_ICH"){
-            phenotype = "Stroke_lobar"
-        }
+        Boolean attemptDynamicCall = true
 
-
-//            property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,'ExSeq_17k_mdv70','P_FIRTH_FE_IV')
-        if (metaDataService.portalTypeFromSession!='t2d'){
+        if (metaDataService.portalTypeFromSession!='t2d'){ // stroke must be static only
             attemptDynamicCall = false
+            HashMap phenoDataSet = retrievePhenotypeDataSetCombo( phenotype,
+                    dataset )
+            phenotype = phenoDataSet.phenotype
+            dataset = phenoDataSet.dataSet
         }
 
         property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
@@ -563,6 +603,12 @@ class WidgetService {
 
             // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
             // translate to json string
+            if (metaDataService.portalTypeFromSession!='t2d') {
+                HashMap phenoDataSet = retrievePhenotypeDataSetCombo(phenotype,
+                        dataset)
+                phenotype = phenoDataSet.phenotype
+                dataset = phenoDataSet.dataSet
+            }
 
             Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
             //
@@ -628,15 +674,25 @@ class WidgetService {
      */
     public List<PhenotypeBean> getHailPhenotypeMap() {
         // local variables
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         List<PhenotypeBean> beanList = new ArrayList<PhenotypeBean>();
         String portalType = this.metaDataService?.getPortalTypeFromSession();
 
-        // DIGKB-136: get different phenotype list for stroke portal
         if (portalType.equals("stroke")) {
+            HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
+            boolean firstTime = true
+            for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
+                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype,
+                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime))
+                firstTime = false
+            }
             // build the phenotype list
-            beanList.add(new PhenotypeBean(key: "Stroke_all", name: "Stroke_all", description: "ICH Status", defaultSelected: true));
-            beanList.add(new PhenotypeBean(key: "Stroke_lobar", name: "Stroke_lobar", description: "Lobar ICH", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "Stroke_deep", name: "Stroke_deep", description: "Deep ICH", defaultSelected: false));
+//            beanList.add(new PhenotypeBean(key: "Stroke_all", name: "Stroke_all", description: "ICH Status", defaultSelected: true));
+//            beanList.add(new PhenotypeBean(key: "Stroke_lobar", name: "Stroke_lobar", description: "Lobar ICH", defaultSelected: false));
+//            beanList.add(new PhenotypeBean(key: "Stroke_deep", name: "Stroke_deep", description: "Deep ICH", defaultSelected: false));
+//            beanList.add(new PhenotypeBean(key: "CAD", name: "CAD", description: "Coronary artery disease", defaultSelected: false));
+//            beanList.add(new PhenotypeBean(key: "FG", name: "FG", description: "Fasting glucose", defaultSelected: false));
+//            beanList.add(new PhenotypeBean(key: "2hrI", name: "2hrI", description: "2 hour insulin", defaultSelected: false));
 //            beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", defaultSelected: false));
 
         } else {

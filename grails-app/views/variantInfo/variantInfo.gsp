@@ -189,7 +189,7 @@
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    portalType,"#lz-47","#collapseLZ",'${phenotype}',defaultPhenotypeDescription,'${locusZoomDataset}',
+                    portalType,"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}');
         }).fail(function (jqXHR, textStatus, errorThrown) {
