@@ -124,7 +124,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl) {
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic) {
             var phenotype = lzParameters.phenotype;
             var dataSet = dataSetName;
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
@@ -145,6 +145,14 @@ var mpgSoftware = mpgSoftware || {};
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, phenotype));
 
             var layout = (function (variantInfoLink) {
+                var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
+                    + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
+                    + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
+                if ((typeof makeDynamic !== 'undefined') &&
+                    (makeDynamic)){
+                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
+                }
+                toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
                 return {
                     id: phenotype,
                     title: lzParameters.description,
@@ -288,11 +296,7 @@ var mpgSoftware = mpgSoftware || {};
                                 closable: true,
                                 show: { or: ["highlighted", "selected"] },
                                 hide: { and: ["unhighlighted", "unselected"] },
-                                html: "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
-                                    + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
-                                    + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>"
-                                    + "<a onClick=\"mpgSoftware.locusZoom.conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>"
-                                    + "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Make LD Reference</a>"
+                                html: toolTipText
                             }
                         }
                     ]

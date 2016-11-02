@@ -595,7 +595,7 @@ class WidgetService {
         if(phenotype == null) {
             phenotype = this.phenotypeKey
         }
-
+        Property property
         // get the query result and translate to a json string
         try {
             // get the variant list
@@ -608,9 +608,13 @@ class WidgetService {
                         dataset)
                 phenotype = phenoDataSet.phenotype
                 dataset = phenoDataSet.dataSet
+            } else {
+                phenotype = "T2D"
+                dataset = "ExSeq_17k_"+metaDataService.getDataVersion()
             }
 
-            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
+            property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
+
             //
             knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(dataset, phenotype, property.name);
 
