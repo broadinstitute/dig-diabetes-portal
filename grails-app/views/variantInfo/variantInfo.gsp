@@ -178,20 +178,28 @@
             url: ('<g:createLink controller="variantInfo" action="variantAjax"/>' + '/${variantToSearch}'),
             async: true
         }).done(function (data, textStatus, jqXHR) {
-            var portalType = "t2d";
-            var defaultPhenotypeDescription = "Type 2 diabetes";
+
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                portalType = "stroke";
-                defaultPhenotypeDescription = "All stroke";
-            </g:if>
-            mpgSoftware.variantInfo.initializePage(data,
+                mpgSoftware.variantInfo.initializePage(data,
                     "<%=variantToSearch%>",
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    portalType,"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
+                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
                     '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}');
+                    '${createLink(controller:"variantInfo", action:"variantInfo")}',false);
+            </g:if>
+            <g:else>
+                mpgSoftware.variantInfo.initializePage(data,
+                        "<%=variantToSearch%>",
+                        "<g:createLink controller='trait' action='traitInfo' />",
+                        "<%=restServer%>",
+                        variantSummaryText,
+                        't2d',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}',true);
+            </g:else>
+
         }).fail(function (jqXHR, textStatus, errorThrown) {
             loading.hide();
             core.errorReporter(jqXHR, errorThrown)

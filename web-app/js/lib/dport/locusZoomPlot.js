@@ -124,7 +124,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic) {
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,broadAssociationSource,makeDynamic) {
             var phenotype = lzParameters.phenotype;
             var dataSet = dataSetName;
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
@@ -311,7 +311,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var resetLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescr,dataSetName,
-                                         geneGetLZ,variantInfoUrl) {
+                                         geneGetLZ,variantInfoUrl,makeDynamic) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -353,7 +353,7 @@ var mpgSoftware = mpgSoftware || {};
                 addLZPhenotype({
                     phenotype: defaultPhenotypeName,
                     description: phenoTypeDescr
-                },dataSetName,geneGetLZ,variantInfoUrl);
+                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
 
             }
         };
@@ -361,7 +361,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescription,locusZoomDataset,
-                                         geneGetLZ,variantInfoUrl) {
+                                         geneGetLZ,variantInfoUrl,makeDynamic) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -404,7 +404,7 @@ var mpgSoftware = mpgSoftware || {};
                 addLZPhenotype({
                     phenotype: defaultPhenotypeName,
                     description: phenoTypeDescription
-                },dataSetName,geneGetLZ,variantInfoUrl);
+                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {
                     locusZoomPlot.rescaleSVG();

@@ -455,10 +455,6 @@ class WidgetService {
     public HashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
 //                ['ICH_Status':[phenotype:"Stroke_all", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
-//                                     'Deep_ICH':[phenotype:"Stroke_deep", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
-//                                     'Lobar_ICH':[phenotype:"Stroke_lobar", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
-//                                     'FG':[phenotype:"FG", dataSet:'GWAS_MAGIC_'+metaDataService.getDataVersion()],
-//                                     '2hrI':[phenotype:"2hrI", dataSet:'GWAS_MAGIC_'+metaDataService.getDataVersion()],
 //                                     'CAD':[phenotype:"CAD", dataSet:'GWAS_CARDIoGRAM_'+metaDataService.getDataVersion()],
 //                                     'UACR':[phenotype:"UACR", dataSet:'GWAS_CKDGenConsortium-UACR_'+metaDataService.getDataVersion()]
 //        ];

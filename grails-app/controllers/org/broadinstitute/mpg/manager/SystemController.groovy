@@ -338,7 +338,21 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
-        } else  if (restServer == 'devloadbalancedserver')  {
+        } else  if (restServer == 'dev01server')  {
+            if (!(currentServer == 'dev01server')) {
+                restServerService.goWithTheDev01Server()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        }  else  if (restServer == 'dev02server')  {
+            if (!(currentServer == 'dev02server')) {
+                restServerService.goWithTheDev02Server()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        }  else  if (restServer == 'devloadbalancedserver')  {
             if (!(currentServer == 'devloadbalancedserver')) {
                 restServerService.goWithTheDevLoadBalancedServer()
                 flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."

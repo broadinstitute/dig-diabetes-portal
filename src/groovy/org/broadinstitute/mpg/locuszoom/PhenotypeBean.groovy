@@ -5,9 +5,10 @@ package org.broadinstitute.mpg.locuszoom
  *
  */
 public class PhenotypeBean {
-    String key;
-    String displayName;
-    String name;
-    String description;
+    String key
+    String displayName
+    String name
+    String description
+    String propertyName
     Boolean defaultSelected
 }

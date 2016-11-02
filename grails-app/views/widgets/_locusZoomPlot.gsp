@@ -31,15 +31,38 @@
             <li class="dropdown" id="tracks-menu-dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
                 <ul id="trackList" class="dropdown-menu">
+                    <script>
+                       var makeDynamic = false;
+                       <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                            makeDynamic = true;
+                       </g:if>
+                    </script>
+
                     <g:each in="${lzOptions}">
-                        <li><a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                            phenotype: '${it.key}',
-                            description: '${it.description}'
-                        },'<%=locusZoomDataset%>','${createLink(controller:"gene", action:"getLocusZoom")}',
-                          '${createLink(controller:"variantInfo", action:"variant")}',
-                           mpgSoftware.locusZoom.broadAssociationSource)">
-                            ${g.message(code: "metadata." + it.name)}
-                        </a></li>
+                        <li>
+                        <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                        phenotype: '${it.key}',
+                                        description: '${it.description}'
+                                    },
+                                    '<%=locusZoomDataset%>','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                    '${createLink(controller:"variantInfo", action:"variant")}',
+                                    mpgSoftware.locusZoom.broadAssociationSource,true)">
+                                ${g.message(code: "metadata." + it.name)}
+                            </a>
+                        </g:if>
+                        <g:else>
+                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                        phenotype: '${it.key}',
+                                        description: '${it.description}'
+                                    },
+                                    '<%=locusZoomDataset%>','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                    '${createLink(controller:"variantInfo", action:"variant")}',
+                                    mpgSoftware.locusZoom.broadAssociationSource,false)">
+                                ${g.message(code: "metadata." + it.name)}
+                            </a>
+                        </g:else>
+                        </li>
                     </g:each>
                 </ul>
             </li>

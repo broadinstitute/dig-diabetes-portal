@@ -96,6 +96,24 @@
 
                             <div class="radio">
                                 <label>
+                                    <input id="testserver" type="radio" name="datatype" value="dev01server"
+                                        <%=restServer.getCurrentServer()==restServer.getDev01()?" checked ":"" %> />
+                                    <g:message code="system.radio.rest_server.dev01" /> (${restServer.getDev01()})
+                                </label>
+
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input id="testserver" type="radio" name="datatype" value="dev02server"
+                                        <%=restServer.getCurrentServer()==restServer.getDev02()?" checked ":"" %> />
+                                    <g:message code="system.radio.rest_server.dev02" /> (${restServer.getDev02()})
+                                </label>
+
+                            </div>
+
+                            <div class="radio">
+                                <label>
                                     <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
                                         <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
                                     <g:message code="system.radio.rest_server.dev" /> (${restServer.getDevLoadBalanced()})

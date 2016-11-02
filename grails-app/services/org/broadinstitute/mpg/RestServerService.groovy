@@ -37,6 +37,8 @@ class RestServerService {
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
+    private String DEV_01_SERVER = ""
+    private String DEV_02_SERVER = ""
     private String AWS01_REST_SERVER = ""
     private String AWS02_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
@@ -132,6 +134,9 @@ class RestServerService {
         // test load balancer with rest server(s) behind it
         DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
 
+        DEV_01_SERVER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
+        DEV_02_SERVER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
+
         // dev rest server, not load balanced
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
 
@@ -154,6 +159,14 @@ class RestServerService {
     }
 
     // current below
+
+    public String getDev01() {
+        return DEV_01_SERVER ;
+    }
+
+    public String getDev02() {
+        return DEV_02_SERVER ;
+    }
 
     public String getDevLoadBalanced() {
         return DEV_LOAD_BALANCED_SERVER;
@@ -226,6 +239,14 @@ class RestServerService {
         pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
     }
 
+
+    public void goWithTheDev01Server() {
+        pickADifferentRestServer(DEV_01_SERVER )
+    }
+
+    public void goWithTheDev02Server() {
+        pickADifferentRestServer(DEV_02_SERVER)
+    }
 
     public void goWithTheDevLoadBalancedServer() {
         pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)

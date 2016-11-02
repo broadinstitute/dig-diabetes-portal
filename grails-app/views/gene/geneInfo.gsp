@@ -63,14 +63,20 @@
             portalDescription = 'All stroke';
             </g:if>
             <g:renderNotBetaFeaturesDisplayedValue>
-//            if (portalType === 't2d'){
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
                         "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                        mpgSoftware.locusZoom.broadAssociationSource);
-//            }
-
+                        mpgSoftware.locusZoom.broadAssociationSource,false);
+                </g:if>
+                <g:else>
+                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                        "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                    mpgSoftware.locusZoom.broadAssociationSource,true);
+                </g:else>
             </g:renderNotBetaFeaturesDisplayedValue>
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();
