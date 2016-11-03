@@ -37,6 +37,10 @@ class InformationalController {
         render(view: 'contactBeacon')
     }
 
+    def dataSubmission() {
+        render(view: 'dataSubmission')
+    }
+
     /***
      * Get the contents for the filter drop-down box on the burden test section of the gene info page
      * @return
