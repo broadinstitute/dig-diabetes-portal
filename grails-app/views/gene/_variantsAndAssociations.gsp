@@ -49,7 +49,7 @@
 <div class="row clearfix">
 
     <div class="col-md-2">
-        <button id="reviser" class="btn btn-primary pull-left" onclick="reviseRows()">
+        <button id="reviser" class="btn btn-primary pull-left" onclick="reviseRows()"  style="display: none">
             <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
         </button>
     </div>

@@ -39,6 +39,8 @@ class RestServerService {
     private String DEV_LOAD_BALANCED_SERVER = ""
     private String DEV_01_SERVER = ""
     private String DEV_02_SERVER = ""
+    private String PROD_01_SERVER = ""
+    private String PROD_02_SERVER = ""
     private String AWS01_REST_SERVER = ""
     private String AWS02_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
@@ -137,6 +139,9 @@ class RestServerService {
         DEV_01_SERVER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
         DEV_02_SERVER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
 
+        PROD_01_SERVER = grailsApplication.config.t2dProd01BehindLoadBalancer.base + grailsApplication.config.t2dProd01BehindLoadBalancer.name + grailsApplication.config.t2dProd01BehindLoadBalancer.path
+        PROD_02_SERVER = grailsApplication.config.t2dProd02BehindLoadBalancer.base + grailsApplication.config.t2dProd02BehindLoadBalancer.name + grailsApplication.config.t2dProd02BehindLoadBalancer.path
+
         // dev rest server, not load balanced
         DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
 
@@ -165,7 +170,15 @@ class RestServerService {
     }
 
     public String getDev02() {
-        return DEV_02_SERVER ;
+        return DEV_02_SERVER;
+    }
+
+    public String getProd01() {
+        return PROD_01_SERVER ;
+    }
+
+    public String getProd02() {
+        return PROD_02_SERVER ;
     }
 
     public String getDevLoadBalanced() {
@@ -240,13 +253,21 @@ class RestServerService {
     }
 
 
-    public void goWithTheDev01Server() {
-        pickADifferentRestServer(DEV_01_SERVER )
-    }
+        public void goWithTheDev01Server() {
+            pickADifferentRestServer(DEV_01_SERVER )
+        }
 
-    public void goWithTheDev02Server() {
-        pickADifferentRestServer(DEV_02_SERVER)
-    }
+        public void goWithTheDev02Server() {
+            pickADifferentRestServer(DEV_02_SERVER)
+        }
+
+        public void goWithTheProd01Server() {
+            pickADifferentRestServer(PROD_01_SERVER )
+        }
+
+        public void goWithTheProd02Server() {
+            pickADifferentRestServer(PROD_02_SERVER)
+        }
 
     public void goWithTheDevLoadBalancedServer() {
         pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)

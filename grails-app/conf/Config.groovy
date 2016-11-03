@@ -168,6 +168,16 @@ t2dDev02BehindLoadBalancer {
     name =  'dev/'
     path = 'gs/'
 }
+t2dProd01BehindLoadBalancer {
+    base = 'http://dig-prod-01.broadinstitute.org:8888/'
+    name =  'prod/'
+    path = 'gs/'
+}
+t2dProd02BehindLoadBalancer {
+    base = 'http://dig-prod-02.broadinstitute.org:8888/'
+    name =  'prod/'
+    path = 'gs/'
+}
 
 // individual servers
 t2dAws01RestServer {

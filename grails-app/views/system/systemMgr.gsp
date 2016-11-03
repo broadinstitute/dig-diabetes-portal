@@ -129,6 +129,22 @@
                                 </label>
 
                             </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="prod01server" type="radio" name="datatype" value="prod01server"
+                                        <%=restServer.getCurrentServer()==restServer.getProd01()?" checked ":"" %>  />
+                                    <g:message code="system.radio.rest_server.prod01" /> (${restServer.getProd01()})
+                                </label>
+
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input id="prod02server" type="radio" name="datatype" value="prod02server"
+                                        <%=restServer.getCurrentServer()==restServer.getProd02()?" checked ":"" %>  />
+                                    <g:message code="system.radio.rest_server.prod02" /> (${restServer.getProd02()})
+                                </label>
+
+                            </div>
 
                             <div class="radio">
                                 <label>
@@ -167,6 +183,8 @@
                                 <li style="padding: 10px"><a href="${restServer.getDevLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getDevLoadBalanced()} cache</a></li>
                                 <li style="padding: 10px"><a href="${restServer.getQaLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getQaLoadBalanced()} cache</a></li>
                                 <li style="padding: 10px"><a href="${restServer.getProdLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getProdLoadBalanced()} cache</a></li>
+                                <li style="padding: 10px"><a href="http://dig-prod-01.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-01.broadinstitute.org:8888/prod/gs cache</a></li>
+                                <li style="padding: 10px"><a href="http://dig-prod-02.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-02.broadinstitute.org:8888/prod/gs cache</a></li>
                             </ul>
                         </div>
                     </div>

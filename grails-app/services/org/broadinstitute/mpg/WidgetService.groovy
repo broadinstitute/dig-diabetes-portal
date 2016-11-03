@@ -446,7 +446,16 @@ class WidgetService {
 
 
 
-
+private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
+    List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
+    List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
+    if (sortedSampleGroup.size()>0){
+        SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+        Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
+        holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+    }
+    return holdingStructure
+}
 
 
 
@@ -454,33 +463,24 @@ class WidgetService {
 
     public HashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
-//                ['ICH_Status':[phenotype:"Stroke_all", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()],
-//                                     'CAD':[phenotype:"CAD", dataSet:'GWAS_CARDIoGRAM_'+metaDataService.getDataVersion()],
-//                                     'UACR':[phenotype:"UACR", dataSet:'GWAS_CKDGenConsortium-UACR_'+metaDataService.getDataVersion()]
-//        ];
+//                ['ICH_Status':[phenotype:"Stroke_all", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()]]
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
         // kludge to reorder for stroke demo
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
-            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
-            if (sampleGroup.size()>0){
-                SampleGroup chosenSampleGroup = sampleGroup.first()
-                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
-            }
+            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
         }
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
-            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
-            if (sampleGroup.size()>0){
-                SampleGroup chosenSampleGroup = sampleGroup.first()
-                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
-            }
+            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+//            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
+//            List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
+//            if (sortedSampleGroup.size()>0){
+//                SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+//                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
+//            }
         }
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
-            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
-            if (sampleGroup.size()>0){
-                SampleGroup chosenSampleGroup = sampleGroup.first()
-                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
-            }
+            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
         }
         return returnValue
     }
@@ -682,8 +682,10 @@ class WidgetService {
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
+                HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
                 beanList.add(new PhenotypeBean(key: phenotype, name: phenotype,
                         description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime))
+                //property:phenotypeDataSetCombo.property)
                 firstTime = false
             }
             // build the phenotype list
