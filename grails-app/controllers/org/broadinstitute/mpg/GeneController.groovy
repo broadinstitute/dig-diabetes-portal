@@ -142,7 +142,8 @@ class GeneController {
                                              phenotype:phenotype,
                                              locale:locale,
                                              lzOptions:lzOptions,
-                                             burdenDataSet:"samples_17k_"+metaDataService.getDataVersion(),
+                                             sampleDataSet:"samples_17k_"+metaDataService.getDataVersion(),
+                                             burdenDataSet:locusZoomDataset,
                                              dataVersion: metaDataService.getDataVersion(),
                                              locusZoomDataset:locusZoomDataset
             ] )
@@ -326,13 +327,14 @@ class GeneController {
         Boolean explicitlySelectSamples = false
         String geneName = params.geneName
         String dataSet = params.dataSet
+        String sampleDataSet = params.sampleDataSet
         int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
         String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
         int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
+        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, sampleDataSet, explicitlySelectSamples);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

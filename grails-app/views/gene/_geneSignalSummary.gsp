@@ -642,12 +642,12 @@ div.variantBoxHeaders {
                      ( sampleBasedPhenotypeName.length > 0)) {
                     $('#aggregateVariantsLocation').css('display','block');
                     $('#noAggregatedVariantsLocation').css('display','none');
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=burdenDataSet%>","1","0.95","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"2","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"3","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"4","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.95","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"2","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"3","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"4","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
                 } else {
                     $('#aggregateVariantsLocation').css('display','none');
                     $('#noAggregatedVariantsLocation').css('display','block');
@@ -744,7 +744,7 @@ div.variantBoxHeaders {
 
 
 
-            var refreshVariantAggregates = function (phenotypeName, filterNum, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
+            var refreshVariantAggregates = function (phenotypeName, filterNum, sampleDataSet, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
                 var rememberCallBack = callBack;
                 var rememberCallBackParameter = callBackParameter;
 
@@ -754,6 +754,7 @@ div.variantBoxHeaders {
                     url: "${createLink(controller: 'gene', action: 'burdenTestAjax')}",
                     data: { geneName:geneName,
                             dataSet:dataSet,
+                            sampleDataSet:sampleDataSet,
                             filterNum:filterNum,
                             burdenTraitFilterSelectedOption: phenotypeName,
                             mafOption:mafOption,
