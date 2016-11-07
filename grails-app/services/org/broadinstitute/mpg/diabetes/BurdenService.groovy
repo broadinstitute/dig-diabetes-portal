@@ -297,7 +297,7 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
+    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet, Boolean explicitlySelectSamples) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -349,7 +349,7 @@ class BurdenService {
             JSONObject filtersObject = new JSONObject()
 
 
-            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, [] as JSONArray, dataSet, explicitlySelectSamples);
+            returnJson = this.getBurdenResultForVariantIdList("mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, [] as JSONArray, sampleDataSet, explicitlySelectSamples);
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());

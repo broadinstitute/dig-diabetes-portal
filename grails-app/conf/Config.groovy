@@ -585,9 +585,9 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 // placeholder for data version
-diabetes.data.version = "mdv70";
+diabetes.data.version = "mdv23";
 portal.data.version.map = ["t2d": "mdv23", "stroke": "mdv70", "mi" : "mdv23"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
-portal.type.override = "stroke"     // options are "t2d" or "stroke"
+portal.type.override = "t2d"     // options are "t2d" or "stroke"
 
 
