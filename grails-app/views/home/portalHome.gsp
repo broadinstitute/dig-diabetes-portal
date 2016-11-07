@@ -242,7 +242,7 @@
             </g:if>
             <g:else>
                 <p><g:message code="about.the.portal.text1"/>
-                    <a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.header.nav.submit"/></a>
+                    <a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.home.collaborate"/></a>
                 <g:message code="about.the.portal.text2"/></p>
                 <p><g:message code='portal.home.funders'/>:</p>
                 <table>

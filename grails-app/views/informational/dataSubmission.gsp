@@ -42,6 +42,8 @@
     <g:message code="informational.dataSubmission.section4"></g:message>
     <h3><g:message code="informational.dataSubmission.section5title"></g:message></h3>
     <g:message code="informational.dataSubmission.section5"></g:message>
+        <h3><g:message code="informational.dataSubmission.section5atitle"></g:message></h3>
+        <g:message code="informational.dataSubmission.section5a"></g:message>
 
             <div class="separator"></div>
 
