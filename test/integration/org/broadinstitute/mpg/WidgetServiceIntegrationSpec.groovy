@@ -31,7 +31,7 @@ class WidgetServiceIntegrationSpec extends IntegrationSpec{
         String chromosome = "8";
         int startPosition = 118000000;
         int endPosition = 121000000;
-        resultJsonString = this.widgetService.getVariantJsonForLocusZoomString(chromosome, startPosition, endPosition, null, null, null, null, []);
+        resultJsonString = this.widgetService.getVariantJsonForLocusZoomString(chromosome, startPosition, endPosition, "ExSeq_17k_hs_mdv23", "T2D", "P_FIRTH_FE_IV", "static", []);
 
         then:
         assert resultJsonString != null

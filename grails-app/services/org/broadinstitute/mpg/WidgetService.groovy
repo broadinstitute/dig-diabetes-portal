@@ -697,7 +697,7 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
 
             // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
             if (metaDataService.portalTypeFromSession=='t2d') {
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D2", description: "Type 2 Diabetes", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: true));
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: true));
                 beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
                 beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
                 beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
