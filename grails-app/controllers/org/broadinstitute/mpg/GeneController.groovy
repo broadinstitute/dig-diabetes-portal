@@ -419,6 +419,9 @@ class GeneController {
         String endString = params.end; // ex "29937203"
         String phenotype = params.phenotype;
         String dataSet = params.dataset
+        String dataType = params.datatype
+        String propertyName = params.propertyName
+
 
         int startInteger;
         int endInteger;
@@ -443,7 +446,7 @@ class GeneController {
             endInteger = Integer.parseInt(endString);
 
             if (chromosome != null) {
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype, conditionVariants);
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype, propertyName, dataType, conditionVariants);
             } else {
                 jsonReturn = errorJson;
             }

@@ -10,5 +10,7 @@ public class PhenotypeBean {
     String name
     String description
     String propertyName
+    String dataSet
+    String dataType
     Boolean defaultSelected
 }

@@ -461,7 +461,7 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
 
 
 
-    public HashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
+    public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
 //                ['ICH_Status':[phenotype:"Stroke_all", dataSet:'GWAS_Stroke_'+metaDataService.getDataVersion()]]
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
@@ -472,12 +472,6 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
         }
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
             buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-//            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype.name, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
-//            List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
-//            if (sortedSampleGroup.size()>0){
-//                SampleGroup chosenSampleGroup = sortedSampleGroup.first()
-//                returnValue[phenotype.name] = [phenotype:phenotype.name, dataSet:chosenSampleGroup.systemId]
-//            }
         }
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
             buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
@@ -510,7 +504,14 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
      * @return
      * @throws PortalException
      */
-    public List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> getVariantListForLocusZoom(String chromosome, int startPosition, int endPosition, String dataset, String phenotype, List<String> covariateVariants) throws PortalException {
+    public List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> getVariantListForLocusZoom(   String chromosome,
+                                                                                                            int startPosition,
+                                                                                                            int endPosition,
+                                                                                                            String dataset,
+                                                                                                            String phenotype,
+                                                                                                            String propertyName,
+                                                                                                            String dataType,
+                                                                                                            List<String> covariateVariants ) throws PortalException {
         // local variables
         List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList;
         String jsonResultString, jsonGetDataString;
@@ -521,22 +522,25 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
         // Super hack: If we are looking at one of four different stroke data sets then we can make a dynamic call on the 17 K, but we have to
         //  insert a fake data set, property name, and phenotype
         Property property
-        Boolean attemptDynamicCall = true
+        Boolean attemptDynamicCall =  (dataType == 'dynamic')
 
-        if (metaDataService.portalTypeFromSession!='t2d'){ // stroke must be static only
-            attemptDynamicCall = false
-            HashMap phenoDataSet = retrievePhenotypeDataSetCombo( phenotype,
-                    dataset )
-            phenotype = phenoDataSet.phenotype
-            dataset = phenoDataSet.dataSet
-        }
+//        if (metaDataService.portalTypeFromSession!='t2d'){ // stroke must be static only
+//            attemptDynamicCall = false
+//            HashMap phenoDataSet = retrievePhenotypeDataSetCombo( phenotype,
+//                    dataset )
+//            phenotype = phenoDataSet.phenotype
+//            dataset = phenoDataSet.dataSet
+//        }
 
-        property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
         // build the LZ json builder
-        if (property) {
-            locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, property.name);
+        if (attemptDynamicCall) {
+            if (metaDataService.portalTypeFromSession=='t2d') {
+                locusZoomJsonBuilder = new LocusZoomJsonBuilder("ExSeq_17k_mdv23", phenotype, "P_FIRTH_FE_IV");
+            } else if (metaDataService.portalTypeFromSession=='stroke') {
+                locusZoomJsonBuilder = new LocusZoomJsonBuilder("GWAS_Stroke_mdv70", phenotype, "P_VALUE");
+            }
         } else { // option while we get real refs working
-            locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype);
+            locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName );
         }
 
         // adding covariates for variant
@@ -548,7 +552,8 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList);
 
         // submit the post request
-        if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
+        if (!attemptDynamicCall){
+        //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
         } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_DEV) {
@@ -558,10 +563,13 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
             jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_QA);
 
         } else {
-            throw new PortalException("Got incorrect LZ endpoint selection: " + this.getLocusZoomEndpointSelection())
+            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_DEV);
         }
 
         // translate the returning json into variant list
+        if (metaDataService.portalTypeFromSession=='stroke'){
+            jsonResultString = jsonResultString.replaceAll(~/P_FIRTH_FE_IV/,"P_VALUE")
+        }
         knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonResultString);
         variantList = knowledgeBaseResultParser.parseResult();
 
@@ -578,7 +586,8 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
      * @return
      */
     public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition,
-                                                   String dataset, String phenotype, List<String> covariateVariants) {
+                                                   String dataset, String phenotype, String propertyName,
+                                                   String dataType, List<String> covariateVariants) {
         // local variables
         List<Variant> variantList = null;
         JSONObject jsonResultObject = null;
@@ -595,24 +604,21 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
         // get the query result and translate to a json string
         try {
             // get the variant list
-            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, covariateVariants);
+            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 
             // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
-            // translate to json string
-            if (metaDataService.portalTypeFromSession!='t2d') {
-                HashMap phenoDataSet = retrievePhenotypeDataSetCombo(phenotype,
-                        dataset)
-                phenotype = phenoDataSet.phenotype
-                dataset = phenoDataSet.dataSet
-            } else {
-                phenotype = "T2D"
-                dataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-            }
-
-            property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataset,'P_VALUE')
 
             //
-            knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(dataset, phenotype, property.name);
+            if (dataType=='static'){
+                knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator( dataset, phenotype, propertyName );
+            } else {
+
+                if (metaDataService.portalTypeFromSession=='t2d') {
+                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "ExSeq_17k_mdv23", "T2D", "P_FIRTH_FE_IV" );
+                } else if (metaDataService.portalTypeFromSession=='stroke') {
+                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "GWAS_Stroke_mdv70", "T2D", "P_VALUE" );
+                }
+            }
 
             jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
 
@@ -678,39 +684,40 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
         List<PhenotypeBean> beanList = new ArrayList<PhenotypeBean>();
         String portalType = this.metaDataService?.getPortalTypeFromSession();
 
-        if (portalType.equals("stroke")) {
+
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
-                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype,
+                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet, propertyName:phenotypeDataSetCombo.property,dataType:"static",
                         description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime))
-                //property:phenotypeDataSetCombo.property)
+
                 firstTime = false
             }
-            // build the phenotype list
-//            beanList.add(new PhenotypeBean(key: "Stroke_all", name: "Stroke_all", description: "ICH Status", defaultSelected: true));
-//            beanList.add(new PhenotypeBean(key: "Stroke_lobar", name: "Stroke_lobar", description: "Lobar ICH", defaultSelected: false));
-//            beanList.add(new PhenotypeBean(key: "Stroke_deep", name: "Stroke_deep", description: "Deep ICH", defaultSelected: false));
-//            beanList.add(new PhenotypeBean(key: "CAD", name: "CAD", description: "Coronary artery disease", defaultSelected: false));
-//            beanList.add(new PhenotypeBean(key: "FG", name: "FG", description: "Fasting glucose", defaultSelected: false));
-//            beanList.add(new PhenotypeBean(key: "2hrI", name: "2hrI", description: "2 hour insulin", defaultSelected: false));
-//            beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", defaultSelected: false));
 
-        } else {
-            // build the phenotype list
-            beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", defaultSelected: true));
-            beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", defaultSelected: false));
-            beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", defaultSelected: false));
-        }
+            // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
+            if (metaDataService.portalTypeFromSession=='t2d') {
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D2", description: "Type 2 Diabetes", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: true));
+                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+
+            } else if (metaDataService.portalTypeFromSession=='stroke') {
+
+                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: true));
+                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+
+            }
+
 
         // return
         return beanList

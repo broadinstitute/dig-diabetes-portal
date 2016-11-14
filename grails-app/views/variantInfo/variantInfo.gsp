@@ -185,9 +185,9 @@
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
-                    '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}',false);
+                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                    '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
             </g:if>
             <g:else>
                 mpgSoftware.variantInfo.initializePage(data,
@@ -195,9 +195,9 @@
                         "<g:createLink controller='trait' action='traitInfo' />",
                         "<%=restServer%>",
                         variantSummaryText,
-                        't2d',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${locusZoomDataset}',
+                        't2d',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}',true);
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
             </g:else>
 
         }).fail(function (jqXHR, textStatus, errorThrown) {

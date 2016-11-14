@@ -124,7 +124,10 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,broadAssociationSource,makeDynamic) {
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic) {
+            var phenotype = lzParameters.phenotype;
+            var localDataSet = lzParameters.dataSet;
+            var propertyName = lzParameters.propertyName;
             var phenotype = lzParameters.phenotype;
             var dataSet = dataSetName;
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
@@ -135,7 +138,9 @@ var mpgSoftware = mpgSoftware || {};
                         "start=" + state.start + "&" +
                         "end=" + state.end + "&" +
                         "phenotype=" + phenotype + "&" +
-                        "dataset=" + dataSet;
+                        "dataset=" + dataSet + "&" +
+                        "propertyName=" + propertyName + "&" +
+                        "datatype="+ makeDynamic;
                     if (state.condition_on_variant){
                         url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
                     }
@@ -149,7 +154,7 @@ var mpgSoftware = mpgSoftware || {};
                     + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
                     + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
                 if ((typeof makeDynamic !== 'undefined') &&
-                    (makeDynamic)){
+                    (makeDynamic==='dynamic')){
                     toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
                 }
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
@@ -360,7 +365,8 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,phenoTypeDescription,locusZoomDataset,
+                                         phenoTypeName,phenoTypeDescription,
+                                         phenoPropertyName,locusZoomDataset,
                                          geneGetLZ,variantInfoUrl,makeDynamic) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
@@ -403,7 +409,9 @@ var mpgSoftware = mpgSoftware || {};
                 // default panel
                 addLZPhenotype({
                     phenotype: defaultPhenotypeName,
-                    description: phenoTypeDescription
+                    description: phenoTypeDescription,
+                    propertyName:phenoPropertyName,
+                    dataSet:locusZoomDataset
                 },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {

@@ -665,15 +665,15 @@ div.variantBoxHeaders {
                 </g:if>
                 if (!mpgSoftware.locusZoom.plotAlreadyExists()){
                     mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                            "#lz-1", "#collapseExample", '${phenotype}',portalDescription,'${locusZoomDataset}',
+                            "#lz-1", "#collapseExample", '${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                             '${createLink(controller:"gene", action:"getLocusZoom")}',
-                            '${createLink(controller:"variantInfo", action:"variantInfo")}');
+                            '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
                 } else {
                     if (typeof hailPhenotypeInfo !== 'undefined') {
                         mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1","#collapseExample",hailPhenotypeInfo.key,hailPhenotypeInfo.description,"<%=locusZoomDataset%>",//'BMI_adj_withincohort_invn',
+                                "#lz-1","#collapseExample",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                '${createLink(controller:"variantInfo", action:"variantInfo")}');
+                                '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
                     } else {
                         $("#locusZoomLocation").css('display','none');
                     }
