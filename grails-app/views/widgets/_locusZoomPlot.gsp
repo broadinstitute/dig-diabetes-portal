@@ -8,7 +8,9 @@
     </div>
 
     <div id="collapseLZ" class="accordion-body collapse">
-        <p><g:message code="variant.locusZoom.text"/></p>
+        <p><g:message code="variant.locusZoom.text1"/></p>
+        <p><g:message code="variant.locusZoom.text2"/></p>
+        <p><g:message code="variant.locusZoom.text3"/></p>
 
         <div style="display: flex; justify-content: space-around;">
             <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>

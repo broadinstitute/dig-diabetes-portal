@@ -41,6 +41,8 @@
 
     <h4><g:message code="informational.dataSubmission.section1title"></g:message></h4>
     <g:message code="informational.dataSubmission.section1"></g:message>
+        <h4><g:message code="informational.dataSubmission.section9title"></g:message></h4>
+        <g:message code="informational.dataSubmission.section9"></g:message>
     <h4><g:message code="informational.dataSubmission.section2title"></g:message></h4>
     <g:message code="informational.dataSubmission.section2"></g:message>
     <h4><g:message code="informational.dataSubmission.section3title"></g:message></h4>
