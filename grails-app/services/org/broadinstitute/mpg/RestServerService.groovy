@@ -1881,12 +1881,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        // need to figure out data set and property names
+        List<LinkedHashMap<String, String>> matchers = identifyMatchers( 'P_VALUE', '' )
         // would be handy to replace all of the assorted P values with just 1 string
         if (pValueName != 'P_VALUE'){
             for (List variant in dataJsonObject.variants) {
                 Map holder = variant.find{p->p.keySet().contains(pValueName)}
+                List<LinkedHashMap> recDescriptor = matchers.findAll{it.ds==holder[pValueName].keySet()[0]
+                   // &&it.pname==pValueName
+                }
+                if (recDescriptor.size()==1){
+                    LinkedHashMap currentRecDescriptor = recDescriptor.first()
+                    variant << ['pname':currentRecDescriptor['pname']]
+                    variant << ['pheno':currentRecDescriptor['pheno']]
+                    variant << ['datasetname':currentRecDescriptor['ds']]
+                } else {
+                    println("strange.  ${recDescriptor.size()} results")
+                }
                 holder['P_VALUE'] = holder[pValueName]
                 holder.remove(pValueName)
+
             }
         }
 

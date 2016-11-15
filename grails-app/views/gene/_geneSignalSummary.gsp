@@ -343,7 +343,7 @@ div.variantBoxHeaders {
 
                                         <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                                        <div class="col-lg-3"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}','{{dsr}}')" class="boldItlink">{{rsId}}</a></div>
+                                        <div class="col-lg-3"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}','{{dsr}}','{{pname}}','{{pheno}}')" class="boldItlink">{{rsId}}</a></div>
 
                                         <div class="col-lg-2">{{P_VALUE}}</div>
 
@@ -466,6 +466,14 @@ div.variantBoxHeaders {
                                     obj['ds'] = (val)?val:'';
                                 } else if (key==='dsr') {
                                     obj['dsr'] = (val)?val:'';
+                                } else if (key==='pname') {
+                                    obj['pname'] = (val)?val:'';
+                                } else if (key==='pheno') {
+                                    obj['pheno'] = (val)?val:'';
+                                } else if (key==='datasetname') {
+                                    obj['datasetname'] = (val)?val:'';
+                                }  else if (key==='meaning') {
+                                    obj['meaning'] = (val)?val:'';
                                 }  else if (key==='MAF') {
                                     _.forEach(val,function(mafval,mafkey){
                                         mafValue = (mafval)?mafval:'';
@@ -795,7 +803,7 @@ div.variantBoxHeaders {
                 refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
             };
 
-    var refreshLZ = function(varId,dataSetName){
+    var refreshLZ = function(varId,dataSetName,propName,phenotype){
         var parseId = varId.split("_");
         var locusZoomRange = 80000;
         var variantPos = parseInt(parseId[1]);
@@ -812,13 +820,9 @@ div.variantBoxHeaders {
         mpgSoftware.locusZoom.removeAllPanels();
 
                 mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                        "#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,//'BMI_adj_withincohort_invn',
+                        "#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,propName,phenotype,
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                         '${createLink(controller:"variantInfo", action:"variantInfo")}');
-        %{--mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,--}%
-                %{--"#lz-1","#collapseExample",'T2D',dataSetName,//'BMI_adj_withincohort_invn',--}%
-                %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-                %{--'${createLink(controller:"variantInfo", action:"variantInfo")}');--}%
     };
 
 
