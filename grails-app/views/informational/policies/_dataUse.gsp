@@ -20,10 +20,10 @@
         <g:message code="informational.policies.dataset_classes.section_1"/>
         <h4><g:message code="informational.policies.data_transfer.header"/></h4>
         <g:message code="informational.policies.data_transfer.section_1"/>
-        <a href='https://s3.amazonaws.com/broad-portal-resources/AMP-T2D_DTA_and_policies_093016.pdf' target="_blank">
-            <g:message code="mainpage.click.here"/>
+        <p><a href='https://s3.amazonaws.com/broad-portal-resources/AMP-T2D_DTA_and_policies.pdf' target="_blank">
+            <g:message code="mainpage.click.here"/> <g:message code="informational.policies.data_transfer.section_2"/></p>
         </a>
-        <g:message code="informational.policies.data_transfer.section_2"/>
+        <p><g:message code="informational.dataSubmission.section6"/></p>
         <h4><g:message code="informational.policies.use_analysis.header"/></h4>
     <g:message code="informational.policies.use_analysis.section_1"/>
         <g:message code="informational.policies.use_analysis.section_2"/>
