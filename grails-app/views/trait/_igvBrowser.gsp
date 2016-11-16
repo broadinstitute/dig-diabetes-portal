@@ -158,7 +158,7 @@
                            browser;
                    var renderData = {
                        dataSources: data.allSources,
-                       url: '${createLink(controller:'trait', action:'getData', absolute:'true')}',
+                       url: '${createLink(controller:'trait', action:'getData', absolute:'false')}',
                        variantURL: '${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}',
                        traitURL: '${createLink(controller:'trait', action:'traitInfo', absolute:'true')}'
                    };
