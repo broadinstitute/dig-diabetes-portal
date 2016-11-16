@@ -68,7 +68,7 @@ class HtmlTagLib {
 
 
         if (!fileDesignationOnDisk) {
-            throwTagError("could not find ${fileName} on disk")
+            return;  // better to fail silently
         }
         File file = new File(fileDesignationOnDisk)
         String fileContents = ""
