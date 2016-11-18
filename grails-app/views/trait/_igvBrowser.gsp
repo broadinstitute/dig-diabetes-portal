@@ -31,49 +31,45 @@
 <br/>
 <script>
 </script>
-<nav class="navbar" role="navigation">
+<nav class="navbar" role="navigation" style="margin:0;padding:0">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse"
                         data-target="#bs-example-navbar-collapse-1"><span class="sr-only"><g:message code="controls.shared.igv.toggle_nav" /></span><span
                         class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button>
-                <a class="navbar-brand">IGV</a></div>
-            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse">
+                %{--<a class="navbar-brand">IGV</a></div>--}%
+            <div id="bs-example-navbar-collapse-1" class="collapse navbar-collapse" style="margin:0;padding:0">
                 <ul class="nav navbar-nav navbar-left">
-                    <li class="dropdown" id="tracks-menu-dropdown">
+                    <li class="dropdown" id="tracks-menu-dropdown" style="margin:0;padding:0">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><g:message code="controls.shared.igv.tracks" /><b class="caret"></b></a>
-                        <ul id="mytrackList" class="dropdown-menu">
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-</g:if>
-<g:if test="${g.portalTypeString()?.equals('stroke')}">
-    %{--<g:render template="/trait/igvBrowserLinksStroke"/>--}%
-</g:if>
+                        <ul id="mytrackList" class="dropdown-menu" style="margin:0;padding:0">
                         </ul>
                     </li>
                 </ul>
-                <div class="nav navbar-nav navbar-left">
-                    <div class="well-sm">
-                        <input id="goBoxInput" class="form-control" placeholder="Locus Search" type="text"
-                               onchange="igvSearch($('#goBoxInput')[0].value)">
-                    </div>
-                </div>
-                <div class="nav navbar-nav navbar-left">
-                    <div class="well-sm">
-                        <button id="goBox" class="btn btn-default" onclick="igvSearch($('#goBoxInput')[0].value)">
-                            <g:message code="controls.shared.igv.search" />
-                        </button>
-                    </div>
-                </div>
-                <div class="nav navbar-nav navbar-right">
-                    <div class="well-sm">
-                        <div class="btn-group-sm"></div>
-                        <button id="zoomOut" type="button" class="btn btn-default btn-sm"
-                                onclick="igv.browser.zoomOut()">
-                            <span class="glyphicon glyphicon-minus"></span></button>
-                        <button id="zoomIn" type="button" class="btn btn-default btn-sm" onclick="igv.browser.zoomIn()">
-                            <span class="glyphicon glyphicon-plus"></span></button>
-                    </div>
-                </div>
+                %{--<div class="nav navbar-nav navbar-left">--}%
+                    %{--<div class="well-sm">--}%
+                        %{--<input id="goBoxInput" class="form-control" placeholder="Locus Search" type="text"--}%
+                               %{--onchange="igvSearch($('#goBoxInput')[0].value)">--}%
+                    %{--</div>--}%
+                %{--</div>--}%
+                %{--<div class="nav navbar-nav navbar-left">--}%
+                    %{--<div class="well-sm">--}%
+                        %{--<button id="goBox" class="btn btn-default" onclick="igvSearch($('#goBoxInput')[0].value)">--}%
+                            %{--<g:message code="controls.shared.igv.search" />--}%
+                        %{--</button>--}%
+                    %{--</div>--}%
+                %{--</div>--}%
+                %{--<div class="nav navbar-nav navbar-right">--}%
+                    %{--<div class="well-sm">--}%
+                        %{--<div class="btn-group-sm"></div>--}%
+                        %{--<button id="zoomOut" type="button" class="btn btn-default btn-sm"--}%
+                                %{--onclick="igv.browser.zoomOut()">--}%
+                            %{--<span class="glyphicon glyphicon-minus"></span></button>--}%
+                        %{--<button id="zoomIn" type="button" class="btn btn-default btn-sm" onclick="igv.browser.zoomIn()">--}%
+                            %{--<span class="glyphicon glyphicon-plus"></span></button>--}%
+                    %{--</div>--}%
+                %{--</div>--}%
+            </div>
             </div>
         </div>
     </nav>
@@ -111,10 +107,10 @@
                    name: "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
                    order: 9998
                },
-               {
-                   type: "sequence",
-                   order: -9999
-               },
+//               {
+//                   type: "sequence",
+//                   order: -9999
+//               },
                {
                    url: "//dn7ywbm9isq8j.cloudfront.net/annotations/hg19/genes/gencode.v18.collapsed.bed",
                    name: "<g:message code='controls.shared.igv.tracks.genes' />",
@@ -122,9 +118,10 @@
                }
            ];
            options = {
+               id: "hg19",
                showKaryo: true,
-               showRuler: true,
-               showCommandBar: false,
+               showRuler: false,
+               showCommandBar: true,
                fastaURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta",
                cytobandURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/cytoBand.txt",
                locus: locusName,
@@ -161,7 +158,7 @@
                            browser;
                    var renderData = {
                        dataSources: data.allSources,
-                       url: '${createLink(controller:'trait', action:'getData', absolute:'true')}',
+                       url: '${createLink(controller:'trait', action:'getData', absolute:'false')}',
                        variantURL: '${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}',
                        traitURL: '${createLink(controller:'trait', action:'traitInfo', absolute:'true')}'
                    };
@@ -172,106 +169,7 @@
                }
        );
 
-        %{--var div,--}%
-                %{--options,--}%
-                %{--browser;--}%
-
-        %{--div = $("#myDiv")[0];--}%
-        %{--options = {--}%
-            %{--showKaryo: true,--}%
-            %{--showRuler: true,--}%
-            %{--showCommandBar: false,--}%
-            %{--fastaURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/hg19.fasta",--}%
-            %{--cytobandURL: "//dn7ywbm9isq8j.cloudfront.net/genomes/seq/hg19/cytoBand.txt",--}%
-            %{--locus: locusName,--}%
-            %{--flanking: 100000,--}%
-            %{--tracks: [--}%
-%{--<g:if test="${g.portalTypeString()?.equals('stroke')}">--}%
-                %{--{--}%
-                    %{--type: "gwas",--}%
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
-                    %{--trait: "Stroke_all",--}%
-                    %{--dataset: "GWAS_Stroke_mdv5",--}%
-                    %{--pvalue: "P_VALUE",--}%
-                    %{--name: "<g:message code='metadata.Stroke_all' />",--}%
-                    %{--variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',--}%
-                    %{--traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'--}%
-                %{--},--}%
-                %{--{--}%
-                    %{--type: "gwas",--}%
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
-                    %{--trait: "Stroke_deep",--}%
-                    %{--dataset: "GWAS_Stroke_mdv5",--}%
-                    %{--pvalue: "P_VALUE",--}%
-                    %{--name: "<g:message code='metadata.Stroke_deep' />",--}%
-                    %{--variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',--}%
-                    %{--traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'--}%
-                %{--},--}%
-                %{--{--}%
-                    %{--type: "gwas",--}%
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
-                    %{--trait: "Stroke_lobar",--}%
-                    %{--dataset: "GWAS_Stroke_mdv5",--}%
-                    %{--pvalue: "P_VALUE",--}%
-                    %{--name: "<g:message code='metadata.Stroke_lobar' />",--}%
-                    %{--variantURL: '${g.createLink(absolute:true, uri:'/variantInfo/variantInfo/')}',--}%
-                    %{--traitURL: '${g.createLink(absolute:true, uri:'/trait/traitInfo/')}'--}%
-                %{--},--}%
-%{--</g:if>--}%
-%{--<g:else>--}%
-                %{--{--}%
-                    %{--type: "gwas",--}%
-                    %{--url: "${restServer.currentRestServer()}getData",--}%
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
-                    %{--trait: "T2D",--}%
-                    %{--dataset: "GWAS_DIAGRAM_mdv2",--}%
-                    %{--pvalue: "P_VALUE",--}%
-                    %{--name: "<g:message code='portal.header.title.short' />",--}%
-                    %{--variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",--}%
-                    %{--traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"--}%
-                %{--},--}%
-                %{--{--}%
-                    %{--type: "gwas",--}%
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
-                    %{--trait: "FG",--}%
-                    %{--dataset: "GWAS_MAGIC_mdv2",--}%
-                    %{--pvalue: "P_VALUE",--}%
-                    %{--name: "<g:message code='informational.shared.traits.fasting_glucose' />",--}%
-                    %{--variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",--}%
-                    %{--traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"--}%
-                %{--},--}%
-                %{--{--}%
-                    %{--type: "gwas",--}%
-                    %{--url: "${createLink(controller:'trait', action:'getData')}",--}%
-                    %{--trait: "FI",--}%
-                    %{--dataset: "GWAS_MAGIC_mdv2",--}%
-                    %{--pvalue: "P_VALUE",--}%
-                    %{--name: "<g:message code='informational.shared.traits.fasting_insulin' />",--}%
-                    %{--variantURL: "http://www.type2diabetesgenetics.org/variantInfo/variantInfo/",--}%
-                    %{--traitURL: "http://www.type2diabetesgenetics.org/trait/traitInfo/"--}%
-                %{--},--}%
-%{--</g:else>--}%
-                %{--{--}%
-                    %{--url: "http://data.broadinstitute.org/igvdata/t2d/recomb_decode.bedgraph",--}%
-                    %{--min: 0,--}%
-                    %{--max: 7,--}%
-                    %{--name: "<g:message code='controls.shared.igv.tracks.recomb_rate' />",--}%
-                    %{--order: 9998--}%
-                %{--},--}%
-                %{--{--}%
-                    %{--type: "sequence",--}%
-                    %{--order: -9999--}%
-                %{--},--}%
-                %{--{--}%
-                    %{--url: "//dn7ywbm9isq8j.cloudfront.net/annotations/hg19/genes/gencode.v18.collapsed.bed",--}%
-                    %{--name: "<g:message code='controls.shared.igv.tracks.genes' />",--}%
-                    %{--order: 10000--}%
-                %{--}--}%
-            %{--]--}%
-        %{--};--}%
-
-        %{--browser = igv.createBrowser(div, options);--}%
-    };
+     };
 
 </script>
 
