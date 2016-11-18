@@ -16,6 +16,7 @@ class TraitController {
     private static final log = LogFactory.getLog(this)
     MetaDataService metaDataService
     MetadataUtilityService metadataUtilityService
+    WidgetService widgetService
 
     /***
      * create page frame for association statistics across 25 traits for a single variant. The resulting Ajax call is  ajaxTraitsPerVariant
@@ -387,7 +388,7 @@ class TraitController {
 
     def retrievePotentialIgvTracks(){
         // defined this tiny little closure that we use locally
-        Closure convertStructToJson = { incoming ->
+        Closure convertStaticStructToJson = { incoming ->
             List<String> allOptions = []
             incoming.each { Map map ->
                 List<String> perOptionFields = []
@@ -396,248 +397,22 @@ class TraitController {
             }
             return "[${allOptions.join(",")}]"
         }
+        Closure convertDynamicStructToJson = { incoming ->
+            List<String> allOptions = []
+            incoming.each { org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean ->
+                List<String> perOptionFields = []
+
+                perOptionFields << " \"type\":\"gwas\" "
+                perOptionFields << " \"trait\":\"${phenotypeBean.name}\" "
+                perOptionFields << " \"dataset\":\"${phenotypeBean.dataSet}\" "
+                perOptionFields << " \"pvalue\":\"${phenotypeBean.propertyName}\" "
+                perOptionFields << " \"name\":\"${phenotypeBean.description}\" "
+                allOptions << "{${perOptionFields.join(",")}}"
+            }
+            return "[${allOptions.join(",")}]"
+        }
 
         JsonSlurper slurper = new JsonSlurper()
-        List t2dDataSources = [
-                [   type:'gwas',
-                    trait: 'T2D',
-                    dataset:'ExSeq_17k_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_EMMAX_FE_IV_17k',
-                    name: 'T2D (exome sequencing)' ],
-                [   type:'gwas',
-                    trait: 'T2D',
-                    dataset:'ExChip_82k_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'T2D (exome chip)' ],
-                [   type:'gwas',
-                    trait: 'FG',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'fasting glucose' ],
-                [   type:'gwas',
-                    trait: '2hrG',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: '2-hour glucose' ],
-                [   type:'gwas',
-                    trait: '2hrI',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: '2-hour insulin' ],
-                [   type:'gwas',
-                    trait: 'FI',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'fasting insulin' ],
-                [   type:'gwas',
-                    trait: 'PI',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'fasting proinsulin' ],
-                [   type:'gwas',
-                    trait: 'HBA1C',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HbA1c' ],
-                [   type:'gwas',
-                    trait: 'HOMAIR',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HOMA-IR' ],
-                [   type:'gwas',
-                    trait: 'HOMAB',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HOMA-B' ],
-                [   type:'gwas',
-                    trait: 'BMI',
-                    dataset:'GWAS_GIANT_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'BMI' ],
-                [   type:'gwas',
-                    trait: 'WHR',
-                    dataset:'GWAS_GIANT_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'waist-hip ratio' ],
-                [   type:'gwas',
-                    trait: 'HEIGHT',
-                    dataset:'GWAS_GIANT_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'height' ],
-                [   type:'gwas',
-                    trait: 'HDL',
-                    dataset:'GWAS_GLGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HDL' ],
-                [   type:'gwas',
-                    trait: 'LDL',
-                    dataset:'GWAS_GLGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'LDL' ],
-                [   type:'gwas',
-                    trait: 'TG',
-                    dataset:'GWAS_GLGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'triglycerides' ],
-                [   type:'gwas',
-                    trait: 'CAD',
-                    dataset:'GWAS_CARDIoGRAM_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'coronary artery disease' ],
-                [   type:'gwas',
-                    trait: 'T2D',
-                    dataset:'GWAS_CKDGenConsortium_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'chronic kidney disease' ],
-                [   type:'gwas',
-                    trait: 'eGFRcrea',
-                    dataset:'GWAS_CKDGenConsortiume-GFRcrea_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'eGFR-creat (serum creatinine)' ],
-                [   type:'gwas',
-                    trait: 'eGFRcys',
-                    dataset:'GWAS_CKDGenConsortium_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'eGFR-creat (serum cystine)' ],
-                [   type:'gwas',
-                    trait: 'UACR',
-                    dataset:'GWAS_CKDGenConsortium-UACR_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'urinary albumin-to-creatinine ratio' ],
-                [   type:'gwas',
-                    trait: 'SCZ',
-                    dataset:'GWAS_PGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'schizophrenia' ],
-                [   type:'gwas',
-                    trait: 'MDD',
-                    dataset:'GWAS_PGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'major depressive disorder' ],
-                [   type:'gwas',
-                    trait: 'BIP',
-                    dataset:'GWAS_PGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'bipolar disorder' ]
-
-        ];
-        List strokeDataSources = [
-                [   type:'gwas',
-                    trait: 'Stroke_all',
-                    dataset:'GWAS_Stroke_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'Stroke' ],
-                [   type:'gwas',
-                    trait: 'Stroke_deep',
-                    dataset:'GWAS_Stroke_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'Stroke deep' ],
-                [   type:'gwas',
-                    trait: 'Stroke_lobar',
-                    dataset:'GWAS_Stroke_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'Stroke lobar' ],
-                [   type:'gwas',
-                    trait: 'FG',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'fasting glucose' ],
-                [   type:'gwas',
-                    trait: '2hrI',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: '2-hour insulin' ],
-                [   type:'gwas',
-                    trait: 'FI',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'fasting insulin' ],
-                [   type:'gwas',
-                    trait: 'PI',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'fasting proinsulin' ],
-                [   type:'gwas',
-                    trait: 'HBA1C',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HbA1C' ],
-                [   type:'gwas',
-                    trait: 'HOMAIR',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HOMA-IR' ],
-                [   type:'gwas',
-                    trait: 'HOMAB',
-                    dataset:'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HOMA-B' ],
-                [   type:'gwas',
-                    trait: 'BMI',
-                    dataset:'GWAS_GIANT_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'BMI' ],
-                [   type:'gwas',
-                    trait: 'WHR',
-                    dataset:'GWAS_GIANT_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'waist-hip ratio' ],
-                [   type:'gwas',
-                    trait: 'HEIGHT',
-                    dataset:'GWAS_GIANT_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'height' ],
-                [   type:'gwas',
-                    trait: 'HDL',
-                    dataset:'GWAS_GLGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'HDL' ],
-                [   type:'gwas',
-                    trait: 'LDL',
-                    dataset:'GWAS_GLGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'LDL' ],
-                [   type:'gwas',
-                    trait: 'TG',
-                    dataset:'GWAS_GLGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'triglycerides' ],
-                [   type:'gwas',
-                    trait: 'CAD',
-                    dataset:'GWAS_CARDIoGRAM_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'coronary artery disease' ],
-                [   type:'gwas',
-                    trait: 'CKD',
-                    dataset:'GWAS_CKDGenConsortium_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'chronic kidney disease' ],
-                [   type:'gwas',
-                    trait: 'eGFRcys',
-                    dataset:'GWAS_CKDGenConsortium_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'eGFR-creat (serum creatinine)' ],
-                [   type:'gwas',
-                    trait: 'UACR',
-                    dataset:'GWAS_CKDGenConsortium-UACR_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'urinary ATC ratio' ],
-                [   type:'gwas',
-                    trait: 'SCZ',
-                    dataset:'GWAS_PGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'schizophrenia' ],
-                [   type:'gwas',
-                    trait: 'MDD',
-                    dataset:'GWAS_PGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'depression' ],
-                [   type:'gwas',
-                    trait: 'BIP',
-                    dataset:'GWAS_PGC_'+metaDataService.getDataVersion(),
-                    pvalue: 'P_VALUE',
-                    name: 'bipolar disorder' ]
-         ];
         List strokeDefaultDataSources = [
                 [
                         type: 'gwas',
@@ -684,30 +459,29 @@ class TraitController {
                         name: 'fasting insulin'
                 ]
         ];
+        List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
+        List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> staticPhenotypeMap = phenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->phenotypeBean.dataType=='static'}
         String portalType = g.portalTypeString() as String
         List dataSources = []
         List defaultDataSources = []
 
         // kludge alert
         if (portalType=='t2d'){
-            dataSources = t2dDataSources
             defaultDataSources = t2dDefaultDataSources
         }else if (portalType=='stroke'){
-            dataSources = strokeDataSources
             defaultDataSources = strokeDefaultDataSources
         } else {
-            dataSources = t2dDataSources
             defaultDataSources = t2dDefaultDataSources
         }
 
-        if (defaultDataSources) {
+//        if (defaultDataSources) {
             render(status: 200, contentType: "application/json") {
-                [allSources:slurper.parseText(convertStructToJson(dataSources)),
-                defaultTracks:slurper.parseText(convertStructToJson(defaultDataSources))]
+                [allSources:slurper.parseText(convertDynamicStructToJson(staticPhenotypeMap)),
+                defaultTracks:slurper.parseText(convertStaticStructToJson(defaultDataSources))]
             }
-        } else {
-            render(status: 300, contentType: "application/json")
-        }
+//        } else {
+//            render(status: 300, contentType: "application/json")
+//        }
     }
 
 

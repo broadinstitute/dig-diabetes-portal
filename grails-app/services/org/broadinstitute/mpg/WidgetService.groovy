@@ -448,7 +448,8 @@ class WidgetService {
 
 private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
     List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
-    List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
+   // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
+    List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
     if (sortedSampleGroup.size()>0){
         SampleGroup chosenSampleGroup = sortedSampleGroup.first()
         Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
