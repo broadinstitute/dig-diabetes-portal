@@ -454,6 +454,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/admin/updatePassword/**': ['permitAll'],
         '/admin/**':            ['ROLE_ADMIN'],
         '/user/**':            ['ROLE_ADMIN'],
+        '/geneData/**':            ['ROLE_ADMIN'],
         '/gene/index':          ['permitAll'],
         '/gene/**':             ['ROLE_USER'],
         '/informational/**':    ['permitAll'],

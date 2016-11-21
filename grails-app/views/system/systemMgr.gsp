@@ -449,8 +449,18 @@
             <div class="row clearfix">
                 <div class="col-md-4" style="text-align: right">Change text and/or translations</div>
                 <div class="col-md-4">
-                     <a class='btn btn-primary btn-lg' href="<g:createLink controller='localization' action='list' />?format=">
+                    <a class='btn btn-primary btn-lg' href="<g:createLink controller='localization' action='list' />?format=">
                         Interactive text manipulation tool
+                    </a>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+
+            <div class="row clearfix" style="margin-top:15px">
+                <div class="col-md-4" style="text-align: right">Change gene definitions</div>
+                <div class="col-md-4">
+                    <a class='btn btn-primary btn-lg' href="<g:createLink controller='gene' action='list' />?format=">
+                        Interactive gene manipulation tool
                     </a>
                 </div>
                 <div class="col-md-4"></div>

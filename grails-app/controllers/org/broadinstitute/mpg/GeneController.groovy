@@ -11,6 +11,10 @@ import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
+import static org.springframework.http.HttpStatus.*
+import grails.transaction.Transactional
+
+@Transactional(readOnly = true)
 class GeneController {
 
     RestServerService restServerService
@@ -22,6 +26,9 @@ class GeneController {
     BurdenService burdenService
     WidgetService widgetService
     GrailsApplication grailsApplication
+
+
+    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     /***
      * return partial matches as Json for the purposes of the twitter typeahead handler
@@ -102,7 +109,7 @@ class GeneController {
         }
         if (newVandAColumnPValue){
             String filteredNumericPValue = newVandAColumnPValue.replaceAll(/\s*x\s*10/,"e") // take out any references to 10x, which would match the representation and the table, so I guess it's
-                                                                                            // a fair mistake for a novice.   replace with a legal numerical format
+            // a fair mistake for a novice.   replace with a legal numerical format
             try {
                 new BigDecimal(filteredNumericPValue)
                 columnInformation << [name:"${newVandAColumnName}", value:"${filteredNumericPValue}", count:'0']
@@ -148,7 +155,7 @@ class GeneController {
                                              locusZoomDataset:locusZoomDataset
             ] )
         }
-     }
+    }
 
     /***
      * we've been asked to search, but we don't know what kind of string. Figure it out, and then
@@ -208,7 +215,7 @@ class GeneController {
         // this is an error condition -- we should never get here in the code
         log.error("why did we never finish parsing '${uncharacterizedString}'?")
         redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
-       return
+        return
     }
 
     /***
@@ -396,7 +403,7 @@ class GeneController {
 
 
 
-        /***
+    /***
      * Get the contents for the filter drop-down box on the burden test section of the gene info page
      * @return
      */
@@ -465,5 +472,116 @@ class GeneController {
 
         // return
         render(jsonReturn)
+    }
+
+
+
+    def list(Integer max) {
+        params.max = Math.min(max ?: 50, 1000)
+        List geneResults = []
+        def taskList = Gene.createCriteria().list (params) {
+            if ( params.query ) {
+                ilike("name1", "%${params.query}%")
+                geneResults = Gene.findAllByName1Ilike("%${params.query}%").sort{it.name1}
+            } else {
+                geneResults = Gene.list(params+[sort:'name1'])
+            }
+        }
+        respond geneResults, model:[geneInstanceCount: Gene.count()]
+       // respond Gene.list(params+[sort:'name1']), model:[geneInstanceCount: Gene.count()]
+    }
+
+    def show(Gene geneInstance) {
+        respond geneInstance
+    }
+
+    def create() {
+        respond new Gene(params)
+    }
+
+    def search() {
+        params.max = (params.max && params.max.toInteger() > 0) ? Math.min(params.max.toInteger(), 50) : 20
+        params.order = params.order ? params.order : (params.sort ? 'desc' : 'asc')
+        params.sort = params.sort ?: "name1"
+        render (view: 'list', model:Gene.list(params) )
+    }
+
+    @Transactional
+    def save(Gene geneInstance) {
+        if (geneInstance == null) {
+            notFound()
+            return
+        }
+
+        if (geneInstance.hasErrors()) {
+            respond geneInstance.errors, view:'create'
+            return
+        }
+
+        geneInstance.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.created.message', args: [message(code: 'gene.label', default: 'Gene'), geneInstance.id])
+                redirect geneInstance
+            }
+            '*' { respond geneInstance, [status: CREATED] }
+        }
+    }
+
+    def edit(Gene geneInstance) {
+        respond geneInstance
+    }
+
+    @Transactional
+    def update(Gene geneInstance) {
+        if (geneInstance == null) {
+            notFound()
+            return
+        }
+
+        if (geneInstance.hasErrors()) {
+            respond geneInstance.errors, view:'edit'
+            return
+        }
+
+        geneInstance.save flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.updated.message', args: [message(code: 'Gene.label', default: 'Gene'), geneInstance.id])
+                redirect geneInstance
+            }
+            '*'{ respond geneInstance, [status: OK] }
+        }
+    }
+
+    @Transactional
+    def delete(Gene geneInstance) {
+
+        if (geneInstance == null) {
+            notFound()
+            return
+        }
+
+        geneInstance.delete flush:true
+
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Gene.label', default: 'Gene'), geneInstance.id])
+                redirect action:"index", method:"GET"
+            }
+            '*'{ render status: NO_CONTENT }
+        }
+    }
+
+    protected void notFound() {
+        request.withFormat {
+            form multipartForm {
+                flash.message = message(code: 'default.not.found.message', args: [message(code: 'gene.label', default: 'Gene'), params.id])
+                redirect action: "index", method: "GET"
+            }
+            '*'{ render status: NOT_FOUND }
+        }
     }
 }
