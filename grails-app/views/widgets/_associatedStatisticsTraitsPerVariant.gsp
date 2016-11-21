@@ -46,7 +46,7 @@ button.expandoButton:visited {
 <div class="accordion-heading">
     <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseVariantTraitAssociation">
         <h2><strong><g:message code="widgets.variant.trait.associations.title"
-                               default="Association statistics across 25 traits"/><g:if test="${dnSnpId}"><g:message
+                               default="Association statistics across 25 traits"/><g:if test="${dnSnpId}"> <g:message
                 code="site.shared.phrases.for"/> ${dnSnpId}</g:if></strong></h2>
     </a>
 </div>
