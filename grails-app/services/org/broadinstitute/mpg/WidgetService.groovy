@@ -617,7 +617,7 @@ private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetProper
                 if (metaDataService.portalTypeFromSession=='t2d') {
                     knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "ExSeq_17k_mdv23", "T2D", "P_FIRTH_FE_IV" );
                 } else if (metaDataService.portalTypeFromSession=='stroke') {
-                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "GWAS_Stroke_mdv70", "T2D", "P_VALUE" );
+                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "GWAS_Stroke_mdv70", phenotype, "P_FIRTH_FE_IV" );
                 }
             }
 
