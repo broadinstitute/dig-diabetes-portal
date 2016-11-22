@@ -64,7 +64,7 @@ class HtmlTagLib {
             }
         }
 
-        String fileDesignationOnDisk = grailsApplication.mainContext.getResource(fileName).file.toString()
+        String fileDesignationOnDisk = grailsApplication.mainContext.getResource(fileName)?.file?.toString()
 
 
         if (!fileDesignationOnDisk) {
@@ -73,9 +73,11 @@ class HtmlTagLib {
         File file = new File(fileDesignationOnDisk)
         String fileContents = ""
 
-        file.eachLine {
-            String rawCharacters = it
-            fileContents += StringEscapeUtils.escapeJavaScript(rawCharacters)
+        if (file.exists()){
+            file?.eachLine {
+                String rawCharacters = it
+                fileContents += StringEscapeUtils.escapeJavaScript(rawCharacters)
+            }
         }
         out << fileContents
     }
