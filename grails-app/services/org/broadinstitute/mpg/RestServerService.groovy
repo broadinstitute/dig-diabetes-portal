@@ -1884,13 +1884,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         // need to figure out data set and property names
         List<LinkedHashMap<String, String>> matchers = identifyMatchers( 'P_VALUE', '' )
         // would be handy to replace all of the assorted P values with just 1 string
-        if (pValueName != 'P_VALUE'){
+      //  if (pValueName != 'P_VALUE'){
             for (List variant in dataJsonObject.variants) {
                 Map holder = variant.find{p->p.keySet().contains(pValueName)}
                 List<LinkedHashMap> recDescriptor = matchers.findAll{it.ds==holder[pValueName].keySet()[0]
                    // &&it.pname==pValueName
                 }
-                if (recDescriptor.size()==1){
+                if (recDescriptor.size()>=1){
                     LinkedHashMap currentRecDescriptor = recDescriptor.first()
                     variant << ['pname':currentRecDescriptor['pname']]
                     variant << ['pheno':currentRecDescriptor['pheno']]
@@ -1898,11 +1898,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 } else {
                     println("strange.  ${recDescriptor.size()} results")
                 }
-                holder['P_VALUE'] = holder[pValueName]
-                holder.remove(pValueName)
+//                holder['P_VALUE'] = holder[pValueName]
+//                holder.remove(pValueName)
 
             }
-        }
+      //  }
 
         return dataJsonObject
     }
@@ -1942,15 +1942,27 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 List<String> pValueString = []
                 Map<Float,Map> sortHelper = [:]
                 for (List instanceOfVariant in instancesOfVariant ){
-                    Map pMaps = instanceOfVariant.find{p->p.keySet().contains('P_VALUE')}
-                    Map dsMap = pMaps["P_VALUE"]
-                    for (Map phenoMaps in dsMap.values()){
-                        for (String value in phenoMaps.values()){
-                            if (!sortHelper.containsKey()){
-                                sortHelper[value as Float] = instanceOfVariant
+                    String propName
+                    Map pnameMaps = instanceOfVariant.find{p->p.keySet().contains('pname')}
+                    if (pnameMaps) {
+                        propName = pnameMaps["pname"]
+                    } else {
+                        println('really? -- no pname')
+                    }
+                    Map pMaps = instanceOfVariant.find{p->p.keySet().contains(propName)}
+                    if (pMaps){
+                        Map dsMap = pMaps[propName]
+                        for (Map phenoMaps in dsMap.values()){
+                            for (String value in phenoMaps.values()){
+                                if (!sortHelper.containsKey()){
+                                    sortHelper[value as Float] = instanceOfVariant
+                                }
+                                pValueString << value
                             }
-                            pValueString << value
                         }
+
+                    } else {
+                        println('strange -- no pvalue')
                     }
 
                 }

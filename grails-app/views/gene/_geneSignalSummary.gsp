@@ -22,10 +22,10 @@ div.greenline {
       background-color: #ccffcc;
   }
 .linkEmulator{
-    /*text-decoration: underline;*/
-    /*cursor: pointer;*/
-    /*font-style: italic;*/
-    /*color: #588fd3;*/
+    text-decoration: underline;
+    cursor: pointer;
+    font-style: italic;
+    color: #588fd3;
 }
 .boxOfVariants {
     border: 1px solid black;
@@ -65,7 +65,7 @@ div.variantBoxHeaders {
 </style>
 
 <div class="row">
-    <div class="pull-right">
+    <div class="pull-right" style="display:none">
         <label for="signalPhenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"
                                                             default="Change phenotype choice"/></label>
         &nbsp;
@@ -287,7 +287,8 @@ div.variantBoxHeaders {
                                             <div class="row  {{CAT}}">
                                                 <div class="col-lg-2"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
 
-                                                <div class="col-lg-2">{{rsId}}</div>
+                                                <div class="col-lg-2"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}','{{dsr}}','{{pname}}','{{pheno}}')" class="boldItlink">{{rsId}}</a></div>
+
 
                                                 <div class="col-lg-1">{{impact}}</div>
 
@@ -819,10 +820,11 @@ div.variantBoxHeaders {
         };
         mpgSoftware.locusZoom.removeAllPanels();
 
-                mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
+
+                mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,
                         "#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,propName,phenotype,
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}');
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}','static');
     };
 
 
