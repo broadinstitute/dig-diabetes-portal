@@ -13,19 +13,34 @@ var mpgSoftware = mpgSoftware || {};
 
     // standard layout
     var StandardLayout = {
-        resizable: "responsive",
+        responsive_resize: true,
         aspect_ratio: 7.5,
+        dashboard: {
+            components: [
+                { type: "title", title: "LocusZoom", position: "left" },
+                { type: "covariates_model", button_html: "Model", button_title: "Click to view/remove covariates from this plot's model", position: "left" },
+                { type: "dimensions", position: "right" },
+                { type: "region_scale", position: "right" },
+                { type: "download", position: "right" }
+            ]
+        },
         panels: [
             {
                 id: 'genes',
                 margin: { top: 20, right: 50, bottom: 20, left: 50 },
                 axes: {},
+                dashboard: {
+                    components: [
+                        { type: "move_panel_up", position: "right" },
+                        { type: "move_panel_down", position: "right" }
+                    ]
+                },
                 interaction: {
                     drag_background_to_pan: true,
                     drag_x_ticks_to_scale: true,
                     drag_y1_ticks_to_scale: true,
                     drag_y2_ticks_to_scale: true,
-                    scroll_to_zoom: false,
+                    scroll_to_zoom: true,
                     x_linked: true
                 },
                 data_layers: [
@@ -83,13 +98,7 @@ var mpgSoftware = mpgSoftware || {};
 
         // Create event hooks to clear the loader whenever a panel renders new data
         lzp.layout.panels.forEach(function(panel){
-            lzp.panels[panel.id].loader.show("Loading...").animate();
-            lzp.panels[panel.id].on("data_requested", function(){
-                this.loader.show("Loading...").animate();
-            });
-            lzp.panels[panel.id].on("data_rendered", function(){
-                this.loader.hide();
-            });
+            lzp.panels[panel.id].addBasicLoader();
         });
 
         return {
@@ -102,6 +111,12 @@ var mpgSoftware = mpgSoftware || {};
         // these get defined when the LZ plot is initialized
         var locusZoomPlot;
         var dataSources;
+
+        function conditioning(myThis) {
+            locusZoomPlot.CovariatesModel.add(LocusZoom.getToolTipData(myThis));
+            LocusZoom.getToolTipData(myThis).deselect();
+        }
+
 
 
         function conditionOnVariant(variantId, phenotype,datasetName) {
@@ -141,8 +156,17 @@ var mpgSoftware = mpgSoftware || {};
                         "dataset=" + dataSet + "&" +
                         "propertyName=" + propertyName + "&" +
                         "datatype="+ makeDynamic;
-                    if (state.condition_on_variant){
-                        url += "&conditionVariantId=" + state.condition_on_variant.replace(/[^0-9ATCG]/g,"_")
+                    if (state.model.covariates.length){
+                        var covariant_ids = "";
+                        state.model.covariates.forEach(function(covariant){
+                            _.forEach(covariant,function(v,k){
+                                if ((k.substr(k.length-3))===':id'){
+                                    covariant_ids += (covariant_ids.length ? "," : "") + v.replace(/[^0-9ATCG]/g,"_");
+                                }
+                            });
+                            //covariant_ids += (covariant_ids.length ? "," : "") + covariant.id.replace(/[^0-9ATCG]/g,"_");
+                        });
+                        url += "&conditionVariantId=" + covariant_ids;
                     }
                     return url;
                 }
@@ -155,7 +179,8 @@ var mpgSoftware = mpgSoftware || {};
                     + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
                 if ((typeof makeDynamic !== 'undefined') &&
                     (makeDynamic==='dynamic')){
-                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
+                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
+                    //toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
                 }
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
                 return {
@@ -183,12 +208,19 @@ var mpgSoftware = mpgSoftware || {};
                             label_offset: 40
                         }
                     },
+                    dashboard: {
+                        components: [
+                            { type: "remove_panel", position: "right", color: "red" },
+                            { type: "move_panel_up", position: "right" },
+                            { type: "move_panel_down", position: "right" }
+                        ]
+                    },
                     interaction: {
                         drag_background_to_pan: true,
                         drag_x_ticks_to_scale: true,
                         drag_y1_ticks_to_scale: true,
                         drag_y2_ticks_to_scale: true,
-                        scroll_to_zoom: false,
+                        scroll_to_zoom: true,
                         x_linked: true
                     },
                     data_layers: [
@@ -307,7 +339,7 @@ var mpgSoftware = mpgSoftware || {};
                     ]
                 };
             }(variantInfoUrl));
-            locusZoomPlot.addPanel(layout);
+            locusZoomPlot.addPanel(layout).addBasicLoader();
         };
 
 
@@ -450,6 +482,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
     return {
+        conditioning:conditioning,
         initLocusZoom : initLocusZoom,
         initializeLZPage:initializeLZPage,
         resetLZPage:resetLZPage,
