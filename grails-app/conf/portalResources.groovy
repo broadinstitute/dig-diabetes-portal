@@ -39,6 +39,10 @@ modules = {
         resource url: 'css/dport/sunburst.css'
         resource url: 'js/lib/dport/sunburst.js'
     }
+    burdenTest {
+        resource url: 'css/dport/burdenTest.css'
+        resource url: 'js/lib/dport/burdenTest.js'
+    }
     mbar {
         resource url: 'css/dport/mbarchart.css'
         resource url: 'js/lib/dport/mbarchart.js'

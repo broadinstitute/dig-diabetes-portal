@@ -1,366 +1,18 @@
-<style>
-rect.histogramHolder {
-    fill: #6699cc;
-}
-rect.box {
-    fill: #fff;
-}
-.nav-tabs>li>a {
-    cursor: pointer;
-}
-div.corvariateDisplay {
-    overflow-x: auto;
-    white-space: nowrap;
-}
-div.corvariateDisplay [class*="col"], /* TWBS v3 */
-div.corvariateDisplay [class*="span"] {  /* TWBS v2 */
-    display: inline-block;
-    float: none; /* Very important */
-}
-.metana {
-    text-align: center;
-}
-.filterCmp {
-    padding: 0;
-    font-size: 11px;
-}
-#gaitButtons a.dt-button{
-    padding: 0 10px 0 10px;
-}
-input[type=checkbox][disabled] + label {
-    color: #ccc;
-}
-.stratumName{
-    font-weight: bold;
-}
-.strataHolder {
-    padding: 5px 10px 10px 5px;
-}
-.metaAnalysis{
-    padding: 5px 10px 10px 5px;
-}
-.hider {
-    display: none;
-}
-div.covariate_holder {
-    margin: 0;
-}
-ul.strataResults {
-    margin-bottom: 0;
-    padding: 0;
-    list-style-type: none;
-}
-.caatSpinner{
-    position: absolute;
-    z-index: 1;
-    left: 30%;
-    top: 50%;
-}
-.boxWhiskerPlot {
-    margin: 50px 0 0 0;
-}
-.burden-test-some-results{
-//    background: #eee;
-}
-#stratsCovTabs li.active {
-    border-radius: 4px 4px 0px 0px;
-}
-#stratsCovTabs a.covariateCohort {
-    margin-bottom: -3px;
-    margin-right: 5px;
-    border-top: solid 1px black;
-    border-left: solid 1px black;
-    border-right: solid 1px black;
-    border-radius: 4px 4px 0px 0px;
-}
-
-#stratsCovTabs a.covariateCohort.ALL {
-    margin-bottom: -3px;
-    margin-right: 5px;
-    border-top: solid 2px black;
-    border-left: solid 2px black;
-    border-right: solid 2px black;
-    border-radius: 4px 4px 0px 0px;
-}
-
-.stratsTabs a.filterCohort {
-    margin-bottom: -3px;
-    margin-right: 5px;
-    border-top: solid 1px black;
-    border-left: solid 1px black;
-    border-right: solid 1px black;
-    border-radius: 4px 4px 0px 0px;
-}
-
-.stratsTabs li.active {
-    border-radius: 4px 4px 0px 0px;
-    margin-right: 5px;
-    /*border-top: solid 1px black;*/
-    /*border-left: solid 1px black;*/
-    /*border-right: solid 1px black;*/
-}
-.filterCohort {
-    cursor: pointer;you
-}
-.stratsTabs a.filterCohort.ALL {
-    margin-bottom: -3px;
-    margin-right: 5px;
-    border-top: solid 2px black;
-    border-left: solid 2px black;
-    border-right: solid 2px black;
-    border-radius: 4px 4px 0px 0px;
-}
-.stratsTabs a.filterCohort.ALL:hover {
-    margin-bottom: -3px;
-    margin-right: 5px;
-    border-top: solid 2px black;
-    border-left: solid 2px black;
-    border-right: solid 2px black;
-    border-radius: 4px 4px 0px 0px;
-}
-.tab-pane.active > div.row {
-    background: #fff;
-    padding: 20px 2px 20px 5px;
-    border: 1px solid #000;
-    -webkit-border-radius: 4px;
-    -moz-border-radius: 4px;
-    border-radius: 4px;
-}
-div.sampleNumberReporter {
-    display: none;
-    font-weight: bold;
-}
-div.secHeader {
-    font-weight: bold;
-    font-size: 18px;
-    text-decoration: underline;
-}
-div.secBody {
-   // background-color: #eee;
-}
-div.burden-test-wrapper-options {
-    //background-color: #eee;
-    font-size: 16px;
-    padding: 0;
-}
-div.burden-test-wrapper-options .row {
-    margin: 0 0 1px 0;
-}
-div.burden-test-btn-wrapper {
-    padding: 0px 10px 25px 10px;
-    margin-top: 0;
-}
-div.burden-test-specific-results{
-    background-color: #ffffff;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    padding: 10px;
-    border: 1px solid;
-}
-div.iatError {
-    background-color: #ffffc9;
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    padding: 2px 2px 2px 8px;
-    border: 1px solid #888888;
-}
-span.distPlotter{
-    color: #000;
-    cursor: pointer;
-}
-span.activeDistPlotter{
-    color: #0082ca;
-}
-button.burden-test-btn {
-    width: 100%;
-}
-
-div.burden-test-result {
-    font-size: 14px;
-    padding: 0 0 5px 0;
-    display: none;
-}
-
-div.burden-test-result-large {
-    font-size: 25px;
-    padding-top: 10px;
-    display: none;
-}
-
-.burden-test-result .pValue {
-    white-space: nowrap;
-}
-
-div.labelAndInput {
-    white-space: nowrap;
-}
-
-div.labelAndInput > input {
-    width: 150px;
-}
-
-.burden-test-result .orValue {
-    white-space: nowrap;
-}
-
-.burden-test-result .ciValue {
-    white-space: nowrap;
-}
-
-.mafOptionChooser div.radio {
-    padding: 0 20px 0 0;
-}
-
-.vcenter {
-    margin-top: 2em;
-}
-
-.vertical-center {
-    margin-top: 1em;
-}
-
-.variantList {
-    border: 1px solid darkgrey;
-    padding: 2px;
-    max-height: 140px;
-    overflow-y: auto;
-    font-size: 14px;
-}
-
-.variantsListLabel {
-    text-align: center;
-}
-
-.burdenTestResultHolder {
-    height: 140px;
-}
-.filterHolder div.row div {
-    padding: 0;
-    line-height: 20px;
-}
-.covariateHolder .row {
-    line-height: 15px;
-}
- text.box{
-        display: none; /* if you don't want text labels on your boxes*/
- }
-text.whisker{
-      display: none; /*if you don't want text labels on your boxes*/
-}
-line.center{
-      display: none; /*if you don't want text labels on your boxes*/
-}
-span.metaAnalysis {
-    font-size: 18px;
-}
-span.stratumName.meta {
-    font-size: 20px;
-}
-.strat1.strataHolder {
-    font-size: 18px;
-}
-</style>
-
 
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
 
-    mpgSoftware.burdenInfo = (function () {
+    mpgSoftware.gaitBackgroundData = mpgSoftware.initializeGaitBackgroundData("${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}");
 
-        var delayedBurdenDataPresentation = {};
-
-        // burden testing hypothesis testing section
-        var fillBurdenBiologicalHypothesisTesting = function (caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName) {
-            var retainBarchartPtr;
-
-            // The bar chart graphic
-            if ((caseNumerator) ||
-                (caseDenominator) &&
-                (controlNumerator) &&
-                (controlDenominator)) {
-                delayedBurdenDataPresentation = {functionToRun: mpgSoftware.geneInfo.fillUpBarChart,
-                    barchartPtr: retainBarchartPtr,
-                    launch: function () {
-                        retainBarchartPtr = mpgSoftware.geneInfo.fillUpBarChart(caseNumerator, caseDenominator, controlNumerator, controlDenominator, traitName);
-                        return retainBarchartPtr;
-                    },
-                    removeBarchart: function () {
-                        if ((typeof retainBarchartPtr !== 'undefined') &&
-                            (typeof retainBarchartPtr.clear !== 'undefined')) {
-                            retainBarchartPtr.clear('T2D');
-                        }
-//                        $('#significanceDescriptorFormatter').empty();
-//                        $('#possibleCarrierVariantsLink').empty();
-                    }
-                };
-            }
-        };
-
-        var retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter = function () {
-            return delayedBurdenDataPresentation;
-        };
-
-        return {
-            // public routines
-            fillBurdenBiologicalHypothesisTesting: fillBurdenBiologicalHypothesisTesting,
-            retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter: retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter
-        }
-    }());
-
-    mpgSoftware.gaitBackgroundData = (function () {
-
-        var fillVariantOptionFilterDropDown = function ( burdenProteinEffectFilterName ){
-            var burdenProteinEffectFilter = burdenProteinEffectFilterName;
-            var promise =  $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}",
-                    data: {},
-                    async: true
-                });
-                promise.done(
-                 function (data) {
-                       if ((typeof data !== 'undefined') && (data)){
-                               //first check for error conditions
-                                if (!data){
-                                    console.log('null return data from burdenTestVariantSelectionOptionsAjax');
-                                } else if (data.is_error) {
-                                    console.log('burdenTestAjax returned is_error ='+data.is_error +'.');
-                                }
-                                else if ((typeof data.options === 'undefined') ||
-                                         (data.options.length <= 0)){
-                                     console.log('burdenTestAjax returned undefined (or length = 0) for options.');
-                               }else {
-                                   var optionList = data.options;
-                                   var dropDownHolder = $(burdenProteinEffectFilter);
-                                   for ( var i = 0 ; i < optionList.length ; i++ ){
-                                        dropDownHolder.append('<option value="'+optionList[i].id+'">'+optionList[i].name+'</option>')
-                                   }
-                                }
-                            }
-
-                    });
-                    promise.fail() ;
-        }; // fillFilterDropDown
-
-
-        return {
-            // public routines
-            fillVariantOptionFilterDropDown: fillVariantOptionFilterDropDown
-        }
-    }());
-
-    mpgSoftware.burdenTestShared = (function () {
-        var loading = $('#rSpinner');
-        var storedSampleMetadata;
-        var minimumNumberOfSamples = 100;
-        var portalTypeWithAncestry = true;
-        var geneForGaitStr = '';
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-        portalTypeWithAncestry = false;
-        </g:if>
+mpgSoftware.burdenTestShared = (function () {
+    var loading = $('#rSpinner');
+    var storedSampleMetadata;
+    var minimumNumberOfSamples = 100;
+    var portalTypeWithAncestry = true;
+    var geneForGaitStr = '';
+    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+    portalTypeWithAncestry = false;
+    </g:if>
 
 
 
@@ -3232,7 +2884,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                       <div style="margin:15px 8px 15px 10px" class="separator"></div>
                                 </div>
                                 <div  class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="col-md-5 col-sm-6 col-xs-12">
                                         <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
                                         <div class="labelAndInput">
                                             MAF &lt;&nbsp;
@@ -3241,7 +2893,18 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         </div>
 
                                     </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-6">
+                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
+                                        <div class="form-inline mafOptionChooser">
+                                            <div class="radio">
+                                                <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                            </div>
+                                            <div class="radio">
+                                                <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 col-sm-12 col-xs-12">
                                         <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                                         <div class="form-inline mafOptionChooser">
                                             <div class="radio">

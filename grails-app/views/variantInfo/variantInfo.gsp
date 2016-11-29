@@ -7,6 +7,7 @@
     <r:require modules="boxwhisker"/>
     <r:require module="locusZoom"/>
     <r:require modules="core, mustache"/>
+    <r:require modules="burdenTest"/>
 
     <r:layoutResources/>
     <style>
