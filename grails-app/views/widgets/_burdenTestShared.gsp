@@ -666,7 +666,18 @@ var displayBurdenVariantSelector = function (){
                         $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
                         mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
                         mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
-                     }
+                        $('#addVariant').on( 'click', function () {
+                            alert('got button click');
+                            %{--t.row.add( [--}%
+                                %{--counter +'.1',--}%
+                                %{--counter +'.2',--}%
+                                %{--counter +'.3',--}%
+                                %{--counter +'.4',--}%
+                                %{--counter +'.5'--}%
+                            %{--] ).draw( false );--}%
+                            });
+                        }
+
 
 
 
@@ -2905,15 +2916,9 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         </div>
                                     </div>
                                     <div class="col-md-2 col-sm-12 col-xs-12">
-                                        <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
-                                        <div class="form-inline mafOptionChooser">
-                                            <div class="radio">
-                                                <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
-                                            </div>
-                                            <div class="radio">
-                                                <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters()"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
-                                            </div>
-                                        </div>
+                                        <button id="addVariant" class="btn btn-secondary pull-right">
+                                            Add a new variant to list
+                                        </button>
                                     </div>
                                 </div>
                             </div>
