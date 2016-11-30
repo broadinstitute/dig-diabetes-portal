@@ -26,7 +26,7 @@
 
 <div id="main">
 
-    <div class="container">
+    <div class="container dk-static-content">
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
         </g:if>
         <g:else>
@@ -35,84 +35,79 @@
 
         <div class="row">
             <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                <div style="width: 70%;">
-                    <h2><g:message code="contact.header" /></h2>
 
-                    <p><g:message code="contact.summary" /></p>
 
-                    <p><g:message code="contact.getInTouch" />
+                <div class="col-md-12">
+                    <h1><g:message code="contact.header" /></h1>
+
+                    <h5 class="dk-under-header"><g:message code="contact.summary" /></h5>
+
+                    <h5 class="dk-under-header"><g:message code="contact.getInTouch" />
                         <ul>
                             <li><g:message code="contact.option.contactTeam" /></li>
                             <li><g:message code="contact.option.forum" /></li>
                             <li><g:message code="contact.option.emailList" /></li>
                             <li><g:message code="contact.option.contribute" /></li>
-                        </ul>
-                    </p>
-                    <h3>Accelerating Medicines Partnership (AMP) Type 2 Diabetes Knowledge Portal (T2DKP) and Data Coordinating Center (DCC) Team</h3>
-                    <p>Jose Florez (Principal Investigator)<br>
-                        Jason Flannick (Senior Group Leader)<br>
-                        Noël Burtt (Associate Director, Operations)<br></p>
-                        
-                    <h4>Manager of content and community</h4>
+                        </ul><h5>
+                    </div></div>
 
-                    <p>Maria Costanzo</p>
-                    <h4>Software engineers</h4>
+                <div class="row">
+                    <div class="col-md-9">
+                    <h4 class="dk-blue-bordered"><g:message code="contact.amp.t2dkp.team.title"></g:message></h4>
 
-                    <p>Benjamin Alexander<br>
-                        Marc Duby<br>
-                        Clint Gilbert<br>
-                        Todd Green<br>
-                        Dong-Keun Jang<br>
-                        Oliver Ruebenacker<br>
-                        David Siedzik<br>
-                        Kaan Yuksel</p>
-                    <h4>Computational biologists</h4>
+                <table class="dk-team-list"><g:message code="contact.amp.t2dkp.team.list"></g:message></table>
 
-                    <p>Marcin von Grotthuss<br>
-                        Ryan Koesterer</p>
-                    <h4>Project manager</h4>
 
-                    <p>Lizz Caulkins</p>
+                    <h4 class="dk-blue-bordered"><g:message code="contact.methods.team.title"></g:message></h4>
+                    <h4><g:message code="contact.methods.team.subtitle1"></g:message></h4>
 
-                    <h3>Methods and Tool Development Teams</h3>
-                    <h4>AMP Type 2 Diabetes Knowledge (T2DK)</h4>
+                <table class="dk-team-list"><g:message code="contact.methods.team_ampmethods"></g:message></table>
 
-                    <p>Daniel MacArthur (Principal Investigator)<br>
-                        Benjamin Neale (Principal Investigator)<br>
-                        Jonathan Bloom<br>
-                        Konrad Karczewski<br>
-                        Cotton Seed</p>
-                    <h4>AMP Enhanced Diabetes Portal</h4>
+                <h4><g:message code="contact.methods.team.subtitle2"></g:message></h4>
 
-                    <p>Michael Boehnke (Principal Investigator)<br>
-                        Gonçalo Abecasis (Principal Investigator)<br>
-                        Christopher Clark<br>
-                        Matthew Flickinger<br>
-                        Daniel Taliun<br>
-                        Ryan Welch</p>
-                    <h4>AMP Federated Nodes</h4>
+                <table class="dk-team-list"><g:message code="contact.methods.team_edp"></g:message></table>
 
-                    <p>Paul Flicek (Principal Investigator)<br>
-                        Mark McCarthy (Principal Investigator)<br>
-                        Gil McVean (Principal Investigator)<br>
-                        Helen Parkinson<br>
-                        Dylan Spalding</p>
+                <h4><g:message code="contact.methods.team.subtitle3"></g:message></h4>
 
-                    <div id="t2dImageHolder">
-                        <a href="https://broadinstitute.org" target="_blank">
-                            <img src="${resource(dir: 'images', file:'BroadInstLogoforDigitalRGB.png')}" />
-                        </a>
-                        <a href="https://sph.umich.edu" target="_blank">
-                            <img src="${resource(dir: 'images/organizations', file:'UM-SPH.png')}" />
-                        </a>
-                        <a href="http://www.ox.ac.uk/" target="_blank">
-                            <img src="${resource(dir: 'images/organizations', file:'University_of_Oxford.gif')}" />
-                        </a>
-                        <a href="https://www.ebi.ac.uk" target="_blank">
-                            <img src="${resource(dir: 'images/organizations', file:'EBI.png')}" />
-                        </a>
-                    </div>
+                <table class="dk-team-list"><g:message code="contact.methods.team_federated"></g:message></table>
                 </div>
+
+                    <div class="col-md-3 text-center" id="t2dImageHolder">
+                        <p style="margin-top: 10px;"><a href="https://broadinstitute.org" target="_blank">
+
+                            <img style="width:180px;" src="${resource(dir: 'images', file:'BroadInstLogoforDigitalRGB.png')}" />
+
+                        </a></p>
+                        <hr>
+
+                        <p><a href="https://sph.umich.edu" target="_blank">
+
+                            <img style="width:120px;" src="${resource(dir: 'images/organizations', file:'UM-SPH.png')}" />
+
+                        </a></p>
+                        <hr>
+
+                        <p><a href="http://www.ox.ac.uk/" target="_blank">
+
+                            <img style="width:120px;" src="${resource(dir: 'images/organizations', file:'University_of_Oxford.gif')}" />
+
+                        </a></p>
+                        <hr>
+
+                        <p><a href="https://www.ebi.ac.uk" target="_blank">
+
+                            <img style="width:180px;" src="${resource(dir: 'images/organizations', file:'EBI.png')}" />
+
+                        </a></p>
+
+                    </div>
+
+                </div>
+                </div>
+
+                        </div>
+
+
             </g:if>
             <g:else>
                 <div class="buttonHolder tabbed-about-page">
