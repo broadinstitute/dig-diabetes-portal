@@ -2923,7 +2923,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                       <div style="margin:15px 8px 15px 10px" class="separator"></div>
                                 </div>
                                 <div  class="row">
-                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
                                         <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
                                         <div class="labelAndInput">
                                             MAF &lt;&nbsp;
@@ -2932,7 +2932,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         </div>
 
                                     </div>
-                                    <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <div class="col-md-6 col-sm-6 col-xs-12">
                                         <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
                                         <div class="form-inline mafOptionChooser">
                                             <div class="radio">
@@ -2943,11 +2943,22 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-sm-12 col-xs-12">
-                                        <input style="display: inline-block" type="text" class="form-control" id="proposedVariant" placeholder="value">
-                                        <button id="addVariant" class="btn btn-secondary pull-right">
-                                            Add a new variant to list
-                                        </button>
+                                </div>
+                                <div  class="row" style="margin: 10px 0 -18px 0">
+                                    <div class="col-md-offset-4 col-md-8 col-sm-9 col-xs-12">
+                                        <div  class="row">
+                                            <div style="text-align: right; padding: 5px 0" class="col-sm-4 col-xs-12">
+                                                <label>Add a new variant to list</label>
+                                            </div>
+                                            <div class="col-sm-6 col-xs-12">
+                                                <input style="display: inline-block" type="text" class="form-control" id="proposedVariant" placeholder="value">
+                                            </div>
+                                            <div class="col-sm-2 col-xs-4">
+                                                <button id="addVariant" class="btn btn-secondary">
+                                                    Add
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
