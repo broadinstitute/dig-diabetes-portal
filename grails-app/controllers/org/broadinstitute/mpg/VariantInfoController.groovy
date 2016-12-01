@@ -77,6 +77,26 @@ class VariantInfoController {
         String variantToStartWith = params.id
         if (variantToStartWith)      {
             JSONObject jsonObject =  restServerService.retrieveVariantInfoByName (variantToStartWith.trim())
+            if (jsonObject.variants) {
+                for (List variant in jsonObject.variants){
+                    for (Map field in variant){
+                        String key = field.keySet()[0]
+                        String value = field.values()[0]
+                        if (  ( (key == "Consequence")||
+                                (key == "SIFT_PRED")||
+                                (key == "PolyPhen_PRED") ) &&
+                             ( value != null) ){
+                            List<String> consequenceList = value.tokenize(",")
+                            List<String> translatedConsequenceList = []
+                            for (String consequence in consequenceList){
+                                translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+                            }
+                            field[key]=(translatedConsequenceList.join(", "))
+                        }
+                    }
+                }
+            }
+
             render(status:200, contentType:"application/json") {
                 [variant:jsonObject]
             }
