@@ -16,6 +16,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -751,7 +752,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "CLOSEST_GENE",
                                                                          "TRANSCRIPT_ANNOT",
                                                                          "Reference_Allele",
-                                                                         "Effect_Allele"])
+                                                                         "Effect_Allele",
+                                                                         "Consequence",
+                                                                         "PolyPhen_PRED",
+                                                                         "SIFT_PRED",
+                                                                         "Protein_change"
+        ])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
