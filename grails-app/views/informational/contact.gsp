@@ -7,15 +7,72 @@
     <r:layoutResources/>
 
     <style>
-        #t2dImageHolder {
-            display: flex;
-            justify-content: space-around;
-            height: 60px;
-            width: 100%;
+
+        .dk-static-content {
+            padding-top: 30px;
         }
 
-        #t2dImageHolder a, #t2dImageHolder a img {
-            height: 100%;
+        .dk-under-header {
+            font-weight: 300; line-height: 20px; font-size: 16px;
+        }
+
+        .dk-notice {
+            padding: 10px 20px 10px 20px;
+            margin: 10px 0 10px 0;
+            background-color: #7aa1fc;
+            color: #fff;
+            background-image:url(../images/logo_bg2.jpg);
+            background-repeat:no-repeat;
+            background-size:100% 100%;
+
+        }
+
+        .dk-notice a {
+            color:#def;
+            font-weight: 200;
+            font-size: 18px;
+        }
+
+        .dk-notice p {
+            margin-bottom: 0;
+        }
+
+        .dk-notice-header {
+            font-size: 26px;
+            font-weight: 100;
+        }
+
+        .dk-blue-bordered {
+            display:block;
+            border-top: solid 1px #39F;
+            border-bottom: solid 1px #39F;
+            color: #39f;
+            padding: 5px 0;
+            text-align:left;
+            line-height:22px;
+        }
+        .dk-team-list {
+            width: 100%;
+            font-size: 14px;
+            line-height: 22px;
+        }
+
+        .dk-team-list td:last-child {
+            width: 50%;
+        }
+
+        .dk-team-list td {
+            padding-right: 25px;
+            padding-bottom: 15px;
+            vertical-align:top;
+        }
+
+        .dk-team-list strong {
+            float: right;
+        }
+
+        .dk-team-list td > p {
+            padding-left: 15px;
         }
 
     </style>
@@ -25,13 +82,14 @@
 <body>
 
 <div id="main">
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+</g:if>
+<g:else>
+    <h1><g:message code="contact.title.plural" default="Contact"/></h1>
+</g:else>
 
     <div class="container dk-static-content">
-        <g:if test="${g.portalTypeString()?.equals('t2d')}">
-        </g:if>
-        <g:else>
-            <h1><g:message code="contact.title.plural" default="Contact"/></h1>
-        </g:else>
+
 
         <div class="row">
             <g:if test="${g.portalTypeString()?.equals('t2d')}">
@@ -72,7 +130,7 @@
                 <table class="dk-team-list"><g:message code="contact.methods.team_federated"></g:message></table>
                 </div>
 
-                    <div class="col-md-3 text-center" id="t2dImageHolder">
+                     <div class="col-md-3 text-center" id="t2dImageHolder">
                         <p style="margin-top: 10px;"><a href="https://broadinstitute.org" target="_blank">
 
                             <img style="width:180px;" src="${resource(dir: 'images', file:'BroadInstLogoforDigitalRGB.png')}" />
