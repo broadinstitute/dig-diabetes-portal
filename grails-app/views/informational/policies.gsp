@@ -242,10 +242,11 @@
             <h2><g:message code="policies.dataUse"/></h2>
         </div>
         <div class="row pull-left medText consortium-spacing col-xs-12">
-            <g:message code="informational.policies.stroke.mission"></g:message>
+            <p><g:message code="informational.policies.stroke.mission"></g:message></p>
         </div>
+
         <div class="row pull-left medText consortium-spacing col-xs-12">
-          <g:message code="informational.policies.stroke.sharing"></g:message>
+          <p><g:message code="informational.policies.stroke.sharing"></g:message></p>
         </div>
 
         <div class="row pull-left medText consortium-spacing col-xs-12">
@@ -262,21 +263,21 @@
             <strong><g:message code="informational.policies.stroke.registration"></g:message></strong>
         </div>
         <div class="row pull-left medText consortium-spacing col-xs-12">
-            <g:message code="informational.policies.stroke.google"></g:message>
+            <p><g:message code="informational.policies.stroke.google"></g:message></p>
         </div>
 
         <div class="row pull-left medText consortium-spacing col-xs-12">
-            <strong><g:message code="informational.policies.conduct.availability.header"></g:message></strong>
+            <p><strong><g:message code="informational.policies.conduct.availability.header"></g:message></strong></p>
         </div>
         <div class="row pull-left medText consortium-spacing col-xs-12">
-            <g:message code="informational.policies.conduct.section_1"></g:message>
+            <p><g:message code="informational.policies.conduct.section_1"></g:message></p>
         </div>
 
         <div class="row pull-left medText consortium-spacing col-xs-12">
             <strong><g:message code="informational.policies.conduct.user_responsibilities.header"></g:message></strong>
         </div>
         <div class="row pull-left medText consortium-spacing col-xs-12">
-            <g:message code="informational.policies.conduct.section_3"></g:message>
+            <p><g:message code="informational.policies.conduct.section_3"></g:message></p>
         </div>
         <div class="row pull-left medText consortium-spacing col-xs-12">
             <ol><g:message code="informational.policies.conduct.section_4"></g:message>
