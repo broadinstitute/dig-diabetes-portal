@@ -633,6 +633,49 @@ var displayBurdenVariantSelector = function (){
                 return renderData;
             };
 
+            var respondedToAddVariantButtonClick = function () {
+                var proposedVariant = $('#proposedVariant').val();
+                var allVariants = proposedVariant.split(",");
+                _.forEach(allVariants,function(oneVariantRaw){
+                    var oneVariant = oneVariantRaw.trim();
+                    if (oneVariant.length > 0){
+                        var promise =  $.ajax({
+                            cache: false,
+                            type: "get",
+                            url: ( "${createLink(controller: 'variantInfo', action: 'variantAjax')}/" + oneVariant ),
+                            async: true
+                         });
+                        promise.done(
+                              function (data) {
+                                if ((typeof data !== 'undefined') &&
+                                     (data) &&
+                                     (!(data.is_error))&&
+                                     (data.variant)){
+
+                                         var args = _.flatten([{}, data.variant.variants[0]]);
+                                         var variantObject = _.merge.apply(_, args);
+                                         var t = $('#gaitTable').DataTable();
+
+                                        t.row.add( [variantObject.VAR_ID,
+                                                        '<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantObject.VAR_ID+'" class="boldItlink">'+
+variantObject.CHROM+':'+variantObject.POS+'</a>',
+                                                        variantObject.DBSNP_ID,
+                                                        variantObject.CHROM,
+                                                        variantObject.POS,
+                                                        variantObject.PolyPhen_PRED,
+                                                        variantObject.SIFT_PRED,
+                                                        variantObject.Protein_change,
+                                                        variantObject.Consequence
+                                                    ] ).draw( false );
+
+                                }
+                            }
+                         );
+
+                        promise.fail();
+                    }
+                });
+            };
 
             var sampleMetadata = getStoredSampleMetadata();
             if ( ( sampleMetadata !==  null ) &&
@@ -666,45 +709,8 @@ var displayBurdenVariantSelector = function (){
                         $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
                         mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
                         mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
-                        $('#addVariant').on( 'click', function () {
-                            var proposedVariant = $('#proposedVariant').val();
-                            var promise =  $.ajax({
-                                cache: false,
-                                type: "get",
-                                url: ( "${createLink(controller: 'variantInfo', action: 'variantAjax')}/" + proposedVariant ),
-                                async: true
-                             });
-                            promise.done(
-                                  function (data) {
-                                    if ((typeof data !== 'undefined') &&
-                                         (data) &&
-                                         (!(data.is_error))&&
-                                         (data.variant)){
-
-                                             var args = _.flatten([{}, data.variant.variants[0]]);
-                                             var variantObject = _.merge.apply(_, args);
-                                             var t = $('#gaitTable').DataTable();
-
-                                            t.row.add( [variantObject.VAR_ID,
-                                                            '<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantObject.VAR_ID+'" class="boldItlink">'+
-                                                                variantObject.CHROM+':'+variantObject.POS+'</a>',
-                                                            variantObject.DBSNP_ID,
-                                                            variantObject.CHROM,
-                                                            variantObject.POS,
-                                                            variantObject.PolyPhen_PRED,
-                                                            variantObject.SIFT_PRED,
-                                                            variantObject.Protein_change,
-                                                            variantObject.Consequence
-                                                        ] ).draw( false );
-
-                         }
+                        $('#addVariant').on( 'click', respondedToAddVariantButtonClick );
                     }
-                 );
-
-                 promise.fail();
-
-                            });
-                        }
 
 
 
