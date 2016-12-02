@@ -649,24 +649,28 @@ var displayBurdenVariantSelector = function (){
                               function (data) {
                                 if ((typeof data !== 'undefined') &&
                                      (data) &&
-                                     (!(data.is_error))&&
-                                     (data.variant)){
+                                     (data.variant)&&
+                                     (!(data.variant.is_error))){
+                                         if (data.variant.numRecords>0){
+                                             var args = _.flatten([{}, data.variant.variants[0]]);
+                                             var variantObject = _.merge.apply(_, args);
+                                             var t = $('#gaitTable').DataTable();
 
-                                         var args = _.flatten([{}, data.variant.variants[0]]);
-                                         var variantObject = _.merge.apply(_, args);
-                                         var t = $('#gaitTable').DataTable();
-
-                                        t.row.add( [variantObject.VAR_ID,
-                                                        '<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantObject.VAR_ID+'" class="boldItlink">'+
-variantObject.CHROM+':'+variantObject.POS+'</a>',
-                                                        variantObject.DBSNP_ID,
-                                                        variantObject.CHROM,
-                                                        variantObject.POS,
-                                                        variantObject.PolyPhen_PRED,
-                                                        variantObject.SIFT_PRED,
-                                                        variantObject.Protein_change,
-                                                        variantObject.Consequence
-                                                    ] ).draw( false );
+                                            t.row.add( [variantObject.VAR_ID,
+                                                            '<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantObject.VAR_ID+'" class="boldItlink">'+
+    variantObject.CHROM+':'+variantObject.POS+'</a>',
+                                                            variantObject.DBSNP_ID,
+                                                            variantObject.CHROM,
+                                                            variantObject.POS,
+                                                            variantObject.PolyPhen_PRED,
+                                                            variantObject.SIFT_PRED,
+                                                            variantObject.Protein_change,
+                                                            variantObject.Consequence
+                                                        ] ).draw( false );
+                                         }
+                                         %{--else {--}%
+                                            %{--alert('Could not find the variant you wanted');--}%
+                                         %{--}--}%
 
                                 }
                             }
