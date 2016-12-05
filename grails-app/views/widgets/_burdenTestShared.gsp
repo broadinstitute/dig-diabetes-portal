@@ -2,6 +2,8 @@
 <g:javascript>
     var mpgSoftware = mpgSoftware || {};
 
+
+
     mpgSoftware.gaitBackgroundData = mpgSoftware.initializeGaitBackgroundData("${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}");
 
 mpgSoftware.burdenTestShared = (function () {
@@ -635,7 +637,13 @@ var displayBurdenVariantSelector = function (){
 
             var respondedToAddVariantButtonClick = function () {
                 var proposedVariant = $('#proposedVariant').val();
+                if (proposedVariant.length<1){
+                    proposedVariant = $('#proposedMultiVariant').val();
+                }
                 var allVariants = proposedVariant.split(",");
+                if (allVariants.length<2){
+                   allVariants = proposedVariant.split('\n');
+                }
                 _.forEach(allVariants,function(oneVariantRaw){
                     var oneVariant = oneVariantRaw.trim();
                     if (oneVariant.length > 0){
@@ -714,6 +722,18 @@ var displayBurdenVariantSelector = function (){
                         mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
                         mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
                         $('#addVariant').on( 'click', respondedToAddVariantButtonClick );
+                        $('#proposedMultiVariant').typeahead({
+                                %{--source: function (query, process) {--}%
+                                %{--$.get('<g:createLink controller="gene" action="variantOnlyTypeAhead"/>', {query: query}, function (data) {--}%
+                                    %{--process(data);--}%
+                                });
+                        $('#proposedVariant').typeahead({
+                                source: function (query, process) {
+                                $.get('<g:createLink controller="gene" action="variantOnlyTypeAhead"/>', {query: query}, function (data) {
+                                    process(data);
+                                })
+                            }
+                        });
                     }
 
 
@@ -2285,6 +2305,24 @@ var displayBurdenVariantSelector = function (){
         };
 
 
+
+
+
+        var swapSingleMultipleVariantAdditionMode = function (mode){
+            var singleVariantInput = $('#proposedVariant');
+            var multiVariantInput = $('#proposedMultiVariant');
+            singleVariantInput.val('');
+            multiVariantInput.val('');
+            if (mode<=1){
+                singleVariantInput.css('display','inline-block');
+                multiVariantInput.css('display','none');
+            } else {
+                singleVariantInput.css('display','none');
+                multiVariantInput.css('display','inline-block');
+            }
+        }
+
+
         // public routines are declared below
         return {
             displaySampleDistribution:displaySampleDistribution,  // display a distribution plot based on the name of the filter
@@ -2296,6 +2334,7 @@ var displayBurdenVariantSelector = function (){
             carryCovChanges:carryCovChanges, // Terry across strata.  Similar to carryTheAllFiltersAcrossStrata but much simpler
             displayTestResultsSection: displayTestResultsSection,  // simply display results section (show() or hide()
             generateListOfVariantsFromFilters: generateListOfVariantsFromFilters,
+            swapSingleMultipleVariantAdditionMode:   swapSingleMultipleVariantAdditionMode,
             storeGeneForGait: storeGeneForGait
         }
 
@@ -2305,6 +2344,8 @@ $( document ).ready( function (){
     mpgSoftware.burdenTestShared.storeGeneForGait('<%=geneName%>');
     mpgSoftware.burdenTestShared.retrieveExperimentMetadata( '#datasetFilter' );
     mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData();
+
+
 } );
 
 </g:javascript>
@@ -2954,22 +2995,48 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         </div>
                                     </div>
                                 </div>
-                                <div  class="row" style="margin: 10px 0 -18px 0">
-                                    <div class="col-md-offset-4 col-md-8 col-sm-9 col-xs-12">
+                                <div  class="row">
+                                      <div style="margin:15px 8px 15px 10px" class="separator"></div>
+                                </div>
+                                <div  class="row" style="margin: 10px 0 0px 0">
+                                    <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
                                         <div  class="row">
-                                            <div style="text-align: right; padding: 5px 0" class="col-sm-4 col-xs-12">
-                                                <label>Add a new variant to list</label>
+
+
+                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                <div  class="row">
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <label>Add a new variant to list</label>
+                                                    </div>
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <div class="form-inline mafOptionChooser">
+                                                            <div class="radio">
+                                                                <label  style="font-size: 11px">
+                                                                    <input type="radio" name="additionalVariantOption" value="1" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(1)" checked/>
+                                                                    &nbsp;Single variant
+                                                                </label>
+                                                            </div>
+                                                            <div class="radio">
+                                                                <label style="font-size: 11px">
+                                                                    <input type="radio" name="additionalVariantOption"  value="2" onclick="mpgSoftware.burdenTestShared.swapSingleMultipleVariantAdditionMode(2)"/>
+                                                                    &nbsp;Multiple
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>                                            </div>
+                                            <div class="col-md-5 col-sm-5 col-xs-12">
+                                                <input style="display: inline-block" type="text" class="form-control input-sm" id="proposedVariant"/>
+                                                <textarea style="display: none" type="text" class="form-control" cols=20 rows=4 id="proposedMultiVariant"/>
                                             </div>
-                                            <div class="col-sm-6 col-xs-12">
-                                                <input style="display: inline-block" type="text" class="form-control" id="proposedVariant" placeholder="value">
-                                            </div>
-                                            <div class="col-sm-2 col-xs-4">
+                                            <div class="col-md-1 col-sm-1 col-xs-4">
                                                 <button id="addVariant" class="btn btn-secondary">
                                                     Add
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="col-md-2"></div>
                                 </div>
                             </div>
                             <div  class="col-md-1 col-sm-1 col-xs-12 burden-test-btn-wrapper vcenter">

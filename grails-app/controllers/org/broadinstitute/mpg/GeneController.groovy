@@ -52,6 +52,20 @@ class GeneController {
 
 
     /***
+     * We want to be able to do a type ahead in a gene name only field
+     * @return
+     */
+    def variantOnlyTypeAhead() {
+        String partialMatches = geneManagementService.partialVariantOnlyMatches(params.query,27)
+        response.setContentType("application/json")
+        render ("${partialMatches}")
+    }
+
+
+
+
+
+    /***
      * display all information about a gene. This call displays only the core of the page -- the data all come back
      * with the Jace on
      * @return

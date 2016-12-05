@@ -148,13 +148,21 @@ class GeneManagementService {
             String upperCasedCharacters = firstCharacters.toUpperCase()
 
             // add gene strings
-            returnValue.addAll(retrieveGeneStringList(upperCasedCharacters, maximumMatches/3 as int))
+            if (retrieveGeneStringList.maximumNumberOfParameters>1){
+                returnValue.addAll(retrieveGeneStringList(upperCasedCharacters, maximumMatches/3 as int))
+            }
+
 
             // add variant dbsnp id strings
-            returnValue.addAll(retrieveVariantDbSnpStringList(upperCasedCharacters, maximumMatches/3 as int))
+            if (retrieveVariantDbSnpStringList.maximumNumberOfParameters>1) {
+                returnValue.addAll(retrieveVariantDbSnpStringList(upperCasedCharacters, maximumMatches / 3 as int))
+            }
 
             // add variant var id strings
-            returnValue.addAll(retrieveVariantVarIdStringList(upperCasedCharacters, maximumMatches/3 as int))
+            if (retrieveVariantVarIdStringList.maximumNumberOfParameters>1) {
+                returnValue.addAll(retrieveVariantVarIdStringList(upperCasedCharacters, maximumMatches / 3 as int))
+            }
+
         }
 
         return returnValue
@@ -247,6 +255,27 @@ class GeneManagementService {
     }
 
 
+    private String deliverPartialMatchesInJsonVariantsOnly( String firstCharacters,
+                                                                int maximumMatches,
+                                                                Closure retrieveVariantDbSnp,
+                                                                Closure retrieveVariantVarId) {
+        StringBuilder sb = new StringBuilder("[")
+        // KDUXTD-83: try to speed up type ahead of gene search
+        List <String> partialMatchList = deliverPartialMatchesUsingStringLists(firstCharacters,maximumMatches,{},retrieveVariantDbSnp,retrieveVariantVarId)
+
+        int numberOfMatches = partialMatchList.size()
+        for ( int i=0 ; i<numberOfMatches ; i++ ) {
+            sb << "\"${partialMatchList[i]}\""
+            if ((i+1)<numberOfMatches){
+                sb << ",\n"
+            } else {
+                sb << "\n"
+            }
+        }
+        sb << "]"
+        return sb.toString()
+    }
+
 
 
 
@@ -275,6 +304,17 @@ class GeneManagementService {
                 retrieveGene )
 
     }
+
+
+    public String partialVariantOnlyMatches( String firstCharacters,
+                                      int maximumMatches) {
+        return   deliverPartialMatchesInJsonVariantsOnly(  firstCharacters,
+                maximumMatches,
+                retrieveVariantDbSnpUsingNamedQueries,
+                retrieveVariantVarIdUsingNamedQueries )
+
+    }
+
 
 
     /**
