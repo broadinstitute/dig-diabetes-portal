@@ -109,18 +109,25 @@ class GeneManagementService {
         if ((firstCharacters  !=  null) &&
             (firstCharacters.length() > 0))   {
             String upperCasedCharacters = firstCharacters.toUpperCase()
-            List <Gene> rawGeneRecords = retrieveGene (upperCasedCharacters, maximumMatches/3 as int)
-            rawGeneRecords.each {  Gene gene ->
-                returnValue.add(gene.name2)
+            if (retrieveGene.maximumNumberOfParameters>1){
+                List <Gene> rawGeneRecords = retrieveGene (upperCasedCharacters, maximumMatches/3 as int)
+                rawGeneRecords.each {  Gene gene ->
+                    returnValue.add(gene.name2)
+                }
+
             }
-            List <Variant> rawVariantRecords1 = retrieveVariantDbSnp (upperCasedCharacters, maximumMatches/3 as int)
-            rawVariantRecords1.each {  Variant variant ->
-                returnValue.add(variant.dbSnpId)
+            if (retrieveVariantDbSnp.maximumNumberOfParameters>1) {
+                List <Variant> rawVariantRecords1 = retrieveVariantDbSnp (upperCasedCharacters, maximumMatches/3 as int)
+                rawVariantRecords1.each {  Variant variant ->
+                    returnValue.add(variant.dbSnpId)
+                }
             }
 
-            List <Variant> rawVariantRecords2 = retrieveVariantVarId (upperCasedCharacters, maximumMatches/3 as int)
-            rawVariantRecords2.each {  Variant variant ->
-                returnValue.add(variant.varId)
+            if (retrieveVariantVarId.maximumNumberOfParameters>1) {
+                List <Variant> rawVariantRecords2 = retrieveVariantVarId (upperCasedCharacters, maximumMatches/3 as int)
+                rawVariantRecords2.each {  Variant variant ->
+                    returnValue.add(variant.varId)
+                }
             }
 
         }
@@ -261,7 +268,7 @@ class GeneManagementService {
                                                                 Closure retrieveVariantVarId) {
         StringBuilder sb = new StringBuilder("[")
         // KDUXTD-83: try to speed up type ahead of gene search
-        List <String> partialMatchList = deliverPartialMatchesUsingStringLists(firstCharacters,maximumMatches,{},retrieveVariantDbSnp,retrieveVariantVarId)
+        List <String> partialMatchList = deliverPartialMatches(firstCharacters,maximumMatches,{},retrieveVariantDbSnp,retrieveVariantVarId)
 
         int numberOfMatches = partialMatchList.size()
         for ( int i=0 ; i<numberOfMatches ; i++ ) {
