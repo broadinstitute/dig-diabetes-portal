@@ -74,8 +74,7 @@
     <div class="container dk-static-content">
         <div class="row">
             <div class="col-md-12">
-                <h1 align="center"><g:message code="informational.about_t2d.title"></g:message></h1>
-<h5 class="dk-under-header">&nbsp;</h5>
+                <h1><g:message code="informational.about_t2d.title"></g:message></h1>
                 <h5 class="dk-under-header"><g:message code="informational.about_t2D.under_title"></g:message></h5>
                 <h5 class="dk-under-header">&nbsp;</h5>
             </div></div>
