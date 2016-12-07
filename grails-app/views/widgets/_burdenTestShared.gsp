@@ -644,29 +644,36 @@ var displayBurdenVariantSelector = function (){
                 if (allVariants.length<2){
                    allVariants = proposedVariant.split('\n');
                 }
+                var datatable = $('#gaitTable').DataTable();
+                var deferreds = [];
+                var unrecognizedVariants = [];
+                var duplicateVariants = [];
                 _.forEach(allVariants,function(oneVariantRaw){
                     var oneVariant = oneVariantRaw.trim();
                     if (oneVariant.length > 0){
-                        var promise =  $.ajax({
-                            cache: false,
-                            type: "get",
-                            url: ( "${createLink(controller: 'variantInfo', action: 'variantAjax')}/" + oneVariant ),
-                            async: true
-                         });
-                        promise.done(
-                              function (data) {
-                                if ((typeof data !== 'undefined') &&
-                                     (data) &&
-                                     (data.variant)&&
-                                     (!(data.variant.is_error))){
-                                         if (data.variant.numRecords>0){
-                                             var args = _.flatten([{}, data.variant.variants[0]]);
-                                             var variantObject = _.merge.apply(_, args);
-                                             var t = $('#gaitTable').DataTable();
-
-                                            t.row.add( [variantObject.VAR_ID,
+                        var oneCall = function(curVariant,unrecognized, duplicate){
+                            var d = $.Deferred();
+                            var promise =  $.ajax({
+                                cache: false,
+                                type: "get",
+                                url: ( "${createLink(controller: 'variantInfo', action: 'variantAjax')}/" + curVariant ),
+                                async: true
+                             });
+                            promise.done(
+                                  function (data) {
+                                      if ((typeof data !== 'undefined') &&
+                                         (data) &&
+                                         (data.variant)&&
+                                         (!(data.variant.is_error))){
+                                             if (data.variant.numRecords>0){
+                                                var args = _.flatten([{}, data.variant.variants[0]]);
+                                                var variantObject = _.merge.apply(_, args);
+                                                if (_.findIndex(datatable.rows().data(),function (oneRow){return oneRow[0]===variantObject.VAR_ID;}) > -1) {
+                                                    duplicate.push(curVariant);
+                                                } else {
+                                                   datatable.row.add( [variantObject.VAR_ID,
                                                             '<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantObject.VAR_ID+'" class="boldItlink">'+
-    variantObject.CHROM+':'+variantObject.POS+'</a>',
+                                                                variantObject.CHROM+':'+variantObject.POS+'</a>',
                                                             variantObject.DBSNP_ID,
                                                             variantObject.CHROM,
                                                             variantObject.POS,
@@ -675,54 +682,78 @@ var displayBurdenVariantSelector = function (){
                                                             variantObject.Protein_change,
                                                             variantObject.Consequence
                                                         ] ).draw( false );
-                                         }
-                                         %{--else {--}%
-                                            %{--alert('Could not find the variant you wanted');--}%
-                                         %{--}--}%
+                                                }
 
-                                }
-                            }
-                         );
+                                             } else {
+                                                unrecognized.push(curVariant);
+                                             }
 
-                        promise.fail();
+                                      }
+                                      d.resolve(data);
+                                  }
+                            );
+                            promise.fail(d.reject);
+                            return d.promise();
+                        };
+                        deferreds.push(oneCall(oneVariant,unrecognizedVariants,duplicateVariants));
                     }
                 });
-            };
-
-            var sampleMetadata = getStoredSampleMetadata();
-            if ( ( sampleMetadata !==  null ) &&
-                 ( typeof sampleMetadata !== 'undefined') ){
-
-                    var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
-                    var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
-                    var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
-                    var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
-                    var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
-                    var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements);
-
-                    // kludge alert!  Currently we have no way of specifying whether or not a data set can be used for stratification.
-                    //  For now I will erase the hide the stratification section if it doesn't apply to a data set, but clearly we need to do better
-                    if ($('#datasetFilter').val()==="samples_camp_mdv23"){
-                        $('.stratificationHolder').css('display','none');
+            $.when.apply($,deferreds).then(function() {
+                $('#rSpinner').hide();
+                var reportError = "";
+                if (unrecognizedVariants.length>0){
+                    if (unrecognizedVariants.length>1){
+                        reportError += ('The following variants were unrecognized: '+unrecognizedVariants.join(", "));
                     } else {
-                        $('.stratificationHolder').css('display','block');
+                        reportError += ('Variant '+unrecognizedVariants[0]+' unrecognized.');
                     }
+                }
+                if (duplicateVariants.length>0){
+                    if (reportError.length > 0) {reportError += '\n\n';}
+                    if (duplicateVariants.length>1){
+                        reportError += ('The following variants were already in the table: '+duplicateVariants.join(", "));
+                    } else {
+                        reportError += ('Variant '+duplicateVariants[0]+' already in the table.');
+                    }
+                }
+                if (reportError.length > 0) { alert(reportError);}
+            });
+    };
 
-                    $("#chooseFiltersLocation").empty();
-                    $("#chooseCovariatesLocation").empty();
+var sampleMetadata = getStoredSampleMetadata();
+if ( ( sampleMetadata !==  null ) &&
+( typeof sampleMetadata !== 'undefined') ){
+
+var optionsPerFilter = generateOptionsPerFilter(filterInfo) ;
+var stratificationProperty = generateNamesOfStrata(multipleStrataExist, optionsPerFilter, strataProperty, phenotype);
+var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
+var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
+var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
+var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements);
+
+// kludge alert!  Currently we have no way of specifying whether or not a data set can be used for stratification.
+//  For now I will erase the hide the stratification section if it doesn't apply to a data set, but clearly we need to do better
+if ($('#datasetFilter').val()==="samples_camp_mdv23"){
+$('.stratificationHolder').css('display','none');
+} else {
+$('.stratificationHolder').css('display','block');
+}
+
+$("#chooseFiltersLocation").empty();
+$("#chooseCovariatesLocation").empty();
 
 
 
-                    //
-                    //  display the variant selection filtering tools
-                    //
-                    if (getGeneForGait().length>0){
-                        renderData.sectionNumber++;
-                        $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-                        mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
-                        mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
-                        $('#addVariant').on( 'click', respondedToAddVariantButtonClick );
-                        $('#proposedMultiVariant').typeahead({
+//
+//  display the variant selection filtering tools
+//
+if (getGeneForGait().length>0){
+renderData.sectionNumber++;
+$("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
+mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters();
+$('#addVariant').on( 'click', respondedToAddVariantButtonClick );
+$('#proposedMultiVariant').typeahead({
                                 %{--source: function (query, process) {--}%
                                 %{--$.get('<g:createLink controller="gene" action="variantOnlyTypeAhead"/>', {query: query}, function (data) {--}%
                                     %{--process(data);--}%
