@@ -59,10 +59,12 @@
                     <div class="panel-heading" role="tab" id="${sg[0].systemId}">
                         <p class="dataset-name">${ g.message(code: 'metadata.' + sg[0].getSystemId()) }
                             <span class="dataset-summary">
-                            <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP')}">
-                                <span class="data-status-early-phase1-access">Early Access Phase 1</span> | %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
+
+                <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP') || sg[0]?.getSystemId()?.toString()?.contains('BioMe')}">
+                                <span class="data-status-early-phase1-access">Early Access Phase 1</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
                             </g:if>
+
                             <g:else>
                                 <span class="data-status-open-access">Open access</span> | %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
