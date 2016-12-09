@@ -187,7 +187,7 @@ public class BurdenJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getKnowledgeBaseQueryPayloadForVariantSearch(String geneString, String mostDelScoreOperand, int mostDelScore, List<QueryFilter> additionalFilterList) throws PortalException {
+    public String getKnowledgeBaseQueryPayloadForVariantSearch(String geneString, String mostDelScoreOperand, int mostDelScore, List<QueryFilter> additionalFilterList, List<Property> additionalProperties) throws PortalException {
         // local variables
         String jsonString = "";
         JsonParser parser = JsonParser.getService();
@@ -210,7 +210,12 @@ public class BurdenJsonBuilder {
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN_PRED));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_SIFT_PRED));
 
-
+        // add minor allele count if it exists for this data set
+        if (additionalProperties != null){
+            for (Property property: additionalProperties){
+                query.addQueryProperty(property);
+            }
+        }
 
         // add in the filters
         query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, geneString);

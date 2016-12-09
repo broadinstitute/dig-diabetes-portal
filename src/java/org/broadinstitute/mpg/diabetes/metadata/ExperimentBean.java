@@ -13,6 +13,7 @@ import java.util.List;
 public class ExperimentBean implements Experiment {
     private String name;
     private String technology;
+    private String institution;
     private String version;
     private List<SampleGroup> sampleGroupList;
     private DataSet parent;
@@ -47,6 +48,14 @@ public class ExperimentBean implements Experiment {
 
     public void setTechnology(String technology) {
         this.technology = technology;
+    }
+
+    public String getInstitution() {
+        return institution;
+    }
+
+    public void setInstitution(String technology) {
+        this.institution = institution;
     }
 
     public String getVersion() {

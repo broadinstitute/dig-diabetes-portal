@@ -1409,7 +1409,7 @@ $('#proposedMultiVariant').typeahead({
                              _.forEach(data.results, function(oneVariant){
                                 var variant = {};
                                  _.forEach(oneVariant.pVals, function(fieldHolder){
-                                    variant[fieldHolder.level] = fieldHolder.count;
+                                    variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
                                  });
                                  variantListHolder.push(variant);
                              });
@@ -1464,13 +1464,15 @@ $('#proposedMultiVariant').typeahead({
                                             "width": "40px"  },
                                         { "name": "POS",   "targets": [4], "title":"Position",
                                             "width": "auto" },
-                                        { "name": "PolyPhen_PRED",   "targets": [5], "title":"Polyphen",
+                                        { "name": "MAC",   "targets": [5], "title":"MAC",
                                             "width": "auto" },
-                                        { "name": "SIFT_PRED",   "targets": [6], "title":"SIFT",
+                                        { "name": "PolyPhen_PRED",   "targets": [6], "title":"Polyphen",
                                             "width": "auto" },
-                                        { "name": "Protein_change",   "targets": [7], "title":"Protein change",
+                                        { "name": "SIFT_PRED",   "targets": [7], "title":"SIFT",
+                                            "width": "auto" },
+                                        { "name": "Protein_change",   "targets": [8], "title":"Protein change",
                                           "width": "60px"  },
-                                        { "name": "Consequence",   "targets": [8], "title":"Consequence",
+                                        { "name": "Consequence",   "targets": [9], "title":"Consequence",
                                           "width": "100px"  }
 
                                     ],
@@ -1496,6 +1498,8 @@ $('#proposedMultiVariant').typeahead({
                             arrayOfRows.push(DBSNP_ID);
                             arrayOfRows.push(variantRec.CHROM);
                             arrayOfRows.push(variantRec.POS);
+                            var codedMac = variantRec.MAC;
+                            arrayOfRows.push(codedMac);
                             arrayOfRows.push((variantRec.PolyPhen_PRED)?variantRec.PolyPhen_PRED:'');
                             arrayOfRows.push((variantRec.SIFT_PRED)?variantRec.SIFT_PRED:'');
                             //arrayOfRows.push('<a href="${createLink(controller: 'gene', action: 'geneInfo')}/'+variantRec.CLOSEST_GENE+'" class="boldItlink">'+variantRec.CLOSEST_GENE+'</a>');

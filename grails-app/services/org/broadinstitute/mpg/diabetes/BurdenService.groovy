@@ -72,7 +72,7 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList) {
+    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
         // local variables
         String jsonString = "";
         JSONObject resultJson;
@@ -90,9 +90,15 @@ class BurdenService {
             mostDelScore = 5;
         }
 
+        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC")
+        List<Property> additionalProperties = []
+        if (macProperty != null){
+            additionalProperties << macProperty
+        }
+
         // get the json string to send to the getData call
         try {
-            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore, additionalQueryFilterList);
+            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore, additionalQueryFilterList, additionalProperties);
 
         } catch (PortalException exception) {
             log.error("Got json building error for getData payload creation: " + exception.getMessage());
@@ -238,7 +244,7 @@ class BurdenService {
 //            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataSet,1.0,convertedPhenotype,pValueName))
 
             // get the getData results payload
-            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
             log.info("got burden getData results: " + jsonObject);
 
 
@@ -327,7 +333,7 @@ class BurdenService {
             queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))
 
             // get the getData results payload
-            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
             log.info("got burden getData results: " + jsonObject);
 
             // get the list of variants back

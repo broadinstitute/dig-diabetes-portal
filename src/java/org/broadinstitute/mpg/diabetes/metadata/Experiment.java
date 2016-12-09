@@ -12,5 +12,7 @@ public interface Experiment extends DataSet {
 
     public String getVersion();
 
+    public String getInstitution();
+
     public List<SampleGroup> getSampleGroups();
 }

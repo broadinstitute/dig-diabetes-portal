@@ -74,7 +74,7 @@ class BurdenServiceIntegrationSpec extends IntegrationSpec {
         String referenceJsonString = "{\"is_error\": false, \"numRecords\": 2, \"variants\": [[{\"VAR_ID\": \"8_118184783_C_T\"}],[{\"VAR_ID\": \"8_118170004_C_T\"}]], \"passback\": \"123abc\"}";
         JsonSlurper slurper = new JsonSlurper()
         JSONObject referenceJson = slurper.parseText(referenceJsonString);
-        String generatedJsonString = this.burdenService.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList);
+        String generatedJsonString = this.burdenService.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, sampleGroup);
         JSONObject generatedJson = slurper.parseText(generatedJsonString);
 
         then:

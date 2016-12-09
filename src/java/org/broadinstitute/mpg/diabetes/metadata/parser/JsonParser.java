@@ -64,34 +64,6 @@ public class JsonParser {
 
 
     /**
-     * return all the experiments in the metadata chache
-     *
-     * @return                  all the experiments in the metadata chache
-     */
-    /*
-    public List<Experiment> getAllExperiments() {
-        // check to see if the experiments are already loaded
-        if (this.metaDataRoot == null) {
-            // load the json
-            this.metaDataRoot = new MetaDataRootBean();
-
-            try {
-                // get the metadata root experiment
-                this.parseExperiments(this.metaDataRoot.getExperiments());
-
-
-            } catch (PortalException exception) {
-                // TODO - message
-                Log.e(this.getClass().getName(), "Got portal exception loading experiments: " + exception.getMessage());
-            }
-        }
-
-        // return
-        return this.metaDataRootBean.getExperiments();
-    }
-    */
-
-    /**
      * returns the root object containing the parsed json onformation
      *
      * @return
@@ -335,6 +307,16 @@ public class JsonParser {
         return this.jsonString;
     }
 
+
+    private String safeKeyRetrieval(JSONObject jsonObject,String key){
+        String returnValue = null;
+        if (jsonObject.containsKey(key)){
+            returnValue = jsonObject.getString(key);
+        }
+        return returnValue;
+    }
+
+
     /**
      * method to return a list of experiments from the json string
      *
@@ -358,9 +340,10 @@ public class JsonParser {
             for (int i = 0; i < experimentArray.length(); i++) {
                 tempJson = experimentArray.getJSONObject(i);
                 ExperimentBean experiment = new ExperimentBean();
-                experiment.setName(tempJson.getString(PortalConstants.JSON_NAME_KEY));
-                experiment.setTechnology(tempJson.getString(PortalConstants.JSON_TECHNOLOGY_KEY));
-                experiment.setVersion(tempJson.getString(PortalConstants.JSON_VERSION_KEY));
+                experiment.setName( safeKeyRetrieval ( tempJson, PortalConstants.JSON_NAME_KEY));
+                experiment.setTechnology( safeKeyRetrieval ( tempJson, PortalConstants.JSON_TECHNOLOGY_KEY));
+                experiment.setInstitution( safeKeyRetrieval ( tempJson, PortalConstants.JSON_INSTITUTION_KEY ) );
+                experiment.setVersion( safeKeyRetrieval ( tempJson, PortalConstants.JSON_VERSION_KEY));
                 experimentList.add(experiment);
                 experiment.setParent(parent);
 

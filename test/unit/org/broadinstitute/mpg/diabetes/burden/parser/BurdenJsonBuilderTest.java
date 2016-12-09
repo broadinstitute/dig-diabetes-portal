@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.burden.parser;
 
 import junit.framework.TestCase;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
+import org.broadinstitute.mpg.diabetes.metadata.Property;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
@@ -100,9 +101,11 @@ public class BurdenJsonBuilderTest extends TestCase {
         String readJsonString = new Scanner(inputStream).useDelimiter("\\A").next();
         referenceJson = new JSONObject(readJsonString);
 
+        List<Property> additionalProperties = new ArrayList<Property>();
+
         // create the json from the builder
         try {
-            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(geneString, mostDelScoreOperand, mostDelScore, new ArrayList<QueryFilter>());
+            String generatedJsonString = this.burdenJsonBuilder.getKnowledgeBaseQueryPayloadForVariantSearch(geneString, mostDelScoreOperand, mostDelScore, new ArrayList<QueryFilter>(),additionalProperties);
             generatedJson = new JSONObject(generatedJsonString);
 
         } catch (PortalException exception) {
