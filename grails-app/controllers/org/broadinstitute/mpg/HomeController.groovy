@@ -13,6 +13,7 @@ class HomeController {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     ResourceLocator grailsResourceLocator
+    RestServerService restServerService
     NewsFeedService newsFeedService
     def mailService
 
@@ -57,6 +58,32 @@ class HomeController {
         // forward to index page
         redirect(action: 'index')
     }
+
+
+
+    def pickDistributedKb = {
+        String distributedKB = params.distributedKB
+
+
+        // log
+        log.info("setting portal type: " + distributedKB + " for session: " + request.getSession());
+
+        if (distributedKB != null) {
+            request?.getSession()?.setAttribute("distributedKB", distributedKB)
+            if (distributedKB == 'EBI'){
+                restServerService.explicitlySetRestServer( "https://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/" )
+            } else {
+                restServerService.resetCurrentRestServer()
+            }
+        }
+
+        // forward to index page
+        redirect(action: 'portalHome')
+    }
+
+
+
+
 
     /***
      * This is our standard home page. We get directed here from a few places in the portal

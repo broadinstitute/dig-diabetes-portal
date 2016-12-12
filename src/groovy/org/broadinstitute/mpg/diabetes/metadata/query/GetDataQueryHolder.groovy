@@ -238,6 +238,19 @@ class GetDataQueryHolder {
     }
 
 
+
+    public void addSpecificProperty(Property property) {
+         if (property != null) {
+            getDataQuery.addQueryProperty(property)
+        } else {
+            log.info("Got null dproperty, so can't add to getDataQuery: " + property);
+        }
+
+    }
+
+
+
+
     /***
      * add P properties. The incoming data structure is built by the getColumnsToDisplayStructure method in SharedToolsService
      * @param resultColumnsToDisplay

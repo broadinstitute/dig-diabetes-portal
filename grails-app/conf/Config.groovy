@@ -592,3 +592,7 @@ portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" 
 portal.type.override = "t2d"     // options are "t2d" or "stroke"
 
 
+
+distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
+
+

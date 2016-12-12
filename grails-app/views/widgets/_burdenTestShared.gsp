@@ -648,6 +648,15 @@ var displayBurdenVariantSelector = function (){
                 var deferreds = [];
                 var unrecognizedVariants = [];
                 var duplicateVariants = [];
+                var datasetFilter = $('#datasetFilter').val();
+                var dataSet;
+                if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
+                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
+                    dataSet = 'GWAS_Stroke_mdv70';
+                }else {
+                    dataSet = 'ExChip_CAMP_mdv23';
+                }
                 _.forEach(allVariants,function(oneVariantRaw){
                     var oneVariant = oneVariantRaw.trim();
                     if (oneVariant.length > 0){
@@ -656,7 +665,7 @@ var displayBurdenVariantSelector = function (){
                             var promise =  $.ajax({
                                 cache: false,
                                 type: "get",
-                                url: ( "${createLink(controller: 'variantInfo', action: 'variantAjax')}/" + curVariant ),
+                                url: ( "${createLink(controller: 'variantInfo', action: 'variantAndDsAjax')}?varid=" + curVariant +"&dataSet="+dataSet),
                                 async: true
                              });
                             promise.done(
@@ -668,6 +677,11 @@ var displayBurdenVariantSelector = function (){
                                              if (data.variant.numRecords>0){
                                                 var args = _.flatten([{}, data.variant.variants[0]]);
                                                 var variantObject = _.merge.apply(_, args);
+                                                var mac = '';
+                                                var macObject = variantObject['MAC'];
+                                                if (typeof macObject !== 'undefined'){
+                                                    _.forEach(macObject,function(v,k){mac=v;})
+                                                }
                                                 if (_.findIndex(datatable.rows().data(),function (oneRow){return oneRow[0]===variantObject.VAR_ID;}) > -1) {
                                                     duplicate.push(curVariant);
                                                 } else {
@@ -677,6 +691,7 @@ var displayBurdenVariantSelector = function (){
                                                             variantObject.DBSNP_ID,
                                                             variantObject.CHROM,
                                                             variantObject.POS,
+                                                            mac,
                                                             variantObject.PolyPhen_PRED,
                                                             variantObject.SIFT_PRED,
                                                             variantObject.Protein_change,

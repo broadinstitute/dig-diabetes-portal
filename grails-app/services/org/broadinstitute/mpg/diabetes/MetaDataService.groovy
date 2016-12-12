@@ -72,6 +72,38 @@ class MetaDataService {
         return portalType;
     }
 
+
+
+
+
+
+    public String getDistributedKBFromSession() {
+        // if portal type defined in config, use that
+        String distributedKBOverride = this.grailsApplication.config.distributed.kb.override;
+        String distributedKB = null;
+
+        distributedKB = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('distributedKB');
+
+        // DIGP-291: adding different metadata versions by portal
+        // get the data version based on user session portal type; default to portal override if no session preference set
+        if (distributedKB == null) {
+            distributedKB = distributedKBOverride;
+
+            // if not portal override set in config, set to t2d as last resort
+            if (distributedKB == null) {
+                distributedKB = "Broad";
+            }
+        }
+
+        // return
+        return distributedKB;
+    }
+
+
+
+
+
+
     /**
      * returns the data version to use based on the portal type setting in the user session
      *
