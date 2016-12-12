@@ -1499,6 +1499,7 @@ $('#proposedMultiVariant').typeahead({
                             arrayOfRows.push(variantRec.CHROM);
                             arrayOfRows.push(variantRec.POS);
                             var codedMac = variantRec.MAC;
+                            if ( typeof codedMac === 'undefined') { codedMac = ''; }
                             arrayOfRows.push(codedMac);
                             arrayOfRows.push((variantRec.PolyPhen_PRED)?variantRec.PolyPhen_PRED:'');
                             arrayOfRows.push((variantRec.SIFT_PRED)?variantRec.SIFT_PRED:'');
