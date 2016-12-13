@@ -60,10 +60,12 @@ var mpgSoftware = mpgSoftware || {};
                             $(phenotypeTableChooser).val(defaultPhenotype);
                         } else if (availPhenotypes.length>0){
                             if ((availPhenotypes[0]==='default')||(availPhenotypes.length>1)){
-                                $(phenotypeTableChooser).val(availPhenotypes[1]);
+                                defaultPhenotype = availPhenotypes[1];
+
                             } else {
-                                $(phenotypeTableChooser).val(availPhenotypes[0]);
+                                defaultPhenotype = availPhenotypes[0];
                             }
+                            $(phenotypeTableChooser).val(defaultPhenotype);
                         }
 
                         callbackFn({'value': defaultPhenotype});

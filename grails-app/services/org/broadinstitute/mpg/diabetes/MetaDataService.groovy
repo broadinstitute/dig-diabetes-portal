@@ -107,20 +107,26 @@ class MetaDataService {
     /**
      * returns the data version to use based on the portal type setting in the user session
      *
+     * logic:
+     *  if we are using a remote KB, or we are using anything other than T2D
+     *     then use the preassigned mdv from config
+     *  else (we are using t2d and not ebi) then pull the MDV from the shared tools service
      * @return
      */
     public String getDataVersion() {
         // DIGP-291: adding different metadata versions by portal
         String dataVersion;
-        String portalType = this.getPortalTypeFromSession();
+        String portalType = this.getPortalTypeFromSession()
+        String distributedKb = this.getDistributedKBFromSession()
 
         // get the data version based on user session portal type; default to t2d
-        dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
-
-        // DIGP-391: quick fix for Marcin testing; for t2d, get the version from the system manager setting
-      //  if ("t2d".equals(portalType)) {
-            dataVersion = "mdv" + this.sharedToolsService.getDataVersion();
-      //  }
+        if (distributedKb == 'EBI')  {
+            dataVersion = this.grailsApplication.config.portal.data.version.map[distributedKb]
+        } else if  ("t2d"!= portalType) {
+            dataVersion = this.grailsApplication.config.portal.data.version.map[portalType]
+        } else {
+            dataVersion = "mdv" + this.sharedToolsService.getDataVersion()
+        }
 
         // return
         return dataVersion;
@@ -191,6 +197,13 @@ class MetaDataService {
 
         // return
         return this.jsonParser;
+    }
+
+    public void forceImmediateMetadataReload() {
+
+        String jsonString = this.restServerService.getMetadata();
+        this.jsonParser.forceMetadataReload(jsonString);
+
     }
 
 

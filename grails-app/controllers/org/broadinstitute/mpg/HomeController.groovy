@@ -2,6 +2,7 @@ package org.broadinstitute.mpg
 
 import dig.diabetes.portal.NewsFeedService
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -15,6 +16,7 @@ class HomeController {
     ResourceLocator grailsResourceLocator
     RestServerService restServerService
     NewsFeedService newsFeedService
+    MetaDataService metaDataService
     def mailService
 
     /***
@@ -75,6 +77,7 @@ class HomeController {
             } else {
                 restServerService.resetCurrentRestServer()
             }
+            metaDataService.forceImmediateMetadataReload()
         }
 
         // forward to index page
