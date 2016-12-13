@@ -30,19 +30,24 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         String portalType = g.portalTypeString() as String
+        String  distributedKB = g.distributedKBString() as String
         String locusZoomDataset = ""
         String phenotype
         // kludge alert
-        if (portalType=='t2d'){
-            locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-            phenotype = 'T2D'
-        }else if (portalType=='stroke'){
-            locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
-            phenotype = 'Stroke_all'
+        if (distributedKB == 'EBI') {
+            locusZoomDataset = "GWAS_OxBB_"+metaDataService.getDataVersion()
         } else {
-            locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            if (portalType=='t2d'){
+                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+                phenotype = 'T2D'
+            }else if (portalType=='stroke'){
+                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
+                phenotype = 'Stroke_all'
+            } else {
+                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            }
         }
-        // this supports variant searches coming from links inside of LZ plots
+       // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
             // if defined, lzId will look like: 8:118184783_C/T
             // need to get format like: 8_118184783_C_T

@@ -66,6 +66,23 @@ class SectionSelectorTagLib {
     }
 
 
+
+    def renderIfWeHaveDynamicDataValue = { attrs,body ->
+        if (metaDataService.getDistributedKBFromSession ()!='EBI'){
+            out << body()
+        }
+
+    }
+
+
+    def renderNotIfWeHaveDynamicDataValue = { attrs,body ->
+        if (metaDataService.getDistributedKBFromSession ()=='EBI'){
+            out << body()
+        }
+
+    }
+
+
     def renderExomeChipSection = { attrs,body ->
         if (sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp)){
             out << body()
