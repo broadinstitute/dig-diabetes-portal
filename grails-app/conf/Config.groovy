@@ -588,7 +588,7 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 // placeholder for data version
 diabetes.data.version = "mdv23";
 portal.data.version.map = ["t2d": "mdv23", "stroke": "mdv70", "mi" : "mdv23", "EBI": "mdv1"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
 portal.type.override = "t2d"     // options are "t2d" or "stroke"
 
 

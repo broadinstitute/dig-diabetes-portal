@@ -629,7 +629,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryBean getDataQueryBean = getDataQueryHolder.getGetDataQuery()
         List<HashMap> listOfPropertyMaps = []
         JSONObject retValue = null
-        if (getDataQueryBean.queryPropertyList.size()>this.MAXIMUM_NUMBER_DB_JOINS){
+        //if (getDataQueryBean.queryPropertyList.size()>this.MAXIMUM_NUMBER_DB_JOINS){
             int loopCounter = 0
             listOfPropertyMaps << [:]
             List <String> propertyListKeys = getDataQueryBean.queryPropertyMap.keySet() as List<String>
@@ -696,7 +696,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     }
                 }
             }
-        }
+        //}
         return retValue
     }
 

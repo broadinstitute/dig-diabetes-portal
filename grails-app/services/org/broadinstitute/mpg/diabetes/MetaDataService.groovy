@@ -141,9 +141,14 @@ class MetaDataService {
         // DIGP-291: adding different metadata versions by portal
         String phenotype;
         String portalType = this.getPortalTypeFromSession();
+        String distributedKb = this.getDistributedKBFromSession()
 
-        // get the data version based on user session portal type; default to t2d
-        phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType];
+        if (distributedKb == 'EBI')  {
+            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[distributedKb]
+        } else {
+            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType]
+        }
+
 
         // return
         return phenotype;
