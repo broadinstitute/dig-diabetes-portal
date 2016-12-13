@@ -2,6 +2,7 @@ package org.broadinstitute.mpg
 
 import dig.diabetes.portal.NewsFeedService
 import org.apache.juli.logging.LogFactory
+import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -13,7 +14,9 @@ class HomeController {
     GrailsApplication grailsApplication
     SharedToolsService sharedToolsService
     ResourceLocator grailsResourceLocator
+    RestServerService restServerService
     NewsFeedService newsFeedService
+    MetaDataService metaDataService
     def mailService
 
     /***
@@ -57,6 +60,33 @@ class HomeController {
         // forward to index page
         redirect(action: 'index')
     }
+
+
+
+    def pickDistributedKb = {
+        String distributedKB = params.distributedKB
+
+
+        // log
+        log.info("setting portal type: " + distributedKB + " for session: " + request.getSession());
+
+        if (distributedKB != null) {
+            request?.getSession()?.setAttribute("distributedKB", distributedKB)
+            if (distributedKB == 'EBI'){
+                restServerService.explicitlySetRestServer( "https://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/" )
+            } else {
+                restServerService.resetCurrentRestServer()
+            }
+            metaDataService.forceImmediateMetadataReload()
+        }
+
+        // forward to index page
+        redirect(action: 'portalHome')
+    }
+
+
+
+
 
     /***
      * This is our standard home page. We get directed here from a few places in the portal

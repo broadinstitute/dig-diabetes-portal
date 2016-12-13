@@ -73,6 +73,9 @@
             }
         });
 
+
+
+
         var retrievePhenotypes = function () {
             var loading = $('#spinner').show();
             $.ajax({
@@ -106,6 +109,21 @@
             });
         };
         retrievePhenotypes();
+
+
+        $('#chooseDistributedKB').change(function(e){
+            var loading = $('#spinner').show();
+            var target = $(e.target);
+            $('#distributedKBString').text(target.val());
+            $.ajax({
+                type: "GET",
+                url: "${createLink(controller:'home', action:'pickDistributedKb')}?distributedKB="+target.val(),
+                success:function(data){
+                    retrievePhenotypes();
+                    loading.hide();
+                }
+            });
+        });
 
     });
 
@@ -213,6 +231,16 @@
         <div class="col-md-4">
             <h3><g:message code="portal.home.news_headline" default="What's new" /></h3>
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
+            <div style="margin: 0 10px 10px 10px">
+                <label style="display: inline; padding-right: 15px"> Current distributed KB is
+                    <span style="font-weight: bold" id="distributedKBString">${g.distributedKBString()}</span>
+                </label>
+                <select name="chooseDistributedKB" id="chooseDistributedKB" class="form-control input-sm"
+                        style="display: inline; width:100px">
+                    <option value="Broad" <%= (g.distributedKBString()=='Broad')? 'selected':'' %> >Broad</option>
+                    <option value="EBI" <%= (g.distributedKBString()=='EBI')? 'selected':'' %> >EBI</option>
+                </select>
+            </div>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <a class="btn btn-default" style="width:100%; margin-right: 2%; margin-bottom: 10px;"
                    href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1"

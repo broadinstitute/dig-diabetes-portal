@@ -1,8 +1,11 @@
 package org.broadinstitute.mpg
 
+import org.broadinstitute.mpg.diabetes.MetaDataService
+
 class SectionSelectorTagLib {
 
     SharedToolsService sharedToolsService
+    MetaDataService metaDataService
 
     def renderSigmaSection = { attrs,body ->
 
@@ -40,6 +43,40 @@ class SectionSelectorTagLib {
 
     def renderNotBetaFeaturesDisplayedValue = { attrs,body ->
         if (!sharedToolsService.getBetaFeaturesDisplayedValue ()){
+            out << body()
+        }
+
+    }
+
+
+
+    def renderIfWeHaveSampleDatathereValue = { attrs,body ->
+        if (metaDataService.getDistributedKBFromSession ()!='EBI'){
+            out << body()
+        }
+
+    }
+
+
+    def renderNotIfWeHaveSampleDatathereValue = { attrs,body ->
+        if (metaDataService.getDistributedKBFromSession ()=='EBI'){
+            out << body()
+        }
+
+    }
+
+
+
+    def renderIfWeHaveDynamicDataValue = { attrs,body ->
+        if (metaDataService.getDistributedKBFromSession ()!='EBI'){
+            out << body()
+        }
+
+    }
+
+
+    def renderNotIfWeHaveDynamicDataValue = { attrs,body ->
+        if (metaDataService.getDistributedKBFromSession ()=='EBI'){
             out << body()
         }
 

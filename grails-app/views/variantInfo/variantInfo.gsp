@@ -248,11 +248,13 @@
 
 
 
-                    %{--<g:renderBetaFeaturesDisplayedValue>--}%
-                    <div class="separator"></div>
+                    <g:renderIfWeHaveSampleDatathereValue>
 
-                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
-                    %{--from the--}%
+                        <div class="separator"></div>
+
+                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+
+                    </g:renderIfWeHaveSampleDatathereValue>
 
 
                     <div class="separator"></div>

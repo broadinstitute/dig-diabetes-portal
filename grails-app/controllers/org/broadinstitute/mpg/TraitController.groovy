@@ -459,19 +459,42 @@ class TraitController {
                         name: 'fasting insulin'
                 ]
         ];
+        List ebiDefaultDataSources = [
+                [
+                        type: 'gwas',
+                        trait: 'FG',
+                        dataset: 'GWAS_OxBB_'+metaDataService.getDataVersion(),
+                        pvalue: 'P_VALUE',
+                        name: 'fasting glucose'
+                ],
+                [
+                        type: 'gwas',
+                        trait: 'BMI',
+                        dataset: 'GWAS_OxBB_'+metaDataService.getDataVersion(),
+                        pvalue: 'P_VALUE',
+                        name: 'Body mass index'
+                ]
+        ];
+
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> staticPhenotypeMap = phenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->phenotypeBean.dataType=='static'}
         String portalType = g.portalTypeString() as String
+        String distributedKb = g.distributedKBString() as String
         List dataSources = []
         List defaultDataSources = []
 
         // kludge alert
-        if (portalType=='t2d'){
-            defaultDataSources = t2dDefaultDataSources
-        }else if (portalType=='stroke'){
-            defaultDataSources = strokeDefaultDataSources
+        if (distributedKb == 'EBI'){
+            defaultDataSources = ebiDefaultDataSources
         } else {
-            defaultDataSources = t2dDefaultDataSources
+            if (portalType=='t2d'){
+                defaultDataSources = t2dDefaultDataSources
+            }else if (portalType=='stroke'){
+                defaultDataSources = strokeDefaultDataSources
+            } else {
+                defaultDataSources = t2dDefaultDataSources
+            }
+
         }
 
 //        if (defaultDataSources) {

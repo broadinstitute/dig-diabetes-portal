@@ -46,6 +46,7 @@ class RestServerService {
     private String AWS02_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
     private String BASE_URL = ""
+    private String REMEMBER_BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
@@ -155,6 +156,7 @@ class RestServerService {
         //
         //
         BASE_URL = grailsApplication.config.server.URL
+        REMEMBER_BASE_URL = BASE_URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
 
@@ -237,6 +239,7 @@ class RestServerService {
         if (!(newRestServer == BASE_URL)) {
             log.info("NOTE: about to change from the old server = ${BASE_URL} to instead using = ${newRestServer}")
             BASE_URL = newRestServer
+            REMEMBER_BASE_URL = BASE_URL
             log.info("NOTE: change to server ${BASE_URL} is complete")
         }
     }
@@ -244,6 +247,16 @@ class RestServerService {
     public String getCurrentServer() {
         return (BASE_URL ?: "none")
     }
+
+
+    public void resetCurrentRestServer(){
+        BASE_URL = REMEMBER_BASE_URL
+    }
+
+    public void explicitlySetRestServer(String newRestServer){
+        BASE_URL = newRestServer
+    }
+
 
     public void goWithTheProdLoadBalancedServer() {
         pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
@@ -616,7 +629,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryBean getDataQueryBean = getDataQueryHolder.getGetDataQuery()
         List<HashMap> listOfPropertyMaps = []
         JSONObject retValue = null
-        if (getDataQueryBean.queryPropertyList.size()>this.MAXIMUM_NUMBER_DB_JOINS){
+        //if (getDataQueryBean.queryPropertyList.size()>this.MAXIMUM_NUMBER_DB_JOINS){
             int loopCounter = 0
             listOfPropertyMaps << [:]
             List <String> propertyListKeys = getDataQueryBean.queryPropertyMap.keySet() as List<String>
@@ -683,7 +696,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     }
                 }
             }
-        }
+        //}
         return retValue
     }
 
@@ -766,6 +779,34 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return dataJsonObject
     }
 
+
+    JSONObject retrieveVariantInfoByNameAndDs(String variantId,String dataSet) {
+        String filters = codedfilterByVariant(variantId)
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["CHROM",
+                                                                         "POS",
+                                                                         "VAR_ID",
+                                                                         "DBSNP_ID",
+                                                                         "GENE",
+                                                                         "CLOSEST_GENE",
+                                                                         "TRANSCRIPT_ANNOT",
+                                                                         "Reference_Allele",
+                                                                         "Effect_Allele",
+                                                                         "Consequence",
+                                                                         "PolyPhen_PRED",
+                                                                         "SIFT_PRED",
+                                                                         "Protein_change"
+        ])
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
+        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC")
+        JsonSlurper slurper = new JsonSlurper()
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        if (macProperty != null){
+            getDataQueryHolder.addSpecificProperty(macProperty)
+        }
+        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
 
 
 

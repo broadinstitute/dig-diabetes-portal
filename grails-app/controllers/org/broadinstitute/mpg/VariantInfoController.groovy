@@ -30,19 +30,24 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         String portalType = g.portalTypeString() as String
+        String  distributedKB = g.distributedKBString() as String
         String locusZoomDataset = ""
         String phenotype
         // kludge alert
-        if (portalType=='t2d'){
-            locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-            phenotype = 'T2D'
-        }else if (portalType=='stroke'){
-            locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
-            phenotype = 'Stroke_all'
+        if (distributedKB == 'EBI') {
+            locusZoomDataset = "GWAS_OxBB_"+metaDataService.getDataVersion()
         } else {
-            locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            if (portalType=='t2d'){
+                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+                phenotype = 'T2D'
+            }else if (portalType=='stroke'){
+                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
+                phenotype = 'Stroke_all'
+            } else {
+                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            }
         }
-        // this supports variant searches coming from links inside of LZ plots
+       // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
             // if defined, lzId will look like: 8:118184783_C/T
             // need to get format like: 8_118184783_C_T
@@ -86,6 +91,37 @@ class VariantInfoController {
                                 (key == "SIFT_PRED")||
                                 (key == "PolyPhen_PRED") ) &&
                              ( value != null) ){
+                            List<String> consequenceList = value.tokenize(",")
+                            List<String> translatedConsequenceList = []
+                            for (String consequence in consequenceList){
+                                translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+                            }
+                            field[key]=(translatedConsequenceList.join(", "))
+                        }
+                    }
+                }
+            }
+
+            render(status:200, contentType:"application/json") {
+                [variant:jsonObject]
+            }
+
+        }
+    }
+    def variantAndDsAjax() {
+        String variantToStartWith = params.varid
+        String dataSet = params.dataSet
+        if (variantToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveVariantInfoByNameAndDs (variantToStartWith.trim(),dataSet)
+            if (jsonObject.variants) {
+                for (List variant in jsonObject.variants){
+                    for (Map field in variant){
+                        String key = field.keySet()[0]
+                        String value = field.values()[0]
+                        if (  ( (key == "Consequence")||
+                                (key == "SIFT_PRED")||
+                                (key == "PolyPhen_PRED") ) &&
+                                ( value != null) ){
                             List<String> consequenceList = value.tokenize(",")
                             List<String> translatedConsequenceList = []
                             for (String consequence in consequenceList){
