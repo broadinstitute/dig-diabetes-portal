@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg
 
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionController {
@@ -25,6 +26,11 @@ class RegionController {
             if ((startExtent<0) ||(endExtent<0)) {
                 encounteredErrors = true
             }
+            List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(metaDataService?.getDefaultPhenotype(),
+                    'GWAS',metaDataService.getDataVersion(),'')
+            List<SampleGroup> orderedSampleGroupList = sampleGroupList.sort{ it.subjectsNumber }
+            SampleGroup preferredSampleGroup = orderedSampleGroupList.last()
+
             if (!encounteredErrors){
                 // Grails/Groovy does not seem to play nicely with JSON
                 ArrayList<String> query = [
@@ -34,8 +40,8 @@ class RegionController {
                         comparator: '='
                     ] as JSONObject).toString(),
                     ([
-                        phenotype: 'T2D',
-                        dataset: 'GWAS_DIAGRAM_'+metaDataService.getDataVersion(),
+                        phenotype: metaDataService?.getDefaultPhenotype(),
+                        dataset: preferredSampleGroup.systemId,
                         prop: 'P_VALUE',
                         value: '1',
                         comparator:'<'
