@@ -4,29 +4,25 @@
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.Gaulton_2016_NatGenet"></g:message><br>
-<g:message code="informational.shared.publications.Gaulton_2016_NatGenet.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+<g:message code="informational.shared.publications.Gaulton_2016_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Gaulton_2016_NatGenet.citation"></g:message> </div>
 </div></p>
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.Wessel_2015_NatCommun"></g:message><br>
-<g:message code="informational.shared.publications.Wessel_2015_NatCommun.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+<g:message code="informational.shared.publications.Wessel_2015_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Wessel_2015_NatCommun.citation"></g:message></div>
 </div></p>
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.Ng_2014_PlOSGenet"></g:message><br>
-<g:message code="informational.shared.publications.Ng_2014_PlOSGenet.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+<g:message code="informational.shared.publications.Ng_2014_PlOSGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Ng_2014_PlOSGenet.citation"></g:message></div>
 </div></p>
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.Tayo_2011_PlOS1"></g:message><br>
-<g:message code="informational.shared.publications.Tayo_2011_PlOS1.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+<g:message code="informational.shared.publications.Tayo_2011_PlOS1.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Tayo_2011_PlOS1.citation"></g:message></div>
 </div></p>
 
@@ -69,22 +65,18 @@
 
 <h4>Overview of analysis results</h4>
 <p><g:message code="informational.data.overview.BioMe1"></g:message>
-    (<g:message code="informational.shared.publications.Morris_2012_NatGenet.author"></g:message>
-    <g:message code="informational.shared.publications.etal"></g:message>
+    (<g:message code="informational.shared.publications.Morris_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <g:message code="informational.shared.publications.Morris_2012_NatGenet"></g:message>)
 </p>
 <p><g:message code="informational.data.overview.BioMe2"></g:message>
-(<g:message code="informational.shared.publications.Dupuis_2010_NatGenet.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+(<g:message code="informational.shared.publications.Dupuis_2010_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <g:message code="informational.shared.publications.Dupuis_2010_NatGenet"></g:message>;
 
-<g:message code="informational.shared.publications.Scott_2012_NatGenet.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+<g:message code="informational.shared.publications.Scott_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <g:message code="informational.shared.publications.Scott_2012_NatGenet"></g:message>).
 
 <p><g:message code="informational.data.overview.BioMe3"></g:message>
-    <g:message code="informational.shared.publications.Soranzo_2010_Diabetes.author"></g:message>
-<g:message code="informational.shared.publications.etal"></g:message>
+    <g:message code="informational.shared.publications.Soranzo_2010_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
     <g:message code="informational.shared.publications.Soranzo_2010_Diabetes"></g:message><g:message code="informational.data.overview.BioMe4"></g:message></p>
 
 <h4>Detailed reports</h4>
