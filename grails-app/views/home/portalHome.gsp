@@ -233,11 +233,11 @@
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
             <div style="margin: 0 10px 10px 10px">
                 <label style="display: inline; padding-right: 15px"> View data at
-                    <span style="font-weight: bold" id="distributedKBString">${g.distributedKBString()}</span>
+                    %{--<span style="font-weight: bold" id="distributedKBString">${g.distributedKBString()}</span>--}%
                 </label>
                 <select name="chooseDistributedKB" id="chooseDistributedKB" class="form-control input-sm"
                         style="display: inline; width:100px">
-                    <option value="Broad" <%= (g.distributedKBString()=='Broad')? 'selected':'' %> >Broad DCC</option>
+                    <option value="Broad DCC" <%= (g.distributedKBString()=='Broad')? 'selected':'' %> >Broad DCC</option>
                     <option value="EBI" <%= (g.distributedKBString()=='EBI')? 'selected':'' %> >EBI</option>
                 </select>
             </div>
