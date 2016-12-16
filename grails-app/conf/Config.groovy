@@ -133,10 +133,28 @@ if (grails.config.locations.isEmpty()){
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
 
 // load balancers with multiple servers behind them
+/*
 t2dProdLoadBalancedServer {
     base = 'http://dig-api-prod.broadinstitute.org/'
     name =  'prod/'
     path = 'gs/'
+}
+// EBI
+t2dProdLoadBalancedServer {
+    base = 'https://www.ebi.ac.uk/'
+    name =  'ega/t2d/dig-genome-store/'
+    path = 'gs/'
+}
+*/
+t2dDistributedLocalhostServer {
+    base = 'http://localhost:8090/'
+    name =  'dccservices/'
+    path = 'distributed/'
+}
+t2dProdLoadBalancedServer {
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
+    name =  'dccservices/'
+    path = 'distributed/'
 }
 t2dQaLoadBalancedServer {
     base = 'http://dig-api-qa.broadinstitute.org/'
