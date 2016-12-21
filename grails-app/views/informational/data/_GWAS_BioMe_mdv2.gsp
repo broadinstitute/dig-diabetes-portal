@@ -64,7 +64,8 @@
 <p><g:message code="informational.data.exptsumm.BioMe4"></g:message></p>
 
 <h4>Overview of analysis results</h4>
-<p><g:message code="informational.data.overview.BioMe1"></g:message>
+<p><g:message code="informational.data.overview.BioMe1a"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe1b"></g:message>
     (<g:message code="informational.shared.publications.Morris_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <g:message code="informational.shared.publications.Morris_2012_NatGenet"></g:message>)
 </p>
