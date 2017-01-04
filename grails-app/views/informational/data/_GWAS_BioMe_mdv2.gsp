@@ -76,8 +76,7 @@
 <g:message code="informational.shared.publications.Scott_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <g:message code="informational.shared.publications.Scott_2012_NatGenet"></g:message>).
 
-<p><g:message code="informational.data.overview.BioMe3"></g:message>
-    <g:message code="informational.shared.publications.Soranzo_2010_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<p><g:message code="informational.data.overview.BioMe3"></g:message><g:message code="informational.shared.publications.Soranzo_2010_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
     <g:message code="informational.shared.publications.Soranzo_2010_Diabetes"></g:message><g:message code="informational.data.overview.BioMe4"></g:message></p>
 
 <h4>Detailed reports</h4>
