@@ -214,6 +214,12 @@ t2dAwsStage01RestServer {
     path = 'gs/'
 }
 
+toddServer {
+    base = 'http://dig-prod.broadinstitute.org:8087/'
+    name =  'todd/'
+    path = 'gs/'
+}
+
 t2dLocalhostRestServer {
     base = 'http://localhost:8888/'
     name =  'dig-genome-store/'

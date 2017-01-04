@@ -210,29 +210,6 @@ class SystemController {
             }
         }
 
-        /*
-        Boolean metadataOverrideHasBeenRequested = sharedToolsService.getMetadataOverrideStatus ()
-        if (metadataOverrideStatus == "forceIt") {
-            if (metadataOverrideHasBeenRequested == false) {
-                sharedToolsService.setMetadataOverrideStatus(1)
-                // DIGP_47: adding in new medatata data structure service
-                this.metaDataService.setForceProcessedMetadataOverride(1)
-                flash.message = "You have scheduled an override to the metadata cache. The next time the metadata is requested the cache will be reloaded"
-            } else {
-                flash.message = "But the metadata cache was already scheduled!"
-            }
-        } else {
-            // DIGP-170: switching test below to (metadataOverrideHasBeenRequested == true)
-            if (metadataOverrideHasBeenRequested == true) {
-                sharedToolsService.setForceMetadataOverride(0)
-                // DIGP_47: adding in new medatata data structure service
-                this.metaDataService.setForceProcessedMetadataOverride(0)
-                flash.message = "you have rejected the request to update the metadata. "
-            } else {
-                flash.message = "But there was no override in place to cancel!"
-            }
-        }
-        */
         forward(action: "systemManager")
     }
 
@@ -383,6 +360,13 @@ class SystemController {
         } else  if (restServer == 'aws02restserver')  {
             if (!(currentServer == 'aws02restserver')) {
                 restServerService.goWithTheAws02RestServer()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        }else  if (restServer == 'toddServer')  {
+            if (!(currentServer == 'toddServer')) {
+                restServerService.goWithToddServer()
                 flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"

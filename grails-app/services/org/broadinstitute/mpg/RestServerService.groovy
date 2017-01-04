@@ -36,6 +36,7 @@ class RestServerService {
     SqlService sqlService
 
     private String PROD_LOAD_BALANCED_SERVER = ""
+    private String TODD_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
     private String DEV_01_SERVER = ""
@@ -153,6 +154,8 @@ class RestServerService {
         // 'stage aws01'
         AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
 
+        TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
+
         //
         //
         BASE_URL = grailsApplication.config.server.URL
@@ -198,6 +201,10 @@ class RestServerService {
 
     public String getProdLoadBalanced() {
         return PROD_LOAD_BALANCED_SERVER;
+    }
+
+    public String getToddServer() {
+        return TODD_SERVER;
     }
 
     public String getQaLoadBalanced() {
@@ -293,6 +300,10 @@ class RestServerService {
 
     public void goWithTheAws02RestServer() {
         pickADifferentRestServer(AWS02_REST_SERVER)
+    }
+
+    public void goWithToddServer() {
+        pickADifferentRestServer(TODD_SERVER)
     }
 
     public void goWithTheDevServer() {

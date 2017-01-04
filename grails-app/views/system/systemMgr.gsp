@@ -155,6 +155,15 @@
 
                             </div>
 
+                            <div class="radio">
+                                <label>
+                                    <input id="toddServer" type="radio" name="datatype" value="toddServer"
+                                        <%=restServer.getCurrentServer()==restServer.getToddServer()?" checked ":"" %>  />
+                                    <g:message code="system.radio.rest_server.todd" /> (${restServer.getToddServer()})
+                                </label>
+
+                            </div>
+
                          </div>
                     </div>
                     <div class="col-md-3"></div>
@@ -185,6 +194,7 @@
                                 <li style="padding: 10px"><a href="${restServer.getProdLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getProdLoadBalanced()} cache</a></li>
                                 <li style="padding: 10px"><a href="http://dig-prod-01.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-01.broadinstitute.org:8888/prod/gs cache</a></li>
                                 <li style="padding: 10px"><a href="http://dig-prod-02.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-02.broadinstitute.org:8888/prod/gs cache</a></li>
+                                <li style="padding: 10px"><a href="${restServer.getToddServer()}reloadCache" class="btn btn-warning">reset ${restServer.getToddServer()} cache</a></li>
                             </ul>
                         </div>
                     </div>
