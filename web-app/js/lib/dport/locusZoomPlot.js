@@ -143,9 +143,8 @@ var mpgSoftware = mpgSoftware || {};
             var phenotype = lzParameters.phenotype;
             var localDataSet = lzParameters.dataSet;
             var propertyName = lzParameters.propertyName;
-            var phenotype = lzParameters.phenotype;
             var dataSet = dataSetName;
-            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype) {
+            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype,dataSetName) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -153,7 +152,7 @@ var mpgSoftware = mpgSoftware || {};
                         "start=" + state.start + "&" +
                         "end=" + state.end + "&" +
                         "phenotype=" + phenotype + "&" +
-                        "dataset=" + dataSet + "&" +
+                        "dataset=" + dataSetName + "&" +
                         "propertyName=" + propertyName + "&" +
                         "datatype="+ makeDynamic;
                     if (state.model.covariates.length){
@@ -171,7 +170,7 @@ var mpgSoftware = mpgSoftware || {};
                     return url;
                 }
             }, "BroadT2D");
-            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, phenotype));
+            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, phenotype,dataSetName));
 
             var layout = (function (variantInfoLink) {
                 var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
@@ -180,12 +179,11 @@ var mpgSoftware = mpgSoftware || {};
                 if ((typeof makeDynamic !== 'undefined') &&
                     (makeDynamic==='dynamic')){
                     toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
-                    //toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditionOnVariant('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
                 }
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
                 return {
                     id: phenotype+dataSetName,
-                    title: lzParameters.description+" ("+makeDynamic+")",
+                    title: {text:lzParameters.description+" ("+makeDynamic+")"},
                     description: phenotype,
                     y_index: -1,
                     min_width: 400,

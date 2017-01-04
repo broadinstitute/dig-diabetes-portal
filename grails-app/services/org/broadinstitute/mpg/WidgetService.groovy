@@ -447,7 +447,7 @@ class WidgetService {
 
 
     private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), 'Mixed')
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         if (sortedSampleGroup.size()>0){
@@ -457,23 +457,6 @@ class WidgetService {
         }
         return holdingStructure
     }
-
-
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordForAnscestry (HashMap<String,HashMap<String,String>> holdingStructure,
-                                                                                                          String phenotype,
-                                                                                                          String ancestry ){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), ancestry)
-        // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
-        List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
-        if (sortedSampleGroup.size()>0){
-            SampleGroup chosenSampleGroup = sortedSampleGroup.first()
-            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
-            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
-        }
-        return holdingStructure
-    }
-
-
 
 
 
@@ -491,13 +474,7 @@ class WidgetService {
             buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
         }
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
-            if (distributedKB != 'EBI'){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-            } else {
-                buildSinglePhenotypeDataSetPropertyRecordForAnscestry(returnValue,phenotype.name,'European')
-            }
-
-
+            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
         }
         return returnValue
     }

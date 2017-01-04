@@ -413,71 +413,80 @@ class TraitController {
         }
 
         JsonSlurper slurper = new JsonSlurper()
-        List strokeDefaultDataSources = [
-                [
-                        type: 'gwas',
-                        trait: 'Stroke_all',
-                        dataset: 'GWAS_Stroke_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'Stroke'
-                ],
-                [
-                        type: 'gwas',
-                        trait: 'Stroke_deep',
-                        dataset: 'GWAS_Stroke_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'Stroke deep'
-                ],
-                [
-                        type: 'gwas',
-                        trait: 'Stroke_lobar',
-                        dataset: 'GWAS_Stroke_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'Stroke lobar'
-                ]
-        ];
-        List t2dDefaultDataSources = [
-                [
-                        type: 'gwas',
-                        trait: 'T2D',
-                        dataset: 'ExSeq_17k_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_EMMAX_FE_IV_17k',
-                        name: 'T2D (exome sequencing)'
-                ],
-                [
-                        type: 'gwas',
-                        trait: 'FG',
-                        dataset: 'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'fasting glucose'
-                ],
-                [
-                        type: 'gwas',
-                        trait: 'FI',
-                        dataset: 'GWAS_MAGIC_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'fasting insulin'
-                ]
-        ];
-        List ebiDefaultDataSources = [
-                [
-                        type: 'gwas',
-                        trait: 'FG',
-                        dataset: 'GWAS_OxBB_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'fasting glucose'
-                ],
-                [
-                        type: 'gwas',
-                        trait: 'BMI',
-                        dataset: 'GWAS_OxBB_'+metaDataService.getDataVersion(),
-                        pvalue: 'P_VALUE',
-                        name: 'Body mass index'
-                ]
-        ];
+        List strokeDefaultDataSources = []
+//                [
+//                        type: 'gwas',
+//                        trait: 'Stroke_all',
+//                        dataset: 'GWAS_Stroke_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'Stroke'
+//                ],
+//                [
+//                        type: 'gwas',
+//                        trait: 'Stroke_deep',
+//                        dataset: 'GWAS_Stroke_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'Stroke deep'
+//                ],
+//                [
+//                        type: 'gwas',
+//                        trait: 'Stroke_lobar',
+//                        dataset: 'GWAS_Stroke_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'Stroke lobar'
+//                ]
+//        ];
+        List t2dDefaultDataSources = []
+//                [
+//                        type: 'gwas',
+//                        trait: 'T2D',
+//                        dataset: 'ExSeq_17k_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_EMMAX_FE_IV_17k',
+//                        name: 'T2D (exome sequencing)'
+//                ],
+//                [
+//                        type: 'gwas',
+//                        trait: 'FG',
+//                        dataset: 'GWAS_MAGIC_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'fasting glucose'
+//                ],
+//                [
+//                        type: 'gwas',
+//                        trait: 'FI',
+//                        dataset: 'GWAS_MAGIC_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'fasting insulin'
+//                ]
+//        ];
+        List ebiDefaultDataSources = []
+//                [
+//                        type: 'gwas',
+//                        trait: 'FG',
+//                        dataset: 'GWAS_OxBB_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'fasting glucose'
+//                ],
+//                [
+//                        type: 'gwas',
+//                        trait: 'BMI',
+//                        dataset: 'GWAS_OxBB_'+metaDataService.getDataVersion(),
+//                        pvalue: 'P_VALUE',
+//                        name: 'Body mass index'
+//                ]
+//        ];
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> staticPhenotypeMap = phenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->phenotypeBean.dataType=='static'}
+        t2dDefaultDataSources.addAll(staticPhenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->( phenotypeBean.key=='T2D'||
+                                                                                                                                phenotypeBean.key=='FG'||
+                                                                                                                                phenotypeBean.key=='FI')} )
+        strokeDefaultDataSources.addAll(staticPhenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->(  phenotypeBean.key=='Stroke_all'||
+                                                                                                                                    phenotypeBean.key=='Stroke_deep'||
+                                                                                                                                    phenotypeBean.key=='Stroke_lobar')} )
+        ebiDefaultDataSources.addAll(staticPhenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->( phenotypeBean.key=='FG'||
+                                                                                                                                phenotypeBean.key=='BMI')} )
+
         String portalType = g.portalTypeString() as String
         String distributedKb = g.distributedKBString() as String
         List dataSources = []
@@ -500,7 +509,7 @@ class TraitController {
 //        if (defaultDataSources) {
             render(status: 200, contentType: "application/json") {
                 [allSources:slurper.parseText(convertDynamicStructToJson(staticPhenotypeMap)),
-                defaultTracks:slurper.parseText(convertStaticStructToJson(defaultDataSources))]
+                defaultTracks:slurper.parseText(convertDynamicStructToJson(defaultDataSources))]
             }
 //        } else {
 //            render(status: 300, contentType: "application/json")
