@@ -84,12 +84,12 @@
 <p>AMP-DCC Data Analysis Report (<a href="">download PDF</a>)</p>
 <p>Genotype Data Quality Control Report (<a href="">download PDF</a>)</p>
 
-<h4>Accessing BioMe GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing BioMe AMP T2D GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.BioMe"></g:message></p>
 
-<h4>Future plans for BioMe GWAS data in the T2D Knowledge Portal</h4>
+<h4>Future plans for BioMe AMP T2D GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.future.BioMe"></g:message></p>
 
-<h4>External Links to BioMe GWAS data</h4>
+<h4>External Links to BioMe AMP T2D GWAS data</h4>
 <p><g:message code="informational.data.external.BioMe"></g:message></p>
 </div>
