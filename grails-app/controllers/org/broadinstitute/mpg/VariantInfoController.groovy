@@ -373,6 +373,7 @@ def retrieveSampleSummary (){
         // params.dataSet=="1" // where 1->13k, 2->26k"
         // params.variantName=="SLC30A8" // string representing gene name
 
+        String portalType = g.portalTypeString() as String
 
         // Really?  Different names for phenotypes?  Well, okay, let's translate them
         String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
@@ -384,7 +385,19 @@ def retrieveSampleSummary (){
         JSONObject filtersJsonObject = slurper.parseText(params.filters)
         JSONArray phenotypeFilterValues = slurper.parseText(params.compoundedFilterValues) as JSONArray
         JSONArray variantNameJsonList = slurper.parseText(params.variantList) as JSONArray
+
         String dataset = params.dataset
+        /***
+         * Superkludge:  currently the burden server can only take preset data versions.  We are going to convert whatever data set we get
+         * to a predefined MDV number until we can find a more general solution
+         */
+        if (portalType == 't2d'){
+            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
+        } else if (portalType == 'stroke'){
+            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_STROKE}")
+        }
+
+
         // cast the parameters
         String variantName = params.variantName
         List<String> variantNameList = []

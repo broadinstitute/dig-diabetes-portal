@@ -524,20 +524,12 @@ class WidgetService {
         Property property
         Boolean attemptDynamicCall =  (dataType == 'dynamic')
 
-//        if (metaDataService.portalTypeFromSession!='t2d'){ // stroke must be static only
-//            attemptDynamicCall = false
-//            HashMap phenoDataSet = retrievePhenotypeDataSetCombo( phenotype,
-//                    dataset )
-//            phenotype = phenoDataSet.phenotype
-//            dataset = phenoDataSet.dataSet
-//        }
-
         // build the LZ json builder
         if (attemptDynamicCall) {
             if (metaDataService.portalTypeFromSession=='t2d') {
-                locusZoomJsonBuilder = new LocusZoomJsonBuilder("ExSeq_17k_mdv23", phenotype, "P_FIRTH_FE_IV");
+                locusZoomJsonBuilder = new LocusZoomJsonBuilder("ExSeq_17k_mdv${restServerService.SAMPLE_DATA_VERSION_T2D}", phenotype, "P_FIRTH_FE_IV");
             } else if (metaDataService.portalTypeFromSession=='stroke') {
-                locusZoomJsonBuilder = new LocusZoomJsonBuilder("GWAS_Stroke_mdv70", phenotype, "P_VALUE");
+                locusZoomJsonBuilder = new LocusZoomJsonBuilder("GWAS_Stroke_mdv${restServerService.SAMPLE_DATA_VERSION_STROKE}", phenotype, "P_VALUE");
             }
         } else { // option while we get real refs working
             locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName );
