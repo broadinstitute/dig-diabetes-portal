@@ -54,7 +54,7 @@ public class ExperimentBean implements Experiment {
         return institution;
     }
 
-    public void setInstitution(String technology) {
+    public void setInstitution(String institution) {
         this.institution = institution;
     }
 

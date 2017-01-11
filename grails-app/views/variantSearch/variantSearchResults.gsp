@@ -70,6 +70,12 @@
                 // just give up
                 return;
             }
+            if (data.errorMsg != ''){
+                alert(data.errorMsg);
+                var loader = $('#spinner');
+                loader.hide();
+                return;
+            }
             var additionalProps = encodeURIComponent(additionalProperties.join(':'));
             var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data);
 

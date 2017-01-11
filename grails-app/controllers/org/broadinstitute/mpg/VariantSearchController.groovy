@@ -5,6 +5,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
@@ -754,16 +755,112 @@ class VariantSearchController {
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
 
+
+        Closure generateInstitutionMap = { propertyList ->
+            LinkedHashMap<String,Integer> institutionMap = [:]
+            for (Property property in propertyList){
+                if (property?.parent?.parent){
+                    String institution = metaDataService.getInstitutionNameFromSampleGroupName(property?.parent?.parent?.systemId)
+                    if (institution){
+                        if (institutionMap.containsKey(institution)){
+                            institutionMap[institution] += 1
+                        } else {
+                            institutionMap[institution] = 1
+                        }
+                    }
+                }
+            }
+            return institutionMap
+        }
+
+
         log.debug "variantSearch variantSearchAjax = ${filters}"
 
         // build up filters our data query
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
+
+        /***
+         * Temporary workaround:  the federated KB does not yet support cross institution filtering.  Detect those requests and prohibit them.
+         */
+        String errorMsg = ''
+        LinkedHashMap<String,Integer> institutionMap = generateInstitutionMap(getDataQueryHolder.getDataQuery.filterList*.property)
+
+//        for (Property property in getDataQueryHolder.getDataQuery.filterList*.property){
+//            String institution = metaDataService.getInstitutionNameFromSampleGroupName(property?.parent?.parent?.systemId)
+//            if (institution){
+//                if (institutionMap.containsKey(institution)){
+//                    institutionMap[institution] += 1
+//                } else {
+//                    institutionMap[institution] = 1
+//                }
+//            }
+//        }
+        if (institutionMap.size()>1){
+            Map sortedInstitutionMap = institutionMap.sort { a, b -> b.value <=> a.value }
+            String key
+            Integer value
+            for (Map.Entry<String, ArrayList<String>> entry : sortedInstitutionMap.entrySet()) {
+                key = entry.getKey();
+                value = entry.getValue();
+            }
+            errorMsg = "Cross institution filters are currently disallowed.  Please return to the Search page and remove filters not from ${key}"
+            render(status: 200, contentType: "application/json") {
+                [
+
+                        errorMsg: errorMsg
+                ]
+            }
+            return
+        }
+
         // determine columns to display
         LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
         JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
 
         // make the call to REST server
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
+
+        /***
+         * Temporary workaround:  the federated KB does not yet support cross institution filtering.  Detect those requests and prohibit them.
+         */
+        errorMsg = ''
+        institutionMap = generateInstitutionMap(getDataQueryHolder.getDataQuery.queryPropertyMap.values())
+//        for (Property property in getDataQueryHolder.getDataQuery.queryPropertyMap.values()){
+//            if (property?.parent?.parent){
+//                String institution = metaDataService.getInstitutionNameFromSampleGroupName(property?.parent?.parent?.systemId)
+//                if (institution){
+//                    if (institutionMap.containsKey(institution)){
+//                        institutionMap[institution] += 1
+//                    } else {
+//                        institutionMap[institution] = 1
+//                    }
+//                }
+//            }
+//        }
+        if (institutionMap.size()>1){
+            Map sortedInstitutionMap = institutionMap.sort { a, b -> b.value <=> a.value }
+            String key
+            Integer value
+            for (Map.Entry<String, ArrayList<String>> entry : sortedInstitutionMap.entrySet()) {
+                key = entry.getKey();
+                value = entry.getValue();
+            }
+            errorMsg = "Properties can currently retrieved only from a single institution.  Please return to the Search page and restart your search"
+            render(status: 200, contentType: "application/json") {
+                [
+
+                        errorMsg: errorMsg
+                ]
+            }
+            return
+        }
+
+
+
+
+
+
+
         // get the number of variants that this query will return
         // do this here so it doesn't have to happen after every resort or change in the table
         getDataQueryHolder.isCount(true)
@@ -810,7 +907,8 @@ class VariantSearchController {
                     datasetStructure        : datasetStructure,
                     cProperties             : commonPropertiesJsonObject,
                     translationDictionary   : translationDictionary,
-                    numberOfVariants        : dataJsonObjectCount.numRecords
+                    numberOfVariants        : dataJsonObjectCount.numRecords,
+                    errorMsg                : errorMsg
             ]
         }
 
