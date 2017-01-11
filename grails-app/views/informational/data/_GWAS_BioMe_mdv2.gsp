@@ -82,7 +82,7 @@
 <h4>Detailed reports</h4>
 
 <p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase1_2017_0101.pdf" target="_blank">download PDF</a>)</p>
-<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_0928.pdf" target="_blank">download PDF</a>)</p>
+<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf" target="_blank">download PDF</a>)</p>
 
 <h4>Accessing BioMe AMP T2D GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.BioMe"></g:message></p>
