@@ -759,8 +759,17 @@ class VariantSearchController {
         Closure generateInstitutionMap = { propertyList ->
             LinkedHashMap<String,Integer> institutionMap = [:]
             for (Property property in propertyList){
-                if (property?.parent?.parent){
-                    String institution = metaDataService.getInstitutionNameFromSampleGroupName(property?.parent?.parent?.systemId)
+                String dataSetName
+
+                if (property?.parent instanceof SampleGroup) {
+                    // if the name is found on the first level parent then we have a d property to deal with
+                    dataSetName =  property.parent.systemId
+                } else if (property?.parent instanceof org.broadinstitute.mpg.diabetes.metadata.Phenotype) {
+                    // the only other option is a p property
+                    dataSetName =  property.parent.parent?.systemId
+                } // else if the property doesn't have a parent than it is a common property, and we don't need to consider it
+                if (dataSetName){
+                    String institution = metaDataService.getInstitutionNameFromSampleGroupName(dataSetName)
                     if (institution){
                         if (institutionMap.containsKey(institution)){
                             institutionMap[institution] += 1
