@@ -29,8 +29,9 @@
     <h4>Data set phenotypes</h4>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
-        <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
-        <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
+        <li><g:message code="informational.shared.traits.fasting_glucose_age-sex"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c_age-sex"></g:message></li>
+        <li><g:message code="informational.shared.traits.HbA1c_age-sex-BMI"></g:message></li>
     </ul>
 
     <h4>Data set subjects</h4>
