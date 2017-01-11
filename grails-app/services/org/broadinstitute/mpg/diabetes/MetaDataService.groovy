@@ -383,6 +383,29 @@ class MetaDataService {
     }
 
 
+    public String getInstitutionNameFromSampleGroupName(String sampleGroupId){
+        SampleGroup  sampleGroup = getSampleGroupByName (sampleGroupId)
+        Experiment experiment = getExperimentFromSampleGroup( sampleGroup)
+        return experiment.getInstitution()
+    }
+
+
+
+
+
+    public Experiment getExperimentFromSampleGroup(SampleGroup sampleGroup){
+        Experiment experiment
+
+        if (sampleGroup){
+            DataSet dataSet = sampleGroup.getParent()
+            while (!( dataSet instanceof Experiment )){
+                dataSet = dataSet?.getParent()
+            }
+            experiment = dataSet as Experiment
+        }
+
+        return experiment
+    }
 
 
     public SampleGroup  getSampleGroupByName(String sampleGroupId){
