@@ -60,8 +60,13 @@
                         <p class="dataset-name">${ g.message(code: 'metadata.' + sg[0].getSystemId()) }
                             <span class="dataset-summary">
 
-                <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP') || sg[0]?.getSystemId()?.toString()?.contains('BioMe')}">
+                <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('BioMe')}">
                                 <span class="data-status-early-phase1-access">Early Access Phase 1</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
+                                </span>
+                            </g:if>
+
+                            <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP')}">
+                                <span class="data-status-early-phase1-access">Early Access Phase 2</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
                             </g:if>
 
