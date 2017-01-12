@@ -57,27 +57,12 @@
         $(document).ready(function() {
             // call this inside the ready function because the page is still loading when the the parent
             // ajax calls returns
-            var portalType = "t2d";
-            var portalDescription = 'Type 2 Diabetes';
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            portalType = "stroke";
-            portalDescription = 'All stroke';
-            </g:if>
             <g:renderNotBetaFeaturesDisplayedValue>
-                <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
                         "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
                         '${lzOptions.first().dataType}');
-                </g:if>
-                <g:else>
-                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                        '${lzOptions.first().dataType}');
-                </g:else>
             </g:renderNotBetaFeaturesDisplayedValue>
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();

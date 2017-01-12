@@ -18,6 +18,8 @@ class VariantInfoController {
     BurdenService burdenService
     WidgetService widgetService
     MetaDataService metaDataService
+    def grailsApplication
+
 
     def index() { }
 
@@ -29,24 +31,28 @@ class VariantInfoController {
         String locale = RequestContextUtils.getLocale(request)
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
+        String locusZoomDataset
         String portalType = g.portalTypeString() as String
-        String  distributedKB = g.distributedKBString() as String
-        String locusZoomDataset = ""
         String phenotype
+
+        locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
+
+
+
         // kludge alert
-        if (distributedKB == 'EBI') {
-            locusZoomDataset = "GWAS_OxBB_"+metaDataService.getDataVersion()
-        } else {
-            if (portalType=='t2d'){
-                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-                phenotype = 'T2D'
-            }else if (portalType=='stroke'){
-                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
-                phenotype = 'Stroke_all'
-            } else {
-                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-            }
-        }
+//        if (distributedKB == 'EBI') {
+//            locusZoomDataset = "GWAS_OxBB_"+metaDataService.getDataVersion()
+//        } else {
+//            if (portalType=='t2d'){
+//                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+//                phenotype = 'T2D'
+//            }else if (portalType=='stroke'){
+//                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
+//                phenotype = 'Stroke_all'
+//            } else {
+//                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+//            }
+//        }
        // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
             // if defined, lzId will look like: 8:118184783_C/T
@@ -249,8 +255,6 @@ class VariantInfoController {
     def sampleMetadataExperimentAjax() {
         List<SampleGroup> sampleGroupList
 
-       // if (g.portalTypeString()?.equals("stroke")){
-
         sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
 
 
@@ -391,11 +395,13 @@ def retrieveSampleSummary (){
          * Superkludge:  currently the burden server can only take preset data versions.  We are going to convert whatever data set we get
          * to a predefined MDV number until we can find a more general solution
          */
-        if (portalType == 't2d'){
-            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
-        } else if (portalType == 'stroke'){
-            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_STROKE}")
-        }
+        grailsApplication.config.portal.data.version.map[portalType]
+        dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${grailsApplication.config.portal.data.version.map[portalType]}")
+//        if (portalType == 't2d'){
+//            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
+//        } else if (portalType == 'stroke'){
+//            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_STROKE}")
+//        }
 
 
         // cast the parameters

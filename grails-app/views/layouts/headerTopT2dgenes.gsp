@@ -26,12 +26,15 @@
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <img src="${resource(dir: 'images/stroke', file:g.message(code:"files.strokeBannerText", default:"R24_logo.png"))}" />
             </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_banner.png"))}" />
+            </g:elseif>
             <g:else>
                 <img src="${resource(dir: 'images', file:g.message(code:"files.t2dBannerText", default:"t2d_logo.png"))}" />
             </g:else>
             <div class="container-fluid dk-t2d-user-banner">
                 <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>'>
-                    <g:message code="portal.language.setting.setSpanish" defaukt="En Español" /></a> |
+                    <g:message code="portal.language.setting.setSpanish" default="En Español" /></a> |
                 <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'>
                     <g:message code="portal.language.setting.setEnglish" default="In English" /></a>
             </div>

@@ -3,7 +3,20 @@
         <sec:ifLoggedIn>
             <sec:ifAllGranted roles="ROLE_ADMIN">
                 <li><g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link></li>
-                <li><g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link></li>
+                <li>
+                    <script>
+                        function aa(selector){
+                            window.open('<g:createLink controller="home" action="pickPortal"/>'+'?portal='+$(selector).val(), '_self');
+                        };
+                    </script>
+                    <select name="portal_typeSelector" style="background-color: #588fd3; padding-top: 0px; margin: 2px; font-weight: bold"
+                    onchange="aa(this)">
+                        <option value="t2d" <%=(g.portalTypeString()=='t2d')?"selected":"" %>>T2D</option>
+                        <option value="stroke" <%=(g.portalTypeString()=='stroke')?"selected":"" %>>Stroke</option>
+                        <option value="mi" <%=(g.portalTypeString()=='mi')?"selected":"" %>>MI</option>
+                    </select>
+                    %{--<g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>--}%
+                </li>
             </sec:ifAllGranted>
             <sec:ifAllGranted roles="ROLE_SYSTEM">
                 <li><g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link></li>

@@ -41,14 +41,7 @@ class HomeController {
      *
      */
     def pickPortal = {
-        String portalType
-
-        // if stroke, then switch or vice versa
-        if (g.portalTypeString()?.equals("stroke")) {
-            portalType = "t2d"
-        } else {
-            portalType = "stroke"
-        }
+        String portalType = params.portal
 
         // log
         log.info("setting portal type: " + portalType + " for session: " + request.getSession());
@@ -59,30 +52,8 @@ class HomeController {
 
         // forward to index page
         redirect(action: 'index')
-    }
 
-
-
-    def pickDistributedKb = {
-        String distributedKB = params.distributedKB
-
-
-        // log
-        log.info("setting portal type: " + distributedKB + " for session: " + request.getSession());
-
-        if (distributedKB != null) {
-            request?.getSession()?.setAttribute("distributedKB", distributedKB)
-            if (distributedKB == 'EBI'){
-                restServerService.explicitlySetRestServer( "https://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/" )
-            } else {
-                restServerService.resetCurrentRestServer()
-            }
-            metaDataService.forceImmediateMetadataReload()
-        }
-
-        // forward to index page
-        redirect(action: 'portalHome')
-    }
+     }
 
 
 

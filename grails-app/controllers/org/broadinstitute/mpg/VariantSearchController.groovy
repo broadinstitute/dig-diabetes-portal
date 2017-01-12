@@ -755,7 +755,9 @@ class VariantSearchController {
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
 
-
+        /***
+         * package up as much of the kludgy workaround needed to avoid cross institution joins as we can
+         */
         Closure generateInstitutionMap = { propertyList ->
             LinkedHashMap<String,Integer> institutionMap = [:]
             for (Property property in propertyList){
@@ -793,17 +795,6 @@ class VariantSearchController {
          */
         String errorMsg = ''
         LinkedHashMap<String,Integer> institutionMap = generateInstitutionMap(getDataQueryHolder.getDataQuery.filterList*.property)
-
-//        for (Property property in getDataQueryHolder.getDataQuery.filterList*.property){
-//            String institution = metaDataService.getInstitutionNameFromSampleGroupName(property?.parent?.parent?.systemId)
-//            if (institution){
-//                if (institutionMap.containsKey(institution)){
-//                    institutionMap[institution] += 1
-//                } else {
-//                    institutionMap[institution] = 1
-//                }
-//            }
-//        }
         if (institutionMap.size()>1){
             Map sortedInstitutionMap = institutionMap.sort { a, b -> b.value <=> a.value }
             String key
@@ -834,18 +825,6 @@ class VariantSearchController {
          */
         errorMsg = ''
         institutionMap = generateInstitutionMap(getDataQueryHolder.getDataQuery.queryPropertyMap.values())
-//        for (Property property in getDataQueryHolder.getDataQuery.queryPropertyMap.values()){
-//            if (property?.parent?.parent){
-//                String institution = metaDataService.getInstitutionNameFromSampleGroupName(property?.parent?.parent?.systemId)
-//                if (institution){
-//                    if (institutionMap.containsKey(institution)){
-//                        institutionMap[institution] += 1
-//                    } else {
-//                        institutionMap[institution] = 1
-//                    }
-//                }
-//            }
-//        }
         if (institutionMap.size()>1){
             Map sortedInstitutionMap = institutionMap.sort { a, b -> b.value <=> a.value }
             String key

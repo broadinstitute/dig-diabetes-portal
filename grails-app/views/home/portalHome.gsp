@@ -135,6 +135,9 @@
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <img src="${resource(dir: 'images/stroke', file: g.message(code: "files.strokeFrontHeader", default: "R24_front_header.png"))}" style="width:75%;" />
             </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header.png"))}" />
+            </g:elseif>
             <g:else>
                 <img src="${resource(dir: 'images', file: g.message(code: "files.t2dFrontHeader", default: "t2d_front_header6.png"))}" style="width:75%;" />
             </g:else>
@@ -154,10 +157,15 @@
                     <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; float:right; margin-right: 5%;"><g:message code="mainpage.button.imperative"/> ></button>
                 </div>
                 <div>
-                    <strong><g:message code="site.shared.phrases.examples" />:</strong> <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                    <a href='<g:createLink controller="gene" action="geneInfo"
-                                           params="[id: 'HDAC9']"/>'>HDAC9</a>
-                </g:if>
+                    <strong><g:message code="site.shared.phrases.examples" />:</strong>
+                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <a href='<g:createLink controller="gene" action="geneInfo"
+                                               params="[id: 'HDAC9']"/>'>HDAC9</a>
+                    </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                        <a href='<g:createLink controller="gene" action="geneInfo"
+                                               params="[id: 'CDKN2B']"/>'>CDKN2B</a>
+                    </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="gene" action="geneInfo"
                                                params="[id: 'SLC30A8']"/>'>SLC30A8</a>
@@ -168,6 +176,9 @@
                         <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs2984613']"/>'>rs2984613</a>,
                         <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>
                     </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                        <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs2891168']"/>'>rs2891168</a>,
+                    </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="variantInfo" action="variantInfo"
                                                params="[id: 'rs13266634']"/>'>rs13266634</a>
@@ -178,6 +189,10 @@
                         <a href='<g:createLink controller="region" action="regionInfo"
                                                params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
                     </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                        <a href='<g:createLink controller="region" action="regionInfo"
+                                               params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
+                    </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="region" action="regionInfo"
                                                params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
@@ -211,6 +226,9 @@
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="portal.stroke.about.the.data.text" />
                 </g:if>
+                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <g:message code="portal.mi.about.the.data.text" />
+                </g:elseif>
                 <g:else>
                     <g:message code="about.the.portal.data.text" />
                 </g:else>
@@ -221,6 +239,9 @@
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="portal.stroke.use.citation.itself" />
                 </g:if>
+                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <g:message code="portal.mi.use.citation.itself" />
+                </g:elseif>
                 <g:else>
                     <g:message code="portal.use.citation.itself" />
                 </g:else>
