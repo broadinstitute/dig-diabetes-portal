@@ -19,14 +19,13 @@
 
 <div id="main">
     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-<g:render template="./about_t2d"/>
-
-
+        <g:render template="./about_t2d"/>
     </g:if>
-
+    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+        <g:render template="./about_mi"/>
+    </g:elseif>
     <g:else>
         <g:render template="./about_stroke"/>
-
     </g:else>
 </div>
 

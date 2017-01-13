@@ -11,6 +11,9 @@
     <g:if test="${g.portalTypeString()?.equals('stroke')}">
         <title><g:message code="portal.stroke.header.title.short"/> <g:message code="portal.stroke.header.title.genetics"/></title>
     </g:if>
+    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+        <title><g:message code="portal.mi.header.title.short"/> <g:message code="portal.mi.header.title.genetics"/></title>
+    </g:elseif>
     <g:else>
         <title><g:message code="portal.header.title.short"/> <g:message code="portal.header.title.genetics"/></title>
     </g:else>

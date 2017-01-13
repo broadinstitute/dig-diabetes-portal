@@ -22,6 +22,9 @@
        <g:message code="gene.igv.intro4" default="(GWAS)"/>
     </g:renderT2dGenesSection>
 </g:if>
+<g:elseif  test="${g.portalTypeString()?.equals('mi')}">
+    <g:message code="gene.mi.igv.intro1" default="Use the browser"/>
+</g:elseif>
 <g:else>
     <g:message code="gene.stroke.igv.intro1" default="Use the browser"/>
 </g:else>

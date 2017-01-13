@@ -1,7 +1,9 @@
 package org.broadinstitute.mpg
 
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -17,16 +19,24 @@ class InformationalController {
 
     def data() {
         Set<Experiment> allExperimentsForGivenVersion = []
-
         String currentVersion = metaDataService.getDataVersion()
         List<String> technologies = metaDataService.getTechnologyListByVersion(currentVersion)
 
+        Set<Experiment> allExperiments = metaDataService.getExperimentByVersionAndTechnology("","",metaDataService.METADATA_VARIANT)
+        List versionList = []
+        for (Experiment experiment in allExperiments){
+            versionList << "\"${experiment.version}\""
+        }
+        String listOfVersions = "["+versionList.unique().join(",")+"]"
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray listOfVersionsAsJson = slurper.parseText(listOfVersions)
+
         technologies.each {
-            allExperimentsForGivenVersion.add(metaDataService.getExperimentByVersionAndTechnology(currentVersion, it, 1))
+            allExperimentsForGivenVersion.add(metaDataService.getExperimentByVersionAndTechnology(currentVersion, it, metaDataService.METADATA_VARIANT))
         }
 
         String locale = RequestContextUtils.getLocale(request)
-        render(view: 'data', model: [locale: locale, experiments: allExperimentsForGivenVersion])
+        render(view: 'data', model: [locale: locale, experiments: allExperimentsForGivenVersion, allVersions: listOfVersionsAsJson])
     }
 
     def aboutBeacon() {

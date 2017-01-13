@@ -21,7 +21,9 @@ public class ExperimentByVersionVisitor implements DataSetVisitor {
     public void visit(DataSet dataSet) {
         if (dataSet.getType() == PortalConstants.TYPE_EXPERIMENT_KEY) {
             Experiment tempExperiment = (Experiment)dataSet;
-            if (tempExperiment.getVersion().equalsIgnoreCase(this.versionToSearchFor)) {
+            if ((tempExperiment.getVersion().equalsIgnoreCase(this.versionToSearchFor))||
+                    (this.versionToSearchFor==null)||
+                    (this.versionToSearchFor.length()==0)){
                 this.experimentList.add(tempExperiment);
             }
         } else {

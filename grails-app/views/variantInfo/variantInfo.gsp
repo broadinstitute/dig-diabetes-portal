@@ -180,7 +180,6 @@
             async: true
         }).done(function (data, textStatus, jqXHR) {
 
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 mpgSoftware.variantInfo.initializePage(data,
                     "<%=variantToSearch%>",
                     "<g:createLink controller='trait' action='traitInfo' />",
@@ -189,17 +188,7 @@
                     'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
-            </g:if>
-            <g:else>
-                mpgSoftware.variantInfo.initializePage(data,
-                        "<%=variantToSearch%>",
-                        "<g:createLink controller='trait' action='traitInfo' />",
-                        "<%=restServer%>",
-                        variantSummaryText,
-                        't2d',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
-            </g:else>
+
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
             loading.hide();

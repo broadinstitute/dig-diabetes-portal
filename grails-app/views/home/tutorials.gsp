@@ -56,6 +56,10 @@
                 $(".media").attr("href", "${links.introTutorial}");
                 $(".media").find("iframe").attr("src", "${links.introTutorial}");
             </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                $(".media").attr("href", "${links.miIntroTutorial}");
+                $(".media").find("iframe").attr("src", "${links.miIntroTutorial}");
+            </g:elseif>
             <g:else>
                 $(".media").attr("href", "${links.strokeIntroTutorial}");
                 $(".media").find("iframe").attr("src", "${links.strokeIntroTutorial}");
@@ -67,6 +71,10 @@
                 $(".media").attr("href", "${links.variantFinderTutorial}");
                 $(".media").find("iframe").attr("src", "${links.variantFinderTutorial}");
             </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                $(".media").attr("href", "${links.miVariantFinderTutorial}");
+                $(".media").find("iframe").attr("src", "${links.miVariantFinderTutorial}");
+            </g:elseif>
             <g:else>
                 $(".media").attr("href", "${links.strokeVariantFinderTutorial}");
                 $(".media").find("iframe").attr("src", "${links.strokeVariantFinderTutorial}");
@@ -95,6 +103,9 @@
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
             <a class="media" href="${links.introTutorial}">PDF File</a>
         </g:if>
+        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+            <a class="media" href="${links.miIntroTutorial}">PDF File</a>
+        </g:elseif>
         <g:else>
             <a class="media" href="${links.strokeIntroTutorial}">PDF File</a>
         </g:else>

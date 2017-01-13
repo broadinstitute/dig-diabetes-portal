@@ -119,27 +119,13 @@
 
                             <div class="col-xs-3">
                                 <span class="pull-right">Version filter</span>
-                <sec:ifAllGranted roles="ROLE_SYSTEM">
+
                     <select id="versionDatasetFilter" class="form-control">
-                        <option value="mdv1">mdv1 (T2D)</option>
-                        <option value="mdv2" selected>latest</option>
-                        <option value="mdv3">mdv3 (T2D)</option>
-                        <option value="mdv5">mdv5 (stroke)</option>
+                        <g:each in="${allVersions}" var="ver">
+                            <option value="${ver}">${ver}</option>
+                        </g:each>
                     </select>
-                </sec:ifAllGranted>
-                <sec:ifNotGranted roles="ROLE_SYSTEM">
-                    <select id="versionDatasetFilter" class="form-control" disabled>
-                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                            <option value="mdv5" selected>mdv5 (stroke)</option>
-                        </g:if>
-                        <g:else>
-                            <option value="mdv1">mdv1 (T2D)</option>
-                            <option value="mdv2" selected>latest</option>
-                            <option value="mdv3">mdv3 (T2D)</option>
-                            <option value="mdv5">mdv5 (stroke)</option>
-                        </g:else>
-                    </select>
-                </sec:ifNotGranted>
+
                 </div>
 
                 <div class="col-xs-3">
