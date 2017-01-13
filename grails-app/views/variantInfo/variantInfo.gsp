@@ -237,13 +237,13 @@
 
 
 
-                    <g:renderIfWeHaveSampleDatathereValue>
+                <g:if test="${g.portalTypeString()?.equals('stroke')||g.portalTypeString()?.equals('t2d')}">
 
                         <div class="separator"></div>
 
                         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
 
-                    </g:renderIfWeHaveSampleDatathereValue>
+                    </g:if>
 
 
                     <div class="separator"></div>

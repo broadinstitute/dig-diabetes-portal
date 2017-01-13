@@ -1,0 +1,36 @@
+<div class="panel-body">
+
+    <h4>Publications</h4>
+
+<p><div class="paper">
+</div></p>
+
+<p></p>
+
+<h4>Data set phenotypes</h4>
+
+<ul>
+
+    <li><g:message code="informational.shared.traits.hypertension"></g:message></li>
+</ul>
+
+<h4>Data Set Subjects</h4>
+
+<table class="table table-condensed table-responsive table-striped">
+    <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+
+    <tr><td>0</td><td>4,522</td><td><a onclick="showSection(event)">Oxford BioBank</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">Healthy Caucasians between the ages of 30 to 50 recruited from the Oxfordshire area.</td></tr>
+            </table>
+        </div>
+
+    </td><td><g:message code="metadata.European"></g:message></td></tr>
+</table>
+<h4>Project</h4>
+
+</div>
