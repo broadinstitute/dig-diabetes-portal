@@ -396,7 +396,7 @@ def retrieveSampleSummary (){
          * to a predefined MDV number until we can find a more general solution
          */
         grailsApplication.config.portal.data.version.map[portalType]
-        dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${grailsApplication.config.portal.data.version.map[portalType]}")
+        dataset = dataset?.replaceAll(~/mdv\d+/,"${grailsApplication.config.portal.data.version.map[portalType]}")
 //        if (portalType == 't2d'){
 //            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
 //        } else if (portalType == 'stroke'){

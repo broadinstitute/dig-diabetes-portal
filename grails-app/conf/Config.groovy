@@ -618,6 +618,9 @@ portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" 
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_17k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
 portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
 

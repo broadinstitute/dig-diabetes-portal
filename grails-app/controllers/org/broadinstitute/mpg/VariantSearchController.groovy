@@ -803,7 +803,7 @@ class VariantSearchController {
                 key = entry.getKey();
                 value = entry.getValue();
             }
-            errorMsg = "Cross institution filters are currently disallowed.  Please return to the Search page and remove filters not from ${key}"
+            errorMsg = "Currently, searches in the Oxford BioBank GWAS data set may not be combined with searches in any other data set. Please return to the Search page and modify your search."
             render(status: 200, contentType: "application/json") {
                 [
 
