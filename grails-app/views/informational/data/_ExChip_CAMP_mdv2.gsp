@@ -51,11 +51,11 @@
 <h4>Accessing CAMP data in the T2D Knowledge Portal</h4>
 <p>CAMP data are available:
 <ul>
-<li>On Gene Pages in the Variants & Associations table</li>
-<li>On Variant Pages in the Associations at a glance section and in the Association statistics across traits table</li>
-<li>Via the Variant Finder tool, for the phenotypes T2D, fasting glucose, and fasting insulin</li>
-<li>Via the Genetic Association Interactive Tool (GAIT), which enables custom association analysis for either single variants (available on Variant Pages) or for the set of variants in and near a gene (Interactive burden test, available on Gene Pages)</li>
-</ul></p>
+<li>On <b>Gene Pages</b> in the <b>Variants & Associations</b> table</li>
+<li>On <b>Variant Pages</b> in the <b>Associations at a glance</b> section and in the <b>Association statistics across traits</b> table</li>
+<li>Via the <b>Variant Finder</b> tool, for the phenotypes T2D, fasting glucose, and fasting insulin</li>
+<li>Via the <b>Genetic Association Interactive Tool (GAIT)</b>, which enables custom association analysis for either single variants (available on Variant Pages) or for the set of variants in and near a gene (<b>Interactive burden test</b>, available on Gene Pages)</li>
+<li>From the <b>View full genetic association results for a phenotype</b> search on the Portal home page: first select one of the data set phenotypes, and then on the resulting page, select the CAMP GWAS data set.</li></ul></p>
 
 <h4>Future plans for CAMP data in the T2D Knowledge Portal</h4>
 <ul>
