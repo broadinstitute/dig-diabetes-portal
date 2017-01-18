@@ -139,11 +139,14 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic) {
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId) {
             var phenotype = lzParameters.phenotype;
             var localDataSet = lzParameters.dataSet;
             var propertyName = lzParameters.propertyName;
             var dataSet = dataSetName;
+            var domId = lzGraphicDomId;
+  //          var locusZoomInput = state.chr + ":" + startPosition + "-" + endPosition;
+  //          $(lzGraphicDomId).attr("data-region", locusZoomInput);
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype,dataSetName) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
@@ -390,7 +393,7 @@ var mpgSoftware = mpgSoftware || {};
                     dataSet: dataSetName,
                     propertyName: propName,
                     description: phenoTypeDescr
-                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
+                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId);
 
             }
         };
@@ -444,7 +447,7 @@ var mpgSoftware = mpgSoftware || {};
                     description: phenoTypeDescription,
                     propertyName:phenoPropertyName,
                     dataSet:locusZoomDataset
-                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
+                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {
                     locusZoomPlot.rescaleSVG();

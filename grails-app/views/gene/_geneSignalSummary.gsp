@@ -169,7 +169,7 @@ div.variantBoxHeaders {
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
-                                        '${it.dataType}')">
+                                        '${it.dataType}','#lz-1')">
                                     ${g.message(code: "metadata." + it.name)}
                                 </a>
                             </li>
@@ -189,7 +189,7 @@ div.variantBoxHeaders {
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
-                                        '${it.dataType}')">
+                                        '${it.dataType}','#lz-1')">
                                     ${g.message(code: "metadata." + it.name)}
                                 </a>
                             </li>
@@ -669,13 +669,13 @@ div.variantBoxHeaders {
                 };
                 if (!mpgSoftware.locusZoom.plotAlreadyExists()){
                     mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                            "#lz-1", "#collapseExample", '${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
+                            "#lz-1", "#collapseExample", '${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().dataSet}','${lzOptions.first().propertyName}','junk',
                             '${createLink(controller:"gene", action:"getLocusZoom")}',
                             '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
                 } else {
                     if (typeof hailPhenotypeInfo !== 'undefined') {
                         mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1","#collapseExample",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
+                                "#lz-1","#collapseExample",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().dataSet}','${lzOptions.first().propertyName}','junk',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                                 '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
                     } else {
@@ -815,10 +815,10 @@ div.variantBoxHeaders {
         mpgSoftware.locusZoom.removeAllPanels();
 
 
-                mpgSoftware.locusZoom.resetLZPage('variantInfo', varId, positioningInformation,
-                        "#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,propName,phenotype,
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}','static');
+                %{--mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,--}%
+                        %{--"#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,propName,phenotype,--}%
+                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
+                        %{--'${createLink(controller:"variantInfo", action:"variantInfo")}','static');--}%
     };
 
 
