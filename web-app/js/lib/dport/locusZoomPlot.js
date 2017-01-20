@@ -8,13 +8,18 @@ var mpgSoftware = mpgSoftware || {};
 
 
     mpgSoftware.locusZoom = (function (){
-    var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
+        var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
+        var currentLzPlotKey = 'lz-47';
 
 
-    // standard layout
-    var StandardLayout = {
-        responsive_resize: true,
-        aspect_ratio: 7.5,
+    var createStandardLayout = function(){
+      this.layout = {
+          responsive_resize: true,
+          min_width: 600,
+          min_height: 300,
+          width: 600,
+          height: 300,
+        aspect_ratio: 2,
         dashboard: {
             components: [
                 { type: "title", title: "LocusZoom", position: "left" },
@@ -63,28 +68,38 @@ var mpgSoftware = mpgSoftware || {};
                             show: { or: ["highlighted", "selected"] },
                             hide: { and: ["unhighlighted", "unselected"] },
                             html: "<h4><strong><i>{{gene_name}}</i></strong></h4>"
-                            + "<div style=\"float: left;\">Gene ID: <strong>{{gene_id}}</strong></div>"
-                            + "<div style=\"float: right;\">Transcript ID: <strong>{{transcript_id}}</strong></div>"
-                            + "<div style=\"clear: both;\"></div>"
-                            + "<table>"
-                            + "<tr><th>Constraint</th><th>Expected variants</th><th>Observed variants</th><th>Const. Metric</th></tr>"
-                            + "<tr><td>Synonymous</td><td>{{exp_syn}}</td><td>{{n_syn}}</td><td>z = {{syn_z}}</td></tr>"
-                            + "<tr><td>Missense</td><td>{{exp_mis}}</td><td>{{n_mis}}</td><td>z = {{mis_z}}</td></tr>"
-                            + "<tr><td>LoF</td><td>{{exp_lof}}</td><td>{{n_lof}}</td><td>pLI = {{pLI}}</td></tr>"
-                            + "</table>"
-                            + "<div style=\"width: 100%; text-align: right;\"><a href=\"http://exac.broadinstitute.org/gene/{{gene_id}}\" target=\"_new\">More data on ExAC</a></div>"
+                                + "<div style=\"float: left;\">Gene ID: <strong>{{gene_id}}</strong></div>"
+                                + "<div style=\"float: right;\">Transcript ID: <strong>{{transcript_id}}</strong></div>"
+                                + "<div style=\"clear: both;\"></div>"
+                                + "<table>"
+                                + "<tr><th>Constraint</th><th>Expected variants</th><th>Observed variants</th><th>Const. Metric</th></tr>"
+                                + "<tr><td>Synonymous</td><td>{{exp_syn}}</td><td>{{n_syn}}</td><td>z = {{syn_z}}</td></tr>"
+                                + "<tr><td>Missense</td><td>{{exp_mis}}</td><td>{{n_mis}}</td><td>z = {{mis_z}}</td></tr>"
+                                + "<tr><td>LoF</td><td>{{exp_lof}}</td><td>{{n_lof}}</td><td>pLI = {{pLI}}</td></tr>"
+                                + "</table>"
+                                + "<div style=\"width: 100%; text-align: right;\"><a href=\"http://exac.broadinstitute.org/gene/{{gene_id}}\" target=\"_new\">More data on ExAC</a></div>"
                         }
                     }
                 ]
             }
         ]
+    }
     };
+
+
+
+
+    var setNewDefaultLzPlot = function (key){
+        currentLzPlotKey  = key;
+    }
     
     var initLocusZoom = function(selector, variantIdString) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
+        standardLayout[currentLzPlotKey] =  (new createStandardLayout()).layout;
         if(variantIdString != '') {
-            StandardLayout.state = {
+            setNewDefaultLzPlot(selector);
+            standardLayout[currentLzPlotKey].state = {
                 ldrefvar: variantIdString
             };
         }
@@ -94,7 +109,7 @@ var mpgSoftware = mpgSoftware || {};
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
             .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
-        var lzp = LocusZoom.populate(selector, ds, StandardLayout);
+        var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
         // Create event hooks to clear the loader whenever a panel renders new data
         lzp.layout.panels.forEach(function(panel){
@@ -109,49 +124,53 @@ var mpgSoftware = mpgSoftware || {};
 
 
         // these get defined when the LZ plot is initialized
-        var locusZoomPlot;
+        var locusZoomPlot = {};
+        var standardLayout = {};
         var dataSources;
 
         function conditioning(myThis) {
-            locusZoomPlot.CovariatesModel.add(LocusZoom.getToolTipData(myThis));
+            locusZoomPlot[currentLzPlotKey].CovariatesModel.add(LocusZoom.getToolTipData(myThis));
             LocusZoom.getToolTipData(myThis).deselect();
         }
 
 
 
         function conditionOnVariant(variantId, phenotype,datasetName) {
-            locusZoomPlot.curtain.show('Loading...', {'text-align': 'center'});
-            locusZoomPlot.panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
-            locusZoomPlot.state[phenotype+datasetName+".positions"].selected = [];
+            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
+            locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
+            locusZoomPlot[currentLzPlotKey].state[phenotype+datasetName+".positions"].selected = [];
             var newStateObject = {
                 condition_on_variant: variantId
             };
-            locusZoomPlot.applyState(newStateObject);
+            locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
         }
 
         function changeLDReference(variantId, phenotype,datasetName) {
-            locusZoomPlot.curtain.show('Loading...', {'text-align': 'center'});
-            locusZoomPlot.panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
+            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
+            locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
             var newStateObject = {
                 ldrefvar: variantId
             };
-            locusZoomPlot.applyState(newStateObject);
+            locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
         }
 
 
-        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic) {
-            var phenotype = lzParameters.phenotype;
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId) {
+            var rawPhenotype = lzParameters.phenotype;
+            var phenotype = lzParameters.phenotype+"_"+makeDynamic;
             var localDataSet = lzParameters.dataSet;
             var propertyName = lzParameters.propertyName;
             var dataSet = dataSetName;
-            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, phenotype,dataSetName) {
+            var domId = lzGraphicDomId;
+            setNewDefaultLzPlot(lzGraphicDomId);
+            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype,dataSetName) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
                         "chromosome=" + state.chr + "&" +
                         "start=" + state.start + "&" +
                         "end=" + state.end + "&" +
-                        "phenotype=" + phenotype + "&" +
+                        "phenotype=" + rawPhenotype + "&" +
                         "dataset=" + dataSetName + "&" +
                         "propertyName=" + propertyName + "&" +
                         "datatype="+ makeDynamic;
@@ -170,7 +189,7 @@ var mpgSoftware = mpgSoftware || {};
                     return url;
                 }
             }, "BroadT2D");
-            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, phenotype,dataSetName));
+            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName));
 
             var layout = (function (variantInfoLink) {
                 var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
@@ -337,7 +356,7 @@ var mpgSoftware = mpgSoftware || {};
                     ]
                 };
             }(variantInfoUrl));
-            locusZoomPlot.addPanel(layout).addBasicLoader();
+            locusZoomPlot[currentLzPlotKey].addPanel(layout).addBasicLoader();
         };
 
 
@@ -353,6 +372,7 @@ var mpgSoftware = mpgSoftware || {};
             if (typeof domId1 !== 'undefined') {
                 lzGraphicDomId = domId1;
             }
+            setNewDefaultLzPlot(lzGraphicDomId);
             if (typeof phenoTypeName !== 'undefined') {
                 defaultPhenotypeName = phenoTypeName;
             }
@@ -381,7 +401,7 @@ var mpgSoftware = mpgSoftware || {};
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
                 var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
-                locusZoomPlot = returned.locusZoomPlot;
+                locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources = returned.dataSources;
 
                 // default panel
@@ -390,7 +410,7 @@ var mpgSoftware = mpgSoftware || {};
                     dataSet: dataSetName,
                     propertyName: propName,
                     description: phenoTypeDescr
-                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
+                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId);
 
             }
         };
@@ -407,6 +427,7 @@ var mpgSoftware = mpgSoftware || {};
             if (typeof domId1 !== 'undefined') {
                 lzGraphicDomId = domId1;
             }
+            setNewDefaultLzPlot(lzGraphicDomId);
             if (typeof phenoTypeName !== 'undefined') {
                 defaultPhenotypeName = phenoTypeName;
             }
@@ -435,7 +456,7 @@ var mpgSoftware = mpgSoftware || {};
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
                 var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
-                locusZoomPlot = returned.locusZoomPlot;
+                locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources = returned.dataSources;
 
                 // default panel
@@ -444,42 +465,44 @@ var mpgSoftware = mpgSoftware || {};
                     description: phenoTypeDescription,
                     propertyName:phenoPropertyName,
                     dataSet:locusZoomDataset
-                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic);
+                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {
-                    locusZoomPlot.rescaleSVG();
+                    locusZoomPlot[currentLzPlotKey].rescaleSVG();
                 });
 
                 var clearCurtain = function() {
-                    locusZoomPlot.curtain.hide();
+                    locusZoomPlot[currentLzPlotKey].curtain.hide();
                 };
-                locusZoomPlot.on('data_rendered', clearCurtain);
+                locusZoomPlot[currentLzPlotKey].on('data_rendered', clearCurtain);
             }
         };
 
     var rescaleSVG = function (){
-        locusZoomPlot.rescaleSVG();
+        locusZoomPlot[currentLzPlotKey].rescaleSVG();
     };
 
     var removePanel = function (panelId){
-        locusZoomPlot.removePanel(panelId);
+        locusZoomPlot[currentLzPlotKey].removePanel(panelId);
     }
     var removeAllPanels = function (){
-        _.forEach(locusZoomPlot.panel_ids_by_y_index,function(o){
+        _.forEach(locusZoomPlot[currentLzPlotKey].panel_ids_by_y_index,function(o){
             if ((typeof o !== 'undefined') && (o !== 'genes')){
-                locusZoomPlot.removePanel(o);
+                locusZoomPlot[currentLzPlotKey].removePanel(o);
             }
         });
 
     }
 
     var plotAlreadyExists = function (){
-        return (typeof locusZoomPlot !== 'undefined');
+        return (typeof locusZoomPlot[currentLzPlotKey] !== 'undefined');
     }
 
 
 
+
     return {
+        setNewDefaultLzPlot: setNewDefaultLzPlot,
         conditioning:conditioning,
         initLocusZoom : initLocusZoom,
         initializeLZPage:initializeLZPage,
@@ -490,7 +513,8 @@ var mpgSoftware = mpgSoftware || {};
         rescaleSVG:rescaleSVG,
         removePanel:removePanel,
         removeAllPanels:removeAllPanels,
-        plotAlreadyExists: plotAlreadyExists
+        plotAlreadyExists: plotAlreadyExists,
+        locusZoomPlot:locusZoomPlot
        // broadAssociationSource:broadAssociationSource
     }
 
