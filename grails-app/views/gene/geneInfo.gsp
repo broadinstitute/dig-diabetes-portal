@@ -95,9 +95,9 @@
 
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
-                %{--<g:renderBetaFeaturesDisplayedValue>--}%
+                <g:renderBetaFeaturesDisplayedValue>
                     <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
-                %{--</g:renderBetaFeaturesDisplayedValue>--}%
+                </g:renderBetaFeaturesDisplayedValue>
 
 
                 <div class="accordion" id="accordion2">

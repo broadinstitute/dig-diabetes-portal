@@ -639,8 +639,6 @@ div.variantBoxHeaders {
                             '<div id="aggregateVariantsLocation"></div>'+
                             '<div id="commonVariantsLocation"></div>');
                 }
-               // $('#collapseExample div.well').append('<div id="aggregateVariantsLocation"></div>');
-               // $('#collapseExample div.well').append('<div id="locusZoomLocation"></div>');
                 $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
@@ -682,6 +680,9 @@ div.variantBoxHeaders {
                         $("#locusZoomLocation").css('display','none');
                     }
                 }
+                $('#collapseExample').on('shown.bs.collapse', function (e) {
+                    mpgSoftware.locusZoom.rescaleSVG();
+                });
             };
 
 
