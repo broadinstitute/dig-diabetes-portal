@@ -158,6 +158,7 @@ var mpgSoftware = mpgSoftware || {};
         function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId) {
             var rawPhenotype = lzParameters.phenotype;
             var phenotype = lzParameters.phenotype+"_"+makeDynamic;
+            //var phenotype = lzParameters.phenotype;
             var localDataSet = lzParameters.dataSet;
             var propertyName = lzParameters.propertyName;
             var dataSet = dataSetName;
@@ -417,8 +418,8 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,phenoTypeDescription,locusZoomDataset,
-                                         phenoPropertyName,junk,
+                                         phenoTypeName,phenoTypeDescription,
+                                         phenoPropertyName,locusZoomDataset,junk,
                                          geneGetLZ,variantInfoUrl,makeDynamic) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";

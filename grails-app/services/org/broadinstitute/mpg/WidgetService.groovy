@@ -467,15 +467,28 @@ class WidgetService {
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
         // kludge to reorder for stroke demo
-        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
-            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+        if (metaDataService.portalTypeFromSession=='t2d') {
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+        } else if (metaDataService.portalTypeFromSession=='stroke') {
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+        } else if (metaDataService.portalTypeFromSession=='mi') {
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="MYOCARDIAL INFARCTION"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="MYOCARDIAL INFARCTION"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+
         }
-        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
-            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-        }
-        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
-            buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-        }
+
         return returnValue
     }
 

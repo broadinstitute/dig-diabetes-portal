@@ -137,7 +137,7 @@ var mpgSoftware = mpgSoftware || {};
 
 //            if (portalType === 't2d'){
                 mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
-                    lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
+                    lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,'junk',
                     geneLocusZoomUrl,
                     variantInfoUrl,makeDynamic);
 //            }
