@@ -145,9 +145,11 @@ class GeneController {
             }else if (portalType=='stroke'){
                 locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
                 phenotype = 'Stroke_all'
-            } else  if (portalType=='MI') {
-                locusZoomDataset = "GWAS_CADISP_"+metaDataService.getDataVersion()
-            } else {
+            }
+//            else  if (portalType=='mi') {
+//                locusZoomDataset = "GWAS_CADISP_"+metaDataService.getDataVersion()
+//            }
+            else {
                 locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
             }
             String  geneUpperCase =   geneToStartWith.toUpperCase()

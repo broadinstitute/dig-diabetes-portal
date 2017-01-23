@@ -1832,7 +1832,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", dataset)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueName, phenotypeName, dataset), '1')
-        getDataQueryHolder.getDataQuery.setLimit(100000)
+        getDataQueryHolder.getDataQuery.setLimit(500)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
