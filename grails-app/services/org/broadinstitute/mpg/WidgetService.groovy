@@ -468,7 +468,9 @@ class WidgetService {
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
         // kludge to reorder for stroke demo
         if (metaDataService.portalTypeFromSession=='t2d') {
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
         } else if (metaDataService.portalTypeFromSession=='stroke') {
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
