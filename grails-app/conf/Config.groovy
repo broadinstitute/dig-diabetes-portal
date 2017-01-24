@@ -173,7 +173,7 @@ t2dDev02BehindLoadBalancer {
 t2dAws01RestServer {
 //    base = 'http://localhost:8888/'
 //    name =  'dig-genome-store/'
-    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
     name =  'aws/'
     path = 'gs/'
 }
