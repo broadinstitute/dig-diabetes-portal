@@ -81,19 +81,44 @@ class BurdenService {
 
         // set the most del score based on the variant filtering option given
         // TODO - possibly combine this and polyphen/sift filtering into one method for clarity
-        if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING) {
-            mostDelScore = 1;
-            operand = PortalConstants.OPERATOR_EQUALS;
-        } else  if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
-            mostDelScore = 3;
-        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
-            mostDelScore = 5;
+        switch (variantSelectionOptionId){
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING:
+                mostDelScore = 1;
+                operand = PortalConstants.OPERATOR_EQUALS;
+                break;
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING:
+                mostDelScore = 3;
+                break;
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
+            case PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT: // filter locally
+            case PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD:  // filter locally
+            case PortalConstants.BURDEN_VARIANT_OPTION_NS:  // filter locally
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
+                mostDelScore = 5;
+                break;
+            default:
+                mostDelScore = 5;
+                break;
         }
+//        if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING) {
+//            mostDelScore = 1;
+//            operand = PortalConstants.OPERATOR_EQUALS;
+//        } else  if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
+//            mostDelScore = 3;
+//        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
+//            mostDelScore = 5;
+//        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
+//            mostDelScore = 5;
+//        }
 
         Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC")
         List<Property> additionalProperties = []
         if (macProperty != null){
             additionalProperties << macProperty
+        }
+        Property mafProperty = metaDataService.getSampleGroupProperty(dataSet,"MAF")
+        if (mafProperty) {
+            additionalProperties << mafProperty
         }
 
         // get the json string to send to the getData call
@@ -238,10 +263,6 @@ class BurdenService {
 
         try {
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
-//            String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_"+metaDataService.getDataVersion(), "T2D", "P_VALUE" )
-//            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))
-//            String pValueName = filterManagementService.findFavoredMeaningValue ( dataSet, convertedPhenotype,  "P_VALUE" )
-//            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataSet,1.0,convertedPhenotype,pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
@@ -253,7 +274,7 @@ class BurdenService {
             log.info("got first pass variant list of size: " + variantList.size());
 
             // filter variant list based on polyphen/sift
-            burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId);
+            burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId,dataSet);
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
             // filter the larger json object based on the variants that passed the above
@@ -341,7 +362,7 @@ class BurdenService {
             log.info("got first pass variant list of size: " + variantList.size());
 
             // filter variant list based on polyphen/sift
-            burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId);
+            burdenVariantList = this.transformAndFilterVariantList(variantList, variantSelectionOptionId,dataSet);
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
             JSONObject samplesObject = new JSONObject()
@@ -548,7 +569,7 @@ class BurdenService {
      * @param variantSelectionOptionId
      * @return
      */
-    protected List<String> transformAndFilterVariantList(List<Variant> variantList, int variantSelectionOptionId) {
+    protected List<String> transformAndFilterVariantList(List<Variant> variantList, int variantSelectionOptionId, String dataset) {
         // local variables
         List<String> variantStringList = new ArrayList<String>();
         boolean qualifyingVariant = false;
@@ -585,10 +606,40 @@ class BurdenService {
                     qualifyingVariant = true;
                 }
 
+            } else if ( (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT)||
+                        (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
+                        (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
+                float maf = variant.getMaf()
+                boolean ptv = (variant.getMostDelScore() == 1)
+                boolean ptvOrMissense = (variant.getMostDelScore() == 1 || variant.getMostDelScore() == 2)
+                boolean nsStrict = ((variant.getMutationTasterPredictor()?.contains("D"))&&
+                        (variant.getSiftPredictor()?.contains("deleterious"))&&
+                        (variant.getLrtPredictor()?.contains("D"))&&
+                        (variant.getPolyphenHvarPredictor()?.contains("D"))&&
+                        (variant.getPolyphenHdivPredictor()?.contains("D")))
+                boolean nsBroad = ((variant.getMutationTasterPredictor()?.contains("D"))||
+                        (variant.getSiftPredictor()?.contains("deleterious"))||
+                        (variant.getLrtPredictor()?.contains("D"))||
+                        (variant.getPolyphenHvarPredictor()?.contains("D"))||
+                        (variant.getPolyphenHdivPredictor()?.contains("D")))
+                switch (variantSelectionOptionId){
+                    case PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT:
+                        qualifyingVariant = (ptv || nsStrict)
+                        break
+                    case PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD:
+                        qualifyingVariant = (ptv || nsStrict || (nsBroad && maf<0.01))
+                        break
+                    case PortalConstants.BURDEN_VARIANT_OPTION_NS:
+                        qualifyingVariant = (ptv || nsStrict || nsBroad || (ptvOrMissense && maf<0.01))
+                        break
+                    default:
+                        qualifyingVariant = true
+                        break
+                }
             } else {
-                // for any other call, all the variants are included, so simply set to true
-                qualifyingVariant = true;
-            }
+            // for any other call, all the variants are included, so simply set to true
+            qualifyingVariant = true;
+        }
 
             if (qualifyingVariant) {
                 variantStringList.add(variant.getVariantId());
@@ -613,11 +664,21 @@ class BurdenService {
 
         // build the default options string
         builder.append("{\"options\": [ ");
-        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", true));
-        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", true));
-        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deleterious variants", true));
-        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deleterious variants", true));
-        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false));
+        List <String> allOptions = []
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deleterious variants", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deleterious variants", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "NS Strict", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "NS Broad 1%", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "NS 1%", false)
+        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false)
+        builder.append( allOptions.join(",") )
+//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", true));
+//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", true));
+//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deleterious variants", true));
+//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deleterious variants", true));
+//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false));
         builder.append(" ]}");
 
         // create the json object and return

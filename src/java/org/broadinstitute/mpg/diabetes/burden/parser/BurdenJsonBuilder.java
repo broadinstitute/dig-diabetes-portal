@@ -1,6 +1,8 @@
 package org.broadinstitute.mpg.diabetes.burden.parser;
 
+import com.google.gson.JsonObject;
 import org.broadinstitute.mpg.diabetes.MetaDataService;
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValueBean;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.DataSet;
@@ -197,6 +199,7 @@ public class BurdenJsonBuilder {
         GetDataQuery query = new GetDataQueryBean();
 
         // add in the query properties
+        Property tproperty;
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_DBSNP_ID));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
@@ -209,6 +212,14 @@ public class BurdenJsonBuilder {
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN_PRED));
         query.addQueryProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_SIFT_PRED));
+        tproperty = (Property) parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MUTATION_TASTER_PRED );
+        if (tproperty != null) {query.addQueryProperty(tproperty);}
+        tproperty = (Property) parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_LRT_PRED );
+        if (tproperty != null) {query.addQueryProperty(tproperty);}
+        tproperty = (Property) parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN2_HVAR_PRED );
+        if (tproperty != null) {query.addQueryProperty(tproperty);}
+        tproperty = (Property) parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POLYPHEN2_HDIV_PRED );
+        if (tproperty != null) {query.addQueryProperty(tproperty);}
 
         // add minor allele count if it exists for this data set
         if (additionalProperties != null){
@@ -227,8 +238,8 @@ public class BurdenJsonBuilder {
         }
 
         // get the payload string
-        query.setPageSize(100000);
-        query.setLimit(100000);
+        query.setPageSize(1000);
+        query.setLimit(1000);
         jsonString = jsonBuilder.getQueryJsonPayloadString(query);
 
         // return
@@ -261,6 +272,15 @@ public class BurdenJsonBuilder {
                     Map<String, Object> map = this.getHashMapOfJsonArray(tempArray2);
                     variant.setVariantId((String)map.get(PortalConstants.JSON_VARIANT_ID_KEY));
                     variant.setChromosome((String) map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
+                    if (map.get("MAF") != null) {
+                        JSONObject jsonObject1 = (JSONObject) map.get("MAF");
+
+                        String key = (String)jsonObject1.keySet().iterator().next();
+                        if (!jsonObject1.isNull(key)) {
+                            Double mafValue = (Double)jsonObject1.get(key);
+                            variant.setMaf(mafValue.floatValue() );
+                        }
+                    }
                     if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY) == null) {
                         variant.setPolyphenPredictor((String)"");
                     }else{
@@ -270,6 +290,26 @@ public class BurdenJsonBuilder {
                         variant.setSiftPredictor((String)"");
                     }else{
                         variant.setSiftPredictor((String) map.get(PortalConstants.JSON_VARIANT_SIFT_PRED_KEY));
+                    }
+                    if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY) == null) {
+                        variant.setPolyphenHdivPredictor((String)"");
+                    }else{
+                        variant.setPolyphenHdivPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY));
+                    }
+                    if (map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY) == null) {
+                        variant.setPolyphenHvarPredictor((String)"");
+                    }else{
+                        variant.setPolyphenHvarPredictor((String) map.get(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY));
+                    }
+                    if (map.get(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY) == null) {
+                        variant.setMutationTasterPredictor((String)"");
+                    }else{
+                        variant.setMutationTasterPredictor((String) map.get(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY));
+                    }
+                    if (map.get(PortalConstants.JSON_VARIANT_LRT_PRED_KEY) == null) {
+                        variant.setLrtPredictor((String)"");
+                    }else{
+                        variant.setLrtPredictor((String) map.get(PortalConstants.JSON_VARIANT_LRT_PRED_KEY));
                     }
                     variant.setMostDelScore((Integer)map.get(PortalConstants.JSON_VARIANT_MOST_DEL_SCORE_KEY));
                     variantList.add(variant);

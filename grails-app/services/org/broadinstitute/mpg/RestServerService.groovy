@@ -935,31 +935,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             it)
                 }
             }
-
-//            if ((pValue) && (pValue.length() > 0)) {
-//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-//                        dataSet,
-//                        pValue)
-//            }
-//            if ((orValue) && (orValue.length() > 0)) {
-//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-//                        dataSet,
-//                        orValue)
-//            }
-//            if ((betaValue) && (betaValue.length() > 0)) {
-//                addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-//                        dataSet,
-//                        betaValue)
-//            }
-//            // OBSA/OBSU are phenotype-dependent, so they weren't included in the data
-//            // previously sent to the client
-//            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-//                    dataSet,
-//                    "OBSA")
-//            addColumnsForPProperties(resultColumnsToDisplay, phenotype,
-//                    dataSet,
-//                    "OBSU")
-
         }
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         JsonSlurper slurper = new JsonSlurper()

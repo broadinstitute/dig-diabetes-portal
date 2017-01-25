@@ -18,6 +18,12 @@ public interface Variant {
 
     public String getSiftPredictor();
 
+    public String getMutationTasterPredictor();
+    public String getLrtPredictor();
+    public String getPolyphenHvarPredictor();
+    public String getPolyphenHdivPredictor();
+    public float getMaf();
+
     public Integer getMostDelScore();
 
     public List<PropertyValue> getPropertyValues();
@@ -51,4 +57,10 @@ public interface Variant {
     public void setAlternateAllele(String alternateAllele);
 
     public void setChromosome(String chromosome);
+
+    public void setMutationTasterPredictor(String mutationTasterPredictor);
+    public void setLrtPredictor(String lrtPredictor);
+    public void setPolyphenHvarPredictor(String polyphenHvarPredictor);
+    public void setPolyphenHdivPredictor(String polyphenHdivPredictor);
+    public void setMaf(float maf);
 }

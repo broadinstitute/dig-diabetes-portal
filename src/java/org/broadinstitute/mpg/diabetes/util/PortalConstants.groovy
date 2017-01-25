@@ -29,6 +29,10 @@ class PortalConstants {
     public final static String JSON_VARIANT_POLYPHEN_PRED_KEY           = "PolyPhen_PRED";
     public final static String JSON_VARIANT_SIFT_PRED_KEY               = "SIFT_PRED";
     public final static String JSON_VARIANT_CONDEL_PRED_KEY             = "Condel_PRED";
+    public final static String JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY     = "Polyphen2_HDIV_pred";
+    public final static String JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY     = "Polyphen2_HVAR_pred";
+    public final static String JSON_VARIANT_LRT_PRED_KEY                = "LRT_pred";
+    public final static String JSON_VARIANT_MUTATION_TASTER_PRED_KEY    = "MutationTaster_pred";
     public final static String JSON_NUMBER_RECORDS_KEY                  = "numRecords";
     public final static String JSON_ERROR_KEY                           = "is_error";
     public final static String JSON_PASSBACK_KEY                        = "passback";
@@ -107,6 +111,10 @@ class PortalConstants {
     public final static String PROPERTY_KEY_COMMON_MOST_DEL_SCORE         = "metadata_rootMOST_DEL_SCORE";
     public final static String PROPERTY_KEY_COMMON_EFFECT_ALLELE          = "metadata_rootEffect_Allele";
     public final static String PROPERTY_KEY_COMMON_REFERENCE_ALLELE       = "metadata_rootReference_Allele";
+    public final static String PROPERTY_KEY_COMMON_MUTATION_TASTER_PRED   = "metadata_rootMutationTaster_pred";
+    public final static String PROPERTY_KEY_COMMON_LRT_PRED               = "metadata_rootLRT_pred";
+    public final static String PROPERTY_KEY_COMMON_POLYPHEN2_HVAR_PRED    = "metadata_rootPolyphen2_HVAR_pred";
+    public final static String PROPERTY_KEY_COMMON_POLYPHEN2_HDIV_PRED    = "metadata_rootPolyphen2_HDIV_pred";
 
     public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
     public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1MAF";
@@ -201,6 +209,9 @@ class PortalConstants {
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS  = 3;
     public static final int BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS  = 4;
     public static final int BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING         = 5;
+    public static final int BURDEN_VARIANT_OPTION_NS_STRICT                      = 6;
+    public static final int BURDEN_VARIANT_OPTION_NS_BROAD                       = 7;
+    public static final int BURDEN_VARIANT_OPTION_NS                             = 8;
     public static final int BURDEN_VARIANT_OPTION_ALL                            = 0;
 
     // burden test constants

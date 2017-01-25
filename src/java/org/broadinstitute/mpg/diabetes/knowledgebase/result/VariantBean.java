@@ -24,6 +24,11 @@ public class VariantBean implements Variant {
     private String polyphenPredictor;
     private String siftPredictor;
     private Integer mostDelScore;
+    private String mutationTasterPredictor;
+    private String lrtPredictor;
+    private String polyphenHvarPredictor;
+    private String polyphenHdivPredictor;
+    private float maf;
     List<PropertyValue> propertyValues = new ArrayList<PropertyValue>();
 
     public void addAllToPropertyValues(Collection<PropertyValue> values) {
@@ -90,6 +95,46 @@ public class VariantBean implements Variant {
     public void setMostDelScore(Integer mostDelScore) {
         this.mostDelScore = mostDelScore;
     }
+
+    public String getMutationTasterPredictor() {
+        return mutationTasterPredictor;
+    }
+
+    public void setMutationTasterPredictor(String mutationTasterPredictor) {
+        this.mutationTasterPredictor = mutationTasterPredictor;
+    }
+
+    public String getLrtPredictor() {
+        return lrtPredictor;
+    }
+
+    public void setLrtPredictor(String lrtPredictor) {
+        this.lrtPredictor = lrtPredictor;
+    }
+
+    public String getPolyphenHvarPredictor() {
+        return polyphenHvarPredictor;
+    }
+
+    public void setPolyphenHvarPredictor(String polyphenHvarPredictor) {
+        this.polyphenHvarPredictor = polyphenHvarPredictor;
+    }
+
+    public String getPolyphenHdivPredictor() {
+        return polyphenHdivPredictor;
+    }
+
+    public void setPolyphenHdivPredictor(String polyphenHdivPredictor) {
+        this.polyphenHdivPredictor = polyphenHdivPredictor;
+    }
+    public float getMaf() {
+        return maf;
+    }
+
+    public void setMaf(float maf) {
+        this.maf = maf;
+    }
+
 
     /**
      * returns the given property value if the given property search terms find one; null otherwise
