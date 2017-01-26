@@ -366,12 +366,6 @@ public class BurdenJsonBuilder {
         Boolean unexpectedData = false;
 
         // get root data set.  We need to get this from the metadata, but we will use a workaround for now.
-//        if (("mdv2".equals("mdv2"))||
-//                (versionString.equals("mdv21") )||
-//                (versionString.equals("mdv22") )||
-//                (versionString.equals("mdv23") )) {
-//            rootDataSet = metaDataService.getSampleGroupByName("ExSeq_17k_" + versionString );
-//        }
         rootDataSet = metaDataService.getSampleGroupByName( dataSet );
 
         // always add a check that MAF is greater than 0 for the root data set specified to make sure we are not pulling variants that do not occur

@@ -349,7 +349,6 @@ class BurdenService {
 
         try {
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
-//            queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFilters(dataVersionId, mafSampleGroupOption, mafValue);
             String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_"+metaDataService.getDataVersion(), "T2D", "P_VALUE" )
             queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))
 
@@ -370,7 +369,7 @@ class BurdenService {
             samplesObject.put(PortalConstants.JSON_BURDEN_SAMPLES_KEY, samplesArray)
 
             JSONObject covariatesObject = new JSONObject()
-            JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4"])
+            JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4","Age","SEX"])
             covariatesObject.put(PortalConstants.JSON_BURDEN_COVARIATES_KEY, covariatesArray);
 
             JSONObject filtersObject = new JSONObject()
@@ -665,20 +664,25 @@ class BurdenService {
         // build the default options string
         builder.append("{\"options\": [ ");
         List <String> allOptions = []
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deleterious variants", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deleterious variants", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "NS Strict", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "NS Broad 1%", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "NS 1%", false)
-        allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false)
+        // new fields of been introduced, but don't let users search for them if they haven't migrated to this database yet
+        if ((metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY))&&
+                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY))&&
+                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY))&&
+                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_LRT_PRED_KEY))){
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "NS 1%", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "NS Broad 1%", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "NS Strict", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false)
+        } else { // the old filters, retained for backwards compatibility
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deleterious variants", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deleterious variants", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false)
+        }
+
         builder.append( allOptions.join(",") )
-//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", true));
-//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", true));
-//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS, "All missense possibly deleterious variants", true));
-//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_PROB_DELETERIOUS, "All missense probably deleterious variants", true));
-//        builder.append(this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false));
         builder.append(" ]}");
 
         // create the json object and return

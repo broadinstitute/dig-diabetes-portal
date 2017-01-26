@@ -234,15 +234,15 @@ div.variantBoxHeaders {
                                                 <div id="allCoding"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">all missense</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">NS 1%</span>
                                                 <div id="allMissense"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">possibly damaging</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">NS 1% broad</span>
                                                 <div id="possiblyDamaging"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">probably damaging</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">NS strict</span>
                                                 <div id="probablyDamaging"></div>
                                             </div>
 
@@ -650,12 +650,12 @@ div.variantBoxHeaders {
                      ( sampleBasedPhenotypeName.length > 0)) {
                     $('#aggregateVariantsLocation').css('display','block');
                     $('#noAggregatedVariantsLocation').css('display','none');
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.95","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"2","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"3","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"4","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","0.05","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
                 } else {
                     $('#aggregateVariantsLocation').css('display','none');
                     $('#noAggregatedVariantsLocation').css('display','block');

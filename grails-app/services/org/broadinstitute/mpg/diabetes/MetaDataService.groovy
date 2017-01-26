@@ -478,6 +478,23 @@ class MetaDataService {
         return toReturn;
     }
 
+
+    public Property findCommonPropertyWithName(String propertyName) {
+        Property returnValue
+
+        try {
+            returnValue = this.getJsonParser().findCommonPropertyWithName(propertyName);
+
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving findCommonPropertyWithName: " + propertyName + " : " + exception.getMessage());
+        }
+        return returnValue
+    }
+
+
+
+
+
     public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning) {
         // local variables
         List<SampleGroup> groupList;
