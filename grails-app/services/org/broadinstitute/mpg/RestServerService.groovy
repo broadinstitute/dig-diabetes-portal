@@ -1946,7 +1946,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
+
+    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, float pValueSignificance) {
+        String specifyRequest = """{"version":"${currentRestServer()}","gene":"${geneName}","phenotype":"${phenotype}"}"""
+        postRestCall(specifyRequest, String targetUrl)
+    }
+
+
+
+
+
+
+
+        public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject dataJsonObject
         List variants = []
