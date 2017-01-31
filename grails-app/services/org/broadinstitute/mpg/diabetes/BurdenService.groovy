@@ -670,10 +670,10 @@ class BurdenService {
                 (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY))&&
                 (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_LRT_PRED_KEY))){
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
-            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "NS 1%", false)
-            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "NS Broad 1%", false)
-            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "NS Strict", false)
-            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "All protein truncating variants", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "PTV + NS 1%", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "PTV + NSbroad 1%", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "PTV + NSstrict", false)
+            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING, "PTV", false)
         } else { // the old filters, retained for backwards compatibility
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE, "All missense variants", false)
