@@ -52,6 +52,7 @@ class RestServerService {
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
     private String GET_DATA_URL = "getData"
+    private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -1947,9 +1948,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, float pValueSignificance) {
-        String specifyRequest = """{"version":"${currentRestServer()}","gene":"${geneName}","phenotype":"${phenotype}"}"""
-        postRestCall(specifyRequest, String targetUrl)
+    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName) {
+        String specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}"}"""
+        return postRestCall(specifyRequest, GET_DATA_AGGREGATION_URL)
     }
 
 

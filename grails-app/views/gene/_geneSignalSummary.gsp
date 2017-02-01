@@ -444,8 +444,9 @@ div.variantBoxHeaders {
                         var mafValue;
                         var mdsValue;
                         var pValue;
-                        _.forEach(v,function(actObj){
-                            _.forEach(actObj,function(val,key){
+                        _.forEach(v,function(val,key){
+//                        _.forEach(v,function(actObj){
+//                            _.forEach(actObj,function(val,key){
                                 if (key==='VAR_ID'){
                                     obj['id']= (val)?val:'';
                                 } else if (key==='DBSNP_ID'){
@@ -518,7 +519,7 @@ div.variantBoxHeaders {
 
                                 }
                             });
-                        });
+                        //});
                         renderData.variants.push(obj);
                      });
                 };

@@ -414,28 +414,25 @@ class VariantSearchController {
         List<String> allTechnologies =  metaDataService.getTechnologyListByVersion(currentVersion)
         List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
 
-        JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
-
-        if (dataJsonObject.variants) {
-                for (List result in dataJsonObject.variants){
-                    for (Map pval in result) {
-                        //for (Map pval in field) {
-//                            for (Map pval in fieldHolder){
-                                if (pval.containsKey("Consequence")){
-                                    List<String> consequenceList = pval["Consequence"]?.tokenize(",")
-                                    List<String> translatedConsequenceList = []
-                                    for (String consequence in consequenceList){
-                                        translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
-                                    }
-                                    pval["Consequence"] = translatedConsequenceList.join(", ")
-                                }
-                            //}
-
-                        //}
-                    }
-                }
-
-            }
+        //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
+        JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+//        if (dataJsonObject.variants) {
+//                for (List result in dataJsonObject.variants){
+//                    for (Map pval in result) {
+//
+//                        if (pval.containsKey("Consequence")){
+//                            List<String> consequenceList = pval["Consequence"]?.tokenize(",")
+//                            List<String> translatedConsequenceList = []
+//                            for (String consequence in consequenceList){
+//                                translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+//                            }
+//                            pval["Consequence"] = translatedConsequenceList.join(", ")
+//                        }
+//
+//                    }
+//                }
+//
+//            }
 
 
         render(status: 200, contentType: "application/json") {

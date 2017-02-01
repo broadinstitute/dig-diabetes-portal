@@ -257,7 +257,7 @@ server.URL = 'http://localhost:8888/dig-genome-store/gs/'
 // currently operational t2d server
 //server.URL = "http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/aws/gs/"
 //for stroke
-server.URL = "http://dig-api-dev.broadinstitute.org/dev/gs/"
+//server.URL = "http://dig-api-dev.broadinstitute.org/dev/gs/"
 
 
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
