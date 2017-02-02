@@ -414,8 +414,17 @@ class VariantSearchController {
         List<String> allTechnologies =  metaDataService.getTechnologyListByVersion(currentVersion)
         List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
 
+        JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
-        JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+
+        if (dataJsonObject == null){
+            // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
+            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
+        }
+
+        //JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
 //        if (dataJsonObject.variants) {
 //                for (List result in dataJsonObject.variants){
 //                    for (Map pval in result) {

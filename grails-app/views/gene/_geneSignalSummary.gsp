@@ -234,19 +234,19 @@ div.variantBoxHeaders {
                                                 <div id="allCoding"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">NS 1%</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV + NS 1%</span>
                                                 <div id="allMissense"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">NS 1% broad</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+ NSbroad 1%</span>
                                                 <div id="possiblyDamaging"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">NS strict</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV + NSstrict</span>
                                                 <div id="probablyDamaging"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">protein truncating</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV</span>
                                                 <div id="proteinTruncating"></div>
                                             </div>
 
@@ -430,6 +430,143 @@ div.variantBoxHeaders {
             return convertedName;
         };
         mpgSoftware.geneSignalSummary = (function () {
+            var processAggregatedData = function(v) {
+                var obj = {};
+                var procAggregatedData = function (val, key) {
+                    var mafValue;
+                    var mdsValue;
+                    var pValue;
+                    if (key === 'VAR_ID') {
+                        obj['id'] = (val) ? val : '';
+                    } else if (key === 'DBSNP_ID') {
+                        obj['rsId'] = (val) ? val : '';
+                    } else if (key === 'Protein_change') {
+                        obj['impact'] = (val) ? val : '';
+                    } else if (key === 'Consequence') {
+                        obj['deleteriousness'] = (val) ? val : '';
+                    } else if (key === 'Reference_Allele') {
+                        obj['referenceAllele'] = (val) ? val : '';
+                    } else if (key === 'Effect_Allele') {
+                        obj['effectAllele'] = (val) ? val : '';
+                    } else if (key === 'MOST_DEL_SCORE') {
+                        obj['MOST_DEL_SCORE'] = (val) ? val : '';
+                    } else if (key === 'dataset') {
+                        obj['ds'] = (val) ? val : '';
+                    } else if (key === 'dsr') {
+                        obj['dsr'] = (val) ? val : '';
+                    } else if (key === 'pname') {
+                        obj['pname'] = (val) ? val : '';
+                    } else if (key === 'pheno') {
+                        obj['pheno'] = (val) ? val : '';
+                    } else if (key === 'datasetname') {
+                        obj['datasetname'] = (val) ? val : '';
+                    } else if (key === 'meaning') {
+                        obj['meaning'] = (val) ? val : '';
+                    } else if (key === 'MAF') {
+                        _.forEach(val, function (mafval, mafkey) {
+                            mafValue = (mafval) ? mafval : '';
+                            obj['MAF'] = mafValue;
+                        })
+                    } else if ((key === 'P_FIRTH_FE_IV') ||
+                            (key === 'P_VALUE') ||
+                            (key === 'P_FE_INV') ||
+                            (key === 'P_FIRTH')
+                            ) {
+                        obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
+                        obj['P_VALUEV'] = (val) ? val : 1;
+                    } else if (key === 'BETA') {
+                        obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
+                        obj['BETAV'] = Math.exp((val) ? val : 1);
+
+                    }
+                    return obj;
+                }
+                _.forEach(v,procAggregatedData);
+                return obj;
+            };
+            var procExpandedData = function(actObj){
+                var mafValue;
+                var mdsValue;
+                var pValue;
+                var obj = {};
+                            _.forEach(actObj,function(val,key) {
+                                if (key === 'VAR_ID') {
+                                    obj['id'] = (val) ? val : '';
+                                } else if (key === 'DBSNP_ID') {
+                                    obj['rsId'] = (val) ? val : '';
+                                } else if (key === 'Protein_change') {
+                                    obj['impact'] = (val) ? val : '';
+                                } else if (key === 'Consequence') {
+                                    obj['deleteriousness'] = (val) ? val : '';
+                                } else if (key === 'Reference_Allele') {
+                                    obj['referenceAllele'] = (val) ? val : '';
+                                } else if (key === 'Effect_Allele') {
+                                    obj['effectAllele'] = (val) ? val : '';
+                                } else if (key === 'MOST_DEL_SCORE') {
+                                    obj['MOST_DEL_SCORE'] = (val) ? val : '';
+                                    if (obj['MOST_DEL_SCORE'].length > 0) {
+                                        mdsValue = parseInt(obj['MOST_DEL_SCORE']);
+                                    }
+                                } else if (key === 'ds') {
+                                    obj['ds'] = (val) ? val : '';
+                                } else if (key === 'dsr') {
+                                    obj['dsr'] = (val) ? val : '';
+                                } else if (key === 'pname') {
+                                    obj['pname'] = (val) ? val : '';
+                                } else if (key === 'pheno') {
+                                    obj['pheno'] = (val) ? val : '';
+                                } else if (key === 'datasetname') {
+                                    obj['datasetname'] = (val) ? val : '';
+                                } else if (key === 'meaning') {
+                                    obj['meaning'] = (val) ? val : '';
+                                } else if (key === 'MAF') {
+                                    _.forEach(val, function (mafval, mafkey) {
+                                        mafValue = (mafval) ? mafval : '';
+                                        obj['MAF'] = mafValue;
+                                    })
+                                } else if ((key === 'P_FIRTH_FE_IV') ||
+                                        (key === 'P_VALUE') ||
+                                        (key === 'P_FE_INV') ||
+                                        (key === 'P_FIRTH')
+                                        ) {
+                                    _.forEach(val, function (dsetval, dsetkey) {
+                                        _.forEach(dsetval, function (pval, pkey) {
+                                            obj['P_VALUE'] = UTILS.realNumberFormatter((pval) ? pval : 1);
+                                            obj['P_VALUEV'] = (pval) ? pval : 1;
+                                            pValue = obj['P_VALUEV'];
+                                        });
+
+                                    });
+
+                                } else if ((key === 'ODDS_RATIO') ||
+                                        (key === 'OR_FIRTH') ||
+                                        (key === 'OR_FIRTH_FE_IV') ||
+                                        (key === 'OR_FIRTH')
+                                        ) {
+                                    _.forEach(val, function (dsetval, dsetkey) {
+                                        _.forEach(dsetval, function (pval, pkey) {
+                                            obj['BETA'] = UTILS.realNumberFormatter((pval) ? pval : 1);
+                                            obj['BETAV'] = (pval) ? pval : 1;
+                                        });
+
+                                    });
+
+                                } else if (key === 'BETA') {
+                                    _.forEach(val, function (dsetval, dsetkey) {
+                                        _.forEach(dsetval, function (pval, pkey) {
+                                            obj['BETA'] = UTILS.realNumberFormatter(Math.exp((pval) ? pval : 1));
+                                            obj['BETAV'] = Math.exp((pval) ? pval : 1);
+                                        });
+
+                                    });
+
+                                }
+                            });
+                return obj;
+            };
+
+
+
             var buildRenderData = function (data,mafCutoff)  {
                 var renderData = {variants:[],
                                     rvar:[],
@@ -440,87 +577,14 @@ div.variantBoxHeaders {
                         (data.variants.variants.length > 0)){
                     var obj;
                     _.forEach(data.variants.variants,function(v,index,y){
-                        obj = {};
-                        var mafValue;
-                        var mdsValue;
-                        var pValue;
-                        _.forEach(v,function(val,key){
-//                        _.forEach(v,function(actObj){
-//                            _.forEach(actObj,function(val,key){
-                                if (key==='VAR_ID'){
-                                    obj['id']= (val)?val:'';
-                                } else if (key==='DBSNP_ID'){
-                                    obj['rsId']= (val)?val:'';
-                                } else if (key==='Protein_change'){
-                                    obj['impact']= (val)?val:'';
-                                } else if (key==='Consequence'){
-                                    obj['deleteriousness']= (val)?val:'';
-                                } else if (key==='Reference_Allele'){
-                                    obj['referenceAllele']= (val)?val:'';
-                                } else if (key==='Effect_Allele') {
-                                    obj['effectAllele'] = (val)?val:'';
-                                } else if (key==='MOST_DEL_SCORE') {
-                                    obj['MOST_DEL_SCORE'] = (val)?val:'';
-                                    if (obj['MOST_DEL_SCORE'].length > 0){
-                                        mdsValue = parseInt(obj['MOST_DEL_SCORE']);
-                                    }
-                                } else if (key==='ds') {
-                                    obj['ds'] = (val)?val:'';
-                                } else if (key==='dsr') {
-                                    obj['dsr'] = (val)?val:'';
-                                } else if (key==='pname') {
-                                    obj['pname'] = (val)?val:'';
-                                } else if (key==='pheno') {
-                                    obj['pheno'] = (val)?val:'';
-                                } else if (key==='datasetname') {
-                                    obj['datasetname'] = (val)?val:'';
-                                }  else if (key==='meaning') {
-                                    obj['meaning'] = (val)?val:'';
-                                }  else if (key==='MAF') {
-                                    _.forEach(val,function(mafval,mafkey){
-                                        mafValue = (mafval)?mafval:'';
-                                        obj['MAF'] = mafValue;
-                                    })
-                                } else if ((key==='P_FIRTH_FE_IV')||
-                                        (key==='P_VALUE')||
-                                        (key==='P_FE_INV')||
-                                        (key==='P_FIRTH')
-                                        ){
-                                    _.forEach(val,function(dsetval,dsetkey){
-                                        _.forEach(dsetval,function(pval,pkey) {
-                                            obj['P_VALUE'] = UTILS.realNumberFormatter((pval)?pval:1);
-                                            obj['P_VALUEV'] = (pval)?pval:1;
-                                            pValue = obj['P_VALUEV'];
-                                        });
+                        if (_.flatten(v).length==0) {
+                            renderData.variants.push(processAggregatedData(v));
+                            //renderData.variants.push(_.forEach(v,procAggregatedData));
+                        } else {
+                            renderData.variants.push(processAggregatedData(v));
+                            //renderData.variants.push(_.forEach(v,procExpandedData));
+                        }
 
-                                    });
-
-                                }  else if ((key==='ODDS_RATIO')||
-                                        (key==='OR_FIRTH')||
-                                        (key==='OR_FIRTH_FE_IV')||
-                                        (key==='OR_FIRTH')
-                                        ){
-                                    _.forEach(val,function(dsetval,dsetkey){
-                                        _.forEach(dsetval,function(pval,pkey) {
-                                            obj['BETA'] = UTILS.realNumberFormatter((pval)?pval:1);
-                                            obj['BETAV'] = (pval)?pval:1;
-                                        });
-
-                                    });
-
-                                } else if (key==='BETA') {
-                                    _.forEach(val,function(dsetval,dsetkey){
-                                        _.forEach(dsetval,function(pval,pkey) {
-                                            obj['BETA'] = UTILS.realNumberFormatter(Math.exp((pval)?pval:1));
-                                            obj['BETAV'] = Math.exp((pval)?pval:1);
-                                        });
-
-                                    });
-
-                                }
-                            });
-                        //});
-                        renderData.variants.push(obj);
                      });
                 };
                 return renderData;
