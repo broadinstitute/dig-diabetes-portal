@@ -6,11 +6,40 @@
     font-size: 24px;
     font-weight: 100;
 }
+.interestingPhenotypesHolder{
+    margin: 30px 30px 0 0;
+    padding: 20px 30px 10px 0;
+    border: 0.5px solid gray;
+    display: none;
+}
 .trafficExplanations.emphasize {
     font-weight: 900;
 }
 .trafficExplanations.unemphasize {
     font-weight: normal;
+}
+.phenotypeStrength {
+    cursor:pointer;
+    margin: 10px;
+    border: 1px solid black;
+    padding: 5px;
+    width: 60px;
+    background-color: white;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
+.redPhenotype {
+
+}
+.yellowPhenotype {
+    background-color: #ffffb3;
+}
+.greenPhenotype {
+    background-color: #ccffcc;
 }
 div.redline {
  /*   background-color: #ffb3b3;*/
@@ -108,7 +137,16 @@ div.variantBoxHeaders {
             </div>
 
         </div>
+        <div class="row interestingPhenotypesHolder">
+            <div class="col-xs-12">
+            <div id="interestingPhenotypes" class="container">
+
+            </div>
+            </div>
+        </div>
+
     </div>
+
 </div>
 <div class="collapse" id="collapseExample">
     <div class="well">
@@ -430,7 +468,7 @@ div.variantBoxHeaders {
             return convertedName;
         };
         mpgSoftware.geneSignalSummary = (function () {
-            var processAggregatedData = function(v) {
+            var processAggregatedData = function (v) {
                 var obj = {};
                 var procAggregatedData = function (val, key) {
                     var mafValue;
@@ -456,7 +494,7 @@ div.variantBoxHeaders {
                         obj['dsr'] = (val) ? val : '';
                     } else if (key === 'pname') {
                         obj['pname'] = (val) ? val : '';
-                    } else if (key === 'pheno') {
+                    } else if (key === 'phenotype') {
                         obj['pheno'] = (val) ? val : '';
                     } else if (key === 'datasetname') {
                         obj['datasetname'] = (val) ? val : '';
@@ -481,103 +519,102 @@ div.variantBoxHeaders {
                     }
                     return obj;
                 }
-                _.forEach(v,procAggregatedData);
+                _.forEach(v, procAggregatedData);
                 return obj;
             };
-            var procExpandedData = function(actObj){
+            var procExpandedData = function (actObj) {
                 var mafValue;
                 var mdsValue;
                 var pValue;
                 var obj = {};
-                            _.forEach(actObj,function(val,key) {
-                                if (key === 'VAR_ID') {
-                                    obj['id'] = (val) ? val : '';
-                                } else if (key === 'DBSNP_ID') {
-                                    obj['rsId'] = (val) ? val : '';
-                                } else if (key === 'Protein_change') {
-                                    obj['impact'] = (val) ? val : '';
-                                } else if (key === 'Consequence') {
-                                    obj['deleteriousness'] = (val) ? val : '';
-                                } else if (key === 'Reference_Allele') {
-                                    obj['referenceAllele'] = (val) ? val : '';
-                                } else if (key === 'Effect_Allele') {
-                                    obj['effectAllele'] = (val) ? val : '';
-                                } else if (key === 'MOST_DEL_SCORE') {
-                                    obj['MOST_DEL_SCORE'] = (val) ? val : '';
-                                    if (obj['MOST_DEL_SCORE'].length > 0) {
-                                        mdsValue = parseInt(obj['MOST_DEL_SCORE']);
-                                    }
-                                } else if (key === 'ds') {
-                                    obj['ds'] = (val) ? val : '';
-                                } else if (key === 'dsr') {
-                                    obj['dsr'] = (val) ? val : '';
-                                } else if (key === 'pname') {
-                                    obj['pname'] = (val) ? val : '';
-                                } else if (key === 'pheno') {
-                                    obj['pheno'] = (val) ? val : '';
-                                } else if (key === 'datasetname') {
-                                    obj['datasetname'] = (val) ? val : '';
-                                } else if (key === 'meaning') {
-                                    obj['meaning'] = (val) ? val : '';
-                                } else if (key === 'MAF') {
-                                    _.forEach(val, function (mafval, mafkey) {
-                                        mafValue = (mafval) ? mafval : '';
-                                        obj['MAF'] = mafValue;
-                                    })
-                                } else if ((key === 'P_FIRTH_FE_IV') ||
-                                        (key === 'P_VALUE') ||
-                                        (key === 'P_FE_INV') ||
-                                        (key === 'P_FIRTH')
-                                        ) {
-                                    _.forEach(val, function (dsetval, dsetkey) {
-                                        _.forEach(dsetval, function (pval, pkey) {
-                                            obj['P_VALUE'] = UTILS.realNumberFormatter((pval) ? pval : 1);
-                                            obj['P_VALUEV'] = (pval) ? pval : 1;
-                                            pValue = obj['P_VALUEV'];
-                                        });
-
-                                    });
-
-                                } else if ((key === 'ODDS_RATIO') ||
-                                        (key === 'OR_FIRTH') ||
-                                        (key === 'OR_FIRTH_FE_IV') ||
-                                        (key === 'OR_FIRTH')
-                                        ) {
-                                    _.forEach(val, function (dsetval, dsetkey) {
-                                        _.forEach(dsetval, function (pval, pkey) {
-                                            obj['BETA'] = UTILS.realNumberFormatter((pval) ? pval : 1);
-                                            obj['BETAV'] = (pval) ? pval : 1;
-                                        });
-
-                                    });
-
-                                } else if (key === 'BETA') {
-                                    _.forEach(val, function (dsetval, dsetkey) {
-                                        _.forEach(dsetval, function (pval, pkey) {
-                                            obj['BETA'] = UTILS.realNumberFormatter(Math.exp((pval) ? pval : 1));
-                                            obj['BETAV'] = Math.exp((pval) ? pval : 1);
-                                        });
-
-                                    });
-
-                                }
+                _.forEach(actObj, function (val, key) {
+                    if (key === 'VAR_ID') {
+                        obj['id'] = (val) ? val : '';
+                    } else if (key === 'DBSNP_ID') {
+                        obj['rsId'] = (val) ? val : '';
+                    } else if (key === 'Protein_change') {
+                        obj['impact'] = (val) ? val : '';
+                    } else if (key === 'Consequence') {
+                        obj['deleteriousness'] = (val) ? val : '';
+                    } else if (key === 'Reference_Allele') {
+                        obj['referenceAllele'] = (val) ? val : '';
+                    } else if (key === 'Effect_Allele') {
+                        obj['effectAllele'] = (val) ? val : '';
+                    } else if (key === 'MOST_DEL_SCORE') {
+                        obj['MOST_DEL_SCORE'] = (val) ? val : '';
+                        if (obj['MOST_DEL_SCORE'].length > 0) {
+                            mdsValue = parseInt(obj['MOST_DEL_SCORE']);
+                        }
+                    } else if (key === 'ds') {
+                        obj['ds'] = (val) ? val : '';
+                    } else if (key === 'dsr') {
+                        obj['dsr'] = (val) ? val : '';
+                    } else if (key === 'pname') {
+                        obj['pname'] = (val) ? val : '';
+                    } else if (key === 'pheno') {
+                        obj['pheno'] = (val) ? val : '';
+                    } else if (key === 'datasetname') {
+                        obj['datasetname'] = (val) ? val : '';
+                    } else if (key === 'meaning') {
+                        obj['meaning'] = (val) ? val : '';
+                    } else if (key === 'MAF') {
+                        _.forEach(val, function (mafval, mafkey) {
+                            mafValue = (mafval) ? mafval : '';
+                            obj['MAF'] = mafValue;
+                        })
+                    } else if ((key === 'P_FIRTH_FE_IV') ||
+                            (key === 'P_VALUE') ||
+                            (key === 'P_FE_INV') ||
+                            (key === 'P_FIRTH')
+                            ) {
+                        _.forEach(val, function (dsetval, dsetkey) {
+                            _.forEach(dsetval, function (pval, pkey) {
+                                obj['P_VALUE'] = UTILS.realNumberFormatter((pval) ? pval : 1);
+                                obj['P_VALUEV'] = (pval) ? pval : 1;
+                                pValue = obj['P_VALUEV'];
                             });
+
+                        });
+
+                    } else if ((key === 'ODDS_RATIO') ||
+                            (key === 'OR_FIRTH') ||
+                            (key === 'OR_FIRTH_FE_IV') ||
+                            (key === 'OR_FIRTH')
+                            ) {
+                        _.forEach(val, function (dsetval, dsetkey) {
+                            _.forEach(dsetval, function (pval, pkey) {
+                                obj['BETA'] = UTILS.realNumberFormatter((pval) ? pval : 1);
+                                obj['BETAV'] = (pval) ? pval : 1;
+                            });
+
+                        });
+
+                    } else if (key === 'BETA') {
+                        _.forEach(val, function (dsetval, dsetkey) {
+                            _.forEach(dsetval, function (pval, pkey) {
+                                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((pval) ? pval : 1));
+                                obj['BETAV'] = Math.exp((pval) ? pval : 1);
+                            });
+
+                        });
+
+                    }
+                });
                 return obj;
             };
 
 
-
-            var buildRenderData = function (data,mafCutoff)  {
-                var renderData = {variants:[],
-                                    rvar:[],
-                                    cvar:[]};
+            var buildRenderData = function (data, mafCutoff) {
+                var renderData = {variants: [],
+                    rvar: [],
+                    cvar: []};
                 if ((typeof data !== 'undefined') &&
-                        (typeof data.variants !== 'undefined')&&
-                        (typeof data.variants.variants !== 'undefined')&&
-                        (data.variants.variants.length > 0)){
+                        (typeof data.variants !== 'undefined') &&
+                        (typeof data.variants.variants !== 'undefined') &&
+                        (data.variants.variants.length > 0)) {
                     var obj;
-                    _.forEach(data.variants.variants,function(v,index,y){
-                        if (_.flatten(v).length==0) {
+                    _.forEach(data.variants.variants, function (v, index, y) {
+                        if (_.flatten(v).length == 0) {
                             renderData.variants.push(processAggregatedData(v));
                             //renderData.variants.push(_.forEach(v,procAggregatedData));
                         } else {
@@ -585,17 +622,18 @@ div.variantBoxHeaders {
                             //renderData.variants.push(_.forEach(v,procExpandedData));
                         }
 
-                     });
-                };
+                    });
+                }
+                ;
                 return renderData;
             };
-            var refineRenderData = function (renderData,significanceLevel)  {
-                renderData.rvar=[];
-                renderData.cvar=[];
+            var refineRenderData = function (renderData, significanceLevel) {
+                renderData.rvar = [];
+                renderData.cvar = [];
                 var pValueCutoffHighImpact = 0;
                 var pValueCutoffCommon = 0;
                 var maxNumberOfVariants = 100;
-                switch (significanceLevel){
+                switch (significanceLevel) {
                     case 3:
                         pValueCutoffHighImpact = 0.00000005;
                         pValueCutoffCommon = 0.000005;
@@ -608,51 +646,67 @@ div.variantBoxHeaders {
                         pValueCutoffHighImpact = 1;
                         pValueCutoffCommon = 1;
                         break;
-                    default: break;
+                    default:
+                        break;
                 }
-                _.forEach(renderData.variants,function(v){
+                _.forEach(renderData.variants, function (v) {
                     var mafValue = v['MAF']
                     var mdsValue = v['MOST_DEL_SCORE'];
                     var pValue = v['P_VALUEV'];
-                    if ((typeof mdsValue !== 'undefined') && (mdsValue!=='') && (mdsValue<=2) &&
-                            (typeof pValue !== 'undefined') && (pValue<=pValueCutoffHighImpact)){
-                        if (renderData.rvar.length < maxNumberOfVariants){
-                            if (pValue < 0.00000005) {v['CAT'] = 'greenline'}
-                            else if (pValue < 0.0001) {v['CAT'] = 'yellowline'}
-                            else {v['CAT'] = 'redline'}
+                    if ((typeof mdsValue !== 'undefined') && (mdsValue !== '') && (mdsValue <= 2) &&
+                            (typeof pValue !== 'undefined') && (pValue <= pValueCutoffHighImpact)) {
+                        if (renderData.rvar.length < maxNumberOfVariants) {
+                            if (pValue < 0.00000005) {
+                                v['CAT'] = 'greenline'
+                            }
+                            else if (pValue < 0.0001) {
+                                v['CAT'] = 'yellowline'
+                            }
+                            else {
+                                v['CAT'] = 'redline'
+                            }
                             renderData.rvar.push(v);
                         }
                     }
-                    if ((typeof mafValue !== 'undefined') && (mafValue!=='') && (mafValue>0.05)&&
-                                (typeof pValue !== 'undefined') && (pValue<=pValueCutoffCommon)) {
+                    if ((typeof mafValue !== 'undefined') && (mafValue !== '') && (mafValue > 0.05) &&
+                            (typeof pValue !== 'undefined') && (pValue <= pValueCutoffCommon)) {
                         if (renderData.cvar.length < maxNumberOfVariants) {
-                            if (pValue < 0.00000005) {v['CAT'] = 'greenline'}
-                            else if (pValue < 0.0001) {v['CAT'] = 'yellowline'}
-                            else {v['CAT'] = 'redline'}
+                            if (pValue < 0.00000005) {
+                                v['CAT'] = 'greenline'
+                            }
+                            else if (pValue < 0.0001) {
+                                v['CAT'] = 'yellowline'
+                            }
+                            else {
+                                v['CAT'] = 'redline'
+                            }
                             renderData.cvar.push(v);
                         }
                     }
                 });
-                renderData.rvar = _.sortBy(renderData.rvar,function(o){return o.P_VALUEV});
-                renderData.cvar = _.sortBy(renderData.cvar,function(o){return o.P_VALUEV});
+                renderData.rvar = _.sortBy(renderData.rvar, function (o) {
+                    return o.P_VALUEV
+                });
+                renderData.cvar = _.sortBy(renderData.cvar, function (o) {
+                    return o.P_VALUEV
+                });
                 return renderData;
             };
 
 
-
-            var updateAggregateVariantsDisplay = function (data,locToUpdate) {
+            var updateAggregateVariantsDisplay = function (data, locToUpdate) {
                 var updateHere = $(locToUpdate);
                 updateHere.empty();
-                if ((data)&&
-                        (data.stats)){
-                    updateHere.append("<ul class='aggregateVariantsDescr list-group'>"+
-                                        "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.beta)+"</li>"+
-                                        "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.pValue)+"</li>"+
-                                        "<li class='list-group-item'>"+UTILS.realNumberFormatter(data.stats.ciLower)+" - "+UTILS.realNumberFormatter(data.stats.ciUpper)+"</li>"+
-                                    "</ul>");
-                    if (data.stats.pValue<0.000001){
+                if ((data) &&
+                        (data.stats)) {
+                    updateHere.append("<ul class='aggregateVariantsDescr list-group'>" +
+                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.beta) + "</li>" +
+                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.pValue) + "</li>" +
+                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " - " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
+                            "</ul>");
+                    if (data.stats.pValue < 0.000001) {
                         updateDisplayBasedOnStoredSignificanceLevel(3);//green light
-                    } else if (data.stats.pValue<0.01){
+                    } else if (data.stats.pValue < 0.01) {
                         updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
                     }
 
@@ -662,18 +716,20 @@ div.variantBoxHeaders {
 
             var commonSectionComesFirst = function (renderData) { // returns true or false
                 var returnValue;
-                var sortedVariants = _.sortBy(renderData.variants,function(o){return o.P_VALUEV});
-                for ( var i = 0 ; (i < sortedVariants.length)  && (typeof returnValue === 'undefined') ; i++ ){
-                    var oneVariant  = sortedVariants[i];
-                    if ((typeof oneVariant.MAF !== 'undefined')&&(oneVariant.MAF!=="")){
-                        if (oneVariant.MAF < 0.05){
+                var sortedVariants = _.sortBy(renderData.variants, function (o) {
+                    return o.P_VALUEV
+                });
+                for (var i = 0; (i < sortedVariants.length) && (typeof returnValue === 'undefined'); i++) {
+                    var oneVariant = sortedVariants[i];
+                    if ((typeof oneVariant.MAF !== 'undefined') && (oneVariant.MAF !== "")) {
+                        if (oneVariant.MAF < 0.05) {
                             returnValue = false;
-                        }else {
+                        } else {
                             returnValue = true;
                         }
                     }
-                    if ((typeof oneVariant.MOST_DEL_SCORE !== 'undefined')){
-                        if (oneVariant.MOST_DEL_SCORE < 3){
+                    if ((typeof oneVariant.MOST_DEL_SCORE !== 'undefined')) {
+                        if (oneVariant.MOST_DEL_SCORE < 3) {
                             returnValue = false;
                         }
                     }
@@ -682,206 +738,293 @@ div.variantBoxHeaders {
             }
 
 
-            var updateSignificantVariantDisplay = function (data) {
-                var renderData = buildRenderData (data,0.05);
+            var buildListOfInterestingPhenotypes = function (renderData) {
+                var listOfInterestingPhenotypes = [];
+                _.forEach(renderData.variants, function (v) {
+                    var newSignalCategory = assessOneSignalsSignificance(v);
+                    if (newSignalCategory > 1) {
+                        var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
+                        if (existingRecIndex > -1) {
+                            var existingRec = listOfInterestingPhenotypes[existingRecIndex];
+                            if (existingRec['signalStrength'] < newSignalCategory) {
+                                existingRec['signalStrength'] = newSignalCategory;
+                            }
+                            if (existingRec['pValue'] > v['P_VALUEV']) {
+                                existingRec['pValue'] = v['P_VALUEV'];
+                            }
+                        } else {
+                            listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
+                                'signalStrength': newSignalCategory,
+                                'pValue': v['P_VALUEV']})
+                        }
+                    }
+                });
+                return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
+            };
+
+            var displayInterestingPhenotypes = function (data) {
+                var renderData = buildRenderData(data, 0.05);
                 var signalLevel = assessSignalSignificance(renderData);
-                var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
-                renderData = refineRenderData(renderData,1);
-                updateDisplayBasedOnSignificanceLevel (signalLevel);
-                if (mpgSoftware.locusZoom.plotAlreadyExists()) {
+                updateDisplayBasedOnSignificanceLevel(signalLevel);
+                var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData);
+                if (listOfInterestingPhenotypes.length > 0) {
+                    $('.interestingPhenotypesHolder').css('display','block');
+                    var phenotypeDescriptions = '<label>Phenotypes with signals</label>'+
+                            '<ul class="nav nav-pills">';
+                    _.forEach(listOfInterestingPhenotypes, function (o) {
+                        if (o['signalStrength'] == 1) {
+                            phenotypeDescriptions += ('<li class="nav-item redPhenotype things">' + o['phenotype'] + '</li>');
+                        } else if (o['signalStrength'] == 2) {
+                            phenotypeDescriptions += ('<li class="nav-item yellowPhenotype phenotypeStrength">' + o['phenotype'] + '</li>');
+                        } else if (o['signalStrength'] == 3) {
+                            phenotypeDescriptions += ('<li class="nav-item greenPhenotype phenotypeStrength">' + o['phenotype'] + '</li>');
+                        }
+                    });
+                    phenotypeDescriptions += '</ul>';
+                    $('#interestingPhenotypes').append(phenotypeDescriptions);
+
+                }
+                $('.phenotypeStrength').on("click",function () {
+                    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype($(this).text(),
+                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:false,phenotype:$(this).text()});
+                });
+                var firstPheno = $('.phenotypeStrength').first().text();
+                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPheno,
+                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPheno});
+            };
+
+                        var updateSignificantVariantDisplay = function (data,additionalParameters) {
+                            var updateLZ = additionalParameters.updateLZ;
+                            var phenotypeName = additionalParameters.phenotype;
+                            var renderData = buildRenderData (data,0.05);
+                            var signalLevel = assessSignalSignificance(renderData);
+                            var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
+                            renderData = refineRenderData(renderData,1);
+                            updateDisplayBasedOnSignificanceLevel (signalLevel);
+                            if (updateLZ&&mpgSoftware.locusZoom.plotAlreadyExists()) {
+                                mpgSoftware.locusZoom.removeAllPanels();
+                            }
+                            if (updateLZ) {
+                                $('#collapseExample div.well').empty();
+                                if (commonSectionShouldComeFirst) {
+                                    $('#collapseExample div.well').append('<div id="commonVariantsLocation"></div>' +
+                                                    '<div id="locusZoomLocation"></div>' +
+                                                    '<div id="highImpactVariantsLocation"></div>' +
+                                                    '<div id="aggregateVariantsLocation"></div>'
+                                    );
+                                } else {
+                                    $('#collapseExample div.well').append('<div id="highImpactVariantsLocation"></div>' +
+                                            '<div id="locusZoomLocation"></div>' +
+                                            '<div id="aggregateVariantsLocation"></div>' +
+                                            '<div id="commonVariantsLocation"></div>');
+                                }
+                            } else {
+                                $('#highImpactVariantsLocation div').empty();
+                                $('#commonVariantsLocation div').empty();
+                            }
+                            if (updateLZ){
+                                $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
+                            }
+                            $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
+                            $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
+                            $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
+                            //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
+                            var sampleBasedPhenotypeName = phenotypeNameForSampleData(phenotypeName);
+                            var hailPhenotypeInfo = phenotypeNameForHailData(phenotypeName);
+                            if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
+                                 ( sampleBasedPhenotypeName.length > 0)) {
+                                $('#aggregateVariantsLocation').css('display','block');
+                                $('#noAggregatedVariantsLocation').css('display','none');
+                                refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
+                                refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
+                                refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
+                                refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
+                                refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
+                                refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                            } else {
+                                $('#aggregateVariantsLocation').css('display','none');
+                                $('#noAggregatedVariantsLocation').css('display','block');
+                            }
+                            var positioningInformation = {
+                                chromosome: '${geneChromosome}'.replace(/chr/g, ""),
+                                startPosition:  ${geneExtentBegin},
+                                endPosition:  ${geneExtentEnd}
+                            };
+                            if (updateLZ) {
+                                if (!mpgSoftware.locusZoom.plotAlreadyExists()) {
+                                    mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                                            "#lz-1", "#collapseExample", '${lzOptions.first().key}', '${lzOptions.first().description}', '${lzOptions.first().propertyName}', '${lzOptions.first().dataSet}', 'junk',
+                                            '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                            '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
+                                } else {
+                                    if (typeof hailPhenotypeInfo !== 'undefined') {
+                                        mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
+                                                "#lz-1", "#collapseExample", '${lzOptions.first().key}', '${lzOptions.first().description}', '${lzOptions.first().dataSet}', '${lzOptions.first().propertyName}', 'junk',
+                                                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                                '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
+                                    } else {
+                                        $("#locusZoomLocation").css('display', 'none');
+                                    }
+                                }
+                            }
+                            $('#collapseExample').on('shown.bs.collapse', function (e) {
+                                mpgSoftware.locusZoom.rescaleSVG();
+                            });
+                        };
+
+
+                        var assessOneSignalsSignificance = function (v,signalCategory) {
+                            var signalCategory = 1;
+                            var mdsValue = parseInt(v['MOST_DEL_SCORE']);
+                            var pValue = parseFloat(v['P_VALUEV']);
+                            if (((pValue < 0.00000005)) ||
+                                    ( (pValue < 0.000005) &&
+                                            (mdsValue < 3) )) {
+                                signalCategory = 3;
+                            } else if (pValue < 0.0005) {
+                                signalCategory = 2;
+                            }
+                            return signalCategory;
+                        };
+                        var assessSignalSignificance = function (renderData){
+                           var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
+                            _.forEach(renderData.variants,function(v){
+                                var newSignalCategory = assessOneSignalsSignificance(v);
+                                if (newSignalCategory>signalCategory){
+                                    signalCategory = newSignalCategory;
+                                }
+                            });
+                            return signalCategory;
+                        };
+
+
+
+
+
+                        var updateDisplayBasedOnSignificanceLevel = function (significanceLevel) {
+
+
+                                var significanceLevelDoms = $('.trafficExplanations');
+
+                                            significanceLevelDoms.removeClass('emphasize');
+                                            significanceLevelDoms.addClass('unemphasize');
+
+
+                            $('#trafficLightHolder').empty();
+                            var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
+                            significanceLevelDom.removeClass('unemphasize');
+                            significanceLevelDom.addClass('emphasize');
+                            if (significanceLevel == 1){
+                                $('#trafficLightHolder').append('<r:img uri="/images/redlight.png"/>');
+                            } else if (significanceLevel == 2){
+                                $('#trafficLightHolder').append('<r:img uri="/images/yellowlight.png"/>');
+                            } else if (significanceLevel == 3){
+                                $('#trafficLightHolder').append('<r:img uri="/images/greenlight.png"/>');
+                            }
+                            $('#signalLevelHolder').text(significanceLevel);
+                        };
+
+
+
+
+
+                        var updateDisplayBasedOnStoredSignificanceLevel = function (newSignificanceLevel) {
+                            var currentSignificanceLevel = $('#signalLevelHolder').text();
+                            if (newSignificanceLevel>=currentSignificanceLevel){
+                                return;
+                            }
+                            updateDisplayBasedOnSignificanceLevel(newSignificanceLevel);
+                        };
+
+
+
+
+                        var refreshVariantAggregates = function (phenotypeName, filterNum, sampleDataSet, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
+                            var rememberCallBack = callBack;
+                            var rememberCallBackParameter = callBackParameter;
+
+                            $.ajax({
+                                cache: false,
+                                type: "post",
+                                url: "${createLink(controller: 'gene', action: 'burdenTestAjax')}",
+                                data: { geneName:geneName,
+                                        dataSet:dataSet,
+                                        sampleDataSet:sampleDataSet,
+                                        filterNum:filterNum,
+                                        burdenTraitFilterSelectedOption: phenotypeName,
+                                        mafOption:mafOption,
+                                        mafValue:mafValue   },
+                                async: true,
+                                success: function (data) {
+                                    rememberCallBack(data,rememberCallBackParameter);
+                                },
+                                error: function (jqXHR, exception) {
+                                    core.errorReporter(jqXHR, exception);
+                                }
+                            });
+
+                        };
+
+                        var refreshTopVariants = function ( callBack ) {
+                            var rememberCallBack = callBack;
+                            $.ajax({
+                                cache: false,
+                                type: "post",
+                                url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
+                                data: {
+                                    geneToSummarize:"${geneName}"},
+                                async: true,
+                                success: function (data) {
+                                    rememberCallBack(data);
+                                },
+                                error: function (jqXHR, exception) {
+                                    core.errorReporter(jqXHR, exception);
+                                }
+                            });
+
+                        };
+                        var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
+                            var rememberCallBack = callBack;
+                            $.ajax({
+                                cache: false,
+                                type: "post",
+                                url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
+                                data: {
+                                    phenotype: phenotypeName,
+                                    geneToSummarize:"${geneName}"},
+                                async: true,
+                                success: function (data) {
+                                    rememberCallBack(data, parameter);
+                                },
+                                error: function (jqXHR, exception) {
+                                    core.errorReporter(jqXHR, exception);
+                                }
+                            });
+
+                        };
+                        var refreshTopVariantsByPhenotype = function (sel, callBack) {
+                            var phenotypeName = sel.value;
+                            refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
+                        };
+
+                var refreshLZ = function(varId,dataSetName,propName,phenotype){
+                    var parseId = varId.split("_");
+                    var locusZoomRange = 80000;
+                    var variantPos = parseInt(parseId[1]);
+                    var begPos = 0;
+                    var endPos =  variantPos + locusZoomRange;
+                    if (variantPos > locusZoomRange ){
+                        begPos =  variantPos - locusZoomRange;
+                    }
+                    var positioningInformation = {
+                        chromosome: parseId[0],
+                        startPosition: begPos,
+                        endPosition: endPos
+                    };
                     mpgSoftware.locusZoom.removeAllPanels();
-                }
-                $('#collapseExample div.well').empty();
-                if (commonSectionShouldComeFirst){
-                    $('#collapseExample div.well').append('<div id="commonVariantsLocation"></div>'+
-                            '<div id="locusZoomLocation"></div>'+
-                            '<div id="highImpactVariantsLocation"></div>'+
-                            '<div id="aggregateVariantsLocation"></div>'
-                    );
-                } else {
-                    $('#collapseExample div.well').append('<div id="highImpactVariantsLocation"></div>'+
-                            '<div id="locusZoomLocation"></div>'+
-                            '<div id="aggregateVariantsLocation"></div>'+
-                            '<div id="commonVariantsLocation"></div>');
-                }
-                $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
-                $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
-                $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
-                $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
-                var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
-                var sampleBasedPhenotypeName = phenotypeNameForSampleData(phenotypeName);
-                var hailPhenotypeInfo = phenotypeNameForHailData(phenotypeName);
-                if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
-                     ( sampleBasedPhenotypeName.length > 0)) {
-                    $('#aggregateVariantsLocation').css('display','block');
-                    $('#noAggregatedVariantsLocation').css('display','none');
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
-                } else {
-                    $('#aggregateVariantsLocation').css('display','none');
-                    $('#noAggregatedVariantsLocation').css('display','block');
-                }
-                var positioningInformation = {
-                    chromosome: '${geneChromosome}'.replace(/chr/g, ""),
-                    startPosition:  ${geneExtentBegin},
-                    endPosition:  ${geneExtentEnd}
-                };
-                if (!mpgSoftware.locusZoom.plotAlreadyExists()){
-                    mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                            "#lz-1", "#collapseExample", '${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',
-                            '${createLink(controller:"gene", action:"getLocusZoom")}',
-                            '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
-                } else {
-                    if (typeof hailPhenotypeInfo !== 'undefined') {
-                        mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1","#collapseExample",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().dataSet}','${lzOptions.first().propertyName}','junk',
-                                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
-                    } else {
-                        $("#locusZoomLocation").css('display','none');
-                    }
-                }
-                $('#collapseExample').on('shown.bs.collapse', function (e) {
-                    mpgSoftware.locusZoom.rescaleSVG();
-                });
-            };
 
 
-            var assessSignalSignificance = function (renderData){
-               var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
-                _.forEach(renderData.variants,function(v){
-                    var mdsValue = parseInt(v['MOST_DEL_SCORE']);
-                    var mafValue = parseFloat(v['MAF']);
-                    var pValue = parseFloat(v['P_VALUEV']);
-                    if (signalCategory < 3){
-                        if ( ((pValue < 0.00000005)&&
-                              (mdsValue < 3))||
-                             ((pValue < 0.000005)&&
-                              (mafValue > 0.05)) ){
-                            signalCategory = 3;
-                        }
-                    } else if (signalCategory < 2){
-                        if (pValue < 0.0001){
-                            signalCategory = 2;
-                        }
-                    }
-                });
-                return signalCategory;
-            }
-
-
-
-
-            var updateDisplayBasedOnSignificanceLevel = function (significanceLevel) {
-
-
-                    var significanceLevelDoms = $('.trafficExplanations');
-
-                                significanceLevelDoms.removeClass('emphasize');
-                                significanceLevelDoms.addClass('unemphasize');
-
-
-                $('#trafficLightHolder').empty();
-                var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
-                significanceLevelDom.removeClass('unemphasize');
-                significanceLevelDom.addClass('emphasize');
-                if (significanceLevel == 1){
-                    $('#trafficLightHolder').append('<r:img uri="/images/redlight.png"/>');
-                } else if (significanceLevel == 2){
-                    $('#trafficLightHolder').append('<r:img uri="/images/yellowlight.png"/>');
-                } else if (significanceLevel == 3){
-                    $('#trafficLightHolder').append('<r:img uri="/images/greenlight.png"/>');
-                }
-                $('#signalLevelHolder').text(significanceLevel);
-            };
-
-
-
-
-
-            var updateDisplayBasedOnStoredSignificanceLevel = function (newSignificanceLevel) {
-                var currentSignificanceLevel = $('#signalLevelHolder').text();
-                if (newSignificanceLevel>=currentSignificanceLevel){
-                    return;
-                }
-                updateDisplayBasedOnSignificanceLevel(newSignificanceLevel);
-            };
-
-
-
-
-            var refreshVariantAggregates = function (phenotypeName, filterNum, sampleDataSet, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
-                var rememberCallBack = callBack;
-                var rememberCallBackParameter = callBackParameter;
-
-                $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: "${createLink(controller: 'gene', action: 'burdenTestAjax')}",
-                    data: { geneName:geneName,
-                            dataSet:dataSet,
-                            sampleDataSet:sampleDataSet,
-                            filterNum:filterNum,
-                            burdenTraitFilterSelectedOption: phenotypeName,
-                            mafOption:mafOption,
-                            mafValue:mafValue   },
-                    async: true,
-                    success: function (data) {
-                        rememberCallBack(data,rememberCallBackParameter);
-                    },
-                    error: function (jqXHR, exception) {
-                        core.errorReporter(jqXHR, exception);
-                    }
-                });
-
-            };
-
-
-            var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack) {
-                var rememberCallBack = callBack;
-                $.ajax({
-                    cache: false,
-                    type: "post",
-                    url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
-                    data: {phenotype: phenotypeName,
-                        geneToSummarize:"${geneName}"},
-                    async: true,
-                    success: function (data) {
-                        rememberCallBack(data);
-                    },
-                    error: function (jqXHR, exception) {
-                        core.errorReporter(jqXHR, exception);
-                    }
-                });
-
-            };
-            var refreshTopVariantsByPhenotype = function (sel, callBack) {
-                var phenotypeName = sel.value;
-                refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
-            };
-
-    var refreshLZ = function(varId,dataSetName,propName,phenotype){
-        var parseId = varId.split("_");
-        var locusZoomRange = 80000;
-        var variantPos = parseInt(parseId[1]);
-        var begPos = 0;
-        var endPos =  variantPos + locusZoomRange;
-        if (variantPos > locusZoomRange ){
-            begPos =  variantPos - locusZoomRange;
-        }
-        var positioningInformation = {
-            chromosome: parseId[0],
-            startPosition: begPos,
-            endPosition: endPos
-        };
-        mpgSoftware.locusZoom.removeAllPanels();
-
-
-                %{--mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,--}%
+                            %{--mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,--}%
                         %{--"#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,propName,phenotype,--}%
                         %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
                         %{--'${createLink(controller:"variantInfo", action:"variantInfo")}','static');--}%
@@ -891,10 +1034,13 @@ div.variantBoxHeaders {
 
 
 return {
+    assessOneSignalsSignificance: assessOneSignalsSignificance,
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
+    displayInterestingPhenotypes:displayInterestingPhenotypes,
     updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
+    refreshTopVariants:refreshTopVariants,
     refreshLZ:refreshLZ
 }
 }());
@@ -905,21 +1051,18 @@ return {
 //var loading = $('#spinner').show();
 //loading.hide();
 $( document ).ready(function() {
-mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',
-    '${g.defaultPhenotype()}',
-                "${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",
-                function(){
-                    // retrieve the top value in the phenotype drop-down
-                    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype($($('#signalPhenotypeTableChooser>option')[1]).attr('value'),
-                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
-                } );
-    var positioningInformation = {
-        chromosome: '${geneChromosome}'.replace(/chr/g, ""),
-        startPosition:  ${geneExtentBegin},
-        endPosition:  ${geneExtentEnd}
-    };
+    %{--mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',--}%
+    %{--'${g.defaultPhenotype()}',--}%
+    %{--"${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",--}%
+    %{--function(){--}%
+    %{--// retrieve the top value in the phenotype drop-down--}%
+//    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype('T2D',
+//    mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
+    %{--} );--}%
+    %{--});--}%
 
-    });
+   mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.displayInterestingPhenotypes);
+});
 
 
 </script>

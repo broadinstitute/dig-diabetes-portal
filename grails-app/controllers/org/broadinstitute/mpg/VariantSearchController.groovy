@@ -397,8 +397,16 @@ class VariantSearchController {
 
 
 
-    def retrieveTopVariantsAcrossSgs (){
-        String phenotypeName
+    def retrieveTopVariantsAcrossSgsAndPhenotypes () {
+
+    }
+
+
+
+
+
+        def retrieveTopVariantsAcrossSgs (){
+        String phenotypeName = ''
         String geneName
         if (params.phenotype) {
             phenotypeName = params.phenotype
