@@ -88,7 +88,10 @@ class HomeController {
             strokeIntroTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_disease_KP_tutorial.pdf",
             strokeVariantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf",
             miIntroTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_disease_KP_tutorial.pdf",
-            miVariantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf"
+            miVariantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf",
+                GAITguide: "https://s3.amazonaws.com/broad-portal-resources/GAIT_guide.pdf",
+                VariantResultsTableGuide: "https://s3.amazonaws.com/broad-portal-resources/Variant_results_table_guide_09-15-2016.pdf",
+                GeneticsGuide: "https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf"
         ]
         render(controller: 'home', view: 'tutorials', model: [links: links])
     }
