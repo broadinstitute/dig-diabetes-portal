@@ -92,14 +92,32 @@
 %{--Main search page for application--}%
 <div id="main">
     <div class="container content-wrapper">
-        <h1 class="page-header">Tutorials</h1>
+        <h1 class="page-header">Resources</h1>
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
             <a href="https://www.youtube.com/watch?v=jsgUxsd7Z4w" target="_blank">Video walkthrough</a>
+            <ul class="tutorial"><li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.introTutorial.title"/></a></li>
+                <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
+                        code="portal.variantFinderTutorial.title"/></a></li>
+            </ul>
         </g:if>
+
+<g:elseif test="${g.portalTypeString()?.equals('t2d')}">
         <ul class="tutorial"><li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
                 code="portal.introTutorial.title"/></a></li>
             <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.variantFinderTutorial.title"/></a></li></ul>
+                    code="portal.variantFinderTutorial.title"/></a></li>
+            <li><a id="GAITPdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.GAITguide.title"/></a></li>
+            <li><a id="VariantResultsPdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.variantResultsTableGuide.title"/></a></li>
+            <li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.GeneticsGuide.title"/></a></li>
+        </ul>
+</g:elseif>
+
+
+
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
             <a class="media" href="${links.introTutorial}">PDF File</a>
         </g:if>
