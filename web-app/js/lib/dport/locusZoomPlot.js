@@ -16,10 +16,10 @@ var mpgSoftware = mpgSoftware || {};
       this.layout = {
           responsive_resize: true,
           min_width: 600,
-          min_height: 300,
+          min_height: 200,
           width: 600,
-          height: 300,
-        aspect_ratio: 2,
+          height: 200,
+        aspect_ratio: 3,
         dashboard: {
             components: [
                 { type: "title", title: "LocusZoom", position: "left" },

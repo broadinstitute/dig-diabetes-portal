@@ -14,6 +14,7 @@
 }
 #phenotypeLabel{
     font-size: 32px;
+    font-weight: bold;
 }
 .trafficExplanations.emphasize {
     font-weight: 900;
@@ -141,7 +142,7 @@ div.variantBoxHeaders {
         </div>
         <div class="row interestingPhenotypesHolder">
             <div class="col-xs-12">
-            <div id="interestingPhenotypes" class="container">
+            <div id="interestingPhenotypes">
 
             </div>
             </div>
@@ -327,7 +328,7 @@ div.variantBoxHeaders {
                                                 <div class="col-lg-1">{{P_VALUE}}</div>
 
                                                 <div class="col-lg-1">{{BETA}}</div>
-                                                <div class="col-lg-3">{{ds}}</div>
+                                                <div class="col-lg-3">{{dsr}}</div>
                                             </div>
                                         {{ /rvar }}
                                         {{ ^rvar }}
@@ -380,7 +381,7 @@ div.variantBoxHeaders {
 
                                         <div class="col-lg-1">{{BETA}}</div>
 
-                                        <div class="col-lg-3">{{ds}}</div>
+                                        <div class="col-lg-3">{{dsr}}</div>
 
                                 </div>
                                 {{ /cvar }}
@@ -499,6 +500,7 @@ div.variantBoxHeaders {
                             (key === 'P_FE_INV') ||
                             (key === 'P_FIRTH')
                             ) {
+                        obj['property'] = key;
                         obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
                         obj['P_VALUEV'] = (val) ? val : 1;
                     } else if (key === 'BETA') {
@@ -591,11 +593,26 @@ div.variantBoxHeaders {
                         }
                     }
                 });
-                renderData.rvar = _.sortBy(renderData.rvar, function (o) {
+                // sort by P value for the high-impact variants
+                var tempRVar = _.sortBy(renderData.rvar, function (o) {
                     return o.P_VALUEV
                 });
-                renderData.cvar = _.sortBy(renderData.cvar, function (o) {
+                renderData.rvar = [];
+                // Only the first P value with each name gets in.  Since these are sorted we get all the variants with the lowest P values
+                _.forEach(tempRVar,function(o){
+                    if (_.findIndex(renderData.rvar,function (p){return (p['id']==o['id'])})<0){
+                        renderData.rvar.push(o);
+                    }
+                });
+                // repeat the sorting and filtering for the common variants
+                var tempCVar = _.sortBy(renderData.cvar, function (o) {
                     return o.P_VALUEV
+                });
+                renderData.cvar = [];
+                _.forEach(tempCVar,function(o){
+                    if (_.findIndex(renderData.cvar,function (p){return (p['id']==o['id'])})<0){
+                        renderData.cvar.push(o);
+                    }
                 });
                 return renderData;
             };
@@ -609,7 +626,7 @@ div.variantBoxHeaders {
                     updateHere.append("<ul class='aggregateVariantsDescr list-group'>" +
                             "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.beta) + "</li>" +
                             "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.pValue) + "</li>" +
-                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " - " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
+                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " : " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
                             "</ul>");
                     if (data.stats.pValue < 0.000001) {
                         updateDisplayBasedOnStoredSignificanceLevel(3);//green light
@@ -658,9 +675,12 @@ div.variantBoxHeaders {
                             }
                             if (existingRec['pValue'] > v['P_VALUEV']) {
                                 existingRec['pValue'] = v['P_VALUEV'];
+                                existingRec['ds'] = v['ds'];
+                                existingRec['pname'] = v['pname'];
                             }
                         } else {
                             listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
+                                'ds': v['ds'],
                                 'pname': v['pname'],
                                 'signalStrength': newSignalCategory,
                                 'pValue': v['P_VALUEV']})
@@ -681,11 +701,11 @@ div.variantBoxHeaders {
                             '<ul class="nav nav-pills">';
                     _.forEach(listOfInterestingPhenotypes, function (o) {
                         if (o['signalStrength'] == 1) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" class="nav-item redPhenotype things">' + o['pname'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype things">' + o['pname'] + '</li>');
                         } else if (o['signalStrength'] == 2) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                         } else if (o['signalStrength'] == 3) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                         }
                     });
                     phenotypeDescriptions += '</ul>';
@@ -694,18 +714,21 @@ div.variantBoxHeaders {
                 }
                 $('.phenotypeStrength').on("click",function () {
                     var phenocode = $(this).attr('id');
+                    var ds = $(this).attr('ds');
                     mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
-                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:$(this).text()});
+                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:$(this).text(),ds:ds});
                 });
                 var firstPhenoCode = $('.phenotypeStrength').first().attr('id');
+                var firstDS = $('.phenotypeStrength').first().attr('ds');
                 var firstPhenoName = $('.phenotypeStrength').first().text();
                 mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPhenoCode,
-                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPhenoCode,pname:firstPhenoName});
+                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPhenoCode,pname:firstPhenoName,ds:firstDS});
             };
 
                 var updateSignificantVariantDisplay = function (data,additionalParameters) {
                     var updateLZ = additionalParameters.updateLZ;
                     var phenotypeName = additionalParameters.phenotype;
+                    var datasetName = additionalParameters.ds;
                     var pName = additionalParameters.pname;
                     var renderData = buildRenderData (data,0.05);
                     var signalLevel = assessSignalSignificance(renderData);
@@ -768,18 +791,18 @@ div.variantBoxHeaders {
                     if (updateLZ) {
                         if (!mpgSoftware.locusZoom.plotAlreadyExists()) {
                             mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                                    "#lz-1", "#collapseExample", '${lzOptions.first().key}', '${lzOptions.first().description}', '${lzOptions.first().propertyName}', '${lzOptions.first().dataSet}', 'junk',
+                                    "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
                                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                                     '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
                         } else {
-                            if (typeof hailPhenotypeInfo !== 'undefined') {
+                            //if (typeof hailPhenotypeInfo !== 'undefined') {
                                 mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                        "#lz-1", "#collapseExample", '${lzOptions.first().key}', '${lzOptions.first().description}', '${lzOptions.first().dataSet}', '${lzOptions.first().propertyName}', 'junk',
+                                        "#lz-1", "#collapseExample", phenotypeName, pName, datasetName, '${lzOptions.first().propertyName}', 'junk',
                                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
-                            } else {
-                                $("#locusZoomLocation").css('display', 'none');
-                            }
+//                            } else {
+//                                $("#locusZoomLocation").css('display', 'none');
+//                            }
                         }
                     }
                     $('#collapseExample').on('shown.bs.collapse', function (e) {
