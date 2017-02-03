@@ -234,16 +234,22 @@ t2dDevRestServer {
     name =  'prod/'
     path = 'gs/'
 }
-// DIGP-136: changed to load balanced production machine
+
 t2dProdRestServer {//current 'prod'
     base = 'http://dig-api-prod.broadinstitute.org/'
     name =  'prod/'
     path = 'gs/'
 }
-// DIGP-136: changed to load balanced development machine
+
 t2dNewDevRestServer { //current 'dev'
     base = 'http://dig-api-prod.broadinstitute.org/'
     name =  'prod/'
+    path = 'gs/'
+}
+
+localServer {
+    base = 'http://localhost:8888/'
+    name =  'dig-genome-store/'
     path = 'gs/'
 }
 

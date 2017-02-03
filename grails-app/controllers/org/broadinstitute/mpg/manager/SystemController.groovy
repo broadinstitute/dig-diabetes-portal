@@ -371,6 +371,20 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
+        }else  if (restServer == 'prodserverbroad')  {
+            if (!(currentServer == 'prodserverbroad')) {
+                restServerService.goWithProdLoadBalancedBroadServer()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        }else  if (restServer == 'localserver')  {
+            if (!(currentServer == 'localserver')) {
+                restServerService.goWithLocalServer()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
         }
         params.datatype = "forceIt"
         forward(action: "forceMetadataCacheUpdate")

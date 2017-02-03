@@ -36,6 +36,8 @@ class RestServerService {
     SqlService sqlService
 
     private String PROD_LOAD_BALANCED_SERVER = ""
+    private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
+    private String LOCAL_SERVER = ""
     private String TODD_SERVER = ""
     private String QA_LOAD_BALANCED_SERVER = ""
     private String DEV_LOAD_BALANCED_SERVER = ""
@@ -137,6 +139,12 @@ class RestServerService {
         // load balancer with rest server(s) behind it
         PROD_LOAD_BALANCED_SERVER = grailsApplication.config.t2dProdLoadBalancedServer.base + grailsApplication.config.t2dProdLoadBalancedServer.name + grailsApplication.config.t2dProdLoadBalancedServer.path
 
+        // load balancer with rest server(s) behind it
+        PROD_LOAD_BALANCED_BROAD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+
+        // local server for development
+        LOCAL_SERVER = grailsApplication.config.localServer.base + grailsApplication.config.localServer.name + grailsApplication.config.localServer.path
+
         // qa load balancer with rest server(s) behind it
         QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
 
@@ -205,6 +213,14 @@ class RestServerService {
 
     public String getProdLoadBalanced() {
         return PROD_LOAD_BALANCED_SERVER;
+    }
+
+    public String getProdLoadBalancedBroad() {
+        return PROD_LOAD_BALANCED_BROAD_SERVER;
+    }
+
+    public String getLocal() {
+        return LOCAL_SERVER;
     }
 
     public String getToddServer() {
@@ -306,9 +322,13 @@ class RestServerService {
         pickADifferentRestServer(AWS02_REST_SERVER)
     }
 
-    public void goWithToddServer() {
-        pickADifferentRestServer(TODD_SERVER)
+    public void goWithProdLoadBalancedBroadServer() {
+        pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
     }
+    public void goWithLocalServer() {
+        pickADifferentRestServer(LOCAL_SERVER)
+    }
+
 
     public void goWithTheDevServer() {
         pickADifferentRestServer(DEV_REST_SERVER)

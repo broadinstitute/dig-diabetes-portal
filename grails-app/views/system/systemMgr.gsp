@@ -157,6 +157,25 @@
 
                             <div class="radio">
                                 <label>
+                                    <input id="prodserverbroad" type="radio" name="datatype" value="prodserverbroad"
+                                        <%=restServer.getCurrentServer()==restServer.getProdLoadBalancedBroad()?" checked ":"" %>  />
+                                    <g:message code="system.radio.rest_server.prod_broad" /> (${restServer.getProdLoadBalancedBroad()})
+                                </label>
+
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input id="localserver" type="radio" name="datatype" value="localserver"
+                                        <%=restServer.getCurrentServer()==restServer.getLocal()?" checked ":"" %>  />
+                                    <g:message code="system.radio.rest_server.local" /> (${restServer.getLocal()})
+                                </label>
+
+                            </div>
+
+
+                            <div class="radio">
+                                <label>
                                     <input id="toddServer" type="radio" name="datatype" value="toddServer"
                                         <%=restServer.getCurrentServer()==restServer.getToddServer()?" checked ":"" %>  />
                                     <g:message code="system.radio.rest_server.todd" /> (${restServer.getToddServer()})
