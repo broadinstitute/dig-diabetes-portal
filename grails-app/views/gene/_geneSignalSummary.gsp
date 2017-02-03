@@ -12,6 +12,9 @@
     border: 0.5px solid gray;
     display: none;
 }
+#phenotypeLabel{
+    font-size: 32px;
+}
 .trafficExplanations.emphasize {
     font-weight: 900;
 }
@@ -23,7 +26,6 @@
     margin: 10px;
     border: 1px solid black;
     padding: 5px;
-    width: 60px;
     background-color: white;
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
@@ -148,18 +150,8 @@ div.variantBoxHeaders {
     </div>
 
 </div>
-<div class="collapse" id="collapseExample">
+<div class="collapse in" id="collapseExample">
     <div class="well">
-
-
-        %{--<div id="highImpactVariantsLocation"></div>--}%
-
-        %{--<div id="commonVariantsLocation"></div>--}%
-
-        %{--<div id="aggregateVariantsLocation" style="display: none"></div>--}%
-
-
-
 
     <div id="noAggregatedVariantsLocation">
         <div class="row" style="margin-top: 15px;">
@@ -669,6 +661,7 @@ div.variantBoxHeaders {
                             }
                         } else {
                             listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
+                                'pname': v['pname'],
                                 'signalStrength': newSignalCategory,
                                 'pValue': v['P_VALUEV']})
                         }
@@ -688,11 +681,11 @@ div.variantBoxHeaders {
                             '<ul class="nav nav-pills">';
                     _.forEach(listOfInterestingPhenotypes, function (o) {
                         if (o['signalStrength'] == 1) {
-                            phenotypeDescriptions += ('<li class="nav-item redPhenotype things">' + o['phenotype'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" class="nav-item redPhenotype things">' + o['pname'] + '</li>');
                         } else if (o['signalStrength'] == 2) {
-                            phenotypeDescriptions += ('<li class="nav-item yellowPhenotype phenotypeStrength">' + o['phenotype'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                         } else if (o['signalStrength'] == 3) {
-                            phenotypeDescriptions += ('<li class="nav-item greenPhenotype phenotypeStrength">' + o['phenotype'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                         }
                     });
                     phenotypeDescriptions += '</ul>';
@@ -700,17 +693,20 @@ div.variantBoxHeaders {
 
                 }
                 $('.phenotypeStrength').on("click",function () {
-                    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype($(this).text(),
-                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:$(this).text()});
+                    var phenocode = $(this).attr('id');
+                    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
+                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:$(this).text()});
                 });
-                var firstPheno = $('.phenotypeStrength').first().text();
-                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPheno,
-                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPheno});
+                var firstPhenoCode = $('.phenotypeStrength').first().attr('id');
+                var firstPhenoName = $('.phenotypeStrength').first().text();
+                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPhenoCode,
+                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPhenoCode,pname:firstPhenoName});
             };
 
                 var updateSignificantVariantDisplay = function (data,additionalParameters) {
                     var updateLZ = additionalParameters.updateLZ;
                     var phenotypeName = additionalParameters.phenotype;
+                    var pName = additionalParameters.pname;
                     var renderData = buildRenderData (data,0.05);
                     var signalLevel = assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
@@ -722,16 +718,20 @@ div.variantBoxHeaders {
                     if (updateLZ) {
                         $('#collapseExample div.well').empty();
                         if (commonSectionShouldComeFirst) {
-                            $('#collapseExample div.well').append('<div id="commonVariantsLocation"></div>' +
+                            $('#collapseExample div.well').append(
+                                            '<div class="text-center" id="phenotypeLabel">'+pName+'</div>'+
+                                            '<div id="commonVariantsLocation"></div>' +
                                             '<div id="locusZoomLocation"></div>' +
                                             '<div id="highImpactVariantsLocation"></div>' +
                                             '<div id="aggregateVariantsLocation"></div>'
                             );
                         } else {
-                            $('#collapseExample div.well').append('<div id="highImpactVariantsLocation"></div>' +
-                                    '<div id="locusZoomLocation"></div>' +
-                                    '<div id="aggregateVariantsLocation"></div>' +
-                                    '<div id="commonVariantsLocation"></div>');
+                            $('#collapseExample div.well').append(
+                                            '<div class="text-center" id="phenotypeLabel">'+pName+'</div>'+
+                                            '<div id="highImpactVariantsLocation"></div>' +
+                                            '<div id="aggregateVariantsLocation"></div>' +
+                                            '<div id="commonVariantsLocation"></div>'+
+                                            '<div id="locusZoomLocation"></div>' );
                         }
                     } else {
                         $('#highImpactVariantsLocation div').empty();

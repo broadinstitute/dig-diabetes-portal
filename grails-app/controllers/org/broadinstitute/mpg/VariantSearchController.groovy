@@ -432,7 +432,35 @@ class VariantSearchController {
             dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
         }
 
-        //JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+
+        if (dataJsonObject.variants) {
+           for (Map pval in dataJsonObject.variants){
+                //for (Map pval in result) {
+                    if (pval.containsKey("Consequence")){
+                        List<String> consequenceList = pval["Consequence"]?.tokenize(",")
+                        List<String> translatedConsequenceList = []
+                        for (String consequence in consequenceList){
+                            translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+                        }
+                        pval["Consequence"] = translatedConsequenceList.join(", ")
+                    }
+                    if (pval.containsKey("dataset")){
+                        pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
+                    }
+                    if (pval.containsKey("phenotype")){
+                        pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
+                    }
+                //}
+           }
+
+        }
+
+
+
+
+
+
+            //JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
 //        if (dataJsonObject.variants) {
 //                for (List result in dataJsonObject.variants){
 //                    for (Map pval in result) {
