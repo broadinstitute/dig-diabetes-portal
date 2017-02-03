@@ -36,7 +36,10 @@
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 }
 .redPhenotype {
-
+    background-color: #dddddd;
+}
+.nav>li.redPhenotype {
+    display: none;
 }
 .yellowPhenotype {
     background-color: #ffffb3;
@@ -666,7 +669,7 @@ div.variantBoxHeaders {
                 var listOfInterestingPhenotypes = [];
                 _.forEach(renderData.variants, function (v) {
                     var newSignalCategory = assessOneSignalsSignificance(v);
-                    if (newSignalCategory > 1) {
+                    if (newSignalCategory > 0) {
                         var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
                         if (existingRecIndex > -1) {
                             var existingRec = listOfInterestingPhenotypes[existingRecIndex];
@@ -690,6 +693,18 @@ div.variantBoxHeaders {
                 return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
             };
 
+            function toggleOtherPhenoBtns(){
+                var otherBtns = $('.nav>li.redPhenotype');
+                if ((typeof otherBtns !== 'undefined')&&
+                        (otherBtns.length>0)){
+                    if ($(otherBtns[0]).css('display')==='none') {
+                        $(otherBtns).css('display','block');
+                    } else {
+                        $(otherBtns).css('display','none');
+                    }
+                }
+            };
+
             var displayInterestingPhenotypes = function (data) {
                 var renderData = buildRenderData(data, 0.05);
                 var signalLevel = assessSignalSignificance(renderData);
@@ -698,10 +713,11 @@ div.variantBoxHeaders {
                 if (listOfInterestingPhenotypes.length > 0) {
                     $('.interestingPhenotypesHolder').css('display','block');
                     var phenotypeDescriptions = '<label>Phenotypes with signals</label>'+
+                            '<button type="button" class="btn btn-outline-secondary  btn-sm" style="margin-left: 20px" onclick="mpgSoftware.geneSignalSummary.toggleOtherPhenoBtns()">Additional phenotypes</button>'+
                             '<ul class="nav nav-pills">';
                     _.forEach(listOfInterestingPhenotypes, function (o) {
                         if (o['signalStrength'] == 1) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype things">' + o['pname'] + '</li>');
+                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                         } else if (o['signalStrength'] == 2) {
                             phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                         } else if (o['signalStrength'] == 3) {
@@ -979,6 +995,7 @@ return {
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
     refreshTopVariants:refreshTopVariants,
+    toggleOtherPhenoBtns:toggleOtherPhenoBtns,
     refreshLZ:refreshLZ
 }
 }());
