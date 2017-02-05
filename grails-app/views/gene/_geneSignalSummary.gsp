@@ -561,46 +561,52 @@ div.variantBoxHeaders {
                     default:
                         break;
                 }
+                var rvart = [];
+                var cvart = [];
                 _.forEach(renderData.variants, function (v) {
                     var mafValue = v['MAF']
                     var mdsValue = v['MOST_DEL_SCORE'];
                     var pValue = v['P_VALUEV'];
-                    if ((typeof mdsValue !== 'undefined') && (mdsValue !== '') && (mdsValue <= 2) &&
+                    if ((typeof mdsValue !== 'undefined') && (mdsValue !== '') && (mdsValue < 3) &&
                             (typeof pValue !== 'undefined') && (pValue <= pValueCutoffHighImpact)) {
-                        if (renderData.rvar.length < maxNumberOfVariants) {
-                            if (pValue < 0.00000005) {
+                        if (rvart.length < maxNumberOfVariants) {
+                            if (pValue < 0.000005) {
                                 v['CAT'] = 'greenline'
                             }
-                            else if (pValue < 0.0001) {
+                            else if (pValue < 0.0005) {
                                 v['CAT'] = 'yellowline'
                             }
                             else {
                                 v['CAT'] = 'redline'
                             }
-                            renderData.rvar.push(v);
+                            rvart.push(v);
                         }
                     }
                     if ((typeof mafValue !== 'undefined') && (mafValue !== '') && (mafValue > 0.05) &&
                             (typeof pValue !== 'undefined') && (pValue <= pValueCutoffCommon)) {
-                        if (renderData.cvar.length < maxNumberOfVariants) {
+                        if (cvart.length < maxNumberOfVariants) {
                             if (pValue < 0.00000005) {
                                 v['CAT'] = 'greenline'
                             }
-                            else if (pValue < 0.0001) {
-                                v['CAT'] = 'yellowline'
+                            else if (pValue < 0.0005) {
+                                if (v['CAT']!='greenline'){
+                                    v['CAT'] = 'yellowline'
+                                }
                             }
                             else {
-                                v['CAT'] = 'redline'
+                                if ((v['CAT']!=='greenline')&&
+                                        (v['CAT']!=='yellowline')) {
+                                    v['CAT'] = 'redline'
+                                }
                             }
-                            renderData.cvar.push(v);
+                            cvart.push(v);
                         }
                     }
                 });
                 // sort by P value for the high-impact variants
-                var tempRVar = _.sortBy(renderData.rvar, function (o) {
+                var tempRVar = _.sortBy(rvart, function (o) {
                     return o.P_VALUEV
                 });
-                renderData.rvar = [];
                 // Only the first P value with each name gets in.  Since these are sorted we get all the variants with the lowest P values
                 _.forEach(tempRVar,function(o){
                     if (_.findIndex(renderData.rvar,function (p){return (p['id']==o['id'])})<0){
@@ -608,10 +614,9 @@ div.variantBoxHeaders {
                     }
                 });
                 // repeat the sorting and filtering for the common variants
-                var tempCVar = _.sortBy(renderData.cvar, function (o) {
+                var tempCVar = _.sortBy(cvart, function (o) {
                     return o.P_VALUEV
                 });
-                renderData.cvar = [];
                 _.forEach(tempCVar,function(o){
                     if (_.findIndex(renderData.cvar,function (p){return (p['id']==o['id'])})<0){
                         renderData.cvar.push(o);
@@ -655,8 +660,9 @@ div.variantBoxHeaders {
                             returnValue = true;
                         }
                     }
-                    if ((typeof oneVariant.MOST_DEL_SCORE !== 'undefined')) {
-                        if (oneVariant.MOST_DEL_SCORE < 3) {
+                    if (typeof oneVariant.MOST_DEL_SCORE !== 'undefined') {
+                        if ((oneVariant.MOST_DEL_SCORE < 3)&&
+                                ((typeof returnValue !== 'undefined')&&(returnValue !== true))) {
                             returnValue = false;
                         }
                     }
