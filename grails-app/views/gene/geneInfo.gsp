@@ -58,11 +58,11 @@
             // call this inside the ready function because the page is still loading when the the parent
             // ajax calls returns
             <g:renderNotBetaFeaturesDisplayedValue>
-                %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,--}%
-                        %{--"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',--}%
-                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-                        %{--'${createLink(controller:"variantInfo", action:"variantInfo")}',--}%
-                        %{--'${lzOptions.first().dataType}');--}%
+                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                        "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                        '${lzOptions.first().dataType}');
             </g:renderNotBetaFeaturesDisplayedValue>
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();
@@ -187,9 +187,9 @@
 
                         <g:renderNotBetaFeaturesDisplayedValue>
 
-                            %{--<div class="separator"></div>--}%
+                            <div class="separator"></div>
 
-                            %{--<g:render template="/widgets/locusZoomPlot"/>--}%
+                            <g:render template="/widgets/locusZoomPlot"/>
 
                         </g:renderNotBetaFeaturesDisplayedValue>
 
