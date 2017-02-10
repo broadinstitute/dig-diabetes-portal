@@ -255,9 +255,9 @@ localServer {
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
-//server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
 
-server.URL = 'http://localhost:8888/dig-genome-store/gs/'
+//server.URL = 'http://localhost:8888/dig-genome-store/gs/'
 // qa is probably right, the right now we need the tests to pass
 //server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
 // currently operational t2d server

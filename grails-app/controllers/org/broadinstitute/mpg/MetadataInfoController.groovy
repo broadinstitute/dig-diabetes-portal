@@ -27,15 +27,5 @@ class MetadataInfoController {
         return "metadata.${key}=${g.message(code: "metadata." + key, default: "<b>No translation for</b> " + key)}"
     }
 
-    // Produce a plaintext page with all the metadata and their translations
-    // for the current locale. Designed for simple copy-pasting to give to
-    // translation service and identifying missing translations.
-    def metadatalist() {
-        Set<String> names = metaDataService.parseMetadataNames()
-        String[] namesArray = names.toArray()
-        namesArray.sort()
 
-        String toDisplay = buildDisplay(namesArray)
-        render(toDisplay)
-    }
 }

@@ -911,19 +911,7 @@ class VariantSearchController {
         JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
 
         // prepare translation object
-        // this object contains metadata translations, where the database-form metadata
-        // text is a key to the translated text (ex. T2D -> Type 2 Diabetes).
-        // metadataNames contains most of what we need, but doesn't contain strings of the
-        // type <datasource>_<metadataVersion> (ex. GWAS_DIAGRAM_mdv2), so also go through
-        // the datasources applicable to this request and add those strings to
-        // metadataNames
-        Set<String> metadataNames = metaDataService.parseMetadataNames()
-        fullPropertyTree.each { phenotype, datasets ->
-            metadataNames.addAll(datasets.keySet())
-        }
-        // this supports the "no phenotype" stuff--since "none" is not actually in the data,
-        // we need to add it manually here
-        metadataNames.add("none")
+        Set<String> metadataNames = metaDataService.getEveryMetadataStringThatMightNeedTranslating()
 
         JSONObject translationDictionary = []
         metadataNames.each { name ->

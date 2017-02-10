@@ -830,7 +830,8 @@ class MetaDataService {
         // get the metadata hash map
         propertyList = this.jsonParser.getPropertyListOfPropertyType(this.jsonParser.getMetaDataRoot(), propertyTypeId);
 
-        if (propertyList.size() > numberReturn) {
+        if ((propertyList.size() > numberReturn)&&
+                (numberReturn!= -1)){
             propertyList = new ArrayList<>(propertyList.subList(0, numberReturn))
         }
 
@@ -1029,6 +1030,27 @@ class MetaDataService {
 
 
 
+public Set<String> getEveryMetadataStringThatMightNeedTranslating(){
+    Set<String> metadataNames = []
+    List<String> phenotypes = getEveryPhenotype(true)
+    phenotypes.each{ String phenotype ->
+        metadataNames << phenotype
+    }
+    List<Properties> allProperties = getPropertyListByPropertyType(PortalConstants.TYPE_ALL_PROPERTY_KEY,-1)
+    allProperties.each{ Property property ->
+        metadataNames << property.name
+    }
+    List<SampleGroup> sampleGroups = getSampleGroupList()
+    sampleGroups.each { SampleGroup sampleGroup ->
+        metadataNames << sampleGroup.systemId
+    }
+    return metadataNames.unique()
+}
+
+
+
+
+
 
     /**
      * return the json object emulating a trait-search call given a phenotype list
@@ -1074,17 +1096,6 @@ class MetaDataService {
         return jsonObject
     }
 
-    // returns a set of the metadata names in database form (i.e. not translated)
-    // used for translation support--though should be used sparingly
-    public Set<String> parseMetadataNames() {
-        String metadata = restServerService.getMetadata()
-        // TODO - DIGP-320: move this call to use the JsonParser class to access the cached metadata, avoiding differences in cached vs real time call data
-        def jsonSlurper = new JsonSlurper()
-
-        JSONObject metadataParsed = jsonSlurper.parseText(metadata)
-
-        return pullOutMetadataNames(metadataParsed)
-    }
 
     /*
     Given the metadata, recursively go through it looking for

@@ -35,7 +35,8 @@ public class PropertyByPropertyTypeVisitor implements DataSetVisitor {
            // if property of type asked for, add to the property list
            Property property = (Property)dataSet;
 
-           if (property.getPropertyType() == this.propertyType) {
+           if ((property.getPropertyType() == this.propertyType)||
+               (this.propertyType == PortalConstants.TYPE_ALL_PROPERTY_KEY)){
                this.propertyList.add(property);
            }
 
