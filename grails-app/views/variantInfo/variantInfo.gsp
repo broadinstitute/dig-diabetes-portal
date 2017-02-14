@@ -241,7 +241,7 @@
 
                         <div class="separator"></div>
 
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
 
                     </g:if>
 

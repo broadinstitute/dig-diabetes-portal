@@ -16,6 +16,15 @@
     font-size: 32px;
     font-weight: bold;
 }
+#burdenGoesHere .panel-group{
+    margin-right: 42px;
+}
+#burdenGoesHere .secBody {
+    padding-right: 40px;
+}
+#burdenGoesHere .burden-test-specific-results{
+    margin-right: 40px;
+}
 .trafficExplanations.emphasize {
     font-weight: 900;
 }
@@ -345,6 +354,11 @@ div.variantBoxHeaders {
                             </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div id="burdenGoesHere" class="row"></div>
+                </div>
+            </div>
        </script>
 
 
@@ -402,7 +416,13 @@ div.variantBoxHeaders {
             </div>
         </script>
 
-
+<div id="BurdenHiddenHere" style="display:none">
+    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
+                                                           'modifiedTitle': 'Run a custom burden test',
+                                                           'accordionHeaderClass': 'toned-down-accordion-heading',
+                                                           'modifiedTitleStyling': 'font-size: 18px;text-decoration: underline;padding-left: 20px;',
+                                                           'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
+</div>
 
 
 <script>
@@ -786,6 +806,16 @@ div.variantBoxHeaders {
                         $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                     }
                     $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
+                    var tempHtml = $('#BurdenHiddenHere').clone(true).html();
+                    if (typeof tempHtml !== 'undefined'){
+                        $('#BurdenHiddenHere>dir').empty();
+                        $.data(document.body,'burdenText',tempHtml);
+                    }
+                    $('#burdenGoesHere').empty();
+                    tempHtml = $.data(document.body,'burdenText');
+                    $(tempHtml).appendTo('#burdenGoesHere');
+                    //$('#BurdenHiddenHere>div').clone(true).appendTo('#burdenGoesHere');
+;
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                     $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
                     //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();

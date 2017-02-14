@@ -2402,10 +2402,10 @@ $( document ).ready( function (){
 </g:javascript>
 
 <div class="accordion-group">
-    <div class="accordion-heading">
+    <div class="${accordionHeaderClass}">
         <a class="accordion-toggle  collapsed" data-toggle="collapse" href="#collapseBurden">
             <g:if test="${modifiedTitle}">
-                <h2><strong>${modifiedTitle}</strong></h2>
+                <h2><strong style="${modifiedTitleStyling}">${modifiedTitle}</strong></h2>
             </g:if>
             <g:else>
                 <h2><strong>Genetic Association Interactive Tool</strong></h2>

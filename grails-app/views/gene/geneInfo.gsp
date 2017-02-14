@@ -58,11 +58,11 @@
             // call this inside the ready function because the page is still loading when the the parent
             // ajax calls returns
             <g:renderNotBetaFeaturesDisplayedValue>
-                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                        '${lzOptions.first().dataType}');
+                %{--mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,--}%
+                        %{--"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',--}%
+                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
+                        %{--'${createLink(controller:"variantInfo", action:"variantInfo")}',--}%
+                        %{--'${lzOptions.first().dataType}');--}%
             </g:renderNotBetaFeaturesDisplayedValue>
             $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
             $('#variantPageText').hide();
@@ -95,9 +95,9 @@
 
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
-                <g:renderBetaFeaturesDisplayedValue>
+                %{--<g:renderBetaFeaturesDisplayedValue>--}%
                     <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
-                </g:renderBetaFeaturesDisplayedValue>
+                %{--</g:renderBetaFeaturesDisplayedValue>--}%
 
 
                 <div class="accordion" id="accordion2">
@@ -161,35 +161,11 @@
                     </script>
 
 
-
-
-
-
-                    <div class="separator"></div>
-
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
-                               href="#collapseTwo">
-                                <h2><strong><g:message code="gene.continentalancestry.title"
-                                                       default="variation across continental ancestry"/></strong>
-                                </h2>
-                            </a>
-                        </div>
-
-                        <g:render template="variationAcrossContinents"/>
-
-                    </div>
-
-
-
-
-
                         <g:renderNotBetaFeaturesDisplayedValue>
 
-                            <div class="separator"></div>
+                            %{--<div class="separator"></div>--}%
 
-                            <g:render template="/widgets/locusZoomPlot"/>
+                            %{--<g:render template="/widgets/locusZoomPlot"/>--}%
 
                         </g:renderNotBetaFeaturesDisplayedValue>
 
@@ -197,9 +173,9 @@
 
                         <div class="separator"></div>
 
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
-                                                                               'modifiedTitle': 'Interactive burden test',
-                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
+                        %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
+                                                                               %{--'modifiedTitle': 'Interactive burden test',--}%
+                                                                               %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>--}%
 
                     </g:if>
 
