@@ -86,6 +86,9 @@ class BurdenService {
                 mostDelScore = 1;
                 operand = PortalConstants.OPERATOR_EQUALS;
                 break;
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE:
+                mostDelScore = 2;
+                break;
             case PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING:
                 mostDelScore = 3;
                 break;
