@@ -29,6 +29,12 @@ public class GetDataQueryBean implements GetDataQuery {
     int pageStart = -1;
     int pageSize = -1;
     int limit = 1000;
+
+    // some optional properties we can use for our aggregated call
+    private String version = null;
+    private String phenotype = null;
+    private String gene = null;
+
     boolean isCount = false;
     private List<Covariate> covariateList = new ArrayList<Covariate>();
 
@@ -118,6 +124,15 @@ public class GetDataQueryBean implements GetDataQuery {
     public boolean isCount() {
         return isCount;
     }
+
+    public String getVersion(){ return this.version; }
+    public void setVersion( String mdvString ){  this.version = mdvString; }
+
+    public String getGene(){ return this.gene; }
+    public void setGene( String geneString ){  this.gene = geneString; }
+
+    public String getPhenotype(){ return this.phenotype; }
+    public void setPhenotype( String phenotypeString ){  this.phenotype = phenotypeString; }
 
     /**
      * returns a sorted list of distinct properties to query

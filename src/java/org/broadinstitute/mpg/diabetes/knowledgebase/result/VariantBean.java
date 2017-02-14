@@ -30,6 +30,12 @@ public class VariantBean implements Variant {
     private String polyphenHdivPredictor;
     private float maf;
     List<PropertyValue> propertyValues = new ArrayList<PropertyValue>();
+    private String dataSet;
+    private float beta;
+    private float pValue;
+    private float alleleFrequency;
+    private String phenotype;
+
 
     public void addAllToPropertyValues(Collection<PropertyValue> values) {
         this.propertyValues.addAll(values);
@@ -65,6 +71,17 @@ public class VariantBean implements Variant {
         // return
         return variantId;
     }
+
+    public void setBeta(float beta){this.beta = beta;}
+    public void setPValue(float pValue){this.pValue = pValue;}
+    public void setDataset(String dataSet){this.dataSet = dataSet;}
+    public void setPhenotype(String phenotype){this.phenotype = phenotype;}
+    public void setAlleleFrequency(float alleleFrequency){this.alleleFrequency = alleleFrequency;}
+    public String getDataset(){return this.dataSet;}
+    public String getPhenotype(){return this.phenotype;}
+    public float getBeta(){return this.beta;}
+    public float getPValue(){return this.pValue;}
+    public float getAlleleFrequency(){return this.alleleFrequency;}
 
     public void setVariantId(String variantId) {
         this.variantId = variantId;

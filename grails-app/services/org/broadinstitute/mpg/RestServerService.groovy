@@ -634,6 +634,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject postGetDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_URL);
     }
+    public JSONObject postGetAggDataCall(String jsonString) {
+        return this.postRestCall(jsonString, this.GET_DATA_AGGREGATION_URL);
+    }
 
     public JSONObject postGetHailDataCall(String jsonString, String URL) {
         // TODO - hard code to QA server for now

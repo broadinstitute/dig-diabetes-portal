@@ -920,6 +920,24 @@ class MetaDataService {
         return returnValue
     }
 
+
+    /***
+     * retrieve a trait starting with the  raw region specification string we get from users
+     * @param userSpecifiedString
+     * @return
+     */
+    public JSONObject searchTraitByGene(String geneName, String userSpecifiedString, List<Phenotype> phenotypeList) {
+        JSONObject returnValue = null
+        LinkedHashMap<String, Integer> ourNumbers = extractTraitSearchNumbersWeNeed(userSpecifiedString)
+        if (ourNumbers.containsKey("chromosomeNumber") &&
+                ourNumbers.containsKey("startExtent") &&
+                ourNumbers.containsKey("endExtent")) {
+            returnValue = getTraitSearchResultForGeneChromosomeAndPositionAndPhenotypes(phenotypeList, geneName, ourNumbers["chromosomeNumber"], Integer.valueOf(ourNumbers["startExtent"]).intValue(),
+                    Integer.valueOf(ourNumbers["endExtent"]).intValue());
+        }
+        return returnValue
+    }
+
     /***
      * The point is to extract the relevant numbers from a string that looks something like this:
      *      String s="chr19:21,940,000-22,190,000"
@@ -1095,6 +1113,55 @@ public Set<String> getEveryMetadataStringThatMightNeedTranslating(){
         // return
         return jsonObject
     }
+
+    /***
+     *
+     * @param phenotypeList
+     * @param gene
+     * @param chromosome
+     * @param startPosition
+     * @param endPosition
+     * @return
+     * @throws PortalException
+     */
+    public JSONObject getTraitSearchResultForGeneChromosomeAndPositionAndPhenotypes(List<Phenotype> phenotypeList, String gene, String chromosome, int startPosition, int endPosition) throws PortalException {
+        // local variables
+        JSONObject jsonObject = null;
+        GetDataQuery getDataQuery = null;
+        CommonGetDataQueryBuilder commonGetDataQueryBuilder = new CommonGetDataQueryBuilder();
+        List<Variant> variantList = new ArrayList<Variant>();
+        KnowledgeBaseResultTranslator knowledgeBaseResultTranslator = new KnowledgeBaseTraitSearchTranslator();
+        String version = getDataVersion()
+
+        // for each trait, get the getData query
+        for (Phenotype phenotype : phenotypeList) {
+            getDataQuery = commonGetDataQueryBuilder.getAggDataQueryForGenePhenotype(phenotype, gene, version, chromosome, startPosition, endPosition, "0.05");
+
+            // call the rest server
+            jsonObject = this.restServerService.postGetAggDataCall(this.queryJsonBuilder.getQueryJsonPayloadString(getDataQuery));
+
+            if (jsonObject["is_error"]) {
+                println("error from KB: ${jsonObject["error_msg"]}")
+            } else {
+                // for the result, translate into a variant and add to the list
+                KnowledgeBaseResultParser knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonObject.toString());
+                List<Variant> tempList = knowledgeBaseResultParser.parseAggResult();
+                variantList.addAll(tempList);
+            }
+
+
+        }
+
+        // for all the variants found, translate into trait-search format
+        jsonObject = knowledgeBaseResultTranslator.translateAgg(variantList);
+
+        // return
+        return jsonObject
+    }
+
+
+
+
 
 
     /*
