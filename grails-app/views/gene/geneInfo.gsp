@@ -140,7 +140,7 @@
 
                             <div id="collapseIgv" class="accordion-body collapse">
                                 <div class="accordion-inner">
-                                    <div class="igvGoesHere"></div>
+
                                     <g:render template="../trait/igvBrowser"/>
                                 </div>
                             </div>
