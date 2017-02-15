@@ -811,10 +811,10 @@ div.variantBoxHeaders {
                         $('#BurdenHiddenHere>dir').empty();
                         $.data(document.body,'burdenText',tempHtml);
                     }
-                    $('#burdenGoesHere').empty();
                     tempHtml = $.data(document.body,'burdenText');
+                    $('#burdenGoesHere').empty();
                     $(tempHtml).appendTo('#burdenGoesHere');
-                    //$('#BurdenHiddenHere>div').clone(true).appendTo('#burdenGoesHere');
+
 ;
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                     $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));

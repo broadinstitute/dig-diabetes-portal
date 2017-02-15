@@ -16,7 +16,6 @@ import grails.transaction.Transactional
 
 @Transactional(readOnly = true)
 class GeneController {
-
     RestServerService restServerService
     GeneManagementService geneManagementService
     SharedToolsService sharedToolsService
@@ -67,7 +66,7 @@ class GeneController {
 
     /***
      * display all information about a gene. This call displays only the core of the page -- the data all come back
-     * with the Jace on
+     * with the Json
      * @return
      */
     def geneInfo() {
@@ -80,6 +79,26 @@ class GeneController {
         String newDatasetName
         String newDatasetRowName = ""
         String phenotype = "T2D"
+        String portalType = g.portalTypeString() as String
+        String igvIntro = ""
+        switch (portalType){
+            case 't2d':
+                igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'T2D'
+                break
+            case 'mi':
+                igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'MI'
+                break
+            case 'stroke':
+                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'Stroke_all'
+                break
+            default:
+                break
+        }
+        String locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
+
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser
@@ -136,22 +155,7 @@ class GeneController {
         List<PhenotypeBean> lzOptions = this.widgetService?.getHailPhenotypeMap()
 
         if (geneToStartWith)  {
-            String portalType = g.portalTypeString() as String
-            String locusZoomDataset = ""
-            // kludge alert
-            if (portalType=='t2d'){
-                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-                phenotype = 'T2D'
-            }else if (portalType=='stroke'){
-                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
-                phenotype = 'Stroke_all'
-            }
-//            else  if (portalType=='mi') {
-//                locusZoomDataset = "GWAS_CADISP_"+metaDataService.getDataVersion()
-//            }
-            else {
-                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-            }
+
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -170,7 +174,8 @@ class GeneController {
                                              sampleDataSet:"samples_17k_"+metaDataService.getDataVersion(),
                                              burdenDataSet:locusZoomDataset,
                                              dataVersion: metaDataService.getDataVersion(),
-                                             locusZoomDataset:locusZoomDataset
+                                             locusZoomDataset:locusZoomDataset,
+                                             igvIntro: igvIntro
             ] )
         }
     }

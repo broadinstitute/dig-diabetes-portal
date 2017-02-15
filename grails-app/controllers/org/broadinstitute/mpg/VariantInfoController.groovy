@@ -32,8 +32,25 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         String locusZoomDataset
+        String phenotype = "T2D"
         String portalType = g.portalTypeString() as String
-        String phenotype
+        String igvIntro = ""
+        switch (portalType){
+            case 't2d':
+                igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'T2D'
+                break
+            case 'mi':
+                igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'MI'
+                break
+            case 'stroke':
+                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'Stroke_all'
+                break
+            default:
+                break
+        }
 
         locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
 
@@ -60,7 +77,8 @@ class VariantInfoController {
                             restServer: restServerService.currentRestServer(),
                             lzOptions   : lzOptions,
                             locusZoomDataset:locusZoomDataset,
-                            phenotype:phenotype
+                            phenotype:phenotype,
+                            igvIntro: igvIntro
                     ])
 
         }

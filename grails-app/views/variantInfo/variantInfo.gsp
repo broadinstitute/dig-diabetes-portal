@@ -300,6 +300,7 @@
 
                         <div id="collapseIgv" class="accordion-body collapse">
                             <div class="accordion-inner">
+                                <div class="igvGoesHere"></div>
                                 <g:render template="../trait/igvBrowser"/>
                             </div>
                         </div>
@@ -336,7 +337,16 @@
     $('#accordionVariant').on('shown.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
             var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
-            setUpIgv(igvParms.locus, igvParms.server);
+           // setUpIgv(igvParms.locus, igvParms.server);
+            setUpIgv(igvParms.locus,
+                    '.igvGoesHere',
+                    "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
+                    "<g:message code='controls.shared.igv.tracks.genes' />",
+                    "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
+                    "${createLink(controller:'trait', action:'getData', absolute:'false')}",
+                    "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
+                    "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
+                    '${igvIntro}');
         }
 
     });
