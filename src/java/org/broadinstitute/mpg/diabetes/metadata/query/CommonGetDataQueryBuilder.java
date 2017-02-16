@@ -58,6 +58,58 @@ public class CommonGetDataQueryBuilder {
         return queryBean;
     }
 
+
+
+
+
+
+    public GetDataQuery getAggDataQueryForGenePhenotype(Phenotype phenotype, String gene, String version, String chromosome, int startPosition, int endPosition, String pValueString) throws PortalException {
+        // local variables
+        GetDataQuery queryBean = new GetDataQueryBean();
+        List<Property> commonProperties = this.jsonParser.getAllCommonProperties();
+        Property property = null;
+
+        // build the getData query for the phenotype first
+        queryBean = this.getAggregatedDataQueryForGenePhenotype(phenotype, gene, version);
+
+        // add in the filter properties
+//        property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_CHROMOSOME, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
+//        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_EQUALS, chromosome);
+//        property = this.getPropertyByNameAndPropertyType(commonProperties, PortalConstants.NAME_COMMON_PROPERTY_POSITION, PortalConstants.TYPE_COMMON_PROPERTY_KEY);
+//        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_MORE_THAN_EQUALS, String.valueOf(startPosition));
+//        queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(endPosition));
+
+        // return
+        return queryBean;
+    }
+
+
+    /**
+     * builds a getData query object for a given phenotype object search
+     *
+     * @param phenotype
+     * @param gene
+     * @return
+     * @throws PortalException
+     */
+    public GetDataQuery getAggregatedDataQueryForGenePhenotype(Phenotype phenotype, String gene, String version) throws PortalException {
+        // local variables
+        GetDataQuery queryBean = new GetDataQueryBean();
+        Property property = null;
+
+        queryBean.setPageSize(50);
+        queryBean.setPageStart(0);
+        queryBean.setVersion(version);
+        queryBean.setGene(gene);
+        queryBean.setPhenotype(phenotype.getName());
+
+        // return
+        return queryBean;
+    }
+
+
+
+
     /**
      * builds a getData query object for a given phenotype object search
      *

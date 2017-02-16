@@ -21,7 +21,7 @@
         $.ajax({
             cache: false,
             type: "get",
-            url: "../../trait/traitVariantCrossGetDataAjax/" + "${regionSpecification}",
+            url: "../../trait/traitVariantCrossGetDataByGeneAjax?id=" + "${regionSpecification}&gene=${geneName}",
             async: true,
             success: function (data) {
                 fillTraitVariantCross(data);

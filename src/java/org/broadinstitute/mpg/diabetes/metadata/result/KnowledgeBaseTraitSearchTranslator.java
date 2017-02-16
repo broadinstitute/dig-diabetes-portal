@@ -27,6 +27,8 @@ public class KnowledgeBaseTraitSearchTranslator implements KnowledgeBaseResultTr
     private final String KEY_EFFECT_ALLELE  = "EFFECT_ALLELE";
     private final String KEY_OTHER_ALLELE   = "OTHER_ALLELE";
     private final String KEY_DIR            = "DIR";
+    private final String KEY_MAF            = "MAF";
+    private final String KEY_TRAIT          = "TRAIT";
 
     /**
      * translate getData result into trait-search expected result format
@@ -61,6 +63,44 @@ public class KnowledgeBaseTraitSearchTranslator implements KnowledgeBaseResultTr
         // return
         return rootObject;
     }
+
+
+    public JSONObject translateAgg(List<Variant> variantList) throws PortalException {
+        // local variables
+        JSONArray jsonArray = null;
+        JSONObject rootObject = new JSONObject();
+        JSONObject tempObject = null;
+
+        // create a variants array and add it to root
+        jsonArray = new JSONArray();
+        rootObject.put(PortalConstants.JSON_VARIANTS_KEY, jsonArray);
+
+        // for each row, add in a json object with property key/value pairs and add it to the json array
+        for (Variant variant: variantList) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put(this.KEY_PVALUE,variant.getPValue() );
+            jsonObject.put(this.KEY_P_VALUE,variant.getPValue() );
+            jsonObject.put(this.KEY_DIR,1);
+            jsonObject.put(this.KEY_ODDS_RATIO,1 );
+            jsonObject.put(this.KEY_ID,variant.getVariantId() );
+            jsonObject.put(this.KEY_VAR_ID,variant.getVariantId() );
+            jsonObject.put(this.KEY_BETA,variant.getBeta() );
+            jsonObject.put(this.KEY_MAF,variant.getAlleleFrequency() );
+            jsonObject.put(this.KEY_TRAIT,variant.getPhenotype() );
+            jsonArray.add(jsonObject);
+
+        }
+
+        // if got here, no error, so indicate
+        rootObject.put(PortalConstants.JSON_ERROR_KEY, false);
+
+        // add in the number of records
+        rootObject.put(PortalConstants.JSON_NUMBER_RECORDS_KEY, variantList.size());
+
+        // return
+        return rootObject;
+    }
+
 
     /**
      * translate a getData variant result into the trait-search result API type; return null object if the getData result does not conform to the tait-search data rules

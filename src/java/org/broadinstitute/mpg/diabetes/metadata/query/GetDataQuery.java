@@ -56,4 +56,14 @@ public interface GetDataQuery {
     public void addAllToCovariateList(List<Covariate> covariateList);
 
     public List<Covariate> getCovariateList();
+
+    public String getVersion();
+    public void setVersion( String mdvString );
+
+    public String getGene();
+    public void setGene( String geneString );
+
+    public String getPhenotype();
+    public void setPhenotype( String phenotypeString );
+
 }
