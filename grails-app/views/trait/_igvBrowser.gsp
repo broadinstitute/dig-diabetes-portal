@@ -67,7 +67,8 @@
                             getDataUrl,// '${createLink(controller:'trait', action:'getData', absolute:'false')}',
                             variantURL,// '${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}',
                             traitURL,// '${createLink(controller:'trait', action:'traitInfo', absolute:'true')}'
-                            igvIntro // 'Here is IGV...'
+                            igvIntro, // 'Here is IGV...'
+                            preferredPheno // display only this phenotype by default
            ){
 
        var igvInitialization = function (dynamicTracks,renderData){
@@ -114,7 +115,8 @@
        $(sectionSelector).empty().append(Mustache.render( $('#igvHolderTemplate')[0].innerHTML,{igvIntro:igvIntro}));
        var rGetDataUrl = getDataUrl,
            rVariantURL = variantURL,
-           rTraitURL = traitURL;
+           rTraitURL = traitURL,
+           rPreferredPheno = preferredPheno;
 
        var promise =  $.ajax({
            cache: false,
@@ -135,6 +137,12 @@
                        traitURL: rTraitURL
                    };
                    $("#mytrackList").empty().append(Mustache.render( $('#phenotypeDropdownTemplate')[0].innerHTML,renderData));
+                   if (typeof rPreferredPheno !== 'undefined'){
+                        var capturedPhenotypeTrack =  _.find(data.allSources,{'trait':rPreferredPheno});
+                       if (typeof capturedPhenotypeTrack !== 'undefined') {
+                           data.defaultTracks = [capturedPhenotypeTrack];
+                       }
+                   }
                    options = igvInitialization(data.defaultTracks,renderData);
                    div = $("#myDiv")[0];
                    browser = igv.createBrowser(div, options);

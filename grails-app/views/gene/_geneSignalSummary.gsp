@@ -44,6 +44,9 @@
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 }
+.chosenPhenotype{
+    border: 2px solid black;
+}
 .redPhenotype {
     background-color: #dddddd;
 }
@@ -154,9 +157,16 @@ div.variantBoxHeaders {
         </div>
         <div class="row interestingPhenotypesHolder">
             <div class="col-xs-12">
-            <div id="interestingPhenotypes">
+                <div id="interestingPhenotypes">
 
+                </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-offset-10 col-xs-2">
+                <label>
+                    <input class="preferIgv" type="checkbox" onclick="mpgSoftware.geneSignalSummary.refreshSignalSummaryBasedOnPhenotype()">Use IGV
+                </label>
             </div>
         </div>
 
@@ -730,7 +740,24 @@ div.variantBoxHeaders {
                     }
                 }
             };
-
+            var launchUpdateSignalSummaryBasedOnPhenotype = function (phenocode,ds,phenoName) {
+                $('.phenotypeStrength').removeClass('chosenPhenotype');
+                $('#'+phenocode).addClass('chosenPhenotype');
+                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
+                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,preferIgv:$('.preferIgv').is(":checked")});
+            };
+            var updateSignalSummaryBasedOnPhenotype = function () {
+                var phenocode = $(this).attr('id');
+                var ds = $(this).attr('ds');
+                var phenoName = $(this).text();
+                launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
+            };
+            var refreshSignalSummaryBasedOnPhenotype = function () {
+                var phenocode = $('.phenotypeStrength.chosenPhenotype').attr('id');
+                var ds = $('.phenotypeStrength.chosenPhenotype').attr('ds');
+                var phenoName = $('.phenotypeStrength.chosenPhenotype').text();
+                launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
+            };
             var displayInterestingPhenotypes = function (data) {
                 var renderData = buildRenderData(data, 0.05);
                 var signalLevel = assessSignalSignificance(renderData);
@@ -754,23 +781,23 @@ div.variantBoxHeaders {
                     $('#interestingPhenotypes').append(phenotypeDescriptions);
 
                 }
-                $('.phenotypeStrength').on("click",function () {
-                    var phenocode = $(this).attr('id');
-                    var ds = $(this).attr('ds');
-                    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
-                            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:$(this).text(),ds:ds,preferIgv:true});
-                });
-                var firstPhenoCode = $('.phenotypeStrength').first().attr('id');
-                var firstDS = $('.phenotypeStrength').first().attr('ds');
-                var firstPhenoName = $('.phenotypeStrength').first().text();
-                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPhenoCode,
-                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPhenoCode,pname:firstPhenoName,ds:firstDS,preferIgv:true});
+
+                $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
+                $('.phenotypeStrength').first().click();
+//                var firstPhenoCode = $('.phenotypeStrength').first().attr('id');
+//                var firstDS = $('.phenotypeStrength').first().attr('ds');
+//                var firstPhenoName = $('.phenotypeStrength').first().text();
+//                $('#'+chosenPhenotype).addClass('chosenPhenotype');
+//                var preferIgv = $('.preferIgv').is(":checked");
+//                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPhenoCode,
+//                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPhenoCode,pname:firstPhenoName,ds:firstDS,preferIgv:preferIgv});
             };
 
                 var updateSignificantVariantDisplay = function (data,additionalParameters) {
                     var phenotypeName = additionalParameters.phenotype;
                     var datasetName = additionalParameters.ds;
                     var pName = additionalParameters.pname;
+                    var useIgvNotLz = additionalParameters.preferIgv;
                     var renderData = buildRenderData (data,0.05);
                     var signalLevel = assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
@@ -798,7 +825,9 @@ div.variantBoxHeaders {
                                         '<div id="locusZoomLocation"></div>'+
                                         '<div class="igvGoesHere"></div>');
                     }
-                    $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
+                    if (!useIgvNotLz){
+                        $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
+                    }
                     $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                     var tempHtml = $('#BurdenHiddenHere').clone(true).html();
                     if (typeof tempHtml !== 'undefined'){
@@ -834,28 +863,34 @@ div.variantBoxHeaders {
                         startPosition:  ${geneExtentBegin},
                         endPosition:  ${geneExtentEnd}
                     };
-                    if (!mpgSoftware.locusZoom.plotAlreadyExists()) {
-                        mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
-                                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
+                    if (useIgvNotLz){
+                        setUpIgv('<%=geneName%>',
+                                '.igvGoesHere',
+                                "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
+                                "<g:message code='controls.shared.igv.tracks.genes' />",
+                                "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
+                                "${createLink(controller:'trait', action:'getData', absolute:'false')}",
+                                "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
+                                "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
+                                '${igvIntro}',
+                                phenotypeName);
                     } else {
-                        mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1", "#collapseExample", phenotypeName, pName, datasetName, '${lzOptions.first().propertyName}', 'junk',
-                                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
+                        if (!mpgSoftware.locusZoom.plotAlreadyExists()) {
+                            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                                    "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
+                                    '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                    '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
+                        } else {
+                            mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
+                                    "#lz-1", "#collapseExample", phenotypeName, pName, datasetName, '${lzOptions.first().propertyName}', 'junk',
+                                    '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                    '${createLink(controller:"variantInfo", action:"variantInfo")}', '${lzOptions.first().dataType}');
+                        }
                     }
-                    setUpIgv('<%=geneName%>',
-                            '.igvGoesHere',
-                            "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
-                            "<g:message code='controls.shared.igv.tracks.genes' />",
-                            "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
-                            "${createLink(controller:'trait', action:'getData', absolute:'false')}",
-                            "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
-                            "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
-                            '${igvIntro}');
                     $('#collapseExample').on('shown.bs.collapse', function (e) {
-                        mpgSoftware.locusZoom.rescaleSVG();
+                        if (mpgSoftware.locusZoom.plotAlreadyExists()) {
+                            mpgSoftware.locusZoom.rescaleSVG();
+                        }
                     });
                 };
 
@@ -1029,7 +1064,8 @@ return {
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
     refreshTopVariants:refreshTopVariants,
     toggleOtherPhenoBtns:toggleOtherPhenoBtns,
-    refreshLZ:refreshLZ
+    refreshLZ:refreshLZ,
+    refreshSignalSummaryBasedOnPhenotype:refreshSignalSummaryBasedOnPhenotype
 }
 }());
 
