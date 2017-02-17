@@ -8,7 +8,7 @@
 </script>
 <script id="igvHolderTemplate"  type="x-tmpl-mustache">
 
-<div id="myDiv">
+<div id="igvDiv">
 <p>
 
 {{igvIntro}}
@@ -144,7 +144,7 @@
                        }
                    }
                    options = igvInitialization(data.defaultTracks,renderData);
-                   div = $("#myDiv")[0];
+                   div = $("#igvDiv")[0];
                    browser = igv.createBrowser(div, options);
                }
        );

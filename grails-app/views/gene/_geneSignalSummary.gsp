@@ -45,7 +45,7 @@
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 }
 .chosenPhenotype{
-    border: 2px solid black;
+    font-weight: bold;
 }
 .redPhenotype {
     background-color: #dddddd;
@@ -108,6 +108,12 @@ ul.aggregatingVariantsLabels {
 div.variantBoxHeaders {
     padding: 10px;
     font-size: 16px;
+}
+.igvGoesHere {
+    background-color: white;
+    border: inset 1px grey;
+    margin-top: 10px;
+    padding: 5px;
 }
 </style>
 
@@ -766,7 +772,7 @@ div.variantBoxHeaders {
                 if (listOfInterestingPhenotypes.length > 0) {
                     $('.interestingPhenotypesHolder').css('display','block');
                     var phenotypeDescriptions = '<label>Phenotypes with signals</label>'+
-                            '<button type="button" class="btn btn-outline-secondary  btn-sm" style="margin-left: 20px" onclick="mpgSoftware.geneSignalSummary.toggleOtherPhenoBtns()">Additional phenotypes</button>'+
+                            '<button type="button" class="btn btn-outline-secondary  btn-sm" onclick="mpgSoftware.geneSignalSummary.toggleOtherPhenoBtns()">Additional phenotypes</button>'+
                             '<ul class="nav nav-pills">';
                     _.forEach(listOfInterestingPhenotypes, function (o) {
                         if (o['signalStrength'] == 1) {
@@ -784,13 +790,6 @@ div.variantBoxHeaders {
 
                 $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
                 $('.phenotypeStrength').first().click();
-//                var firstPhenoCode = $('.phenotypeStrength').first().attr('id');
-//                var firstDS = $('.phenotypeStrength').first().attr('ds');
-//                var firstPhenoName = $('.phenotypeStrength').first().text();
-//                $('#'+chosenPhenotype).addClass('chosenPhenotype');
-//                var preferIgv = $('.preferIgv').is(":checked");
-//                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(firstPhenoCode,
-//                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:firstPhenoCode,pname:firstPhenoName,ds:firstDS,preferIgv:preferIgv});
             };
 
                 var updateSignificantVariantDisplay = function (data,additionalParameters) {
