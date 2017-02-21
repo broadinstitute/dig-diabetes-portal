@@ -42,6 +42,7 @@ modules = {
     burdenTest {
         resource url: 'css/dport/burdenTest.css'
         resource url: 'js/lib/dport/burdenTest.js'
+        resource url: 'js/lib/dport/burdenTestShared.js'
     }
     mbar {
         resource url: 'css/dport/mbarchart.css'
@@ -75,7 +76,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
@@ -83,10 +84,9 @@ modules = {
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/barchart.js'
 
-        resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest"
 
         resource url: 'css/images/controls.png'
 
@@ -98,7 +98,6 @@ modules = {
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
 
-        resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantWF {
         resource url: 'css/dport/variantWorkflow.css'
@@ -112,11 +111,11 @@ modules = {
     igv {
         dependsOn "jquery"
 
+        resource url: 'js/lib/dport/igvLaunch.js'
+
         resource url: 'images/ajaxLoadingAnimation.gif'
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-//        resource url: 'https://igv.org/web/release/1.0.1/igv-1.0.1.css'
-//        resource url: 'https://igv.org/web/release/1.0.1/igv-1.0.1.min.js'
         resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
         resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
 
@@ -155,8 +154,7 @@ modules = {
     }
     igvNarrow {  // IGV on a page with core
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
-//        resource url: 'https://igv.org/web/release/1.0.1/igv-1.0.1.css'
-//        resource url: 'https://igv.org/web/release/1.0.1/igv-1.0.1.min.js'
+
         resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
         resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
     }

@@ -96,7 +96,8 @@
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 %{--<g:renderBetaFeaturesDisplayedValue>--}%
-                    <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                <g:render template="../templates/geneSignalSummaryTemplate"/>
+                <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
                 %{--</g:renderBetaFeaturesDisplayedValue>--}%
 
 
@@ -125,47 +126,8 @@
                                   model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
                         </g:renderBetaFeaturesDisplayedValue>
                     </g:if>
-                    <g:if test="${1}">
-
-                        <div class="separator"></div>
-
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
-                                   href="#collapseIgv">
-                                    <h2><strong><g:message code="gene.igv.title"
-                                                           default="Explore variants with IGV"/></strong></h2>
-                                </a>
-                            </div>
-
-                            <div id="collapseIgv" class="accordion-body collapse">
-                                <div class="accordion-inner">
-
-                                    <g:render template="../trait/igvBrowser"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <script>
-                            $('#accordion2').on('shown.bs.collapse', function (e) {
-                                if (e.target.id === "collapseIgv") {
-                                    setUpIgv('<%=geneName%>',
-                                            '.igvGoesHere',
-                                            "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
-                                            "<g:message code='controls.shared.igv.tracks.genes' />",
-                                            "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
-                                            "${createLink(controller:'trait', action:'getData', absolute:'false')}",
-                                            "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
-                                            "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
-                                            '${igvIntro}');
-                                }
-
-                            });
-                            $('#collapseOne').collapse({hide: true})
-                        </script>
-
-                    </g:if>
-                    <script>
+                    <g:render template="../templates/igvBrowserTemplate"/>
+                     <script>
                         $('#collapseOne').collapse({hide: true})
                     </script>
 

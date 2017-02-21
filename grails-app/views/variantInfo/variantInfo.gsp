@@ -241,7 +241,8 @@
 
                         <div class="separator"></div>
 
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
+                    <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
+                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
 
                     </g:if>
 
@@ -301,7 +302,7 @@
                         <div id="collapseIgv" class="accordion-body collapse">
                             <div class="accordion-inner">
                                 <div class="igvGoesHere"></div>
-                                <g:render template="../trait/igvBrowser"/>
+                                <g:render template="../templates/igvBrowserTemplate"/>
                             </div>
                         </div>
                     </div>
@@ -337,8 +338,7 @@
     $('#accordionVariant').on('shown.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
             var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
-           // setUpIgv(igvParms.locus, igvParms.server);
-            setUpIgv(igvParms.locus,
+           igvLauncher.setUpIgv(igvParms.locus,
                     '.igvGoesHere',
                     "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
                     "<g:message code='controls.shared.igv.tracks.genes' />",
