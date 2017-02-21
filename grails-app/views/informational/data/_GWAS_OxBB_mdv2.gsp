@@ -47,7 +47,7 @@
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.OxfordBB"></g:message></p>
 
-<h4>Accessing Oxford BioBank GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing Oxford BioBank exome chip analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.OxfordBB"></g:message></p>
 
 </div>

@@ -4,12 +4,7 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
-import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
-import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -803,7 +798,7 @@ class VariantSearchController {
                 key = entry.getKey();
                 value = entry.getValue();
             }
-            errorMsg = "Currently, searches in the Oxford BioBank GWAS data set may not be combined with searches in any other data set. Please return to the Search page and modify your search."
+            errorMsg = "Currently, searches in the Oxford BioBank exome chip analysis data set may not be combined with searches in any other data set. Please return to the Search page and modify your search."
             render(status: 200, contentType: "application/json") {
                 [
 
