@@ -9,8 +9,7 @@ mpgSoftware.burdenTestShared = (function () {
     var minimumNumberOfSamples = 100;
     var portalTypeWithAncestry = true;
     var geneForGaitStr = '';
-
-
+    var fillVariantOptionFilterDropDown;
 
 
     /***
@@ -167,6 +166,79 @@ mpgSoftware.burdenTestShared = (function () {
     };
 
 
+    var buildGaitInterface = function(selectionToFill,
+        displayParameters,
+        geneName,
+        allowStratificationByAncestry,
+        selectionForDataSetFilter,
+        sampleMetadataExperimentAjaxUrl,
+        sampleMetadataAjaxWithAssumedExperimentUrl,
+        variantOnlyTypeAheadUrl,
+        sampleMetadataAjaxUrl,
+        generateListOfVariantsFromFiltersAjaxUrl,
+        retrieveSampleSummaryUrl,
+        variantInfoUrl,
+        variantAndDsAjaxUrl,
+        burdenTestVariantSelectionOptionsAjaxUrl){
+                    mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
+                        displayParameters);
+                    mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
+                    mpgSoftware.burdenTestShared.setPortalTypeWithAncestry(allowStratificationByAncestry);
+                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,sampleMetadataExperimentAjaxUrl );
+                    mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(sampleMetadataAjaxWithAssumedExperimentUrl,
+                        variantOnlyTypeAheadUrl,
+                        sampleMetadataAjaxUrl,
+                        generateListOfVariantsFromFiltersAjaxUrl,
+                        retrieveSampleSummaryUrl,
+                        variantInfoUrl,
+                        variantAndDsAjaxUrl,
+                        burdenTestVariantSelectionOptionsAjaxUrl);
+    };
+
+
+
+
+
+
+    var initializeGaitUi = function(selectorInWhichToInsert,valuesToInsert){
+        $(selectorInWhichToInsert).empty().append(Mustache.render( $('#mainGaitHolder')[0].innerHTML,valuesToInsert));
+    };
+
+
+    var  fillVariantOptionFilterDropDown = function (burdenTestVariantSelectionOptionsAjaxUrl,burdenProteinEffectFilterName) {
+                var burdenProteinEffectFilter = burdenProteinEffectFilterName;
+                var promise = $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: burdenTestVariantSelectionOptionsAjaxUrl,
+                    data: {},
+                    async: true
+                });
+                promise.done(
+                    function (data) {
+                        if ((typeof data !== 'undefined') && (data)) {
+                            //first check for error conditions
+                            if (!data) {
+                                console.log('null return data from burdenTestVariantSelectionOptionsAjax');
+                            } else if (data.is_error) {
+                                console.log('burdenTestAjax returned is_error =' + data.is_error + '.');
+                            }
+                            else if ((typeof data.options === 'undefined') ||
+                                (data.options.length <= 0)) {
+                                console.log('burdenTestAjax returned undefined (or length = 0) for options.');
+                            } else {
+                                var optionList = data.options;
+                                var dropDownHolder = $(burdenProteinEffectFilter);
+                                for (var i = 0; i < optionList.length; i++) {
+                                    dropDownHolder.append('<option value="' + optionList[i].id + '">' + optionList[i].name + '</option>')
+                                }
+                            }
+                        }
+
+                    });
+                promise.fail();
+
+    };
 
     /***
      * Get back data sets based on phenotype and insert them into a drop-down box
@@ -231,6 +303,7 @@ mpgSoftware.burdenTestShared = (function () {
         var retrieveSampleSummaryUrl = params.retrieveSampleSummaryUrl;
         var generateListOfVariantsFromFiltersAjaxUrl = params.generateListOfVariantsFromFiltersAjaxUrl;
         var variantAndDsAjaxUrl = params.variantAndDsAjaxUrl;
+        var burdenTestVariantSelectionOptionsAjaxUrl = params.burdenTestVariantSelectionOptionsAjaxUrl;
         phenotypeDropdown.empty();
         if ( ( data !==  null ) &&
             ( typeof data.phenotypes !== 'undefined' ) &&
@@ -291,7 +364,8 @@ mpgSoftware.burdenTestShared = (function () {
      *  Use this if you have only one data set, since then we don't need to burden the user with the choice
      */
     var preloadInteractiveAnalysisData = function (sampleMetadataAjaxWithAssumedExperimentUrl,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
-                                                   generateListOfVariantsFromFiltersAjaxUrl,retrieveSampleSummaryUrl,variantInfoUrl,variantAndDsAjaxUrl) {
+                                                   generateListOfVariantsFromFiltersAjaxUrl,retrieveSampleSummaryUrl,variantInfoUrl,variantAndDsAjaxUrl,
+                                                   burdenTestVariantSelectionOptionsAjaxUrl) {
         $('.caatSpinner').show();
         var dropDownSelector = '#phenotypeFilter';
         var strataChooserMarker = [];
@@ -301,6 +375,7 @@ mpgSoftware.burdenTestShared = (function () {
         var rememberRetrieveSampleSummaryUrl = retrieveSampleSummaryUrl;
         var rememberVariantInfoUrl = variantInfoUrl;
         var rememberVariantAndDsAjaxUrl = variantAndDsAjaxUrl;
+        var rememberBurdenTestVariantSelectionOptionsAjaxUrl = burdenTestVariantSelectionOptionsAjaxUrl;
         if (portalTypeWithAncestry){
             strataChooserMarker.push(1);
         }
@@ -341,7 +416,8 @@ mpgSoftware.burdenTestShared = (function () {
                 }
 
                 refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,rememberLinkToTypeaheadUrl,
-                    rememberSampleMetadataAjaxUrl,rememberGenerateListOfVariantsFromFiltersAjaxUrl,rememberVariantInfoUrl,rememberRetrieveSampleSummaryUrl,rememberVariantAndDsAjaxUrl);
+                    rememberSampleMetadataAjaxUrl,rememberGenerateListOfVariantsFromFiltersAjaxUrl,rememberVariantInfoUrl,rememberRetrieveSampleSummaryUrl,
+                    rememberVariantAndDsAjaxUrl, rememberBurdenTestVariantSelectionOptionsAjaxUrl);
                 displayTestResultsSection(false);
                 $('.caatSpinner').hide();
 
@@ -358,12 +434,13 @@ mpgSoftware.burdenTestShared = (function () {
 
 
     var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator,changeExperiment,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
-                                       generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl) {
+                                       generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl, burdenTestVariantSelectionOptionsAjaxUrl) {
         if ((typeof changeExperiment !== 'undefined') &&
             (changeExperiment)){
             loadExperimentMetadata($(datasetFilter).val(),refreshTopOfGaitDisplay,sampleMetadataAjaxUrl,{dropDownPhenoSelector:phenotypeFilter,stratifyDesignation:stratifyDesignation,
                 linkToTypeaheadUrl:linkToTypeaheadUrl,sampleMetadataAjaxUrl:sampleMetadataAjaxUrl,variantInfoUrl:variantInfoUrl,retrieveSampleSummaryUrl:retrieveSampleSummaryUrl,
-                generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,variantAndDsAjaxUrl:variantAndDsAjaxUrl})
+                generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,variantAndDsAjaxUrl:variantAndDsAjaxUrl,
+                burdenTestVariantSelectionOptionsAjaxUrl:burdenTestVariantSelectionOptionsAjaxUrl})
         }
         var sampleMetadata = getStoredSampleMetadata();
         var phenotypeFilterValue = $(phenotypeFilter).val();
@@ -382,7 +459,7 @@ mpgSoftware.burdenTestShared = (function () {
         $('#stratsTabs').empty();
         var caseControlFiltering = $('#caseControlFiltering').prop('checked');
         stratifiedSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
-            linkToTypeaheadUrl,generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl);
+            linkToTypeaheadUrl,generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,burdenTestVariantSelectionOptionsAjaxUrl);
         displayTestResultsSection(false);
     };
 
@@ -413,7 +490,8 @@ mpgSoftware.burdenTestShared = (function () {
      *
      */
     var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo, caseControlFiltering,linkToTypeaheadUrl,
-                                                        generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl) {
+                                                        generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,
+                                                        burdenTestVariantSelectionOptionsAjaxUrl) {
         var stratumName;
         var multipleStrataExist = ((strataProperty !== 'none')&&( typeof strataProperty !== 'undefined'));
         if (!multipleStrataExist){
@@ -782,7 +860,7 @@ mpgSoftware.burdenTestShared = (function () {
             if (getGeneForGait().length>0){
                 renderData.sectionNumber++;
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-                mpgSoftware.gaitBackgroundData.fillVariantOptionFilterDropDown('#burdenProteinEffectFilter');
+                mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
                 mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,function(){
                     mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl)
                 });
@@ -2398,7 +2476,10 @@ return {
     generateListOfVariantsFromFilters: generateListOfVariantsFromFilters,
     swapSingleMultipleVariantAdditionMode:   swapSingleMultipleVariantAdditionMode,
     storeGeneForGait: storeGeneForGait,
-    setPortalTypeWithAncestry: setPortalTypeWithAncestry
+    setPortalTypeWithAncestry: setPortalTypeWithAncestry,
+    initializeGaitUi:initializeGaitUi,
+    fillVariantOptionFilterDropDown:fillVariantOptionFilterDropDown,
+    buildGaitInterface:buildGaitInterface
 }
 
 }());
