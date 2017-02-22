@@ -1522,11 +1522,9 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
                         variantListHolder.push(variant);
                     });
                 }
-                $('#gaitButtons').empty();
-                $('#gaitVariantTableLength').empty();
-                $('#gaitTable_info').empty();
-                $('#gaitTable_paginate').empty();
-                var gaitTable  = $('#gaitTable').DataTable({
+
+                var gaitTable  = $('#gaitTable').DataTable(
+                {
                         "select": {
                             style:    'none',
                             selector: 'td:first-child'
@@ -1596,7 +1594,7 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
                         "bProcessing": true
                     }
                 );
-                $('#gaitTable').DataTable().clear();
+               // $('#gaitTable').DataTable().clear();
                 _.forEach(variantListHolder,function(variantRec){
                     //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                     var arrayOfRows = [];

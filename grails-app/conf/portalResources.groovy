@@ -76,7 +76,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
@@ -128,6 +128,10 @@ modules = {
         dependsOn 'datatables'
         resource url: 'js/lib/dport/tableViewer.js'
         resource url: 'css/dport/tableViewer.css'
+    }
+    geneSignalSummary {
+        resource url: 'js/lib/dport/geneSignalSummary.js'
+        resource url: 'css/dport/geneSignalSummary.css'
     }
     mustache {
         resource url: 'js/lib/mustache.js'

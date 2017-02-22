@@ -195,39 +195,9 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                         <div class="row variantBoxHeaders" >
-                                <div class="col-lg-3">Variant ID</div>
 
-                                <div class="col-lg-3">dbSNP Id</div>
+                        <table id="commonVariantsLocationHolder" class="compact row-border"></table>
 
-                                <div class="col-lg-2">p-Value</div>
-
-                                <div class="col-lg-1">Effect</div>
-
-                                <div class="col-lg-3">Data set</div>
-                            </div>
-                            <div class="boxOfVariants">
-                                {{ #cvar }}
-                                <div class="row {{CAT}}">
-
-                                        <div class="col-lg-3"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
-
-                                        <div class="col-lg-3"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}','{{dsr}}','{{pname}}','{{pheno}}')" class="boldItlink">{{rsId}}</a></div>
-
-                                        <div class="col-lg-2">{{P_VALUE}}</div>
-
-                                        <div class="col-lg-1">{{BETA}}</div>
-
-                                        <div class="col-lg-3">{{dsr}}</div>
-
-                                </div>
-                                {{ /cvar }}
-                                {{ ^cvar }}
-                                <div class="row">
-                                    <div class="col-xs-offset-4 col-xs-4">No common variants</div>
-                                </div>
-                                {{ /cvar }}
-                            </div>
                         </div>
                     </div>
 

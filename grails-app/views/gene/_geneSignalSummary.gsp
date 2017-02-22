@@ -44,6 +44,46 @@
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 }
+table.dataTable thead tr th.sorting {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px;
+    border-bottom: 1px solid #8AB8E6;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E0F4FC', endColorstr='#9BC5F4'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#E0F4FC), to(#9BC5F4)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #E0F4FC, #9BC5F4); /* for firefox 3.6+ */
+}
+table.dataTable thead tr th.sorting_asc {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px;
+    border-bottom: 1px solid #8AB8E6;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E0F4FC', endColorstr='#9BC5F4'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#E0F4FC), to(#9BC5F4)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #E0F4FC, #9BC5F4); /* for firefox 3.6+ */
+}
+table.dataTable thead tr th.sorting_desc {
+    font-size: 12px;
+    font-weight: normal;
+    padding: 4px;
+    border-bottom: 1px solid #8AB8E6;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E0F4FC', endColorstr='#9BC5F4'); /* for IE */
+    background: -webkit-gradient(linear, left top, left bottom, from(#E0F4FC), to(#9BC5F4)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #E0F4FC, #9BC5F4); /* for firefox 3.6+ */
+}
+
 .chosenPhenotype{
     font-weight: bold;
 }
@@ -59,13 +99,13 @@
 .greenPhenotype {
     background-color: #ccffcc;
 }
-div.redline {
+tr.redline {
  /*   background-color: #ffb3b3;*/
 }
-div.yellowline {
+table.dataTable tbody tr.yellowline {
      background-color: #ffffb3;
 }
-div.greenline {
+table.dataTable tbody tr.greenline {
       background-color: #ccffcc;
   }
 .linkEmulator{
@@ -203,16 +243,7 @@ div.variantBoxHeaders {
 
 
 <div id="BurdenHiddenHere" style="display:none">
-    <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': '',
-                                                                     'modifiedTitle': 'Run a custom burden test',
-                                                                     'accordionHeaderClass': 'toned-down-accordion-heading',
-                                                                     'modifiedTitleStyling': 'font-size: 18px;text-decoration: underline;padding-left: 20px;',
-                                                                     'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
-    %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
-                                                           %{--'modifiedTitle': 'Run a custom burden test',--}%
-                                                           %{--'accordionHeaderClass': 'toned-down-accordion-heading',--}%
-                                                           %{--'modifiedTitleStyling': 'font-size: 18px;text-decoration: underline;padding-left: 20px;',--}%
-                                                           %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>--}%
+    <g:render template="/templates/burdenTestSharedTemplate" />
 </div>
 
 
@@ -607,6 +638,7 @@ div.variantBoxHeaders {
                     if (!useIgvNotLz){
                         $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                     }
+
                     $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
 
                     //  set up the gait interface
@@ -628,9 +660,11 @@ div.variantBoxHeaders {
                             "${createLink(controller: 'variantInfo', action: 'variantAndDsAjax')}",
                             "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}");
 
-;
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                     $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
+                    mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
+                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.cvar);
+
                     //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
                     var sampleBasedPhenotypeName = phenotypeNameForSampleData(phenotypeName);
                     var hailPhenotypeInfo = phenotypeNameForHailData(phenotypeName);
@@ -861,20 +895,8 @@ return {
 
 
 })();
-    //
-//var loading = $('#spinner').show();
-//loading.hide();
-$( document ).ready(function() {
-    %{--mpgSoftware.geneInfo.fillPhenotypeDropDown('#signalPhenotypeTableChooser',--}%
-    %{--'${g.defaultPhenotype()}',--}%
-    %{--"${createLink(controller: 'VariantSearch', action: 'retrievePhenotypesAjax')}",--}%
-    %{--function(){--}%
-    %{--// retrieve the top value in the phenotype drop-down--}%
-//    mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype('T2D',
-//    mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay);
-    %{--} );--}%
-    %{--});--}%
 
+$( document ).ready(function() {
    mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.displayInterestingPhenotypes);
 });
 
