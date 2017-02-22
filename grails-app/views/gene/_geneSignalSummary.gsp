@@ -208,11 +208,11 @@ div.variantBoxHeaders {
                                                                      'accordionHeaderClass': 'toned-down-accordion-heading',
                                                                      'modifiedTitleStyling': 'font-size: 18px;text-decoration: underline;padding-left: 20px;',
                                                                      'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
-    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
-                                                           'modifiedTitle': 'Run a custom burden test',
-                                                           'accordionHeaderClass': 'toned-down-accordion-heading',
-                                                           'modifiedTitleStyling': 'font-size: 18px;text-decoration: underline;padding-left: 20px;',
-                                                           'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
+    %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
+                                                           %{--'modifiedTitle': 'Run a custom burden test',--}%
+                                                           %{--'accordionHeaderClass': 'toned-down-accordion-heading',--}%
+                                                           %{--'modifiedTitleStyling': 'font-size: 18px;text-decoration: underline;padding-left: 20px;',--}%
+                                                           %{--'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>--}%
 </div>
 
 
@@ -608,14 +608,25 @@ div.variantBoxHeaders {
                         $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                     }
                     $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
-                    var tempHtml = $('#BurdenHiddenHere').clone(true).html();
-                    if (typeof tempHtml !== 'undefined'){
-                        $('#BurdenHiddenHere>dir').empty();
-                        $.data(document.body,'burdenText',tempHtml);
-                    }
-                    tempHtml = $.data(document.body,'burdenText');
-                    $('#burdenGoesHere').empty();
-                    $(tempHtml).appendTo('#burdenGoesHere');
+
+                    //  set up the gait interface
+                    mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere',{
+                                accordionHeaderClass:'toned-down-accordion-heading',
+                                modifiedTitle:'Run a custom burden test',
+                                modifiedTitleStyling:'font-size: 18px;text-decoration: underline;padding-left: 20px;'
+                            },
+                            '${geneName}',
+                            true,
+                            '#datasetFilter',
+                            '${createLink(controller: 'VariantInfo', action: 'sampleMetadataExperimentAjax')}',
+                            "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjaxWithAssumedExperiment')}",
+                            "${createLink(controller: 'gene', action: 'variantOnlyTypeAhead')}",
+                            "${createLink(controller: 'VariantInfo', action: 'sampleMetadataAjax')}",
+                            "${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}",
+                            "${createLink(controller: 'VariantInfo', action: 'retrieveSampleSummary')}",
+                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",
+                            "${createLink(controller: 'variantInfo', action: 'variantAndDsAjax')}",
+                            "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}");
 
 ;
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));

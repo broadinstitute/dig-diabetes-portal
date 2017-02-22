@@ -325,8 +325,6 @@ mpgSoftware.burdenTestShared = (function () {
             });
             stratifyDesignationDropdown.val('none')
         }
-//        refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering', false, linkToTypeaheadUrl, sampleMetadataAjaxUrl,
-//          generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl);
         displayTestResultsSection(false);
         $('.caatSpinner').hide();
     };
@@ -730,8 +728,9 @@ mpgSoftware.burdenTestShared = (function () {
             return renderData;
         };
 
-        var respondedToAddVariantButtonClick = function (variantAndDsAjaxUrl) {
+        var respondedToAddVariantButtonClick = function (variantAndDsAjaxUrl,variantInfoUrl) {
             var proposedVariant = $('#proposedVariant').val();
+            var rememberVariantInfoUrl = variantInfoUrl;
             if (proposedVariant.length<1){
                 proposedVariant = $('#proposedMultiVariant').val();
             }
@@ -781,7 +780,7 @@ mpgSoftware.burdenTestShared = (function () {
                                             duplicate.push(curVariant);
                                         } else {
                                             datatable.row.add( [variantObject.VAR_ID,
-                                                    '<a href="/dig-diabetes-portal/variantInfo/variantInfo/'+variantObject.VAR_ID+'" class="boldItlink">'+
+                                                    '<a href="'+rememberVariantInfoUrl+'/'+variantObject.VAR_ID+'" class="boldItlink">'+
                                                     variantObject.CHROM+':'+variantObject.POS+'</a>',
                                                 variantObject.DBSNP_ID,
                                                 variantObject.CHROM,
@@ -861,18 +860,16 @@ mpgSoftware.burdenTestShared = (function () {
                 renderData.sectionNumber++;
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
                 mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
-                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,function(){
-                    mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl)
+                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl);
+                $('#addVariant').on( 'click', respondedToAddVariantButtonClick , variantAndDsAjaxUrl,variantInfoUrl);
+                $('#proposedMultiVariant').typeahead({});
+                $('#proposedVariant').typeahead({
+                    source: function (query, process) {
+                        $.get(linkToTypeaheadUrl, {query: query}, function (data) {
+                            process(data);
+                        })
+                    }
                 });
-                $('#addVariant').on( 'click', respondedToAddVariantButtonClick , variantAndDsAjaxUrl);
-                 $('#proposedMultiVariant').typeahead({});
-            $('#proposedVariant').typeahead({
-                source: function (query, process) {
-                    $.get(linkToTypeaheadUrl, {query: query}, function (data) {
-                        process(data);
-                    })
-                }
-            });
         }
 
 
@@ -1486,9 +1483,11 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
     if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
         dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
     } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
-        dataSet = 'GWAS_Stroke_mdv70';
+        dataSet = 'GWAS'+datasetFilter.substring('samples'.length);
+        //dataSet = 'GWAS_Stroke_mdv70';
     }else {
-        dataSet = 'ExChip_CAMP_mdv23';
+        dataSet = 'ExChip'+datasetFilter.substring('samples'.length);
+       // dataSet = 'ExChip_CAMP_mdv23';
     }
 
     $('#rSpinner').show();
