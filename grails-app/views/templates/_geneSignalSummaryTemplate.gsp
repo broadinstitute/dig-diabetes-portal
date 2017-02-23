@@ -128,50 +128,8 @@
             <div class="row">
                 <div class="col-lg-12">
 
-                            <div class="row variantBoxHeaders">
-                                <div class="col-lg-2">Variant ID</div>
+                <table id="highImpactTemplateHolder" class="compact row-border"></table>
 
-                                <div class="col-lg-2">dbSNP Id</div>
-
-                                <div class="col-lg-1">Protein<br/>change</div>
-
-                                <div class="col-lg-2">Predicted<br/>impact</div>
-
-                                <div class="col-lg-1">p-Value</div>
-
-                                <div class="col-lg-1">Effect</div>
-                                <div class="col-lg-3">Data set</div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="boxOfVariants">
-                                        {{ #rvar }}
-                                            <div class="row  {{CAT}}">
-                                                <div class="col-lg-2"><a href="${createLink(controller: 'variantInfo', action: 'variantInfo')}/{{id}}" class="boldItlink">{{id}}</a></div>
-
-                                                <div class="col-lg-2"><span class="linkEmulator" onclick="mpgSoftware.geneSignalSummary.refreshLZ('{{id}}','{{dsr}}','{{pname}}','{{pheno}}')" class="boldItlink">{{rsId}}</a></div>
-
-
-                                                <div class="col-lg-1">{{impact}}</div>
-
-                                                <div class="col-lg-2">{{deleteriousness}}</div>
-
-                                                <div class="col-lg-1">{{P_VALUE}}</div>
-
-                                                <div class="col-lg-1">{{BETA}}</div>
-                                                <div class="col-lg-3">{{dsr}}</div>
-                                            </div>
-                                        {{ /rvar }}
-                                        {{ ^rvar }}
-                                            <div class="row">
-                                                <div class="col-xs-offset-4 col-xs-4">No high impact variants</div>
-                                            </div>
-                                        {{ /rvar }}
-
-                                    </div>
-                                </div>
-                            </div>
                 </div>
             </div>
             <div class="row">
