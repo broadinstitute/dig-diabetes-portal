@@ -79,20 +79,11 @@
         <div id="chooseSamples" class="">
             <div class="secBody">
 
-                <div class="row secHeader"">
+                <div class="row secHeader chooseExperiment">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
                 </div>
 
-                <div class="row" style="display:none">
-                    <div class="col-sm-12 col-xs-12">
-                        <p>
-                            Select a phenotype to test for association and optionally choose to stratify samples by ancestry and/or filter cases and controls separately.
-                        </p>
-
-                    </div>
-                </div>
-
-                <div class="row">
+                <div class="row chooseExperiment">
                     <div class="col-sm-12 col-xs-12 text-left"  style="padding-top: 8px; padding-bottom: 15px">
                         <select id="datasetFilter" class="traitFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,
@@ -107,11 +98,11 @@
                     </div>
 
                 </div>
-                <div class="row secHeader" style="padding: 0 0 5px 0">
+                <div class="row secHeader  choosePhenotype" style="padding: 0 0 5px 0">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
                 </div>
 
-                <div class="row">
+                <div class="row  choosePhenotype">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="phenotypeFilter" class="traitFilter form-control text-left phenotypeFilter"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
@@ -128,11 +119,11 @@
 
 
                 {{ #strataChooser }}
-                <div class="row secHeader stratificationHolder" style="margin: 20px 0 0 0">
+                <div class="row secHeader stratificationHolder chooseStratification" style="margin: 20px 0 0 0">
                     <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
                 </div>
 
-                <div class="row stratificationHolder">
+                <div class="row stratificationHolder chooseStratification">
                     <div class="col-sm-12 col-xs-12 text-left">
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,

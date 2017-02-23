@@ -60,15 +60,6 @@ div.dataTables_scrollHeadInner table.dataTable thead tr.niceHeaders th {
     padding-left: 18px;
     background-position: center left;
 }
-/*table.dataTable thead .sorting_asc {*/
-    /*background: url("http://cdn.datatables.net/1.10.0/images/sort_asc.png") no-repeat center left;*/
-/*}*/
-/*table.dataTable thead .sorting_desc {*/
-    /*background: url("http://cdn.datatables.net/1.10.0/images/sort_desc.png") no-repeat center left;*/
-/*}*/
-/*table.dataTable thead .sorting {*/
-    /*background: url("http://cdn.datatables.net/1.10.0/images/sort_both.png") no-repeat center left;*/
-/*}*/
 .chosenPhenotype{
     font-weight: bold;
 }
@@ -93,6 +84,17 @@ table.dataTable tbody tr.yellowline {
 table.dataTable tbody tr.greenline {
     background-color: #ccffcc;
 }
+.signalSummaryDisplay{
+    margin: 6px 0 0 0;
+    padding: 5px;
+    background-color: white;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+}
 .linkEmulator{
     text-decoration: underline;
     cursor: pointer;
@@ -100,7 +102,6 @@ table.dataTable tbody tr.greenline {
     color: #588fd3;
 }
 .boxOfVariants {
-    border: 1px solid black;
     padding: 10px;
     max-height: 200px;
     overflow-y: auto;
@@ -145,4 +146,8 @@ div.variantBoxHeaders {
     border: inset 1px grey;
     margin-top: 10px;
     padding: 5px;
+}
+.variantCategoryHolder {
+    border-top: 1px solid black;
+    margin: 12px 0 15px 0;
 }

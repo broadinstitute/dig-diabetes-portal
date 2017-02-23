@@ -192,7 +192,8 @@ mpgSoftware.burdenTestShared = (function () {
                         retrieveSampleSummaryUrl,
                         variantInfoUrl,
                         variantAndDsAjaxUrl,
-                        burdenTestVariantSelectionOptionsAjaxUrl);
+                        burdenTestVariantSelectionOptionsAjaxUrl,
+                        displayParameters);
     };
 
 
@@ -363,7 +364,7 @@ mpgSoftware.burdenTestShared = (function () {
      */
     var preloadInteractiveAnalysisData = function (sampleMetadataAjaxWithAssumedExperimentUrl,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
                                                    generateListOfVariantsFromFiltersAjaxUrl,retrieveSampleSummaryUrl,variantInfoUrl,variantAndDsAjaxUrl,
-                                                   burdenTestVariantSelectionOptionsAjaxUrl) {
+                                                   burdenTestVariantSelectionOptionsAjaxUrl,displayParameters) {
         $('.caatSpinner').show();
         var dropDownSelector = '#phenotypeFilter';
         var strataChooserMarker = [];
@@ -374,6 +375,7 @@ mpgSoftware.burdenTestShared = (function () {
         var rememberVariantInfoUrl = variantInfoUrl;
         var rememberVariantAndDsAjaxUrl = variantAndDsAjaxUrl;
         var rememberBurdenTestVariantSelectionOptionsAjaxUrl = burdenTestVariantSelectionOptionsAjaxUrl;
+        var rememberDisplayParameters = displayParameters;
         if (portalTypeWithAncestry){
             strataChooserMarker.push(1);
         }
@@ -416,6 +418,24 @@ mpgSoftware.burdenTestShared = (function () {
                 refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,rememberLinkToTypeaheadUrl,
                     rememberSampleMetadataAjaxUrl,rememberGenerateListOfVariantsFromFiltersAjaxUrl,rememberVariantInfoUrl,rememberRetrieveSampleSummaryUrl,
                     rememberVariantAndDsAjaxUrl, rememberBurdenTestVariantSelectionOptionsAjaxUrl);
+                // make sections visible or invisible
+                if ((typeof rememberDisplayParameters.allowExperimentChoice !== 'undefined')&&(rememberDisplayParameters.allowExperimentChoice)){
+                    $(".chooseExperiment").css('display','block'); } else {$(".chooseExperiment").css('display','none');}
+                if ((typeof rememberDisplayParameters.allowPhenotypeChoice !== 'undefined')&&(rememberDisplayParameters.allowPhenotypeChoice)){
+                    $(".choosePhenotype").css('display','block'); } else {$(".choosePhenotype").css('display','none');}
+                if ((typeof rememberDisplayParameters.allowStratificationChoice !== 'undefined')&&(rememberDisplayParameters.allowStratificationChoice)){
+                    $(".chooseStratification").css('display','block'); } else {$(".chooseStratification").css('display','none');}
+                // choose default phenotype
+                if (typeof rememberDisplayParameters.defaultPhenotype !== 'undefined'){
+                    var defaultPhenotype = rememberDisplayParameters.defaultPhenotype;
+                    var array = $.map($("#phenotypeFilter")[0].options, function( elem ) {
+                        return (elem.value || elem.text);
+                    });
+                    var indexOfDefaultPhenotype = _.findIndex(array,function(o) { return o == defaultPhenotype });
+                    if (indexOfDefaultPhenotype > -1){
+                        $("#phenotypeFilter").val(array[indexOfDefaultPhenotype]);
+                    }
+                }
                 displayTestResultsSection(false);
                 $('.caatSpinner').hide();
 

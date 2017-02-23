@@ -41,6 +41,16 @@
                 <button name="singlebutton"
                         class="btn btn-secondary btn-lg burden-test-btn vcenter"
                         type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Summary</button>
+                <button name="adjustSignalSummaryDisplay"
+                        class="btn btn-secondary btn-sm burden-test-btn vcenter"
+                        type="button" data-toggle="collapse" data-target="#signalSummaryDisplay" aria-expanded="false" aria-controls="signalSummaryDisplay">Adjust display</button>
+                <div class="collapse" id="signalSummaryDisplay">
+                    <div class="signalSummaryDisplay">
+                        <label>
+                            <input class="preferIgv" type="checkbox" onclick="mpgSoftware.geneSignalSummary.refreshSignalSummaryBasedOnPhenotype()">Use IGV
+                        </label>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -51,13 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-xs-offset-10 col-xs-2">
-                <label>
-                    <input class="preferIgv" type="checkbox" onclick="mpgSoftware.geneSignalSummary.refreshSignalSummaryBasedOnPhenotype()">Use IGV
-                </label>
-            </div>
-        </div>
+
 
     </div>
 
@@ -89,111 +93,8 @@
 
     (function () {
         "use strict";
-        var phenotypeNameForSampleData  = function (untranslatedPhenotype) {
-            var convertedName = '';
-            if (untranslatedPhenotype === 'T2D') {
-                convertedName = 't2d';
-            } else if (untranslatedPhenotype === 'FG') {
-                convertedName = 'FAST_GLU_ANAL';
-            } else if (untranslatedPhenotype === 'FI') {
-                convertedName = 'FAST_INS_ANAL';
-            } else if (untranslatedPhenotype === 'BMI') {
-                convertedName = 'BMI';
-            } else if (untranslatedPhenotype === 'CHOL') {
-                convertedName = 'CHOL_ANAL';
-            } else if (untranslatedPhenotype === 'TG') {
-                convertedName = 'TG_ANAL';
-            } else if (untranslatedPhenotype === 'HDL') {
-                convertedName = 'HDL_ANAL';
-            } else if (untranslatedPhenotype === 'LDL') {
-                convertedName = 'LDL_ANAL';
-            } else if (untranslatedPhenotype === 'SBP') {
-                convertedName = 'SBP_ANAL';
-            } else if (untranslatedPhenotype === 'DBP') {
-                convertedName = 'DBP_ANAL';
-            }
-            return convertedName;
-        };
-        var phenotypeNameForHailData  = function (untranslatedPhenotype) {
-            var convertedName;
-            if (untranslatedPhenotype === 'T2D') {
-                convertedName = {key: "T2D", description: "Type 2 Diabetes"};
-            } else if (untranslatedPhenotype === 'BMI') {
-                convertedName = {key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index"};
-            } else if (untranslatedPhenotype === 'LDL') {
-                convertedName = {key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol"};
-            } else if (untranslatedPhenotype === 'HDL') {
-                convertedName = {key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol"};
-            } else if (untranslatedPhenotype === 'FI') {
-                convertedName = {key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin"};
-            } else if (untranslatedPhenotype === 'FG') {
-                convertedName = {key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose"};
-            } else if (untranslatedPhenotype === 'HIPC') {
-                convertedName = {key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference"};
-            } else if (untranslatedPhenotype === 'WAIST') {
-                convertedName = {key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference"};
-            } else if (untranslatedPhenotype === 'WHR') {
-                convertedName = {key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio"};
-            } else if (untranslatedPhenotype === 'SBP') {
-                convertedName = {key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol"};
-            } else if (untranslatedPhenotype === 'DBP') {
-                convertedName = {key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides"};
-            }
-            return convertedName;
-        };
-        mpgSoftware.geneSignalSummary = (function () {
-            var processAggregatedData = function (v) {
-                var obj = {};
-                var procAggregatedData = function (val, key) {
-                    var mafValue;
-                    var mdsValue;
-                    var pValue;
-                    if (key === 'VAR_ID') {
-                        obj['id'] = (val) ? val : '';
-                    } else if (key === 'DBSNP_ID') {
-                        obj['rsId'] = (val) ? val : '';
-                    } else if (key === 'Protein_change') {
-                        obj['impact'] = (val) ? val : '';
-                    } else if (key === 'Consequence') {
-                        obj['deleteriousness'] = (val) ? val : '';
-                    } else if (key === 'Reference_Allele') {
-                        obj['referenceAllele'] = (val) ? val : '';
-                    } else if (key === 'Effect_Allele') {
-                        obj['effectAllele'] = (val) ? val : '';
-                    } else if (key === 'MOST_DEL_SCORE') {
-                        obj['MOST_DEL_SCORE'] = (val) ? val : '';
-                    } else if (key === 'dataset') {
-                        obj['ds'] = (val) ? val : '';
-                    } else if (key === 'dsr') {
-                        obj['dsr'] = (val) ? val : '';
-                    } else if (key === 'pname') {
-                        obj['pname'] = (val) ? val : '';
-                    } else if (key === 'phenotype') {
-                        obj['pheno'] = (val) ? val : '';
-                    } else if (key === 'datasetname') {
-                        obj['datasetname'] = (val) ? val : '';
-                    } else if (key === 'meaning') {
-                        obj['meaning'] = (val) ? val : '';
-                    } else if (key === 'AF') {
-                        obj['MAF'] = UTILS.realNumberFormatter((val) ? val : 1);
-                    } else if ((key === 'P_FIRTH_FE_IV') ||
-                            (key === 'P_VALUE') ||
-                            (key === 'P_FE_INV') ||
-                            (key === 'P_FIRTH')
-                            ) {
-                        obj['property'] = key;
-                        obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
-                        obj['P_VALUEV'] = (val) ? val : 1;
-                    } else if (key === 'BETA') {
-                        obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
-                        obj['BETAV'] = Math.exp((val) ? val : 1);
 
-                    }
-                    return obj;
-                }
-                _.forEach(v, procAggregatedData);
-                return obj;
-            };
+        mpgSoftware.geneSignalSummary = (function () {
             var buildRenderData = function (data, mafCutoff) {
                 var renderData = {variants: [],
                     rvar: [],
@@ -205,101 +106,14 @@
                     var obj;
                     _.forEach(data.variants.variants, function (v, index, y) {
                         if (_.flatten(v).length == 0) {
-                            renderData.variants.push(processAggregatedData(v));
-                            //renderData.variants.push(_.forEach(v,procAggregatedData));
+                            renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
                         } else {
-                            renderData.variants.push(processAggregatedData(v));
-                            //renderData.variants.push(_.forEach(v,procExpandedData));
+                            renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
                         }
 
                     });
                 }
                 ;
-                return renderData;
-            };
-            var refineRenderData = function (renderData, significanceLevel) {
-                renderData.rvar = [];
-                renderData.cvar = [];
-                var pValueCutoffHighImpact = 0;
-                var pValueCutoffCommon = 0;
-                var maxNumberOfVariants = 100;
-                switch (significanceLevel) {
-                    case 3:
-                        pValueCutoffHighImpact = 0.00000005;
-                        pValueCutoffCommon = 0.000005;
-                        break;
-                    case 2:
-                        pValueCutoffHighImpact = 0.0001;
-                        pValueCutoffCommon = 0.0001;
-                        break;
-                    case 1:
-                        pValueCutoffHighImpact = 1;
-                        pValueCutoffCommon = 1;
-                        break;
-                    default:
-                        break;
-                }
-                var rvart = [];
-                var cvart = [];
-                _.forEach(renderData.variants, function (v) {
-                    var mafValue = v['MAF']
-                    var mdsValue = v['MOST_DEL_SCORE'];
-                    var pValue = v['P_VALUEV'];
-                    if ((typeof mdsValue !== 'undefined') && (mdsValue !== '') && (mdsValue < 3) &&
-                            (typeof pValue !== 'undefined') && (pValue <= pValueCutoffHighImpact)) {
-                        if (rvart.length < maxNumberOfVariants) {
-                            if (pValue < 0.000005) {
-                                v['CAT'] = 'greenline'
-                            }
-                            else if (pValue < 0.0005) {
-                                v['CAT'] = 'yellowline'
-                            }
-                            else {
-                                v['CAT'] = 'redline'
-                            }
-                            rvart.push(v);
-                        }
-                    }
-                    if ((typeof mafValue !== 'undefined') && (mafValue !== '') && (mafValue > 0.05) &&
-                            (typeof pValue !== 'undefined') && (pValue <= pValueCutoffCommon)) {
-                        if (cvart.length < maxNumberOfVariants) {
-                            if (pValue < 0.00000005) {
-                                v['CAT'] = 'greenline'
-                            }
-                            else if (pValue < 0.0005) {
-                                if (v['CAT']!='greenline'){
-                                    v['CAT'] = 'yellowline'
-                                }
-                            }
-                            else {
-                                if ((v['CAT']!=='greenline')&&
-                                        (v['CAT']!=='yellowline')) {
-                                    v['CAT'] = 'redline'
-                                }
-                            }
-                            cvart.push(v);
-                        }
-                    }
-                });
-                // sort by P value for the high-impact variants
-                var tempRVar = _.sortBy(rvart, function (o) {
-                    return o.P_VALUEV
-                });
-                // Only the first P value with each name gets in.  Since these are sorted we get all the variants with the lowest P values
-                _.forEach(tempRVar,function(o){
-                    if (_.findIndex(renderData.rvar,function (p){return (p['id']==o['id'])})<0){
-                        renderData.rvar.push(o);
-                    }
-                });
-                // repeat the sorting and filtering for the common variants
-                var tempCVar = _.sortBy(cvart, function (o) {
-                    return o.P_VALUEV
-                });
-                _.forEach(tempCVar,function(o){
-                    if (_.findIndex(renderData.cvar,function (p){return (p['id']==o['id'])})<0){
-                        renderData.cvar.push(o);
-                    }
-                });
                 return renderData;
             };
 
@@ -310,8 +124,8 @@
                 if ((data) &&
                         (data.stats)) {
                     updateHere.append("<ul class='aggregateVariantsDescr list-group'>" +
-                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.beta) + "</li>" +
                             "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.pValue) + "</li>" +
+                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.beta) + "</li>" +
                             "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " : " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
                             "</ul>");
                     if (data.stats.pValue < 0.000001) {
@@ -442,29 +256,16 @@
                     var renderData = buildRenderData (data,0.05);
                     var signalLevel = assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
-                    renderData = refineRenderData(renderData,1);
-                    //updateDisplayBasedOnSignificanceLevel (signalLevel); // The traffic light is now for the gene
+                    renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
                     if (mpgSoftware.locusZoom.plotAlreadyExists()) {
                         mpgSoftware.locusZoom.removeAllPanels();
                     }
                     $('#collapseExample div.well').empty();
                     if (commonSectionShouldComeFirst) {
-                        $('#collapseExample div.well').append(
-                                        '<div class="text-center" id="phenotypeLabel">'+pName+'</div>'+
-                                        '<div id="commonVariantsLocation"></div>' +
-                                        '<div id="locusZoomLocation" class="locusZoomLocation"></div>' +
-                                        '<div class="igvGoesHere"></div>'+
-                                        '<div id="highImpactVariantsLocation"></div>' +
-                                        '<div id="aggregateVariantsLocation"></div>'
-                        );
+                        $("#collapseExample div.well").empty().append(Mustache.render( $('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,{pName:pName}));
                     } else {
-                        $('#collapseExample div.well').append(
-                                        '<div class="text-center" id="phenotypeLabel">'+pName+'</div>'+
-                                        '<div id="highImpactVariantsLocation"></div>' +
-                                        '<div id="aggregateVariantsLocation"></div>' +
-                                        '<div id="commonVariantsLocation"></div>'+
-                                        '<div id="locusZoomLocation"  class="locusZoomLocation"></div>'+
-                                        '<div class="igvGoesHere"></div>');
+                        $("#collapseExample div.well").empty().append(Mustache.render( $('#organizeSignalSummaryHighImpactFirstTemplate')[0].innerHTML,{pName:pName}));
+
                     }
                     if (useIgvNotLz){
                        $('.locusZoomLocation').css('display','none');
@@ -483,7 +284,11 @@
                     mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere',{
                                 accordionHeaderClass:'toned-down-accordion-heading',
                                 modifiedTitle:'Run a custom burden test',
-                                modifiedTitleStyling:'font-size: 18px;text-decoration: underline;padding-left: 20px;'
+                                modifiedTitleStyling:'font-size: 18px;text-decoration: underline;padding-left: 20px; float: right; margin-right: 20px;',
+                                allowExperimentChoice: false,
+                                allowPhenotypeChoice: true,
+                                allowStratificationChoice: true,
+                                defaultPhenotype:phenotypeName
                             },
                             '${geneName}',
                             true,
@@ -504,8 +309,8 @@
                             "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.cvar);
 
                     //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
-                    var sampleBasedPhenotypeName = phenotypeNameForSampleData(phenotypeName);
-                    var hailPhenotypeInfo = phenotypeNameForHailData(phenotypeName);
+                    var sampleBasedPhenotypeName = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForSampleData(phenotypeName);
+                    var hailPhenotypeInfo = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForHailData(phenotypeName);
                     if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
                          ( sampleBasedPhenotypeName.length > 0)) {
                         $('#aggregateVariantsLocation').css('display','block');
@@ -708,10 +513,6 @@
                     mpgSoftware.locusZoom.removeAllPanels();
 
 
-                            %{--mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,--}%
-                        %{--"#lz-1","#collapseExample",'T2D','Type 2 Diabetes',dataSetName,propName,phenotype,--}%
-                        %{--'${createLink(controller:"gene", action:"getLocusZoom")}',--}%
-                        %{--'${createLink(controller:"variantInfo", action:"variantInfo")}','static');--}%
     };
 
 

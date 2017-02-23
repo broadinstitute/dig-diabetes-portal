@@ -102,34 +102,34 @@
 
 
                 <div class="accordion" id="accordion2">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
-                               href="#collapseOne" aria-expanded="true">
-                                <h2><strong><g:message code="gene.variantassociations.title"
-                                                       default="Variants and associations"/></strong></h2>
-                            </a>
-                        </div>
+                    %{--<div class="accordion-group">--}%
+                        %{--<div class="accordion-heading">--}%
+                            %{--<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"--}%
+                               %{--href="#collapseOne" aria-expanded="true">--}%
+                                %{--<h2><strong><g:message code="gene.variantassociations.title"--}%
+                                                       %{--default="Variants and associations"/></strong></h2>--}%
+                            %{--</a>--}%
+                        %{--</div>--}%
 
-                        <div id="collapseOne" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="variantsAndAssociations"/>
-                            </div>
-                        </div>
-                    </div>
+                        %{--<div id="collapseOne" class="accordion-body collapse">--}%
+                            %{--<div class="accordion-inner">--}%
+                                %{--<g:render template="variantsAndAssociations"/>--}%
+                            %{--</div>--}%
+                        %{--</div>--}%
+                    %{--</div>--}%
 
 
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <g:renderBetaFeaturesDisplayedValue>
-                        <div class="separator"></div>
-                        <g:render template="/widgets/gwasRegionSummary"
-                                  model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>
-                        </g:renderBetaFeaturesDisplayedValue>
-                    </g:if>
+                   %{----}%
+                    %{--<g:renderBetaFeaturesDisplayedValue>--}%
+                    %{--<div class="separator"></div>--}%
+                    %{--<g:render template="/widgets/gwasRegionSummary"--}%
+                              %{--model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>--}%
+                    %{--</g:renderBetaFeaturesDisplayedValue>--}%
+                    %{----}%
                     <g:render template="../templates/igvBrowserTemplate"/>
-                     <script>
-                        $('#collapseOne').collapse({hide: true})
-                    </script>
+                     %{--<script>--}%
+                        %{--$('#collapseOne').collapse({hide: true})--}%
+                    %{--</script>--}%
 
 
                         <g:renderNotBetaFeaturesDisplayedValue>
@@ -142,7 +142,7 @@
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||g.portalTypeString()?.equals('t2d')}">
 
-                        <div class="separator"></div>
+                        %{--<div class="separator"></div>--}%
 
                         %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
                                                                                %{--'modifiedTitle': 'Interactive burden test',--}%

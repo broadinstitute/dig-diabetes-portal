@@ -74,15 +74,15 @@
 
 
 <script id="aggregateVariantsTemplate"  type="x-tmpl-mustache">
-                            <div class="row" style="margin-top: 15px;">
-                                <h3 class="specialTitle">Aggregate variants</h3>
+                            <div class="row" style="margin: 15px 0 0 15px;">
+                                <h4>Aggregate variants</h4>
                             </div>
 
                             <div class="row">
                                 <div class="col-lg-1">
                                             <ul class='aggregatingVariantsLabels'>
-                                              <li style="text-align: right">beta</li>
                                               <li style="text-align: right">pValue</li>
+                                              <li style="text-align: right">beta</li>
                                               <li style="text-align: right">CI (95%)</li>
                                             </ul>
                                 </div>
@@ -121,20 +121,22 @@
 
 
 <script id="highImpactTemplate"  type="x-tmpl-mustache">
-            <div class="row" style="margin-top: 15px;">
-                <h3 class="specialTitle">High impact variants</h3>
-            </div>
-
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-xs-12">
 
-                <table id="highImpactTemplateHolder" class="compact row-border"></table>
+                    <div class="row" style="">
+                        <h3 class="specialTitle">High impact variants</h3>
 
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div id="burdenGoesHere" class="row"></div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                        <table id="highImpactTemplateHolder" class="compact row-border"></table>
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
        </script>
@@ -163,3 +165,58 @@
 
             </div>
         </script>
+
+
+
+<script id="organizeSignalSummaryCommonFirstTemplate"  type="x-tmpl-mustache">
+            <div class="text-center" id="phenotypeLabel">{{pName}}</div>
+            <div class="row"  style="margin-bottom: 10px">
+                <div class="col-xs-12">
+                    <div class="variantCategoryHolder">
+                        <div id="commonVariantsLocation"></div>
+                        <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                        <div class="igvGoesHere"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="igvGoesHere"></div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="variantCategoryHolder">
+                        <div id="highImpactVariantsLocation"></div>
+                        <div id="aggregateVariantsLocation"></div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="burdenGoesHere" class="row"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</script>
+
+<script id="organizeSignalSummaryHighImpactFirstTemplate"  type="x-tmpl-mustache">
+            <div class="text-center" id="phenotypeLabel">{{pName}}</div>
+            <div class="row" style="margin-bottom: 10px">
+                <div class="col-xs-12">
+                    <div class="variantCategoryHolder">
+                        <div id="highImpactVariantsLocation"></div>
+                        <div id="aggregateVariantsLocation"></div>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div id="burdenGoesHere" class="row"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="variantCategoryHolder">
+                        <div id="commonVariantsLocation"></div>
+                        <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                        <div class="igvGoesHere"></div>
+                    </div>
+                </div>
+            </div>
+</script>
