@@ -33,6 +33,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "scrollCollapse": true,
                 "paging":         false,
                 "bFilter": true,
+                "language": {
+                    "search": "Filter:"
+                },
                 "bLengthChange" : true,
                 "bInfo":false,
                 "bProcessing": true,
@@ -86,6 +89,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "scrollCollapse": true,
                 "paging":         false,
                 "bFilter": true,
+                "language": {
+                    "search": "Filter:"
+                },
                 "bLengthChange" : true,
                 "bInfo":false,
                 "bProcessing": true,
@@ -300,6 +306,214 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         return renderData;
     };
 
+    var buildRenderData = function (data, mafCutoff) {
+        var renderData = {variants: [],
+            rvar: [],
+            cvar: []};
+        if ((typeof data !== 'undefined') &&
+            (typeof data.variants !== 'undefined') &&
+            (typeof data.variants.variants !== 'undefined') &&
+            (data.variants.variants.length > 0)) {
+            var obj;
+            _.forEach(data.variants.variants, function (v, index, y) {
+                if (_.flatten(v).length == 0) {
+                    renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
+                } else {
+                    renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
+                }
+
+            });
+        }
+        ;
+        return renderData;
+    };
+
+
+    var updateAggregateVariantsDisplay = function (data, locToUpdate) {
+        var updateHere = $(locToUpdate);
+        updateHere.empty();
+        if ((data) &&
+            (data.stats)) {
+            updateHere.append("<ul class='aggregateVariantsDescr list-group'>" +
+                "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.pValue) + "</li>" +
+                "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.beta) + "</li>" +
+                "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " : " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
+                "</ul>");
+            if (data.stats.pValue < 0.000001) {
+                mpgSoftware.geneSignalSummary.updateDisplayBasedOnStoredSignificanceLevel(3);//green light
+            } else if (data.stats.pValue < 0.01) {
+                mpgSoftware.geneSignalSummary.updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
+            }
+
+        }
+    };
+
+
+    var commonSectionComesFirst = function (renderData) { // returns true or false
+        var returnValue;
+        var sortedVariants = _.sortBy(renderData.variants, function (o) {
+            return o.P_VALUEV
+        });
+        for (var i = 0; (i < sortedVariants.length) && (typeof returnValue === 'undefined'); i++) {
+            var oneVariant = sortedVariants[i];
+            if ((typeof oneVariant.MAF !== 'undefined') && (oneVariant.MAF !== "")) {
+                if (oneVariant.MAF < 0.05) {
+                    returnValue = false;
+                } else {
+                    returnValue = true;
+                }
+            }
+            if (typeof oneVariant.MOST_DEL_SCORE !== 'undefined') {
+                if ((oneVariant.MOST_DEL_SCORE < 3)&&
+                    ((typeof returnValue !== 'undefined')&&(returnValue !== true))) {
+                    returnValue = false;
+                }
+            }
+        }
+        return returnValue;
+    }
+
+
+    var buildListOfInterestingPhenotypes = function (renderData) {
+        var listOfInterestingPhenotypes = [];
+        _.forEach(renderData.variants, function (v) {
+            var newSignalCategory = assessOneSignalsSignificance(v);
+            if (newSignalCategory > 0) {
+                var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
+                if (existingRecIndex > -1) {
+                    var existingRec = listOfInterestingPhenotypes[existingRecIndex];
+                    if (existingRec['signalStrength'] < newSignalCategory) {
+                        existingRec['signalStrength'] = newSignalCategory;
+                    }
+                    if (existingRec['pValue'] > v['P_VALUEV']) {
+                        existingRec['pValue'] = v['P_VALUEV'];
+                        existingRec['ds'] = v['ds'];
+                        existingRec['pname'] = v['pname'];
+                    }
+                } else {
+                    listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
+                        'ds': v['ds'],
+                        'pname': v['pname'],
+                        'signalStrength': newSignalCategory,
+                        'pValue': v['P_VALUEV']})
+                }
+            }
+        });
+        return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
+    };
+
+    function toggleOtherPhenoBtns(){
+        var otherBtns = $('.nav>li.redPhenotype');
+        if ((typeof otherBtns !== 'undefined')&&
+            (otherBtns.length>0)){
+            if ($(otherBtns[0]).css('display')==='none') {
+                $(otherBtns).css('display','block');
+                $('a.morePhenos').css('display','none');
+                $('a.noMorePhenos').css('display','block');
+            } else {
+                $(otherBtns).css('display','none');
+                $('a.morePhenos').css('display','block');
+                $('a.noMorePhenos').css('display','none');
+            }
+        }
+    };
+    var launchUpdateSignalSummaryBasedOnPhenotype = function (phenocode,ds,phenoName) {
+        $('.phenotypeStrength').removeClass('chosenPhenotype');
+        $('#'+phenocode).addClass('chosenPhenotype');
+        mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
+            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,preferIgv:$('.preferIgv').is(":checked")});
+    };
+    var updateSignalSummaryBasedOnPhenotype = function () {
+        var phenocode = $(this).attr('id');
+        var ds = $(this).attr('ds');
+        var phenoName = $(this).text();
+        launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
+    };
+    var refreshSignalSummaryBasedOnPhenotype = function () {
+        var phenocode = $('.phenotypeStrength.chosenPhenotype').attr('id');
+        var ds = $('.phenotypeStrength.chosenPhenotype').attr('ds');
+        var phenoName = $('.phenotypeStrength.chosenPhenotype').text();
+        launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
+    };
+    var displayInterestingPhenotypes = function (data,params) {
+        var renderData = buildRenderData(data, 0.05);
+        var signalLevel = assessSignalSignificance(renderData);
+        updateDisplayBasedOnSignificanceLevel(signalLevel,params);
+        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData);
+        if (listOfInterestingPhenotypes.length > 0) {
+            $('.interestingPhenotypesHolder').css('display','block');
+            var phenotypeDescriptions = '<label>Phenotypes with signals</label>'+
+
+                '<ul class="nav nav-pills">';
+            _.forEach(listOfInterestingPhenotypes, function (o) {
+                if (o['signalStrength'] == 1) {
+                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                } else if (o['signalStrength'] == 2) {
+                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                } else if (o['signalStrength'] == 3) {
+                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                }
+            });
+            phenotypeDescriptions += ('<li><a href="#" class="morePhenos"  onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Additional phenotypes...</a></li>');
+            phenotypeDescriptions += ('<li><a href="#" class="noMorePhenos" style="display:none" onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Collapse phenotypes without signals</a></li>');
+            phenotypeDescriptions += '</ul>';
+            $('#interestingPhenotypes').append(phenotypeDescriptions);
+
+        }
+
+        $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
+        $('.phenotypeStrength').first().click();
+    };
+
+    var assessOneSignalsSignificance = function (v,signalCategory) {
+        var signalCategory = 1;
+        var mdsValue = parseInt(v['MOST_DEL_SCORE']);
+        var pValue = parseFloat(v['P_VALUEV']);
+        if (((pValue < 0.00000005)) ||
+            ( (pValue < 0.000005) &&
+                (mdsValue < 3) )) {
+            signalCategory = 3;
+        } else if (pValue < 0.0005) {
+            signalCategory = 2;
+        }
+        return signalCategory;
+    };
+    var assessSignalSignificance = function (renderData){
+        var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
+        _.forEach(renderData.variants,function(v){
+            var newSignalCategory = assessOneSignalsSignificance(v);
+            if (newSignalCategory>signalCategory){
+                signalCategory = newSignalCategory;
+            }
+        });
+        return signalCategory;
+    };
+    var updateDisplayBasedOnSignificanceLevel = function (significanceLevel,params) {
+
+
+        var significanceLevelDoms = $('.trafficExplanations');
+
+        significanceLevelDoms.removeClass('emphasize');
+        significanceLevelDoms.addClass('unemphasize');
+
+
+        $('#trafficLightHolder').empty();
+        var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
+        significanceLevelDom.removeClass('unemphasize');
+        significanceLevelDom.addClass('emphasize');
+        if (significanceLevel == 1){
+            $('#trafficLightHolder').append(params.redLightImage);
+        } else if (significanceLevel == 2){
+            $('#trafficLightHolder').append(params.yellowLightImage);
+        } else if (significanceLevel == 3){
+            $('#trafficLightHolder').append(params.greenLightImage);
+        }
+        $('#signalLevelHolder').text(significanceLevel);
+    };
+
+
+
+
 
 // public routines are declared below
     return {
@@ -308,7 +522,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         processAggregatedData:processAggregatedData,
         phenotypeNameForSampleData:phenotypeNameForSampleData,
         phenotypeNameForHailData:phenotypeNameForHailData,
-        refineRenderData:refineRenderData
+        refineRenderData:refineRenderData,
+        buildRenderData:buildRenderData,
+        updateAggregateVariantsDisplay:updateAggregateVariantsDisplay,
+        commonSectionComesFirst:commonSectionComesFirst,
+        toggleOtherPhenoBtns:toggleOtherPhenoBtns,
+        refreshSignalSummaryBasedOnPhenotype:refreshSignalSummaryBasedOnPhenotype,
+        displayInterestingPhenotypes:displayInterestingPhenotypes,
+        assessSignalSignificance:assessSignalSignificance,
+        updateDisplayBasedOnSignificanceLevel:updateDisplayBasedOnSignificanceLevel
     }
 
 }());

@@ -30,6 +30,17 @@
 .trafficExplanations.unemphasize {
     font-weight: normal;
 }
+.morePhenos{
+    margin-top: 5px;
+    text-decoration: underline;
+}
+.noMorePhenos {
+    margin-top: 5px;
+    text-decoration: underline;
+}
+a.morePhenos:hover {
+    background: rgba(0,0,0,.5);
+}
 .phenotypeStrength {
     cursor:pointer;
     margin: 10px;

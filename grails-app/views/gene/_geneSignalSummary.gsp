@@ -10,7 +10,7 @@
         </select>
     </div>
 </div>
-<div class="panel panel-default">%{--should hold the Choose data set panel--}%
+<div >%{--should hold the Choose data set panel--}%
     <div class="panel-heading" style="background-color: #E0F3FD">
         <div class="row">
             <div class="col-md-2 col-xs-12">
@@ -24,7 +24,7 @@
             <div class="col-md-8 col-xs-12">
                 <div class="row">
                     <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                        Evidence of no signal
+                        No evidence of a signal
                     </div>
 
                     <div class="col-lg-12 trafficExplanations trafficExplanation2">
@@ -38,16 +38,13 @@
             </div>
 
             <div class="col-md-2 col-xs-12">
-                <button name="singlebutton"
-                        class="btn btn-secondary btn-lg burden-test-btn vcenter"
-                        type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Summary</button>
-                <button name="adjustSignalSummaryDisplay"
+                    <button name="adjustSignalSummaryDisplay"
                         class="btn btn-secondary btn-sm burden-test-btn vcenter"
                         type="button" data-toggle="collapse" data-target="#signalSummaryDisplay" aria-expanded="false" aria-controls="signalSummaryDisplay">Adjust display</button>
                 <div class="collapse" id="signalSummaryDisplay">
                     <div class="signalSummaryDisplay">
                         <label>
-                            <input class="preferIgv" type="checkbox" onclick="mpgSoftware.geneSignalSummary.refreshSignalSummaryBasedOnPhenotype()">Use IGV
+                            <input class="preferIgv" type="checkbox" onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">Use IGV
                         </label>
                     </div>
                 </div>
@@ -95,167 +92,15 @@
         "use strict";
 
         mpgSoftware.geneSignalSummary = (function () {
-            var buildRenderData = function (data, mafCutoff) {
-                var renderData = {variants: [],
-                    rvar: [],
-                    cvar: []};
-                if ((typeof data !== 'undefined') &&
-                        (typeof data.variants !== 'undefined') &&
-                        (typeof data.variants.variants !== 'undefined') &&
-                        (data.variants.variants.length > 0)) {
-                    var obj;
-                    _.forEach(data.variants.variants, function (v, index, y) {
-                        if (_.flatten(v).length == 0) {
-                            renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
-                        } else {
-                            renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
-                        }
-
-                    });
-                }
-                ;
-                return renderData;
-            };
-
-
-            var updateAggregateVariantsDisplay = function (data, locToUpdate) {
-                var updateHere = $(locToUpdate);
-                updateHere.empty();
-                if ((data) &&
-                        (data.stats)) {
-                    updateHere.append("<ul class='aggregateVariantsDescr list-group'>" +
-                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.pValue) + "</li>" +
-                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.beta) + "</li>" +
-                            "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " : " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
-                            "</ul>");
-                    if (data.stats.pValue < 0.000001) {
-                        updateDisplayBasedOnStoredSignificanceLevel(3);//green light
-                    } else if (data.stats.pValue < 0.01) {
-                        updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
-                    }
-
-                }
-            };
-
-
-            var commonSectionComesFirst = function (renderData) { // returns true or false
-                var returnValue;
-                var sortedVariants = _.sortBy(renderData.variants, function (o) {
-                    return o.P_VALUEV
-                });
-                for (var i = 0; (i < sortedVariants.length) && (typeof returnValue === 'undefined'); i++) {
-                    var oneVariant = sortedVariants[i];
-                    if ((typeof oneVariant.MAF !== 'undefined') && (oneVariant.MAF !== "")) {
-                        if (oneVariant.MAF < 0.05) {
-                            returnValue = false;
-                        } else {
-                            returnValue = true;
-                        }
-                    }
-                    if (typeof oneVariant.MOST_DEL_SCORE !== 'undefined') {
-                        if ((oneVariant.MOST_DEL_SCORE < 3)&&
-                                ((typeof returnValue !== 'undefined')&&(returnValue !== true))) {
-                            returnValue = false;
-                        }
-                    }
-                }
-                return returnValue;
-            }
-
-
-            var buildListOfInterestingPhenotypes = function (renderData) {
-                var listOfInterestingPhenotypes = [];
-                _.forEach(renderData.variants, function (v) {
-                    var newSignalCategory = assessOneSignalsSignificance(v);
-                    if (newSignalCategory > 0) {
-                        var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
-                        if (existingRecIndex > -1) {
-                            var existingRec = listOfInterestingPhenotypes[existingRecIndex];
-                            if (existingRec['signalStrength'] < newSignalCategory) {
-                                existingRec['signalStrength'] = newSignalCategory;
-                            }
-                            if (existingRec['pValue'] > v['P_VALUEV']) {
-                                existingRec['pValue'] = v['P_VALUEV'];
-                                existingRec['ds'] = v['ds'];
-                                existingRec['pname'] = v['pname'];
-                            }
-                        } else {
-                            listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
-                                'ds': v['ds'],
-                                'pname': v['pname'],
-                                'signalStrength': newSignalCategory,
-                                'pValue': v['P_VALUEV']})
-                        }
-                    }
-                });
-                return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
-            };
-
-            function toggleOtherPhenoBtns(){
-                var otherBtns = $('.nav>li.redPhenotype');
-                if ((typeof otherBtns !== 'undefined')&&
-                        (otherBtns.length>0)){
-                    if ($(otherBtns[0]).css('display')==='none') {
-                        $(otherBtns).css('display','block');
-                    } else {
-                        $(otherBtns).css('display','none');
-                    }
-                }
-            };
-            var launchUpdateSignalSummaryBasedOnPhenotype = function (phenocode,ds,phenoName) {
-                $('.phenotypeStrength').removeClass('chosenPhenotype');
-                $('#'+phenocode).addClass('chosenPhenotype');
-                mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
-                        mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,preferIgv:$('.preferIgv').is(":checked")});
-            };
-            var updateSignalSummaryBasedOnPhenotype = function () {
-                var phenocode = $(this).attr('id');
-                var ds = $(this).attr('ds');
-                var phenoName = $(this).text();
-                launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
-            };
-            var refreshSignalSummaryBasedOnPhenotype = function () {
-                var phenocode = $('.phenotypeStrength.chosenPhenotype').attr('id');
-                var ds = $('.phenotypeStrength.chosenPhenotype').attr('ds');
-                var phenoName = $('.phenotypeStrength.chosenPhenotype').text();
-                launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
-            };
-            var displayInterestingPhenotypes = function (data) {
-                var renderData = buildRenderData(data, 0.05);
-                var signalLevel = assessSignalSignificance(renderData);
-                updateDisplayBasedOnSignificanceLevel(signalLevel);
-                var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData);
-                if (listOfInterestingPhenotypes.length > 0) {
-                    $('.interestingPhenotypesHolder').css('display','block');
-                    var phenotypeDescriptions = '<label>Phenotypes with signals</label>'+
-                            '<button type="button" class="btn btn-outline-secondary  btn-sm" onclick="mpgSoftware.geneSignalSummary.toggleOtherPhenoBtns()">Additional phenotypes</button>'+
-                            '<ul class="nav nav-pills">';
-                    _.forEach(listOfInterestingPhenotypes, function (o) {
-                        if (o['signalStrength'] == 1) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
-                        } else if (o['signalStrength'] == 2) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
-                        } else if (o['signalStrength'] == 3) {
-                            phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
-                        }
-                    });
-                    phenotypeDescriptions += '</ul>';
-                    $('#interestingPhenotypes').append(phenotypeDescriptions);
-
-                }
-
-                $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
-                $('.phenotypeStrength').first().click();
-            };
 
                 var updateSignificantVariantDisplay = function (data,additionalParameters) {
                     var phenotypeName = additionalParameters.phenotype;
                     var datasetName = additionalParameters.ds;
                     var pName = additionalParameters.pname;
                     var useIgvNotLz = additionalParameters.preferIgv;
-                    var renderData = buildRenderData (data,0.05);
-                    var signalLevel = assessSignalSignificance(renderData);
-                    var commonSectionShouldComeFirst = commonSectionComesFirst(renderData);
+                    var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+                    var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
+                    var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
                     renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
                     if (mpgSoftware.locusZoom.plotAlreadyExists()) {
                         mpgSoftware.locusZoom.removeAllPanels();
@@ -315,12 +160,12 @@
                          ( sampleBasedPhenotypeName.length > 0)) {
                         $('#aggregateVariantsLocation').css('display','block');
                         $('#noAggregatedVariantsLocation').css('display','none');
-                        refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allVariants");
-                        refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allCoding");
-                        refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#allMissense")
-                        refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#possiblyDamaging");
-                        refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#probablyDamaging")
-                        refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",updateAggregateVariantsDisplay,"#proteinTruncating");
+                        refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allVariants");
+                        refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allCoding");
+                        refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allMissense")
+                        refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#possiblyDamaging");
+                        refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#probablyDamaging")
+                        refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#proteinTruncating");
                     } else {
                         $('#aggregateVariantsLocation').css('display','none');
                         $('#noAggregatedVariantsLocation').css('display','block');
@@ -362,56 +207,9 @@
                 };
 
 
-                        var assessOneSignalsSignificance = function (v,signalCategory) {
-                            var signalCategory = 1;
-                            var mdsValue = parseInt(v['MOST_DEL_SCORE']);
-                            var pValue = parseFloat(v['P_VALUEV']);
-                            if (((pValue < 0.00000005)) ||
-                                    ( (pValue < 0.000005) &&
-                                            (mdsValue < 3) )) {
-                                signalCategory = 3;
-                            } else if (pValue < 0.0005) {
-                                signalCategory = 2;
-                            }
-                            return signalCategory;
-                        };
-                        var assessSignalSignificance = function (renderData){
-                           var signalCategory = 1; // 1 == red (no signal), 3 == green (signal)
-                            _.forEach(renderData.variants,function(v){
-                                var newSignalCategory = assessOneSignalsSignificance(v);
-                                if (newSignalCategory>signalCategory){
-                                    signalCategory = newSignalCategory;
-                                }
-                            });
-                            return signalCategory;
-                        };
 
 
 
-
-
-                        var updateDisplayBasedOnSignificanceLevel = function (significanceLevel) {
-
-
-                                var significanceLevelDoms = $('.trafficExplanations');
-
-                                            significanceLevelDoms.removeClass('emphasize');
-                                            significanceLevelDoms.addClass('unemphasize');
-
-
-                            $('#trafficLightHolder').empty();
-                            var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
-                            significanceLevelDom.removeClass('unemphasize');
-                            significanceLevelDom.addClass('emphasize');
-                            if (significanceLevel == 1){
-                                $('#trafficLightHolder').append('<r:img uri="/images/redlight.png"/>');
-                            } else if (significanceLevel == 2){
-                                $('#trafficLightHolder').append('<r:img uri="/images/yellowlight.png"/>');
-                            } else if (significanceLevel == 3){
-                                $('#trafficLightHolder').append('<r:img uri="/images/greenlight.png"/>');
-                            }
-                            $('#signalLevelHolder').text(significanceLevel);
-                        };
 
 
 
@@ -422,7 +220,10 @@
                             if (newSignificanceLevel>=currentSignificanceLevel){
                                 return;
                             }
-                            updateDisplayBasedOnSignificanceLevel(newSignificanceLevel);
+                            mpgSoftware.geneSignalSummaryMethods.updateDisplayBasedOnSignificanceLevel(newSignificanceLevel,
+                                    {redLightImage:'<r:img uri="/images/redlight.png"/>',
+                                        yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
+                                        greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
                         };
 
 
@@ -454,8 +255,9 @@
 
                         };
 
-                        var refreshTopVariants = function ( callBack ) {
+                        var refreshTopVariants = function ( callBack, params ) {
                             var rememberCallBack = callBack;
+                            var rememberParams = params;
                             $.ajax({
                                 cache: false,
                                 type: "post",
@@ -464,7 +266,7 @@
                                     geneToSummarize:"${geneName}"},
                                 async: true,
                                 success: function (data) {
-                                    rememberCallBack(data);
+                                    rememberCallBack(data,rememberParams);
                                 },
                                 error: function (jqXHR, exception) {
                                     core.errorReporter(jqXHR, exception);
@@ -474,6 +276,7 @@
                         };
                         var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
                             var rememberCallBack = callBack;
+                            var rememberParameter = parameter;
                             $.ajax({
                                 cache: false,
                                 type: "post",
@@ -483,7 +286,7 @@
                                     geneToSummarize:"${geneName}"},
                                 async: true,
                                 success: function (data) {
-                                    rememberCallBack(data, parameter);
+                                    rememberCallBack(data, rememberParameter);
                                 },
                                 error: function (jqXHR, exception) {
                                     core.errorReporter(jqXHR, exception);
@@ -519,16 +322,12 @@
 
 
 return {
-    assessOneSignalsSignificance: assessOneSignalsSignificance,
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
-    displayInterestingPhenotypes:displayInterestingPhenotypes,
-    updateDisplayBasedOnSignificanceLevel: updateDisplayBasedOnSignificanceLevel,
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
     refreshTopVariants:refreshTopVariants,
-    toggleOtherPhenoBtns:toggleOtherPhenoBtns,
     refreshLZ:refreshLZ,
-    refreshSignalSummaryBasedOnPhenotype:refreshSignalSummaryBasedOnPhenotype
+    updateDisplayBasedOnStoredSignificanceLevel:updateDisplayBasedOnStoredSignificanceLevel
 }
 }());
 
@@ -536,7 +335,10 @@ return {
 })();
 
 $( document ).ready(function() {
-   mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.displayInterestingPhenotypes);
+   mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
+           {redLightImage:'<r:img uri="/images/redlight.png"/>',
+            yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
+            greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
 });
 
 
