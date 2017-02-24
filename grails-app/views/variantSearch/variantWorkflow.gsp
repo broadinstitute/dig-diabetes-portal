@@ -104,6 +104,7 @@
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
 
             <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
+            <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.tutorial"/></p>
 
             <!-- tabs -->
             <ul class="nav nav-tabs" role="tablist">
@@ -304,7 +305,7 @@
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_SYNONYMOUS_CODE})">
                                         <g:message
                                                 code="variantSearch.proteinEffectRestrictions.synonymousCoding"
-                                                default="no effect (synonymous coding)"/>
+                                                default="synonymous coding"/>
                                     </label>
 
 
@@ -313,7 +314,7 @@
                                                value="${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE}"
                                                onclick="mpgSoftware.firstResponders.updateProteinEffectSelection(${PortalConstants.PROTEIN_PREDICTION_EFFECT_NONCODING_CODE})">
                                         <g:message code="variantSearch.proteinEffectRestrictions.noncoding"
-                                                   default="no effect (non-coding)"/>
+                                                   default="non-coding"/>
                                     </label>
 
                                 </div>

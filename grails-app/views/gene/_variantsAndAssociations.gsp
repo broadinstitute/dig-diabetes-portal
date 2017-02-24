@@ -9,6 +9,8 @@
 <p>
     <g:message code="gene.variantassociations.subDirective"
                default="Click on a number below to generate a table of variants associated with type 2 diabetes in the following categories:"/></p>
+<g:message code="gene.variantassociations.subDirective2" /></p>
+<g:message code="gene.variantassociations.subDirective3" /></p>
 <br/>
 
 <g:render template="variantsAndAssociationsTableChanger"/>
