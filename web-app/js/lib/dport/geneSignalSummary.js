@@ -34,7 +34,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "paging":         false,
                 "bFilter": true,
                 "language": {
-                    "search": "Filter:"
+                    "search": "Text filter:"
                 },
                 "bLengthChange" : true,
                 "bInfo":false,
@@ -90,7 +90,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "paging":         false,
                 "bFilter": true,
                 "language": {
-                    "search": "Filter:"
+                    "search": "Text filter:"
                 },
                 "bLengthChange" : true,
                 "bInfo":false,
