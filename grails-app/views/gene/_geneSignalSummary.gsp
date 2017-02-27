@@ -21,7 +21,7 @@
 
             </div>
 
-            <div class="col-md-8 col-xs-12">
+            <div class="col-md-5 col-xs-12">
                 <div class="row">
                     <div class="col-lg-12 trafficExplanations trafficExplanation1">
                         No evidence of a signal
@@ -37,16 +37,56 @@
                 </div>
             </div>
 
-            <div class="col-md-2 col-xs-12">
+            <div class="col-md-5 col-xs-12">
                     <button name="adjustSignalSummaryDisplay"
                         class="btn btn-secondary btn-sm burden-test-btn vcenter"
                         type="button" data-toggle="collapse" data-target="#signalSummaryDisplay" aria-expanded="false" aria-controls="signalSummaryDisplay">Adjust display</button>
                 <div class="collapse" id="signalSummaryDisplay">
                     <div class="signalSummaryDisplay">
-                        <label>
-                            <input class="preferIgv" type="checkbox" onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">Use IGV
-                        </label>
+                        <div class="row" style="margin-bottom: 5px">
+                            <div class="col-xs-5">
+                                <label class="radio-inline" style="font-weight: bold">Genome browser</label>
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="radio-inline"><input type="radio"  name="genomeBrowser" value=1
+                                                                   onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()"
+                                                                   checked>LocusZoom</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <label class="radio-inline"><input type="radio"  name="genomeBrowser" value=2
+                                                                   onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">IGV</label>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 5px">
+                            <div class="col-xs-5">
+                                <label class="text-inline" style="font-weight: bold">LD pruning parameter</label>
+                            </div>
+                            <div class="col-xs-2">
+                                <input type="text"  name="ldPruning"  style="width:60px" disabled>
+                            </div>
+                            <div class="col-xs-5">
+                                <label class="text-inline" style="font-weight: 100">(0&lt;value&lt;1)</label>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 5px">
+                            <div class="col-xs-5">
+                                <label class="text-inline" style="font-weight: bold; padding-top: 10px">MAF filter</label>
+                            </div>
+                            <div class="col-xs-3">
+                                <input type="text"  name="mafFilterMax"  style="width:100px" value="0">
+                                <input type="text"  name="mafFilterMin"  style="width:100px" value="1">
+                            </div>
+                            <div class="col-xs-4">
+                                <label class="text-inline" style="font-weight: 100">&lt; MAF</label><br/>
+                                <label class="text-inline" style="font-weight: 100">&gt; MAF</label>
+                            </div>
+                        </div>
+
+
+
+
                     </div>
+
                 </div>
             </div>
 

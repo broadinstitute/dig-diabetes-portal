@@ -421,7 +421,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('.phenotypeStrength').removeClass('chosenPhenotype');
         $('#'+phenocode).addClass('chosenPhenotype');
         mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
-            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,preferIgv:$('.preferIgv').is(":checked")});
+            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,
+                preferIgv:$('input[name=genomeBrowser]:checked').val()==="2"});
     };
     var updateSignalSummaryBasedOnPhenotype = function () {
         var phenocode = $(this).attr('id');
