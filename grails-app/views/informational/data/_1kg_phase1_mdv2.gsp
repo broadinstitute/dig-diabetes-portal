@@ -3,7 +3,7 @@
 
     <p>Download URL: <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz" target="_blank">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz</a><br/>
         Download date: 07/26/2015<br/>
-        Data set version: dv1; 1000 Genomes Phase 1<br/>
+        Data set version: dv1; 1000 Genomes Phase 1<br/></p>
 
         <h4>Publications</h4>
 
