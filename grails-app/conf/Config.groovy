@@ -192,9 +192,12 @@ t2dProd01BehindLoadBalancer {
     path = 'gs/'
 }
 t2dProd02BehindLoadBalancer {
-    base = 'http://dig-prod-02.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
+//    base = 'http://dig-prod-02.broadinstitute.org:8888/'
+//    name =  'prod/'
+//    path = 'gs/'
+    base = 'http://localhost:8090/'
+    name =  ''
+    path = 'dccservices/'
 }
 
 // individual servers
@@ -215,9 +218,12 @@ t2dAwsStage01RestServer {
 }
 
 toddServer {
-    base = 'http://dig-prod.broadinstitute.org:8087/'
-    name =  'todd/'
-    path = 'gs/'
+//    base = 'http://dig-prod.broadinstitute.org:8087/'
+//    name =  'todd/'
+//    path = 'gs/'
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
+    name =  ''
+    path = 'dccservices/'
 }
 
 t2dLocalhostRestServer {
