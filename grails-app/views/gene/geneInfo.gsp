@@ -140,7 +140,9 @@
 
                         </g:renderNotBetaFeaturesDisplayedValue>
 
-                <g:if test="${g.portalTypeString()?.equals('stroke')||g.portalTypeString()?.equals('t2d')}">
+                <g:if test="${g.portalTypeString()?.equals('stroke')||
+                                g.portalTypeString()?.equals('t2d')||
+                                g.portalTypeString()?.equals('mi')}">
 
                         %{--<div class="separator"></div>--}%
 

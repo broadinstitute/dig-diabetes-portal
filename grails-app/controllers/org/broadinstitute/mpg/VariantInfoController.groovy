@@ -42,7 +42,7 @@ class VariantInfoController {
                 break
             case 'mi':
                 igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'MI'
+                phenotype = 'EOMI'
                 break
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
