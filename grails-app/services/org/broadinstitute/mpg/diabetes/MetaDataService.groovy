@@ -568,7 +568,7 @@ class MetaDataService {
         }
 
         // return
-        return groupList;
+        return groupList.sort{it.sortOrder};
     }
 
     /**
