@@ -248,9 +248,12 @@ t2dNewDevRestServer { //current 'dev'
 }
 
 localServer {
-    base = 'http://localhost:8888/'
-    name =  'dig-genome-store/'
-    path = 'gs/'
+//    base = 'http://localhost:8888/'
+//    name =  'dig-genome-store/'
+//    path = 'gs/'
+    base = 'http://localhost:8090/'
+    name =  'dccservices/'
+    path = ''
 }
 
 
@@ -286,6 +289,7 @@ burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broad
 burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
