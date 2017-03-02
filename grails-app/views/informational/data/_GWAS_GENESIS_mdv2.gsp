@@ -111,33 +111,24 @@
 
     <h4>Project</h4>
 
-    <p><g:message code="informational.data.project.project”></g:message></p>
+    <p><g:message code="informational.data.project.GENESIS"></g:message></p>
 
 
 <h4>Funding acknowledgments</h4>
-<p><g:message code="informational.data.funding.project”></g:message>
+<p><g:message code="informational.data.funding.GENESIS"></g:message>
 
     <h4>Experiment summary</h4>
-    <p><g:message code="informational.data.exptsumm.project”></g:message></p>
+    <p><g:message code="informational.data.exptsumm.GENESIS"></g:message>
+    (<g:message code="informational.shared.publications.Knowles_2015_JClinInvest.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <g:message code="informational.shared.publications.Knowles_2015_JClinInvest"></g:message>).</p>
 
-<h4>Overview of analysis and results</h4>
-<p><g:message code="informational.data.overview.results”></g:message></p>
 
+    <h4>Accessing GENESIS data in the T2D Knowledge Portal</h4>
 
-    <h4>Detailed reports</h4>
+    <p><g:message code="informational.data.accessing.GENESIS"></g:message></p>
 
-    <p>AMP-DCC Data Analysis Report (<a href="" target="_blank">download PDF</a>)</p>
-    <p>Genotype Data Quality Control Report (<a href="" target="_blank">download PDF</a>)</p>
-
-    <h4>Accessing (dataset name) data in the T2D Knowledge Portal</h4>
-
-    <p><g:message code="informational.data.accessing.data”></g:message></p>
-
-<h4>Future plans for (dataset name) data in the T2D Knowledge Portal</h4>
-
-<p><g:message code="informational.data.future.data”></g:message></p>
 
     <h4>External Links to (dataset name) data</h4>
 
-    <p><g:message code="informational.data.external.project”></g:message></p>
+    <p><g:message code="informational.data.external.project"></g:message></p>
 </div>
