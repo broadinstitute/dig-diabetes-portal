@@ -364,6 +364,13 @@ class SystemController {
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
+        } else  if (restServer == 'aws02newcoderestserver')  {
+            if (!(currentServer == 'aws02newcoderestserver')) {
+                restServerService.goWithTheAws02NewCodeRestServer()
+                flash.message = "You are now using the ${restServer} new KB 2.0 code server, AND you have scheduled an override to the metadata cache.!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
         }else  if (restServer == 'toddServer')  {
             if (!(currentServer == 'toddServer')) {
                 restServerService.goWithToddServer()
