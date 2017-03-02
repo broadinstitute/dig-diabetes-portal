@@ -128,7 +128,5 @@
     <p><g:message code="informational.data.accessing.GENESIS"></g:message></p>
 
 
-    <h4>External Links to (dataset name) data</h4>
 
-    <p><g:message code="informational.data.external.project"></g:message></p>
 </div>
