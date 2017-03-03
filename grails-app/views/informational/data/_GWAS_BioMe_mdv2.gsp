@@ -26,7 +26,7 @@
 <div class="citation"><g:message code="informational.shared.publications.Tayo_2011_PlOS1.citation"></g:message></div>
 </div></p>
 
-    <h4>Data set phenotypes</h4>
+    <h4>Dataset phenotypes</h4>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_glucose_age-sex"></g:message></li>
@@ -34,7 +34,7 @@
         <li><g:message code="informational.shared.traits.HbA1c_age-sex-BMI"></g:message></li>
     </ul>
 
-    <h4>Data set subjects</h4>
+    <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
@@ -64,7 +64,7 @@
 <p><g:message code="informational.data.exptsumm.BioMe3"></g:message></p>
 <p><g:message code="informational.data.exptsumm.BioMe4"></g:message></p>
 
-<h4>Overview of analysis results</h4>
+<h4>Overview of analysis and results</h4>
 <p><g:message code="informational.data.overview.BioMe1a"></g:message></p>
 <p><g:message code="informational.data.overview.BioMe1b"></g:message>
     (<g:message code="informational.shared.publications.Morris_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>

@@ -287,6 +287,7 @@
         </g:if>
 
         <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
+        <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
 
     </div>
 

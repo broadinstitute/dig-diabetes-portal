@@ -1566,7 +1566,10 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
                                     // gaitTable.rows().deselect();
                                     $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked",false);
                                 }
-                            }
+                            },
+                            { extend: "copy", text: "Copy all to clipboard" },
+                            { extend: "csv", text: "Copy all to csv" },
+                            { extend: "pdf", text: "Copy all to pdf" }
                         ],
                         "aLengthMenu":[[10, 50, -1], [10, 50, "All"]],
                         "bDestroy": true,
@@ -1614,7 +1617,7 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
                         "bProcessing": true
                     }
                 );
-               // $('#gaitTable').DataTable().clear();
+                $('#gaitTable').DataTable().clear();
                 _.forEach(variantListHolder,function(variantRec){
                     //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                     var arrayOfRows = [];

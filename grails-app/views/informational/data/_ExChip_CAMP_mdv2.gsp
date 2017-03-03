@@ -1,13 +1,13 @@
 <div class="panel-body">
 
-<h4>Data set phenotypes</h4>
+<h4>Dataset phenotypes</h4>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
 <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
 </ul>
 
-    <h4>Data Set Subjects</h4>
+    <h4>Dataset Subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>

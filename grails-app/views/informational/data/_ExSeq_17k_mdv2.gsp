@@ -1,22 +1,24 @@
 <div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
-    Publication:
-<div class="paper">
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/27398621" target="_blank">The genetic architecture of type 2 diabetes.</a><br/>
-Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C, Fontanillas P, Moutsianas L, McCarthy DJ, Rivas MA, Perry JR, Sim X, Blackwell TW, Robertson NR, Rayner NW, Cingolani P, Locke AE, Tajes JF, Highland HM, Dupuis J, Chines PS, Lindgren CM, Hartl C, Jackson AU, Chen H, Huyghe JR, van de Bunt M, Pearson RD, Kumar A, Müller-Nurasyid M, Grarup N, Stringham HM, Gamazon ER, Lee J, Chen Y, Scott RA, Below JE, Chen P, Huang J, Go MJ, Stitzel ML, Pasko D, Parker SC, Varga TV, Green T, Beer NL, Day-Williams AG, Ferreira T, Fingerlin T,  Horikoshi M, Hu C, Huh I, Ikram MK, Kim BJ, Kim Y, Kim YJ, Kwon MS, Lee J, Lee S, Lin KH, Maxwell TJ, Nagai Y, Wang X, Welch RP, Yoon J, Zhang W, Barzilai N, Voight BF, Han BG, Jenkinson CP, Kuulasmaa T, Kuusisto J, Manning A, Ng MC, Palmer ND, Balkau B, Stančáková A, Abboud HE, Boeing H, Giedraitis V, Prabhakaran D, Gottesman O, Scott J, Carey J, Kwan P, Grant G, Smith JD, Neale BM, Purcell S, Butterworth AS, Howson JM, Lee HM, Lu Y, Kwak SH, Zhao W, Danesh J, Lam VK, Park  KS, Saleheen D, So WY, Tam CH, Afzal U, Aguilar D, Arya R, Aung T, Chan E, Navarro C, Cheng CY, Palli D, Correa A, Curran JE, Rybin D, Farook VS, Fowler SP, Freedman BI, Griswold M, Hale DE, Hicks PJ, Khor CC, Kumar S, Lehne B, Thuillier  D, Lim WY, Liu J, van der Schouw YT, Loh M, Musani SK, Puppala S, Scott WR, Yengo L, Tan ST, Taylor HA Jr, Thameem F, Wilson G, Wong TY, Njølstad PR, Levy JC, Mangino M, Bonnycastle LL, Schwarzmayr T, Fadista J, Surdulescu GL, Herder C, Groves CJ, Wieland T, Bork-Jensen J, Brandslund I, Christensen C, Koistinen HA, Doney AS, Kinnunen L, Esko T, Farmer AJ, Hakaste L, Hodgkiss D, Kravic J, Lyssenko V, Hollensted M, Jørgensen ME, Jørgensen T, Ladenvall C, Justesen JM, Käräjämäki A, Kriebel J, Rathmann W, Lannfelt L, Lauritzen T, Narisu N, Linneberg A, Melander O, Milani L, Neville M, Orho-Melander M, Qi L, Qi Q, Roden M, Rolandsson O, Swift A, Rosengren AH, Stirrups K, Wood AR, Mihailov E, Blancher C, Carneiro MO, Maguire J, Poplin R, Shakir K, Fennell T, DePristo M, Hrabé de Angelis M, Deloukas P, Gjesing AP, Jun G, Nilsson P, Murphy J, Onofrio R, Thorand B, Hansen T, Meisinger C, Hu FB, Isomaa B, Karpe F, Liang L, Peters A, Huth C, O'Rahilly SP, Palmer CN, Pedersen O, Rauramaa R, Tuomilehto J, Salomaa V, Watanabe RM, Syvänen AC, Bergman RN, Bharadwaj D, Bottinger EP, Cho YS, Chandak GR, Chan JC, Chia KS, Daly MJ, Ebrahim SB, Langenberg C, Elliott P, Jablonski KA, Lehman DM, Jia W, Ma RC, Pollin TI, Sandhu M, Tandon N, Froguel P, Barroso I, Teo YY, Zeggini E, Loos RJ, Small KS, Ried JS, DeFronzo RA, Grallert H, Glaser B, Metspalu A, Wareham NJ, Walker M, Banks E, Gieger C, Ingelsson E, Im HK, Illig T, Franks PW, Buck G, Trakalo J, Buck D, Prokopenko I, Mägi R, Lind L, Farjoun Y, Owen KR, Gloyn AL, Strauch K, Tuomi T, Kooner JS, Lee JY, Park T, Donnelly P, Morris AD, Hattersley AT, Bowden DW, Collins FS, Atzmon G, Chambers JC, Spector TD, Laakso M, Strom TM, Bell GI, Blangero J, Duggirala R, Tai ES, McVean G, Hanis CL, Wilson JG, Seielstad M, Frayling TM, Meigs JB, Cox NJ, Sladek R, Lander ES, Gabriel S, Burtt NP, Mohlke KL, Meitinger T, Groop L, Abecasis G, Florez JC, Scott LJ, Morris AP, Kang HM, Boehnke M, Altshuler D, McCarthy MI.
-<div class="citation">Nature. 2016 Aug 4;536(7614):41-7. doi: 10.1038/nature18642.</div>
-</div>
-Publication:
-<div class="paper">
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/24915262" target="_blank">Association of a low-frequency variant in HNF1A with type 2 diabetes in a Latino 
-population.</a><br/>
-SIGMA Type 2 Diabetes Consortium, Estrada K, Aukrust I, Bjørkhaug L, Burtt NP, Mercader JM, García-Ortiz H, Huerta-Chagoya A, Moreno-Macías H, Walford G, Flannick J, Williams AL, Gómez-Vázquez MJ, Fernandez-Lopez JC, Martínez-Hernández A, Jiménez-Morales S, Centeno-Cruz F, Mendoza-Caamal E, Revilla-Monsalve C, Islas-Andrade S, Córdova EJ, Soberón X, González-Villalpando ME, Henderson E, Wilkens LR, Le Marchand L, Arellano-Campos O, Ordóñez-Sánchez ML, Rodríguez-Torres M, Rodríguez-Guillén R, Riba L, Najmi LA, Jacobs SB, Fennell T,  Gabriel S, Fontanillas P, Hanis CL, Lehman DM, Jenkinson CP, Abboud HE, Bell GI, Cortes ML, Boehnke M, González-Villalpando C, Orozco L, Haiman CA, Tusié-Luna T, Aguilar-Salinas CA, Altshuler D, Njølstad PR, Florez JC, MacArthur DG.<div class="citation">JAMA. 2014 Jun 11;311(22):2305-14. doi: 10.1001/jama.2014.6511.</div>
-</div>
-    <h6 style="color:#ccc;">Data set phenotypes</h6>
+
+    <h4>Publications</h4>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Fuchsberger_2016_Nature"></g:message><br>
+<g:message code="informational.shared.publications.Fuchsberger_2016_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Fuchsberger_2016_Nature.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
+    <g:message code="informational.shared.publications.SIGMA_2014_JAMA"></g:message><br>
+    <g:message code="informational.shared.publications.SIGMA_2014_JAMA.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.SIGMA_2014_JAMA.citation"></g:message> </div>
+</div></p>
+
+    <h4>Dataset phenotypes</h4>
     <ul>
-        <li>Type 2 diabetes</li>
+        <li><g:message code="informational.shared.traits.t2d"></g:message></li>
     </ul>
-<h4>Data Set Subjects</h4>
+<h4>Dataset Subjects</h4>
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small>
     </th><th>Ethnicity</th></tr>
@@ -438,23 +440,33 @@ SIGMA Type 2 Diabetes Consortium, Estrada K, Aukrust I, Bjørkhaug L, Burtt NP, 
         </div></td><td>Latino</td></tr>
     <tr><td></td><td></td><td></td></tr>
     <tr><td>Total</td><td>8321</td><td>8421</td><td></td><td></td></tr></table>
-<h6 style="color:#ccc;">Project 1</h6>
+
+<h4>Projects</h4>
+
 <h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
 
 <p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis." </p>
 
 <p>&nbsp;</p>
 
-<h6 style="color:#ccc;">Project 2</h6>
 <h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></h4>
 
 <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
 
 <p>&nbsp;</p>
 
-<h6 style="color:#ccc;">Project 3</h6>
 <h4>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
 </h4>
 
 <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations. </p>
 </div>
+
+<h4>Overview of analysis</h4>
+<p><g:message code="informational.data.overview.17K"></g:message></p>
+<p>&nbsp;</p>
+<h4>Accessing 17K exome sequence analysis data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.17K"></g:message></p>
+
+
+
+

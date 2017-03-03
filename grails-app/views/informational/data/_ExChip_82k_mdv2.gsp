@@ -1,11 +1,12 @@
 <div class="panel-body">
-<h6 style="color:#ccc;">Data set</h6>
-Publication:
-<div class="paper">
-<a href="http://www.ncbi.nlm.nih.gov/pubmed/27398621" target="_blank">The genetic architecture of type 2 diabetes.</a><br/>
-Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C, Fontanillas P, Moutsianas L, McCarthy DJ, Rivas MA, Perry JR, Sim X, Blackwell TW, Robertson NR, Rayner NW, Cingolani P, Locke AE, Tajes JF, Highland HM, Dupuis J, Chines PS, Lindgren CM, Hartl C, Jackson AU, Chen H, Huyghe JR, van de Bunt M, Pearson RD, Kumar A, Müller-Nurasyid M, Grarup N, Stringham HM, Gamazon ER, Lee J, Chen Y, Scott RA, Below JE, Chen P, Huang J, Go MJ, Stitzel ML, Pasko D, Parker SC, Varga TV, Green T, Beer NL, Day-Williams AG, Ferreira T, Fingerlin T,  Horikoshi M, Hu C, Huh I, Ikram MK, Kim BJ, Kim Y, Kim YJ, Kwon MS, Lee J, Lee S, Lin KH, Maxwell TJ, Nagai Y, Wang X, Welch RP, Yoon J, Zhang W, Barzilai N, Voight BF, Han BG, Jenkinson CP, Kuulasmaa T, Kuusisto J, Manning A, Ng MC, Palmer ND, Balkau B, Stančáková A, Abboud HE, Boeing H, Giedraitis V, Prabhakaran D, Gottesman O, Scott J, Carey J, Kwan P, Grant G, Smith JD, Neale BM, Purcell S, Butterworth AS, Howson JM, Lee HM, Lu Y, Kwak SH, Zhao W, Danesh J, Lam VK, Park  KS, Saleheen D, So WY, Tam CH, Afzal U, Aguilar D, Arya R, Aung T, Chan E, Navarro C, Cheng CY, Palli D, Correa A, Curran JE, Rybin D, Farook VS, Fowler SP, Freedman BI, Griswold M, Hale DE, Hicks PJ, Khor CC, Kumar S, Lehne B, Thuillier  D, Lim WY, Liu J, van der Schouw YT, Loh M, Musani SK, Puppala S, Scott WR, Yengo L, Tan ST, Taylor HA Jr, Thameem F, Wilson G, Wong TY, Njølstad PR, Levy JC, Mangino M, Bonnycastle LL, Schwarzmayr T, Fadista J, Surdulescu GL, Herder C, Groves CJ, Wieland T, Bork-Jensen J, Brandslund I, Christensen C, Koistinen HA, Doney AS, Kinnunen L, Esko T, Farmer AJ, Hakaste L, Hodgkiss D, Kravic J, Lyssenko V, Hollensted M, Jørgensen ME, Jørgensen T, Ladenvall C, Justesen JM, Käräjämäki A, Kriebel J, Rathmann W, Lannfelt L, Lauritzen T, Narisu N, Linneberg A, Melander O, Milani L, Neville M, Orho-Melander M, Qi L, Qi Q, Roden M, Rolandsson O, Swift A, Rosengren AH, Stirrups K, Wood AR, Mihailov E, Blancher C, Carneiro MO, Maguire J, Poplin R, Shakir K, Fennell T, DePristo M, Hrabé de Angelis M, Deloukas P, Gjesing AP, Jun G, Nilsson P, Murphy J, Onofrio R, Thorand B, Hansen T, Meisinger C, Hu FB, Isomaa B, Karpe F, Liang L, Peters A, Huth C, O'Rahilly SP, Palmer CN, Pedersen O, Rauramaa R, Tuomilehto J, Salomaa V, Watanabe RM, Syvänen AC, Bergman RN, Bharadwaj D, Bottinger EP, Cho YS, Chandak GR, Chan JC, Chia KS, Daly MJ, Ebrahim SB, Langenberg C, Elliott P, Jablonski KA, Lehman DM, Jia W, Ma RC, Pollin TI, Sandhu M, Tandon N, Froguel P, Barroso I, Teo YY, Zeggini E, Loos RJ, Small KS, Ried JS, DeFronzo RA, Grallert H, Glaser B, Metspalu A, Wareham NJ, Walker M, Banks E, Gieger C, Ingelsson E, Im HK, Illig T, Franks PW, Buck G, Trakalo J, Buck D, Prokopenko I, Mägi R, Lind L, Farjoun Y, Owen KR, Gloyn AL, Strauch K, Tuomi T, Kooner JS, Lee JY, Park T, Donnelly P, Morris AD, Hattersley AT, Bowden DW, Collins FS, Atzmon G, Chambers JC, Spector TD, Laakso M, Strom TM, Bell GI, Blangero J, Duggirala R, Tai ES, McVean G, Hanis CL, Wilson JG, Seielstad M, Frayling TM, Meigs JB, Cox NJ, Sladek R, Lander ES, Gabriel S, Burtt NP, Mohlke KL, Meitinger T, Groop L, Abecasis G, Florez JC, Scott LJ, Morris AP, Kang HM, Boehnke M, Altshuler D, McCarthy MI.
-<div class="citation">Nature. 2016 Aug 4;536(7614):41-7. doi: 10.1038/nature18642.</div>
-</div>
+    <h6 style="color:#ccc;">Data set</h6>
+    Publication:
+    <div class="paper">
+        <a href="http://www.ncbi.nlm.nih.gov/pubmed/27398621"
+           target="_blank">The genetic architecture of type 2 diabetes.</a><br/>
+        Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C, Fontanillas P, Moutsianas L, McCarthy DJ, Rivas MA, Perry JR, Sim X, Blackwell TW, Robertson NR, Rayner NW, Cingolani P, Locke AE, Tajes JF, Highland HM, Dupuis J, Chines PS, Lindgren CM, Hartl C, Jackson AU, Chen H, Huyghe JR, van de Bunt M, Pearson RD, Kumar A, Müller-Nurasyid M, Grarup N, Stringham HM, Gamazon ER, Lee J, Chen Y, Scott RA, Below JE, Chen P, Huang J, Go MJ, Stitzel ML, Pasko D, Parker SC, Varga TV, Green T, Beer NL, Day-Williams AG, Ferreira T, Fingerlin T,  Horikoshi M, Hu C, Huh I, Ikram MK, Kim BJ, Kim Y, Kim YJ, Kwon MS, Lee J, Lee S, Lin KH, Maxwell TJ, Nagai Y, Wang X, Welch RP, Yoon J, Zhang W, Barzilai N, Voight BF, Han BG, Jenkinson CP, Kuulasmaa T, Kuusisto J, Manning A, Ng MC, Palmer ND, Balkau B, Stančáková A, Abboud HE, Boeing H, Giedraitis V, Prabhakaran D, Gottesman O, Scott J, Carey J, Kwan P, Grant G, Smith JD, Neale BM, Purcell S, Butterworth AS, Howson JM, Lee HM, Lu Y, Kwak SH, Zhao W, Danesh J, Lam VK, Park  KS, Saleheen D, So WY, Tam CH, Afzal U, Aguilar D, Arya R, Aung T, Chan E, Navarro C, Cheng CY, Palli D, Correa A, Curran JE, Rybin D, Farook VS, Fowler SP, Freedman BI, Griswold M, Hale DE, Hicks PJ, Khor CC, Kumar S, Lehne B, Thuillier  D, Lim WY, Liu J, van der Schouw YT, Loh M, Musani SK, Puppala S, Scott WR, Yengo L, Tan ST, Taylor HA Jr, Thameem F, Wilson G, Wong TY, Njølstad PR, Levy JC, Mangino M, Bonnycastle LL, Schwarzmayr T, Fadista J, Surdulescu GL, Herder C, Groves CJ, Wieland T, Bork-Jensen J, Brandslund I, Christensen C, Koistinen HA, Doney AS, Kinnunen L, Esko T, Farmer AJ, Hakaste L, Hodgkiss D, Kravic J, Lyssenko V, Hollensted M, Jørgensen ME, Jørgensen T, Ladenvall C, Justesen JM, Käräjämäki A, Kriebel J, Rathmann W, Lannfelt L, Lauritzen T, Narisu N, Linneberg A, Melander O, Milani L, Neville M, Orho-Melander M, Qi L, Qi Q, Roden M, Rolandsson O, Swift A, Rosengren AH, Stirrups K, Wood AR, Mihailov E, Blancher C, Carneiro MO, Maguire J, Poplin R, Shakir K, Fennell T, DePristo M, Hrabé de Angelis M, Deloukas P, Gjesing AP, Jun G, Nilsson P, Murphy J, Onofrio R, Thorand B, Hansen T, Meisinger C, Hu FB, Isomaa B, Karpe F, Liang L, Peters A, Huth C, O'Rahilly SP, Palmer CN, Pedersen O, Rauramaa R, Tuomilehto J, Salomaa V, Watanabe RM, Syvänen AC, Bergman RN, Bharadwaj D, Bottinger EP, Cho YS, Chandak GR, Chan JC, Chia KS, Daly MJ, Ebrahim SB, Langenberg C, Elliott P, Jablonski KA, Lehman DM, Jia W, Ma RC, Pollin TI, Sandhu M, Tandon N, Froguel P, Barroso I, Teo YY, Zeggini E, Loos RJ, Small KS, Ried JS, DeFronzo RA, Grallert H, Glaser B, Metspalu A, Wareham NJ, Walker M, Banks E, Gieger C, Ingelsson E, Im HK, Illig T, Franks PW, Buck G, Trakalo J, Buck D, Prokopenko I, Mägi R, Lind L, Farjoun Y, Owen KR, Gloyn AL, Strauch K, Tuomi T, Kooner JS, Lee JY, Park T, Donnelly P, Morris AD, Hattersley AT, Bowden DW, Collins FS, Atzmon G, Chambers JC, Spector TD, Laakso M, Strom TM, Bell GI, Blangero J, Duggirala R, Tai ES, McVean G, Hanis CL, Wilson JG, Seielstad M, Frayling TM, Meigs JB, Cox NJ, Sladek R, Lander ES, Gabriel S, Burtt NP, Mohlke KL, Meitinger T, Groop L, Abecasis G, Florez JC, Scott LJ, Morris AP, Kang HM, Boehnke M, Altshuler D, McCarthy MI.
+        <div class="citation">Nature. 2016 Aug 4;536(7614):41-7. doi: 10.1038/nature18642.</div>
+    </div>
     <h6 style="color:#ccc;">Data set phenotypes</h6>
     <ul>
         <li>Type 2 diabetes</li>
@@ -102,303 +103,306 @@ Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C
                 </table>
             </div></td><td>European</td></tr>
         <tr><td>646</td><td>1380</td><td><a onclick="showSection(event)">FIN-D2D 2007</a>
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>T2D as classified by WHO 1997 criteria (fasting plasma glucose &ge; 7.0 mmol/l or 2-hr plasma glucose &ge; 11.1 mmol/l)</li>
-                            <li>known T1D cases excluded</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <li>NGT as classified by WHO 1997 criteria (fasting plasma glucose < 6.1 mmol/l and 2-hr plasma glucose < 7.8 mmol/l)</li>
-                    </td></tr>
-            </table>
-</div></td><td>European</td></tr>
-<tr><td>81</td><td>477</td><td><a
-        onclick="showSection(event)">The Dose Responses to Exercise Training (DR's EXTRA) Study</a>
 
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>T2D as classified by WHO 1997 criteria (fasting plasma glucose &ge; 7.0 mmol/l or 2-hr plasma glucose &ge; 11.1 mmol/l)</li>
-                        <li>known T1D cases excluded</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>NGT as classified by WHO 1997 criteria (fasting plasma glucose < 6.1 mmol/l and 2-hr plasma glucose < 7.8 mmol/l)</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>1112</td><td>1494</td><td><a onclick="showSection(event)">National FINRISK 2007 Study (FINRISK 2007)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>T2D as classified by WHO 1997 criteria (fasting plasma glucose &ge; 7.0 mmol/l or 2-hr plasma glucose &ge; 11.1 mmol/l)</li>
+                                <li>known T1D cases excluded</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>NGT as classified by WHO 1997 criteria (fasting plasma glucose < 6.1 mmol/l and 2-hr plasma glucose < 7.8 mmol/l)</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>81</td><td>477</td><td><a
+                onclick="showSection(event)">The Dose Responses to Exercise Training (DR's EXTRA) Study</a>
 
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>T2D as classified by WHO 1997 criteria (fasting plasma glucose &ge; 7.0 mmol/l or 2-hr plasma glucose &ge; 11.1 mmol/l)</li>
-                        <li>known T1D cases excluded</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>NGT as classified by WHO 1999 criteria</li>
-                    <li>frequency matched to cases by birth province; BMI &ge;18.5 kg/m2; within each birth province, prioritized samples with highest values for age + 2*BMI</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>981</td><td>486</td><td><a
-        onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>T2D as classified by WHO 1997 criteria (fasting plasma glucose &ge; 7.0 mmol/l or 2-hr plasma glucose &ge; 11.1 mmol/l)</li>
+                                <li>known T1D cases excluded</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>NGT as classified by WHO 1997 criteria (fasting plasma glucose < 6.1 mmol/l and 2-hr plasma glucose < 7.8 mmol/l)</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>1112</td><td>1494</td><td><a onclick="showSection(event)">National FINRISK 2007 Study (FINRISK 2007)</a>
 
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>T2D as classified by WHO 1999 criteria, by report of diabetes medication use, or based on medical record review</li>
-                        <li>known T1D cases excluded</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>NGT as classified by WHO 1999 criteria; approximately frequency matched to the cases by 5-year age category, sex, and birth province</li>
-                </td></tr>
-        </table></div></td><td>European</td></tr>
-<tr><td>311</td><td>4688</td><td><a
-        onclick="showSection(event)">Prevalence, Prediction and Prevention of diabetes (PPP) (Finnish)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>T2D as classified by WHO 1997 criteria (fasting plasma glucose &ge; 7.0 mmol/l or 2-hr plasma glucose &ge; 11.1 mmol/l)</li>
+                                <li>known T1D cases excluded</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>NGT as classified by WHO 1999 criteria</li>
+                            <li>frequency matched to cases by birth province; BMI &ge;18.5 kg/m2; within each birth province, prioritized samples with highest values for age + 2*BMI</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>981</td><td>486</td><td><a
+                onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
 
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Diagnosis of diabetes was based on an OGTT or a history of previously known diabetes applying WHO criteria. In uncertain cases, the diagnosis was confirmed from patient records.</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>No previously known diabetes. Free from diabetes after an OGTT applying WHO criteria.</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>2601</td><td>0</td><td><a onclick="showSection(event)">Diabetes Registry Vaasa (DIREVA) (Finnish)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>T2D as classified by WHO 1999 criteria, by report of diabetes medication use, or based on medical record review</li>
+                                <li>known T1D cases excluded</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>NGT as classified by WHO 1999 criteria; approximately frequency matched to the cases by 5-year age category, sex, and birth province</li>
+                        </td></tr>
+                </table></div></td><td>European</td></tr>
+        <tr><td>311</td><td>4688</td><td><a
+                onclick="showSection(event)">Prevalence, Prediction and Prevention of diabetes (PPP) (Finnish)</a>
 
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Previous diagnosis of T2D</li>
-                        <li>Normal C-peptide levels</li>
-                        <li>No Anti-GAD antibody</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>No controls are in the registry</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>1928</td><td>0</td><td><a onclick="showSection(event)">All New Diabetics In Scania (ANDiS) (Swedish)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Diagnosis of diabetes was based on an OGTT or a history of previously known diabetes applying WHO criteria. In uncertain cases, the diagnosis was confirmed from patient records.</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>No previously known diabetes. Free from diabetes after an OGTT applying WHO criteria.</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>2601</td><td>0</td><td><a onclick="showSection(event)">Diabetes Registry Vaasa (DIREVA) (Finnish)</a>
 
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Previous diagnosis of T2D</li>
-                        <li>Normal C-peptide levels</li>
-                        <li>No Anti-GAD antibody</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>No controls are in the registry</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>440</td><td>5173</td><td><a onclick="showSection(event)">Malmö Diet and Cancer (MDC) (Swedish)</a>
-<div style="display: none;" class="cohortDetail">
-    <table border="1">
-        <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-        <tr>
-            <td valign="top">
-                <ul>
-                    <li>DM at baseline was defined as self-report of a physician diagnosis or use of diabetes medication or fasting whole blood glucose greater than or equal to 6.1 mmol/l (corresponding to fasting plasma glucose concentration &ge; 7.0 mmol/l).</li>
-                </ul>
-            </td>
-            <td valign="top">
-                <li>Fasting blood glucose below 6.1 mmol/l (corresponding to fasting plasma glucose concentration &le; 7.0 mmol/l)</li>
-            </td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous diagnosis of T2D</li>
+                                <li>Normal C-peptide levels</li>
+                                <li>No Anti-GAD antibody</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>No controls are in the registry</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>1928</td><td>0</td><td><a onclick="showSection(event)">All New Diabetics In Scania (ANDiS) (Swedish)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous diagnosis of T2D</li>
+                                <li>Normal C-peptide levels</li>
+                                <li>No Anti-GAD antibody</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>No controls are in the registry</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>440</td><td>5173</td><td><a onclick="showSection(event)">Malmö Diet and Cancer (MDC) (Swedish)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>DM at baseline was defined as self-report of a physician diagnosis or use of diabetes medication or fasting whole blood glucose greater than or equal to 6.1 mmol/l (corresponding to fasting plasma glucose concentration &ge; 7.0 mmol/l).</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Fasting blood glucose below 6.1 mmol/l (corresponding to fasting plasma glucose concentration &le; 7.0 mmol/l)</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>3192</td><td>0</td><td><a onclick="showSection(event)">Scania Diabetes Registry (SDR) (Swedish)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Physicians own classification into T2D, based on WHO 1985 guidelines (before 2001) or WHO 1999 guidelines (diagnosed after January 2001)</li>
+                                <li>T1D exclusion criteria: presence of severe hyperglycaemia and/or ketosis at diagnosis, low fasting C-peptide levels and presence of GAD antibodies</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>No controls are in the registry</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>1334</td><td>1754</td><td><a onclick="showSection(event)">Nurses' Health Study (NHS)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Diabetes cases were defined as self-reported diabetes confirmed by a validated supplementary questionnaire</li>
+                                <li>For cases before 1998, diagnosis was made using criteria consistent with those proposed by the National Diabetes Data Group</li>
+                                <li>We used the American Diabetes Association diagnostic criteria for diagnosis of diabetes cases during the 1998 and 2000 cycles</li>
+                                <li>98% of self-reported cases were confirmed by medical records review</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Controls were defined as those free of diabetes at the time of diagnosis of the case and remained unaffected through follow-up</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>1113</td><td>1298</td><td><a onclick="showSection(event)">Health Professional Follow-Up Study (HPFS)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Diabetes cases were defined as self-reported diabetes confirmed by a validated supplementary questionnaire</li>
+                                <li>For cases before 1998, diagnosis was made using criteria consistent with those proposed by the National Diabetes Data Group</li>
+                                <li>We used the American Diabetes Association diagnostic criteria for diagnosis of diabetes cases during the 1998 and 2000 cycles</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Controls were defined as those free of diabetes at the time of diagnosis of the case and remained unaffected through follow-up</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>882</td><td>1506</td><td><a
+                onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous diagnosis of T2D</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Population based controls with fasting glucose < 7 mmol/l</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>1446</td><td>1567</td><td><a onclick="showSection(event)">EFSOCH and DARE</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Type 2 diabetic individuals were ascertained from the Exeter branch of the Diabetes Alliance for Research in England (DARE) study and selected for genotyping if they were not on insulin within the first year of diagnosis and diagnosed after the age of 35 years</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Control individuals were selected from the Exeter Family Study of Childhood health (EFSOCH). Male and female partners were ascertained at the time of pregnancy and included on the basis that they represent a very similar geographic distribution to the DARE case individuals, and were normoglycaemic on the basis of fasting glucose of HbA1C.</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>959</td><td>2779</td><td><a
+                onclick="showSection(event)">Cooperative Health Research in the Region of Augsburg [KORA]</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous diagnosis of T2D, or both fasting and 2-hr criteria met for new T2D diagnosis</li>
+                                <li>Family history of diabetes (parents, sibs, children, grandparents, avuncular, cousins)</li>
+                                <li>Unrelated individuals based on IBS analyses</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>No diagnosis of T2D</li>
+                            <li>Normal glucose tolerance at baseline</li>
+                            <li>Unrelated samples</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>5864</td><td>4996</td><td><a onclick="showSection(event)">Danish T2D case-control</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Screen-detected (by fasting glucose or 2-hr glucose after OGTT) or clinical onset type 2 diabetes (WHO 1999 criteria)</li>
+                                <li>Fasting C-peptide <150 pmol/L</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Population-based sampled with fasting glucose < 6.1 mmol/l and 2-hr glucose < 7.8 (if measured) (WHO 1999 criteria)</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>960</td><td>965</td><td><a onclick="showSection(event)">GLACIER</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Participants with incident type 2 diabetes were identified from the <a
+                                        href="http://www.diabetesregister.se/en/about-diabnorth-and-the-diabetes-register">Diabetes Register in Northern Sweden (DiabNorth) Web</a>
+                                </li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Fasting glucose <5.6 mmol/l</li>
+                        </td></tr>
+                </table></div></td><td>European</td></tr>
+        <tr><td>691</td><td>1157</td><td><a
+                onclick="showSection(event)">EPIC-Norfolk (T2D cases) and the Fenland study (cohort)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Clinically diagnosed incident cases of T2D from the EPIC-Norfolk study and prevalent undiagnosed T2D in the Fenland study based on fasting glucose &ge;7.0 mmol/L and/or 2hGlu &ge;11.1mmol/L</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                            <li>Random sample of population-based Fenland study with FG<7.0mmol/L and 2h-glucose <11.1mmol/L</li>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+        <tr><td>Total: 29,161</td><td>Total: 48,571</td><td></td><td></td></tr>
     </table>
-</div></td><td>European</td></tr>
-<tr><td>3192</td><td>0</td><td><a onclick="showSection(event)">Scania Diabetes Registry (SDR) (Swedish)</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Physicians own classification into T2D, based on WHO 1985 guidelines (before 2001) or WHO 1999 guidelines (diagnosed after January 2001)</li>
-                        <li>T1D exclusion criteria: presence of severe hyperglycaemia and/or ketosis at diagnosis, low fasting C-peptide levels and presence of GAD antibodies</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>No controls are in the registry</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>1334</td><td>1754</td><td><a onclick="showSection(event)">Nurses' Health Study (NHS)</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Diabetes cases were defined as self-reported diabetes confirmed by a validated supplementary questionnaire</li>
-                        <li>For cases before 1998, diagnosis was made using criteria consistent with those proposed by the National Diabetes Data Group</li>
-                        <li>We used the American Diabetes Association diagnostic criteria for diagnosis of diabetes cases during the 1998 and 2000 cycles</li>
-                        <li>98% of self-reported cases were confirmed by medical records review</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Controls were defined as those free of diabetes at the time of diagnosis of the case and remained unaffected through follow-up</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>1113</td><td>1298</td><td><a onclick="showSection(event)">Health Professional Follow-Up Study (HPFS)</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Diabetes cases were defined as self-reported diabetes confirmed by a validated supplementary questionnaire</li>
-                        <li>For cases before 1998, diagnosis was made using criteria consistent with those proposed by the National Diabetes Data Group</li>
-                        <li>We used the American Diabetes Association diagnostic criteria for diagnosis of diabetes cases during the 1998 and 2000 cycles</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Controls were defined as those free of diabetes at the time of diagnosis of the case and remained unaffected through follow-up</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>882</td><td>1506</td><td><a onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT)</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Previous diagnosis of T2D</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Population based controls with fasting glucose < 7 mmol/l</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>1446</td><td>1567</td><td><a onclick="showSection(event)">EFSOCH and DARE</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Type 2 diabetic individuals were ascertained from the Exeter branch of the Diabetes Alliance for Research in England (DARE) study and selected for genotyping if they were not on insulin within the first year of diagnosis and diagnosed after the age of 35 years</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Control individuals were selected from the Exeter Family Study of Childhood health (EFSOCH). Male and female partners were ascertained at the time of pregnancy and included on the basis that they represent a very similar geographic distribution to the DARE case individuals, and were normoglycaemic on the basis of fasting glucose of HbA1C.</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>959</td><td>2779</td><td><a
-        onclick="showSection(event)">Cooperative Health Research in the Region of Augsburg [KORA]</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Previous diagnosis of T2D, or both fasting and 2-hr criteria met for new T2D diagnosis</li>
-                        <li>Family history of diabetes (parents, sibs, children, grandparents, avuncular, cousins)</li>
-                        <li>Unrelated individuals based on IBS analyses</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>No diagnosis of T2D</li>
-                    <li>Normal glucose tolerance at baseline</li>
-                    <li>Unrelated samples</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>5864</td><td>4996</td><td><a onclick="showSection(event)">Danish T2D case-control</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Screen-detected (by fasting glucose or 2-hr glucose after OGTT) or clinical onset type 2 diabetes (WHO 1999 criteria)</li>
-                        <li>Fasting C-peptide <150 pmol/L</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Population-based sampled with fasting glucose < 6.1 mmol/l and 2-hr glucose < 7.8 (if measured) (WHO 1999 criteria)</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>960</td><td>965</td><td><a onclick="showSection(event)">GLACIER</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Participants with incident type 2 diabetes were identified from the <a
-                                href="http://www.diabetesregister.se/en/about-diabnorth-and-the-diabetes-register">Diabetes Register in Northern Sweden (DiabNorth) Web</a>
-                        </li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Fasting glucose <5.6 mmol/l</li>
-                </td></tr>
-        </table></div></td><td>European</td></tr>
-<tr><td>691</td><td>1157</td><td><a
-        onclick="showSection(event)">EPIC-Norfolk (T2D cases) and the Fenland study (cohort)</a>
-
-    <div style="display: none;" class="cohortDetail">
-        <table border="1">
-            <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-            <tr>
-                <td valign="top">
-                    <ul>
-                        <li>Clinically diagnosed incident cases of T2D from the EPIC-Norfolk study and prevalent undiagnosed T2D in the Fenland study based on fasting glucose &ge;7.0 mmol/L and/or 2hGlu &ge;11.1mmol/L</li>
-                    </ul>
-                </td>
-                <td valign="top">
-                    <li>Random sample of population-based Fenland study with FG<7.0mmol/L and 2h-glucose <11.1mmol/L</li>
-                </td></tr>
-        </table>
-    </div></td><td>European</td></tr>
-<tr><td>Total: 29,161</td><td>Total: 48,571</td><td></td><td></td></tr>
-</table>
- <h6 style="color:#ccc;">Projects</h6>
+    <h6 style="color:#ccc;">Projects</h6>
     <h4>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a
             href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
     </small></h4>
@@ -410,9 +414,10 @@ Fuchsberger C, Flannick J, Teslovich TM, Mahajan A, Agarwala V, Gaulton KJ, Ma C
     </small></h4>
 
     <p>GoT2D led an effort to aggregate data for a meta-analysis of low-frequency variants in coding regions that influence risk of in type 2 diabetes and related traits such as LDL cholesterol levels. The study was based on data from high-density SNP genotyping with a custom array (the exome chip) in 82,000 people, of which 16,000 were funded by GoT2D. The dataset includes ~35,000 type 2 diabetes cases and ~51,000 controls, all of European ancestry.</p>
-<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
+    <h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a
+            href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
 
-<p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis." </p>
+    <p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis."</p>
 
 </div>
 

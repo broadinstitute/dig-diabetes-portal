@@ -164,7 +164,7 @@
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                         <a href='<g:createLink controller="gene" action="geneInfo"
-                                               params="[id: 'CDKN2B']"/>'>CDKN2B</a>
+                                               params="[id: 'LDLR']"/>'>LDLR</a>
                     </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="gene" action="geneInfo"

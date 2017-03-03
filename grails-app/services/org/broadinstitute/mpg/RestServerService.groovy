@@ -16,7 +16,6 @@ import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
-import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -47,6 +46,7 @@ class RestServerService {
     private String PROD_02_SERVER = ""
     private String AWS01_REST_SERVER = ""
     private String AWS02_REST_SERVER = ""
+    private String AWS02_NEW_CODE_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String REMEMBER_BASE_URL = ""
@@ -164,6 +164,9 @@ class RestServerService {
         AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
 
         // 'stage aws01'
+        AWS02_NEW_CODE_REST_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
+
+        // 'stage aws01'
         AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
 
         TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
@@ -209,6 +212,10 @@ class RestServerService {
 
     public String getAws02RestServer() {
         return AWS02_REST_SERVER;
+    }
+
+    public String getAws02NewCodeRestServer() {
+        return AWS02_NEW_CODE_REST_SERVER;
     }
 
     public String getProdLoadBalanced() {
@@ -322,6 +329,10 @@ class RestServerService {
         pickADifferentRestServer(AWS02_REST_SERVER)
     }
 
+    public void goWithTheAws02NewCodeRestServer() {
+        pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
+    }
+
     public void goWithProdLoadBalancedBroadServer() {
         pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
     }
@@ -350,6 +361,7 @@ class RestServerService {
             this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2NewCode);
         }
 
         return this.burdenServerList;

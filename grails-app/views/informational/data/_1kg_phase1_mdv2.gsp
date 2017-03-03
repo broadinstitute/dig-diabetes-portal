@@ -1,15 +1,20 @@
 <div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
+    <h4>Dataset</h4>
 
     <p>Download URL: <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz" target="_blank">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz</a><br/>
         Download date: 07/26/2015<br/>
-        Data set version: dv1<br/>
-        Publication: <div class="paper">
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/26432245" target="_blank">A global reference for human genetic variation.</a><br/>
-        1000 Genomes Project Consortium, Auton A, Brooks LD, Durbin RM, Garrison EP, Kang HM, Korbel JO, Marchini JL, McCarthy S, McVean GA, Abecasis GR.</p>
-        <div class="citation">Nature. 2015 Oct 1;526(7571):68-74. doi: 10.1038/nature15393.</div>
-        </div>
-    <h6 style="color:#ccc;">Data set subjects</h6>
+        Data set version: dv1; 1000 Genomes Phase 1<br/></p>
+
+        <h4>Publications</h4>
+
+    <p><div class="paper">
+<g:message code="informational.shared.publications.1000G_2015_Nature"></g:message><br>
+<g:message code="informational.shared.publications.1000G_2015_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.1000G_2015_Nature.citation"></g:message> </div>
+</div></p>
+
+
+    <h4>Dataset subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
     <tr><th>Number of subjects</th><th>Cohort</th><th>Ethnicity</th></tr>
@@ -33,7 +38,7 @@
 </table>
 
 
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h4>The International Genome Sample Resource (IGSR) <small><a href="http://www.1000genomes.org/" target="_blank">Learn more ></a>
     </small></h4>
 

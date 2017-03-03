@@ -144,6 +144,7 @@
                                 g.portalTypeString()?.equals('t2d')||
                                 g.portalTypeString()?.equals('mi')}">
 
+
                         %{--<div class="separator"></div>--}%
 
                         %{--<g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',--}%
