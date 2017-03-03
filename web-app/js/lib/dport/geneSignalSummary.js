@@ -5,13 +5,40 @@ var mpgSoftware = mpgSoftware || {};
 
 mpgSoftware.geneSignalSummaryMethods = (function () {
     var loading = $('#rSpinner');
+    var commonTable;
+
+    var tableInitialization = function(){
+        $.fn.DataTable.ext.search.push(
+            function( settings, data, dataIndex ) {
+              var filter = $('div.dsFilter').attr('dsfilter');
+              if (typeof filter === 'undefined') {
+                  return true;
+              } else {
+                  if (data[4]===filter){
+                      return true;
+                  } else {
+                      return false;
+                  }
+
+              }
+            }
+        );
+
+    };
+    var commonTableRedraw = function (){
+        commonTable.draw();
+    }
+    var commonTableDsFilter = function (dataset){
+        $('div.dsFilter').attr('dsfilter',$(dataset).text());
+        $('#commonVariantsLocationHolder.compact.row-border.dataTable.no-footer').DataTable().columns(1).search('').draw();
+    }
 
 
     var buildCommonTable = function(selectionToFill,
                                     variantInfoUrl,
                                       cvar){
 
-        var commonTable  = $(selectionToFill).dataTable({
+        commonTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
                 "className": "compact",
                 "bAutoWidth" : false,
@@ -45,6 +72,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                  }
             }
         );
+        var distinctDataSets = [];
         _.forEach(cvar,function(variantRec){
             var arrayOfRows = [];
             var variantID = variantRec.id;
@@ -54,9 +82,16 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             arrayOfRows.push(variantRec.P_VALUE);
             arrayOfRows.push(variantRec.BETA);
             arrayOfRows.push(variantRec.dsr);
+            if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
+                distinctDataSets.push(variantRec.dsr);
+            }
             commonTable.dataTable().fnAddData( arrayOfRows );
         });
+        _.forEach(distinctDataSets.sort(),function (o){
+            $('div.dsFilter').append("<button class='dataset-item'  onclick='mpgSoftware.geneSignalSummaryMethods.commonTableDsFilter(this)'>"+o+"</button>");
+        });
         $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
+
     };
 
 
@@ -531,7 +566,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         refreshSignalSummaryBasedOnPhenotype:refreshSignalSummaryBasedOnPhenotype,
         displayInterestingPhenotypes:displayInterestingPhenotypes,
         assessSignalSignificance:assessSignalSignificance,
-        updateDisplayBasedOnSignificanceLevel:updateDisplayBasedOnSignificanceLevel
+        updateDisplayBasedOnSignificanceLevel:updateDisplayBasedOnSignificanceLevel,
+        tableInitialization:tableInitialization,
+        commonTableRedraw:commonTableRedraw,
+        commonTableDsFilter:commonTableDsFilter
     }
 
 }());

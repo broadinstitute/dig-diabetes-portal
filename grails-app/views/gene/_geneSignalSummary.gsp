@@ -379,6 +379,7 @@ $( document ).ready(function() {
            {redLightImage:'<r:img uri="/images/redlight.png"/>',
             yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
             greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
+    mpgSoftware.geneSignalSummaryMethods.tableInitialization();
 });
 
 

@@ -18,6 +18,9 @@
 #burdenGoesHere .panel-group{
     margin-right: 42px;
 }
+a.dataset-item{
+    display: block;
+}
 #burdenGoesHere .secBody {
     padding-right: 40px;
 }
