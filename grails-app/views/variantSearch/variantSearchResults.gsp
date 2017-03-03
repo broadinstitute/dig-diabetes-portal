@@ -40,6 +40,8 @@
 
 <body>
 
+<g:render template="../templates/variantSearchResultsTemplate" />
+
 <script>
     <g:applyCodec encodeAs="none">
     var filtersAsJson = ${listOfQueries};
@@ -64,8 +66,10 @@
 
     // when this is called, the table is generated/regenerated
     // it's here because of all the URLs/data that need to be filled in
-    function loadTheTable() {
-        mpgSoftware.variantSearchResults.loadVariantTableViaAjax("<%=queryFilters%>", additionalProperties, '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />').then(function (data, status) {
+    function loadTheTable(variantTableSelector) {
+        mpgSoftware.variantSearchResults.loadVariantTableViaAjax("<%=queryFilters%>",
+                additionalProperties,
+                '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />').then(function (data, status) {
             if (status != 'success') {
                 // just give up
                 return;
@@ -80,7 +84,7 @@
             var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data);
 
             var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-            variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, '#variantTable',
+            variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, variantTableSelector,
                     '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
                     '<g:createLink controller="variantInfo" action="variantInfo" />',
                     '<g:createLink controller="gene" action="geneInfo" />',
@@ -146,7 +150,7 @@
         additionalProperties = _.difference(additionalProperties, valuesToRemove);
         additionalProperties = _.union(additionalProperties, valuesToInclude);
 
-        loadTheTable();
+        loadTheTable('#variantTableResults');
 
         // any necessary clean up
         // reset the dataset/cohort dropdowns on the phenotype addition tab
@@ -233,7 +237,8 @@
 
     $(document).ready(function () {
         // this kicks everything off
-        loadTheTable();
+        $(".holderForVariantSearchResults").empty().append(Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'#variantTableResults'}));
+        loadTheTable('#variantTableResults');
 
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -299,8 +304,8 @@
         </div>
     </div>
     <hr />
-    <div class="container-fluid">
-        <g:render template="../region/newCollectedVariantsForRegion"/>
+    <div class="container-fluid holderForVariantSearchResults" >
+        %{--<g:render template="../region/newCollectedVariantsForRegion"/>--}%
     </div>
 
     <g:render template="addDataModal" />
