@@ -1,13 +1,23 @@
 <div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
+    <h4>Dataset</h4>
 
-    <p>Data set version: dv1<br/>
-        Publication: <a href="http://biorxiv.org/content/early/2016/05/10/030338" target="_blank">Analysis of protein-coding genetic variation in 60,706 humans, Exome Aggregation Consortium et al., preprint.</a></p>
+    <p>Dataset version: dv1<br/>
 
+        <h4>Publications</h4>
 
-    <h6 style="color:#ccc;">Project</h6>
+    <p><div class="paper">
+<g:message code="informational.shared.publications.Lek_2016_Nature"></g:message><br>
+<g:message code="informational.shared.publications.Lek_2016_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Lek_2016_Nature.citation"></g:message> </div>
+</div></p>
+
+    <h4>Project</h4>
     <h4>Exome Aggregation Consortium (ExAC) <small><a href="http://exac.broadinstitute.org/" target="_blank">Learn more ></a>
     </small></h4>
 
     <p>ExAC is a coalition of investigators seeking to aggregate and harmonize exome sequencing data from a wide variety of large-scale sequencing projects, and to make summary data available for the wider scientific community.</p>
+
+<h4>Accessing ExAC data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.ExAC"></g:message></p>
+
 </div>

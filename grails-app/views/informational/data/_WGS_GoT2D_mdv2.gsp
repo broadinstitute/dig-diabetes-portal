@@ -116,4 +116,8 @@
 
     <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
 
+<h4>Accessing GoT2D WGS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.GoT2DWGS"></g:message></p>
+
+
 </div>
