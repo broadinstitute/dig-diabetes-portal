@@ -7,11 +7,7 @@
 <div class="citation"><g:message code="informational.shared.publications.Fuchsberger_2016_Nature.citation"></g:message> </div>
 </div></p>
 
-<p><div class="paper">
-<g:message code="informational.shared.publications.Mahajan_2014_NatGenet"></g:message><br>
-<g:message code="informational.shared.publications.Mahajan_2014_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Mahajan_2014_NatGenet.citation"></g:message> </div>
-</div></p>
+</p>
 
     <h4>Dataset phenotypes</h4>
     <ul>
