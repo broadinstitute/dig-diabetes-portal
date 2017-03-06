@@ -84,7 +84,7 @@
             var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data);
 
             var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-            variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, variantTableSelector,
+            variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, variantTableSelector.variantTableResults,
                     '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
                     '<g:createLink controller="variantInfo" action="variantInfo" />',
                     '<g:createLink controller="gene" action="geneInfo" />',
@@ -150,7 +150,11 @@
         additionalProperties = _.difference(additionalProperties, valuesToRemove);
         additionalProperties = _.union(additionalProperties, valuesToInclude);
 
-        loadTheTable('#variantTableResults');
+        loadTheTable({variantTableResults:'#variantTableResults',
+            variantTableHeaderRow:'#variantTableHeaderRow',
+            variantTableHeaderRow2:'#variantTableHeaderRow2',
+            variantTableHeaderRow3:'#variantTableHeaderRow3',
+            variantTableBody:'#variantTableBody'});
 
         // any necessary clean up
         // reset the dataset/cohort dropdowns on the phenotype addition tab
@@ -237,8 +241,19 @@
 
     $(document).ready(function () {
         // this kicks everything off
-        $(".holderForVariantSearchResults").empty().append(Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'#variantTableResults'}));
-        loadTheTable('#variantTableResults');
+        $(".holderForVariantSearchResults").empty().append(
+                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'#variantTableResults',
+                        variantTableHeaderRow:'#variantTableHeaderRow',
+                        variantTableHeaderRow2:'#variantTableHeaderRow2',
+                        variantTableHeaderRow3:'#variantTableHeaderRow3',
+                        variantTableBody:'#variantTableBody'}
+
+        ));
+        loadTheTable({variantTableResults:'#variantTableResults',
+            variantTableHeaderRow:'#variantTableHeaderRow',
+            variantTableHeaderRow2:'#variantTableHeaderRow2',
+            variantTableHeaderRow3:'#variantTableHeaderRow3',
+            variantTableBody:'#variantTableBody'});
 
         $('[data-toggle="tooltip"]').tooltip();
     });
