@@ -70,40 +70,40 @@
         mpgSoftware.variantSearchResults.loadVariantTableViaAjax("<%=queryFilters%>",
                 additionalProperties,
                 '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />').then(function (data, status) {
-            if (status != 'success') {
-                // just give up
-                return;
-            }
-            if (data.errorMsg != ''){
-                alert(data.errorMsg);
-                var loader = $('#spinner');
-                loader.hide();
-                return;
-            }
-            var additionalProps = encodeURIComponent(additionalProperties.join(':'));
-            var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data);
+                    if (status != 'success') {
+                        // just give up
+                        return;
+                    }
+                    if (data.errorMsg != ''){
+                        alert(data.errorMsg);
+                        var loader = $('#spinner');
+                        loader.hide();
+                        return;
+                    }
+                    var additionalProps = encodeURIComponent(additionalProperties.join(':'));
+                    var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector);
 
-            var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-            variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, variantTableSelector,
-                    '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
-                    '<g:createLink controller="variantInfo" action="variantInfo" />',
-                    '<g:createLink controller="gene" action="geneInfo" />',
-                    proteinEffectList.proteinEffectMap,
-                    "${locale}",
-                    '<g:message code="table.buttons.copyText" default="Copy" />',
-                    '<g:message code="table.buttons.printText" default="Print me!" />',
-                    {
-                        filters: "<%=queryFilters%>",
-                        properties: additionalProps
-                    },
-                    <g:applyCodec encodeAs="none">
-                        "<%= translatedFilters %>"
-                    </g:applyCodec>
-            );
-            mpgSoftware.variantSearchResults.generateModal(data,
-                    '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
-                    '<g:message code="variantTable.columnHeaders.commonProperties"/>')
-        });
+                    var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
+                    variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, variantTableSelector.variantTableResults,
+                            '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
+                            '<g:createLink controller="variantInfo" action="variantInfo" />',
+                            '<g:createLink controller="gene" action="geneInfo" />',
+                            proteinEffectList.proteinEffectMap,
+                            "${locale}",
+                            '<g:message code="table.buttons.copyText" default="Copy" />',
+                            '<g:message code="table.buttons.printText" default="Print me!" />',
+                            {
+                                filters: "<%=queryFilters%>",
+                                properties: additionalProps
+                            },
+                            <g:applyCodec encodeAs="none">
+                            "<%= translatedFilters %>"
+                            </g:applyCodec>
+                    );
+                    mpgSoftware.variantSearchResults.generateModal(data,
+                            '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
+                            '<g:message code="variantTable.columnHeaders.commonProperties"/>')
+                });
     }
 
     // the following functions are here (instead of in a separate JS file or something) because
@@ -150,7 +150,11 @@
         additionalProperties = _.difference(additionalProperties, valuesToRemove);
         additionalProperties = _.union(additionalProperties, valuesToInclude);
 
-        loadTheTable('#variantTableResults');
+        loadTheTable({variantTableResults:'#variantTableResults',
+            variantTableHeaderRow:'#variantTableHeaderRow',
+            variantTableHeaderRow2:'#variantTableHeaderRow2',
+            variantTableHeaderRow3:'#variantTableHeaderRow3',
+            variantTableBody:'#variantTableBody'});
 
         // any necessary clean up
         // reset the dataset/cohort dropdowns on the phenotype addition tab
@@ -237,8 +241,19 @@
 
     $(document).ready(function () {
         // this kicks everything off
-        $(".holderForVariantSearchResults").empty().append(Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'#variantTableResults'}));
-        loadTheTable('#variantTableResults');
+        $(".holderForVariantSearchResults").empty().append(
+                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'variantTableResults',
+                            variantTableHeaderRow:'variantTableHeaderRow',
+                            variantTableHeaderRow2:'variantTableHeaderRow2',
+                            variantTableHeaderRow3:'variantTableHeaderRow3',
+                            variantTableBody:'variantTableBody'}
+
+                ));
+        loadTheTable({variantTableResults:'#variantTableResults',
+            variantTableHeaderRow:'#variantTableHeaderRow',
+            variantTableHeaderRow2:'#variantTableHeaderRow2',
+            variantTableHeaderRow3:'#variantTableHeaderRow3',
+            variantTableBody:'#variantTableBody'});
 
         $('[data-toggle="tooltip"]').tooltip();
     });
@@ -258,7 +273,7 @@
             <a href="<g:createLink controller='variantSearch' action='variantSearchWF'
                                    params='[encParams: "${encodedParameters}"]'/>">
                 <button class="btn btn-primary btn-xs">
-                    &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
+                &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
                 </button></a>
             <g:message code="variantTable.searchResults.editCriteria" />
         </div>
@@ -277,11 +292,11 @@
 
         <table class="table table-striped dk-search-collection">
             <tbody>
-                <g:each in="${translatedFilters.split(',')}">
-                    <tr>
-                        <td>${it}</td>
-                    </tr>
-                </g:each>
+            <g:each in="${translatedFilters.split(',')}">
+                <tr>
+                    <td>${it}</td>
+                </tr>
+            </g:each>
             </tbody>
         </table>
 
