@@ -260,6 +260,12 @@
 
         $("#dataModalGoesHere").empty().append(
                 Mustache.render( $('#dataModalTemplate')[0].innerHTML));
+        var allGenes = "${geneNamesToDisplay}".replace("[","").replace("]","").split(',');
+        var namedGeneArray = _.map(allGenes,function(o){return {'name':o}})
+        $(".regionDescr").empty().append(
+                Mustache.render( $('#dataRegionTemplate')[0].innerHTML,
+                { geneNamesToDisplay: namedGeneArray,
+                    regionSpecification:'${regionSpecification}'}));
     });
 
 </script>
@@ -306,9 +312,9 @@
 
         <div id="warnIfMoreThan1000Results"></div>
 
-        <g:if test="${regionSearch}">
-            <g:render template="geneSummaryForRegion"/>
-        </g:if>
+        <div class="regionDescr">
+
+        </div>
 
         <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
         <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>

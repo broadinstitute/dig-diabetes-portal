@@ -961,7 +961,9 @@ class VariantSearchController {
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
             LinkedHashMap<String, String> positioningInformation = getDataQueryHolder.positioningInformation()
+            def slurper = new JsonSlurper()
             if (positioningInformation.size() > 2) {
+
                 regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
                 List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
                 for (Gene gene in geneList) {
@@ -978,6 +980,7 @@ class VariantSearchController {
 
                 }
             }
+            JSONArray JsonGeneHolder = slurper.parseText("${identifiedGenes.collect{return "\"$it\""}}")
 
             // get locale to provide to table-building plugin
             String locale = RequestContextUtils.getLocale(request)
