@@ -249,6 +249,7 @@
                             variantTableBody:'variantTableBody'}
 
                 ));
+
         loadTheTable({variantTableResults:'#variantTableResults',
             variantTableHeaderRow:'#variantTableHeaderRow',
             variantTableHeaderRow2:'#variantTableHeaderRow2',
