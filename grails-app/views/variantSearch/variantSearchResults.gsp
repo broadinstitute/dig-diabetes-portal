@@ -257,6 +257,9 @@
             variantTableBody:'#variantTableBody'});
 
         $('[data-toggle="tooltip"]').tooltip();
+
+        $("#dataModalGoesHere").empty().append(
+                Mustache.render( $('#dataModalTemplate')[0].innerHTML));
     });
 
 </script>
@@ -321,10 +324,9 @@
     </div>
     <hr />
     <div class="container-fluid holderForVariantSearchResults" >
-        %{--<g:render template="../region/newCollectedVariantsForRegion"/>--}%
     </div>
+    <div id="dataModalGoesHere"></div>
 
-    <g:render template="addDataModal" />
 
 </div>
 

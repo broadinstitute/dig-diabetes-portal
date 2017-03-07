@@ -132,6 +132,11 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+        var displayPropertiesForDataset = function (dataset) {
+            $('div[data-dataset]').hide();
+            $('div[data-dataset="' + dataset + '"]').show();
+        };
+
         // given the dataset map that reflects the structure of datasets and cohorts,
         // flatten it into an array of objects containing the id and name fields.
         // the order is that produced by a depth-first search.
@@ -411,7 +416,8 @@ var mpgSoftware = mpgSoftware || {};
         return {
             loadVariantTableViaAjax: loadVariantTableViaAjax,
             dynamicFillTheFields: dynamicFillTheFields,
-            generateModal: generateModal
+            generateModal: generateModal,
+            displayPropertiesForDataset: displayPropertiesForDataset
         }
 
     }());

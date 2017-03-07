@@ -106,6 +106,7 @@ modules = {
     variantSearchResults {
         dependsOn "tableViewer"
 
+        resource url: 'css/dport/variantSearchResults.css'
         resource url: 'js/lib/dport/variantSearchResults.js'
     }
     igv {
