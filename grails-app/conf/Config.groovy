@@ -405,8 +405,8 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
@@ -636,7 +636,7 @@ diabetes.data.version = "mdv25";
 portal.data.version.map = ["t2d": "mdv25", "stroke": "mdv70", "mi" : "mdv90", "EBI": "mdv25"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_17k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
-portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
+portal.type.override = "mi"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
