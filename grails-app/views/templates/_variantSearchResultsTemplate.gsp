@@ -112,7 +112,7 @@
                             <form class="dk-modal-form">
                                 <div id="subtractPhenotypesCheckboxes" class="dk-modal-form-input-group">
                                 </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',domSelectors)"><g:message code="variantSearch.results.modal.confirm" /></button>
                                 <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
 
                             </form>
@@ -125,7 +125,7 @@
                                             <g:message code="searchBuilder.traitOrDisease.prompt" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select id="phenotypeAddition" class="form-control" onchange="phenotypeSelected()">
+                                            <select id="phenotypeAddition" class="form-control" onchange="mpgSoftware.variantSearchResults.phenotypeSelected(domSelectors)">
                                             </select>
                                         </div>
                                     </div>
@@ -135,7 +135,7 @@
                                             <g:message code="searchBuilder.dataset.prompt" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select id="phenotypeAdditionDataset" class="form-control" onchange="datasetSelected()">
+                                            <select id="phenotypeAdditionDataset" class="form-control" onchange="mpgSoftware.variantSearchResults.datasetSelected(domSelectors)">
                                             </select>
                                         </div>
                                     </div>
@@ -150,7 +150,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('phenotype')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',domSelectors)"><g:message code="variantSearch.results.modal.confirm" /></button>
                                 <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
                             </form>
                         </div>
@@ -179,7 +179,7 @@
                 <div id="datasetSelections" class="tab-content">
                 </div>
                 <div class="modal-footer dk-modal-footer">
-                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('datasets')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('datasets',domSelectors)"><g:message code="variantSearch.results.modal.confirm" /></button>
                     <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
                 </div>
             </div>
@@ -210,7 +210,7 @@
             </div>
             <!-- modal body ends -->
             <div class="modal-footer dk-modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="confirmAddingProperties('properties')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('properties',domSelectors)"><g:message code="variantSearch.results.modal.confirm" /></button>
                 <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
             </div>
         </div>
@@ -224,7 +224,7 @@
         <ul id="geneNames">
             {{#geneNamesToDisplay}}
                 <li><a class="genelink" href="<g:createLink controller='gene'
-                                                            action='geneInfo'/>/upcase">{{name}}</a>
+                                                            action='geneInfo'/>/{{name}}">{{name}}</a>
                 </li>
             {{/geneNamesToDisplay}}
         </ul>

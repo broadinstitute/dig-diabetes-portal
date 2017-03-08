@@ -8,18 +8,33 @@ var mpgSoftware = mpgSoftware || {};
         // hoisted here
         var translationFunction;
         var loading;
+        // this is how requested properties beyond what's included in the search get added
+        var additionalProperties = [];
+
+        var getAdditionalProperties = function(){
+            return additionalProperties;
+        };
+
+        // the URL may specify properties to add (so that users can share searches). if this is
+        // the case, those properties will be passed down in string format via the additionalProperties
+        // variable. then, set additionalProperties appropriately, so it can be modified later
+        var initializeAdditionalProperties  = function  (additionalPropertiesFromServer){
+            if(additionalPropertiesFromServer.length > 0) {
+                additionalProperties = additionalPropertiesFromServer.split(':');
+            }
+        };
 
         // this gets the data that builds the table structure. the table is populated via a later call to
         // variantProcessing.iterativeVariantTableFiller
-        var loadVariantTableViaAjax = function (queryFilters, additionalProps, searchUrl) {
-            additionalProps = encodeURIComponent(additionalProps.join(':'));
+        var loadVariantTableViaAjax = function (queryFilters, searchUrl) {
+            //additionalProperties = encodeURIComponent(additionalProperties.join(':'));
             loading = $('#spinner').show();
             return $.ajax({
                 type: 'POST',
                 cache: false,
                 data: {
                     'filters': queryFilters,
-                    'properties': additionalProps
+                    'properties': encodeURIComponent(additionalProperties.join(':'))
                 },
                 url: searchUrl,
                 timeout: 90 * 1000,
@@ -413,11 +428,147 @@ var mpgSoftware = mpgSoftware || {};
             // add/subtract properties -------------------------------------------
         };
 
+        // the following functions are here (instead of in a separate JS file or something) because
+        // they either update the page state (in the form of additionalProperties), or need server-
+        // generated URLs/strings
+        var  confirmAddingProperties  = function(target,domSelectors) {
+            var matchingSelectedInputs = $('input[data-category="' + target + '"]:checked:not(:disabled)').get();
+            var matchingUnselectedInputs = $('input[data-category="' + target + '"]:not(:checked,:disabled)').get();
+            var valuesToInclude = _.map(matchingSelectedInputs, function (input) {
+                return $(input).val();
+            });
+            var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
+                return $(input).val();
+            });
+
+            // if we're coming off the phenotype tab, we need to see if the user selected a dataset
+            // to add
+            if(target == 'phenotype' ) {
+                var phenotypeSelection = $(domSelectors.phenotypeAddition).val();
+                var datasetSelection = $(domSelectors.phenotypeAdditionDataset).val();
+                if(phenotypeSelection != 'default' && datasetSelection != 'default') {
+                    // first see if a cohort was selected
+                    var cohortSelection = $(domSelectors.phenotypeAdditionCohort).val();
+                    if(cohortSelection != 'default' && cohortSelection) {
+                        datasetSelection = cohortSelection;
+                    }
+
+                    var propertyToAdd = phenotypeSelection + '-' + datasetSelection;
+                    valuesToInclude.push(propertyToAdd);
+                }
+
+                // the other part of this is removing datasets/properties for phenotypes that have been
+                // unselected. this isn't handled above because we don't add just a phenotype to
+                // additionalProperties, it's always a phenotype+dataset. therefore, for the phentoypes
+                // that have been unselected, go through additionalProperties and remove any dataset/property
+                // that is from that phenotype.
+                _.forEach(additionalProperties, function(prop) {
+                    var propComponents = prop.split('-');
+                    if(_.includes(valuesToRemove, propComponents[0])) {
+                        valuesToRemove.push(prop);
+                    }
+                });
+            }
+            additionalProperties = _.difference(additionalProperties, valuesToRemove);
+            additionalProperties = _.union(additionalProperties, valuesToInclude);
+
+            loadTheTable({variantTableResults:'#variantTableResults',
+                variantTableHeaderRow:'#variantTableHeaderRow',
+                variantTableHeaderRow2:'#variantTableHeaderRow2',
+                variantTableHeaderRow3:'#variantTableHeaderRow3',
+                variantTableBody:'#variantTableBody'});
+
+            // any necessary clean up
+            // reset the dataset/cohort dropdowns on the phenotype addition tab
+            $(domSelectors.phenotypeAdditionDataset).empty();
+            $(domSelectors.phenotypeCohorts).hide();
+        };
+        var datasetSelected = function(domSelectors) {
+            var selectedDataset = $(domSelectors.phenotypeAdditionDataset+' option:selected');
+            var cohorts = selectedDataset.data();
+            if(! _.isEmpty(cohorts)) {
+                $(domSelectors.phenotypeCohorts).show();
+                var cohortOptions = $(domSelectors.phenotypeAdditionCohort);
+                cohortOptions.empty();
+                cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
+                var displayData = UTILS.flattenDatasetMap(cohorts, 0);
+                _.forEach(displayData, function(cohort) {
+                    var newOption = $("<option />").val(cohort.value).html(cohort.name);
+                    cohortOptions.append(newOption);
+                });
+            } else {
+                $(domSelectors.phenotypeCohorts).hide();
+            }
+        };
+        var phenotypeSelected = function (domSelectors){
+            var phenotype = $(domSelectors.phenotypeAddition).val();
+            var rememberPhenotypeAdditionDataset = domSelectors.phenotypeAdditionDataset;
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: domSelectors.retrieveDatasetsAjaxUrl,
+                data: {phenotype: phenotype},
+                async: true,
+                success: function (data) {
+                    if (data) {
+                        var sampleGroupMap = data.sampleGroupMap;
+                        var options = $(rememberPhenotypeAdditionDataset);
+                        options.empty();
+
+                        options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
+                        var datasetList = _.keys(sampleGroupMap);
+                        _.each(datasetList, function(dataset) {
+                            var newOption = $("<option />").val(dataset).html(sampleGroupMap[dataset].name);
+                            // check to see if this dataset has any values besides "name" defined--if so, then
+                            // it has child cohorts. in that case, attach them as data (via jquery) so that we
+                            // can easily access them if the user chooses this dataset.
+                            var childDatasets = _.chain(sampleGroupMap[dataset]).omit('name').value();
+                            if(_.keys(childDatasets).length > 0) {
+                                newOption.data(childDatasets);
+                            }
+                            options.append(newOption);
+                        });
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+        var saveLink = function (domSelectors){
+            var url = domSelectors.launchAVariantSearchUrl;
+            url = url.concat('&props=' + encodeURIComponent(additionalProperties.join(':')));
+
+            var reference = $(domSelectors.linkToSave);
+            // it appears the the browser may interrupt the copy if the element that's being
+            // copied isn't visible, so show the element long enough to grab the url
+            reference.show();
+            // save the url
+            reference.val(url);
+            reference.focus();
+            reference.select();
+            var success = document.execCommand('copy');
+            reference.hide();
+            // if for whatever reason that fails (browser doesn't support it?), then display an error
+            // and the URL
+            if(! success ) {
+                $(domSelectors.linkToSave).show();
+                alert('Sorry, this functionality isn\'t supported on your browser. Please copy the link from the text box.')
+            }
+        };
+
         return {
             loadVariantTableViaAjax: loadVariantTableViaAjax,
             dynamicFillTheFields: dynamicFillTheFields,
             generateModal: generateModal,
-            displayPropertiesForDataset: displayPropertiesForDataset
+            displayPropertiesForDataset: displayPropertiesForDataset,
+            initializeAdditionalProperties:initializeAdditionalProperties,
+            getAdditionalProperties: getAdditionalProperties,
+            confirmAddingProperties:confirmAddingProperties,
+            datasetSelected:datasetSelected,
+            phenotypeSelected:phenotypeSelected,
+            saveLink:saveLink
         }
 
     }());
