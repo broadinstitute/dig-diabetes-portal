@@ -1,9 +1,9 @@
 <div class="panel-body">
-    <h4>Data set</h4>
-
+    <h4>Dataset</h4>
+<p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - Download URL: <a href="https://fox.nhlbi.nih.gov/CKDGen/">https://fox.nhlbi.nih.gov/CKDGen/</a><br/>
         Download date: October 2016<br/>
-        Data set version: dv2<br/>
+        Dataset version: dv2<br/>
 
         <h4>Publications</h4>
 

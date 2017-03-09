@@ -1,6 +1,6 @@
 <div class="panel-body">
     <h4>Dataset</h4>
-
+<p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - eGFRcrea: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv</a><br/>
     Download URL - eGFRcyse: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv</a><br/>
     Download URL - CKD: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv</a><br/>
