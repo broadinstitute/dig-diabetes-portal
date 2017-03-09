@@ -400,8 +400,8 @@ var mpgSoftware = mpgSoftware || {};
 
             // common properties
             var tabAnchor = $('<a/>').attr({
-                href: '#commonPropertiesSelection',
-                'aria-controls': 'commonPropertiesSelection',
+                href: '.commonPropertiesSelection',
+                'aria-controls': '.commonPropertiesSelection',
                 role: 'tab',
                 'data-toggle': 'tab'
             }).html(commonPropsHeader);
@@ -461,7 +461,7 @@ var mpgSoftware = mpgSoftware || {};
                     },
                     variantTableSelector.translatedFiltersInfo
                 );
-                mpgSoftware.variantSearchResults.generateModal(data,
+                generateModal(data,
                     variantTableSelector.retrievePhenotypesAjaxUrl,
                     variantTableSelector.commonPropsMsg)
             });

@@ -51,7 +51,7 @@
     </div>
 </div>
 <div id="commonPropertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
-    <div role="tabpanel" class="tab-pane" id="commonPropertiesSelection">
+    <div role="tabpanel" class="tab-pane commonPropertiesSelection" id="abc">
 
         <form class="dk-modal-form">
             <h4><g:message code="variantSearch.results.modal.availableCommonProps" /></h4>

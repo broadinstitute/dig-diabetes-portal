@@ -38,14 +38,14 @@
         variantTableBody:'#variantTableBody',
         linkToSave: '#linkToSave',
         queryFilterInfo:"<%=queryFilters%>",
-        proteinEffectsListInfo:proteinEffectsList,
+        proteinEffectsListInfo:"${proteinEffectsList}",
         localeInfo:"${locale}",
         queryFiltersInfo:"<%= queryFilters %>",
         translatedFiltersInfo:"<%= translatedFilters %>",
         filtersAsJsonInfo:filtersAsJson,
         copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
         printMsg:'<g:message code="table.buttons.printText" default="Print me!" />',
-        commonPropsMsg:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />'};
+        commonPropsMsg:'<g:message code="variantTable.columnHeaders.commonProperties"/>'};
 
 
 
@@ -61,7 +61,7 @@
 
                 ));
 
-        loadTheTable(domSelectors);
+        mpgSoftware.variantSearchResults.loadTheTable(domSelectors);
 
         $('[data-toggle="tooltip"]').tooltip();
 
