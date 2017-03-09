@@ -428,6 +428,45 @@ var mpgSoftware = mpgSoftware || {};
             // add/subtract properties -------------------------------------------
         };
 
+        // when this is called, the table is generated/regenerated
+        // it's here because of all the URLs/data that need to be filled in
+        var loadTheTable = function (variantTableSelector) {
+            mpgSoftware.variantSearchResults.loadVariantTableViaAjax( variantTableSelector.queryFiltersInfo,
+                variantTableSelector.variantSearchAndResultColumnsInfoUrl ).then(function (data, status) {
+                if (status != 'success') {
+                    // just give up
+                    return;
+                }
+                if (data.errorMsg != ''){
+                    alert(data.errorMsg);
+                    var loader = $('#spinner');
+                    loader.hide();
+                    return;
+                }
+                var additionalProps = encodeURIComponent(additionalProperties.join(':'));
+                var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector);
+
+                var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
+                variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, variantTableSelector.variantTableResults,
+                    variantTableSelector.variantSearchAndResultColumnsDataUrl,
+                    variantTableSelector.variantInfoUrl,
+                    variantTableSelector.geneInfoUrl,
+                    proteinEffectList.proteinEffectMap,
+                    variantTableSelector.localeInfo,
+                    variantTableSelector.copyMsg,
+                    variantTableSelector.printMsg,
+                    {
+                        filters: variantTableSelector.queryFiltersInfo,
+                        properties: additionalProps
+                    },
+                    variantTableSelector.translatedFiltersInfo
+                );
+                mpgSoftware.variantSearchResults.generateModal(data,
+                    variantTableSelector.retrievePhenotypesAjaxUrl,
+                    variantTableSelector.commonPropsMsg)
+            });
+        }
+
         // the following functions are here (instead of in a separate JS file or something) because
         // they either update the page state (in the form of additionalProperties), or need server-
         // generated URLs/strings
@@ -472,11 +511,7 @@ var mpgSoftware = mpgSoftware || {};
             additionalProperties = _.difference(additionalProperties, valuesToRemove);
             additionalProperties = _.union(additionalProperties, valuesToInclude);
 
-            loadTheTable({variantTableResults:'#variantTableResults',
-                variantTableHeaderRow:'#variantTableHeaderRow',
-                variantTableHeaderRow2:'#variantTableHeaderRow2',
-                variantTableHeaderRow3:'#variantTableHeaderRow3',
-                variantTableBody:'#variantTableBody'});
+            loadTheTable(domSelectors);
 
             // any necessary clean up
             // reset the dataset/cohort dropdowns on the phenotype addition tab
@@ -568,7 +603,8 @@ var mpgSoftware = mpgSoftware || {};
             confirmAddingProperties:confirmAddingProperties,
             datasetSelected:datasetSelected,
             phenotypeSelected:phenotypeSelected,
-            saveLink:saveLink
+            saveLink:saveLink,
+            loadTheTable:loadTheTable
         }
 
     }());

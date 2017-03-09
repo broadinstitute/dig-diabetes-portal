@@ -14,11 +14,17 @@
 <script>
     <g:applyCodec encodeAs="none">
     var filtersAsJson = ${listOfQueries};
+    var translatedFilters  = "<%= translatedFilters %>";
     </g:applyCodec>
 
     mpgSoftware.variantSearchResults.initializeAdditionalProperties ("<%=additionalProperties%>");
 
     var domSelectors = {
+        retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
+        geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',
+        variantInfoUrl:'<g:createLink controller="variantInfo" action="variantInfo" />',
+        variantSearchAndResultColumnsDataUrl:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
+        variantSearchAndResultColumnsInfoUrl:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />',
         launchAVariantSearchUrl: "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>",
         retrieveDatasetsAjaxUrl:"${g.createLink(controller: 'VariantSearch', action: 'retrieveDatasetsAjax')}",
         phenotypeAddition:'#phenotypeAddition',
@@ -30,48 +36,18 @@
         variantTableHeaderRow2:'#variantTableHeaderRow2',
         variantTableHeaderRow3:'#variantTableHeaderRow3',
         variantTableBody:'#variantTableBody',
-        linkToSave: '#linkToSave'};
+        linkToSave: '#linkToSave',
+        queryFilterInfo:"<%=queryFilters%>",
+        proteinEffectsListInfo:proteinEffectsList,
+        localeInfo:"${locale}",
+        queryFiltersInfo:"<%= queryFilters %>",
+        translatedFiltersInfo:"<%= translatedFilters %>",
+        filtersAsJsonInfo:filtersAsJson,
+        copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
+        printMsg:'<g:message code="table.buttons.printText" default="Print me!" />',
+        commonPropsMsg:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />'};
 
-    // when this is called, the table is generated/regenerated
-    // it's here because of all the URLs/data that need to be filled in
-    function loadTheTable(variantTableSelector) {
-        mpgSoftware.variantSearchResults.loadVariantTableViaAjax("<%=queryFilters%>",
-                '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />').then(function (data, status) {
-                    if (status != 'success') {
-                        // just give up
-                        return;
-                    }
-                    if (data.errorMsg != ''){
-                        alert(data.errorMsg);
-                        var loader = $('#spinner');
-                        loader.hide();
-                        return;
-                    }
-                    var additionalProps = encodeURIComponent(mpgSoftware.variantSearchResults.getAdditionalProperties().join(':'));
-                    var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector);
 
-                    var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent("${proteinEffectsList}"));
-                    variantProcessing.iterativeVariantTableFiller(data, totCol, filtersAsJson, variantTableSelector.variantTableResults,
-                            '<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',
-                            '<g:createLink controller="variantInfo" action="variantInfo" />',
-                            '<g:createLink controller="gene" action="geneInfo" />',
-                            proteinEffectList.proteinEffectMap,
-                            "${locale}",
-                            '<g:message code="table.buttons.copyText" default="Copy" />',
-                            '<g:message code="table.buttons.printText" default="Print me!" />',
-                            {
-                                filters: "<%=queryFilters%>",
-                                properties: additionalProps
-                            },
-                            <g:applyCodec encodeAs="none">
-                            "<%= translatedFilters %>"
-                            </g:applyCodec>
-                    );
-                    mpgSoftware.variantSearchResults.generateModal(data,
-                            '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
-                            '<g:message code="variantTable.columnHeaders.commonProperties"/>')
-                });
-    }
 
 
     $(document).ready(function () {
@@ -85,11 +61,7 @@
 
                 ));
 
-        loadTheTable({variantTableResults:'#variantTableResults',
-            variantTableHeaderRow:'#variantTableHeaderRow',
-            variantTableHeaderRow2:'#variantTableHeaderRow2',
-            variantTableHeaderRow3:'#variantTableHeaderRow3',
-            variantTableBody:'#variantTableBody'});
+        loadTheTable(domSelectors);
 
         $('[data-toggle="tooltip"]').tooltip();
 
