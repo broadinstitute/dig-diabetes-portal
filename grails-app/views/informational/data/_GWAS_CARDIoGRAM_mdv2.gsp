@@ -29,12 +29,18 @@ Download date: October 2016<br />
 
 
 <h4>Project</h4>
-<h4>CARDIoGRAMplusC4D Consortium <small><a href="http://www.cardiogramplusc4d.org/" target="_blank">Learn more ></a></small></h4>
+
 
 <p><img src="${resource(dir: 'images/organizations', file: 'cgplusc4d-logo200-manhpl.png')}" style="width: 80px; margin-right: 15px"
         align="left">
 </p>
+<h4>CARDIoGRAMplusC4D Consortium <small><a href="http://www.cardiogramplusc4d.org/" target="_blank">Learn more ></a></small></h4>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.CARDIoGRAM"></g:message></p>
 
+<h4>Accessing CARDIoGRAM GWAS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.CARDIoGRAM"></g:message></p>
 </div>

@@ -22,9 +22,7 @@
 <h4>Dataset phenotypes</h4>
 <ul>
 <li><g:message code="informational.shared.traits.chronic_kidney_disease"></g:message></li>
-<li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-cys"></g:message></li>
-<li><g:message code="informational.shared.traits.urinary_atc_ratio"></g:message></li>
 <li><g:message code="informational.shared.traits.microalbuminuria"></g:message></li>
 </ul>
 
@@ -32,4 +30,9 @@
 <h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
 
 <p>CKDGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
+
+<h4>Accessing CKDGen GWAS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.CKDGen"></g:message></p>
+
+
 </div>

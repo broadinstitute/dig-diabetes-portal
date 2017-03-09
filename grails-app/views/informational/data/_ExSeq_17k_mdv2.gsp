@@ -460,7 +460,7 @@
 </h4>
 
 <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations. </p>
-</div>
+
 
 <h4>Overview of analysis</h4>
 <p><g:message code="informational.data.overview.17K"></g:message></p>
@@ -468,6 +468,6 @@
 <h4>Accessing 17K exome sequence analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.17K"></g:message></p>
 
-
+</div>
 
 
