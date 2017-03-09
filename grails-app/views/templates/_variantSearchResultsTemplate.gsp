@@ -51,7 +51,7 @@
     </div>
 </div>
 <div id="commonPropertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
-    <div role="tabpanel" class="tab-pane commonPropertiesSelection" id="abc">
+    <div role="tabpanel" class="tab-pane commonPropertiesSelection">
 
         <form class="dk-modal-form">
             <h4><g:message code="variantSearch.results.modal.availableCommonProps" /></h4>
@@ -67,6 +67,84 @@
         </form>
     </div>
 </div>
+<div id="topOfVariantResultsPageTemplate" type="x-tmpl-mustache" style="display: none;">
+    <div style="text-align: right;">
+        <a href="https://s3.amazonaws.com/broad-portal-resources/Variant_results_table_guide_09-15-2016.pdf" target="_blank">
+            <g:message code="variantSearch.results.helpText" />
+        </a>
+    </div>
+    <div>
+        {{{encodedParameters}}}
+            <button class="btn btn-primary btn-xs">
+            &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
+            </button></a>
+        <g:message code="variantTable.searchResults.editCriteria" />
+    </div>
+    <div style="margin-top: 5px;">
+        <a id="linkToSaveText" href="#" onclick="mpgSoftware.variantSearchResults.saveLink(domSelectors)">Click here to copy the current search URL to the clipboard</a>
+        <input type="text" id="linkToSave" style="display: none; margin-left: 5px; width: 500px;" />
+    </div>
+</div>
+
+%{--I do not yet understand why the following template fails, but the following one works.  Very strange.  What's wrong with using a table?--}%
+<div id="variantResultsFilterHolderTemplateOldway" type="x-tmpl-mustache" style="display: none;">
+    <table class="table table-striped dk-search-collection">
+        <tbody>
+        {{#translatedFilters}}
+            <tr>
+                <td>{{name}}</td>
+            </tr>
+        {{/translatedFilters}}
+        </tbody>
+    </table>
+</div>
+<div id="variantResultsFilterHolderTemplate" type="x-tmpl-mustache" style="display: none;">
+    <ul style="list-style-type: none;">
+        {{ #translatedFilters }}
+            <li>{{{name}}}
+        {{ /translatedFilters }}
+    </ul>
+</div>
+
+
+<div id="variantResultsMainStructuralTemplate" type="x-tmpl-mustache" style="display: none;">
+
+    <div class="container dk-t2d-back-to-search"></div>
+
+    <div class="container dk-t2d-content">
+
+        <h1><g:message code="variantTable.searchResults.title" default="Variant search results"/></h1>
+
+        <h3><g:message code="variantTable.searchResults.searchCriteriaHeader" default="Search criteria"/></h3>
+
+        <div class="variantResultsFilterHolder"></div>
+
+        <div id="warnIfMoreThan1000Results"></div>
+
+        <div class="regionDescr"></div>
+
+        <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
+        <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
+
+    </div>
+
+    <div class="container dk-variant-table-header">
+        <div class="row">
+            <div class="text-right">
+                <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#dataModal">Add / Subtract Data</button>
+            </div>
+        </div>
+    </div>
+    <hr />
+
+    <div class="container-fluid" ></div>
+
+    <div id="dataModalGoesHere"></div>
+
+</div>
+
+
+
 <script id="dataModalTemplate"  type="x-tmpl-mustache">
 <div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">

@@ -51,8 +51,9 @@
 
 
     $(document).ready(function () {
-        // this kicks everything off
-        $(".holderForVariantSearchResults").empty().append(
+
+//        $("#main").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML ));
+        $(".holderForVariantSearchResults").append(
                 Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'variantTableResults',
                             variantTableHeaderRow:'variantTableHeaderRow',
                             variantTableHeaderRow2:'variantTableHeaderRow2',
@@ -60,7 +61,11 @@
                             variantTableBody:'variantTableBody'}
 
                 ));
+        $(".dk-t2d-back-to-search").empty().append(
+                Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,{encodedParameters:
+                                '<a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams: "${encodedParameters}"]'/>">'}
 
+                ));
         mpgSoftware.variantSearchResults.loadTheTable(domSelectors);
 
         $('[data-toggle="tooltip"]').tooltip();
@@ -70,12 +75,18 @@
         var allGenes = "${geneNamesToDisplay}".replace("[","").replace("]","").split(',');
         if ((allGenes.length>0)&&
                 (allGenes[0].length>0)){
-            var namedGeneArray = _.map(allGenes,function(o){return {'name':o}})
+            var namedGeneArray = _.map(allGenes,function(o){return {'name':o}});
             $(".regionDescr").empty().append(
                     Mustache.render( $('#dataRegionTemplate')[0].innerHTML,
                             { geneNamesToDisplay: namedGeneArray,
                                 regionSpecification:'${regionSpecification}'}));
         }
+        var translatedFilterArray = "${translatedFilters}".split(',');
+        var namedTranslatedFilterArray = _.map(translatedFilterArray,function(o){return {'name':o}});
+        $(".variantResultsFilterHolder").empty().append(
+                Mustache.render( $('#variantResultsFilterHolderTemplate')[0].innerHTML,
+                        { 'translatedFilters': namedTranslatedFilterArray})
+        );
     });
 
 </script>
@@ -83,26 +94,7 @@
 
 <div id="main">
 
-    <div class="container dk-t2d-back-to-search">
-        <div style="text-align: right;">
-            <a href="https://s3.amazonaws.com/broad-portal-resources/Variant_results_table_guide_09-15-2016.pdf" target="_blank">
-                <g:message code="variantSearch.results.helpText" />
-            </a>
-        </div>
-        <div>
-            <a href="<g:createLink controller='variantSearch' action='variantSearchWF'
-                                   params='[encParams: "${encodedParameters}"]'/>">
-                <button class="btn btn-primary btn-xs">
-                &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
-                </button></a>
-            <g:message code="variantTable.searchResults.editCriteria" />
-        </div>
-        <div style="margin-top: 5px;">
-            <a id="linkToSaveText" href="#" onclick="mpgSoftware.variantSearchResults.saveLink(domSelectors)">Click here to copy the current search URL to the clipboard</a>
-            <input type="text" id="linkToSave" style="display: none; margin-left: 5px; width: 500px;" />
-        </div>
-
-    </div>
+    <div class="container dk-t2d-back-to-search"></div>
 
     <div class="container dk-t2d-content">
 
@@ -110,21 +102,11 @@
 
         <h3><g:message code="variantTable.searchResults.searchCriteriaHeader" default="Search criteria"/></h3>
 
-        <table class="table table-striped dk-search-collection">
-            <tbody>
-            <g:each in="${translatedFilters.split(',')}">
-                <tr>
-                    <td>${it}</td>
-                </tr>
-            </g:each>
-            </tbody>
-        </table>
+        <div class="variantResultsFilterHolder"></div>
 
         <div id="warnIfMoreThan1000Results"></div>
 
-        <div class="regionDescr">
-
-        </div>
+        <div class="regionDescr"></div>
 
         <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
         <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
@@ -142,7 +124,6 @@
     <div class="container-fluid holderForVariantSearchResults" >
     </div>
     <div id="dataModalGoesHere"></div>
-
 
 </div>
 
