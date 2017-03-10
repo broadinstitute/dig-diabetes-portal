@@ -52,8 +52,9 @@
 
     $(document).ready(function () {
 
-//        $("#main").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML ));
-        $(".holderForVariantSearchResults").append(
+        $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
+                {'holderForVariantSearchResults':'holdAllVariantSearchResults'}));
+        $("#holdAllVariantSearchResults").append(
                 Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'variantTableResults',
                             variantTableHeaderRow:'variantTableHeaderRow',
                             variantTableHeaderRow2:'variantTableHeaderRow2',
@@ -92,40 +93,7 @@
 </script>
 
 
-<div id="main">
-
-    <div class="container dk-t2d-back-to-search"></div>
-
-    <div class="container dk-t2d-content">
-
-        <h1><g:message code="variantTable.searchResults.title" default="Variant search results"/></h1>
-
-        <h3><g:message code="variantTable.searchResults.searchCriteriaHeader" default="Search criteria"/></h3>
-
-        <div class="variantResultsFilterHolder"></div>
-
-        <div id="warnIfMoreThan1000Results"></div>
-
-        <div class="regionDescr"></div>
-
-        <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
-        <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
-
-    </div>
-
-    <div class="container dk-variant-table-header">
-        <div class="row">
-            <div class="text-right">
-                <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#dataModal">Add / Subtract Data</button>
-            </div>
-        </div>
-    </div>
-    <hr />
-    <div class="container-fluid holderForVariantSearchResults" >
-    </div>
-    <div id="dataModalGoesHere"></div>
-
-</div>
+<div id="variantSearchResultsInterface"></div>
 
 </body>
 </html>

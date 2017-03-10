@@ -14,7 +14,7 @@
         </tbody>
     </table>
 </script>
-<div id="propertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
+<script id="propertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
     <div role="tabpanel" class="tab-pane {{ active }}" id="{{ phenotype }}PropertiesSelection">
         <form class="dk-modal-form">
             <div class="dk-modal-form-input-group">
@@ -49,8 +49,8 @@
             </div>
         </form>
     </div>
-</div>
-<div id="commonPropertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
+</script>
+<script id="commonPropertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
     <div role="tabpanel" class="tab-pane commonPropertiesSelection">
 
         <form class="dk-modal-form">
@@ -66,8 +66,8 @@
             </div>
         </form>
     </div>
-</div>
-<div id="topOfVariantResultsPageTemplate" type="x-tmpl-mustache" style="display: none;">
+</script>
+<script id="topOfVariantResultsPageTemplate" type="x-tmpl-mustache" style="display: none;">
     <div style="text-align: right;">
         <a href="https://s3.amazonaws.com/broad-portal-resources/Variant_results_table_guide_09-15-2016.pdf" target="_blank">
             <g:message code="variantSearch.results.helpText" />
@@ -84,10 +84,10 @@
         <a id="linkToSaveText" href="#" onclick="mpgSoftware.variantSearchResults.saveLink(domSelectors)">Click here to copy the current search URL to the clipboard</a>
         <input type="text" id="linkToSave" style="display: none; margin-left: 5px; width: 500px;" />
     </div>
-</div>
+</script>
 
 %{--I do not yet understand why the following template fails, but the following one works.  Very strange.  What's wrong with using a table?--}%
-<div id="variantResultsFilterHolderTemplateOldway" type="x-tmpl-mustache" style="display: none;">
+<script id="variantResultsFilterHolderTemplateOldway" type="x-tmpl-mustache" style="display: none;">
     <table class="table table-striped dk-search-collection">
         <tbody>
         {{#translatedFilters}}
@@ -97,17 +97,17 @@
         {{/translatedFilters}}
         </tbody>
     </table>
-</div>
-<div id="variantResultsFilterHolderTemplate" type="x-tmpl-mustache" style="display: none;">
+</script>
+<script id="variantResultsFilterHolderTemplate" type="x-tmpl-mustache" style="display: none;">
     <ul style="list-style-type: none;">
         {{ #translatedFilters }}
             <li>{{{name}}}
         {{ /translatedFilters }}
     </ul>
-</div>
+</script>
 
 
-<div id="variantResultsMainStructuralTemplate" type="x-tmpl-mustache" style="display: none;">
+<script id="variantResultsMainStructuralTemplate" type="x-tmpl-mustache" style="display: none;">
 
     <div class="container dk-t2d-back-to-search"></div>
 
@@ -137,16 +137,17 @@
     </div>
     <hr />
 
-    <div class="container-fluid" ></div>
+    <div id="{{holderForVariantSearchResults}}" class="container-fluid" ></div>
 
     <div id="dataModalGoesHere"></div>
 
-</div>
+</script>
 
 
 
 <script id="dataModalTemplate"  type="x-tmpl-mustache">
-<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<h1>eat me</h1>
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"><h1>eat me</h1>
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
