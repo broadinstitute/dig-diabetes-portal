@@ -1,9 +1,9 @@
 <div class="panel-body">
-    <h4>Data set</h4>
-
+    <h4>Dataset</h4>
+<p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - Download URL: <a href="https://fox.nhlbi.nih.gov/CKDGen/">https://fox.nhlbi.nih.gov/CKDGen/</a><br/>
         Download date: October 2016<br/>
-        Data set version: dv2<br/>
+        Dataset version: dv2<br/>
 
         <h4>Publications</h4>
 
@@ -19,8 +19,6 @@
 <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-creat_DM"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-creat_nonDM"></g:message></li>
-<li><g:message code="informational.shared.traits.eGFR-cys"></g:message></li>
-<li><g:message code="informational.shared.traits.chronic_kidney_disease"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-creat_AA"></g:message></li>
 </ul>
 
@@ -32,6 +30,7 @@
 <h4>Experiment summary</h4>
     <p><g:message code="informational.data.exptsumm.CKDGen-eGFRcrea"></g:message></p>
 
-
+<h4>Accessing CKDGen GWAS - stratified serum creatinine associations data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.CKDGen-eGFRcrea"></g:message></p>
 
 </div>

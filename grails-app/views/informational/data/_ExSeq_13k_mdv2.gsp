@@ -1,4 +1,8 @@
 <div class="panel-body">
+
+<h4>Dataset</h4>
+<p><g:message code="informational.data.overlaps.13K"></g:message></p>
+
     <h4>Publication</h4>
 
 <p><div class="paper">

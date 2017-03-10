@@ -1,6 +1,6 @@
 <div class="panel-body">
     <h4>Dataset</h4>
-
+<p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - eGFRcrea: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv</a><br/>
     Download URL - eGFRcyse: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcys_meta_post.csv</a><br/>
     Download URL - CKD: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-CKD_meta_post.csv</a><br/>
@@ -22,9 +22,7 @@
 <h4>Dataset phenotypes</h4>
 <ul>
 <li><g:message code="informational.shared.traits.chronic_kidney_disease"></g:message></li>
-<li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-cys"></g:message></li>
-<li><g:message code="informational.shared.traits.urinary_atc_ratio"></g:message></li>
 <li><g:message code="informational.shared.traits.microalbuminuria"></g:message></li>
 </ul>
 
@@ -32,4 +30,9 @@
 <h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
 
 <p>CKDGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
+
+<h4>Accessing CKDGen GWAS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.CKDGen"></g:message></p>
+
+
 </div>
