@@ -17,7 +17,6 @@
     var translatedFilters  = "<%= translatedFilters %>";
     </g:applyCodec>
 
-    mpgSoftware.variantSearchResults.initializeAdditionalProperties ("<%=additionalProperties%>");
 
     var domSelectors = {
         retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
@@ -28,9 +27,9 @@
         launchAVariantSearchUrl: "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>",
         retrieveDatasetsAjaxUrl:"${g.createLink(controller: 'VariantSearch', action: 'retrieveDatasetsAjax')}",
         linkBackToSearchDefinitionPage:'<a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams: "${encodedParameters}"]'/>">',
-        phenotypeAddition:'#phenotypeAddition',
-        phenotypeAdditionDataset: '#phenotypeAdditionDataset',
-        phenotypeAdditionCohort: '#phenotypeAdditionCohort',
+        phenotypeAddition:'phenotypeAddition',
+        phenotypeAdditionDataset: 'phenotypeAdditionDataset',
+        phenotypeAdditionCohort: 'phenotypeAdditionCohort',
         phenotypeCohorts:'#phenotypeCohorts',
         variantTableResults:'variantTableResults',
         variantTableHeaderRow:'variantTableHeaderRow',
@@ -43,43 +42,23 @@
         localeInfo:"${locale}",
         queryFiltersInfo:"<%= queryFilters %>",
         translatedFiltersInfo:"<%= translatedFilters %>",
+        additionalPropertiesInfo:"<%=additionalProperties%>",
         filtersAsJsonInfo:filtersAsJson,
         copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
         printMsg:'<g:message code="table.buttons.printText" default="Print me!" />',
-        commonPropsMsg:'<g:message code="variantTable.columnHeaders.commonProperties"/>'};
+        commonPropsMsg:'<g:message code="variantTable.columnHeaders.commonProperties"/>',
+        uniqueRoot:""};
+
+
 
 
 
 
     $(document).ready(function () {
 
-        $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
-                {'holderForVariantSearchResults':'holdAllVariantSearchResults'}));
-        $("#holdAllVariantSearchResults").append(
-                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,domSelectors));
-        $(".dk-t2d-back-to-search").empty().append(
-                Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,domSelectors));
-        mpgSoftware.variantSearchResults.loadTheTable(domSelectors);
 
-        $('[data-toggle="tooltip"]').tooltip();
+        mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors,"${geneNamesToDisplay}");
 
-        $("#dataModalGoesHere").empty().append(
-                Mustache.render( $('#dataModalTemplate')[0].innerHTML));
-        var allGenes = "${geneNamesToDisplay}".replace("[","").replace("]","").split(',');
-        if ((allGenes.length>0)&&
-                (allGenes[0].length>0)){
-            var namedGeneArray = _.map(allGenes,function(o){return {'name':o}});
-            $(".regionDescr").empty().append(
-                    Mustache.render( $('#dataRegionTemplate')[0].innerHTML,
-                            { geneNamesToDisplay: namedGeneArray,
-                                regionSpecification:'${regionSpecification}'}));
-        }
-        var translatedFilterArray = "${translatedFilters}".split(',');
-        var namedTranslatedFilterArray = _.map(translatedFilterArray,function(o){return {'name':o}});
-        $(".variantResultsFilterHolder").empty().append(
-                Mustache.render( $('#variantResultsFilterHolderTemplate')[0].innerHTML,
-                        { 'translatedFilters': namedTranslatedFilterArray})
-        );
     });
 
 </script>

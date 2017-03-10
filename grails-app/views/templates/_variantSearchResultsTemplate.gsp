@@ -203,7 +203,7 @@
                                             <g:message code="searchBuilder.traitOrDisease.prompt" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select id="phenotypeAddition" class="form-control" onchange="mpgSoftware.variantSearchResults.phenotypeSelected(domSelectors)">
+                                            <select id="{{phenotypeAddition}}" class="form-control" onchange="mpgSoftware.variantSearchResults.phenotypeSelected(domSelectors)">
                                             </select>
                                         </div>
                                     </div>
@@ -213,7 +213,7 @@
                                             <g:message code="searchBuilder.dataset.prompt" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select id="phenotypeAdditionDataset" class="form-control" onchange="mpgSoftware.variantSearchResults.datasetSelected(domSelectors)">
+                                            <select id="{{phenotypeAdditionDataset}}" class="form-control" onchange="mpgSoftware.variantSearchResults.datasetSelected(domSelectors)">
                                             </select>
                                         </div>
                                     </div>
@@ -223,7 +223,7 @@
                                             <g:message code="variantSearch.results.modal.cohortOptional" />
                                         </div>
                                         <div class="dk-variant-search-builder-ui">
-                                            <select id="phenotypeAdditionCohort" class="form-control" style="max-width: 300px;">
+                                            <select id="{{phenotypeAdditionCohort}}" class="form-control" style="max-width: 300px;">
                                             </select>
                                         </div>
                                     </div>

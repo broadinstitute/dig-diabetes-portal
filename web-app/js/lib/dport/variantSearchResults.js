@@ -165,7 +165,7 @@ var mpgSoftware = mpgSoftware || {};
             return toReturn;
         };
 
-        function generateModal(data, phenotypeUrl, commonPropsHeader) {
+        function generateModal( data, passedInVars ) {
             // populate the modals to add/remove properties
             // first do some processing on the search queries, so we know what can't
             // be removed
@@ -209,15 +209,16 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             // add phenotypes tab
+            var rememberPhenotypeAddition = passedInVars.phenotypeAddition;
             $.ajax({
                 cache: false,
                 type: "post",
-                url: phenotypeUrl,
+                url: passedInVars.retrievePhenotypesAjaxUrl,
                 data: {getNonePhenotype: true},
                 async: true,
                 success: function (data) {
                     if ( data && data.datasets ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeAddition', true, displayedPhenotypes);
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#'+rememberPhenotypeAddition, true, displayedPhenotypes);
                     }
                 },
                 error: function (jqXHR, exception) {
@@ -404,7 +405,7 @@ var mpgSoftware = mpgSoftware || {};
                 'aria-controls': '.commonPropertiesSelection',
                 role: 'tab',
                 'data-toggle': 'tab'
-            }).html(commonPropsHeader);
+            }).html(passedInVars.commonPropsMsg);
             var tabItem = $('<li />').attr({
                 role: 'presentation'
             });
@@ -461,9 +462,8 @@ var mpgSoftware = mpgSoftware || {};
                     },
                     variantTableSelector.translatedFiltersInfo
                 );
-                generateModal(data,
-                    variantTableSelector.retrievePhenotypesAjaxUrl,
-                    variantTableSelector.commonPropsMsg)
+                generateModal(data,variantTableSelector);
+
             });
         }
 
@@ -483,11 +483,11 @@ var mpgSoftware = mpgSoftware || {};
             // if we're coming off the phenotype tab, we need to see if the user selected a dataset
             // to add
             if(target == 'phenotype' ) {
-                var phenotypeSelection = $(domSelectors.phenotypeAddition).val();
-                var datasetSelection = $(domSelectors.phenotypeAdditionDataset).val();
+                var phenotypeSelection = $('#'+domSelectors.phenotypeAddition).val();
+                var datasetSelection = $('#'+domSelectors.phenotypeAdditionDataset).val();
                 if(phenotypeSelection != 'default' && datasetSelection != 'default') {
                     // first see if a cohort was selected
-                    var cohortSelection = $(domSelectors.phenotypeAdditionCohort).val();
+                    var cohortSelection = $('#'+domSelectors.phenotypeAdditionCohort).val();
                     if(cohortSelection != 'default' && cohortSelection) {
                         datasetSelection = cohortSelection;
                     }
@@ -515,15 +515,15 @@ var mpgSoftware = mpgSoftware || {};
 
             // any necessary clean up
             // reset the dataset/cohort dropdowns on the phenotype addition tab
-            $(domSelectors.phenotypeAdditionDataset).empty();
+            $('#'+domSelectors.phenotypeAdditionDataset).empty();
             $(domSelectors.phenotypeCohorts).hide();
         };
         var datasetSelected = function(domSelectors) {
-            var selectedDataset = $(domSelectors.phenotypeAdditionDataset+' option:selected');
+            var selectedDataset = $('#'+domSelectors.phenotypeAdditionDataset+' option:selected');
             var cohorts = selectedDataset.data();
             if(! _.isEmpty(cohorts)) {
                 $(domSelectors.phenotypeCohorts).show();
-                var cohortOptions = $(domSelectors.phenotypeAdditionCohort);
+                var cohortOptions = $('#'+domSelectors.phenotypeAdditionCohort);
                 cohortOptions.empty();
                 cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
                 var displayData = UTILS.flattenDatasetMap(cohorts, 0);
@@ -536,7 +536,7 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
         var phenotypeSelected = function (domSelectors){
-            var phenotype = $(domSelectors.phenotypeAddition).val();
+            var phenotype = $('#'+domSelectors.phenotypeAddition).val();
             var rememberPhenotypeAdditionDataset = domSelectors.phenotypeAdditionDataset;
             $.ajax({
                 cache: false,
@@ -547,7 +547,7 @@ var mpgSoftware = mpgSoftware || {};
                 success: function (data) {
                     if (data) {
                         var sampleGroupMap = data.sampleGroupMap;
-                        var options = $(rememberPhenotypeAdditionDataset);
+                        var options = $('#'+rememberPhenotypeAdditionDataset);
                         options.empty();
 
                         options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
@@ -593,6 +593,38 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
+        var buildVariantResultsTable = function (drivingVariables,geneNamesToDisplay){
+            var root = drivingVariables.uniqueRoot;
+            initializeAdditionalProperties (drivingVariables.additionalPropertiesInfo);
+            $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
+                {'holderForVariantSearchResults':root+'holdAllVariantSearchResults'}));
+            $("#"+root+"holdAllVariantSearchResults").append(
+                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,drivingVariables));
+            $(".dk-t2d-back-to-search").empty().append(
+                Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,drivingVariables));
+            loadTheTable(drivingVariables);
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $("#dataModalGoesHere").empty().append(
+                Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
+            var allGenes = geneNamesToDisplay.replace("[","").replace("]","").split(',');
+            if ((allGenes.length>0)&&
+                (allGenes[0].length>0)){
+                var namedGeneArray = _.map(allGenes,function(o){return {'name':o}});
+                $(".regionDescr").empty().append(
+                    Mustache.render( $('#dataRegionTemplate')[0].innerHTML,
+                        { geneNamesToDisplay: namedGeneArray,
+                            regionSpecification:'${regionSpecification}'}));
+            }
+            var translatedFilterArray = drivingVariables.translatedFiltersInfo.split(',');
+            var namedTranslatedFilterArray = _.map(translatedFilterArray,function(o){return {'name':o}});
+            $(".variantResultsFilterHolder").empty().append(
+                Mustache.render( $('#variantResultsFilterHolderTemplate')[0].innerHTML,
+                    { 'translatedFilters': namedTranslatedFilterArray})
+            );
+        };
+
         return {
             loadVariantTableViaAjax: loadVariantTableViaAjax,
             dynamicFillTheFields: dynamicFillTheFields,
@@ -604,7 +636,8 @@ var mpgSoftware = mpgSoftware || {};
             datasetSelected:datasetSelected,
             phenotypeSelected:phenotypeSelected,
             saveLink:saveLink,
-            loadTheTable:loadTheTable
+            loadTheTable:loadTheTable,
+            buildVariantResultsTable:buildVariantResultsTable
         }
 
     }());
