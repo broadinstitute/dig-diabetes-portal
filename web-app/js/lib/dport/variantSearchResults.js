@@ -64,9 +64,9 @@ var mpgSoftware = mpgSoftware || {};
             if ( $.fn.DataTable.isDataTable( '#variantTable' ) ) {
                 $('#variantTable').DataTable().destroy();
             }
-            $(variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header dk-common"/>');
-            $(variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common"><g:message code="variantTable.columnHeaders.commonProperties"/></th>');
-            $(variantTableSelector.variantTableHeaderRow3+', '+variantTableSelector.variantTableBody).empty();
+            $('#'+variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header dk-common"/>');
+            $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common"><g:message code="variantTable.columnHeaders.commonProperties"/></th>');
+            $('#'+variantTableSelector.variantTableHeaderRow3+', #'+variantTableSelector.variantTableBody).empty();
 
             // common props section
             var totCol = 0;
@@ -81,14 +81,14 @@ var mpgSoftware = mpgSoftware || {};
                 if (!((colName === 'VAR_ID') && (commonWidth > 0))) { // VAR_ID never shows up other than in the first column
                     // the data-colname attribute is used in the table generation function
                     var newHeaderElement = $('<th>', {class: 'datatype-header dk-common', html: translatedColName}).attr('data-colName', colName);
-                    $(variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
+                    $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     commonWidth++;
                 }
 
             }
 
-            $(variantTableSelector.variantTableHeaderRow).children().first().attr('colspan', commonWidth);
-            $(variantTableSelector.variantTableHeaderRow2).children().first().attr('colspan', commonWidth);
+            $('#'+variantTableSelector.variantTableHeaderRow).children().first().attr('colspan', commonWidth);
+            $('#'+variantTableSelector.variantTableHeaderRow2).children().first().attr('colspan', commonWidth);
             totCol += commonWidth;
 
             // dataset props and pheno specific props
@@ -112,7 +112,7 @@ var mpgSoftware = mpgSoftware || {};
                         dataset_width++;
                         // the data-colname attribute is used in the table generation function
                         var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisPhenotypeColor, html: columnDisp}).attr('data-colName', column + '.' + dataset);
-                        $(variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
+                        $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     }
                     for (var i = 0; i < data.columns.pproperty[pheno][dataset].length; i++) {
                         var column = data.columns.pproperty[pheno][dataset][i];
@@ -121,14 +121,14 @@ var mpgSoftware = mpgSoftware || {};
                         dataset_width++;
                         // the data-colname attribute is used in the table generation function
                         var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisPhenotypeColor, html: columnDisp}).attr('data-colName', column + '.' + dataset + '.' + pheno);
-                        $(variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
+                        $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     }
                     if (dataset_width > 0) {
                         var newTableHeader = document.createElement('th');
                         newTableHeader.setAttribute('class', 'datatype-header ' + thisPhenotypeColor);
                         newTableHeader.setAttribute('colspan', dataset_width);
                         $(newTableHeader).append(datasetDisp);
-                        $(variantTableSelector.variantTableHeaderRow2).append(newTableHeader);
+                        $('#'+variantTableSelector.variantTableHeaderRow2).append(newTableHeader);
                     }
                 }
                 if (pheno_width > 0) {
@@ -136,7 +136,7 @@ var mpgSoftware = mpgSoftware || {};
                     newTableHeader.setAttribute('class', 'datatype-header ' + thisPhenotypeColor);
                     newTableHeader.setAttribute('colspan', pheno_width);
                     $(newTableHeader).append(phenoDisp);
-                    $(variantTableSelector.variantTableHeaderRow).append(newTableHeader);
+                    $('#'+variantTableSelector.variantTableHeaderRow).append(newTableHeader);
                 }
                 totCol += pheno_width;
             });
@@ -447,7 +447,7 @@ var mpgSoftware = mpgSoftware || {};
                 var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector);
 
                 var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
-                variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, variantTableSelector.variantTableResults,
+                variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
                     variantTableSelector.variantSearchAndResultColumnsDataUrl,
                     variantTableSelector.variantInfoUrl,
                     variantTableSelector.geneInfoUrl,

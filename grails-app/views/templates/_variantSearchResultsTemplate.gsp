@@ -74,7 +74,7 @@
         </a>
     </div>
     <div>
-        {{{encodedParameters}}}
+        {{{linkBackToSearchDefinitionPage}}}
             <button class="btn btn-primary btn-xs">
             &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
             </button></a>
@@ -146,8 +146,7 @@
 
 
 <script id="dataModalTemplate"  type="x-tmpl-mustache">
-<h1>eat me</h1>
-<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"><h1>eat me</h1>
+<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

@@ -27,15 +27,16 @@
         variantSearchAndResultColumnsInfoUrl:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />',
         launchAVariantSearchUrl: "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>",
         retrieveDatasetsAjaxUrl:"${g.createLink(controller: 'VariantSearch', action: 'retrieveDatasetsAjax')}",
+        linkBackToSearchDefinitionPage:'<a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams: "${encodedParameters}"]'/>">',
         phenotypeAddition:'#phenotypeAddition',
         phenotypeAdditionDataset: '#phenotypeAdditionDataset',
         phenotypeAdditionCohort: '#phenotypeAdditionCohort',
         phenotypeCohorts:'#phenotypeCohorts',
-        variantTableResults:'#variantTableResults',
-        variantTableHeaderRow:'#variantTableHeaderRow',
-        variantTableHeaderRow2:'#variantTableHeaderRow2',
-        variantTableHeaderRow3:'#variantTableHeaderRow3',
-        variantTableBody:'#variantTableBody',
+        variantTableResults:'variantTableResults',
+        variantTableHeaderRow:'variantTableHeaderRow',
+        variantTableHeaderRow2:'variantTableHeaderRow2',
+        variantTableHeaderRow3:'variantTableHeaderRow3',
+        variantTableBody:'variantTableBody',
         linkToSave: '#linkToSave',
         queryFilterInfo:"<%=queryFilters%>",
         proteinEffectsListInfo:"${proteinEffectsList}",
@@ -55,18 +56,9 @@
         $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
                 {'holderForVariantSearchResults':'holdAllVariantSearchResults'}));
         $("#holdAllVariantSearchResults").append(
-                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,{variantTableResults:'variantTableResults',
-                            variantTableHeaderRow:'variantTableHeaderRow',
-                            variantTableHeaderRow2:'variantTableHeaderRow2',
-                            variantTableHeaderRow3:'variantTableHeaderRow3',
-                            variantTableBody:'variantTableBody'}
-
-                ));
+                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,domSelectors));
         $(".dk-t2d-back-to-search").empty().append(
-                Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,{encodedParameters:
-                                '<a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams: "${encodedParameters}"]'/>">'}
-
-                ));
+                Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,domSelectors));
         mpgSoftware.variantSearchResults.loadTheTable(domSelectors);
 
         $('[data-toggle="tooltip"]').tooltip();
