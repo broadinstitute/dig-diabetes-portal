@@ -82,7 +82,7 @@
     </div>
     <div style="margin-top: 5px;">
         <a id="linkToSaveText" href="#" onclick="mpgSoftware.variantSearchResults.saveLink(undefined,'{{uniqueRoot}}')">Click here to copy the current search URL to the clipboard</a>
-        <input type="text" id="linkToSave" style="display: none; margin-left: 5px; width: 500px;" />
+        <input type="text" id="{{linkToSave}}" style="display: none; margin-left: 5px; width: 500px;" />
     </div>
 </script>
 
@@ -218,7 +218,7 @@
                                         </div>
                                     </div>
 
-                                    <div id="phenotypeCohorts" class="dk-modal-form-input-row" style="display: none;">
+                                    <div id="{{phenotypeCohorts}}" class="dk-modal-form-input-row" style="display: none;">
                                         <div class="dk-variant-search-builder-title">
                                             <g:message code="variantSearch.results.modal.cohortOptional" />
                                         </div>

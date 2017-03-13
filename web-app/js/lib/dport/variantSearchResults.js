@@ -24,6 +24,10 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof myVarsToRemember.uniqueRoot === 'undefined'){
                     varsToRemember = myVarsToRemember;
                 } else {
+                    myVarsToRemember["variantTableHeaderRow"] = myVarsToRemember.uniqueRoot+'variantTableHeaderRow';
+                    myVarsToRemember["variantTableHeaderRow2"] = myVarsToRemember.variantTableHeaderRow+"2";
+                    myVarsToRemember["variantTableHeaderRow3"] = myVarsToRemember.variantTableHeaderRow+"3";
+                    myVarsToRemember["variantTableBody"] = myVarsToRemember.uniqueRoot+"variantTableBody";
                     var dataNodeName = myVarsToRemember.uniqueRoot+"_data";
                     var dataNode = $('#'+dataNodeName);
                     if (!$.contains($('body'),dataNode[0])){
@@ -508,7 +512,8 @@ var mpgSoftware = mpgSoftware || {};
                         filters: variantTableSelector.queryFiltersInfo,
                         properties: additionalProps
                     },
-                    variantTableSelector.translatedFiltersInfo
+                    variantTableSelector.translatedFiltersInfo,
+                    variantTableSelector
                 );
                 generateModal(data,variantTableSelector,domHolderName);
 
@@ -565,14 +570,14 @@ var mpgSoftware = mpgSoftware || {};
             // any necessary clean up
             // reset the dataset/cohort dropdowns on the phenotype addition tab
             $('#'+domSelectors.phenotypeAdditionDataset).empty();
-            $(domSelectors.phenotypeCohorts).hide();
+            $('#'+domSelectors.phenotypeCohorts).hide();
         };
         var datasetSelected = function(domSelectors,domSelectorsHolder) {
             domSelectors = getVarsToRemember(domSelectors,domSelectorsHolder);
             var selectedDataset = $('#'+domSelectors.phenotypeAdditionDataset+' option:selected');
             var cohorts = selectedDataset.data();
             if(! _.isEmpty(cohorts)) {
-                $(domSelectors.phenotypeCohorts).show();
+                $('#'+domSelectors.phenotypeCohorts).show();
                 var cohortOptions = $('#'+domSelectors.phenotypeAdditionCohort);
                 cohortOptions.empty();
                 cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
@@ -582,7 +587,7 @@ var mpgSoftware = mpgSoftware || {};
                     cohortOptions.append(newOption);
                 });
             } else {
-                $(domSelectors.phenotypeCohorts).hide();
+                $('#'+domSelectors.phenotypeCohorts).hide();
             }
         };
         var phenotypeSelected = function (domSelectors,domSelectorsName){
@@ -627,7 +632,7 @@ var mpgSoftware = mpgSoftware || {};
             var url = domSelectors.launchAVariantSearchUrl;
             url = url.concat('&props=' + encodeURIComponent(additionalProperties.join(':')));
 
-            var reference = $(domSelectors.linkToSave);
+            var reference = $('#'+domSelectors.linkToSave);
             // it appears the the browser may interrupt the copy if the element that's being
             // copied isn't visible, so show the element long enough to grab the url
             reference.show();
@@ -640,7 +645,7 @@ var mpgSoftware = mpgSoftware || {};
             // if for whatever reason that fails (browser doesn't support it?), then display an error
             // and the URL
             if(! success ) {
-                $(domSelectors.linkToSave).show();
+                $('#'+domSelectors.linkToSave).show();
                 alert('Sorry, this functionality isn\'t supported on your browser. Please copy the link from the text box.')
             }
         };
