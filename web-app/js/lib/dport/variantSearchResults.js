@@ -5,14 +5,57 @@ var mpgSoftware = mpgSoftware || {};
     "use strict";
 
     mpgSoftware.variantSearchResults = (function () {
-        // hoisted here
+        // function for selecting strings
         var translationFunction;
+        // dom node responsible for spinner
         var loading;
+        // default variable to hold a load of URLs, dom selectors, and other variables to remember.  Better yet,
+        //  however, is to hang everything off of the DOM element defined by .uniqueRoot
+        var varsToRemember;
         // this is how requested properties beyond what's included in the search get added
         var additionalProperties = [];
 
         var getAdditionalProperties = function(){
             return additionalProperties;
+        };
+
+        var setVarsToRemember = function(myVarsToRemember){
+            if (typeof myVarsToRemember !== 'undefined'){
+                if (typeof myVarsToRemember.uniqueRoot === 'undefined'){
+                    varsToRemember = myVarsToRemember;
+                } else {
+                    var dataNodeName = myVarsToRemember.uniqueRoot+"_data";
+                    var dataNode = $('#'+dataNodeName);
+                    if (!$.contains($('body'),dataNode[0])){
+                        $('body').append('<div id="'+dataNodeName+'">');
+                        dataNode = $('#'+dataNodeName);
+                    }
+                    $.data(dataNode[0],"variantResultsTableData",myVarsToRemember);
+                }
+            }
+
+        };
+        var getVarsToRemember = function(overrideVarsToRemember,specificVarsRootName){
+            var returnValue;
+            if (typeof overrideVarsToRemember === 'undefined') {
+                if (typeof specificVarsRootName === 'undefined') {
+                    returnValue = varsToRemember;
+                } else {
+                    var dataNodeName = specificVarsRootName+"_data";
+                    var dataNode = $('#'+dataNodeName);
+                    if (!dataNode.length){
+                        console.log('ERROR: data structure holder named '+dataNodeName+' was unexpectedly missing');
+                    } else {
+                        returnValue = $.data(dataNode[0],"variantResultsTableData");
+                    }
+                }
+            } else {
+                returnValue = overrideVarsToRemember;
+            }
+            if (typeof returnValue === 'undefined') {
+                console.log('ERROR: null data structure passed to Variant Results Table functions');
+            }
+            return returnValue;
         };
 
         // the URL may specify properties to add (so that users can share searches). if this is
@@ -52,7 +95,9 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var dynamicFillTheFields = function (data,variantTableSelector) {
+        var dynamicFillTheFields = function (data,variantTableSelector,variantTableSelectorName) {
+            variantTableSelector = getVarsToRemember(variantTableSelector,variantTableSelectorName);
+
             /**
              * This function exists to avoid having to do
              * "if translationDictionary[string] defined, return that, else return string"
@@ -165,7 +210,9 @@ var mpgSoftware = mpgSoftware || {};
             return toReturn;
         };
 
-        function generateModal( data, passedInVars ) {
+        function generateModal( data, passedInVars,passedInVarsName ) {
+            passedInVars = getVarsToRemember(passedInVars,passedInVarsName);
+
             // populate the modals to add/remove properties
             // first do some processing on the search queries, so we know what can't
             // be removed
@@ -431,7 +478,8 @@ var mpgSoftware = mpgSoftware || {};
 
         // when this is called, the table is generated/regenerated
         // it's here because of all the URLs/data that need to be filled in
-        var loadTheTable = function (variantTableSelector) {
+        var loadTheTable = function (variantTableSelector,domHolderName) {
+            variantTableSelector = getVarsToRemember(variantTableSelector,domHolderName);
             mpgSoftware.variantSearchResults.loadVariantTableViaAjax( variantTableSelector.queryFiltersInfo,
                 variantTableSelector.variantSearchAndResultColumnsInfoUrl ).then(function (data, status) {
                 if (status != 'success') {
@@ -445,7 +493,7 @@ var mpgSoftware = mpgSoftware || {};
                     return;
                 }
                 var additionalProps = encodeURIComponent(additionalProperties.join(':'));
-                var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector);
+                var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector,domHolderName);
 
                 var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
                 variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
@@ -462,7 +510,7 @@ var mpgSoftware = mpgSoftware || {};
                     },
                     variantTableSelector.translatedFiltersInfo
                 );
-                generateModal(data,variantTableSelector);
+                generateModal(data,variantTableSelector,domHolderName);
 
             });
         }
@@ -470,7 +518,8 @@ var mpgSoftware = mpgSoftware || {};
         // the following functions are here (instead of in a separate JS file or something) because
         // they either update the page state (in the form of additionalProperties), or need server-
         // generated URLs/strings
-        var  confirmAddingProperties  = function(target,domSelectors) {
+        var  confirmAddingProperties  = function(target,domSelectors,domSelectorName) {
+            domSelectors = getVarsToRemember(domSelectors,domSelectorName);
             var matchingSelectedInputs = $('input[data-category="' + target + '"]:checked:not(:disabled)').get();
             var matchingUnselectedInputs = $('input[data-category="' + target + '"]:not(:checked,:disabled)').get();
             var valuesToInclude = _.map(matchingSelectedInputs, function (input) {
@@ -511,14 +560,15 @@ var mpgSoftware = mpgSoftware || {};
             additionalProperties = _.difference(additionalProperties, valuesToRemove);
             additionalProperties = _.union(additionalProperties, valuesToInclude);
 
-            loadTheTable(domSelectors);
+            loadTheTable(domSelectors,domSelectorName);
 
             // any necessary clean up
             // reset the dataset/cohort dropdowns on the phenotype addition tab
             $('#'+domSelectors.phenotypeAdditionDataset).empty();
             $(domSelectors.phenotypeCohorts).hide();
         };
-        var datasetSelected = function(domSelectors) {
+        var datasetSelected = function(domSelectors,domSelectorsHolder) {
+            domSelectors = getVarsToRemember(domSelectors,domSelectorsHolder);
             var selectedDataset = $('#'+domSelectors.phenotypeAdditionDataset+' option:selected');
             var cohorts = selectedDataset.data();
             if(! _.isEmpty(cohorts)) {
@@ -535,7 +585,8 @@ var mpgSoftware = mpgSoftware || {};
                 $(domSelectors.phenotypeCohorts).hide();
             }
         };
-        var phenotypeSelected = function (domSelectors){
+        var phenotypeSelected = function (domSelectors,domSelectorsName){
+            domSelectors = getVarsToRemember(domSelectors,domSelectorsName);
             var phenotype = $('#'+domSelectors.phenotypeAddition).val();
             var rememberPhenotypeAdditionDataset = domSelectors.phenotypeAdditionDataset;
             $.ajax({
@@ -571,7 +622,8 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
-        var saveLink = function (domSelectors){
+        var saveLink = function (domSelectors,dataHolderName){
+            domSelectors = getVarsToRemember(domSelectors,dataHolderName);
             var url = domSelectors.launchAVariantSearchUrl;
             url = url.concat('&props=' + encodeURIComponent(additionalProperties.join(':')));
 
@@ -594,6 +646,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var buildVariantResultsTable = function (drivingVariables,geneNamesToDisplay){
+            setVarsToRemember(drivingVariables); // since this is our first Variant Results Table call, store the driving variables here
             var root = drivingVariables.uniqueRoot;
             initializeAdditionalProperties (drivingVariables.additionalPropertiesInfo);
             $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
@@ -602,7 +655,7 @@ var mpgSoftware = mpgSoftware || {};
                 Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,drivingVariables));
             $(".dk-t2d-back-to-search").empty().append(
                 Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,drivingVariables));
-            loadTheTable(drivingVariables);
+            loadTheTable(drivingVariables,root);
 
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -637,7 +690,8 @@ var mpgSoftware = mpgSoftware || {};
             phenotypeSelected:phenotypeSelected,
             saveLink:saveLink,
             loadTheTable:loadTheTable,
-            buildVariantResultsTable:buildVariantResultsTable
+            buildVariantResultsTable:buildVariantResultsTable,
+            setVarsToRemember:setVarsToRemember
         }
 
     }());
