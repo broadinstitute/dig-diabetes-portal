@@ -24,10 +24,28 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof myVarsToRemember.uniqueRoot === 'undefined'){
                     varsToRemember = myVarsToRemember;
                 } else {
+                    myVarsToRemember["variantTableResults"] = myVarsToRemember.uniqueRoot+'variantTableResults';
                     myVarsToRemember["variantTableHeaderRow"] = myVarsToRemember.uniqueRoot+'variantTableHeaderRow';
                     myVarsToRemember["variantTableHeaderRow2"] = myVarsToRemember.variantTableHeaderRow+"2";
                     myVarsToRemember["variantTableHeaderRow3"] = myVarsToRemember.variantTableHeaderRow+"3";
                     myVarsToRemember["variantTableBody"] = myVarsToRemember.uniqueRoot+"variantTableBody";
+                    myVarsToRemember["dataModalGoesHere"] = myVarsToRemember.uniqueRoot+"dataModalGoesHere";
+                    myVarsToRemember["dataModal"] = myVarsToRemember.uniqueRoot+"dataModal";
+                    myVarsToRemember["phenotypeModal"] = myVarsToRemember.uniqueRoot+"phenotypeModal";
+                    myVarsToRemember["datasetModal"] = myVarsToRemember.uniqueRoot+"datasetModal";
+                    myVarsToRemember["propertiesModal"] = myVarsToRemember.uniqueRoot+"propertiesModal";
+                    myVarsToRemember["datasetTabList"] = myVarsToRemember.uniqueRoot+"datasetTabList";
+                    myVarsToRemember["datasetSelections"] = myVarsToRemember.uniqueRoot+"datasetSelections";
+                    myVarsToRemember["propertiesTabList"] = myVarsToRemember.uniqueRoot+"propertiesTabList";
+                    myVarsToRemember["propertiesTabPanes"] = myVarsToRemember.uniqueRoot+"propertiesTabPanes";
+                    myVarsToRemember["add_phenotype"] = myVarsToRemember.uniqueRoot+"add_phenotype";
+                    myVarsToRemember["subtract_phenotype"] = myVarsToRemember.uniqueRoot+"subtract_phenotype";
+                    myVarsToRemember["holderForVariantSearchResults"] = myVarsToRemember.uniqueRoot+"holderForVariantSearchResults";
+                    myVarsToRemember["phenotypeAddition"] = myVarsToRemember.uniqueRoot+"phenotypeAddition";
+                    myVarsToRemember["phenotypeAdditionDataset"] = myVarsToRemember.uniqueRoot+"phenotypeAdditionDataset";
+                    myVarsToRemember["phenotypeAdditionCohort"] = myVarsToRemember.uniqueRoot+"phenotypeAdditionCohort";
+                    myVarsToRemember["phenotypeCohorts"] = myVarsToRemember.uniqueRoot+"phenotypeCohorts";
+                    myVarsToRemember["linkToSave"] = myVarsToRemember.uniqueRoot+"linkToSave";
                     var dataNodeName = myVarsToRemember.uniqueRoot+"_data";
                     var dataNode = $('#'+dataNodeName);
                     if (!$.contains($('body'),dataNode[0])){
@@ -110,8 +128,8 @@ var mpgSoftware = mpgSoftware || {};
                 return data.translationDictionary[stringToTranslate] || stringToTranslate
             };
             // clear out the table
-            if ( $.fn.DataTable.isDataTable( '#variantTable' ) ) {
-                $('#variantTable').DataTable().destroy();
+            if ( $.fn.DataTable.isDataTable( /*'#variantTable'*/ '#'+variantTableSelector.variantTableResults ) ) {
+                $( '#'+variantTableSelector.variantTableResults).DataTable().destroy();
             }
             $('#'+variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header dk-common"/>');
             $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common"><g:message code="variantTable.columnHeaders.commonProperties"/></th>');
@@ -306,7 +324,7 @@ var mpgSoftware = mpgSoftware || {};
                     tabItem.addClass('active');
                 }
                 tabItem.append(tabAnchor);
-                $('#datasetTabList').append(tabItem);
+                $('#'+passedInVars.datasetTabList).append(tabItem);
 
                 // create the list of datasets
                 var displayedDatasets = _.keys(data.columns.pproperty[phenotype]);
@@ -336,12 +354,12 @@ var mpgSoftware = mpgSoftware || {};
                     tabPanel.addClass('active');
                 }
                 tabPanel.append(formHolder);
-                $('#datasetSelections').append(tabPanel);
+                $('#'+passedInVars.datasetSelections).append(tabPanel);
 
             });
 
             // now check if any phenotypes got removed, so we can remove their tabs
-            _.forEach($('#datasetTabList li'), function(tab) {
+            _.forEach($('#'+passedInVars.datasetTabList+' li'), function(tab) {
                 var tabPhenotype = $(tab).attr('data-phenotype');
                 if(! displayedPhenotypes.includes(tabPhenotype)) {
                     $(tab).remove();
@@ -353,7 +371,7 @@ var mpgSoftware = mpgSoftware || {};
             // add/subtract properties -------------------------------------------
             // make a tab for each displayed phenotype, plus common properties
             // first clear out any existing tabs
-            $('#propertiesTabList, #propertiesTabPanes').empty();
+            $('#'+passedInVars.propertiesTabList+', #'+passedInVars.propertiesTabPanes).empty();
             _.forEach(displayedPhenotypes, function(phenotype, index) {
                 // build tab
                 var tabAnchor = $('<a/>').attr({
@@ -369,7 +387,7 @@ var mpgSoftware = mpgSoftware || {};
                     tabItem.addClass('active');
                 }
                 tabItem.append(tabAnchor);
-                $('#propertiesTabList').append(tabItem);
+                $('#'+passedInVars.propertiesTabList).append(tabItem);
 
                 // break the datasets and their properties into two separate arrays
                 // this is because they're displayed in two different lists, so we can't
@@ -447,7 +465,7 @@ var mpgSoftware = mpgSoftware || {};
                 var propertiesInputsTemplate = $('#propertiesInputsTemplate').html();
                 Mustache.parse(propertiesInputsTemplate);
                 var rendered = Mustache.render(propertiesInputsTemplate, renderData);
-                $('#propertiesTabPanes').append(rendered);
+                $('#'+passedInVars.propertiesTabPanes).append(rendered);
             });
 
             // common properties
@@ -461,7 +479,7 @@ var mpgSoftware = mpgSoftware || {};
                 role: 'presentation'
             });
             tabItem.append(tabAnchor);
-            $('#propertiesTabList').append(tabItem);
+            $('#'+passedInVars.propertiesTabList).append(tabItem);
 
             var commonProps = _.map(data.cProperties.dataset, function(prop) {
                 return {
@@ -475,7 +493,7 @@ var mpgSoftware = mpgSoftware || {};
             var commonPropsInputTemplate = $('#commonPropertiesInputsTemplate').html();
             Mustache.parse(commonPropsInputTemplate);
             var rendered = Mustache.render(commonPropsInputTemplate, {properties: commonProps});
-            $('#propertiesTabPanes').append(rendered);
+            $('#'+passedInVars.propertiesTabPanes).append(rendered);
 
             // add/subtract properties -------------------------------------------
         };
@@ -655,8 +673,8 @@ var mpgSoftware = mpgSoftware || {};
             var root = drivingVariables.uniqueRoot;
             initializeAdditionalProperties (drivingVariables.additionalPropertiesInfo);
             $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
-                {'holderForVariantSearchResults':root+'holdAllVariantSearchResults'}));
-            $("#"+root+"holdAllVariantSearchResults").append(
+                drivingVariables));
+            $("#"+drivingVariables.holderForVariantSearchResults).empty().append(
                 Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,drivingVariables));
             $(".dk-t2d-back-to-search").empty().append(
                 Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,drivingVariables));
@@ -664,7 +682,7 @@ var mpgSoftware = mpgSoftware || {};
 
             $('[data-toggle="tooltip"]').tooltip();
 
-            $("#dataModalGoesHere").empty().append(
+            $("#"+drivingVariables.dataModalGoesHere).empty().append(
                 Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
             var allGenes = geneNamesToDisplay.replace("[","").replace("]","").split(',');
             if ((allGenes.length>0)&&

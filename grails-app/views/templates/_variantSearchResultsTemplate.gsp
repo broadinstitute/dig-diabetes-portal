@@ -81,7 +81,7 @@
         <g:message code="variantTable.searchResults.editCriteria" />
     </div>
     <div style="margin-top: 5px;">
-        <a id="linkToSaveText" href="#" onclick="mpgSoftware.variantSearchResults.saveLink(undefined,'{{uniqueRoot}}')">Click here to copy the current search URL to the clipboard</a>
+        <a href="#" onclick="mpgSoftware.variantSearchResults.saveLink(undefined,'{{uniqueRoot}}')">Click here to copy the current search URL to the clipboard</a>
         <input type="text" id="{{linkToSave}}" style="display: none; margin-left: 5px; width: 500px;" />
     </div>
 </script>
@@ -119,8 +119,6 @@
 
         <div class="variantResultsFilterHolder"></div>
 
-        <div id="warnIfMoreThan1000Results"></div>
-
         <div class="regionDescr"></div>
 
         <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
@@ -131,7 +129,7 @@
     <div class="container dk-variant-table-header">
         <div class="row">
             <div class="text-right">
-                <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#dataModal">Add / Subtract Data</button>
+                <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#{{dataModal}}">Add / Subtract Data</button>
             </div>
         </div>
     </div>
@@ -139,161 +137,161 @@
 
     <div id="{{holderForVariantSearchResults}}" class="container-fluid" ></div>
 
-    <div id="dataModalGoesHere"></div>
+    <div id="{{dataModalGoesHere}}"></div>
 
 </script>
 
 
 
 <script id="dataModalTemplate"  type="x-tmpl-mustache">
-<div class="modal fade" id="dataModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"><g:message code="variantSearch.results.modal.title" /></h4>
-                <p><g:message code="variantSearch.results.modal.subtitle" /></p>
-            </div>
-            <div class="modal-body">
-                <ul class="list-unstyled dk-modal-list">
-                    <li><a href="#" data-toggle="modal" data-target="#phenotypeModal" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubPheno" /></a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#datasetModal" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubDatasets" /></a></li>
-                    <li><a href="#" data-toggle="modal" data-target="#propertiesModal" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubProps" /></a></li>
-                </ul>
-            </div>
-            <div class="modal-footer dk-modal-footer">
-                <button type="button" class="btn btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
+    <div class="modal fade" id="{{dataModal}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><g:message code="variantSearch.results.modal.title" /></h4>
+                    <p><g:message code="variantSearch.results.modal.subtitle" /></p>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-unstyled dk-modal-list">
+                        <li><a href="#" data-toggle="modal" data-target="#{{phenotypeModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubPheno" /></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#{{datasetModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubDatasets" /></a></li>
+                        <li><a href="#" data-toggle="modal" data-target="#{{propertiesModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubProps" /></a></li>
+                    </ul>
+                </div>
+                <div class="modal-footer dk-modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Phenotype Modal- -->
-<div class="modal fade" id="phenotypeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubPheno" /></h4>
-                <p><g:message code="variantSearch.results.modal.addSubPheno.subtitle" /></p>
-            </div>
-            <div class="modal-body">
-                <div>
+    <!-- Phenotype Modal- -->
+    <div class="modal fade" id="{{phenotypeModal}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubPheno" /></h4>
+                    <p><g:message code="variantSearch.results.modal.addSubPheno.subtitle" /></p>
+                </div>
+                <div class="modal-body">
+                    <div>
 
-                    <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.subPheno" /></a></li>
-                        <li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.addPheno" /></a></li>
-                    </ul>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.subPheno" /></a></li>
+                            <li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.addPheno" /></a></li>
+                        </ul>
 
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="subtract_phenotype">
-                            <form class="dk-modal-form">
-                                <div id="subtractPhenotypesCheckboxes" class="dk-modal-form-input-group">
-                                </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
-                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="subtract_phenotype">
+                                <form class="dk-modal-form">
+                                    <div id="subtractPhenotypesCheckboxes" class="dk-modal-form-input-group">
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                                    <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
 
-                            </form>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="add_phenotype">
-                            <form class="dk-modal-form">
-                                <div class="dk-modal-form-input-group">
-                                    <div class="dk-modal-form-input-row">
-                                        <div class="dk-variant-search-builder-title">
-                                            <g:message code="searchBuilder.traitOrDisease.prompt" />
+                                </form>
+                            </div>
+                            <div role="tabpanel" class="tab-pane" id="add_phenotype">
+                                <form class="dk-modal-form">
+                                    <div class="dk-modal-form-input-group">
+                                        <div class="dk-modal-form-input-row">
+                                            <div class="dk-variant-search-builder-title">
+                                                <g:message code="searchBuilder.traitOrDisease.prompt" />
+                                            </div>
+                                            <div class="dk-variant-search-builder-ui">
+                                                <select id="{{phenotypeAddition}}" class="form-control" onchange="mpgSoftware.variantSearchResults.phenotypeSelected(undefined,'{{uniqueRoot}}')">
+                                                </select>
+                                            </div>
                                         </div>
-                                        <div class="dk-variant-search-builder-ui">
-                                            <select id="{{phenotypeAddition}}" class="form-control" onchange="mpgSoftware.variantSearchResults.phenotypeSelected(undefined,'{{uniqueRoot}}')">
-                                            </select>
+
+                                        <div class="dk-modal-form-input-row">
+                                            <div class="dk-variant-search-builder-title">
+                                                <g:message code="searchBuilder.dataset.prompt" />
+                                            </div>
+                                            <div class="dk-variant-search-builder-ui">
+                                                <select id="{{phenotypeAdditionDataset}}" class="form-control" onchange="mpgSoftware.variantSearchResults.datasetSelected(undefined,'{{uniqueRoot}}')">
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div id="{{phenotypeCohorts}}" class="dk-modal-form-input-row" style="display: none;">
+                                            <div class="dk-variant-search-builder-title">
+                                                <g:message code="variantSearch.results.modal.cohortOptional" />
+                                            </div>
+                                            <div class="dk-variant-search-builder-ui">
+                                                <select id="{{phenotypeAdditionCohort}}" class="form-control" style="max-width: 300px;">
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-
-                                    <div class="dk-modal-form-input-row">
-                                        <div class="dk-variant-search-builder-title">
-                                            <g:message code="searchBuilder.dataset.prompt" />
-                                        </div>
-                                        <div class="dk-variant-search-builder-ui">
-                                            <select id="{{phenotypeAdditionDataset}}" class="form-control" onchange="mpgSoftware.variantSearchResults.datasetSelected(undefined,'{{uniqueRoot}}')">
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div id="{{phenotypeCohorts}}" class="dk-modal-form-input-row" style="display: none;">
-                                        <div class="dk-variant-search-builder-title">
-                                            <g:message code="variantSearch.results.modal.cohortOptional" />
-                                        </div>
-                                        <div class="dk-variant-search-builder-ui">
-                                            <select id="{{phenotypeAdditionCohort}}" class="form-control" style="max-width: 300px;">
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
-                                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
-                            </form>
+                                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                                    <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!--dataset Modal- -->
-<div class="modal fade" id="datasetModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubDatasets" /></h4>
-                <p><g:message code="variantSearch.results.modal.addSubDatasets.subtitle" /></p>
-            </div>
-            <div class="modal-body">
-
-                <!-- Nav tabs -->
-                <ul id="datasetTabList" class="nav nav-tabs" role="tablist">
-                </ul>
-
-                <!-- Tab panes -->
-                <div id="datasetSelections" class="tab-content">
+    <!--dataset Modal- -->
+    <div class="modal fade" id="{{datasetModal}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubDatasets" /></h4>
+                    <p><g:message code="variantSearch.results.modal.addSubDatasets.subtitle" /></p>
                 </div>
+                <div class="modal-body">
+
+                    <!-- Nav tabs -->
+                    <ul id="{{datasetTabList}}" class="nav nav-tabs" role="tablist">
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div id="{{datasetSelections}}" class="tab-content">
+                    </div>
+                    <div class="modal-footer dk-modal-footer">
+                        <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('datasets',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                        <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- properties Modal- -->
+    <div class="modal fade" id="{{propertiesModal}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubProps" /></h4>
+                    <p><g:message code="variantSearch.results.modal.addSubProps.subtitle" /></p>
+                </div>
+                <div class="modal-body">
+
+                    <!-- Nav tabs -->
+                    <ul id="{{propertiesTabList}}" class="nav nav-tabs" role="tablist">
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div id="{{propertiesTabPanes}}" class="tab-content">
+                    </div>
+
+
+                </div>
+                <!-- modal body ends -->
                 <div class="modal-footer dk-modal-footer">
-                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('datasets',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                    <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('properties',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
                     <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
                 </div>
             </div>
         </div>
     </div>
-</div>
-
-
-<!-- properties Modal- -->
-<div class="modal fade" id="propertiesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubProps" /></h4>
-                <p><g:message code="variantSearch.results.modal.addSubProps.subtitle" /></p>
-            </div>
-            <div class="modal-body">
-
-                <!-- Nav tabs -->
-                <ul id="propertiesTabList" class="nav nav-tabs" role="tablist">
-                </ul>
-
-                <!-- Tab panes -->
-                <div id="propertiesTabPanes" class="tab-content">
-                </div>
-
-
-            </div>
-            <!-- modal body ends -->
-            <div class="modal-footer dk-modal-footer">
-                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('properties',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
-                <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
-            </div>
-        </div>
-    </div>
-</div>
 </script>
 <script id="dataRegionTemplate"  type="x-tmpl-mustache">
     <g:message code="variantTable.regionSummary.regionContains" default="This region contains the following genes:"/>
