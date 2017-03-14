@@ -38,8 +38,10 @@
             copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
             printMsg:'<g:message code="table.buttons.printText" default="Print me!" />',
             commonPropsMsg:'<g:message code="variantTable.columnHeaders.commonProperties"/>',
+            geneNamesToDisplay:"${geneNamesToDisplay}",
+            regionSpecification:'${regionSpecification}',
             uniqueRoot:"x"};
-        mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors,"${geneNamesToDisplay}");
+        mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors);
 
     });
 

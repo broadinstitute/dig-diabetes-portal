@@ -24,6 +24,7 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof myVarsToRemember.uniqueRoot === 'undefined'){
                     varsToRemember = myVarsToRemember;
                 } else {
+                    // create strings that will be used as IDs, guaranteed unique based on uniqueRoot
                     myVarsToRemember["variantTableResults"] = myVarsToRemember.uniqueRoot+'variantTableResults';
                     myVarsToRemember["variantTableHeaderRow"] = myVarsToRemember.uniqueRoot+'variantTableHeaderRow';
                     myVarsToRemember["variantTableHeaderRow2"] = myVarsToRemember.variantTableHeaderRow+"2";
@@ -45,8 +46,18 @@ var mpgSoftware = mpgSoftware || {};
                     myVarsToRemember["phenotypeAdditionDataset"] = myVarsToRemember.uniqueRoot+"phenotypeAdditionDataset";
                     myVarsToRemember["phenotypeAdditionCohort"] = myVarsToRemember.uniqueRoot+"phenotypeAdditionCohort";
                     myVarsToRemember["phenotypeCohorts"] = myVarsToRemember.uniqueRoot+"phenotypeCohorts";
+                    myVarsToRemember["subtractPhenotypesCheckboxes"] = myVarsToRemember.uniqueRoot+"subtractPhenotypesCheckboxes";
                     myVarsToRemember["linkToSave"] = myVarsToRemember.uniqueRoot+"linkToSave";
                     var dataNodeName = myVarsToRemember.uniqueRoot+"_data";
+                    // additional data preprocessing
+                    myVarsToRemember["allGenes"] = myVarsToRemember.geneNamesToDisplay.replace("[","").replace("]","").split(',');
+                    myVarsToRemember["namedGeneArray"] = [];
+                    if ((myVarsToRemember["allGenes"].length>0)&&
+                        (myVarsToRemember["allGenes"][0].length>0)) {
+                        myVarsToRemember["namedGeneArray"] = _.map(myVarsToRemember["allGenes"], function (o) {
+                            return {'name': o}
+                        });
+                    }
                     var dataNode = $('#'+dataNodeName);
                     if (!$.contains($('body'),dataNode[0])){
                         $('body').append('<div id="'+dataNodeName+'">');
@@ -253,12 +264,12 @@ var mpgSoftware = mpgSoftware || {};
 
             // subtract phenotypes tab
             // first, remove any phenotypes listed that are no longer displayed
-            _.forEach($('#subtractPhenotypesCheckboxes > div'), function(item) {
+            _.forEach($('#'+passedInVars.subtractPhenotypesCheckboxes+' > div'), function(item) {
                 if(! displayedPhenotypes.includes($(item).attr('data-phenotype'))) {
                     $(item).remove();
                 }
             });
-            var listedPhenotypes = _.map($('#subtractPhenotypesCheckboxes > div'), function(item) {
+            var listedPhenotypes = _.map($('#'+passedInVars.subtractPhenotypesCheckboxes+' > div'), function(item) {
                 return $(item).attr('data-phenotype');
             });
             // phenotypesToAdd is any phenotype that wasn't previously displayed
@@ -274,7 +285,7 @@ var mpgSoftware = mpgSoftware || {};
                 var label = $('<label />').append(newBox);
                 label.append(translationFunction(phenotype));
                 var checkboxDiv = $('<div />').addClass('checkbox').attr({'data-phenotype': phenotype}).append(label);
-                $('#subtractPhenotypesCheckboxes').append(checkboxDiv);
+                $('#'+passedInVars.subtractPhenotypesCheckboxes).append(checkboxDiv);
             });
 
             // add phenotypes tab
@@ -668,9 +679,10 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
-        var buildVariantResultsTable = function (drivingVariables,geneNamesToDisplay){
+        var buildVariantResultsTable = function (drivingVariables){
             setVarsToRemember(drivingVariables); // since this is our first Variant Results Table call, store the driving variables here
             var root = drivingVariables.uniqueRoot;
+            drivingVariables = getVarsToRemember(undefined,root);
             initializeAdditionalProperties (drivingVariables.additionalPropertiesInfo);
             $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
                 drivingVariables));
@@ -684,14 +696,9 @@ var mpgSoftware = mpgSoftware || {};
 
             $("#"+drivingVariables.dataModalGoesHere).empty().append(
                 Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
-            var allGenes = geneNamesToDisplay.replace("[","").replace("]","").split(',');
-            if ((allGenes.length>0)&&
-                (allGenes[0].length>0)){
-                var namedGeneArray = _.map(allGenes,function(o){return {'name':o}});
+            if (drivingVariables["namedGeneArray"].length>0){
                 $(".regionDescr").empty().append(
-                    Mustache.render( $('#dataRegionTemplate')[0].innerHTML,
-                        { geneNamesToDisplay: namedGeneArray,
-                            regionSpecification:'${regionSpecification}'}));
+                    Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables));
             }
             var translatedFilterArray = drivingVariables.translatedFiltersInfo.split(',');
             var namedTranslatedFilterArray = _.map(translatedFilterArray,function(o){return {'name':o}});

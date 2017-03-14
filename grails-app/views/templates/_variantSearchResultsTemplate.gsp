@@ -178,22 +178,22 @@
 
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" class="active"><a href="#subtract_phenotype" aria-controls="subtract_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.subPheno" /></a></li>
-                            <li role="presentation"><a href="#add_phenotype" aria-controls="add_phenotype" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.addPheno" /></a></li>
+                            <li role="presentation" class="active"><a href="#{{subtract_phenotype}}" aria-controls="{{subtract_phenotype}}" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.subPheno" /></a></li>
+                            <li role="presentation"><a href="#{{add_phenotype}}" aria-controls="{{add_phenotype}}" role="tab" data-toggle="tab"><g:message code="variantSearch.results.modal.addPheno" /></a></li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane active" id="subtract_phenotype">
+                            <div role="tabpanel" class="tab-pane active" id="{{subtract_phenotype}}">
                                 <form class="dk-modal-form">
-                                    <div id="subtractPhenotypesCheckboxes" class="dk-modal-form-input-group">
+                                    <div id="{{subtractPhenotypesCheckboxes}}" class="dk-modal-form-input-group">
                                     </div>
                                     <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('phenotype',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
                                     <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
 
                                 </form>
                             </div>
-                            <div role="tabpanel" class="tab-pane" id="add_phenotype">
+                            <div role="tabpanel" class="tab-pane" id="{{add_phenotype}}">
                                 <form class="dk-modal-form">
                                     <div class="dk-modal-form-input-group">
                                         <div class="dk-modal-form-input-row">
@@ -298,11 +298,11 @@
 <div class="row clearfix" style="margin:5px 0 5px 0">
     <div class="col-md-6" style="text-align: left; max-height: 200px; overflow-y: auto">
         <ul id="geneNames">
-            {{#geneNamesToDisplay}}
+            {{#namedGeneArray}}
                 <li><a class="genelink" href="<g:createLink controller='gene'
                                                             action='geneInfo'/>/{{name}}">{{name}}</a>
                 </li>
-            {{/geneNamesToDisplay}}
+            {{/namedGeneArray}}
         </ul>
     </div>
 
