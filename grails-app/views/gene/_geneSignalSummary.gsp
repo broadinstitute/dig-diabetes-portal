@@ -122,7 +122,7 @@
 <div id="BurdenHiddenHere" style="display:none">
     <g:render template="/templates/burdenTestSharedTemplate" />
 </div>
-
+<g:render template="/templates/variantSearchResultsTemplate" />
 
 <script>
     var mpgSoftware = mpgSoftware || {};

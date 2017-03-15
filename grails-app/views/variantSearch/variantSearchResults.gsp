@@ -19,6 +19,7 @@
 
     $(document).ready(function () {
         var domSelectors = {
+            interfaceGoesHere: '#variantSearchResultsInterface',
             retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
             geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',
             variantInfoUrl:'<g:createLink controller="variantInfo" action="variantInfo" />',

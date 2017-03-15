@@ -684,7 +684,7 @@ var mpgSoftware = mpgSoftware || {};
             var root = drivingVariables.uniqueRoot;
             drivingVariables = getVarsToRemember(undefined,root);
             initializeAdditionalProperties (drivingVariables.additionalPropertiesInfo);
-            $("#variantSearchResultsInterface").empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
+            $(drivingVariables.interfaceGoesHere).empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
                 drivingVariables));
             $("#"+drivingVariables.holderForVariantSearchResults).empty().append(
                 Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,drivingVariables));
