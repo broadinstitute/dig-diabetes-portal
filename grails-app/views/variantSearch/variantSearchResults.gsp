@@ -19,7 +19,13 @@
 
     $(document).ready(function () {
         var domSelectors = {
-            interfaceGoesHere: '#variantSearchResultsInterface',
+
+            interfaceGoesHere: '#variantSearchResultsInterface',//  everything in the interface will be hanging off here
+
+            // control the way the table is displayed
+            variantResultsTableHeader:[1],
+
+            // a bunch of URLs we need to pass around
             retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
             geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',
             variantInfoUrl:'<g:createLink controller="variantInfo" action="variantInfo" />',
@@ -28,19 +34,23 @@
             launchAVariantSearchUrl: "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>",
             retrieveDatasetsAjaxUrl:"${g.createLink(controller: 'VariantSearch', action: 'retrieveDatasetsAjax')}",
             linkBackToSearchDefinitionPage:'<a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams: "${encodedParameters}"]'/>">',
-            variantTableResults:'variantTableResults',
-            queryFilterInfo:"<%=queryFilters%>",
+
+            // information we need to pass into the routine.  We should keep this strictly minimal
+            queryFiltersInfo:"<%=queryFilters%>",
             proteinEffectsListInfo:"${proteinEffectsList}",
             localeInfo:"${locale}",
-            queryFiltersInfo:"<%= queryFilters %>",
             translatedFiltersInfo:"<%= translatedFilters %>",
             additionalPropertiesInfo:"<%=additionalProperties%>",
             filtersAsJsonInfo:filtersAsJson,
+            geneNamesToDisplay:"${geneNamesToDisplay}",
+            regionSpecification:'${regionSpecification}',
+
+            // message strings
             copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
             printMsg:'<g:message code="table.buttons.printText" default="Print me!" />',
             commonPropsMsg:'<g:message code="variantTable.columnHeaders.commonProperties"/>',
-            geneNamesToDisplay:"${geneNamesToDisplay}",
-            regionSpecification:'${regionSpecification}',
+
+            //  The string must be unique for every instantiation on a single page
             uniqueRoot:"x"};
         mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors);
 

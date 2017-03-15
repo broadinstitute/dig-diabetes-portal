@@ -1,6 +1,7 @@
 <script id="locusZoomTemplate"  type="x-tmpl-mustache">
         <div style="margin-top: 20px">
 
+
             <div style="display: flex; justify-content: space-around;">
                 <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
 
@@ -145,6 +146,7 @@
 
 
 <script id="commonVariantTemplate"  type="x-tmpl-mustache">
+
             <div class="row" style="margin-top: 15px;">
                 <h3 class="specialTitle">Common variants</h3>
             </div>
@@ -164,6 +166,12 @@
                                   <div class="dropdown-menu dsFilter" aria-labelledby="dropdownMenuButton" style="padding: 0 5px 0 5px;">
                                   </div>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div id="variantSearchResultsInterface"></div>
                         </div>
                     </div>
 
@@ -188,6 +196,7 @@
                 <div class="col-xs-12">
                     <div class="variantCategoryHolder">
                         <div id="commonVariantsLocation"></div>
+
                         <div id="locusZoomLocation" class="locusZoomLocation"></div>
                         <div class="igvGoesHere"></div>
                     </div>
@@ -227,6 +236,7 @@
                 <div class="col-xs-12">
                     <div class="variantCategoryHolder">
                         <div id="commonVariantsLocation"></div>
+
                         <div id="locusZoomLocation" class="locusZoomLocation"></div>
                         <div class="igvGoesHere"></div>
                     </div>

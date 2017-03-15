@@ -131,6 +131,7 @@ modules = {
         resource url: 'css/dport/tableViewer.css'
     }
     geneSignalSummary {
+        dependsOn 'variantSearchResults'
         resource url: 'js/lib/dport/geneSignalSummary.js'
         resource url: 'css/dport/geneSignalSummary.css'
     }

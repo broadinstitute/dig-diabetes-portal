@@ -111,6 +111,7 @@
 
     <div class="container dk-t2d-back-to-search"></div>
 
+    {{#variantResultsTableHeader}}
     <div class="container dk-t2d-content">
 
         <h1><g:message code="variantTable.searchResults.title" default="Variant search results"/></h1>
@@ -126,6 +127,7 @@
 
     </div>
 
+
     <div class="container dk-variant-table-header">
         <div class="row">
             <div class="text-right">
@@ -134,6 +136,13 @@
         </div>
     </div>
     <hr />
+    {{/variantResultsTableHeader}}
+    {{^variantResultsTableHeader}}
+        <div class="text-left">
+            <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#{{dataModal}}">Add / Subtract Data</button>
+        </div>
+    {{/variantResultsTableHeader}}
+
 
     <div id="{{holderForVariantSearchResults}}" class="container-fluid" ></div>
 

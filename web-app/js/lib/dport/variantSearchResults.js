@@ -249,11 +249,11 @@ var mpgSoftware = mpgSoftware || {};
             // populate the modals to add/remove properties
             // first do some processing on the search queries, so we know what can't
             // be removed
-            var phenotypesInQueries = _.chain(filtersAsJson).map('phenotype').uniq().filter().value();
-            var datasetsInQueries = _.chain(filtersAsJson).map(function(q) {
+            var phenotypesInQueries = _.chain(passedInVars.filtersAsJsonInfo).map('phenotype').uniq().filter().value();
+            var datasetsInQueries = _.chain(passedInVars.filtersAsJsonInfo).map(function(q) {
                 return q.phenotype + '-' + q.dataset;
             }).uniq().value();
-            var propertiesInQueries = _.chain(filtersAsJson).map(function(q) {
+            var propertiesInQueries = _.chain(passedInVars.filtersAsJsonInfo).map(function(q) {
                 return q.phenotype + '-' + q.dataset + '-' + q.prop;
             }).uniq().value();
 
