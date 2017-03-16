@@ -1,5 +1,5 @@
 <div class="panel-body">
-    <h4>Data set</h4>
+    <h4>Dataset</h4>
 
     <p>
     Download URL: <a href="https://www.magicinvestigators.org/downloads/" target="_blank">https://www.magicinvestigators.org/downloads/</a></p><br/>
@@ -10,6 +10,11 @@
 <g:message code="informational.shared.publications.Walford_2016_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Walford_2016_Diabetes.citation"></g:message></div>  
 </div></p>
+
+%{--<p><div class="paper">  <g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet"></g:message><br>--}%
+    %{--<g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
+    %{--<div class="citation"><g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet.citation"></g:message></div>  --}%
+%{--</div></p>--}%
 
 <p><div class="paper">  <g:message code="informational.shared.publications.Scott_2012_NatGenet"></g:message><br>
 <g:message code="informational.shared.publications.Scott_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
@@ -34,7 +39,7 @@
 </div></p><br>
 
 
-<h4>Data set phenotypes</h4>
+<h4>Dataset phenotypes</h4>
 <ul>
 <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
@@ -46,6 +51,17 @@
     <li><g:message code="informational.shared.traits.HOMA-IR"></g:message></li>
     <li><g:message code="informational.shared.traits.proinsulin"></g:message></li>
     <li><g:message code="informational.shared.traits.Stumvoll_ISI"></g:message></li>
+
+%{--<li><g:message code="informational.shared.traits.CIR"></g:message></li>--}%
+    %{--<li><g:message code="informational.shared.traits.CIRadjISI"></g:message></li>--}%
+%{--<li><g:message code="informational.shared.traits.AUCinsAUCgluc"></g:message></li>--}%
+    %{--<li><g:message code="informational.shared.traits.DI"></g:message></li>--}%
+%{--<li><g:message code="informational.shared.traits.Incr30"></g:message></li>--}%
+    %{--<li><g:message code="informational.shared.traits.Ins30"></g:message></li>--}%
+%{--<li><g:message code="informational.shared.traits.Ins30adjBMI"></g:message></li>--}%
+    %{--<li><g:message code="informational.shared.traits.AUCins"></g:message></li>--}%
+%{--<li><g:message code="informational.shared.traits.ISI"></g:message></li>--}%
+
 </ul><br>
     
 
@@ -62,5 +78,8 @@
 <p><g:message code="informational.data.exptsumm.MAGIC3"></g:message></p>
 <h5>January 2017 updates</h5>
 <p><g:message code="informational.data.exptsumm.MAGIC4"></g:message></p>
+
+%{--<h5>March 2017 updates</h5>--}%
+%{--<p><g:message code="informational.data.exptsumm.MAGIC5"></g:message></p>--}%
 </div>
 
