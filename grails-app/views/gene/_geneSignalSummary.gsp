@@ -168,6 +168,10 @@
                     var domSelectors = {
                         interfaceGoesHere: '#variantSearchResultsInterface',
                         variantResultsTableHeader:[],
+                        makeAggregatedDataCall: true,
+                        retrieveTopVariantsAcrossSgs:'<g:createLink controller="variantSearch" action="retrieveTopVariantsAcrossSgsWithSimulatedMetadata" />',
+                        geneName:'${geneName}',
+                        phenotypeCode:phenotypeCode,
                         retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
                         geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',
                         variantInfoUrl:'<g:createLink controller="variantInfo" action="variantInfo" />',
@@ -306,7 +310,7 @@
                             mpgSoftware.locusZoom.rescaleSVG();
                         }
                     });
-                    mpgSoftware.geneSignalSummary.displayVariantResultsTable();
+                    mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
                 };
 
 

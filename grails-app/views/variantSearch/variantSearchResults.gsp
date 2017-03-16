@@ -22,10 +22,12 @@
 
             interfaceGoesHere: '#variantSearchResultsInterface',//  everything in the interface will be hanging off here
 
-            // control the way the table is displayed
+            // control the way the table is utilized
             variantResultsTableHeader:[1],
+            makeAggregatedDataCall: false,
 
             // a bunch of URLs we need to pass around
+            retrieveTopVariantsAcrossSgs:'<g:createLink controller="variantSearch" action="retrieveTopVariantsAcrossSgs" />',
             retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
             geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',
             variantInfoUrl:'<g:createLink controller="variantInfo" action="variantInfo" />',

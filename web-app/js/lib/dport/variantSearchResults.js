@@ -128,6 +128,38 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
+
+
+        // this gets the data that builds the table structure. the table is populated via a later call to
+        // variantProcessing.iterativeVariantTableFiller
+        var loadVariantTableFromAggregatedTableViaAjax = function (variableHolder) {
+            //additionalProperties = encodeURIComponent(additionalProperties.join(':'));
+            loading = $('#spinner').show();
+            return $.ajax({
+                type: 'POST',
+                cache: false,
+                data: {
+                    'geneToSummarize': variableHolder.geneName,
+                    'phenotype': variableHolder.phenotypeCode
+                    //'filtersAsJson': variableHolder.filtersAsJsonInfo
+                },
+                url: variableHolder.retrieveTopVariantsAcrossSgs,
+                timeout: 90 * 1000,
+                async: true,
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if(errorThrown == 'timeout') {
+                        // attach the data for the error message so we know what queries are taking a long time
+                        XMLHttpRequest.data = this.data;
+                        var errorMessage = $('<h4></h4>').text('The query you requested took too long to perform. Please try restricting your criteria and searching again.').css('color', 'red');
+                        $('#variantTable').html(errorMessage);
+                    }
+                    loading.hide();
+                    core.errorReporter(XMLHttpRequest, errorThrown);
+                }
+            });
+        };
+
+
         var dynamicFillTheFields = function (data,variantTableSelector,variantTableSelectorName) {
             variantTableSelector = getVarsToRemember(variantTableSelector,variantTableSelectorName);
 
@@ -143,7 +175,7 @@ var mpgSoftware = mpgSoftware || {};
                 $( '#'+variantTableSelector.variantTableResults).DataTable().destroy();
             }
             $('#'+variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header dk-common"/>');
-            $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common"><g:message code="variantTable.columnHeaders.commonProperties"/></th>');
+            $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common">'+variantTableSelector.commonPropsMsg+'</th>');
             $('#'+variantTableSelector.variantTableHeaderRow3+', #'+variantTableSelector.variantTableBody).empty();
 
             // common props section
@@ -513,40 +545,75 @@ var mpgSoftware = mpgSoftware || {};
         // it's here because of all the URLs/data that need to be filled in
         var loadTheTable = function (variantTableSelector,domHolderName) {
             variantTableSelector = getVarsToRemember(variantTableSelector,domHolderName);
-            mpgSoftware.variantSearchResults.loadVariantTableViaAjax( variantTableSelector.queryFiltersInfo,
-                variantTableSelector.variantSearchAndResultColumnsInfoUrl ).then(function (data, status) {
-                if (status != 'success') {
-                    // just give up
-                    return;
-                }
-                if (data.errorMsg != ''){
-                    alert(data.errorMsg);
-                    var loader = $('#spinner');
-                    loader.hide();
-                    return;
-                }
-                var additionalProps = encodeURIComponent(additionalProperties.join(':'));
-                var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector,domHolderName);
+            if (variantTableSelector.makeAggregatedDataCall){
+                loadVariantTableFromAggregatedTableViaAjax( variantTableSelector ).then(function (data, status) {
+                        if (status != 'success') {
+                            // just give up
+                            return;
+                        }
+                        if (data.errorMsg != ''){
+                            alert(data.errorMsg);
+                            var loader = $('#spinner');
+                            loader.hide();
+                            return;
+                        }
+                        var additionalProps = encodeURIComponent(additionalProperties.join(':'));
+                        var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector,domHolderName);
 
-                var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
-                variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
-                    variantTableSelector.variantSearchAndResultColumnsDataUrl,
-                    variantTableSelector.variantInfoUrl,
-                    variantTableSelector.geneInfoUrl,
-                    proteinEffectList.proteinEffectMap,
-                    variantTableSelector.localeInfo,
-                    variantTableSelector.copyMsg,
-                    variantTableSelector.printMsg,
-                    {
-                        filters: variantTableSelector.queryFiltersInfo,
-                        properties: additionalProps
-                    },
-                    variantTableSelector.translatedFiltersInfo,
-                    variantTableSelector
-                );
-                generateModal(data,variantTableSelector,domHolderName);
+                        var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
+                        variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
+                            variantTableSelector.retrieveTopVariantsAcrossSgs,
+                            variantTableSelector.variantInfoUrl,
+                            variantTableSelector.geneInfoUrl,
+                            proteinEffectList.proteinEffectMap,
+                            variantTableSelector.localeInfo,
+                            variantTableSelector.copyMsg,
+                            variantTableSelector.printMsg,
+                            {
+                                filters: variantTableSelector.queryFiltersInfo,
+                                properties: additionalProps
+                            },
+                            variantTableSelector.translatedFiltersInfo,
+                            variantTableSelector
+                        );
+                        generateModal(data,variantTableSelector,domHolderName);
+                    });
+            } else {
+                mpgSoftware.variantSearchResults.loadVariantTableViaAjax( variantTableSelector.queryFiltersInfo,
+                    variantTableSelector.variantSearchAndResultColumnsInfoUrl ).then(function (data, status) {
+                        if (status != 'success') {
+                            // just give up
+                            return;
+                        }
+                        if (data.errorMsg != ''){
+                            alert(data.errorMsg);
+                            var loader = $('#spinner');
+                            loader.hide();
+                            return;
+                        }
+                        var additionalProps = encodeURIComponent(additionalProperties.join(':'));
+                        var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector,domHolderName);
 
-            });
+                        var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
+                        variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
+                            variantTableSelector.variantSearchAndResultColumnsDataUrl,
+                            variantTableSelector.variantInfoUrl,
+                            variantTableSelector.geneInfoUrl,
+                            proteinEffectList.proteinEffectMap,
+                            variantTableSelector.localeInfo,
+                            variantTableSelector.copyMsg,
+                            variantTableSelector.printMsg,
+                            {
+                                filters: variantTableSelector.queryFiltersInfo,
+                                properties: additionalProps
+                            },
+                            variantTableSelector.translatedFiltersInfo,
+                            variantTableSelector
+                        );
+                        generateModal(data,variantTableSelector,domHolderName);
+                    });
+            }
+
         }
 
         // the following functions are here (instead of in a separate JS file or something) because

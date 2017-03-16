@@ -456,30 +456,6 @@ class VariantSearchController {
         }
 
 
-
-
-
-
-            //JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
-//        if (dataJsonObject.variants) {
-//                for (List result in dataJsonObject.variants){
-//                    for (Map pval in result) {
-//
-//                        if (pval.containsKey("Consequence")){
-//                            List<String> consequenceList = pval["Consequence"]?.tokenize(",")
-//                            List<String> translatedConsequenceList = []
-//                            for (String consequence in consequenceList){
-//                                translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
-//                            }
-//                            pval["Consequence"] = translatedConsequenceList.join(", ")
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-
-
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject]
         }
@@ -487,6 +463,125 @@ class VariantSearchController {
     }
 
 
+    def retrieveTopVariantsAcrossSgsWithSimulatedMetadata (){
+        String phenotypeName = ''
+        String geneName
+        if (params.phenotype) {
+            phenotypeName = params.phenotype
+            log.debug "variantSearch params.phenotype = ${params.phenotype}"
+        }
+        if (params.geneToSummarize) {
+            geneName = params.geneToSummarize
+            log.debug "variantSearch params.geneToSummarize = ${params.geneToSummarize}"
+        }
+        String filtersAsJson = params.filtersAsJson
+
+
+        String currentVersion = metaDataService.getDataVersion()
+        List<String> allTechnologies =  metaDataService.getTechnologyListByVersion(currentVersion)
+        List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
+
+        JSONObject dataJsonObject
+        //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
+
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+
+        if (dataJsonObject == null){
+            // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
+            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
+        }
+
+
+        if (dataJsonObject.variants) {
+            for (Map pval in dataJsonObject.variants){
+                //for (Map pval in result) {
+                if (pval.containsKey("Consequence")){
+                    List<String> consequenceList = pval["Consequence"]?.tokenize(",")
+                    List<String> translatedConsequenceList = []
+                    for (String consequence in consequenceList){
+                        translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+                    }
+                    pval["Consequence"] = translatedConsequenceList.join(", ")
+                }
+                if (pval.containsKey("dataset")){
+                    pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
+                }
+                if (pval.containsKey("phenotype")){
+                    pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
+                }
+                //}
+            }
+
+        }
+
+//        LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${filtersAsJson}]", requestedProperties)
+//        JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
+
+        LinkedHashMap fullPropertyTree = metaDataService.getFullPropertyTree()
+        JSONObject propertyMap = sharedToolsService.packageUpATreeAsJson(fullPropertyTree)
+
+        JSONObject datasetStructure = [:]
+        List<String> allPhenotypes = this.metaDataService.getEveryPhenotype(true)
+        allPhenotypes.each { phenotype ->
+            HashMap<String, HashMap> datasetMap = this.metaDataService.getSampleGroupStructureForPhenotypeAsJson(phenotype)
+            datasetStructure[phenotype] = addNamesToDatasetMap(datasetMap);
+        }
+
+        JSONObject commonPropertiesJsonObject = this.metaDataService.getCommonPropertiesAsJson(true);
+
+        // prepare translation object
+        Set<String> metadataNames = metaDataService.getEveryMetadataStringThatMightNeedTranslating()
+        JSONObject translationDictionary = []
+        metadataNames.each { name ->
+            translationDictionary[name] = g.message(code: "metadata." + name, default: name)
+        }
+
+        List<LinkedHashMap> convertedDataStruct = []
+        dataJsonObject["variants"].each {
+            convertedDataStruct << ["VAR_ID":it."VAR_ID",
+                                    "DBSNP_ID":"DBSNP_ID",
+                                    "CHROM":it."CHROM",
+                                    "POS":it."POS",
+                                    "CLOSEST_GENE":"CLOSEST_GENE",
+                                    "Protein_change":"Protein_change",
+                                    "Consequence":"Consequence",
+                                    "P_VALUE":["ExChip_CAMP_mdv25":["FI":it."P_VALUE"]],
+                                    "BETA":["ExChip_CAMP_mdv25":["FI":it."BETA"]]
+            ]
+        }
+        JSONArray convertedDataJsonObject = convertedDataStruct as JSONArray
+
+        LinkedHashMap columns = [
+                "cproperty":["VAR_ID",
+                             "DBSNP_ID",
+                             "CHROM",
+                             "POS",
+                             "CLOSEST_GENE",
+                             "Protein_change",
+                             "Consequence"],
+                "dproperty":["FI":["ExChip_CAMP_mdv25":[]]],
+                "pproperty":["FI":["ExChip_CAMP_mdv25":["P_VALUE","BETA"]]]
+        ]
+        JSONObject columnsAsJsonObject = columns as JSONObject
+
+
+        render(status: 200, contentType: "application/json") {
+            [variants                : convertedDataJsonObject,
+             columns                 : columnsAsJsonObject,
+             metadata                : propertyMap,
+             datasetStructure        : datasetStructure,
+             cProperties             : commonPropertiesJsonObject,
+             translationDictionary   : translationDictionary,
+             numberOfVariants        : dataJsonObject.length(),
+             errorMsg                : '',
+             draw           : 2,//Integer.parseInt(params.draw),
+             recordsTotal   : dataJsonObject["variants"].size(),
+             recordsFiltered: dataJsonObject["variants"].size(),
+             data           : convertedDataJsonObject
+            ]
+        }
+
+    }
 
 
 
