@@ -45,7 +45,7 @@
     <li><g:message code="informational.shared.traits.two_hour_insulin"></g:message></li>
     <li><g:message code="informational.shared.traits.HOMA-IR"></g:message></li>
     <li><g:message code="informational.shared.traits.proinsulin"></g:message></li>
-    <li><g:message code="informational.shared.traits.ISI"></g:message></li>
+    <li><g:message code="informational.shared.traits.Stumvoll_ISI"></g:message></li>
 </ul><br>
     
 
