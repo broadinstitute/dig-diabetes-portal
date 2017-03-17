@@ -425,7 +425,7 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
@@ -474,6 +474,15 @@ class VariantSearchController {
             geneName = params.geneToSummarize
             log.debug "variantSearch params.geneToSummarize = ${params.geneToSummarize}"
         }
+
+        int pageStart = -1
+        int pageSize = -1
+        if ((params.start!=null)&&(params.length!=null)){
+            pageStart = Integer.parseInt(params.start)
+            pageSize = Integer.parseInt(params.length)
+        }
+
+        //getDataQueryHolder.setPageStartAndSize(pageStart, pageSize)
         String filtersAsJson = params.filtersAsJson
 
 
@@ -484,7 +493,7 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
@@ -539,12 +548,11 @@ class VariantSearchController {
         List<LinkedHashMap> convertedDataStruct = []
         dataJsonObject["variants"].each {
             convertedDataStruct << ["VAR_ID":it."VAR_ID",
-                                    "DBSNP_ID":"DBSNP_ID",
-                                    "CHROM":it."CHROM",
-                                    "POS":it."POS",
+                                    "DBSNP_ID":it.DBSNP_ID,
+
                                     "CLOSEST_GENE":"CLOSEST_GENE",
-                                    "Protein_change":"Protein_change",
-                                    "Consequence":"Consequence",
+                                    "Protein_change":it.Protein_change,
+                                    "Consequence":it."Consequence",
                                     "P_VALUE":["ExChip_CAMP_mdv25":["FI":it."P_VALUE"]],
                                     "BETA":["ExChip_CAMP_mdv25":["FI":it."BETA"]]
             ]
@@ -554,8 +562,7 @@ class VariantSearchController {
         LinkedHashMap columns = [
                 "cproperty":["VAR_ID",
                              "DBSNP_ID",
-                             "CHROM",
-                             "POS",
+
                              "CLOSEST_GENE",
                              "Protein_change",
                              "Consequence"],

@@ -1983,8 +1983,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName) {
-        String specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}"}"""
+    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, int  startHere, int pageSize ) {
+        String specifyRequest
+        if ( ( startHere != -1 ) && (pageSize != -1)){
+            specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}"}""".toString()
+        } else {
+            specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}",
+"page_start": ${startHere},
+"page_size": ${pageSize} }""".toString()
+        }
+
         return postRestCall(specifyRequest, GET_DATA_AGGREGATION_URL)
     }
 

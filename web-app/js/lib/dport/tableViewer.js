@@ -380,7 +380,6 @@ var variantProcessing = (function () {
                 render: function(data, type, full, meta) {
                     // if Datatables is calling this function to do anything besides display data (ex. sorting),
                     // just return the data without processing it
-                    alert('draw me');
                     if(type != 'display') {
                         return data;
                     }
@@ -450,6 +449,8 @@ var variantProcessing = (function () {
                     d.geneToSummarize = variableHolder.geneName;
                     d.phenotype = variableHolder.phenotypeCode;
                     d.numberOfVariants = data.numberOfVariants;
+                    d.start = 0;
+                    d.length = 25;
                     // need to stringify because otherwise Groovy gets a lot of
                     // parameters that aren't grouped correctly
                     d.columns = JSON.stringify(d.columns);
