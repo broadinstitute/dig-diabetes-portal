@@ -200,7 +200,6 @@ t2dProd02BehindLoadBalancer {
 
 // individual servers
 t2dAws01RestServer {
-//    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
     base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
     name =  'aws/'
     path = 'gs/'
@@ -208,12 +207,17 @@ t2dAws01RestServer {
 
 
 t2dAwsStage01RestServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
     base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
     name =  'aws01/'
     path = 'gs/'
 }
+
+stageKb2NewCodeServer {
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
+    name =  'dccservices/'
+    path = ''
+}
+
 
 toddServer {
     base = 'http://dig-prod.broadinstitute.org:8087/'
@@ -256,7 +260,8 @@ localServer {
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
-server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+//server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
+server.URL = stageKb2NewCodeServer.base+stageKb2NewCodeServer.name+stageKb2NewCodeServer.path
 
 //server.URL = 'http://localhost:8888/dig-genome-store/gs/'
 // qa is probably right, the right now we need the tests to pass
@@ -280,6 +285,9 @@ burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broad
 burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
+burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 

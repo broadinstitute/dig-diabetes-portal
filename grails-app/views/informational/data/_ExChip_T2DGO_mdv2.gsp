@@ -1,39 +1,34 @@
 <div class="panel-body">
 
-    <h6 style="color:#ccc;">Data set phenotypes</h6>
+        <h4>Publications</h4>
+
+       <p><div class="paper">
+<g:message code="informational.shared.publications.Fuchsberger_2016_Nature"></g:message><br>
+<g:message code="informational.shared.publications.Fuchsberger_2016_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Fuchsberger_2016_Nature.citation"></g:message> </div>
+</div></p>
+
+    <h4>Dataset phenotypes</h4>
     <ul>
-        <li>Type 2 diabetes</li>
-        <li>Fasting glucose</li>
-        <li>Fasting insulin</li>
+        <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
+        <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
     </ul>
 
-    <h4>Data Set Subjects</h4>
+<h4>Projects</h4>
+<h4>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a
+        href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
+</small></h4>
 
-    <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+<p>The DIAGRAM consortium performs large-scale studies to characterize the genetic basis of type 2 diabetes, primarily focusing on samples of European descent.</p>
 
-        <tr><td>540</td><td>2,913</td><td><a onclick="showSection(event)">Massachusetts General Hospital Cardiology and Metabolic Patient cohort (CAMP MGH)</a>
+<h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d"
+                                                  target="_blank">Learn more ></a>
+</small></h4>
 
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">
-                            <ul>
-                                <li></li>
-                            </ul>
-                        </td>
-                        <td valign="top">
-                            <ul>
-                                <li></li>
-                            </ul>
-                        </td></tr>
-                </table>
-            </div></td><td>Mixed</td></tr>
-    </table>
-    <h6 style="color:#ccc;">Project</h6>
-    <h4>CAMP MGH</h4>
+<p>GoT2D led an effort to aggregate data for a meta-analysis of low-frequency variants in coding regions that influence risk of in type 2 diabetes and related traits such as LDL cholesterol levels. The study was based on data from high-density SNP genotyping with a custom array (the exome chip) in 82,000 people, of which 16,000 were funded by GoT2D. The dataset includes ~35,000 type 2 diabetes cases and ~51,000 controls, all of European ancestry.</p>
+<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a
+        href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
 
-    <p>The MGH Cardiology and Metabolic Patient (CAMP MGH) cohort comprises 3857 subjects recruited between 2008 and 2012. Two thirds of the subjects were drawn from patients who had appointments with a physician in the MGH Heart Center, while one third were recruited independent of any hospital visit. All subjects had plasma and serum samples collected, as well as blood for genomic DNA. Subjects with known diabetes had vascular reactivity measurements (FMD of brachial artery), while subjects without known diabetes had an oral glucose tolerance test. Exome Core Chip genotyping was performed on all subjects.</p>
+<p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis."</p>
 
 </div>

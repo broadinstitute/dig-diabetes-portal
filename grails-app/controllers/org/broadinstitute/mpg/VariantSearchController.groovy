@@ -466,6 +466,11 @@ class VariantSearchController {
     def retrieveTopVariantsAcrossSgsWithSimulatedMetadata (){
         String phenotypeName = ''
         String geneName
+        String drawReq = '2'
+        if (params.draw) {
+            drawReq = params.draw
+        }
+
         if (params.phenotype) {
             phenotypeName = params.phenotype
             log.debug "variantSearch params.phenotype = ${params.phenotype}"
@@ -549,8 +554,6 @@ class VariantSearchController {
         dataJsonObject["variants"].each {
             convertedDataStruct << ["VAR_ID":it."VAR_ID",
                                     "DBSNP_ID":it.DBSNP_ID,
-
-                                    "CLOSEST_GENE":"CLOSEST_GENE",
                                     "Protein_change":it.Protein_change,
                                     "Consequence":it."Consequence",
                                     "P_VALUE":["ExChip_CAMP_mdv25":["FI":it."P_VALUE"]],
@@ -562,8 +565,6 @@ class VariantSearchController {
         LinkedHashMap columns = [
                 "cproperty":["VAR_ID",
                              "DBSNP_ID",
-
-                             "CLOSEST_GENE",
                              "Protein_change",
                              "Consequence"],
                 "dproperty":["FI":["ExChip_CAMP_mdv25":[]]],
@@ -581,7 +582,7 @@ class VariantSearchController {
              translationDictionary   : translationDictionary,
              numberOfVariants        : dataJsonObject.length(),
              errorMsg                : '',
-             draw           : 2,//Integer.parseInt(params.draw),
+             draw           : Integer.parseInt(drawReq),
              recordsTotal   : dataJsonObject["variants"].size(),
              recordsFiltered: dataJsonObject["variants"].size(),
              data           : convertedDataJsonObject

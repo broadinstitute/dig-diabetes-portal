@@ -362,6 +362,7 @@ class RestServerService {
             this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2NewCode);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2PassThrough);
         }
 
         return this.burdenServerList;
@@ -1984,16 +1985,21 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, int  startHere, int pageSize ) {
-        String specifyRequest
-        if ( ( startHere != -1 ) && (pageSize != -1)){
-            specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}"}""".toString()
-        } else {
-            specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}",
-"page_start": ${startHere},
-"page_size": ${pageSize} }""".toString()
+        List<String> specifyRequestList = []
+        specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
+        if ((phenotype)&&(phenotype.length()>0)){
+            specifyRequestList << "\"phenotype\":\"${phenotype}\""
         }
-
-        return postRestCall(specifyRequest, GET_DATA_AGGREGATION_URL)
+        if (  startHere != -1 ){
+            specifyRequestList << "\"page_start\":${startHere}"
+        }
+        if (  pageSize != -1 ){
+            specifyRequestList << "\"page_size\":${pageSize}"
+        }
+        if ((geneName)&&(geneName.length()>0)){
+            specifyRequestList << "\"gene\":\"${geneName}\""
+        }
+        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
 
 

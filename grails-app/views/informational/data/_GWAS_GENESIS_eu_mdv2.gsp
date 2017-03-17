@@ -3,11 +3,40 @@
 <h4>Publications</h4>
 
 <p><div class="paper">
+<g:message code="informational.shared.publications.Chennamsetty_2016_CellRep"></g:message><br>
+<g:message code="informational.shared.publications.Chennamsetty_2016_CellRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Chennamsetty_2016_CellRep.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
 <g:message code="informational.shared.publications.Knowles_2015_JClinInvest"></g:message><br>
 <g:message code="informational.shared.publications.Knowles_2015_JClinInvest.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Knowles_2015_JClinInvest.citation"></g:message> </div>
 </div></p>
 
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Fall_2015_Diabetes"></g:message><br>
+    <g:message code="informational.shared.publications.Fall_2015_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Fall_2015_Diabetes.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Dimas_2014_Diabetes"></g:message><br>
+    <g:message code="informational.shared.publications.Dimas_2014_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Dimas_2014_Diabetes.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Yaghootkar_2013_Diabetes"></g:message><br>
+    <g:message code="informational.shared.publications.Yaghootkar_2013_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Yaghootkar_2013_Diabetes.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Ingelsson_2010_Diabetes"></g:message><br>
+    <g:message code="informational.shared.publications.Ingelsson_2010_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Ingelsson_2010_Diabetes.citation"></g:message> </div>
+</div></p>
 
 <h4>Dataset phenotypes</h4>
 <ul>
@@ -38,7 +67,7 @@
 
                         </td></tr>
                 </table>
-            </div></td><td>Mixed</td></tr>
+            </div></td><td>European</td></tr>
         <tr><td>0</td><td>899</td><td><a
                 onclick="showSection(event)">ULSAM (Uppsala Longitudinal Study of Adult Men)</a>
 
@@ -59,7 +88,7 @@
 
                         </td></tr>
                 </table>
-            </div></td><td>Mixed</td></tr>
+            </div></td><td>European</td></tr>
         <tr><td>0</td><td>591</td><td><a
                 onclick="showSection(event)">EUGENE2 (European network on Functional Genomics of type 2 diabetes)</a>
 
@@ -80,7 +109,7 @@
 
                         </td></tr>
                 </table>
-            </div></td><td>Mixed</td></tr>
+            </div></td><td>European</td></tr>
         <tr><td>0</td><td>270</td><td><a
                 onclick="showSection(event)">Stanford IST (Insulin Suppression Test)</a>
 
@@ -101,7 +130,7 @@
 
                         </td></tr>
                 </table>
-            </div></td><td>Mixed</td></tr>
+            </div></td><td>European</td></tr>
 
 
     </table>
@@ -118,7 +147,8 @@
 <p><g:message code="informational.data.funding.GENESIS"></g:message>
 
     <h4>Experiment summary</h4>
-    <p><g:message code="informational.data.exptsumm.GENESIS"></g:message>
+<p><g:message code="informational.data.exptsumm.GENESISa"></g:message></p>
+    <p><g:message code="informational.data.exptsumm.GENESISb"></g:message>
     (<g:message code="informational.shared.publications.Knowles_2015_JClinInvest.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
     <g:message code="informational.shared.publications.Knowles_2015_JClinInvest"></g:message>).</p>
 

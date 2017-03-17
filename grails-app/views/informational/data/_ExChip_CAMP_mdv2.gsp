@@ -1,5 +1,4 @@
 <div class="panel-body">
-
 <h4>Dataset phenotypes</h4>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>

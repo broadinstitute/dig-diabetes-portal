@@ -43,4 +43,9 @@
     </small></h4>
 
     <p>The IGSR maintains human variation and genotype reference data from the 1000 Genomes project, which aimed to find most genetic variants with frequencies of at least 1% in the populations studied. The project generated whole-genome sequence data from 2,504 healthy individuals from 26 populations.</p>
+
+<h4>Accessing 1000 Genomes data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.1000g"></g:message></p>
+
+
 </div>
