@@ -282,15 +282,10 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
-burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
-burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
-burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
+burdenRestServerDev = new ServerBean("Non Intel burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+burdenRestServerIntel = new ServerBean("Intel secure burden server", "http://rp-t2d-client.broadinstitute.org:8087/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 

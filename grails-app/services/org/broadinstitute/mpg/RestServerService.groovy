@@ -354,15 +354,10 @@ class RestServerService {
             // add in all known servers
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws01);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws02);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerQa);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2NewCode);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2PassThrough);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerIntel);
         }
 
         return this.burdenServerList;
