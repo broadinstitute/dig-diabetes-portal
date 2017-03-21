@@ -157,12 +157,11 @@
                     <div class="row" >
                         <div class="col-sm-7"></div>
                         <div class="col-sm-5">
-                            <label for="dsFilter">Data set filter:</label>
                             <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle dsFilter" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                                <!--<button class="btn btn-secondary dropdown-toggle dsFilter" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
                                     Dataset filter
-                                </button>
+                                </button>-->
                                   <div class="dropdown-menu dsFilter" aria-labelledby="dropdownMenuButton" style="padding: 0 5px 0 5px;">
                                   </div>
                             </div>

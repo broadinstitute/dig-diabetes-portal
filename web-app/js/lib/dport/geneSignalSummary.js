@@ -44,32 +44,41 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "bAutoWidth" : false,
                 "order": [[ 1, "asc" ]],
                 "columnDefs": [
-                     { "name": "VAR_ID",   "targets": [0], "type":"allAnchor", "title":"Variant ID",
-                        "sWidth": "20%" },
-                    { "name": "DBSNP_ID",   "targets": [1], "title":"dbSNP ID",
-                        "sWidth": "15%"  },
-                    { "name": "PVALUE",   "targets": [2], "title":"p-Value",
-                        "sWidth": "15%"  },
-                    { "name": "EFFECT",   "targets": [3], "title":"Effect",
-                        "sWidth": "15%" },
-                    { "name": "DS",   "targets": [4], "title":"Data set",
-                        "sWidth": "35%" }
+                     { "name": "VAR_ID",   "targets": [0], "type":"allAnchor", "title":"Variant ID"
+                       , "sWidth": "20%"
+                     },
+                    { "name": "DBSNP_ID",   "targets": [1], "title":"dbSNP ID"
+                        ,"sWidth": "15%"
+                    },
+                    { "name": "PVALUE",   "targets": [2], "title":"p-Value"
+                       , "sWidth": "15%"
+                    },
+                    { "name": "EFFECT",   "targets": [3], "title":"Effect"
+                        ,"sWidth": "15%"
+                    },
+                    { "name": "DS", class:"commonDataSet",  "targets": [4], "title":"Data set"
+                        ,"sWidth": "35%"
+                    }
                 ],
                 "order": [[ 2, "asc" ]],
                 "scrollY":        "300px",
+                "scrollX": "100%",
                 "scrollCollapse": true,
                 "paging":         false,
                 "bFilter": true,
-                "language": {
-                    "search": "Text filter:"
-                },
                 "bLengthChange" : true,
                 "bInfo":false,
                 "bProcessing": true,
                 "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
                    nRow.className = $(aData[0]).attr('custag');
                    return nRow;
-                 }
+                 },
+                dom: 'lBtip',
+                buttons: [
+                    { extend: "copy", text: "Copy" },
+                    { extend: 'csv', filename: "commonVariants" },
+                    { extend: 'pdf', orientation: 'landscape'}
+                ]
             }
         );
         var distinctDataSets = [];
@@ -87,10 +96,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             }
             commonTable.dataTable().fnAddData( arrayOfRows );
         });
+
+        $('#commonVariantsLocationHolder_filter').css('display','none');
+        $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
+        $('tr.niceHeaders th.commonDataSet').append('<button class="btn btn-secondary dropdown-toggle dsFilter" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" '+
+        'aria-expanded="false">Dataset filter</button>');
         _.forEach(distinctDataSets.sort(),function (o){
             $('div.dsFilter').append("<button class='dataset-item'  onclick='mpgSoftware.geneSignalSummaryMethods.commonTableDsFilter(this)'>"+o+"</button>");
         });
-        $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
 
     };
 
@@ -123,17 +136,19 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "scrollY":        "300px",
                 "scrollCollapse": true,
                 "paging":         false,
-                "bFilter": true,
-                "language": {
-                    "search": "Text filter:"
-                },
                 "bLengthChange" : true,
                 "bInfo":false,
                 "bProcessing": true,
                 "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
                     nRow.className = $(aData[0]).attr('custag');
                     return nRow;
-                }
+                },
+                dom: 'lBtip',
+                buttons: [
+                    { extend: "copy", text: "copy" },
+                    { extend: 'csv', filename: "highImpactVariants" },
+                    { extend: 'pdf', orientation: 'landscape'}
+                ]
             }
         );
         _.forEach(rvar,function(variantRec){
@@ -149,6 +164,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             highImpactTable.dataTable().fnAddData( arrayOfRows );
         });
         $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
+        $('#highImpactTemplateHolder_filter').css('display','none');
     };
 
     var phenotypeNameForSampleData  = function (untranslatedPhenotype) {

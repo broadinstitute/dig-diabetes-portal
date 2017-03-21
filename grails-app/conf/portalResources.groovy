@@ -20,6 +20,7 @@ modules = {
         resource url: 'css/lib/datatables/jquery.dataTables.css'
         resource url: 'css/lib/datatables/select.dataTables.css'
 
+        resource url: 'css/dport/jqDataTables.css'
     }
     scroller {
         resource url: 'js/lib/dport/jquery.li-scroller.1.0.js'
@@ -76,7 +77,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'

@@ -449,8 +449,6 @@ var variantProcessing = (function () {
                     d.geneToSummarize = variableHolder.geneName;
                     d.phenotype = variableHolder.phenotypeCode;
                     d.numberOfVariants = data.numberOfVariants;
-                    d.start = 0;
-                    d.length = 25;
                     // need to stringify because otherwise Groovy gets a lot of
                     // parameters that aren't grouped correctly
                     d.columns = JSON.stringify(d.columns);
@@ -461,8 +459,7 @@ var variantProcessing = (function () {
             buttons: [
                 { extend: "copy", text: copyText },
                 { extend: 'csv', filename: filename },
-                { extend: 'pdf', orientation: 'landscape'},
-                { extend: "print", text: printText, filename: filename }
+                { extend: 'pdf', orientation: 'landscape'}
             ],
             drawCallback: function(settings) {
                 $('#spinner').hide();

@@ -174,8 +174,8 @@ var mpgSoftware = mpgSoftware || {};
             if ( $.fn.DataTable.isDataTable( /*'#variantTable'*/ '#'+variantTableSelector.variantTableResults ) ) {
                 $( '#'+variantTableSelector.variantTableResults).DataTable().destroy();
             }
-            $('#'+variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header dk-common"/>');
-            $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common">'+variantTableSelector.commonPropsMsg+'</th>');
+            $('#'+variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header  dk-common niceHeadersInvisible"/>');
+            $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common niceHeadersBackdrop">'+variantTableSelector.commonPropsMsg+'</th>');
             $('#'+variantTableSelector.variantTableHeaderRow3+', #'+variantTableSelector.variantTableBody).empty();
 
             // common props section
@@ -190,7 +190,7 @@ var mpgSoftware = mpgSoftware || {};
                 var translatedColName = translationFunction(colName);
                 if (!((colName === 'VAR_ID') && (commonWidth > 0))) { // VAR_ID never shows up other than in the first column
                     // the data-colname attribute is used in the table generation function
-                    var newHeaderElement = $('<th>', {class: 'datatype-header dk-common', html: translatedColName}).attr('data-colName', colName);
+                    var newHeaderElement = $('<th>', {class: 'datatype-header dk-common niceHeaders', html: translatedColName}).attr('data-colName', colName);
                     $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     commonWidth++;
                 }

@@ -57,23 +57,6 @@ a.morePhenos:hover {
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 }
-div.dataTables_scrollHeadInner table.dataTable thead tr.niceHeaders {
-    font-size: 14px;
-    font-weight: normal;
-    padding: 4px;
-    border-bottom: 1px solid #8AB8E6;
-    color: #000;
-    text-decoration: none;
-    cursor: pointer;
-
-    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E0F4FC', endColorstr='#9BC5F4'); !* for IE *!*/
-    background: -webkit-gradient(linear, left top, left bottom, from(#E0F4FC), to(#9BC5F4)); /* for webkit browsers */
-    background: -moz-linear-gradient(top,  #E0F4FC, #9BC5F4); /* for firefox 3.6+ */
-}
-div.dataTables_scrollHeadInner table.dataTable thead tr.niceHeaders th {
-    padding-left: 18px;
-    background-position: center left;
-}
 .chosenPhenotype{
     font-weight: bold;
 }
@@ -164,4 +147,11 @@ div.variantBoxHeaders {
 .variantCategoryHolder {
     border-top: 1px solid black;
     margin: 12px 0 15px 0;
+}
+table.dataTable,
+table.dataTable th,
+table.dataTable td {
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
 }

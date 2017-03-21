@@ -10,6 +10,45 @@
 <body>
 
 <g:render template="../templates/variantSearchResultsTemplate" />
+<style>
+table.dataTable th.niceHeaders {
+    font-size: 14px;
+    font-weight: bold;
+    padding: 4px;
+    border-bottom: 1px solid #8AB8E6;
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E0F4FC', endColorstr='#9BC5F4'); !* for IE *!*/
+    background: -webkit-gradient(linear, left top, left bottom, from(#E0F4FC), to(#9BC5F4)); /* for webkit browsers */
+    background: -moz-linear-gradient(top,  #E0F4FC, #9BC5F4); /* for firefox 3.6+ */
+}
+table.dataTable th.niceHeadersBackdrop {
+    background-color: #E0F4FC;
+}
+table.dataTable th.niceHeadersInvisible {
+    background-color: #FFFFFF;
+}
+table.dataTable th.niceHeaders.sorting_asc {
+    background-image: url('../../css/lib/datatables/sort_asc.png');
+    background-repeat: no-repeat;
+    background-position:center right;
+}
+table.dataTable th.niceHeaders.sorting_desc {
+    background-image: url('../../css/lib/datatables/sort_desc.png');
+    background-repeat: no-repeat;
+    background-position:center right;
+}
+table.dataTable th.sorting_asc {
+    background-color: #84e171;
+    color: black;
+}
+table.dataTable th.sorting_desc {
+    background-color: #84e171;
+    color: black;
+}
+</style>
 
 <script>
     <g:applyCodec encodeAs="none">

@@ -141,30 +141,6 @@
 
                         var filtersAsJson = [{"comparator":"<","dataset":"ExChip_CAMP_mdv25","phenotype":"FI","prop":"P_VALUE","value":"0.001"}];
 
-                    %{--var domSelectors = {--}%
-                        %{--interfaceGoesHere: '#variantSearchResultsInterface',--}%
-                        %{--retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',--}%
-                        %{--geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',--}%
-                        %{--variantInfoUrl:'<g:createLink controller="variantInfo" action="variantInfo" />',--}%
-                        %{--variantSearchAndResultColumnsDataUrl:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsData" />',--}%
-                        %{--variantSearchAndResultColumnsInfoUrl:'<g:createLink controller="variantSearch" action="variantSearchAndResultColumnsInfo" />',--}%
-                        %{--launchAVariantSearchUrl: "<g:createLink absolute="true" controller="variantSearch" action="launchAVariantSearch" params="[filters: "${filtersForSharing}"]"/>",--}%
-                        %{--retrieveDatasetsAjaxUrl:"${g.createLink(controller: 'VariantSearch', action: 'retrieveDatasetsAjax')}",--}%
-                        %{--linkBackToSearchDefinitionPage:'<a href="<g:createLink controller='variantSearch' action='variantSearchWF' params='[encParams: "${encodedParameters}"]'/>">',--}%
-                        %{--variantTableResults:'variantTableResults',--}%
-                        %{--queryFilterInfo:"<%=queryFilters%>",--}%
-                        %{--proteinEffectsListInfo:"${proteinEffectsList}",--}%
-                        %{--localeInfo:"${locale}",--}%
-                        %{--queryFiltersInfo:"<%= queryFilters %>",--}%
-                        %{--translatedFiltersInfo:"<%= translatedFilters %>",--}%
-                        %{--additionalPropertiesInfo:"<%=additionalProperties%>",--}%
-                        %{--filtersAsJsonInfo:filtersAsJson,--}%
-                        %{--copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',--}%
-                        %{--printMsg:'<g:message code="table.buttons.printText" default="Print me!" />',--}%
-                        %{--commonPropsMsg:'<g:message code="variantTable.columnHeaders.commonProperties"/>',--}%
-                        %{--geneNamesToDisplay:"${geneNamesToDisplay}",--}%
-                        %{--regionSpecification:'${regionSpecification}',--}%
-                        %{--uniqueRoot:"x"};                        --}%
                     var domSelectors = {
                         interfaceGoesHere: '#variantSearchResultsInterface',
                         variantResultsTableHeader:[],
@@ -310,7 +286,7 @@
                             mpgSoftware.locusZoom.rescaleSVG();
                         }
                     });
-                    mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
+                    //mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
                 };
 
 
