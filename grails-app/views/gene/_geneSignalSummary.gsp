@@ -1,4 +1,10 @@
-
+<style>
+    select.dsFilter {
+        font-weight: normal;
+        font-size: 12px;
+        margin: 0 0 0 10px;
+    }
+</style>
 
 <div class="row">
     <div class="pull-right" style="display:none">

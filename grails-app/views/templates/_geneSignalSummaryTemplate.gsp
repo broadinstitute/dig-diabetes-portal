@@ -130,6 +130,17 @@
 
                     </div>
 
+                    <div class="row" >
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-5">
+                            <div class="dropdown">
+                                  <div class="dropdown-menu dsFilterHighImpact" style="padding: 0 5px 0 5px;">
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                     <div class="row">
                         <div class="col-lg-12">
 
@@ -158,11 +169,7 @@
                         <div class="col-sm-7"></div>
                         <div class="col-sm-5">
                             <div class="dropdown">
-                                <!--<button class="btn btn-secondary dropdown-toggle dsFilter" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                                    Dataset filter
-                                </button>-->
-                                  <div class="dropdown-menu dsFilter" aria-labelledby="dropdownMenuButton" style="padding: 0 5px 0 5px;">
+                                  <div class="dropdown-menu dsFilterCommon" style="padding: 0 5px 0 5px;">
                                   </div>
                             </div>
                         </div>
