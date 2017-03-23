@@ -49,6 +49,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var highImpactTableDsFilter = function (dataset){
+        if (dataset === 'ALL'){
+            $('.highImpactVariantVRTLink').css('display','none');
+        } else {
+            $('.highImpactVariantVRTLink').css('display','block');
+        }
         $('#highImpactTemplateHolder.compact.row-border.dataTable.no-footer').DataTable().columns(1).search('').draw();
     }
 
@@ -60,7 +65,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var startVRT = function(callbackData){
         var ds = $(_.last(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data()))).attr('class');
-        var pv = _.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[2];
+        var pv = _.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[callbackData.data.pValueIndex];
         window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype;
     };
 
@@ -138,12 +143,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.forEach(distinctDataSets.sort(),function (o){
             $('select.dsFilter.common').append("<option value='"+o+"'>"+o+"</option>");
         });
-        $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink" style="display:none" cusGene="'+parameters.gene+'" '+
-            'cusPhenotype="'+parameters.phenotype+'"  cusUrl="'+parameters.vrtUrl+'">Explore</div>');
+        $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink" style="display:none">Explore</div>');
         $('.commonVariantVRTLink').on("click", null, {  gene:parameters.gene,
                                                         phenotype:parameters.phenotype,
                                                         vrtUrl:parameters.vrtUrl,
-                                                        tablePtr:commonTable},
+                                                        tablePtr:commonTable,
+                                                        pValueIndex:2},
             mpgSoftware.geneSignalSummaryMethods.startVRT);
         $('div.dsFilterCommon').attr('dsfilter','ALL');
         $('#dropdownCommonVariantDsButton').change(function(h){
@@ -157,7 +162,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var buildHighImpactTable = function(selectionToFill,
                                     variantInfoUrl,
-                                    rvar){
+                                    rvar,
+                                    parameters){
 
         var highImpactTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
@@ -222,6 +228,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.forEach(distinctDataSets.sort(),function (o){
             $('select.dsFilter.highImpact').append("<option value='"+o+"'>"+o+"</option>");
         });
+        $('#dropdownHighImpactVariantMenuButton').after('<div class="boldlink highImpactVariantVRTLink" style="display:none">Explore</div>');
+        $('.highImpactVariantVRTLink').on("click", null, {  gene:parameters.gene,
+                phenotype:parameters.phenotype,
+                vrtUrl:parameters.vrtUrl,
+                tablePtr:highImpactTable,
+                pValueIndex:3},
+            mpgSoftware.geneSignalSummaryMethods.startVRT);
         $('div.dsFilterHighImpact').attr('dsfilter','ALL');
         $('#dropdownHighImpactVariantMenuButton').change(function(h){
             $('div.dsFilterHighImpact').attr('dsfilter',$(this).val());

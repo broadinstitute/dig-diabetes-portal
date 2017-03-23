@@ -217,7 +217,7 @@
 
                     $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                     mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
-                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.rvar);
+                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.rvar,additionalParameters);
 
                     //  set up the gait interface
                     mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere',{
