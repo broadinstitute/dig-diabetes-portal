@@ -167,7 +167,7 @@
                         {{/chooseAdSubtractPhenotype}}
                         {{#chooseAdSubtractDataSets}}
                         <li><a href="#" data-toggle="modal" data-target="#{{datasetModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubDatasets" /></a></li>
-                        {{/chooseAdSubtractDataSetsfor}}
+                        {{/chooseAdSubtractDataSets}}
                         {{#chooseAdSubtractCommonProperties}}
                         <li><a href="#" data-toggle="modal" data-target="#{{propertiesModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubProps" /></a></li>
                         {{/chooseAdSubtractCommonProperties}}

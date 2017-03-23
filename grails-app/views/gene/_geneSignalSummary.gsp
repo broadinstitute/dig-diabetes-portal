@@ -190,6 +190,8 @@
                     var datasetName = additionalParameters.ds;
                     var pName = additionalParameters.pname;
                     var useIgvNotLz = additionalParameters.preferIgv;
+                    additionalParameters['gene'] = '<%=geneName%>';
+                    additionalParameters['vrtUrl'] =  '<g:createLink absolute="true" controller="variantSearch" action="gene" />';
                     var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
                     var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
@@ -243,7 +245,7 @@
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
                     $("#commonVariantsLocation").empty().append(Mustache.render( $('#commonVariantTemplate')[0].innerHTML,renderData));
                     mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
-                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.cvar);
+                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.cvar,additionalParameters);
 
                     //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
                     var sampleBasedPhenotypeName = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForSampleData(phenotypeName);
@@ -296,7 +298,7 @@
                             mpgSoftware.locusZoom.rescaleSVG();
                         }
                     });
-                    mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
+                   // mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
                 };
 
 

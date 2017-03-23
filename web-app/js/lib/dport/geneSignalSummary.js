@@ -39,6 +39,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         commonTable.draw();
     }
     var commonTableDsFilter = function (dataset){
+        if (dataset === 'ALL'){
+            $('.commonVariantVRTLink').css('display','none');
+        } else {
+            $('.commonVariantVRTLink').css('display','block');
+        }
         $('#commonVariantsLocationHolder.compact.row-border.dataTable.no-footer').DataTable().columns(1).search('').draw();
     }
 
@@ -48,14 +53,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     }
 
 
-    var respondToCommonTableDataSetButtonClick = function(event){
+    var disableClickPropagation = function(event){
         event.stopPropagation();
     };
 
 
+    var startVRT = function(callbackData){
+        var ds = $(_.last(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data()))).attr('class');
+        var pv = _.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[2];
+        window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype;
+    };
+
+
+
     var buildCommonTable = function(selectionToFill,
                                     variantInfoUrl,
-                                      cvar){
+                                      cvar, parameters){
 
         commonTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
@@ -109,7 +122,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             arrayOfRows.push(DBSNP_ID);
             arrayOfRows.push(variantRec.P_VALUE);
             arrayOfRows.push(variantRec.BETA);
-            arrayOfRows.push(variantRec.dsr);
+            arrayOfRows.push('<span class="'+variantRec.ds+'">'+variantRec.dsr+'</span>');
             if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
                 distinctDataSets.push(variantRec.dsr);
             }
@@ -120,15 +133,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
         $('tr.niceHeaders th.commonDataSet').append('<select class="dsFilter common" type="button" id="dropdownCommonVariantDsButton" data-toggle="dropdown" aria-haspopup="true" '+
         'aria-expanded="false">Dataset filter</button>');
-        $('#dropdownCommonVariantDsButton').on("click", mpgSoftware.geneSignalSummaryMethods.respondToCommonTableDataSetButtonClick);
+        $('#dropdownCommonVariantDsButton').on("click", mpgSoftware.geneSignalSummaryMethods.disableClickPropagation);
         $('select.dsFilter.common').append("<option value='ALL'>All</option>");
         _.forEach(distinctDataSets.sort(),function (o){
             $('select.dsFilter.common').append("<option value='"+o+"'>"+o+"</option>");
         });
+        $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink" style="display:none" cusGene="'+parameters.gene+'" '+
+            'cusPhenotype="'+parameters.phenotype+'"  cusUrl="'+parameters.vrtUrl+'">Explore</div>');
+        $('.commonVariantVRTLink').on("click", null, {  gene:parameters.gene,
+                                                        phenotype:parameters.phenotype,
+                                                        vrtUrl:parameters.vrtUrl,
+                                                        tablePtr:commonTable},
+            mpgSoftware.geneSignalSummaryMethods.startVRT);
         $('div.dsFilterCommon').attr('dsfilter','ALL');
         $('#dropdownCommonVariantDsButton').change(function(h){
             $('div.dsFilterCommon').attr('dsfilter',$(this).val());
-            mpgSoftware.geneSignalSummaryMethods.commonTableDsFilter('div.dsFilterCommon');
+            mpgSoftware.geneSignalSummaryMethods.commonTableDsFilter($(this).val());
         });
 
     };
@@ -187,7 +207,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             arrayOfRows.push(variantRec.deleteriousness);
             arrayOfRows.push(variantRec.P_VALUE);
             arrayOfRows.push(variantRec.BETA);
-            arrayOfRows.push(variantRec.dsr);
+            arrayOfRows.push('<span class="'+variantRec.ds+'">'+variantRec.dsr+'</span>');
             if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
                 distinctDataSets.push(variantRec.dsr);
             }
@@ -197,7 +217,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('#highImpactTemplateHolder_filter').css('display','none');
         $('tr.niceHeaders th.highImpactDataSet').append('<select class="dsFilter highImpact" type="button" id="dropdownHighImpactVariantMenuButton" data-toggle="dropdown" aria-haspopup="true" '+
             'aria-expanded="false">Dataset filter</button>');
-        $('#dropdownHighImpactVariantMenuButton').on("click", mpgSoftware.geneSignalSummaryMethods.respondToCommonTableDataSetButtonClick);
+        $('#dropdownHighImpactVariantMenuButton').on("click", mpgSoftware.geneSignalSummaryMethods.disableClickPropagation);
         $('select.dsFilter.highImpact').append("<option value='ALL'>All</option>");
         _.forEach(distinctDataSets.sort(),function (o){
             $('select.dsFilter.highImpact').append("<option value='"+o+"'>"+o+"</option>");
@@ -631,7 +651,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         commonTableRedraw:commonTableRedraw,
         commonTableDsFilter:commonTableDsFilter,
         highImpactTableDsFilter:highImpactTableDsFilter,
-        respondToCommonTableDataSetButtonClick:respondToCommonTableDataSetButtonClick
+        disableClickPropagation:disableClickPropagation,
+        startVRT:startVRT
 
     }
 
