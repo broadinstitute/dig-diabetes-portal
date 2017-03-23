@@ -112,7 +112,6 @@
 
 <div class="collapse in" id="collapseExample">
     <div class="well">
-
         <div id="noAggregatedVariantsLocation">
             <div class="row" style="margin-top: 15px;">
                 <div class="col-lg-offset-1">
@@ -145,12 +144,15 @@
 
 
 
-                        var filtersAsJson = [{"comparator":"<","dataset":"ExChip_CAMP_mdv25","phenotype":"FI","prop":"P_VALUE","value":"0.001"}];
+                    var filtersAsJson = [{"comparator":"<","dataset":"ExChip_CAMP_mdv25","phenotype":"FI","prop":"P_VALUE","value":"0.001"}];
 
-                    var domSelectors = {
+                    var drivingVariables = {
                         interfaceGoesHere: '#variantSearchResultsInterface',
                         variantResultsTableHeader:[],
                         makeAggregatedDataCall: true,
+                        chooseAdSubtractPhenotype: [],
+                        chooseAdSubtractDataSets: [],
+                        chooseAdSubtractCommonProperties: [1],
                         retrieveTopVariantsAcrossSgs:'<g:createLink controller="variantSearch" action="retrieveTopVariantsAcrossSgsWithSimulatedMetadata" />',
                         geneName:'${geneName}',
                         phenotypeCode:phenotypeCode,
@@ -175,7 +177,9 @@
                         geneNamesToDisplay:"[]",
                         regionSpecification:'',
                         uniqueRoot:"x"};
-                    mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors);
+                    $("#cDataModalGoesHere").empty().append(
+                            Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
+                   // mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors);
 
                 };
 
@@ -292,7 +296,7 @@
                             mpgSoftware.locusZoom.rescaleSVG();
                         }
                     });
-                    //mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
+                    mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
                 };
 
 

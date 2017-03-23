@@ -198,6 +198,13 @@
 
 <script id="organizeSignalSummaryCommonFirstTemplate"  type="x-tmpl-mustache">
             <div class="text-center" id="phenotypeLabel">{{pName}}</div>
+            <div id="cDataModalGoesHere"></div>
+            <div class="row">
+                <div class="col-xs-9"></div>
+                <div class="col-xs-3">
+                    <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#cDataModalGoesHere">Add / Subtract Data</button>
+                </div>
+            </div>
             <div class="row"  style="margin-bottom: 10px">
                 <div class="col-xs-12">
                     <div class="variantCategoryHolder">
@@ -225,6 +232,13 @@
 
 <script id="organizeSignalSummaryHighImpactFirstTemplate"  type="x-tmpl-mustache">
             <div class="text-center" id="phenotypeLabel">{{pName}}</div>
+            <div id="cDataModalGoesHere"></div>
+            <div class="row">
+                <div class="col-xs-9"></div>
+                <div class="col-xs-3">
+                    <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#cDataModalGoesHere">Add / Subtract Data</button>
+                </div>
+            </div>
             <div class="row" style="margin-bottom: 10px">
                 <div class="col-xs-12">
                     <div class="variantCategoryHolder">

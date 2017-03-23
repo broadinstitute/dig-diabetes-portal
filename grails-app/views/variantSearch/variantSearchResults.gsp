@@ -64,6 +64,9 @@ table.dataTable th.sorting_desc {
             // control the way the table is utilized
             variantResultsTableHeader:[1],
             makeAggregatedDataCall: false,
+            chooseAdSubtractPhenotype: [1],
+            chooseAdSubtractDataSets: [1],
+            chooseAdSubtractCommonProperties: [1],
 
             // a bunch of URLs we need to pass around
             retrieveTopVariantsAcrossSgs:'<g:createLink controller="variantSearch" action="retrieveTopVariantsAcrossSgs" />',

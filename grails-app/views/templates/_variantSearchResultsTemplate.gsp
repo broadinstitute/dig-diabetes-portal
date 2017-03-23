@@ -162,9 +162,15 @@
                 </div>
                 <div class="modal-body">
                     <ul class="list-unstyled dk-modal-list">
+                        {{#chooseAdSubtractPhenotype}}
                         <li><a href="#" data-toggle="modal" data-target="#{{phenotypeModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubPheno" /></a></li>
+                        {{/chooseAdSubtractPhenotype}}
+                        {{#chooseAdSubtractDataSets}}
                         <li><a href="#" data-toggle="modal" data-target="#{{datasetModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubDatasets" /></a></li>
+                        {{/chooseAdSubtractDataSetsfor}}
+                        {{#chooseAdSubtractCommonProperties}}
                         <li><a href="#" data-toggle="modal" data-target="#{{propertiesModal}}" data-dismiss="modal"><g:message code="variantSearch.results.modal.addSubProps" /></a></li>
+                        {{/chooseAdSubtractCommonProperties}}
                     </ul>
                 </div>
                 <div class="modal-footer dk-modal-footer">
