@@ -66,6 +66,7 @@ var mpgSoftware = mpgSoftware || {};
                     $.data(dataNode[0],"variantResultsTableData",myVarsToRemember);
                 }
             }
+            return myVarsToRemember;
 
         };
         var getVarsToRemember = function(overrideVarsToRemember,specificVarsRootName){
@@ -160,6 +161,14 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+        var setTranslationFunction = function(data){
+            translationFunction = function (stringToTranslate) {
+                return data.translationDictionary[stringToTranslate] || stringToTranslate
+            };
+        }
+
+
+
         var dynamicFillTheFields = function (data,variantTableSelector,variantTableSelectorName) {
             variantTableSelector = getVarsToRemember(variantTableSelector,variantTableSelectorName);
 
@@ -167,9 +176,8 @@ var mpgSoftware = mpgSoftware || {};
              * This function exists to avoid having to do
              * "if translationDictionary[string] defined, return that, else return string"
              */
-            translationFunction = function (stringToTranslate) {
-                return data.translationDictionary[stringToTranslate] || stringToTranslate
-            };
+            setTranslationFunction(data);
+
             // clear out the table
             if ( $.fn.DataTable.isDataTable( /*'#variantTable'*/ '#'+variantTableSelector.variantTableResults ) ) {
                 $( '#'+variantTableSelector.variantTableResults).DataTable().destroy();
@@ -788,7 +796,8 @@ var mpgSoftware = mpgSoftware || {};
             saveLink:saveLink,
             loadTheTable:loadTheTable,
             buildVariantResultsTable:buildVariantResultsTable,
-            setVarsToRemember:setVarsToRemember
+            setVarsToRemember:setVarsToRemember,
+            setTranslationFunction:setTranslationFunction
         }
 
     }());

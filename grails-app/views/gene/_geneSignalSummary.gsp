@@ -177,8 +177,20 @@
                         geneNamesToDisplay:"[]",
                         regionSpecification:'',
                         uniqueRoot:"x"};
+                    drivingVariables = mpgSoftware.variantSearchResults.setVarsToRemember(drivingVariables);
                     $("#cDataModalGoesHere").empty().append(
                             Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
+                    var fakeData = {cProperties:{dataset:['DBSNP_ID','CHROM','POS'],
+                                                 is_error: false,
+                                                 numRecords: 3},
+                                     columns:{
+                                         pproperty:[],
+                                         dproperty:[],
+                                         cproperty:['DBSNP_ID']
+                                     },
+                        translationDictionary:{'DBSNP_ID':'dbSNP ID'}};
+                    mpgSoftware.variantSearchResults.setTranslationFunction(fakeData);
+                    mpgSoftware.variantSearchResults.generateModal(fakeData,drivingVariables,drivingVariables.uniqueRoot);
                    // mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors);
 
                 };
@@ -298,7 +310,7 @@
                             mpgSoftware.locusZoom.rescaleSVG();
                         }
                     });
-                   // mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
+                    mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
                 };
 
 
@@ -436,7 +448,7 @@ $( document ).ready(function() {
             yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
             greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
     mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-//    mpgSoftware.geneSignalSummary.displayVariantResultsTable();
+    //mpgSoftware.geneSignalSummary.displayVariantResultsTable();
 });
 
 
