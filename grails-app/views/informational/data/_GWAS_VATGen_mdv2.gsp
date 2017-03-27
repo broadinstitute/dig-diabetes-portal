@@ -18,7 +18,7 @@
 <ul>
     <li><g:message code="informational.shared.traits.SAT"></g:message></li>
     <li><g:message code="informational.shared.traits.VAT"></g:message></li>
-     <li><g:message code="informational.shared.traits.VATadjBMI"></g:message></li>
+    <li><g:message code="informational.shared.traits.VATadjBMI"></g:message></li>
     <li><g:message code="informational.shared.traits.PAT"></g:message></li>
     <li><g:message code="informational.shared.traits.PATadjHtWt"></g:message></li>
     <li><g:message code="informational.shared.traits.SATHU"></g:message></li>
