@@ -69,34 +69,107 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype;
     };
 
+    var buildARowOfTheDatatable = function(columns,variantInfoUrl,distinctDataSets,variantRec){
+        var arrayOfRows = [];
+        _.each(columns,function(columnName){
+            switch(columnName){
+                case 'VAR_ID':
+                    arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantRec.id+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantRec.VAR_ID+'</a>');
+                    break;
+                case 'DBSNP_ID':
+                    arrayOfRows.push((variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'');
+                    break;
+                case 'dataset':
+                    arrayOfRows.push('<span class="'+variantRec.dataset+'">'+variantRec.dsr+'</span>');
+                    if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
+                        distinctDataSets.push(variantRec.dsr);
+                    }
+                    break;
+                case 'PVALUE':
+                    arrayOfRows.push(variantRec['P_VALUE']);
+                    break;
+                case 'EFFECT':
+                    arrayOfRows.push(variantRec['BETA']);
+                    break;
+                default:
+                    arrayOfRows.push(variantRec[columnName]);
+                    break;
+            }
+        });
+        return arrayOfRows;
+    }
+
+    var buildAHeaderForTheDatatable = function (colName,target){
+        var obj = {};
+        switch(colName){
+            case 'VAR_ID':
+                obj = { "name": colName,   "targets": [target], "type":"allAnchor", "title": "Variant ID" };
+                break;
+            case 'dataset':
+                obj = { "name": colName,  class:"commonDataSet",  "targets": [target], "title": "Data set" };
+                break;
+
+            default:
+                obj = { "name": colName,   "targets": [target],  "title": colName };
+                break;
+        }
+        return obj;
+    }
+
 
 
     var buildCommonTable = function(selectionToFill,
                                     variantInfoUrl,
-                                      cvar, parameters){
-
+                                    renderData, parameters){
+        var cvar = renderData.cvar;
+        var requestedProperties = _.map(renderData.propertiesToInclude, function(o){
+            var propertyNamePieces = o.substring("common-common-".length);
+            if (propertyNamePieces.length > 0){
+                return propertyNamePieces;
+            } else {
+                return "prop";
+            }
+        });
+        if (requestedProperties.length===0){
+            requestedProperties.push("VAR_ID");
+            requestedProperties.push("DBSNP_ID");
+            requestedProperties.push("PVALUE");
+            requestedProperties.push("EFFECT");
+            requestedProperties.push("dataset");
+        }
+        var counter = 0;
+//        var columnDefsForDatatable = _.map(requestedProperties, function (o){
+//            return { "name": o,   "targets": [counter++], "type":"allAnchor", "title":o
+//            }
+//        });
+        var columnDefsForDatatable = _.map(requestedProperties, function(o){
+                return buildAHeaderForTheDatatable(o,counter++);
+            }
+        );
         commonTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
                 "className": "compact",
                 "bAutoWidth" : false,
                 "order": [[ 1, "asc" ]],
-                "columnDefs": [
-                     { "name": "VAR_ID",   "targets": [0], "type":"allAnchor", "title":"Variant ID"
-                       , "sWidth": "20%"
-                     },
-                    { "name": "DBSNP_ID",   "targets": [1], "title":"dbSNP ID"
-                        ,"sWidth": "15%"
-                    },
-                    { "name": "PVALUE",   "targets": [2], "title":"p-Value"
-                       , "sWidth": "15%"
-                    },
-                    { "name": "EFFECT",   "targets": [3], "title":"Effect"
-                        ,"sWidth": "15%"
-                    },
-                    { "name": "DS", class:"commonDataSet",  "targets": [4], "title":"Data set"
-                        ,"sWidth": "35%"
-                    }
-                ],
+                "columnDefs":columnDefsForDatatable,
+
+//                    [
+//                     { "name": "VAR_ID",   "targets": [0], "type":"allAnchor", "title":"Variant ID"
+//                       , "sWidth": "20%"
+//                     },
+//                    { "name": "DBSNP_ID",   "targets": [1], "title":"dbSNP ID"
+//                        ,"sWidth": "15%"
+//                    },
+//                    { "name": "PVALUE",   "targets": [2], "title":"p-Value"
+//                       , "sWidth": "15%"
+//                    },
+//                    { "name": "EFFECT",   "targets": [3], "title":"Effect"
+//                        ,"sWidth": "15%"
+//                    },
+//                    { "name": "DS", class:"commonDataSet",  "targets": [4], "title":"Data set"
+//                        ,"sWidth": "35%"
+//                    }
+//                ],
                 "order": [[ 2, "asc" ]],
                 "scrollY":        "300px",
                 "scrollX": "100%",
@@ -120,18 +193,18 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         );
         var distinctDataSets = [];
         _.forEach(cvar,function(variantRec){
-            var arrayOfRows = [];
-            var variantID = variantRec.id;
-            arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantID+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantID+'</a>');
-            var DBSNP_ID = (variantRec.rsId)?variantRec.rsId:'';
-            arrayOfRows.push(DBSNP_ID);
-            arrayOfRows.push(variantRec.P_VALUE);
-            arrayOfRows.push(variantRec.BETA);
-            arrayOfRows.push('<span class="'+variantRec.ds+'">'+variantRec.dsr+'</span>');
-            if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
-                distinctDataSets.push(variantRec.dsr);
-            }
-            commonTable.dataTable().fnAddData( arrayOfRows );
+//            var arrayOfRows = [];
+//            var variantID = variantRec.id;
+//            arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantID+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantID+'</a>');
+//            var DBSNP_ID = (variantRec.rsId)?variantRec.rsId:'';
+//            arrayOfRows.push(DBSNP_ID);
+//            arrayOfRows.push(variantRec.P_VALUE);
+//            arrayOfRows.push(variantRec.BETA);
+//            arrayOfRows.push('<span class="'+variantRec.ds+'">'+variantRec.dsr+'</span>');
+//            if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
+//                distinctDataSets.push(variantRec.dsr);
+//            }
+            commonTable.dataTable().fnAddData( buildARowOfTheDatatable(requestedProperties,variantInfoUrl,distinctDataSets,variantRec) );
         });
 
         $('#commonVariantsLocationHolder_filter').css('display','none');
@@ -206,14 +279,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var distinctDataSets = [];
         _.forEach(rvar,function(variantRec){
             var arrayOfRows = [];
-            var variantID = variantRec.id;
+            var variantID = variantRec.VAR_ID;
             arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantID+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantID+'</a>');
-            var DBSNP_ID = (variantRec.rsId)?variantRec.rsId:'';
+            var DBSNP_ID = (variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'';
             arrayOfRows.push(DBSNP_ID);
-            arrayOfRows.push(variantRec.deleteriousness);
+            arrayOfRows.push(variantRec.Consequence);
             arrayOfRows.push(variantRec.P_VALUE);
             arrayOfRows.push(variantRec.BETA);
-            arrayOfRows.push('<span class="'+variantRec.ds+'">'+variantRec.dsr+'</span>');
+            arrayOfRows.push('<span class="'+variantRec.dataset+'">'+variantRec.dsr+'</span>');
             if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
                 distinctDataSets.push(variantRec.dsr);
             }
@@ -302,35 +375,58 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var mafValue;
             var mdsValue;
             var pValue;
-            if (key === 'VAR_ID') {
-                obj['id'] = (val) ? val : '';
-            } else if (key === 'DBSNP_ID') {
-                obj['rsId'] = (val) ? val : '';
-            } else if (key === 'Protein_change') {
-                obj['impact'] = (val) ? val : '';
-            } else if (key === 'Consequence') {
-                obj['deleteriousness'] = (val) ? val : '';
-            } else if (key === 'Reference_Allele') {
-                obj['referenceAllele'] = (val) ? val : '';
-            } else if (key === 'Effect_Allele') {
-                obj['effectAllele'] = (val) ? val : '';
-            } else if (key === 'MOST_DEL_SCORE') {
-                obj['MOST_DEL_SCORE'] = (val) ? val : '';
-            } else if (key === 'dataset') {
-                obj['ds'] = (val) ? val : '';
-            } else if (key === 'dsr') {
-                obj['dsr'] = (val) ? val : '';
-            } else if (key === 'pname') {
-                obj['pname'] = (val) ? val : '';
-            } else if (key === 'phenotype') {
+//            if (key === 'VAR_ID') {
+//                obj['id'] = (val) ? val : '';
+//            } else if (key === 'DBSNP_ID') {
+//                obj['rsId'] = (val) ? val : '';
+//            } else if (key === 'Protein_change') {
+//                obj['impact'] = (val) ? val : '';
+//            } else if (key === 'Consequence') {
+//                obj['deleteriousness'] = (val) ? val : '';
+//            } else if (key === 'Reference_Allele') {
+//                obj['referenceAllele'] = (val) ? val : '';
+//            } else if (key === 'Effect_Allele') {
+//                obj['effectAllele'] = (val) ? val : '';
+//            } else if (key === 'MOST_DEL_SCORE') {
+//                obj['MOST_DEL_SCORE'] = (val) ? val : '';
+//            } else if (key === 'dataset') {
+//                obj['ds'] = (val) ? val : '';
+//            } else if (key === 'dsr') {
+//                obj['dsr'] = (val) ? val : '';
+//            } else if (key === 'pname') {
+//                obj['pname'] = (val) ? val : '';
+//            } else if (key === 'phenotype') {
+//                obj['pheno'] = (val) ? val : '';
+//            } else if (key === 'datasetname') {
+//                obj['datasetname'] = (val) ? val : '';
+//            } else if (key === 'meaning') {
+//                obj['meaning'] = (val) ? val : '';
+//            } else if (key === 'AF') {
+//                obj['MAF'] = UTILS.realNumberFormatter((val) ? val : 1);
+//            } else if ((key === 'P_FIRTH_FE_IV') ||
+//                (key === 'P_VALUE') ||
+//                (key === 'P_FE_INV') ||
+//                (key === 'P_FIRTH')
+//                ) {
+//                obj['property'] = key;
+//                obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
+//                obj['P_VALUEV'] = (val) ? val : 1;
+//            } else if (key === 'BETA') {
+//                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
+//                obj['BETAV'] = Math.exp((val) ? val : 1);
+//
+//            }
+
+
+
+
+
+
+              if (key === 'phenotype') {
                 obj['pheno'] = (val) ? val : '';
             } else if (key === 'datasetname') {
                 obj['datasetname'] = (val) ? val : '';
-            } else if (key === 'meaning') {
-                obj['meaning'] = (val) ? val : '';
-            } else if (key === 'AF') {
-                obj['MAF'] = UTILS.realNumberFormatter((val) ? val : 1);
-            } else if ((key === 'P_FIRTH_FE_IV') ||
+            }  else if ((key === 'P_FIRTH_FE_IV') ||
                 (key === 'P_VALUE') ||
                 (key === 'P_FE_INV') ||
                 (key === 'P_FIRTH')
@@ -341,7 +437,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             } else if (key === 'BETA') {
                 obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
                 obj['BETAV'] = Math.exp((val) ? val : 1);
-
+            }
+            else {
+                obj[key] = (val) ? val : '';
             }
             return obj;
         }
@@ -373,7 +471,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var rvart = [];
         var cvart = [];
         _.forEach(renderData.variants, function (v) {
-            var mafValue = v['MAF']
+            var mafValue = v['AF']
             var mdsValue = v['MOST_DEL_SCORE'];
             var pValue = v['P_VALUEV'];
             if ((typeof mdsValue !== 'undefined') && (mdsValue !== '') && (mdsValue < 3) &&
@@ -418,7 +516,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
         // Only the first P value with each name gets in.  Since these are sorted we get all the variants with the lowest P values
         _.forEach(tempRVar,function(o){
-            if (_.findIndex(renderData.rvar,function (p){return (p['id']==o['id'])})<0){
+            if (_.findIndex(renderData.rvar,function (p){return (p['VAR_ID']==o['VAR_ID'])})<0){
                 renderData.rvar.push(o);
             }
         });
@@ -427,7 +525,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             return o.P_VALUEV
         });
         _.forEach(tempCVar,function(o){
-            if (_.findIndex(renderData.cvar,function (p){return (p['id']==o['id'])})<0){
+            if (_.findIndex(renderData.cvar,function (p){return (p['VAR_ID']==o['VAR_ID'])})<0){
                 renderData.cvar.push(o);
             }
         });
@@ -484,8 +582,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
         for (var i = 0; (i < sortedVariants.length) && (typeof returnValue === 'undefined'); i++) {
             var oneVariant = sortedVariants[i];
-            if ((typeof oneVariant.MAF !== 'undefined') && (oneVariant.MAF !== "")) {
-                if (oneVariant.MAF < 0.05) {
+            if ((typeof oneVariant.AF !== 'undefined') && (oneVariant.AF !== "")) {
+                if (oneVariant.AF < 0.05) {
                     returnValue = false;
                 } else {
                     returnValue = true;

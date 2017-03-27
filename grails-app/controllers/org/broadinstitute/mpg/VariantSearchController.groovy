@@ -416,6 +416,8 @@ class VariantSearchController {
             geneName = params.geneToSummarize
             log.debug "variantSearch params.geneToSummarize = ${params.geneToSummarize}"
         }
+        List<String> propertiesToInclude =  (params?.propertiesToInclude) ? params?.propertiesToInclude.split(",") : []
+        List<String> propertiesToRemove = (params?.propertiesToRemove) ? params?.propertiesToRemove.split(",") : []
 
 
         String currentVersion = metaDataService.getDataVersion()
@@ -457,7 +459,10 @@ class VariantSearchController {
 
 
         render(status: 200, contentType: "application/json") {
-            [variants: dataJsonObject]
+            [variants: dataJsonObject,
+             propertiesToInclude:(new JsonSlurper().parseText(groovy.json.JsonOutput.toJson(propertiesToInclude))) as JSONArray,
+             propertiesToRemove:(new JsonSlurper().parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray
+            ]
         }
 
     }

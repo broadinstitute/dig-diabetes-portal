@@ -181,13 +181,13 @@
                     drivingVariables = mpgSoftware.variantSearchResults.setVarsToRemember(drivingVariables);
                     $("#cDataModalGoesHere").empty().append(
                             Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
-                    var fakeData = {cProperties:{dataset:['DBSNP_ID','CHROM','POS'],
+                    var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
                                                  is_error: false,
                                                  numRecords: 3},
                                      columns:{
                                          pproperty:[],
                                          dproperty:[],
-                                         cproperty:['DBSNP_ID']
+                                         cproperty:['VAR_ID','DBSNP_ID','PVALUE','EFFECT','dataset']
                                      },
                         translationDictionary:{'DBSNP_ID':'dbSNP ID'}};
                     mpgSoftware.variantSearchResults.setTranslationFunction(fakeData);
@@ -199,9 +199,11 @@
                 var updateCommonTable = function (data,additionalParameters) {
                     var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
                     renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
+                    renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
+                    renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
                     $("#commonVariantsLocation").empty().append(Mustache.render($('#commonVariantTemplate')[0].innerHTML, renderData));
                     mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
-                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData.cvar, additionalParameters);
+                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData, additionalParameters);
                 }
 
 
@@ -333,9 +335,11 @@
                     });
 
                     mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
-                            {redLightImage: '<r:img uri="/images/redlight.png"/>',
+                            {   propertiesToInclude:valuesToInclude,
+                                propertiesToRemove:valuesToRemove,
+                                redLightImage: '<r:img uri="/images/redlight.png"/>',
                                 yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                                greenLightImage: '<r:img uri="/images/greenlight.png"/>'});
+                                greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
 
                 };
 
@@ -385,12 +389,20 @@
                         var refreshTopVariants = function ( callBack, params ) {
                             var rememberCallBack = callBack;
                             var rememberParams = params;
+                            var propertiesToIncludeQuoted = [];
+                            var propertiesToRemoveQuoted = [];
+                            _.each(params.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
+                            _.each(params.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
+
                             $.ajax({
                                 cache: false,
                                 type: "post",
                                 url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
                                 data: {
-                                    geneToSummarize:"${geneName}"},
+                                    geneToSummarize:"${geneName}",
+                                    propertiesToInclude: propertiesToIncludeQuoted.join(","),
+                                    propertiesToRemove: propertiesToRemoveQuoted.join(",")
+                                },
                                 async: true,
                                 success: function (data) {
                                     rememberCallBack(data,rememberParams);
