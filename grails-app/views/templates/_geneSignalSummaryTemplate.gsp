@@ -133,7 +133,8 @@
                     <div class="row">
                             <div class="col-xs-9"></div>
                             <div class="col-xs-3">
-                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal">Add / Subtract Data</button>
+                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal"
+                                onclick="mpgSoftware.geneSignalSummary.adjustProperties(this)"  tableSpec="highImpact">Add / Subtract Data</button>
                             </div>
                     </div>
 
@@ -175,7 +176,8 @@
                     <div class="row">
                             <div class="col-xs-9"></div>
                             <div class="col-xs-3">
-                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal">Add / Subtract Data</button>
+                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal"
+                                onclick="mpgSoftware.geneSignalSummary.adjustProperties(this)" tableSpec="common">Add / Subtract Data</button>
                             </div>
                     </div>
 

@@ -181,7 +181,7 @@
                     drivingVariables = mpgSoftware.variantSearchResults.setVarsToRemember(drivingVariables);
                     $("#cDataModalGoesHere").empty().append(
                             Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
-                    var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
+                    var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','Consequence','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
                                                  is_error: false,
                                                  numRecords: 3},
                                      columns:{
@@ -196,19 +196,29 @@
 
                 };
 
-                var updateCommonTable = function (data,additionalParameters) {
-                    var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
-                    renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
-                    renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
-                    renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
-                    $("#commonVariantsLocation").empty().append(Mustache.render($('#commonVariantTemplate')[0].innerHTML, renderData));
-                    mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
-                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData, additionalParameters);
-                }
+            var updateCommonTable = function (data,additionalParameters) {
+                var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+                renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
+                renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
+                renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
+                $("#commonVariantsLocation").empty().append(Mustache.render($('#commonVariantTemplate')[0].innerHTML, renderData));
+                mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
+                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData, additionalParameters);
+            }
+
+            var updateHighImpactTable = function (data,additionalParameters) {
+                var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+                renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
+                renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
+                renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
+                $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
+                mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
+                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData,additionalParameters);
+            }
 
 
 
-                var updateSignificantVariantDisplay = function (data,additionalParameters) {
+            var updateSignificantVariantDisplay = function (data,additionalParameters) {
                     var phenotypeName = additionalParameters.phenotype;
                     var datasetName = additionalParameters.ds;
                     var pName = additionalParameters.pname;
@@ -238,9 +248,10 @@
                         $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                     }
 
-                    $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
-                    mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
-                            "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData.rvar,additionalParameters);
+                    %{--$("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));--}%
+                    %{--mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",--}%
+                            %{--"${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData,additionalParameters);--}%
+                    updateHighImpactTable(data,additionalParameters);
 
                     //  set up the gait interface
                     mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere',{
@@ -266,6 +277,7 @@
                             "${createLink(controller:'gene',action: 'burdenTestVariantSelectionOptionsAjax')}");
 
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
+
                     updateCommonTable(data,additionalParameters);
 
                     //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
@@ -338,13 +350,22 @@
                     var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
                         return $(input).val();
                     });
+                    if (domSelectors == 'common'){
+                        mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
+                                {   propertiesToInclude:valuesToInclude,
+                                    propertiesToRemove:valuesToRemove,
+                                    redLightImage: '<r:img uri="/images/redlight.png"/>',
+                                    yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
+                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
+                    } else {
+                        mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateHighImpactTable,
+                                {   propertiesToInclude:valuesToInclude,
+                                    propertiesToRemove:valuesToRemove,
+                                    redLightImage: '<r:img uri="/images/redlight.png"/>',
+                                    yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
+                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
 
-                    mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
-                            {   propertiesToInclude:valuesToInclude,
-                                propertiesToRemove:valuesToRemove,
-                                redLightImage: '<r:img uri="/images/redlight.png"/>',
-                                yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                                greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
+                    }
 
                 };
 
@@ -461,7 +482,46 @@
 
 
     };
+    var setCheckBoxes = function(tableId){
+        var hdrMap = {};
+        // Get the names of the columns from the table headers and store them in a map
+        var hdrs = $(tableId).DataTable().columns().header();
+        _.forEach(hdrs,function(o){
+            var hdrDom = $(o);
+            var classList = hdrDom.attr('class').split(/\s+/);
+            var nameWeWant = _.find(classList,function(o){return o.startsWith('codeName_')});
+            var codeName = nameWeWant.substr("codeName_".length);
+            var displayName = hdrDom.html();
+            if (displayName.indexOf('<')>-1){
+                displayName = displayName.substr(0,displayName.indexOf('<'));
+            }
+            hdrMap[codeName] = displayName;
+        });
+        // now get the elements from the modal box
+        var props = $('.dk-modal-form-input-group>div.checkbox>label>input');
+        _.forEach(props,function(o){
+            var fullPropertyName = $(o).attr('value');
+            var propertyName = fullPropertyName.substr('common-common-'.length)
+            if (hdrMap[propertyName]){
+                $(o).prop('checked',true);
+            } else {
+                $(o).prop('checked',false);
+            }
+        });
 
+    }
+    var adjustProperties  = function(origDom){
+        var whichTable = $(origDom).attr('tableSpec');
+        var checkBoxes = $('.dk-modal-form-input-group>div.checkbox>label>input')
+        if (whichTable=='common'){
+            setCheckBoxes('#commonVariantsLocationHolder');
+            $('.confirmPropertyChange').attr('onclick',"mpgSoftware.geneSignalSummary.updateGenePageTables('common','x')");
+
+        } else if (whichTable=='highImpact'){
+            setCheckBoxes('#highImpactTemplateHolder');
+            $('.confirmPropertyChange').attr('onclick',"mpgSoftware.geneSignalSummary.updateGenePageTables('highImpact','x')");
+        }
+    }
 
 
 
@@ -474,7 +534,9 @@ return {
     updateDisplayBasedOnStoredSignificanceLevel:updateDisplayBasedOnStoredSignificanceLevel,
     displayVariantResultsTable:displayVariantResultsTable,
     updateGenePageTables:updateGenePageTables,
-    updateCommonTable:updateCommonTable
+    updateCommonTable:updateCommonTable,
+    updateHighImpactTable:updateHighImpactTable,
+    adjustProperties:adjustProperties
 }
 }());
 

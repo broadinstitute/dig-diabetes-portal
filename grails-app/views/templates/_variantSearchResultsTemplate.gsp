@@ -305,7 +305,7 @@
                     <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.variantSearchResults.confirmAddingProperties('properties',undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
                 {{/returnToTheVariantResultsTable}}
                 {{^returnToTheVariantResultsTable}}
-                <button type="button" class="btn btn-sm btn-primary" data-dismiss="modal" onclick="mpgSoftware.geneSignalSummary.updateGenePageTables(undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
+                <button type="button" class="btn btn-sm btn-primary confirmPropertyChange" data-dismiss="modal" onclick="mpgSoftware.geneSignalSummary.updateGenePageTables(undefined,'{{uniqueRoot}}')"><g:message code="variantSearch.results.modal.confirm" /></button>
                 {{/returnToTheVariantResultsTable}}
                    <button type="button" class="btn btn-sm btn-warning" data-dismiss="modal"><g:message code="variantSearch.results.modal.cancel" /></button>
                 </div>
