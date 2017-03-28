@@ -320,6 +320,11 @@
                         }
                     });
                     mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
+                    $("#xpropertiesModal").on("shown.bs.modal", function(){
+                        $("#xpropertiesModal li a").click();
+                    });
+
+
                 };
 
 
@@ -483,6 +488,14 @@ $( document ).ready(function() {
             greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
     mpgSoftware.geneSignalSummaryMethods.tableInitialization();
     //mpgSoftware.geneSignalSummary.displayVariantResultsTable();
+//    var _old = $.fn.fadeIn;
+//
+//    $.fn.fadeIn = function(){
+//        return _old.apply(this,arguments).trigger("fadeIn");
+//    };
+
+
+
 });
 
 

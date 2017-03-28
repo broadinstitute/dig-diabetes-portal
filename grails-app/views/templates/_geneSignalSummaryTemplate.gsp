@@ -130,6 +130,13 @@
 
                     </div>
 
+                    <div class="row">
+                            <div class="col-xs-9"></div>
+                            <div class="col-xs-3">
+                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal">Add / Subtract Data</button>
+                            </div>
+                    </div>
+
                     <div class="row" >
                         <div class="col-sm-7"></div>
                         <div class="col-sm-5">
@@ -158,12 +165,19 @@
 
 <script id="commonVariantTemplate"  type="x-tmpl-mustache">
 
-            <div class="row" style="margin-top: 15px;">
+            <div class="row">
                 <h3 class="specialTitle">Common variants</h3>
             </div>
 
             <div class="row">
                 <div class="col-lg-12">
+
+                    <div class="row">
+                            <div class="col-xs-9"></div>
+                            <div class="col-xs-3">
+                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal">Add / Subtract Data</button>
+                            </div>
+                    </div>
 
                     <div class="row" >
                         <div class="col-sm-7"></div>
@@ -199,15 +213,11 @@
 <script id="organizeSignalSummaryCommonFirstTemplate"  type="x-tmpl-mustache">
             <div class="text-center" id="phenotypeLabel">{{pName}}</div>
             <div id="cDataModalGoesHere"></div>
-            <div class="row">
-                <div class="col-xs-9"></div>
-                <div class="col-xs-3">
-                    <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#xdataModal">Add / Subtract Data</button>
-                </div>
-            </div>
+
             <div class="row"  style="margin-bottom: 10px">
                 <div class="col-xs-12">
                     <div class="variantCategoryHolder">
+
                         <div id="commonVariantsLocation"></div>
 
                         <div id="locusZoomLocation" class="locusZoomLocation"></div>

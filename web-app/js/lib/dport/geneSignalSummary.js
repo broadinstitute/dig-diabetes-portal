@@ -108,7 +108,24 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             case 'dataset':
                 obj = { "name": colName,  class:"commonDataSet",  "targets": [target], "title": "Data set" };
                 break;
-
+            case 'EFFECT':
+                obj = { "name": colName,   "targets": [target], "title": "effect" };
+                break;
+            case 'MOST_DEL_SCORE':
+                obj = { "name": colName,   "targets": [target], "title": "impact" };
+                break;
+            case 'DBSNP_ID':
+                obj = { "name": colName,   "targets": [target], "title": "dbSNP ID" };
+                break;
+            case 'Protein_change':
+                obj = { "name": colName,   "targets": [target], "title": "protein change" };
+                break;
+            case 'PVALUE':
+                obj = { "name": colName,   "targets": [target], "title": "pValue" };
+                break;
+            case 'GENE':
+                obj = { "name": colName,   "targets": [target], "title": "gene" };
+                break;
             default:
                 obj = { "name": colName,   "targets": [target],  "title": colName };
                 break;
