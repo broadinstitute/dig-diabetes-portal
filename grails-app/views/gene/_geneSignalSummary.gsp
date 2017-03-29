@@ -139,7 +139,10 @@
 
         mpgSoftware.geneSignalSummary = (function () {
 
+                var rememberSignalSummaryVariables = {};
+
                 var displayVariantResultsTable = function(phenotypeCode){
+
 
 
 
@@ -192,8 +195,6 @@
                         translationDictionary:{'DBSNP_ID':'dbSNP ID'}};
                     mpgSoftware.variantSearchResults.setTranslationFunction(fakeData);
                     mpgSoftware.variantSearchResults.generateModal(fakeData,drivingVariables,drivingVariables.uniqueRoot);
-                   // mpgSoftware.variantSearchResults.buildVariantResultsTable(domSelectors);
-
                 };
 
             var updateCommonTable = function (data,additionalParameters) {
@@ -203,7 +204,7 @@
                 renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
                 $("#commonVariantsLocation").empty().append(Mustache.render($('#commonVariantTemplate')[0].innerHTML, renderData));
                 mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
-                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData, additionalParameters);
+                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData, rememberSignalSummaryVariables);
             }
 
             var updateHighImpactTable = function (data,additionalParameters) {
@@ -213,7 +214,7 @@
                 renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
                 $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
                 mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
-                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData,additionalParameters);
+                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData,rememberSignalSummaryVariables);
             }
 
 
@@ -225,6 +226,7 @@
                     var useIgvNotLz = additionalParameters.preferIgv;
                     additionalParameters['gene'] = '<%=geneName%>';
                     additionalParameters['vrtUrl'] =  '<g:createLink absolute="true" controller="variantSearch" action="gene" />';
+                    rememberSignalSummaryVariables = additionalParameters;
                     var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
                     var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
@@ -354,6 +356,8 @@
                         mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
+                                    gene: '<%=geneName%>',
+                                    vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
                                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                                     greenLightImage: '<r:img uri="/images/greenlight.png"/>' });

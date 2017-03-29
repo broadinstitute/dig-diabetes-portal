@@ -25,7 +25,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                       (filter.length===0)){
                       return true;
                 } else {
-                  if (data[columnToConsider]===filter){
+                  var dsname=$(data[0]).attr('dsname');
+                  if (dsname===filter){
                       return true;
                   } else {
                       return false;
@@ -65,7 +66,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var startVRT = function(callbackData){
         var ds = $(_.last(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data()))).attr('class');
-        var pv = _.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[callbackData.data.pValueIndex];
+        var pv = $(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[0]).attr('pval');
         window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype;
     };
 
@@ -74,7 +75,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.each(columns,function(columnName){
             switch(columnName){
                 case 'VAR_ID':
-                    arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantRec.id+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantRec.VAR_ID+'</a>');
+                    arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantRec.VAR_ID+'" class="boldItlink" dsname="'+variantRec.dsr+'" pval="'+variantRec['P_VALUE']+'" custag="'+variantRec.CAT+'">'+variantRec.VAR_ID+'</a>');
                     break;
                 case 'DBSNP_ID':
                     arrayOfRows.push((variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'');
@@ -230,7 +231,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('#commonVariantsLocationHolder_filter').css('display','none');
         $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
         $('tr.niceHeaders th.commonDataSet').append('<select class="dsFilter common" type="button" id="dropdownCommonVariantDsButton" data-toggle="dropdown" aria-haspopup="true" '+
-        'aria-expanded="false">Dataset filter</button>');
+        'aria-expanded="false">Dataset filter</select>');
         $('#dropdownCommonVariantDsButton').on("click", mpgSoftware.geneSignalSummaryMethods.disableClickPropagation);
         $('select.dsFilter.common').append("<option value='ALL'>All</option>");
         _.forEach(distinctDataSets.sort(),function (o){
