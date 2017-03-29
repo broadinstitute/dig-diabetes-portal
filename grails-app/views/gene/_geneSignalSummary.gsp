@@ -1,9 +1,5 @@
 <style>
-    select.dsFilter {
-        font-weight: normal;
-        font-size: 12px;
-        margin: 0 0 0 10px;
-    }
+
 </style>
 
 <div class="row">
@@ -17,7 +13,7 @@
     </div>
 </div>
 <div >%{--should hold the Choose data set panel--}%
-    <div class="panel-heading" style="background-color: #E0F3FD">
+    <div class="panel-heading">
         <div class="row">
             <div class="col-md-2 col-xs-12">
                 <div id='trafficLightHolder'>
@@ -111,7 +107,7 @@
 </div>
 
 <div class="collapse in" id="collapseExample">
-    <div class="well">
+    <div class="wellPlace">
         <div id="noAggregatedVariantsLocation">
             <div class="row" style="margin-top: 15px;">
                 <div class="col-lg-offset-1">
@@ -234,11 +230,11 @@
                     if (mpgSoftware.locusZoom.plotAlreadyExists()) {
                         mpgSoftware.locusZoom.removeAllPanels();
                     }
-                    $('#collapseExample div.well').empty();
+                    $('#collapseExample div.wellPlace').empty();
                     if (commonSectionShouldComeFirst) {
-                        $("#collapseExample div.well").empty().append(Mustache.render( $('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,{pName:pName}));
+                        $("#collapseExample div.wellPlace").empty().append(Mustache.render( $('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,{pName:pName}));
                     } else {
-                        $("#collapseExample div.well").empty().append(Mustache.render( $('#organizeSignalSummaryHighImpactFirstTemplate')[0].innerHTML,{pName:pName}));
+                        $("#collapseExample div.wellPlace").empty().append(Mustache.render( $('#organizeSignalSummaryHighImpactFirstTemplate')[0].innerHTML,{pName:pName}));
 
                     }
                     if (useIgvNotLz){
@@ -337,7 +333,12 @@
                     $("#xpropertiesModal").on("shown.bs.modal", function(){
                         $("#xpropertiesModal li a").click();
                     });
-
+                    $('a[href="#highImpactVariantTabHolder"]').on('shown.bs.tab', function (e) {
+                        $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
+                    });
+                    $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
+                        $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
+                    });
 
                 };
 
@@ -553,12 +554,9 @@ $( document ).ready(function() {
             yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
             greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
     mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-    //mpgSoftware.geneSignalSummary.displayVariantResultsTable();
-//    var _old = $.fn.fadeIn;
-//
-//    $.fn.fadeIn = function(){
-//        return _old.apply(this,arguments).trigger("fadeIn");
-//    };
+
+
+
 
 
 

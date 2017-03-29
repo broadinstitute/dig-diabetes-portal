@@ -311,7 +311,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 },
                 dom: 'lBtip',
                 buttons: [
-                    { extend: "copy", text: "copy" },
+                    { extend: "copy", text: "Copy" },
                     { extend: 'csv', filename: "highImpactVariants" },
                     { extend: 'pdf', orientation: 'landscape'}
                 ]

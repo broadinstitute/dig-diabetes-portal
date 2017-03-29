@@ -125,15 +125,10 @@
             <div class="row">
                 <div class="col-xs-12">
 
-                    <div class="row" style="">
-                        <h3 class="specialTitle">High impact variants</h3>
-
-                    </div>
-
                     <div class="row">
                             <div class="col-xs-9"></div>
                             <div class="col-xs-3">
-                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal"
+                                <button class="btn btn-primary btn-xs pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#xpropertiesModal"
                                 onclick="mpgSoftware.geneSignalSummary.adjustProperties(this)"  tableSpec="highImpact">Add / Subtract Data</button>
                             </div>
                     </div>
@@ -166,9 +161,7 @@
 
 <script id="commonVariantTemplate"  type="x-tmpl-mustache">
 
-            <div class="row">
-                <h3 class="specialTitle">Common variants</h3>
-            </div>
+
 
             <div class="row">
                 <div class="col-lg-12">
@@ -176,7 +169,7 @@
                     <div class="row">
                             <div class="col-xs-9"></div>
                             <div class="col-xs-3">
-                                <button class="btn btn-primary btn-xs" style="margin-bottom: -5px;" data-toggle="modal" data-target="#xpropertiesModal"
+                                <button class="btn btn-primary btn-xs pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#xpropertiesModal"
                                 onclick="mpgSoftware.geneSignalSummary.adjustProperties(this)" tableSpec="common">Add / Subtract Data</button>
                             </div>
                     </div>
@@ -213,28 +206,42 @@
 
 
 <script id="organizeSignalSummaryCommonFirstTemplate"  type="x-tmpl-mustache">
-            <div class="text-center" id="phenotypeLabel">{{pName}}</div>
-            <div id="cDataModalGoesHere"></div>
-
-            <div class="row"  style="margin-bottom: 10px">
-                <div class="col-xs-12">
-                    <div class="variantCategoryHolder">
-
-                        <div id="commonVariantsLocation"></div>
-
-                        <div id="locusZoomLocation" class="locusZoomLocation"></div>
-                        <div class="igvGoesHere"></div>
-                    </div>
-                </div>
-            </div>
+            <div class="text-right" id="phenotypeLabel">{{pName}}</div>
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="variantCategoryHolder">
-                        <div id="highImpactVariantsLocation"></div>
-                        <div id="aggregateVariantsLocation"></div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div id="burdenGoesHere" class="row"></div>
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants</a></li>
+                        <li role="presentation"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div id="cDataModalGoesHere"></div>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="commonVariantTabHolder">
+                    <div class="row"   style="border: none">
+                        <div class="col-xs-12">
+                            <div class="variantCategoryHolder">
+
+                                <div id="commonVariantsLocation"></div>
+
+                                <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                                <div class="igvGoesHere"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="highImpactVariantTabHolder">
+                    <div class="row" style="border: none">
+                        <div class="col-xs-12">
+                            <div class="variantCategoryHolder">
+                                <div id="highImpactVariantsLocation"></div>
+                                <div id="aggregateVariantsLocation"></div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="burdenGoesHere" class="row"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -244,6 +251,14 @@
 
 <script id="organizeSignalSummaryHighImpactFirstTemplate"  type="x-tmpl-mustache">
             <div class="text-center" id="phenotypeLabel">{{pName}}</div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants</a></li>
+                        <li role="presentation"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants</a></li>
+                    </ul>
+                </div>
+            </div>
             <div id="cDataModalGoesHere"></div>
             <div class="row">
                 <div class="col-xs-9"></div>
@@ -251,26 +266,32 @@
                     <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#cDataModalGoesHere">Add / Subtract Data</button>
                 </div>
             </div>
-            <div class="row" style="margin-bottom: 10px">
-                <div class="col-xs-12">
-                    <div class="variantCategoryHolder">
-                        <div id="highImpactVariantsLocation"></div>
-                        <div id="aggregateVariantsLocation"></div>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div id="burdenGoesHere" class="row"></div>
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="highImpactVariantTabHolder">
+                    <div class="row"  style="border: none">
+                        <div class="col-xs-12">
+                            <div class="variantCategoryHolder">
+                                <div id="highImpactVariantsLocation"></div>
+                                <div id="aggregateVariantsLocation"></div>
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div id="burdenGoesHere" class="row"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="variantCategoryHolder">
-                        <div id="commonVariantsLocation"></div>
+                <div role="tabpanel" class="tab-pane" id="commonVariantTabHolder">
+                    <div class="row" style="border: none">
+                        <div class="col-xs-12">
+                            <div class="variantCategoryHolder" id=">
+                                <div id="commonVariantsLocation"></div>
 
-                        <div id="locusZoomLocation" class="locusZoomLocation"></div>
-                        <div class="igvGoesHere"></div>
+                                <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                                <div class="igvGoesHere"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -12,7 +12,8 @@
     display: none;
 }
 #phenotypeLabel{
-    font-size: 32px;
+    display: none;
+    font-size: 16px;
     font-weight: bold;
 }
 #burdenGoesHere .panel-group{
@@ -145,8 +146,8 @@ div.variantBoxHeaders {
     padding: 5px;
 }
 .variantCategoryHolder {
-    border-top: 1px solid black;
-    margin: 12px 0 15px 0;
+    /*border-top: 1px solid black;*/
+    /*margin: 12px 0 15px 0;*/
 }
 table.dataTable,
 table.dataTable th,
