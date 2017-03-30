@@ -70,6 +70,11 @@
                                 </span>
                             </g:elseif>
 
+                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('70KforT2D')}">
+                                <span class="data-status-early-phase1-access">Unpublished</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
+                                </span>
+                            </g:elseif>
+
                             <g:else>
                                 <span class="data-status-open-access">Open access</span> | %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
