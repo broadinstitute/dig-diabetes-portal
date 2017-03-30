@@ -8,7 +8,8 @@
                                                             default="Change phenotype choice"/></label>
         &nbsp;
         <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
-                onchange="mpgSoftware.geneSignalSummary.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay)">
+                onchange="mpgSoftware.geneSignalSummary.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,
+                        {preferIgv:($('input[name=genomeBrowser]:checked').val()==='2')})">
         </select>
     </div>
 </div>
@@ -192,6 +193,8 @@
                     var datasetName = additionalParameters.ds;
                     var pName = additionalParameters.pname;
                     var useIgvNotLz = additionalParameters.preferIgv;
+                    //  until LZ is fixed
+                    useIgvNotLz = true;
                     additionalParameters['gene'] = '<%=geneName%>';
                     additionalParameters['vrtUrl'] =  '<g:createLink absolute="true" controller="variantSearch" action="gene" />';
                     rememberSignalSummaryVariables = additionalParameters;
@@ -199,6 +202,9 @@
                     var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
                     renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
+                    if (useIgvNotLz){
+                        renderData["igvChecked"] =  'checked';
+                    }
                     if (mpgSoftware.locusZoom.plotAlreadyExists()) {
                         mpgSoftware.locusZoom.removeAllPanels();
                     }
@@ -211,12 +217,13 @@
                     }
                     if (useIgvNotLz){
                        $('.locusZoomLocation').css('display','none');
+                       $('.browserChooserGoesHere').empty().append(Mustache.render( $('#genomeBrowserTemplate')[0].innerHTML,renderData));
                     } else {
                         $('.igvGoesHere').css('display','none');
-                    }
-                    if (!useIgvNotLz){
+                        $('.browserChooserGoesHere').empty().append(Mustache.render( $('#genomeBrowserTemplate')[0].innerHTML,renderData));
                         $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                     }
+
 
                     %{--$("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));--}%
                     %{--mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",--}%
