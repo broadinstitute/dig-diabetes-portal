@@ -1,6 +1,25 @@
 <script id="locusZoomTemplate"  type="x-tmpl-mustache">
         <div style="margin-top: 20px">
 
+            <div class="row">
+                <div class="col-xs-offset-7 col-xs-5">
+                    <div class="row" style="margin: 0 10px 5px 0; background-color: #eeeeee">
+                        <div class="col-xs-5">
+                            <label class="radio-inline" style="font-weight: bold">Genome browser</label>
+                        </div>
+                        <div class="col-xs-4">
+                            <label class="radio-inline"><input type="radio"  name="genomeBrowser" value=1
+                                                               onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()"
+                                                               checked>LocusZoom</label>
+                        </div>
+                        <div class="col-xs-3">
+                            <label class="radio-inline"><input type="radio"  name="genomeBrowser" value=2
+                                                               onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">IGV</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
             <div style="display: flex; justify-content: space-around;">
                 <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
