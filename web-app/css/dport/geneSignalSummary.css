@@ -71,9 +71,21 @@ a.morePhenos:hover {
     -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
+    border: 1px solid #000000;
+    font-size:14px;
 }
 .chosenPhenotype{
     font-weight: bold;
+    border: 2px solid #000000;
+    font-size:18px;
+    padding: 8px;
+}
+.variantTableLabels {
+    font-size:16px;
+}
+.variantTableLabels.active{
+    font-weight:bold;
+    color: #000000;
 }
 .redPhenotype {
     background-color: #dddddd;
