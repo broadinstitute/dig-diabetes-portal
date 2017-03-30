@@ -46,6 +46,7 @@ class RestServerService {
     private String PROD_02_SERVER = ""
     private String AWS01_REST_SERVER = ""
     private String AWS02_REST_SERVER = ""
+    private String AWS01_NEW_CODE_REST_SERVER = ""
     private String AWS02_NEW_CODE_REST_SERVER = ""
     private String DEV_REST_SERVER = ""
     private String BASE_URL = ""
@@ -163,8 +164,11 @@ class RestServerService {
         // 'aws01'
         AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
 
-        // 'stage aws01'
+        // 'stage kbv2'
         AWS02_NEW_CODE_REST_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
+
+        // 'prod kbv2'
+        AWS01_NEW_CODE_REST_SERVER = grailsApplication.config.prodKb2NewCodeServer.base + grailsApplication.config.prodKb2NewCodeServer.name + grailsApplication.config.prodKb2NewCodeServer.path
 
         // 'stage aws01'
         AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
@@ -216,6 +220,9 @@ class RestServerService {
 
     public String getAws02NewCodeRestServer() {
         return AWS02_NEW_CODE_REST_SERVER;
+    }
+    public String getAws01NewCodeRestServer() {
+        return AWS01_NEW_CODE_REST_SERVER;
     }
 
     public String getProdLoadBalanced() {
@@ -329,6 +336,9 @@ class RestServerService {
         pickADifferentRestServer(AWS02_REST_SERVER)
     }
 
+    public void goWithTheAws01NewCodeRestServer() {
+        pickADifferentRestServer(AWS01_NEW_CODE_REST_SERVER)
+    }
     public void goWithTheAws02NewCodeRestServer() {
         pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
     }
