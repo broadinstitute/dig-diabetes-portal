@@ -527,6 +527,7 @@ class RestServerService {
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
+            log.info("About to attempt call to ${targetUrl}")
             response = rest.get(currentRestServer + targetUrl) {
                 contentType "text/plain"
             }
@@ -560,6 +561,7 @@ class RestServerService {
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
+            log.info("About to attempt call to ${targetUrl}")
             response = rest.post(currentRestServer + targetUrl) {
                 contentType "application/json"
                 json drivingJson
