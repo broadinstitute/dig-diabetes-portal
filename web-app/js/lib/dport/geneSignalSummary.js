@@ -237,7 +237,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.forEach(distinctDataSets.sort(),function (o){
             $('select.dsFilter.common').append("<option value='"+o+"'>"+o+"</option>");
         });
-        $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink" style="display:none">Explore</div>');
+        $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink pull-right" style="display:none">Explore</div>');
         $('.commonVariantVRTLink').on("click", null, {  gene:parameters.gene,
                                                         phenotype:parameters.phenotype,
                                                         vrtUrl:parameters.vrtUrl,
@@ -343,7 +343,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.forEach(distinctDataSets.sort(),function (o){
             $('select.dsFilter.highImpact').append("<option value='"+o+"'>"+o+"</option>");
         });
-        $('#dropdownHighImpactVariantMenuButton').after('<div class="boldlink highImpactVariantVRTLink" style="display:none">Explore</div>');
+        $('#dropdownHighImpactVariantMenuButton').after('<div class="boldlink highImpactVariantVRTLink pull-right" style="display:none">Explore</div>');
         $('.highImpactVariantVRTLink').on("click", null, {  gene:parameters.gene,
                 phenotype:parameters.phenotype,
                 vrtUrl:parameters.vrtUrl,

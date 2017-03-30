@@ -172,8 +172,8 @@ modules = {
     locusZoom {
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
         resource url: 'js/lib/locuszoom.vendor.min.js'
-        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.3/locuszoom.app.js'
-        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.3/locuszoom.css'
+        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.6/locuszoom.app.js'
+        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.6/locuszoom.css'
 //        resource url: 'js/lib/locuszoom.app.js'
 //        resource url: 'css/lib/locuszoom.css'
 

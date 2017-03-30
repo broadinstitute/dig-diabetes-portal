@@ -11,6 +11,20 @@
     border: 0.5px solid gray;
     display: none;
 }
+#dropdownCommonVariantDsButton{
+    margin: 0 0 0 8px;
+}
+#dropdownHighImpactVariantMenuButton {
+    margin: 0 0 0 8px;
+}
+.highImpactVariantVRTLink {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.commonVariantVRTLink {
+    text-decoration: underline;
+    cursor: pointer;
+}
 #phenotypeLabel{
     display: none;
     font-size: 16px;
