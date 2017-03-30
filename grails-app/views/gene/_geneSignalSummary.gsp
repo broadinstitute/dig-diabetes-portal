@@ -194,7 +194,7 @@
                     var pName = additionalParameters.pname;
                     var useIgvNotLz = additionalParameters.preferIgv;
                     //  until LZ is fixed
-                    useIgvNotLz = true;
+                   // useIgvNotLz = true;
                     additionalParameters['gene'] = '<%=geneName%>';
                     additionalParameters['vrtUrl'] =  '<g:createLink absolute="true" controller="variantSearch" action="gene" />';
                     rememberSignalSummaryVariables = additionalParameters;

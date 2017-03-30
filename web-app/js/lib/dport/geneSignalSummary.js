@@ -660,7 +660,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     }
                 } else {
                     listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
-                        'ds': v['ds'],
+                        'ds': v['dataset'],
                         'pname': v['pname'],
                         'signalStrength': newSignalCategory,
                         'pValue': v['P_VALUEV']})
