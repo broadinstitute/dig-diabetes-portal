@@ -67,7 +67,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var startVRT = function(callbackData){
         var ds = $(_.last(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data()))).attr('class');
         var pv = $(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[0]).attr('pval');
-        window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype;
+        window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype+'&ignoreMdsFilter=1';
     };
 
     var buildARowOfTheDatatable = function(columns,variantInfoUrl,distinctDataSets,variantRec){

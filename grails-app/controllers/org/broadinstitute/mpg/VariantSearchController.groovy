@@ -296,6 +296,7 @@ class VariantSearchController {
         String phenotype = params.phenotype
         String parmType = params.parmType
         String parmVal = params.parmVal
+        String ignoreMdsFilter = params.ignoreMdsFilter
         Float significance = 0f
         try {
             significance = Float.parseFloat(significanceString)
@@ -327,7 +328,10 @@ class VariantSearchController {
                 }
             }
         } else {  // variants and associations table
-            String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
+            String technology = "unknown"
+            if (!ignoreMdsFilter){ // we can use the technology to add a filter to our search.  If requested, ignore this little trick
+                technology = metaDataService.getTechnologyPerSampleGroup(dataset)
+            }
             listOfCodedFilters = filterManagementService.storeParametersInHashmap(geneId, significance, dataset, region, technology, phenotype)
         }
 

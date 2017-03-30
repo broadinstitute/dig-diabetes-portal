@@ -332,10 +332,12 @@
                     var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
                         return $(input).val();
                     });
+                    var currentPhenotype = $('.chosenPhenotype').attr('id');
                     if (domSelectors == 'common'){
                         mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
+                                    currentPhenotype: currentPhenotype,
                                     gene: '<%=geneName%>',
                                     vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
                                     redLightImage: '<r:img uri="/images/redlight.png"/>',
@@ -345,6 +347,8 @@
                         mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateHighImpactTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
+                                    currentPhenotype: currentPhenotype,
+                                    gene: '<%=geneName%>',
                                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                                     greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
@@ -403,16 +407,19 @@
                             var propertiesToRemoveQuoted = [];
                             _.each(params.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
                             _.each(params.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
-
+                            var callingObj = {
+                                geneToSummarize:"${geneName}",
+                                propertiesToInclude: propertiesToIncludeQuoted.join(","),
+                                propertiesToRemove: propertiesToRemoveQuoted.join(",")
+                            };
+                            if (typeof params.currentPhenotype !== 'undefined') {
+                                callingObj["phenotype"] = params.currentPhenotype;
+                            };
                             $.ajax({
                                 cache: false,
                                 type: "post",
                                 url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
-                                data: {
-                                    geneToSummarize:"${geneName}",
-                                    propertiesToInclude: propertiesToIncludeQuoted.join(","),
-                                    propertiesToRemove: propertiesToRemoveQuoted.join(",")
-                                },
+                                data: callingObj,
                                 async: true,
                                 success: function (data) {
                                     rememberCallBack(data,rememberParams);
