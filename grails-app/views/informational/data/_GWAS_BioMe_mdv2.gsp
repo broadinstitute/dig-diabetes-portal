@@ -1,5 +1,7 @@
 <div class="panel-body">
 
+<h4><g:message code="informational.data.accessphase.BioMe"></g:message></h4>
+
 <h4>Publications</h4>
 
 <p><div class="paper">

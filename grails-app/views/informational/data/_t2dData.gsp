@@ -61,17 +61,17 @@
                             <span class="dataset-summary">
 
                             <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('BioMe')}">
-                                <span class="data-status-early-phase1-access">Early Access Phase 1</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
+                                <span class="data-status-early-phase1-access">Early Access Phase 2</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
                             </g:if>
 
-                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP')}">
-                                <span class="data-status-early-phase1-access">Early Access Phase 2</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
+                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('ForT2D')}">
+                                <span class="data-status-early-phase1-access">Unpublished</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
                             </g:elseif>
 
-                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('70K')}">
-                                <span class="data-status-early-phase1-access">Unpublished</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
+                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP')}">
+                                <span class="data-status-early-phase1-access">Early Access Phase 2</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
                                 </span>
                             </g:elseif>
 

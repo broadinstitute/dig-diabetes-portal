@@ -1,22 +1,9 @@
 
 
-
-Subjects: table listing # cases, # controls, cohort name, cohort ethnicity
-
-
-
-Project description
-Project URL
-Experiment summary
-Overview of analysis results (detailed analysis/QC reports may be provided for download)
-Where to find data in the Portal
-Future plans for this data set in the Portal (additional phenotypes, making data accessible via more tools, etc.)
-external links
-
-
-
 <div class="panel-body">
 
+<h4><g:message code="informational.data.accessphase.70KforT2D"></g:message></h4>
+<p><g:message code="informational.data.accessphase.70KforT2Da"></g:message></p>
 <h4>Publications</h4>
 
 <p><div class="paper">
@@ -166,11 +153,9 @@ external links
 
 <p><g:message code="informational.data.accessing.data"></g:message></p>
 
-<h4>Future plans for (dataset name) data in the T2D Knowledge Portal</h4>
-
-<p><g:message code="informational.data.future.data"></g:message></p>
 
 <h4>External Links to 70KforT2D data</h4>
 
-<p><g:message code="informational.data.external.70KforT2D"></g:message></p>
+<p><g:message code="informational.data.external.70KforT2D1"></g:message></p>
+<p><g:message code="informational.data.external.70KforT2D2"></g:message></p>
 </div>
