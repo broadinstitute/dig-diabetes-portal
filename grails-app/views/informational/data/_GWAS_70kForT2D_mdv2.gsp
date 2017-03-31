@@ -3,7 +3,7 @@
 
 Subjects: table listing # cases, # controls, cohort name, cohort ethnicity
 
-For each cohort: case selection criteria, control selection criteria
+
 
 Project description
 Project URL
@@ -93,40 +93,67 @@ external links
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">The T2D cases were selected from UK Caucasian subjects who form part of the Diabetes UK Warren 2 repository. In each case, the diagnosis of diabetes was based on either current prescribed treatment with sulphonylureas, biguanides, other oral agents and/or insulin or, in the case of individuals treated with diet alone, historical or contemporary laboratory evidence of hyperglycaemia (as defined by the World Health Organization). Other forms of diabetes (for example, maturity-onset diabetes of the young, mitochondrial diabetes, and T1D) were excluded by standard clinical criteria based on personal and family history. Criteria for excluding autoimmune diabetes included absence of first-degree relatives with T1D, an interval of &ge; 1 years between diagnosis and institution of regular insulin therapy and negative testing for antibodies to glutamic acid decarboxylase (anti-GAD). Cases were limited to those who reported that all four grandparents had exclusively British and/or Irish origin, by both self-reported ethnicity and place of birth. All were diagnosed between age 25 and 75. Approximately 30% were explicitly recruited as part of multiplex sibships and &sim;25% were offspring in parent-offspring 'trios' or 'duos' (that is, families comprising only one parent complemented by additional sibs). The remainder were recruited as isolated cases but these cases were (compared to population-based cases) of relatively early onset and had a high proportion of T2D parents and/or siblings. Cases were ascertained across the UK but were centralized on the main collection centres (Exeter, London, Newcastle, Norwich, Oxford). Selection of the samples typed in WTCCC from the larger collections was based primarily on DNA availability and success in passing Diabetes and Inflammation Laboratory (DIL)/Wellcome Trust Sanger Institute (WTSI) DNA quality control.</td>
-                    <td valign="top">criteria</td></tr>
+                    <td valign="top"><ul>
+                        <li>The 1958 Birth Cohort (also known as the National Child Development Study) includes all births in England, Wales and Scotland, during one week in 1958. From an original sample of over 17,000 births, survivors were followed up at ages 7, 11, 16, 23, 33 and 42 years (http://www.cls.ioe.ac.uk/studies.asp?section=000100020003). In a biomedical examination at 44-45 years (http://www.b58cgene.sgul.ac.uk/followup.php), 9,377 cohort members were visited at home providing 7,692 blood samples with consent for future Epstein-Barr virus (EBV)-transformed cell lines. DNA samples extracted from 1,500 cell lines of self-reported white ethnicity and representative of gender and each geographical region were selected for use as controls.</li>
+                        <li>The second set of common controls was made up of 1,500 individuals selected from a sample of blood donors recruited as part of the current project. WTCCC in collaboration with the UK Blood Services (NHSBT in England, SNBTS in Scotland and WBS in Wales) set up a UK national repository of de-identified samples of DNA and viable mononuclear cells from 3,622 consenting blood donors, age range 18-69 years (ethical approval 05/Q0106/74). A set of 1,564 samples was selected from the 3622 samples recruited based on sex and geographical region (to reproduce the distribution of the samples of the 1958 Birth Cohort) for use as common controls in the WTCCC study. DNA was extracted as described elsewhere with a yield of 3054 &plusmn; 1207 &#956;g (mean &plusmn; 1 s.d.).</li>
+                    </ul></td></tr>
             </table>
         </div></td><td>European</td></tr>
 
-    <tr><td>n,nnn</td><td>n,nnn</td><td><a onclick="showSection(event)">Cohort name</a>
+    <tr><td>2,614</td><td>3,061</td><td><a onclick="showSection(event)">GENEVA Genes and Environment Initiatives in Type 2 Diabetes (Nurses' Health Study/Health Professionals Follow-up Study) GENEVA NHS/HPFS</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
-                    <td valign="top">criteria</td>
-                    <td valign="top">criteria</td></tr>
+                    <td valign="top"><p>Through 1996 follow-up, criteria for confirmed T2D included one of the following:
+                        <ul>
+                            <li>One or more classic symptoms (excessive thirst, polyuria, weight loss, hunger, pruritus, or coma) plus fasting plasma glucose &ge; 140 mg/dl (7.8 mmol/L) and/or random plasma glucose &ge; 200 mg/dl (11.1 mmol/L) and/or plasma glucose 2 hours after an oral glucose tolerance test &ge; 200 mg/dl; or</li>
+                            <li>At least two elevated plasma glucose levels (as described above) on different occasions in the absence of symptoms; or</li>
+                            <li>Treatment with hypoglycaemic medication (insulin or oral hypoglycaemic agent).</li>
+                        </ul></p>
+                        <p>In response to the current ADA diagnostic criteria (fasting plasma glucose cut point &ge; 126 mg/dl [7.0 mmol/L]), Supplementary Diabetes Questionnaire for participants reporting a new diagnosis of diabetes on the 1998 or later questionnaires were revised. This revised supplementary questionnaire ascertains the level of elevation in fasting plasma glucose and facilitates determining which participants had fasting plasma glucose &ge; 140 mg/dl (the earlier diagnostic cut point) and which had a fasting plasma glucose &ge; 126 (the current diagnostic cut point). The criteria for confirmed T2D during the 1998–2000 follow-up cycle and later cycles remain the same, except for the elevated fasting plasma glucose criterion for which the cut point was changed from 140 mg/dl to 126 mg/dl. The revised supplementary questionnaire was used to classify cases in categories of glucose elevation and determine the proportion diagnosed in each category (e.g. fasting plasma glucose 126–139 versus &ge; 140 mg/dl) allowing conducting sensitivity analyses with exclusion of participants that meet the ADA criteria and not the NDDG criteria.</p></td>
+                    <td valign="top">No diabetes mellitus.</td></tr>
             </table>
-        </div></td><td>ethnicity</td></tr>
+        </div></td><td>European</td></tr>
 
-    <tr><td>n,nnn</td><td>n,nnn</td><td><a onclick="showSection(event)">Cohort name</a>
+    <tr><td>6,995</td><td>49,845</td><td><a onclick="showSection(event)">Resource for Genetic Epidemiology Research on Adult Health and Aging (GERA)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
-                    <td valign="top">criteria</td>
-                    <td valign="top">criteria</td></tr>
+                    <td valign="top">Each participant was coded as a patient for T2D if he/she had at least two diagnoses within this disease category that had to be recorded on separate days. Diagnoses were obtained from patient encounters at Kaiser Permanente Northern California facilities from January 1, 1995 to March 15, 2013. The March 2013 ICD9-CM diagnoses used for the Type 2 Diabetes category were:
+                        <ul>
+                            <li>250.00 Diabetes mellitus without mention of complication, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.02 Diabetes mellitus without mention of complication, type II or unspecified type, uncontrolled.</li>
+                            <li>250.10 Diabetes with ketoacidosis, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.12 Diabetes with ketoacidosis, type II or unspecified type, uncontrolled.</li>
+                            <li>250.20 Diabetes with hyperosmolarity, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.22 Diabetes with hyperosmolarity, type II or unspecified type, uncontrolled.</li>
+                            <li>250.30 Diabetes with other coma, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.32 Diabetes with other coma, type II or unspecified type, uncontrolled.</li>
+                            <li>250.40 Diabetes with renal manifestations, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.42 Diabetes with renal manifestations, type II or unspecified type, uncontrolled.</li>
+                            <li>250.50 Diabetes with ophthalmic manifestations, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.52 Diabetes with ophthalmic manifestations, type II or unspecified type, uncontrolled.</li>
+                            <li>250.60 Diabetes with neurological manifestations, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.62 Diabetes with neurological manifestations, type II or unspecified type, uncontrolled.</li>
+                            <li>250.70 Diabetes with peripheral circulatory disorders, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.72 Diabetes with peripheral circulatory disorders, type II or unspecified type, uncontrolled.</li>
+                            <li>250.80 Diabetes with other specified manifestations, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.82 Diabetes with other specified manifestations, type II or unspecified type, uncontrolled.</li>
+                            <li>250.90 Diabetes with unspecified complication, type II or unspecified type, not stated as uncontrolled.</li>
+                            <li>250.92 Diabetes with unspecified complication, type II or unspecified type, uncontrolled.</li>
+                        </ul></td>
+                    <td valign="top">The rest of subjects not coded as T2D patients were considered as controls.</td></tr>
             </table>
-        </div></td><td>ethnicity</td></tr>
+        </div></td><td>European</td></tr>
 </table>
 
 <h4>Project</h4>
 
-<p><g:message code="informational.data.project.project"></g:message></p>
-
-
-<h4>Funding acknowledgments</h4>
-<p><g:message code="informational.data.funding.project"></g:message>
+<p><g:message code="informational.data.project.70KforT2D"></g:message></p>
 
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.project"></g:message></p>
@@ -143,7 +170,7 @@ external links
 
 <p><g:message code="informational.data.future.data"></g:message></p>
 
-<h4>External Links to (dataset name) data</h4>
+<h4>External Links to 70KforT2D data</h4>
 
-<p><g:message code="informational.data.external.project"></g:message></p>
+<p><g:message code="informational.data.external.70KforT2D"></g:message></p>
 </div>
