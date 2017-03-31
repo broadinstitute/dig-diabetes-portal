@@ -87,9 +87,17 @@
 
                             <div class="radio">
                                 <label>
+                                    <input id="testserver" type="radio" name="datatype" value="aws01newcoderestserver"
+                                        <%=restServer.getCurrentServer()==restServer.getAws01NewCodeRestServer()?" checked ":"" %> />
+                                    <g:message code="system.radio.rest_server.AWS01NewCode" /> (${restServer.getAws01NewCodeRestServer()})
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
                                     <input id="testserver" type="radio" name="datatype" value="aws02restserver"
                                         <%=restServer.getCurrentServer()==restServer.getAws02RestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS02" /> (${restServer.getAws02NewCodeRestServer()})
+                                    <g:message code="system.radio.rest_server.AWS02" /> (${restServer.getAws02RestServer()})
                                 </label>
                             </div>
 
