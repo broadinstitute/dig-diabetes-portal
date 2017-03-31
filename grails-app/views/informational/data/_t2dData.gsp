@@ -1,3 +1,4 @@
+
 <style>
     /* only applies to tables for cohort information */
     .cohortDetail th {
@@ -16,7 +17,6 @@
             $('.sampleGroup:not([data-datatype="' + selectedDataType + '"]').hide();
         }
     };
-
     // used for showing/hiding cohort information
     function showSection(event) {
         $(event.target.nextElementSibling).toggle();
@@ -33,24 +33,143 @@
             $('#dataTypeSelector').append(newOption);
         });
     });
+
 </script>
+
+<script>
+
+    $(document).ready(function() {
+        var data = {
+            dataType: "Data type:",
+            all: "all"
+        };
+        var template = $("#selectDataType")[0].innerHTML;
+        var dynamic_html = Mustache.to_html(template,data);
+        $("#DataTypeList").append(dynamic_html);
+    })
+
+</script>
+
+<script id="selectDataType" type="x-tmpl-mustache">
+    <div class="form-inline">
+        <label>{{dataType}}</label>
+        <select id="dataTypeSelector" class="form-control" onchange=displaySelectedDataTypes()>
+            <option value="all">Show all</option>
+            <option value="ExSeq">Exome Sequencing</option>
+            <option value="WGS">Whole genome Sequencing</option>
+            <option value="GWAS">GWAS</option>
+            <option value="ExChip">Exome chip</option>
+            <option value="1kg">1000 Genome</option>
+            <option value="ExAC">ExAC</option>
+        </select>
+    </div>
+</script>
+
+<script>
+    $(document).ready(function() {
+        var jsonData = {
+            "experiments":[{
+                "samplegroupname":"sample1",
+                "samplegroupid":"samplea"
+            },{
+                "samplegroupname":"sample2",
+                "samplegroupid":"sampleb"
+            }]
+        }
+        var template = $("#ExperimentList")[0].innerHTML;
+        var dynamic_html = Mustache.to_html(template,jsonData);
+        $("#ExperimentSample").append(dynamic_html);
+    });
+</script>
+
+<script id="ExperimentList" type="x-tmpl-mustache">
+    <table>
+    <tbody id="userInfo">
+    {{#experiments}}
+    <tr>
+    <td>{{samplegroupname}}</td>
+    <td>{{samplegroupid}}</td>
+    </tr>
+    {{/experiments}}
+    </tbody>
+    </table>
+</script>
+
+
+
+<script>
+
+$(document).ready(function() {
+    var data = {"myVarList":
+            [{name: "Preeti"}, {name: "foobar"},{name: "singh"}]};
+
+    var template = $("#test2")[0].innerHTML;
+    var dynamic_html = Mustache.to_html(template,data);
+    $("#test").append(dynamic_html);
+})
+</script>
+
+<script id="test2" type="x-tmpl-mustache">
+    {{#myVarList}}
+    <h1> hello {{name}}</h1>
+    {{/myVarList}}
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: "${createLink(controller:'informational',action: 'aboutTheDataAjax')}",
+            data: {metadataVersion: 'mdv25',technology: 'GWAS'},
+            async: true
+        }).done(function (data, textStatus, jqXHR) {
+            _.forEach(data.children, function (k,v) {
+                // make objects with just the level and count fields, then filter
+                // out anything that's not MAF information
+
+                //console.log(k);
+                var arr = $.map(k, function(el) {return el});
+                console.log('arr', arr);
+
+                var template = $("#metaData")[0].innerHTML;
+                var dynamic_html = Mustache.to_html(template,arr);
+                $("#metaDataDisplay").append(dynamic_html);
+
+
+                //var userTemplate = $("#test5").innerHTML;
+                //$("#test6").html(Mustache.to_html(userTemplate,arr));
+            });
+
+        }).fail(function (jqXHR, textStatus, exception) {
+            loading.hide();
+            core.errorReporter(jqXHR, exception);
+        });
+    });
+</script>
+
+<script id="metaData" type="x-tmpl-mustache">
+    <table>
+    <tbody id="userInfo">
+    {{#arr}}
+    <tr>
+    <td>{{ancestry}}</td>
+    <td>{{samples}}</td>
+    </tr>
+    {{/arr}}
+    </tbody>
+    </table>
+</script>
+
+
 
 <div class="row" style="padding-top: 50px;">
 
-    <div class="form-inline">
-        <label>Data type:</label>
-        <select id="dataTypeSelector" class="form-control" onchange="displaySelectedDataTypes()">
-            <option value="all">Show all</option>
-        </select>
-        %{--<label>Case selection criteria:</label>--}%
-        %{--<select class="form-control"><option>Show all</option><option>type 2 diabetes</option><option>coronary artery disease</option>--}%
-        %{--</select>--}%
+    <div  id ="DataTypeList" class="form-inline"></div>
 
-        %{--<div style="float:right; position:relative;">--}%
-        %{--<label>Sort by:</label>--}%
-        %{--<select class="form-control"><option>Sample number</option><option>Update date</option><option>coronary artery disease</option>--}%
-        %{--</select></div>--}%
-    </div>
+    <div  id ="metaDataDisplay" class="form-inline"></div>
+
 
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <g:each var="exp" in="${experiments}">
