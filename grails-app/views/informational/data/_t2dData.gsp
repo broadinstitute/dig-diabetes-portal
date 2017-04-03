@@ -125,39 +125,42 @@ $(document).ready(function() {
             data: {metadataVersion: 'mdv25',technology: 'GWAS'},
             async: true
         }).done(function (data, textStatus, jqXHR) {
+            var x = [];
             _.forEach(data.children, function (k,v) {
                 // make objects with just the level and count fields, then filter
                 // out anything that's not MAF information
 
-                //console.log(k);
-                var arr = $.map(k, function(el) {return el});
-                console.log('arr', arr);
-
-                var template = $("#metaData")[0].innerHTML;
-                var dynamic_html = Mustache.to_html(template,arr);
-                $("#metaDataDisplay").append(dynamic_html);
-
-
-                //var userTemplate = $("#test5").innerHTML;
-                //$("#test6").html(Mustache.to_html(userTemplate,arr));
+                //var arr = $.map(k, function(item) {return item});
+                x.push(k);
+                console.log(x);
             });
+            var holder = {};
+            holder["parents"] = x;
+            console.log(holder);
+            var template = $("#metaData")[0].innerHTML;
+            var dynamic_html = Mustache.to_html(template,holder);
+            $("#metaDataDisplay").append(dynamic_html);
 
         }).fail(function (jqXHR, textStatus, exception) {
             loading.hide();
             core.errorReporter(jqXHR, exception);
         });
     });
+
 </script>
 
 <script id="metaData" type="x-tmpl-mustache">
     <table>
-    <tbody id="userInfo">
-    {{#arr}}
+    <tbody>
+    {{#parents}}
     <tr>
     <td>{{ancestry}}</td>
-    <td>{{samples}}</td>
+    <td>{{descr}}</td>
+    {{#children}}
+    <td>{{ancestry}}<td>
+    {{/children}}
     </tr>
-    {{/arr}}
+    {{/parents}}
     </tbody>
     </table>
 </script>
