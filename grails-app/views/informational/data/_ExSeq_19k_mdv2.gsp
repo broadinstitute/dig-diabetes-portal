@@ -15,6 +15,12 @@
     <div class="citation"><g:message code="informational.shared.publications.SIGMA_2014_JAMA.citation"></g:message> </div>
 </div></p>
 
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Lohmueller_2013_AmJHumGenet"></g:message><br>
+    <g:message code="informational.shared.publications.Lohmueller_2013_AmJHumGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Lohmueller_2013_AmJHumGenet.citation"></g:message> </div>
+</div></p>
+
 <h4>Dataset phenotypes</h4>
 <ul>
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
@@ -439,31 +445,56 @@
 
             </table>
         </div></td><td>Latino</td></tr>
-    <tr><td></td><td></td><td></td></tr>
-    <tr><td>Total</td><td>8321</td><td>8421</td><td></td><td></td></tr></table>
+
+                    <tr><td>LuCamp</td><td>1,000</td><td>1,000</td><td><a onclick="showSection(event)">Inter99, Steno, and ADDITION</a>
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Inter99 cohort: screen-detected type 2 diabetes or previously diagnosed type 2 diabetes according to the World Health Organization (WHO) 1999 criteria</li>
+                            <li>Steno cohort: individuals with clinical-onset type 2 diabetes; individuals with unknown diabetes or states of prediabetes according to WHO 1999 criteria were excluded</li>
+                            <li>ADDITION cohort: individuals with type 2 diabetes were diagnosed by two independent diabetic plasma glucose values at baseline investigation or at a 1-year follow-up investigation.</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Inter99 cohort: normal glucose tolerance</li>
+                            <li>Steno cohort: nondiabetic individuals</li>
+                            <li>ADDITION cohort: nondiabetic individuals</li>
+                            <ul>
+                    </td></tr>
+            </table>
+        </div></td><td>European</td></tr>
+</table>
 
 <h4>Projects</h4>
 
-<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
+<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
 
 <p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis." </p>
 
 <p>&nbsp;</p>
 
-<h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></h4>
+<h5><b>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></b></h5>
 
 <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
 
 <p>&nbsp;</p>
 
-<h4>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
-</h4>
+<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
+</b></h5>
 
 <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations. </p>
+<p>&nbsp;</p>
+<h5><b>Lubeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention and Care (LuCamp) <small><a href="http://www.lucamp.org/" target="_blank">Learn more ></a></small>
+</b></h5>
 
-
+<p><g:message code="informational.data.project.LuCamp"></g:message></p>
+<p>&nbsp;</p>
 <h4>Overview of analysis</h4>
-<p><g:message code="informational.data.overview.17K"></g:message></p>
+<p><g:message code="informational.data.overview.19K"></g:message></p>
 <p>&nbsp;</p>
 <h4>Accessing 19K exome sequence analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.19K"></g:message></p>
