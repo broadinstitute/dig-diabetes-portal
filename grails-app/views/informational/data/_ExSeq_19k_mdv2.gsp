@@ -21,6 +21,12 @@
     <div class="citation"><g:message code="informational.shared.publications.Lohmueller_2013_AmJHumGenet.citation"></g:message> </div>
 </div></p>
 
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Albrechtsen_2013_Diabetologia"></g:message><br>
+    <g:message code="informational.shared.publications.Albrechtsen_2013_Diabetologia.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Albrechtsen_2013_Diabetologia.citation"></g:message> </div>
+</div></p>
+
 <h4>Dataset phenotypes</h4>
 <ul>
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
@@ -452,17 +458,19 @@
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
+                        Cases had all of the following:
                         <ul>
-                            <li>Inter99 cohort: screen-detected type 2 diabetes or previously diagnosed type 2 diabetes according to the World Health Organization (WHO) 1999 criteria</li>
-                            <li>Steno cohort: individuals with clinical-onset type 2 diabetes; individuals with unknown diabetes or states of prediabetes according to WHO 1999 criteria were excluded</li>
-                            <li>ADDITION cohort: individuals with type 2 diabetes were diagnosed by two independent diabetic plasma glucose values at baseline investigation or at a 1-year follow-up investigation.</li>
+                            <li>diagnosis of type 2 diabetes </li>
+                            <li>BMI &gt; 27.5 kg/m<sub>2</sub></li>
+                            <li>hypertension (systolic/diastolic BP &gt; 140/90 mmHg or use of antihypertensive medication)</li>
                         </ul>
                     </td>
                     <td valign="top">
-                        <ul>
-                            <li>Inter99 cohort: normal glucose tolerance</li>
-                            <li>Steno cohort: nondiabetic individuals</li>
-                            <li>ADDITION cohort: nondiabetic individuals</li>
+                        Controls had all of the following:<ul>
+                            <li>fasting plasma glucose &lt; 5.6 mmol/l</li>
+                            <li>2 h post-OGTT plasma glucose &lt; 7.8 mmol/l</li>
+                            <li>BMI &lt; 27.5 kg/m<sub>2</sub></li>
+                        <li>blood pressure &lt; 40/90 mmHg</li>
                             <ul>
                     </td></tr>
             </table>
