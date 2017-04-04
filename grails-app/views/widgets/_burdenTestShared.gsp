@@ -389,7 +389,19 @@ var displayBurdenVariantSelector = function (){
             return returnValue;
         };
 
-
+        var convertSamplesDatasetName = function(datasetFilter){
+                var dataSet = datasetFilter;
+                if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
+                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                } else if (datasetFilter.substring(0,'samples_19k_'.length)==='samples_19k_'){
+                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
+                    dataSet = 'GWAS_Stroke_mdv70';
+                }else {
+                    dataSet = 'ExChip_CAMP_mdv23';
+                }
+                return dataSet;
+        };
 
         /***
         *  Build the UI widgets which can be used to specify the filters for DAGA.  Once they are in place
@@ -649,14 +661,14 @@ var displayBurdenVariantSelector = function (){
                 var unrecognizedVariants = [];
                 var duplicateVariants = [];
                 var datasetFilter = $('#datasetFilter').val();
-                var dataSet;
-                if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
-                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
-                } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
-                    dataSet = 'GWAS_Stroke_mdv70';
-                }else {
-                    dataSet = 'ExChip_CAMP_mdv23';
-                }
+                var dataSet = convertSamplesDatasetName(datasetFilter);
+                // if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
+                //  dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                // } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
+                //     dataSet = 'GWAS_Stroke_mdv70';
+                // }else {
+                //     dataSet = 'ExChip_CAMP_mdv23';
+                // }
                 _.forEach(allVariants,function(oneVariantRaw){
                     var oneVariant = oneVariantRaw.trim();
                     if (oneVariant.length > 0){
@@ -1387,15 +1399,8 @@ $('#proposedMultiVariant').typeahead({
              specifiedMafValueId  = parseFloat(specifiedMafValue),
              burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
              datasetFilter = $('#datasetFilter').val();
-             var dataSet;
              //kludge alert!!!
-             if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
-                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
-             } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
-                dataSet = 'GWAS_Stroke_mdv70';
-             }else {
-                dataSet = 'ExChip_CAMP_mdv23';
-             }
+             var dataSet = mpgSoftware.burdenTestShared.convertSamplesDatasetName(datasetFilter);
 
                $('#rSpinner').show();
                 var promise =  $.ajax({
@@ -2386,7 +2391,8 @@ $('#proposedMultiVariant').typeahead({
             displayTestResultsSection: displayTestResultsSection,  // simply display results section (show() or hide()
             generateListOfVariantsFromFilters: generateListOfVariantsFromFilters,
             swapSingleMultipleVariantAdditionMode:   swapSingleMultipleVariantAdditionMode,
-            storeGeneForGait: storeGeneForGait
+            storeGeneForGait: storeGeneForGait,
+            convertSamplesDatasetName:convertSamplesDatasetName
         }
 
     }());
