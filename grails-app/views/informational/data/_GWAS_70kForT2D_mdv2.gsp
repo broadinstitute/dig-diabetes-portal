@@ -4,6 +4,10 @@
 
 <h4><g:message code="informational.data.accessphase.70KforT2D"></g:message></h4>
 <p><g:message code="informational.data.accessphase.70KforT2Da"></g:message></p>
+
+<h4>Dataset</h4>
+<p><g:message code="informational.data.overlaps.70KforT2D"></g:message></p>
+
 <h4>Publications</h4>
 
 <p><div class="paper">
@@ -143,18 +147,15 @@
 <p><g:message code="informational.data.project.70KforT2D"></g:message></p>
 
 <h4>Experiment summary</h4>
-<p><g:message code="informational.data.exptsumm.project"></g:message></p>
-
-<h4>Overview of analysis and results</h4>
-<p><g:message code="informational.data.overview.results"></g:message></p>
+<p><g:message code="informational.data.exptsumm.70KforT2D"></g:message></p>
 
 
-<h4>Accessing (dataset name) data in the T2D Knowledge Portal</h4>
+<h4>Accessing 70KforT2D GWAS data in the T2D Knowledge Portal</h4>
 
-<p><g:message code="informational.data.accessing.data"></g:message></p>
+<p><g:message code="informational.data.accessing.70KforT2D"></g:message></p>
 
 
-<h4>External Links to 70KforT2D data</h4>
+<h4>External Links to 70KforT2D GWAS data</h4>
 
 <p><g:message code="informational.data.external.70KforT2D1"></g:message></p>
 <p><g:message code="informational.data.external.70KforT2D2"></g:message></p>

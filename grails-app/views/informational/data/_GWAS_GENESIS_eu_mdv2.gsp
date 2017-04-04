@@ -41,6 +41,7 @@
 <h4>Dataset phenotypes</h4>
 <ul>
     <li><g:message code="informational.shared.traits.insulin_sensitivity"></g:message></li>
+    <li><g:message code="informational.shared.traits.insulin_sensitivity_adjBMI"></g:message></li>
     </ul>
 
     <h4>Dataset subjects</h4>
