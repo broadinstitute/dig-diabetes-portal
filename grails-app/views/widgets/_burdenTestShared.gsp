@@ -392,13 +392,17 @@ var displayBurdenVariantSelector = function (){
         var convertSamplesDatasetName = function(datasetFilter){
                 var dataSet = datasetFilter;
                 if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
-                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                 //dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                 dataSet = 'ExSeq_17k_mdv25';
                 } else if (datasetFilter.substring(0,'samples_19k_'.length)==='samples_19k_'){
-                 dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                 //dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+                 dataSet = 'ExSeq_19k_mdv25';
                 } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
                     dataSet = 'GWAS_Stroke_mdv70';
-                }else {
-                    dataSet = 'ExChip_CAMP_mdv23';
+                }else if (datasetFilter.substring(0,'samples_camp_'.length)==='samples_camp_'){
+                 dataSet = 'ExChip'+datasetFilter.substring('samples'.length);
+                } else if (datasetFilter.substring(0,'samples_biome_'.length)==='samples_biome_'){
+                 dataSet = 'GWAS_BioMe_'+datasetFilter.substring('samples_biome_'.length);
                 }
                 return dataSet;
         };
