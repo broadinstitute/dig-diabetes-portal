@@ -1,4 +1,7 @@
 
+<g:render template="./data/ExAC_r03_mdv2" />
+
+
 <style>
     /* only applies to tables for cohort information */
     .cohortDetail th {
@@ -7,41 +10,10 @@
 </style>
 
 <script>
-    var displaySelectedDataTypes = function() {
-        var selectedDataType = $('#dataTypeSelector').val();
-
-        if(selectedDataType == 'all') {
-            $('.sampleGroup').show();
-        } else {
-            $('.sampleGroup[data-datatype="' + selectedDataType + '"]').show();
-            $('.sampleGroup:not([data-datatype="' + selectedDataType + '"]').hide();
-        }
-    };
-    // used for showing/hiding cohort information
-    function showSection(event) {
-        $(event.target.nextElementSibling).toggle();
-    }
-
-    $(document).ready(function() {
-        // gather all the known data types
-        var knownDataTypes = _.chain($('.sampleGroup')).map(function(sgPanel) {
-            return $(sgPanel).attr('data-datatype');
-        }).uniq().value();
-
-        _.forEach(knownDataTypes, function(dataType) {
-            var newOption = $('<option>').append(dataType).attr({value: dataType});
-            $('#dataTypeSelector').append(newOption);
-        });
-    });
-
-</script>
-
-<script>
 
     $(document).ready(function() {
         var data = {
             dataType: "Data type:",
-            all: "all"
         };
         var template = $("#selectDataType")[0].innerHTML;
         var dynamic_html = Mustache.to_html(template,data);
@@ -50,11 +22,54 @@
 
 </script>
 
+<script>
+    function displaySelectedTechnology() {
+        var selectedTech = $("#technologyTypeSelector").val();
+            $.ajax({
+                cache: false,
+                type: "get",
+                url: "${createLink(controller:'informational',action: 'aboutTheDataAjax')}",
+                data: {metadataVersion: "mdv25",technology: selectedTech},
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+                var jsonArray = [];
+                _.forEach(data.children, function (each_key,val) {
+                    console.log(selectedTech);
+                    if(selectedTech == "all"){
+                        jsonArray.push(each_key);
+                        console.log("Show All clicked/default list");
+                    }
+                    else if (each_key.name.includes(selectedTech))
+                    {
+                        jsonArray.push(each_key);
+                        console.log("this tech was selected" + selectedTech)
+                        console.log(jsonArray);
+                    }
+                    else{
+                        console.log("I didn't find any");
+                    }
+                });
+                var holder = {};
+                holder["parents"] = jsonArray;
+                console.log("holder" + holder);
+                var template = $("#metaData")[0].innerHTML;
+                var dynamic_html = Mustache.to_html(template,holder);
+                $("#metaDataDisplay").append(dynamic_html);
+
+                //var templateData = "hello";
+                //$('body').mustache('#testinformationgap', templateData);
+            }).fail(function (jqXHR, textStatus, exception) {
+                loading.hide();
+                core.errorReporter(jqXHR, exception);
+            });
+        };
+
+</script>
 <script id="selectDataType" type="x-tmpl-mustache">
     <div class="form-inline">
-        <label>{{dataType}}</label>
-        <select id="dataTypeSelector" class="form-control" onchange=displaySelectedDataTypes()>
-            <option value="all">Show all</option>
+        <label>Data Type</label>
+        <select id="technologyTypeSelector" class="form-control" onchange="displaySelectedTechnology()">
+            <option value="all" selected="selected" >Show all</option>
             <option value="ExSeq">Exome Sequencing</option>
             <option value="WGS">Whole genome Sequencing</option>
             <option value="GWAS">GWAS</option>
@@ -66,113 +81,46 @@
 </script>
 
 <script>
-    $(document).ready(function() {
-        var jsonData = {
-            "experiments":[{
-                "samplegroupname":"sample1",
-                "samplegroupid":"samplea"
-            },{
-                "samplegroupname":"sample2",
-                "samplegroupid":"sampleb"
-            }]
-        }
-        var template = $("#ExperimentList")[0].innerHTML;
-        var dynamic_html = Mustache.to_html(template,jsonData);
-        $("#ExperimentSample").append(dynamic_html);
+    $(document).ready(function(){
+        displaySelectedTechnology();
     });
-</script>
-
-<script id="ExperimentList" type="x-tmpl-mustache">
-    <table>
-    <tbody id="userInfo">
-    {{#experiments}}
-    <tr>
-    <td>{{samplegroupname}}</td>
-    <td>{{samplegroupid}}</td>
-    </tr>
-    {{/experiments}}
-    </tbody>
-    </table>
-</script>
-
-
-
-<script>
-
-$(document).ready(function() {
-    var data = {"myVarList":
-            [{name: "Preeti"}, {name: "foobar"},{name: "singh"}]};
-
-    var template = $("#test2")[0].innerHTML;
-    var dynamic_html = Mustache.to_html(template,data);
-    $("#test").append(dynamic_html);
-})
-</script>
-
-<script id="test2" type="x-tmpl-mustache">
-    {{#myVarList}}
-    <h1> hello {{name}}</h1>
-    {{/myVarList}}
-</script>
-
-
-<script>
-    $(document).ready(function () {
-        $.ajax({
-            cache: false,
-            type: "get",
-            url: "${createLink(controller:'informational',action: 'aboutTheDataAjax')}",
-            data: {metadataVersion: 'mdv25',technology: 'GWAS'},
-            async: true
-        }).done(function (data, textStatus, jqXHR) {
-            var x = [];
-            _.forEach(data.children, function (k,v) {
-                // make objects with just the level and count fields, then filter
-                // out anything that's not MAF information
-
-                //var arr = $.map(k, function(item) {return item});
-                x.push(k);
-                console.log(x);
-            });
-            var holder = {};
-            holder["parents"] = x;
-            console.log(holder);
-            var template = $("#metaData")[0].innerHTML;
-            var dynamic_html = Mustache.to_html(template,holder);
-            $("#metaDataDisplay").append(dynamic_html);
-
-        }).fail(function (jqXHR, textStatus, exception) {
-            loading.hide();
-            core.errorReporter(jqXHR, exception);
-        });
-    });
-
 </script>
 
 <script id="metaData" type="x-tmpl-mustache">
     <table>
     <tbody>
     {{#parents}}
+    <td>{{ancestry}}</td>
+    <td>{{descr}}</td>
+    <td>{{label}}</td>
+    <td>{{name}}</td>
+    {{#children}}
     <tr>
     <td>{{ancestry}}</td>
     <td>{{descr}}</td>
-    {{#children}}
-    <td>{{ancestry}}<td>
-    {{/children}}
+    <td>{{label}}</td>
+    <td>{{name}}</td>
     </tr>
+    {{#children}}
+    <tr>
+    <td>{{ancestry}}</td>
+    <td>{{descr}}</td>
+    <td>{{label}}</td>
+    <td>{{name}}</td>
+    </tr>
+    {{/children}}
+    {{/children}}
     {{/parents}}
     </tbody>
     </table>
-</script>
 
+</script>
 
 
 <div class="row" style="padding-top: 50px;">
 
     <div  id ="DataTypeList" class="form-inline"></div>
-
     <div  id ="metaDataDisplay" class="form-inline"></div>
-
 
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
         <g:each var="exp" in="${experiments}">
