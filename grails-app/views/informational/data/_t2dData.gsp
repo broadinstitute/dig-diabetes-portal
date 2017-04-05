@@ -57,6 +57,7 @@
                 //$("#metaDataDisplay").hide();
                 $("#metaDataDisplay").empty().append(dynamic_html);
 
+                $('#insertScript').empty().append(Mustache.render( $('#testinformationgsp')[0].innerHTML));
 
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
@@ -87,9 +88,9 @@
 </script>
 
 <script id="metaData" type="x-tmpl-mustache">
+    <div id="insertScript"></div>
     <table>
     <tbody>
-
     {{#parents}}
     <td>{{ancestry}}</td>
     <td>{{descr}}</td>
