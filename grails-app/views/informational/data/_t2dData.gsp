@@ -29,18 +29,17 @@
                 cache: false,
                 type: "get",
                 url: "${createLink(controller:'informational',action: 'aboutTheDataAjax')}",
-                data: {metadataVersion: "mdv25",technology: selectedTech},
+                data: {technology: selectedTech},
                 async: true
             }).done(function (data, textStatus, jqXHR) {
                 var jsonArray = [];
                 _.forEach(data.children, function (each_key,val) {
                     console.log(selectedTech);
-                    if(selectedTech == "all"){
+                    if(selectedTech == "all") {
                         jsonArray.push(each_key);
                         console.log("Show All clicked/default list");
                     }
-                    else if (each_key.name.includes(selectedTech))
-                    {
+                    else if (each_key.name.includes(selectedTech)) {
                         jsonArray.push(each_key);
                         console.log("this tech was selected" + selectedTech)
                         console.log(jsonArray);
@@ -51,10 +50,13 @@
                 });
                 var holder = {};
                 holder["parents"] = jsonArray;
-                console.log("holder" + holder);
+                //console.log("holder" + holder);
+                //onsole.log(jsonArray.length);
                 var template = $("#metaData")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
+                //$("#metaDataDisplay").hide();
                 $("#metaDataDisplay").append(dynamic_html);
+
 
                 //var templateData = "hello";
                 //$('body').mustache('#testinformationgap', templateData);
