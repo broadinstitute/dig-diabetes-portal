@@ -51,15 +51,13 @@
                 var holder = {};
                 holder["parents"] = jsonArray;
                 //console.log("holder" + holder);
-                //onsole.log(jsonArray.length);
+                //console.log(jsonArray.length);
                 var template = $("#metaData")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
                 //$("#metaDataDisplay").hide();
-                $("#metaDataDisplay").append(dynamic_html);
+                $("#metaDataDisplay").empty().append(dynamic_html);
 
 
-                //var templateData = "hello";
-                //$('body').mustache('#testinformationgap', templateData);
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);
@@ -91,6 +89,7 @@
 <script id="metaData" type="x-tmpl-mustache">
     <table>
     <tbody>
+
     {{#parents}}
     <td>{{ancestry}}</td>
     <td>{{descr}}</td>
