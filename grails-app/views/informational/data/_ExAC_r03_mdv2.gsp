@@ -1,5 +1,5 @@
 
-<script class="panel-body" id="testinformationgap" type = "x-tmpl-mustache">
+<script class="panel-body" id="testinformationgsp" type = "x-tmpl-mustache">
     <h4>Dataset</h4>
 
     <p>Dataset version: dv1<br/>
