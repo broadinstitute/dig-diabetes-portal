@@ -21,11 +21,6 @@
     <div class="citation"><g:message code="informational.shared.publications.Lohmueller_2013_AmJHumGenet.citation"></g:message> </div>
 </div></p>
 
-<p><div class="paper">
-    <g:message code="informational.shared.publications.Albrechtsen_2013_Diabetologia"></g:message><br>
-    <g:message code="informational.shared.publications.Albrechtsen_2013_Diabetologia.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-    <div class="citation"><g:message code="informational.shared.publications.Albrechtsen_2013_Diabetologia.citation"></g:message> </div>
-</div></p>
 
 <h4>Dataset phenotypes</h4>
 <ul>
