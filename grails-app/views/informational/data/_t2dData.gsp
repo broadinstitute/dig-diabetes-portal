@@ -1,5 +1,36 @@
-
+<g:render template="./data/WGS_GoT2D_mdv2" />
 <g:render template="./data/ExAC_r03_mdv2" />
+<g:render template="./data/1kg_phase1_mdv2" />
+<g:render template="./data/ExChip_82k_mdv2"/>
+<g:render template="./data/ExChip_CAMP_mdv2"/>
+<g:render template="./data/ExChip_SIGMA1_mdv2"/>
+<g:render template="./data/ExChip_T2DGO_mdv2"/>
+<g:render template="./data/ExSeq_13k_mdv2"/>
+<g:render template="./data/ExSeq_17k_mdv2"/>
+<g:render template="./data/ExSeq_19k_mdv2"/>
+<g:render template="./data/ExSeq_EgnomAD_mdv2"/>
+<g:render template="./data/ExSeq_EOMI_mdv2"/>
+<g:render template="./data/GWAS_70kForT2D_mdv2"/>
+<g:render template="./data/GWAS_BioMe_mdv2"/>
+<g:render template="./data/GWAS_CADISP_mdv2"/>
+<g:render template="./data/GWAS_CARDIoGRAM_mdv2"/>
+<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea_mdv2"/>
+<g:render template="./data/GWAS_CKDGenConsortium-UACR_mdv2"/>
+<g:render template="./data/GWAS_CKDGenConsortium_mdv2"/>
+<g:render template="./data/GWAS_DIAGRAM_mdv2"/>
+<g:render template="./data/GWAS_GENESIS_eu_mdv2"/>
+<g:render template="./data/GWAS_GERFHS_mdv2"/>
+<g:render template="./data/GWAS_GIANT_mdv2"/>
+<g:render template="./data/GWAS_GLGC_mdv2"/>
+<g:render template="./data/GWAS_MAGIC_mdv2"/>
+<g:render template="./data/GWAS_MEGASTROKE_mdv2"/>
+<g:render template="./data/GWAS_MICAD_mdv2"/>
+<g:render template="./data/GWAS_OxBB_mdv2"/>
+<g:render template="./data/GWAS_PGC_mdv2"/>
+<g:render template="./data/GWAS_SIGMA1_mdv2"/>
+<g:render template="./data/GWAS_SIGN_mdv2"/>
+<g:render template="./data/GWAS_Stroke_mdv2"/>
+<g:render template="./data/GWAS_VATGen_mdv2"/>
 
 
 <style>
@@ -10,7 +41,6 @@
 </style>
 
 <script>
-
     $(document).ready(function() {
         var data = {
             dataType: "Data type:",
@@ -19,7 +49,6 @@
         var dynamic_html = Mustache.to_html(template,data);
         $("#DataTypeList").append(dynamic_html);
     })
-
 </script>
 
 <script>
@@ -33,32 +62,35 @@
                 async: true
             }).done(function (data, textStatus, jqXHR) {
                 var jsonArray = [];
+                var informationGspFileNames=[];
                 _.forEach(data.children, function (each_key,val) {
                     console.log(selectedTech);
-                    if(selectedTech == "all") {
+                    if(selectedTech == "") {
                         jsonArray.push(each_key);
                         console.log("Show All clicked/default list");
+                        //informationGspFileName = "";
                     }
                     else if (each_key.name.includes(selectedTech)) {
                         jsonArray.push(each_key);
                         console.log("this tech was selected" + selectedTech)
                         console.log(jsonArray);
+                        informationGspFileNames.push("#" + each_key.name + '_script');
+                        //console.log(each_key.children);
                     }
-                    else{
+                    else {
                         console.log("I didn't find any");
                     }
                 });
                 var holder = {};
                 holder["parents"] = jsonArray;
-                //console.log("holder" + holder);
-                //console.log(jsonArray.length);
                 var template = $("#metaData")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
-                //$("#metaDataDisplay").hide();
                 $("#metaDataDisplay").empty().append(dynamic_html);
-
-                $('#insertScript').empty().append(Mustache.render( $('#testinformationgsp')[0].innerHTML));
-
+                console.log(informationGspFileNames);
+                _.forEach(informationGspFileNames, function (each_Gspfile,val){
+                    console.log(each_Gspfile);
+                    $('#insertScript').append(Mustache.render($(each_Gspfile)[0].innerHTML));
+                })
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);
@@ -70,7 +102,7 @@
     <div class="form-inline">
         <label>Data Type</label>
         <select id="technologyTypeSelector" class="form-control" onchange="displaySelectedTechnology()">
-            <option value="all" selected="selected" >Show all</option>
+            <option value="" selected="selected" >Show all</option>
             <option value="ExSeq">Exome Sequencing</option>
             <option value="WGS">Whole genome Sequencing</option>
             <option value="GWAS">GWAS</option>
@@ -88,7 +120,6 @@
 </script>
 
 <script id="metaData" type="x-tmpl-mustache">
-    <div id="insertScript"></div>
     <table>
     <tbody>
     {{#parents}}
@@ -96,88 +127,18 @@
     <td>{{descr}}</td>
     <td>{{label}}</td>
     <td>{{name}}</td>
-    {{#children}}
-    <tr>
-    <td>{{ancestry}}</td>
-    <td>{{descr}}</td>
-    <td>{{label}}</td>
-    <td>{{name}}</td>
-    </tr>
-    {{#children}}
-    <tr>
-    <td>{{ancestry}}</td>
-    <td>{{descr}}</td>
-    <td>{{label}}</td>
-    <td>{{name}}</td>
-    </tr>
-    {{/children}}
-    {{/children}}
     {{/parents}}
     </tbody>
     </table>
-
 </script>
 
-
 <div class="row" style="padding-top: 50px;">
-
     <div  id ="DataTypeList" class="form-inline"></div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
-
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-        <g:each var="exp" in="${experiments}">
-            <g:each var="sg" in="${exp.sampleGroups}">
-                <div class="panel panel-default sampleGroup" data-datatype="${g.message(code: 'metadata.' + exp[0].technology)}">
-                    <div class="panel-heading" role="tab" id="${sg[0].systemId}">
-                        <p class="dataset-name">${ g.message(code: 'metadata.' + sg[0].getSystemId()) }
-                            <span class="dataset-summary">
-
-                            <g:if test="${sg[0]?.getSystemId()?.toString()?.contains('BioMe')}">
-                                <span class="data-status-early-phase1-access">Early Access Phase 2</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
-                                </span>
-                            </g:if>
-
-                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('ForT2D')}">
-                                <span class="data-status-early-phase1-access">Unpublished</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
-                                </span>
-                            </g:elseif>
-
-                            <g:elseif test="${sg[0]?.getSystemId()?.toString()?.contains('CAMP')}">
-                                <span class="data-status-early-phase1-access">Early Access Phase 2</span> |  %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
-                                </span>
-                            </g:elseif>
-
-                            <g:else>
-                                <span class="data-status-open-access">Open access</span> | %{-- {{ sequencing }} |--}% ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )} | ${sg[0].getAncestry()}
-                                </span>
-                            </g:else>
-                        </p>
-
-                        <p class="dataset-info">
-                            %{--<strong>Data status:</strong> {{ Open access }},--}%
-                            <strong>Data type:</strong> ${g.message(code: 'metadata.' + exp[0].technology)}
-                            %{--, <strong>Experiment type:</strong> {{ exome sequencing }}--}%<br />
-                            <strong>Total number of samples:</strong> ${g.formatNumber(number: sg[0].getSubjectsNumber(), format: "###,###" )},
-                            %{-- sample groups for qualitative traits have # cases/# controls = -1, which we don't want to display--}%
-                            <g:if test="${sg[0].getCasesNumber() != -1}" >
-                                <strong>No. cases:</strong> ${g.formatNumber(number: sg[0].getCasesNumber(), format: "###,###" )},
-                                <strong>No. controls:</strong> ${g.formatNumber(number: sg[0].getControlsNumber(), format: "###,###" )},
-                            </g:if>
-                            <strong>Ethnicity:</strong> ${sg[0].getAncestry()}
-                        </p>
-                        <h5 class="panel-title">
-                            <a class="collapsed open-info" role="button" data-toggle="collapse" data-parent="#accordion" href="#${sg[0].systemId}Collapse" aria-expanded="true" aria-controls="${sg[0].systemId}Collapse">
-                                Learn more >
-                            </a>
-                        </h5>
-                    </div>
-                    <div id="${sg[0].systemId}Collapse" class="panel-collapse collapse" role="tabpanel" aria-labelledby="${sg[0].systemId}">
-                        <div class="panel-body">
-                            <g:render template="data/${sg[0].systemId.replaceAll(/mdv\d+/,"mdv2")}" />
-                        </div>
-                    </div>
-                </div>
-            </g:each>
-        </g:each>
+    <div id="test" class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle collapsed" data-toggle="collapse"
+        </div>
     </div>
+    <div id="insertScript"></div>
 </div>
