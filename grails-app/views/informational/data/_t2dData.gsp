@@ -128,6 +128,22 @@
     <td>{{label}}</td>
     <td>{{name}}</td>
     {{/parents}}
+    <div class="accordion" id="accordionTest">
+         <div class="accordion-group">
+             <div class="accordion-heading">
+                 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionTest"
+                    href="#collapseDataDescription" aria-expanded="true">
+                    <h4>Description</h4>
+                 </a>
+              </div>
+             <div id="collapseDataDescription" class="accordion-body collapse">
+                 <div class="accordion-inner">
+                     <div id="insertScript"></div>
+                 </div>
+             </div>
+         </div>
+     </div>
+    </div>
     </tbody>
     </table>
 </script>
@@ -135,10 +151,9 @@
 <div class="row" style="padding-top: 50px;">
     <div  id ="DataTypeList" class="form-inline"></div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
-    <div id="test" class="accordion-group">
-        <div class="accordion-heading">
-            <a class="accordion-toggle collapsed" data-toggle="collapse"
-        </div>
-    </div>
-    <div id="insertScript"></div>
+
+
+
 </div>
+
+
