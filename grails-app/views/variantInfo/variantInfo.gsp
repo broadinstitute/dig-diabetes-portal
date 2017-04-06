@@ -159,6 +159,22 @@
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
+<script id="functionalAnnotationTemplate"  type="x-tmpl-mustache">
+<table>
+    {{#indivRecords}}
+        <tr>
+            <td>{{element}}</td>
+            <td>{{source}}</td>
+            <td>{{start}}</td>
+            <td>{{stop}}</td>
+        </tr>
+    {{/indivRecords}}
+    {{^indivRecords}}
+    No functional data are available for this variant
+    {{/indivRecords}}
+</table>
+
+</script>
 <script>
     // generate the texts here so that the appropriate one can be selected in initializePage
     // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
@@ -167,6 +183,20 @@
         2: "${g.message(code: "variant.summaryText.missense")}",
         3: "${g.message(code: "variant.summaryText.synonymous")}",
         4: "${g.message(code: "variant.summaryText.noncoding")}"
+    };
+
+    var displayFunctionalData = function(data,additionalData){
+        if ((typeof data !== 'undefined') &&
+            (typeof data.variants !== 'undefined') &&
+            (!data.variants.is_error)){
+            var sortedData = _.sortBy(data.variants.variants,[function(item) {
+                return item.element;
+            }, function(item) {
+                return item.source;
+            }]);
+            var renderData = {'indivRecords':sortedData};
+            $("#functionalDateGoesHere").empty().append(Mustache.render( $('#functionalAnnotationTemplate')[0].innerHTML,renderData));
+        }
     };
 
     var loading = $('#spinner').show();
@@ -188,6 +218,8 @@
                     'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
+                mpgSoftware.variantInfo.retrieveFunctionalData(data,displayFunctionalData,
+                    {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
 
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -210,6 +242,8 @@
                 </h1>
 
                 <g:render template="variantPageHeader"/>
+
+                <div id="functionalDateGoesHere"></div>
 
                 <div class="accordion" id="accordionVariant">
                     <div class="accordion-group">

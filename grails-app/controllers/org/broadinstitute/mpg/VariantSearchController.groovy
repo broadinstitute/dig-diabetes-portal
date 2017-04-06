@@ -456,30 +456,6 @@ class VariantSearchController {
         }
 
 
-
-
-
-
-            //JSONObject dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName)
-//        if (dataJsonObject.variants) {
-//                for (List result in dataJsonObject.variants){
-//                    for (Map pval in result) {
-//
-//                        if (pval.containsKey("Consequence")){
-//                            List<String> consequenceList = pval["Consequence"]?.tokenize(",")
-//                            List<String> translatedConsequenceList = []
-//                            for (String consequence in consequenceList){
-//                                translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
-//                            }
-//                            pval["Consequence"] = translatedConsequenceList.join(", ")
-//                        }
-//
-//                    }
-//                }
-//
-//            }
-
-
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject]
         }
