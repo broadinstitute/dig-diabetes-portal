@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_SIGN_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publications:
@@ -60,5 +60,5 @@
 
     <p>
 
-</div>
+</script>
 

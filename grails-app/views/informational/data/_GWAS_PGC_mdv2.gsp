@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_PGC_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publication: 
@@ -60,5 +60,5 @@ Weilburg JB, Willemsen G, Zitman FG, Neale B, Daly M, Levinson DF, Sullivan PF.
     </small></h4>
 
     <p>PGC conducts meta-analyses of genome-wide association study data, focusing on autism, attention-deficit hyperactivity disorder, bipolar disorder, major depressive disorder, and schizophrenia.</p>
-</div>
+</script>
 

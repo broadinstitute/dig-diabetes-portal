@@ -1,6 +1,6 @@
 
 
-<div class="panel-body">
+<script class="panel-body" id="GWAS_70kForT2D_mdv2_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.data.accessphase.70KforT2D"></g:message></h4>
 <p><g:message code="informational.data.accessphase.70KforT2Da"></g:message></p>
@@ -159,4 +159,4 @@
 
 <p><g:message code="informational.data.external.70KforT2D1"></g:message></p>
 <p><g:message code="informational.data.external.70KforT2D2"></g:message></p>
-</div>
+</script>

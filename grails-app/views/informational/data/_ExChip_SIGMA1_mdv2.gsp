@@ -1,3 +1,4 @@
+<script class="panel-body" id="ExChip_SIGMA1_mdv25_script" type="x-tmpl-mustache">
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>
     <li>Type 2 diabetes</li>
@@ -107,3 +108,4 @@
     <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
 
 </div>
+</script>

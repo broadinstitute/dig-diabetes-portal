@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_GLGC_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Download URL: <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/">http://csg.sph.umich.edu//abecasis/public/lipids2013/</a><br/>
@@ -69,5 +69,5 @@ van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
 <p>With updates to the data in October 2016, the sample size for GLGC GWAS increased to 188,577. Associations for triglyceride, cholesterol, HDL, and LDL levels were updated from a joint analysis of GWAS and MetaboChip data, described <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/">here</a> and published in Willer et al. 2013 (see above).</p>
 
 
-</div>
+</script>
 

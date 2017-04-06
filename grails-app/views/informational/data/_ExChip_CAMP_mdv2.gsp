@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="ExChip_CAMP_mdv25_script" type="x-tmpl-mustache">
     <h4><g:message code="informational.data.accessphase.CAMP"></g:message></h4>
 <h4>Dataset phenotypes</h4>
     <ul>
@@ -48,4 +48,4 @@
 <h4>Future plans for CAMP data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.future.CAMP"></g:message></p>
 
-</div>
+</script>

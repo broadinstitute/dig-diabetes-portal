@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_GERFHS_mdv2" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publication: <div class="paper">
@@ -54,6 +54,6 @@
     <p>Project description.</p>
 
 
-</div>
+</script>
 
 

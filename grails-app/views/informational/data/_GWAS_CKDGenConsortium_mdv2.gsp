@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_CKDGenConsortium_mdv25_script" type="x-tmpl-mustache">
     <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - eGFRcrea: <a href="http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv" target="_blank">http://www.nhlbi.nih.gov/sites/www.nhlbi.nih.gov/files/CKDGen-eGFRcrea_meta_post.csv</a><br/>
@@ -35,4 +35,4 @@
 <p><g:message code="informational.data.accessing.CKDGen"></g:message></p>
 
 
-</div>
+</script>

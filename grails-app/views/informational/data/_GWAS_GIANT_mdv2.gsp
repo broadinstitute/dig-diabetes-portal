@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_GIANT_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Download URL: <a href="https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files" target="_blank">https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files</a><br/>
@@ -76,9 +76,10 @@ Abecasis GR, Stefansson K, Frayling TM, Hirschhorn JN.
     </small></h4>
 
     <p>An international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</p>
-</div>
+
 
 <h6 style="color:#ccc;">Experiment summary</h6>
 <p>
 Data were updated in October 2016, including the addition of European cohorts for BMI and height (published in the Yang et al. article cited above).
 </p>
+</script>

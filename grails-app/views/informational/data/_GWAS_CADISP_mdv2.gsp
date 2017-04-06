@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_CADISP_mdv2_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publications: <a href="https://s3.amazonaws.com/broad-portal-resources/CADISP_publications.pdf" target="_blank">Download list of CADISP publications</a>
@@ -72,4 +72,4 @@
     <p>An organized multinational European network, Cervical Artery Dissection and Ischemic Stroke Patients (CADISP) aims at increasing knowledge of the pathophysiological mechanisms of this disease in a large group of patients. This network is aiming to perform a de novo genetic association analysis using both a genome-wide and a candidate gene approach. For this purpose, DNA from approximately 1100 patients with CAD, and 2000 healthy controls is being collected. In addition, detailed clinical, laboratory, diagnostic, therapeutic, and outcome data are being collected from all participants applying predefined criteria and definitions in a standardized way. </p>
 
 
-</div>
+</script>

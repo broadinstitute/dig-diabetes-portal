@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_OxBB_mdv25_script" type="x-tmpl-mustache">
 
     <h4>Publications</h4>
 
@@ -50,4 +50,4 @@
 <h4>Accessing Oxford BioBank GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.OxfordBB"></g:message></p>
 
-</div>
+</script>

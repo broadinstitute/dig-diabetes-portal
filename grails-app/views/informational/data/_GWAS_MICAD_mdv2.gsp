@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_MICAD_mdv25_script" type="x-tmpl-mustache">
 
     <h4>Publications</h4>
 
@@ -33,4 +33,4 @@
 </table>
 <h4>Project</h4>
 
-</div>
+</script>

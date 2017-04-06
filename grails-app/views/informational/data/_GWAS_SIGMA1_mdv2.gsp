@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_SIGMA1_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publication: <div class="paper">
@@ -156,5 +156,5 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
     <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
 
 
-</div>
+</script>
 

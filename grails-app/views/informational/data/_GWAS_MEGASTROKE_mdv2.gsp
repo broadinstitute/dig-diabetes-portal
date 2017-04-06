@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_MEGASTROKE_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set phenotypes</h6>
     <ul>
         <li>All stroke</li>
@@ -48,5 +48,5 @@
     </table>
 
 
-</div>
+</script>
 
