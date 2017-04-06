@@ -159,23 +159,82 @@
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
+<style>
+table.functionDescrTable{
+    width: 100%;
+}
+table.functionDescrTable th {
+        font-weight: bold;
+}
+</style>
 <script id="functionalAnnotationTemplate"  type="x-tmpl-mustache">
-<table>
-    {{#indivRecords}}
-        <tr>
-            <td>{{element}}</td>
-            <td>{{source}}</td>
-            <td>{{start}}</td>
-            <td>{{stop}}</td>
-        </tr>
-    {{/indivRecords}}
-    {{^indivRecords}}
-    No functional data are available for this variant
-    {{/indivRecords}}
-</table>
-
+<div class="row">
+    <div class="col-xs-5 text-left">
+        Elements <select class="uniqueElements" onchange="displayChosenElements()">
+        {{#uniqueElements}}
+            <option>{{element}}</option>
+        {{/uniqueElements}}
+        </select>
+    </div>
+    <div class="col-xs-5 text-left">
+        Tissues<select class="uniqueTissues" onchange="displayChosenElements()">
+        {{#uniqueTissues}}
+            <option>{{source}}</option>
+        {{/uniqueTissues}}
+        </select>
+    </div>
+    <div class="col-xs-2"></div>
+ </div>
+<div class="row">
+    <div class="col-xs-12 text-left">
+        <table class='functionDescrTable'>
+            {{#recordsExist}}
+                <tr class='headers'>
+                    <th width=25%>Element</th>
+                    <th width=25%>Tissue</th>
+                    <th width=25%>Start position</th>
+                    <th width=25%>End position</th>
+                </tr>
+            {{/recordsExist}}
+            {{#indivRecords}}
+                <tr class="{{element}}__{{source}} {{element}} {{source}}">
+                    <td>{{element}}</td>
+                    <td>{{source}}</td>
+                    <td>{{START}}</td>
+                    <td>{{STOP}}</td>
+                </tr>
+            {{/indivRecords}}
+            {{^indivRecords}}
+            No functional data are available for this variant
+            {{/indivRecords}}
+        </table>
+    </div>
+</div>
 </script>
 <script>
+    var displayChosenElements = function (){
+        $('table.functionDescrTable tr').hide();
+        var chosenElement = $('select.uniqueElements').val();
+        var chosenTissue = $('select.uniqueTissues').val();
+        var specificCombinationIdentifier = 'table.functionDescrTable tr.'+chosenElement+"__"+chosenTissue;
+        if (($(specificCombinationIdentifier).length>0)||
+            (chosenElement==='ALL')||
+            (chosenTissue==='ALL')){
+            $('table.functionDescrTable tr.headers').show();
+        }
+        if ((chosenElement==='ALL')&&(chosenTissue==='ALL')){
+            $('table.functionDescrTable tr').show();
+        }
+        else if (chosenElement==='ALL'){
+            $('table.functionDescrTable tr.'+chosenTissue).show();
+        }
+        else if (chosenTissue==='ALL'){
+            $('table.functionDescrTable tr.'+chosenElement).show();
+        } else {
+            $('table.functionDescrTable tr.'+chosenElement+"__"+chosenTissue).show();
+        }
+
+    };
     // generate the texts here so that the appropriate one can be selected in initializePage
     // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
     var variantSummaryText = {
@@ -189,12 +248,31 @@
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') &&
             (!data.variants.is_error)){
-            var sortedData = _.sortBy(data.variants.variants,[function(item) {
+            var rawSortedData = _.sortBy(data.variants.variants,[function(item) {
                 return item.element;
             }, function(item) {
                 return item.source;
             }]);
-            var renderData = {'indivRecords':sortedData};
+            var sortedData = [];
+            _.forEach(rawSortedData,function(o){
+                sortedData.push({'CHROM':o.CHROM,
+                'START':o.START,
+                'STOP':o.STOP,
+                'source':o.source,
+                'element':o.element.replace(/[0-9]*/g, '').replace(/^_/,'').replace(/\//,' ')})
+            })
+            var uniqueElements = _.uniqBy(sortedData,function(item) {
+                return item.element;
+            });
+            uniqueElements.push({element:'ALL'});
+            var uniqueTissues = _.uniqBy(sortedData,function(item) {
+                return item.source;
+            });
+            uniqueTissues.push({source:'ALL'});
+            var renderData = {  'recordsExist': (sortedData.length>1),
+                                'indivRecords':sortedData,
+                                'uniqueElements':uniqueElements,
+                                'uniqueTissues':uniqueTissues};
             $("#functionalDateGoesHere").empty().append(Mustache.render( $('#functionalAnnotationTemplate')[0].innerHTML,renderData));
         }
     };
