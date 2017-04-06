@@ -28,7 +28,8 @@
 </ul>
 
 <h4>Experiment summary</h4>
-<p><g:message code="informational.data.exptsumm.VATGen"></g:message></p>
+<p><g:message code="informational.data.exptsumm.VATGen1"></g:message></p>
+<p><g:message code="informational.data.exptsumm.VATGen2"></g:message></p>
 
 <h4>Accessing VATGen GWAS data in the T2D Knowledge Portal</h4>
 
