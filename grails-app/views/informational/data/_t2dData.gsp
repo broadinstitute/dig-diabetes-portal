@@ -75,7 +75,6 @@
                         console.log("this tech was selected" + selectedTech)
                         console.log(jsonArray);
                         informationGspFileNames.push("#" + each_key.name + '_script');
-                        //console.log(each_key.children);
                     }
                     else {
                         console.log("I didn't find any");
@@ -91,6 +90,7 @@
                     console.log(each_Gspfile);
                     $('#insertScript').append(Mustache.render($(each_Gspfile)[0].innerHTML));
                 })
+
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);
@@ -98,6 +98,7 @@
         };
 
 </script>
+
 <script id="selectDataType" type="x-tmpl-mustache">
     <div class="form-inline">
         <label>Data Type</label>
@@ -118,6 +119,63 @@
         displaySelectedTechnology();
     });
 </script>
+
+
+<script id="metaData2" type="x-tmpl-mustache">
+<div class="row" style="padding-top:30px;">
+    <h3>Datasets </h3>
+    <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
+    <table id="datasets" class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Dataset</th>
+            <th>Access</th>
+            <th>Samples</th>
+            <th>Ethnicity</th>
+            <th>Data type</th>
+            <th>Sub datasets</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#parents}}
+        <tr>
+            <td class="dataset">
+                <div class="accordion" id="accordionTest">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionTest"
+                                   href="#{{name}}_myTarget" aria-expanded="true">
+                                {{label}}
+                            </a>
+                        </div>
+                        <div id="{{name}}_myTarget" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div id="insertScript"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="access">{{ancestry}}</td>
+            <td class="samples">{{size}}</td>
+            <td class="ethnicity">{{ancestry}}</td>
+            <td class="datatype">{{label}}</td>
+            <td class="subdataset">{{label}}</td>
+        </tr>
+        {{/parents}}
+
+        </tbody>
+    </table>
+</div>
+</script>
+
+<div class="row" style="padding-top: 50px;">
+    <div  id ="DataTypeList" class="form-inline"></div>
+    <div  id ="metaDataDisplay" class="form-inline"></div>
+</div>
+
+
+
 
 <script id="metaData" type="x-tmpl-mustache">
     <table>
@@ -148,60 +206,3 @@
     </tbody>
     </table>
 </script>
-
-
-<script id="metaData2" type="x-tmpl-mustache">
-<div class="row" style="padding-top:30px;">
-    <h3>Datasets </h3>
-    <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
-    <table id="datasets" class="table table-condensed">
-        <thead>
-        <tr>
-            <th>Dataset</th>
-            <th>Access</th>
-            <th>Samples</th>
-            <th>Ethnicity</th>
-            <th>Data type</th>
-            <th>Sub datasets</th>
-        </tr>
-        </thead>
-        <tbody>
-        {{#parents}}
-        <tr>
-            <td class="dataset">
-                <div class="accordion" id="accordionTest">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionTest"
-                                   href="#collapseDataDescription" aria-expanded="true">
-                                {{label}}
-                            </a>
-                        </div>
-                        <div id="collapseDataDescription" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div id="insertScript"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </td>
-
-            <td class="access">{{ancestry}}</td>
-            <td class="samples">{{size}}</td>
-            <td class="ethnicity">{{ancestry}}</td>
-            <td class="datatype">{{label}}</td>
-            <td class="subdataset">{{label}}</td>
-        </tr>
-        {{/parents}}
-
-        </tbody>
-    </table>
-</div>
-</script>
-
-<div class="row" style="padding-top: 50px;">
-    <div  id ="DataTypeList" class="form-inline"></div>
-    <div  id ="metaDataDisplay" class="form-inline"></div>
-</div>
-
-
