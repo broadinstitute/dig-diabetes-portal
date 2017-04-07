@@ -160,24 +160,41 @@
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
 <style>
+select.elementTissueSelector{
+    margin: 5px 0 10px 0;
+}
 table.functionDescrTable{
     width: 100%;
+    border: 1px inset #4682b4;
+    margin: 5px;
 }
 table.functionDescrTable th {
-        font-weight: bold;
+    font-weight: bold;
+    text-decoration: underline;
+}
+table.functionDescrTable td.elementSpec {
+padding-left: 10px;
+}
+table.functionDescrTable th.elementSpec {
+    padding-left: 10px;
+}
+
+span.elementTissueSelectorLabel{
+    font-weight: bold;
+    margin: 0 5px 0 5px;
 }
 </style>
 <script id="functionalAnnotationTemplate"  type="x-tmpl-mustache">
 <div class="row">
     <div class="col-xs-5 text-left">
-        Elements <select class="uniqueElements" onchange="displayChosenElements()">
+        <span class="elementTissueSelectorLabel">Display element</span><select class="elementTissueSelector uniqueElements" onchange="displayChosenElements()">
         {{#uniqueElements}}
             <option>{{element}}</option>
         {{/uniqueElements}}
         </select>
     </div>
     <div class="col-xs-5 text-left">
-        Tissues<select class="uniqueTissues" onchange="displayChosenElements()">
+        <span class="elementTissueSelectorLabel">Display tissues</span><select class="elementTissueSelector uniqueTissues" onchange="displayChosenElements()">
         {{#uniqueTissues}}
             <option>{{source}}</option>
         {{/uniqueTissues}}
@@ -190,15 +207,15 @@ table.functionDescrTable th {
         <table class='functionDescrTable'>
             {{#recordsExist}}
                 <tr class='headers'>
-                    <th width=25%>Element</th>
-                    <th width=25%>Tissue</th>
-                    <th width=25%>Start position</th>
-                    <th width=25%>End position</th>
+                    <th class='elementSpec' width=35%>Element</th>
+                    <th width=35%>Tissue</th>
+                    <th width=15%>Start position</th>
+                    <th width=15%>End position</th>
                 </tr>
             {{/recordsExist}}
             {{#indivRecords}}
-                <tr class="{{element}}__{{source}} {{element}} {{source}}">
-                    <td>{{element}}</td>
+                <tr class="elementTissueRows {{element}}__{{source}} {{element}} {{source}}">
+                    <td class='elementSpec'>{{element}}</td>
                     <td>{{source}}</td>
                     <td>{{START}}</td>
                     <td>{{STOP}}</td>
@@ -259,7 +276,7 @@ table.functionDescrTable th {
                 'START':o.START,
                 'STOP':o.STOP,
                 'source':o.source,
-                'element':o.element.replace(/[0-9]*/g, '').replace(/^_/,'').replace(/\//,' ')})
+                'element':o.element.replace(/[0-9]*/g, '').replace(/^_/,'').replace(/\//,'-')})
             })
             var uniqueElements = _.uniqBy(sortedData,function(item) {
                 return item.element;
@@ -274,6 +291,8 @@ table.functionDescrTable th {
                                 'uniqueElements':uniqueElements,
                                 'uniqueTissues':uniqueTissues};
             $("#functionalDateGoesHere").empty().append(Mustache.render( $('#functionalAnnotationTemplate')[0].innerHTML,renderData));
+            $('select.uniqueElements').val('ALL');
+            $('select.uniqueTissues').val('ALL');
         }
     };
 
@@ -321,9 +340,28 @@ table.functionDescrTable th {
 
                 <g:render template="variantPageHeader"/>
 
-                <div id="functionalDateGoesHere"></div>
+
 
                 <div class="accordion" id="accordionVariant">
+
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse"
+                               data-parent="#accordionVariant"
+                               href="#collapseFunctionalData">
+                                <h2><strong>Epigenetic data</strong></h2>
+                            </a>
+                        </div>
+
+                        <div id="collapseFunctionalData" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div id="functionalDateGoesHere"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse"
