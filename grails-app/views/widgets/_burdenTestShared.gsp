@@ -1,6 +1,7 @@
 
 <g:javascript>
 
+
 $( document ).ready( function (){
 
     mpgSoftware.burdenTestShared.buildGaitInterface('.gaitSectionGoesHere',{

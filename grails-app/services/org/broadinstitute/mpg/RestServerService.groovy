@@ -1406,36 +1406,47 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 ArrayList<JSONArray> variants = data.variants
                 // note: this works because the variants are returned in an ascending order--if
                 // this invariant is not true, then good luck
-                variants.each { variant ->
-                    // check the current significance boundary--if it's equal to the
-                    // significance that we fetched with, then we don't need to iterate
-                    // any more. We can't break out of the each closure, but we can
-                    // skip the computations in the closure
-                    if(significanceList[significanceLevelTracker] == significance) {
-                        return true
+                if (variants.size()==0){
+                    for (float oneSignificance in significanceList) {
+                        // if so, save the current value of counter for the current significance level, and decrement the significane tracker
+                        values.add([
+                                level: oneSignificance,
+                                count: 0
+                        ] as JSONObject)
                     }
-
-                    // find the p-value object
-                    JSONObject pvalObject = variant.find { variantData ->
-                        return (variantData as JSONObject).keySet()[0].indexOf('P_') == 0
-                    } as JSONObject
-                    // pull out the p-value
-                    float pVal = pvalObject[pValueText][dataset][phenotype]
-                    // check if it's > the next significance boundary
-                    if(pVal > significanceList[significanceLevelTracker]) {
-                        // I feel like this while loop could use an explanation, but I don't know of a good
-                        // way to explain
-                        while(pVal > significanceList[significanceLevelTracker]) {
-                            // if so, save the current value of counter for the current significance level, and decrement the significane tracker
-                            values.add([
-                                    level: significanceList[significanceLevelTracker],
-                                    count: counter
-                            ] as JSONObject)
-                            significanceLevelTracker--
+                } else {
+                    variants.each { variant ->
+                        // check the current significance boundary--if it's equal to the
+                        // significance that we fetched with, then we don't need to iterate
+                        // any more. We can't break out of the each closure, but we can
+                        // skip the computations in the closure
+                        if(significanceList[significanceLevelTracker] == significance) {
+                            return true
                         }
+
+                        // find the p-value object
+                        JSONObject pvalObject = variant.find { variantData ->
+                            return (variantData as JSONObject).keySet()[0].indexOf('P_') == 0
+                        } as JSONObject
+                        // pull out the p-value
+                        float pVal = pvalObject[pValueText][dataset][phenotype]
+                        // check if it's > the next significance boundary
+                        if(pVal > significanceList[significanceLevelTracker]) {
+                            // I feel like this while loop could use an explanation, but I don't know of a good
+                            // way to explain
+                            while(pVal > significanceList[significanceLevelTracker]) {
+                                // if so, save the current value of counter for the current significance level, and decrement the significane tracker
+                                values.add([
+                                        level: significanceList[significanceLevelTracker],
+                                        count: counter
+                                ] as JSONObject)
+                                significanceLevelTracker--
+                            }
+                        }
+                        counter++
                     }
-                    counter++
                 }
+
 
                 // get out of the while loop, because we've now got all the data we need
                 break

@@ -27,8 +27,6 @@
     <li><g:message code="informational.shared.traits.VATSATadjBMI"></g:message></li>
 </ul>
 
-<h4>Dataset subjects</h4>
-
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.VATGen"></g:message></p>
 
