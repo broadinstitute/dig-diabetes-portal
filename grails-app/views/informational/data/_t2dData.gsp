@@ -31,6 +31,7 @@
 <g:render template="./data/GWAS_SIGN_mdv2"/>
 <g:render template="./data/GWAS_Stroke_mdv2"/>
 <g:render template="./data/GWAS_VATGen_mdv2"/>
+<g:render template="./data/ExAC_r03_mdv2" />
 
 
 <style>
@@ -68,7 +69,6 @@
                     if(selectedTech == "") {
                         jsonArray.push(each_key);
                         console.log("Show All clicked/default list");
-                        //informationGspFileName = "";
                     }
                     else if (each_key.name.includes(selectedTech)) {
                         jsonArray.push(each_key);
@@ -90,7 +90,6 @@
                     console.log(each_Gspfile);
                     $('#insertScript').append(Mustache.render($(each_Gspfile)[0].innerHTML));
                 })
-
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);
@@ -122,18 +121,18 @@
 
 
 <script id="metaData2" type="x-tmpl-mustache">
-<div class="row" style="padding-top:30px;">
-    <h3>Datasets </h3>
-    <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
-    <table id="datasets" class="table table-condensed">
-        <thead>
-        <tr>
-            <th>Dataset</th>
-            <th>Access</th>
-            <th>Samples</th>
-            <th>Ethnicity</th>
-            <th>Data type</th>
-            <th>Sub datasets</th>
+    <div class="row" style="padding-top:30px;">
+        <h3>Datasets </h3>
+        <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
+        <table id="datasets" class="table table-condensed">
+            <thead>
+            <tr>
+                <th>Dataset</th>
+                <th>Access</th>
+                <th>Samples</th>
+                <th>Ethnicity</th>
+                <th>Data type</th>
+                <th>Sub datasets</th>
         </tr>
         </thead>
         <tbody>
@@ -173,9 +172,6 @@
     <div  id ="DataTypeList" class="form-inline"></div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
 </div>
-
-
-
 
 <script id="metaData" type="x-tmpl-mustache">
     <table>
