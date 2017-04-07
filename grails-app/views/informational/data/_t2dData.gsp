@@ -83,7 +83,7 @@
                 });
                 var holder = {};
                 holder["parents"] = jsonArray;
-                var template = $("#metaData")[0].innerHTML;
+                var template = $("#metaData2")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
                 $("#metaDataDisplay").empty().append(dynamic_html);
                 console.log(informationGspFileNames);
@@ -128,6 +128,7 @@
     <td>{{label}}</td>
     <td>{{name}}</td>
     {{/parents}}
+
     <div class="accordion" id="accordionTest">
          <div class="accordion-group">
              <div class="accordion-heading">
@@ -143,17 +144,64 @@
              </div>
          </div>
      </div>
-    </div>
+
     </tbody>
     </table>
+</script>
+
+
+<script id="metaData2" type="x-tmpl-mustache">
+<div class="row" style="padding-top:30px;">
+    <h3>Datasets </h3>
+    <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
+    <table id="datasets" class="table table-condensed">
+        <thead>
+        <tr>
+            <th>Dataset</th>
+            <th>Access</th>
+            <th>Samples</th>
+            <th>Ethnicity</th>
+            <th>Data type</th>
+            <th>Sub datasets</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{#parents}}
+        <tr>
+            <td class="dataset">
+                <div class="accordion" id="accordionTest">
+                    <div class="accordion-group">
+                        <div class="accordion-heading">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionTest"
+                                   href="#collapseDataDescription" aria-expanded="true">
+                                {{label}}
+                            </a>
+                        </div>
+                        <div id="collapseDataDescription" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div id="insertScript"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+
+            <td class="access">{{ancestry}}</td>
+            <td class="samples">{{size}}</td>
+            <td class="ethnicity">{{ancestry}}</td>
+            <td class="datatype">{{label}}</td>
+            <td class="subdataset">{{label}}</td>
+        </tr>
+        {{/parents}}
+
+        </tbody>
+    </table>
+</div>
 </script>
 
 <div class="row" style="padding-top: 50px;">
     <div  id ="DataTypeList" class="form-inline"></div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
-
-
-
 </div>
 
 
