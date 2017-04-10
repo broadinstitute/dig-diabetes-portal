@@ -1,4 +1,4 @@
-<g:render template="./data/WGS_GoT2D_mdv2" />
+
 <g:render template="./data/ExAC_r03_mdv2" />
 <g:render template="./data/1kg_phase1_mdv2" />
 <g:render template="./data/ExChip_82k_mdv2"/>
@@ -31,10 +31,256 @@
 <g:render template="./data/GWAS_SIGN_mdv2"/>
 <g:render template="./data/GWAS_Stroke_mdv2"/>
 <g:render template="./data/GWAS_VATGen_mdv2"/>
+<g:render template="./data/WGS_GoT2D_mdv2" />
+<g:render template="./data/WGS_GoT2Dimputed_mdv2" />
+<g:render template="./data/WGS_WgnomAD_mdv2" />
 <g:render template="./data/ExAC_r03_mdv2" />
 
 
 <style>
+.datasets-filter table {
+    width:100%;
+}
+
+.datasets-filter td {
+    text-align: center;
+    background-color:#eee;
+    padding: 3px 0;
+    border: solid 1px #fff;
+}
+
+.phenotypetip {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+
+.phenotypetip .phenotypetiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.phenotypetip .phenotypetiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.phenotypetip:hover .phenotypetiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.dataset {
+    font-weight: bold;
+}
+
+.dataset-filter table {
+    width:100%;
+}
+
+.dataset-filter td {
+    text-align: center;
+    background-color:#eee;
+    padding: 3px 0;
+    border: solid 1px #fff;
+}
+
+.greyBG {
+    background-color: #ccc;
+}
+
+.defaultBG {
+    background-color: #fff;
+    color: #000;
+    display:td;
+}
+
+.blueBG {
+    background-color:#e5f5Ff;
+    display:td;
+}
+
+.whiteBG {
+    background-color: #fff;
+    color: #aaa;
+    display:none;
+}
+
+.overlapBG {
+    background-color:#39F;
+    color: #fff;
+}
+
+
+.panel-body1 {
+    padding: 15px 0 20px 30px !important;
+
+    border: none;
+}
+
+.popover{
+
+    min-width: 400px;
+
+}
+
+.popover-title {
+
+    font-size: 14pt;
+
+    font-weight: bold;
+
+    text-align: left;
+
+}
+
+.popover-content {
+
+    font-size: 12pt;
+
+    max-width: 500px;
+
+}
+
+.aboutIconHolder {
+
+    margin: auto;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    height: 170px;
+
+}
+
+
+
+.consortium-spacing {
+
+    padding-top: 25px;
+
+}
+
+
+
+p.dataset-name {
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    margin: 0;
+
+}
+
+
+
+.datapage-body {
+
+    font-size: 16px;
+
+}
+
+
+.dataset-summary {
+
+    display: block;
+
+    position: relative;
+
+    font-size: 18px;
+
+    font-weight: 200;
+
+    float: right;
+
+    color: #36c;
+
+    top: 5px;
+
+}
+
+
+
+.data-status-open-access {
+
+    color: #393;
+
+}
+
+
+
+.data-status-early-phase1-access {
+
+    color: red;
+
+}
+
+
+
+.dataset-info {
+
+    color: #777;
+
+}
+
+
+
+.open-info {
+
+    display: block;
+
+    color: #39F !important;
+
+    font-size: 14px;
+
+}
+
+.notice  {
+
+    font-weight: bold;
+    line-height: 20px;
+    text-decoration: none;
+    margin: 0 auto 0 auto;
+    color: #588fd3;
+    margin: 0;
+
+}
+
+.notice .messageText {
+    font-weight: bold;
+    font-style: italic;
+    color: black;
+    margin: 0 auto 0 auto;
+    font-size: 20px;
+}
+
+
+
+.notice  hr {
+    width: 100%;
+    color: black;
+}
     /* only applies to tables for cohort information */
     .cohortDetail th {
         width: 50%;
@@ -53,6 +299,24 @@
 </script>
 
 <script>
+    function getAccessName(dataTypeName){
+        var access;
+        if (dataTypeName.includes( "BioMe")){
+            access = "Early Access Phase 1";
+        }
+        else if(dataTypeName.includes('ForT2D')){
+            access = "Unpublished";
+        }
+        else if(dataTypeName.includes('CAMP')){
+            access = "Early Access Phase 2";
+        }
+        else{
+            access = "Open access";
+        }
+        return access;
+    }
+</script>
+<script>
     function displaySelectedTechnology() {
         var selectedTech = $("#technologyTypeSelector").val();
             $.ajax({
@@ -67,28 +331,33 @@
                 _.forEach(data.children, function (each_key,val) {
                     console.log(selectedTech);
                     if(selectedTech == "") {
-                        jsonArray.push(each_key);
+                        each_key["access"]= getAccessName(each_key.name);
+                        jsonArray.push(each_key)
                         console.log("Show All clicked/default list");
+                        console.log(each_key.name);
+                        informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else if (each_key.name.includes(selectedTech)) {
+                        each_key["access"]= getAccessName(each_key.name);
                         jsonArray.push(each_key);
-                        console.log("this tech was selected" + selectedTech)
                         console.log(jsonArray);
+                        console.log("this tech was selected" + selectedTech)
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else {
-                        console.log("I didn't find any");
+                        console.log("Not found in the selected technologies");
                     }
                 });
                 var holder = {};
                 holder["parents"] = jsonArray;
+                console.log(holder);
                 var template = $("#metaData2")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
                 $("#metaDataDisplay").empty().append(dynamic_html);
                 console.log(informationGspFileNames);
                 _.forEach(informationGspFileNames, function (each_Gspfile,val){
                     console.log(each_Gspfile);
-                    $('#insertScript').append(Mustache.render($(each_Gspfile)[0].innerHTML));
+                    $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
                 })
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
@@ -96,6 +365,12 @@
             });
         };
 
+</script>
+
+<script>
+    $(document).ready(function(){
+        displaySelectedTechnology();
+    });
 </script>
 
 <script id="selectDataType" type="x-tmpl-mustache">
@@ -114,13 +389,33 @@
 </script>
 
 <script>
-    $(document).ready(function(){
-        displaySelectedTechnology();
+    $(".datatype-option").click(function(event) {
+        filterDatatype = $(this).text();
+        $(this).parent().find("td").each(function() {
+            $(this).css({"background-color":"#eee","color":"#000000"});
+        });
+        $(this).css({"background-color":"#39f","color":"#ffffff"});
+        //filterDatasetsTable(filterDatatype);
     });
+
 </script>
 
 
 <script id="metaData2" type="x-tmpl-mustache">
+    <table class="datatype-option">
+            <h5>Data Type</h5>
+    <tbody>
+    <tr>
+    <td class="datatype-option" style="width:20%,background-color:#C0C0C0,color:#D3D3D3">Show all</td>
+    <td class="datatype-option" style="width:20%">Exome Sequencing</td>
+    <td class="datatype-option" style="width:20%">Whole genome Sequencing</td>
+    <td class="datatype-option" style="width:20%">GWAS</td>
+            <td class="datatype-option" style="width:20%">Exome chip</td>
+    <td class="datatype-option" style="width:20%">1000 Genome</td>
+    <td class="datatype-option" style="width:20%">ExAC</td>
+    </tr>
+    </tbody>
+    </table>
     <div class="row" style="padding-top:30px;">
         <h3>Datasets </h3>
         <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
@@ -132,37 +427,36 @@
                 <th>Samples</th>
                 <th>Ethnicity</th>
                 <th>Data type</th>
-                <th>Sub datasets</th>
-        </tr>
-        </thead>
+            </tr>
+            </thead>
         <tbody>
+        <div class="accordion" id="accordion">
         {{#parents}}
         <tr>
             <td class="dataset">
-                <div class="accordion" id="accordionTest">
+
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionTest"
-                                   href="#{{name}}_myTarget" aria-expanded="true">
-                                {{label}}
-                            </a>
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"
+                                   href="#{{name}}_myTarget" aria-expanded="true" aria-controls="{{name}}_myTarget">
+                                   {{label}}
+                                </a>
                         </div>
                         <div id="{{name}}_myTarget" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <div id="insertScript"></div>
+                                <div id="{{name}}_script_holder"></div>
                             </div>
                         </div>
                     </div>
-                </div>
+
             </td>
-            <td class="access">{{ancestry}}</td>
+            <td class="access">{{access}}</td>
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
-            <td class="datatype">{{label}}</td>
-            <td class="subdataset">{{label}}</td>
+            <td class="datatype">{{technology}}</td>
         </tr>
+        </div>
         {{/parents}}
-
         </tbody>
     </table>
 </div>
@@ -172,33 +466,3 @@
     <div  id ="DataTypeList" class="form-inline"></div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
 </div>
-
-<script id="metaData" type="x-tmpl-mustache">
-    <table>
-    <tbody>
-    {{#parents}}
-    <td>{{ancestry}}</td>
-    <td>{{descr}}</td>
-    <td>{{label}}</td>
-    <td>{{name}}</td>
-    {{/parents}}
-
-    <div class="accordion" id="accordionTest">
-         <div class="accordion-group">
-             <div class="accordion-heading">
-                 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionTest"
-                    href="#collapseDataDescription" aria-expanded="true">
-                    <h4>Description</h4>
-                 </a>
-              </div>
-             <div id="collapseDataDescription" class="accordion-body collapse">
-                 <div class="accordion-inner">
-                     <div id="insertScript"></div>
-                 </div>
-             </div>
-         </div>
-     </div>
-
-    </tbody>
-    </table>
-</script>

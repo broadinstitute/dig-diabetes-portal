@@ -439,7 +439,8 @@ class RestServerService {
         if ((sampleGroup)&&(sampleGroup.getSystemId())){
             String dataSetName  = sampleGroup.getSystemId()
             String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
-            sb <<  """{"name":"${dataSetName}", "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"col": 1""".toString()
+            String technologyTranslated = g.message(code: 'metadata.' + "${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}");
+            sb <<  """{"name":"${dataSetName}", "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","col": 1""".toString()
         }
 
         // recurse, if necessary

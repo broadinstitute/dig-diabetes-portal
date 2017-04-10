@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="WGS_GoT2Dimputed_mdv25_script" type="x-tmpl-mustache">
     <h4>Publication</h4>
 
     <p><div class="paper">
@@ -277,4 +277,4 @@
 <h4>Accessing GoT2D WGS + replication data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.GoT2DWGS_replic"></g:message></p>
 
-</div>
+</script>
