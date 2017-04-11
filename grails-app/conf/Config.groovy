@@ -230,6 +230,12 @@ t2dLocalhostRestServer {
     name =  'dig-genome-store/'
     path = 'gs/'
 }
+t2dLocalhostRestServer {
+    base = 'http://localhost:8090/'
+    name =  'dccservices/'
+    path = ''
+}
+
 
 // individual servers
 // NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing

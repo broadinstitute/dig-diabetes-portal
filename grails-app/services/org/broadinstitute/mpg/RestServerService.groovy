@@ -1998,7 +1998,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, int  startHere, int pageSize ) {
         List<String> specifyRequestList = []
-        specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
+        //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
         if ((phenotype)&&(phenotype.length()>0)){
             specifyRequestList << "\"phenotype\":\"${phenotype}\""
         }
