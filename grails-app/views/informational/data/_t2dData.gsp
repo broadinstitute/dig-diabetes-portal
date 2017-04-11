@@ -37,17 +37,18 @@
 <g:render template="./data/ExAC_r03_mdv2" />
 
 
-<style>
-.datasets-filter table {
-    width:100%;
-}
+<style type="text/css" class="init">
 
-.datasets-filter td {
-    text-align: center;
-    background-color:#eee;
-    padding: 3px 0;
-    border: solid 1px #fff;
-}
+		.datasets-filter table {
+			width:100%;
+		}
+
+		.datasets-filter td {
+			text-align: center;
+			background-color:#eee;
+			padding: 3px 0;
+			border: solid 1px #fff;
+		}
 
 .phenotypetip {
     position: relative;
@@ -274,9 +275,6 @@ p.dataset-name {
     margin: 0 auto 0 auto;
     font-size: 20px;
 }
-
-
-
 .notice  hr {
     width: 100%;
     color: black;
@@ -285,12 +283,13 @@ p.dataset-name {
     .cohortDetail th {
         width: 50%;
     }
+
 </style>
 
 <script>
     $(document).ready(function() {
         var data = {
-            dataType: "Data type:",
+            dataType: "Data type:"
         };
         var template = $("#selectDataType")[0].innerHTML;
         var dynamic_html = Mustache.to_html(template,data);
@@ -317,8 +316,19 @@ p.dataset-name {
     }
 </script>
 <script>
-    function displaySelectedTechnology() {
-        var selectedTech = $("#technologyTypeSelector").val();
+    function displaySelectedTechnology(filterDatatype) {
+        //var selectedTech = $("#technologyTypeSelector").val();
+        //var selectedDatatype = $(".datatype-option").text();
+        //console.log("selectedDatatype" + filterDatatype);
+        var selectedTech = "";
+        if(filterDatatype=="Show all"){ selectedTech="";}
+        else if(filterDatatype=="Exome Sequencing"){ selectedTech="ExSeq";}
+        else if(filterDatatype=="Whole genome Sequencing"){selectedTech="WGS";}
+        else if(filterDatatype=="GWAS"){selectedTech="GWAS";}
+        else if(filterDatatype=="Exome chip"){selectedTech="ExChip";}
+        else if(filterDatatype=="1000 Genome"){selectedTech="1kg";}
+        else if(filterDatatype=="ExAC"){selectedTech="ExAC";}
+        console.log(selectedTech);
             $.ajax({
                 cache: false,
                 type: "get",
@@ -329,19 +339,19 @@ p.dataset-name {
                 var jsonArray = [];
                 var informationGspFileNames=[];
                 _.forEach(data.children, function (each_key,val) {
-                    console.log(selectedTech);
+                    //console.log(selectedTech);
                     if(selectedTech == "") {
                         each_key["access"]= getAccessName(each_key.name);
                         jsonArray.push(each_key)
-                        console.log("Show All clicked/default list");
-                        console.log(each_key.name);
+                        //console.log("Show All clicked/default list");
+                        //console.log(each_key.name);
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else if (each_key.name.includes(selectedTech)) {
                         each_key["access"]= getAccessName(each_key.name);
                         jsonArray.push(each_key);
-                        console.log(jsonArray);
-                        console.log("this tech was selected" + selectedTech)
+                        //console.log(jsonArray);
+                        //console.log("this tech was selected" + selectedTech)
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else {
@@ -350,13 +360,13 @@ p.dataset-name {
                 });
                 var holder = {};
                 holder["parents"] = jsonArray;
-                console.log(holder);
+                //console.log(holder);
                 var template = $("#metaData2")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
                 $("#metaDataDisplay").empty().append(dynamic_html);
-                console.log(informationGspFileNames);
+                //console.log(informationGspFileNames);
                 _.forEach(informationGspFileNames, function (each_Gspfile,val){
-                    console.log(each_Gspfile);
+                    //console.log(each_Gspfile);
                     $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
                 })
             }).fail(function (jqXHR, textStatus, exception) {
@@ -364,12 +374,12 @@ p.dataset-name {
                 core.errorReporter(jqXHR, exception);
             });
         };
-
 </script>
 
 <script>
     $(document).ready(function(){
-        displaySelectedTechnology();
+        var filterDatatype = "Show all";
+        displaySelectedTechnology(filterDatatype);
     });
 </script>
 
@@ -389,35 +399,43 @@ p.dataset-name {
 </script>
 
 <script>
-    $(".datatype-option").click(function(event) {
-        filterDatatype = $(this).text();
-        $(this).parent().find("td").each(function() {
-            $(this).css({"background-color":"#eee","color":"#000000"});
+        /*var datatypeFilter = "<h5>Data type</h5><table class=''><tr>";
+        var datatypeArray = ["Show all","Exome Sequencing","Whole genome Sequencing","GWAS","Exome chip","1000 Genome","ExAC"];
+
+        $.each(datatypeArray, function(datatypeIndex, datatypeValue) {
+            var datatypeTD = "<td class='datatype-option' style='width:" + 100 / (datatypeArray.length + 1) + "%'>" + datatypeValue + "</td>";
+            datatypeFilter += datatypeTD;
         });
-        $(this).css({"background-color":"#39f","color":"#ffffff"});
-        //filterDatasetsTable(filterDatatype);
-    });
+
+        //datatypeFilter += "<td class='datatype-option' style='width:"+100/(datatypeArray.length+1)+"%'>Show all</td></tr></table>";
+        $(".datasets-filter").append(datatypeFilter);
+
+        var filterDatatype = "Show all";
+        */
 
 </script>
 
 
+<script>
+    $(document).ready(function(){
+        var filterDatatype = "Show all";
+        $(".datatype-option").click(function (event) {
+            filterDatatype = $(this).text();
+            console.log(filterDatatype);
+            $(this).parent().find("td").each(function () {
+                $(this).css({"background-color": "#eee", "color": "#000000"});
+            });
+            $(this).css({"background-color": "#39f", "color": "#ffffff"});
+            //console.log("i was clicked");
+            displaySelectedTechnology(filterDatatype);
+    });
+
+    });
+</script>
 <script id="metaData2" type="x-tmpl-mustache">
-    <table class="datatype-option">
-            <h5>Data Type</h5>
-    <tbody>
-    <tr>
-    <td class="datatype-option" style="width:20%,background-color:#C0C0C0,color:#D3D3D3">Show all</td>
-    <td class="datatype-option" style="width:20%">Exome Sequencing</td>
-    <td class="datatype-option" style="width:20%">Whole genome Sequencing</td>
-    <td class="datatype-option" style="width:20%">GWAS</td>
-            <td class="datatype-option" style="width:20%">Exome chip</td>
-    <td class="datatype-option" style="width:20%">1000 Genome</td>
-    <td class="datatype-option" style="width:20%">ExAC</td>
-    </tr>
-    </tbody>
-    </table>
+
     <div class="row" style="padding-top:30px;">
-        <h3>Datasets </h3>
+        <h3>Datasets</h3>
         <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
         <table id="datasets" class="table table-condensed">
             <thead>
@@ -434,7 +452,6 @@ p.dataset-name {
         {{#parents}}
         <tr>
             <td class="dataset">
-
                     <div class="accordion-group">
                         <div class="accordion-heading">
                                 <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion"
@@ -448,7 +465,6 @@ p.dataset-name {
                             </div>
                         </div>
                     </div>
-
             </td>
             <td class="access">{{access}}</td>
             <td class="samples">{{size}}</td>
@@ -463,6 +479,24 @@ p.dataset-name {
 </script>
 
 <div class="row" style="padding-top: 50px;">
-    <div  id ="DataTypeList" class="form-inline"></div>
+    <div>
+        <div class="datasets-filter row">
+            <h4>Filter Dataset Table<small> (Click one to start)</small></h4>
+        </div>
+        <h5>Data type</h5>
+        <table class="datasets-filter">
+            <tbody>
+            <tr>
+                <td class='datatype-option' style='width:12.5%'>Exome Sequencing</td>
+                <td class='datatype-option' style='width:12.5%'>Whole genome Sequencing</td>
+                <td class='datatype-option' style='width:12.5%'>GWAS</td>
+                <td class='datatype-option' style='width:12.5%'>Exome chip</td>
+                <td class='datatype-option' style='width:12.5%'>1000 Genome</td>
+                <td class='datatype-option' style='width:12.5%'>ExAC</td>
+                <td class='datatype-option' style="width: 20%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
 </div>
