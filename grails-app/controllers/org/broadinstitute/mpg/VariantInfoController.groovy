@@ -251,6 +251,63 @@ class VariantInfoController {
     }
 
 
+
+    def retrieveFunctionalDataAjax (){
+        String chromosome = ''
+        int startPos
+        int endPos
+        int pageStart = 0
+        int pageEnd = 1000
+        if (params.chromosome) {
+            chromosome = params.chromosome
+            log.debug "retrieveFunctionalData params.chromosome = ${params.chromosome}"
+        }
+        if (params.startPos) {
+            startPos = Integer.parseInt(params.startPos)
+            log.debug "retrieveFunctionalData params.startPos = ${params.startPos}"
+        }
+        if (params.endPos) {
+            endPos =  Integer.parseInt(params.endPos)
+            log.debug "retrieveFunctionalData params.endPos = ${params.endPos}"
+        }
+
+
+        JSONObject dataJsonObject
+
+         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd )
+
+        if (dataJsonObject.variants) {
+            for (Map pval in dataJsonObject.variants){
+
+//                if (pval.containsKey("Consequence")){
+//                    List<String> consequenceList = pval["Consequence"]?.tokenize(",")
+//                    List<String> translatedConsequenceList = []
+//                    for (String consequence in consequenceList){
+//                        translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
+//                    }
+//                    pval["Consequence"] = translatedConsequenceList.join(", ")
+//                }
+//                if (pval.containsKey("dataset")){
+//                    pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
+//                }
+//                if (pval.containsKey("phenotype")){
+//                    pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
+//                }
+
+            }
+
+        }
+
+
+        render(status: 200, contentType: "application/json") {
+            [variants: dataJsonObject]
+        }
+
+    }
+
+
+
+
     /***
      * Returns the names for available data sets so that the user can choose between them
      *

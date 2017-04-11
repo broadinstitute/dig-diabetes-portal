@@ -102,7 +102,29 @@ var mpgSoftware = mpgSoftware || {};
             var transcriptTableHtml = Mustache.render(transcriptTemplate, renderData);
             $('#transcriptHeader').append(transcriptTableHtml);
         };
+        var retrieveFunctionalData = function(callingData,callback,additionalData){
+            var args = _.flatten([{}, callingData.variant.variants[0]]);
+            var variantObject = _.merge.apply(_, args);
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: additionalData.retrieveFunctionalDataAjaxUrl,
+                data: {
+                    chromosome: variantObject.CHROM,
+                    startPos: ""+variantObject.POS,
+                    endPos: ""+variantObject.POS
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
 
+                callback(data,additionalData);
+
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                core.errorReporter(jqXHR, errorThrown)
+            });
+        };
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       geneLocusZoomUrl,
@@ -1134,7 +1156,8 @@ var mpgSoftware = mpgSoftware || {};
             // ---------------------------------------
             firstReponders: firstResponders,
             retrieveVariantPhenotypeData: retrieveVariantPhenotypeData,
-            initializePage: initializePage
+            initializePage: initializePage,
+            retrieveFunctionalData:retrieveFunctionalData
         }
 
 
