@@ -1,4 +1,5 @@
 <div class="panel-body">
+    <h4><g:message code="informational.data.accessphase.CAMP"></g:message></h4>
 <h4>Dataset phenotypes</h4>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>

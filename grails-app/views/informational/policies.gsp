@@ -196,7 +196,9 @@
 
                     <h4><g:message code="informational.policies.conduct.availability.header"></g:message></h4>
 
-                    <p><g:message code="informational.policies.conduct.section_1"></g:message></p>
+                    <p><g:message code="informational.policies.conduct.section_1a"></g:message></p>
+                        <p><g:message code="informational.policies.conduct.section_1b"></g:message></p>
+                        <p><g:message code="informational.policies.conduct.section_1c"></g:message></p>
 
                     <h4><g:message code="informational.policies.conduct.registration.header"></g:message></h4>
 

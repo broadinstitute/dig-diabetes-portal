@@ -419,6 +419,7 @@
 
             </table>
         </div></td><td>Latino</td></tr>
+
     <tr><td>SIGMA</td><td>487</td><td>443</td><td><a onclick="showSection(event)">Multiethnic Cohort (MEC)</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
