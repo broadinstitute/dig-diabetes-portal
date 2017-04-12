@@ -54,6 +54,6 @@
     <div id="collapseFunctionalData" class="accordion-body collapse">
         <div class="accordion-inner">
             <div id="functionalDateGoesHere"></div>
-        </div>
+            <table id="functionalDataTableGoesHere"></table>
     </div>
 </div>

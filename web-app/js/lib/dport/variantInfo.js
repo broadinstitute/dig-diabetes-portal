@@ -103,7 +103,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#transcriptHeader').append(transcriptTableHtml);
         };
         var retrieveFunctionalData = function(callingData,callback,additionalData){
-            var loading = $('#spinner').show();
+            var loading = $('#spinner');
             var args = _.flatten([{}, callingData.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
             $.ajax({
@@ -1168,7 +1168,9 @@ var mpgSoftware = mpgSoftware || {};
                     'indivRecords':sortedData,
                     'uniqueElements':uniqueElements,
                     'uniqueTissues':uniqueTissues};
+
                 $("#functionalDateGoesHere").empty().append(Mustache.render( $('#functionalAnnotationTemplate')[0].innerHTML,renderData));
+                buildAnnotationTable('#functionalDataTableGoesHere','urlToFillIn',renderData,{});
                 $('select.uniqueElements').val('ALL');
                 $('select.uniqueTissues').val('ALL');
             }
@@ -1201,7 +1203,96 @@ var mpgSoftware = mpgSoftware || {};
         var firstResponders = {
         };
 
+        var buildAnnotationTable = function(selectionToFill,
+                                        variantInfoUrl,
+                                        renderData, parameters){
+            var rowsToDisplay = renderData.indivRecords;
+            var requestedProperties = _.map(renderData.propertiesToInclude, function(o){
+                var propertyNamePieces = o.substring("common-common-".length);
+                if (propertyNamePieces.length > 0){
+                    return propertyNamePieces;
+                } else {
+                    return "prop";
+                }
+            });
+            var counter = 0;
+            var commonTable  = $(selectionToFill).dataTable({
+                    "bDestroy": true,
+                    "className": "compact",
+                    "bAutoWidth" : false,
+                    "order": [[ 1, "asc" ]],
+                    "columnDefs":                   [
+                    { "name": "Element",   "targets": [0], "type":"allAnchor", "title":"Element"
+                      , "sWidth": "30%"
+                    },
+                   { "name": "Tissue",   "targets": [1], "title":"Tissue"
+                       ,"sWidth": "30%"
+                   },
+                   { "name": "startpos",   "targets": [2], "title":"Start position"
+                      , "sWidth": "20%"
+                   },
+                   { "name": "endpos",   "targets": [3], "title":"End position"
+                       ,"sWidth": "20%"
+                   }
+                    ],
+                    "scrollY":        "300px",
+                    "scrollX": "100%",
+                    "scrollCollapse": true,
+                    "paging":         false,
+                    "bFilter": true,
+                    "bLengthChange" : true,
+                    "bInfo":false,
+                    "bProcessing": true,
+                    "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                        nRow.className = $(aData[0]).attr('custag');
+                        return nRow;
+                    },
+                    dom: 'lBtip',
+                    buttons: [
+                        { extend: "copy", text: "Copy" },
+                        { extend: 'csv', filename: "commonVariants" },
+                        { extend: 'pdf', orientation: 'landscape'}
+                    ]
+                }
+            );
 
+            var distinctDataSets = [];
+            _.forEach(rowsToDisplay,function(variantRec){
+               var arrayOfRows = [];
+
+               arrayOfRows.push('<span class="elementSpec">'+variantRec.element+'</span>');
+               arrayOfRows.push(variantRec.source);
+               arrayOfRows.push(variantRec.START);
+               arrayOfRows.push(variantRec.STOP);
+
+               commonTable.dataTable().fnAddData( arrayOfRows );
+            });
+
+            // $('#commonVariantsLocationHolder_filter').css('display','none');
+            // $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
+            // $('tr.niceHeaders th.commonDataSet').append('<select class="dsFilter common" type="button" id="dropdownCommonVariantDsButton" data-toggle="dropdown" aria-haspopup="true" '+
+            //     'aria-expanded="false">Dataset filter</select>');
+            // $('#dropdownCommonVariantDsButton').on("click", mpgSoftware.geneSignalSummaryMethods.disableClickPropagation);
+            // $('select.dsFilter.common').append("<option value='ALL'>All</option>");
+            // _.forEach(distinctDataSets.sort(),function (o){
+            //     $('select.dsFilter.common').append("<option value='"+o+"'>"+o+"</option>");
+            // });
+            // $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink pull-right" style="display:none">Explore</div>');
+            // $('.commonVariantVRTLink').on("click", null, {  gene:parameters.gene,
+            //         phenotype:parameters.phenotype,
+            //         vrtUrl:parameters.vrtUrl,
+            //         tablePtr:commonTable,
+            //         pValueIndex:2},
+            //     mpgSoftware.geneSignalSummaryMethods.startVRT);
+            // $('div.dsFilterCommon').attr('dsfilter','ALL');
+            // $('#dropdownCommonVariantDsButton').change(function(h){
+            //     $('div.dsFilterCommon').attr('dsfilter',$(this).val());
+            //     mpgSoftware.geneSignalSummaryMethods.commonTableDsFilter($(this).val());
+            // });
+
+            commonTable.dataTable().fnDraw();
+
+        };
 
 
         return {
@@ -1223,7 +1314,8 @@ var mpgSoftware = mpgSoftware || {};
             initializePage: initializePage,
             retrieveFunctionalData:retrieveFunctionalData,
             displayFunctionalData:displayFunctionalData,
-            displayChosenElements:displayChosenElements
+            displayChosenElements:displayChosenElements,
+            buildAnnotationTable:buildAnnotationTable
         }
 
 

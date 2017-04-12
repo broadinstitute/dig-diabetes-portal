@@ -226,6 +226,8 @@
         if (e.target.id === "collapseIgv") {
             var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
             setUpIgv(igvParms.locus, igvParms.server);
+        } else if (e.target.id === "collapseFunctionalData") {
+            $("#functionalDataTableGoesHere").DataTable().draw();
         }
 
     });
