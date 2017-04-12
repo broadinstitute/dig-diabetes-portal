@@ -440,7 +440,12 @@ class RestServerService {
             String dataSetName  = sampleGroup.getSystemId()
             String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
             String technologyTranslated = g.message(code: 'metadata.' + "${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}");
-            sb <<  """{"name":"${dataSetName}", "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","col": 1""".toString()
+            List <Phenotype> phenotypeList = sampleGroup.getPhenotypes();
+            ArrayList <String> phenotypeArrayList = phenotypeList.collect{return """{"name":"$it.name","group":"$it.group"}"""};
+            String jsonString = """{"name":"${dataSetName}","phenotypes":${phenotypeArrayList.toString()}, "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","col": 1""";
+            log.info(jsonString);
+            
+            sb << """{"name":"${dataSetName}","phenotypes":${phenotypeArrayList.toString()}, "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","col": 1""".toString()
         }
 
         // recurse, if necessary
@@ -472,8 +477,6 @@ class RestServerService {
 
         return sb
     }
-
-
 
     /***
      * Build the top-level holder consumed by the Sunburst visualization. Most of the databases returned not by this
