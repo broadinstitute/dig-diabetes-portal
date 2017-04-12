@@ -54,7 +54,7 @@
     <li><g:message code="informational.shared.traits.Ins30"></g:message></li>
 <li><g:message code="informational.shared.traits.Ins30adjBMI"></g:message></li>
     <li><g:message code="informational.shared.traits.AUCins"></g:message></li>
-<li><g:message code="informational.shared.traits.ISI"></g:message></li>
+<li><g:message code="informational.shared.traits.Matsuda_ISI"></g:message></li>
 
 </ul><br>
     
