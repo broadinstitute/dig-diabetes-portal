@@ -93,6 +93,7 @@ modules = {
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
+        resource url: 'css/dport/variantInfo.css'
 
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/variantInfo.js'

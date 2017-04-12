@@ -103,6 +103,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#transcriptHeader').append(transcriptTableHtml);
         };
         var retrieveFunctionalData = function(callingData,callback,additionalData){
+            var loading = $('#spinner').show();
             var args = _.flatten([{}, callingData.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
             $.ajax({
@@ -129,6 +130,7 @@ var mpgSoftware = mpgSoftware || {};
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       geneLocusZoomUrl,
                                       variantInfoUrl,makeDynamic) {
+            var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
             if ( typeof data !== 'undefined')  {
@@ -1137,8 +1139,70 @@ var mpgSoftware = mpgSoftware || {};
                 return variantPosition;
             };
 
+        var displayFunctionalData = function(data,additionalData){
+            if ((typeof data !== 'undefined') &&
+                (typeof data.variants !== 'undefined') &&
+                (!data.variants.is_error)){
+                var rawSortedData = _.sortBy(data.variants.variants,[function(item) {
+                    return item.element;
+                }, function(item) {
+                    return item.source;
+                }]);
+                var sortedData = [];
+                _.forEach(rawSortedData,function(o){
+                    sortedData.push({'CHROM':o.CHROM,
+                        'START':o.START,
+                        'STOP':o.STOP,
+                        'source':o.source,
+                        'element':o.element.replace(/[0-9]*/g, '').replace(/^_/,'').replace(/\//,'-')})
+                })
+                var uniqueElements = _.uniqBy(sortedData,function(item) {
+                    return item.element;
+                });
+                uniqueElements.push({element:'ALL'});
+                var uniqueTissues = _.uniqBy(sortedData,function(item) {
+                    return item.source;
+                });
+                uniqueTissues.push({source:'ALL'});
+                var renderData = {  'recordsExist': (sortedData.length>1),
+                    'indivRecords':sortedData,
+                    'uniqueElements':uniqueElements,
+                    'uniqueTissues':uniqueTissues};
+                $("#functionalDateGoesHere").empty().append(Mustache.render( $('#functionalAnnotationTemplate')[0].innerHTML,renderData));
+                $('select.uniqueElements').val('ALL');
+                $('select.uniqueTissues').val('ALL');
+            }
+        };
+
+        var displayChosenElements = function (){
+            $('table.functionDescrTable tr').hide();
+            var chosenElement = $('select.uniqueElements').val();
+            var chosenTissue = $('select.uniqueTissues').val();
+            var specificCombinationIdentifier = 'table.functionDescrTable tr.'+chosenElement+"__"+chosenTissue;
+            if (($(specificCombinationIdentifier).length>0)||
+                (chosenElement==='ALL')||
+                (chosenTissue==='ALL')){
+                $('table.functionDescrTable tr.headers').show();
+            }
+            if ((chosenElement==='ALL')&&(chosenTissue==='ALL')){
+                $('table.functionDescrTable tr').show();
+            }
+            else if (chosenElement==='ALL'){
+                $('table.functionDescrTable tr.'+chosenTissue).show();
+            }
+            else if (chosenTissue==='ALL'){
+                $('table.functionDescrTable tr.'+chosenElement).show();
+            } else {
+                $('table.functionDescrTable tr.'+chosenElement+"__"+chosenTissue).show();
+            }
+
+        };
+
         var firstResponders = {
         };
+
+
+
 
         return {
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
@@ -1157,7 +1221,9 @@ var mpgSoftware = mpgSoftware || {};
             firstReponders: firstResponders,
             retrieveVariantPhenotypeData: retrieveVariantPhenotypeData,
             initializePage: initializePage,
-            retrieveFunctionalData:retrieveFunctionalData
+            retrieveFunctionalData:retrieveFunctionalData,
+            displayFunctionalData:displayFunctionalData,
+            displayChosenElements:displayChosenElements
         }
 
 
