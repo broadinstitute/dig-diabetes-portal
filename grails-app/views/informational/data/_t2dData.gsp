@@ -328,7 +328,7 @@ p.dataset-name {
         else if(filterDatatype=="Exome chip"){selectedTech="ExChip";}
         else if(filterDatatype=="1000 Genome"){selectedTech="1kg";}
         else if(filterDatatype=="ExAC"){selectedTech="ExAC";}
-        console.log(selectedTech);
+        //console.log(selectedTech);
             $.ajax({
                 cache: false,
                 type: "get",
@@ -344,7 +344,9 @@ p.dataset-name {
                         each_key["access"]= getAccessName(each_key.name);
                         jsonArray.push(each_key)
                         //console.log("Show All clicked/default list");
-                        //console.log(each_key.name);
+                        //console.log(each_key.phenotypes);
+                        var distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
+                        console.log(distinctPhenotypeGroups);
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else if (each_key.name.includes(selectedTech)) {
@@ -398,22 +400,7 @@ p.dataset-name {
     </div>
 </script>
 
-<script>
-        /*var datatypeFilter = "<h5>Data type</h5><table class=''><tr>";
-        var datatypeArray = ["Show all","Exome Sequencing","Whole genome Sequencing","GWAS","Exome chip","1000 Genome","ExAC"];
 
-        $.each(datatypeArray, function(datatypeIndex, datatypeValue) {
-            var datatypeTD = "<td class='datatype-option' style='width:" + 100 / (datatypeArray.length + 1) + "%'>" + datatypeValue + "</td>";
-            datatypeFilter += datatypeTD;
-        });
-
-        //datatypeFilter += "<td class='datatype-option' style='width:"+100/(datatypeArray.length+1)+"%'>Show all</td></tr></table>";
-        $(".datasets-filter").append(datatypeFilter);
-
-        var filterDatatype = "Show all";
-        */
-
-</script>
 
 
 <script>
@@ -500,3 +487,20 @@ p.dataset-name {
     </div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
 </div>
+
+<script>
+    /*var datatypeFilter = "<h5>Data type</h5><table class=''><tr>";
+     var datatypeArray = ["Show all","Exome Sequencing","Whole genome Sequencing","GWAS","Exome chip","1000 Genome","ExAC"];
+
+     $.each(datatypeArray, function(datatypeIndex, datatypeValue) {
+     var datatypeTD = "<td class='datatype-option' style='width:" + 100 / (datatypeArray.length + 1) + "%'>" + datatypeValue + "</td>";
+     datatypeFilter += datatypeTD;
+     });
+
+     //datatypeFilter += "<td class='datatype-option' style='width:"+100/(datatypeArray.length+1)+"%'>Show all</td></tr></table>";
+     $(".datasets-filter").append(datatypeFilter);
+
+     var filterDatatype = "Show all";
+     */
+
+</script>
