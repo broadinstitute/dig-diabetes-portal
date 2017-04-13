@@ -1,5 +1,5 @@
-<div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
+<script class="panel-body" id="GWAS_GLGC_mdv25_script" type="x-tmpl-mustache">
+    <h4>Dataset</h4>
 
     <p>Download URL: <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/">http://csg.sph.umich.edu//abecasis/public/lipids2013/</a><br/>
     Publication: <div class="paper">
@@ -49,7 +49,7 @@ van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
          <div class="citation">Nat Genet. 2013 Nov;45(11):1274-83. doi: 10.1038/ng.2797.</div>          </div>
 
 </p>
-<h6 style="color:#ccc;">Data set phenotypes</h6>
+<h4>Dataset phenotypes</h4>
 <ul>
 <li>Cholesterol</li>
 <li>LDL cholesterol</li>
@@ -60,14 +60,14 @@ van Duijn CM, Peltonen L, Abecasis GR, Boehnke M, Kathiresan S.
 </ul>
 
 
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h4>Global Lipids Genetics Consortium (GLGC) <small><a href="http://www.kathiresanlab.org/collaborators/global-lipids-genetic-consortium/" target="_blank">Learn more ></a>
     </small></h4>
 
     <p>A consortium to study the genetic determinants of  blood low-density lipoprotein cholesterol, high-density lipoprotein cholesterol, and triglycerides.</p>
-<h6 style="color:#ccc;">Experiment summary</h6><p>
+<h4>Experiment summary</h4>
 <p>With updates to the data in October 2016, the sample size for GLGC GWAS increased to 188,577. Associations for triglyceride, cholesterol, HDL, and LDL levels were updated from a joint analysis of GWAS and MetaboChip data, described <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/">here</a> and published in Willer et al. 2013 (see above).</p>
 
 
-</div>
+</script>
 

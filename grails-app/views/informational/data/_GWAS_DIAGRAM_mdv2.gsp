@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_DIAGRAM_mdv25_script" type="x-tmpl-mustache">
     <h4>Dataset</h4>
 
     <p>Download URL: <a href="http://diagram-consortium.org/downloads.html">http://diagram-consortium.org/downloads.html</a><br/>
@@ -43,5 +43,5 @@
 <h4>Accessing DIAGRAM trans-ehtnic meta-analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.DIAGRAM"></g:message></p>
 
-</div>
+</script>
 

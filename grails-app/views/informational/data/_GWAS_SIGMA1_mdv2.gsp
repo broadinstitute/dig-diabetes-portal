@@ -1,5 +1,5 @@
-<div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
+<script class="panel-body" id="GWAS_SIGMA1_mdv25_script" type="x-tmpl-mustache">
+    <h4>Dataset</h4>
 
     <p>Publication: <div class="paper">
 
@@ -50,15 +50,15 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
         <div class="citation">Proc Natl Acad Sci U S A. 2014 Sep 9;111(36):13127-32. doi: 10.1073/pnas.1410428111.</div>
 
         </div></p>
-        <h6 style="color:#ccc;">Data set phenotypes</h6>
+        <h4>Dataset phenotypes</h4>
 <ul>
 <li>Type 2 diabetes</li>
 </ul>
 
-<h4>Data Set Subjects</h4>
+<h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
     <tr><td>815</td><td>1138</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
     <div style="display: none;" class="cohortDetail">
@@ -156,5 +156,5 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
     <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
 
 
-</div>
+</script>
 

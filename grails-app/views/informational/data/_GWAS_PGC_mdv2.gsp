@@ -1,5 +1,5 @@
-<div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
+<script class="panel-body" id="GWAS_PGC_mdv25_script" type="x-tmpl-mustache">
+    <h4>Dataset</h4>
 
     <p>Publication: 
     <div class="paper">
@@ -45,7 +45,7 @@ Weilburg JB, Willemsen G, Zitman FG, Neale B, Daly M, Levinson DF, Sullivan PF.
 
     </p>
 
-<h6 style="color:#ccc;">Data set phenotypes</h6>
+<h4>Dataset phenotypes</h4>
 <ul>
 <li>Bipolar disorder</li>
 <li>Major depressive disorder</li>
@@ -55,10 +55,10 @@ Weilburg JB, Willemsen G, Zitman FG, Neale B, Daly M, Levinson DF, Sullivan PF.
 
 
 
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h4>Psychiatric GWAS Consortium (PGC) <small><a href="https://www.nimhgenetics.org/available_data/data_biosamples/pgc_public.php" target="_blank">Learn more ></a>
     </small></h4>
 
     <p>PGC conducts meta-analyses of genome-wide association study data, focusing on autism, attention-deficit hyperactivity disorder, bipolar disorder, major depressive disorder, and schizophrenia.</p>
-</div>
+</script>
 

@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="ExSeq_EgnomAD_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Dataset</h4>
 
@@ -23,4 +23,4 @@
 <h4>Accessing gnomAD exome sequence data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.ExAC"></g:message></p>
 
-</div>
+</script>

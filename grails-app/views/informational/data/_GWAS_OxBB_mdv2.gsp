@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_OxBB_mdv25_script" type="x-tmpl-mustache">
 
     <h4>Publications</h4>
 
@@ -27,7 +27,7 @@
     <h4>Data Set Subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
         <tr><td>0</td><td>4,522</td><td><a onclick="showSection(event)">Oxford BioBank</a>
 
@@ -50,4 +50,4 @@
 <h4>Accessing Oxford BioBank GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.OxfordBB"></g:message></p>
 
-</div>
+</script>

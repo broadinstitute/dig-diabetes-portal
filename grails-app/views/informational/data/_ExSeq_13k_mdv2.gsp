@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="ExSeq_13k_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.13K"></g:message></p>
@@ -27,7 +27,7 @@
     <h4>Dataset subjects</h4>
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small>
-    </th><th>Ethnicity</th></tr>
+    </th><th>Ancestry</th></tr>
     <tr><td>T2D-GENES</td><td>500</td><td>526</td><td><a
             onclick="showSection(event)">Jackson Heart Study Candidate Gene Association Resource</a>
 
@@ -389,4 +389,4 @@
 <p><g:message code="informational.data.accessing.13K"></g:message></p>
 
 
-</div>
+</script>

@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="1kg_phase1_mdv25_script" type="x-tmpl-mustache">
     <h4>Dataset</h4>
 
     <p>Download URL: <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz" target="_blank">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz</a><br/>
@@ -17,7 +17,7 @@
     <h4>Dataset subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
-    <tr><th>Number of subjects</th><th>Cohort</th><th>Ethnicity</th></tr>
+    <tr><th>Number of subjects</th><th>Cohort</th><th>Ancestry</th></tr>
    
  <tr><td>246</td><td>1000 Genomes: African American
 
@@ -48,4 +48,4 @@
 <p><g:message code="informational.data.accessing.1000g"></g:message></p>
 
 
-</div>
+</script>

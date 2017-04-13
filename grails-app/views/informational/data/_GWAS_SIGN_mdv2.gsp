@@ -1,5 +1,5 @@
-<div class="panel-body">
-    <h6 style="color:#ccc;">Data set</h6>
+<script class="panel-body" id="GWAS_SIGN_mdv25_script" type="x-tmpl-mustache">
+    <h4>Dataset</h4>
 
     <p>Publications:
     <p>Meschia, James F. et al. "Stroke Genetics Network (SiGN) Study: Design and Rationale for a Genome-Wide Association Study of Ischemic Stroke Subtypes." Stroke; a journal of cerebral circulation 44.10 (2013): 2694–2702.PMC. Web. 6 Oct. 2016.</p>
@@ -7,7 +7,7 @@
 
 
     </p>
-    <h6 style="color:#ccc;">Data set phenotypes</h6>
+    <h4>Dataset phenotypes</h6>
     <ul>
         <li>CCS causative Cardio-aortic embolism-major</li>
         <li>CCS causative Large artery atherosclerosis</li>
@@ -26,7 +26,7 @@
         <li>toast Other Undetermined</li>
     </ul>
 
-    <h4>Data Set Subjects</h4>
+    <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
@@ -50,15 +50,15 @@
                         </td></tr>
 
                 </table>
-            </div></td><td>ethnicity</td></tr>
+            </div></td><td>Ancestry</td></tr>
 
     </table>
 
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h4>project name<small><a href="http://www.cadisp.com/topic/index.html" target="_blank">Learn more ></a>
     </small></h4>
 
     <p>
 
-</div>
+</script>
 
