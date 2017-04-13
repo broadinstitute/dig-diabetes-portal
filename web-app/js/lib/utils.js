@@ -24,6 +24,9 @@ var UTILS = {
             return  null;
         }
     },
+    disableClickPropagation: function(event){
+        event.stopPropagation();
+    },
     /**
      * Parses the input to the specified number of digits, returning a float
      * without trailing zeros

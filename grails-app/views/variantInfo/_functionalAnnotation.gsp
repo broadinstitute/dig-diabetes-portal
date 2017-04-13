@@ -1,3 +1,8 @@
+<style>
+#functionalDataTableGoesHere_wrapper table.dataTable tbody td {
+    padding: 0 0 0 5px;
+}
+</style>
 <script id="functionalAnnotationTemplate"  type="x-tmpl-mustache">
     <div class="row">
         <div class="col-xs-5 text-left">
@@ -54,6 +59,8 @@
     <div id="collapseFunctionalData" class="accordion-body collapse">
         <div class="accordion-inner">
             <div id="functionalDateGoesHere"></div>
+            <div class="elementFilter"></div>
+            <div class="tissueFilter"></div>
             <table id="functionalDataTableGoesHere"></table>
     </div>
 </div>

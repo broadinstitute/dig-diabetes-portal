@@ -15,6 +15,7 @@ modules = {
         resource url: 'js/lib/datatables/buttons.print.js'
         resource url: 'js/lib/datatables/dataTables.buttons.js'
         resource url: 'js/lib/datatables/dataTables.select.js'
+        resource url: 'js/lib/dport/datatablesSorting.js'
 
         resource url: 'css/lib/datatables/buttons.dataTables.css'
         resource url: 'css/lib/datatables/jquery.dataTables.css'
@@ -94,10 +95,12 @@ modules = {
         resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
         resource url: 'css/dport/variantInfo.css'
+        resource url: 'css/dport/jqDataTables.css'
 
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
+
 
         resource url: 'js/lib/dport/igvLaunch.js'
     }
