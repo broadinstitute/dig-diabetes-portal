@@ -1,4 +1,4 @@
-<script class="panel-body" id="ExChip_SIGMA1_mdv25_script" type="x-tmpl-mustache">
+<div class="panel-body">
 
 <h4>Dataset phenotypes</h4>
 <ul>
@@ -108,4 +108,4 @@
 
     <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
 
-</script>
+</div>

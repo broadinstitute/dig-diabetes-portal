@@ -1,4 +1,4 @@
-<script class="panel-body" id="ExSeq_13k_mdv25_script" type="x-tmpl-mustache">
+<div class="panel-body">
 
 <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.13K"></g:message></p>
@@ -389,4 +389,4 @@
 <p><g:message code="informational.data.accessing.13K"></g:message></p>
 
 
-</script>
+</div>

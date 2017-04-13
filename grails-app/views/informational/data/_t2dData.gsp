@@ -1,7 +1,3 @@
-
-<g:render template="./data/ExAC_r03_mdv2" />
-
-
 <style>
     /* only applies to tables for cohort information */
     .cohortDetail th {

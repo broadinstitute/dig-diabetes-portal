@@ -1,4 +1,4 @@
-<script class="panel-body" id="1kg_phase1_mdv25_script" type="x-tmpl-mustache">
+<div class="panel-body">
     <h4>Dataset</h4>
 
     <p>Download URL: <a href="ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz" target="_blank">ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz</a><br/>
@@ -48,4 +48,4 @@
 <p><g:message code="informational.data.accessing.1000g"></g:message></p>
 
 
-</script>
+</div>

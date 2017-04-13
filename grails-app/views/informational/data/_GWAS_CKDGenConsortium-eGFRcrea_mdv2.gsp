@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_CKDGenConsortium-eGFRcrea_mdv25_script" type="x-tmpl-mustache">
+<div class="panel-body">
     <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - Download URL: <a href="https://fox.nhlbi.nih.gov/CKDGen/">https://fox.nhlbi.nih.gov/CKDGen/</a><br/>
@@ -33,4 +33,4 @@
 <h4>Accessing CKDGen GWAS - stratified serum creatinine associations data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.CKDGen-eGFRcrea"></g:message></p>
 
-</script>
+</div>

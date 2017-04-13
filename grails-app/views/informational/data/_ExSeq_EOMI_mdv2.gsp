@@ -1,4 +1,4 @@
-<script class="panel-body" id="ExSeq_EOMI_mdv25_script" type="x-tmpl-mustache">
+<div class="panel-body">
 <h4>Dataset</h4>
 <h4>Dataset phenotypes</h4>
 <ul>
@@ -6,4 +6,4 @@
 </ul>
 <h4>Dataset subjects</h4>
 
-</script>
+</div>
