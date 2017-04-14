@@ -1282,7 +1282,7 @@ var mpgSoftware = mpgSoftware || {};
                     //     nRow.className = $(aData[0]).attr('custag');
                     //     return nRow;
                     // },
-                    dom: 'lBtip',
+                dom: 'lBtip',
                     buttons: [
                         { extend: "copy", text: "Copy" },
                         { extend: 'csv', filename: "commonVariants" },

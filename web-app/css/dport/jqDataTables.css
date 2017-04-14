@@ -31,3 +31,6 @@ div.dataTable th.niceHeaders {
 select.hdrFilter{
     margin: 2px 0 0 10px;
 }
+#functionalDataTableGoesHere_wrapper div.dt-buttons{
+    float: right;
+}

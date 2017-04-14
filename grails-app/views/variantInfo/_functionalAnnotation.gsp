@@ -59,8 +59,6 @@
     <div id="collapseFunctionalData" class="accordion-body collapse">
         <div class="accordion-inner">
             <div id="functionalDateGoesHere"></div>
-            <div class="elementFilter"></div>
-            <div class="tissueFilter"></div>
             <table id="functionalDataTableGoesHere"></table>
     </div>
 </div>
