@@ -389,23 +389,6 @@ p.dataset-name {
                             })
                             uniqueGroupNameMap2[groupName]= a;
                         })
-
-                        for(var key in datasetPhenotypesMap){
-                            c = [];
-                            if(phenotypeDatasetsMap.hasOwnProperty(key)){
-                                _.forEach(datasetPhenotypesMap[key], function(nk,nv){
-                                    //console.log(nk.name + "-->" + key);
-                                    if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
-                                        phenotypeDatasetsMap[nk.name].push(key);
-                                    }
-                                    else{
-                                        phenotypeDatasetsMap[nk.name] = [key];
-                                    }
-                                })
-
-                            }
-
-                        }
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else if (each_key.name.includes(selectedTech)) {
@@ -448,10 +431,8 @@ p.dataset-name {
                                 phenotypeDatasetsMap[nk.name] = [key];
                             }
                         })
-
                 }
-
-
+                
                 var holder = {};
                 holder["parents"] = jsonArray;
                 console.log(phenotypeDatasetsMap);
