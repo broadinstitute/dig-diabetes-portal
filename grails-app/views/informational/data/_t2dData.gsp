@@ -325,11 +325,12 @@ p.dataset-name {
             $(k).css("background-color", "#eee");
             $(k).css("color", "#000000");
             if($(k).text() == filterLevel2Phenotype){
-                console.log("found" + $(k).text());
+                //console.log("found" + $(k).text());
                 $(k).css("background-color", "#39f");
                 $(k).css("color", "#ffffff");
             }
         })
+        return filterLevel2Phenotype;
     }
     function displaySelectedTechnology(filterDatatype) {
         //var selectedTech = $("#technologyTypeSelector").val();
@@ -360,7 +361,7 @@ p.dataset-name {
                 var phenotypeGroupArrayholder = {};
                 var datasetPhenotypesMap = {};
                 var datasetArray = [];
-                var  phenotypeDatasetsMap = {};
+                var phenotypeDatasetsMap = {};
                 _.forEach(data.children, function (each_key,val) {
                     //console.log(selectedTech);
                     if(selectedTech == "") {
@@ -391,7 +392,7 @@ p.dataset-name {
 
                         for(var key in datasetPhenotypesMap){
                             c = [];
-                            if(datasetPhenotypesMap.hasOwnProperty(key)){
+                            if(phenotypeDatasetsMap.hasOwnProperty(key)){
                                 _.forEach(datasetPhenotypesMap[key], function(nk,nv){
                                     //console.log(nk.name + "-->" + key);
                                     if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
@@ -401,7 +402,9 @@ p.dataset-name {
                                         phenotypeDatasetsMap[nk.name] = [key];
                                     }
                                 })
+
                             }
+
                         }
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
@@ -432,26 +435,27 @@ p.dataset-name {
                         console.log("Not found in the selected technologies");
                     }
                 });
-
-
                 for(var key in datasetPhenotypesMap){
-                    c = [];
-                    if(datasetPhenotypesMap.hasOwnProperty(key)){
+                    console.log(datasetPhenotypesMap[key]);
+                    c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
-                            //console.log(nk.name + "-->" + key);
+                           // console.log(nk.name + "-->" + key);
                             if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
+                                //console.log("hi");
                                 phenotypeDatasetsMap[nk.name].push(key);
                             }
                             else{
                                 phenotypeDatasetsMap[nk.name] = [key];
                             }
                         })
-                    }
+
                 }
+
 
                 var holder = {};
                 holder["parents"] = jsonArray;
                 console.log(phenotypeDatasetsMap);
+
 
                 phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                // console.log(uniqueGroupNameMap2);
@@ -476,15 +480,10 @@ p.dataset-name {
 
                 });
 
-
                 //based on selected phenotype,
                 var template = $("#metaData2")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
                 $("#metaDataDisplay").empty().append(dynamic_html);
-
-
-
-
 
 
                 //console.log(informationGspFileNames);
