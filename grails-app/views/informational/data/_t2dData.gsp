@@ -316,6 +316,21 @@ p.dataset-name {
     }
 </script>
 <script>
+    function onClickPhenotype(filterLevel2Phenotype){
+        console.log("hi");
+        //var filterLevel2Phenotype =  $(this).text();
+        console.log(filterLevel2Phenotype);
+        var allPhenotypes = $("td.phenotype-level2-option");
+        _.forEach(allPhenotypes, function(k,v){
+            $(k).css("background-color", "#eee");
+            $(k).css("color", "#000000");
+            if($(k).text() == filterLevel2Phenotype){
+                console.log("found" + $(k).text());
+                $(k).css("background-color", "#39f");
+                $(k).css("color", "#ffffff");
+            }
+        })
+    }
     function displaySelectedTechnology(filterDatatype) {
         //var selectedTech = $("#technologyTypeSelector").val();
         //var selectedDatatype = $(".datatype-option").text();
@@ -341,15 +356,21 @@ p.dataset-name {
                 var phenotypeGroupArray = [];
                 var uniqueGroupNameMap = {};
                 var uniqueGroupNameMap2 = {};
+                var distinctPhenotypeGroups = [];
                 var phenotypeGroupArrayholder = {};
+                var datasetPhenotypesMap = {};
+                var datasetArray = [];
+                var  phenotypeDatasetsMap = {};
                 _.forEach(data.children, function (each_key,val) {
                     //console.log(selectedTech);
                     if(selectedTech == "") {
                         each_key["access"]= getAccessName(each_key.name);
                         jsonArray.push(each_key)
                         //console.log(each_key.phenotypes);
-
-                        var distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
+                        //console.log(each_key);
+                        datasetArray.push(each_key.name);
+                        datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
+                        distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!uniqueGroupNameMap.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
@@ -358,7 +379,45 @@ p.dataset-name {
                         })
                         _.forEach(phenotypeGroupArray, function(nk,v1){
                             var groupName = nk;
-                           console.log(nk);
+                           //console.log(nk);
+                            a = [];
+                            _.forEach(each_key.phenotypes, function(k2,v2){
+                                if(groupName=k2.group){
+                                    a.push(k2.name)
+                                }
+                            })
+                            uniqueGroupNameMap2[groupName]= a;
+                        })
+
+                        for(var key in datasetPhenotypesMap){
+                            c = [];
+                            if(datasetPhenotypesMap.hasOwnProperty(key)){
+                                _.forEach(datasetPhenotypesMap[key], function(nk,nv){
+                                    //console.log(nk.name + "-->" + key);
+                                    if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
+                                        phenotypeDatasetsMap[nk.name].push(key);
+                                    }
+                                    else{
+                                        phenotypeDatasetsMap[nk.name] = [key];
+                                    }
+                                })
+                            }
+                        }
+                        informationGspFileNames.push("#" + each_key.name + '_script');
+                    }
+                    else if (each_key.name.includes(selectedTech)) {
+                        each_key["access"]= getAccessName(each_key.name);
+                        jsonArray.push(each_key);
+                        distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
+                        _.forEach(distinctPhenotypeGroups, function (k,v){
+                            if(!uniqueGroupNameMap.hasOwnProperty(k)){
+                                phenotypeGroupArray.push(k);
+                                uniqueGroupNameMap[k] = [1];
+                            }
+                        })
+                        _.forEach(phenotypeGroupArray, function(nk,v1){
+                            var groupName = nk;
+                            //console.log(nk);
                             a = [];
                             _.forEach(each_key.phenotypes, function(k2,v2){
                                 if(groupName=k2.group){
@@ -369,36 +428,65 @@ p.dataset-name {
                         })
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
-                    else if (each_key.name.includes(selectedTech)) {
-                        each_key["access"]= getAccessName(each_key.name);
-                        jsonArray.push(each_key);
-                        var distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
-                        _.forEach(distinctPhenotypeGroups, function (k,v){
-                            if(!uniqueGroupNameMap.hasOwnProperty(k)){
-                                phenotypeGroupArray.push(k);
-                                uniqueGroupNameMap[k] = [1];
-                            }
-                        })
-                        informationGspFileNames.push("#" + each_key.name + '_script');
-                    }
                     else {
                         console.log("Not found in the selected technologies");
                     }
                 });
+
+
+                for(var key in datasetPhenotypesMap){
+                    c = [];
+                    if(datasetPhenotypesMap.hasOwnProperty(key)){
+                        _.forEach(datasetPhenotypesMap[key], function(nk,nv){
+                            //console.log(nk.name + "-->" + key);
+                            if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
+                                phenotypeDatasetsMap[nk.name].push(key);
+                            }
+                            else{
+                                phenotypeDatasetsMap[nk.name] = [key];
+                            }
+                        })
+                    }
+                }
+
                 var holder = {};
                 holder["parents"] = jsonArray;
+                console.log(phenotypeDatasetsMap);
+
                 phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
-                console.log(uniqueGroupNameMap2);
-                //console.log(phenotypeGroupArrayholder);
-                //console.log(phenotypeGroupArray);
-                //console.log(uniqueGroupNameMap);
+               // console.log(uniqueGroupNameMap2);
+                var phenotypeFilterTemplate = $("#phenotypeFilter")[0].innerHTML;
+                var filter_dynamic_html = Mustache.to_html(phenotypeFilterTemplate,phenotypeGroupArrayholder);
+                $("#phenotypeFilterDisplay").empty().append(filter_dynamic_html);
+
+                $(".phenotype-option").click(function (event) {
+                    var filterPhenotype = $(this).text();
+                    //console.log(filterPhenotype);
+                    var phenotypeLevel2holder = {};
+                    phenotypeLevel2holder["phenotype"] = uniqueGroupNameMap2[filterPhenotype];;
+                    //console.log(phenotypeLevel2holder);
+                    $(this).parent().find("td").each(function () {
+                        $(this).css({"background-color": "#eee", "color": "#000000"});
+                    });
+                    $(this).css({"background-color": "#39f", "color": "#ffffff"});
+
+                    var phenotypeFilterLevel2Template = $("#phenotypeFilterLevel2")[0].innerHTML;
+                    var filter_dynamic_html_level2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
+                    $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);
+
+                });
+
+
+                //based on selected phenotype,
                 var template = $("#metaData2")[0].innerHTML;
                 var dynamic_html = Mustache.to_html(template,holder);
                 $("#metaDataDisplay").empty().append(dynamic_html);
 
-                var phenotypeFilterTemplate = $("#phenotypeFilter")[0].innerHTML;
-                var filter_dynamic_html = Mustache.to_html(phenotypeFilterTemplate,phenotypeGroupArrayholder);
-                $("#phenotypeFilterDisplay").empty().append(filter_dynamic_html);
+
+
+
+
+
                 //console.log(informationGspFileNames);
                 _.forEach(informationGspFileNames, function (each_Gspfile,val){
                     //console.log(each_Gspfile);
@@ -445,6 +533,7 @@ p.dataset-name {
             $(this).css({"background-color": "#39f", "color": "#ffffff"});
             //console.log("i was clicked");
             displaySelectedTechnology(filterDatatype);});});
+
 </script>
 
 <script id="metaData2" type="x-tmpl-mustache">
@@ -495,18 +584,29 @@ p.dataset-name {
 
 <script id="phenotypeFilter" type="x-tmpl-mustache">
   <h5>Phenotype</h5>
-
   <table class="datasets-filter">
     <tbody>
     <tr>
     {{#groups}}
-    <td class='datatype-option' style='width:13.7%'>{{.}}</td>
+    <td class='phenotype-option' style='width:13.7%'>{{.}}</td>
     {{/groups}}
-    <td class='datatype-option' style="width: 15%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
+    <td class='phenotype-option' style="width: 15%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
     </tr>
     </tbody>
     </table>
+</script>
 
+<!--this panel would display only when phenotype Filter is clicked -->
+<script id="phenotypeFilterLevel2" type="x-tmpl-mustache">
+  <table class="datasets-filter">
+    <tbody>
+    <tr>
+    {{#phenotype}}
+    <td class='phenotype-level2-option' style='width:13.7%' onclick='onClickPhenotype("{{.}}")'>{{.}}</td>
+    {{/phenotype}}
+    </tr>
+    </tbody>
+    </table>
 </script>
 
 <div class="row" style="padding-top: 50px;">
@@ -528,7 +628,8 @@ p.dataset-name {
             </tr>
             </tbody>
         </table>
-      <div id="phenotypeFilterDisplay" class="form-inline"></div>
+        <div id="phenotypeFilterDisplay" class="form-inline"></div>
+        <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
     </div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
 </div>
