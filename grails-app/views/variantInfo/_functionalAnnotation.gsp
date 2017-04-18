@@ -58,7 +58,33 @@
 
     <div id="collapseFunctionalData" class="accordion-body collapse">
         <div class="accordion-inner">
-            <div id="functionalDateGoesHere"></div>
-            <table id="functionalDataTableGoesHere"></table>
+            <div class="row">
+                <div class="xs-col-12">
+                    <div id="functionalDateGoesHere"></div>
+                    <table id="functionalDataTableGoesHere"></table>
+                </div>
+            </div>
+            <div style="margin-top:80px" class="row">
+                <div class="md-col-6">
+                    <div class="row">
+                        <div class="md-col-12">
+                            <h4 style="padding-left: 100px">Tissue summary</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="md-col-12">
+                            <div id="chart1"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="md-col-6"></div>
+            </div>
+
+        </div>
     </div>
 </div>
+<script type="text/javascript">
+
+
+
+</script>

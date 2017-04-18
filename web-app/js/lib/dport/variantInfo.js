@@ -1193,18 +1193,36 @@ var mpgSoftware = mpgSoftware || {};
                 var uniqueElements = _.uniqBy(sortedData,function(item) {
                     return item.element;
                 });
-                uniqueElements.push({element:'ALL'});
                 var uniqueTissues = _.uniqBy(sortedData,function(item) {
                     return item.source;
                 });
+                var dataMatrix = [];
+                for (var i = 0 ; i < uniqueTissues.length ; i++ ) {
+                    var currentRow = [];
+                    for (var j = 0 ; j < uniqueElements.length ; j++){
+
+                        if (_.find(sortedData, {source:uniqueTissues[i].source,element:uniqueElements[j].element})){
+                            currentRow.push(1);
+                        } else {
+                            currentRow.push(0);
+                        }
+                    }
+                    dataMatrix.push(currentRow);
+                }
+                var allUniqueElementNames = _.map(uniqueElements,'element');
+                var allUniqueTissueNames = _.map(uniqueTissues,'source');
+                uniqueElements.push({element:'ALL'});
                 uniqueTissues.push({source:'ALL'});
+
                 var renderData = {  'recordsExist': (sortedData.length>1),
                     'indivRecords':sortedData,
                     'uniqueElements':uniqueElements,
                     'uniqueTissues':uniqueTissues};
 
-               // $("#functionalDateGoesHere").empty().append(Mustache.render( $('#functionalAnnotationTemplate')[0].innerHTML,renderData));
                 buildAnnotationTable('#functionalDataTableGoesHere','urlToFillIn',renderData,{});
+                buildAnnotationMatrix (allUniqueElementNames,
+                    allUniqueTissueNames,
+                    dataMatrix);
                 $('select.uniqueElements').val('ALL');
                 $('select.uniqueTissues').val('ALL');
             }
@@ -1236,6 +1254,30 @@ var mpgSoftware = mpgSoftware || {};
 
         var firstResponders = {
         };
+
+
+        var buildAnnotationMatrix  = function(  allUniqueElementNames,
+                                                allUniqueTissueNames,
+                                                dataMatrix ){
+            var correlationMatrix = dataMatrix;
+            var xlabels = allUniqueElementNames;
+            var ylabels = allUniqueTissueNames;
+            var margin = {top: 50, right: 50, bottom: 190, left: 150},
+                width = 400 - margin.left - margin.right,
+                height = 890 - margin.top - margin.bottom;
+            var matrix = baget.matrix()
+                .height(height)
+                .width(width)
+                .margin(margin)
+                .renderLegend(0)
+                .renderCellText(0)
+                .xlabelsData(xlabels)
+                .ylabelsData(ylabels)
+                .startColor('#ffffff')
+                .endColor('#3498db')
+                .dataHanger("#chart1", correlationMatrix);
+            d3.select("#chart1").call(matrix.render);
+        }
 
         var buildAnnotationTable = function(selectionToFill,
                                         variantInfoUrl,

@@ -59,6 +59,12 @@ modules = {
         resource url: 'js/lib/dport/manhattan.js'
         resource url: 'css/dport/manhattan.css'
     }
+    matrix {
+        dependsOn "d3tooltip"
+
+        resource url: 'js/lib/dport/matrix.js'
+        resource url: 'css/dport/matrix.css'
+    }
     boxwhisker {
         dependsOn "d3tooltip"
 
@@ -87,7 +93,7 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "matrix"
 
         resource url: 'css/images/controls.png'
 
