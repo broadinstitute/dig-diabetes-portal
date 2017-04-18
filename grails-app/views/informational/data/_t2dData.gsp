@@ -455,31 +455,13 @@ p.dataset-name {
                         })
                 }
 
-                //console.log("selectedLevel2Phenotype1" + selectedLevel2Phenotype1);
-                //console.log(phenotypeDatasetsMap["CHOL"]);
-                //console.log(jsonArray);
-                //var selectedLevel2Phenotype1 = "CHOL";
-
-
                 renderFilteredData();
-
-                //var holder = {};
-               // jsonHolder["parents"] = jsonArray;
-                //console.log(selectedLevel2Phenotype1);
-                //console.log(jsonArray);
-
-                //based on selected phenotype,
-               // var template = $("#metaData2")[0].innerHTML;
-                //var dynamic_html = Mustache.to_html(template,jsonHolder);
-                //$("#metaDataDisplay").empty().append(dynamic_html);
-
-               // console.log(selectedLevel2Phenotype1);
 
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                // console.log(uniqueGroupNameMap2);
-                var phenotypeFilterTemplate = $("#phenotypeFilter")[0].innerHTML;
-                var filter_dynamic_html = Mustache.to_html(phenotypeFilterTemplate,phenotypeGroupArrayholder);
-                $("#phenotypeFilterDisplay").empty().append(filter_dynamic_html);
+                var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
+                var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
+                $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
 
                 $(".phenotype-option").click(function (event) {
                     var filterPhenotype = $(this).text();
@@ -542,7 +524,8 @@ p.dataset-name {
             });
             $(this).css({"background-color": "#39f", "color": "#ffffff"});
             //console.log("i was clicked");
-            phenotypeLevel2holder = {};
+            //phenotypeLevel2holder = {};
+            $('tr.phenotype-level2-row').empty();
             displaySelectedTechnology(filterDatatype);});});
 
 </script>
@@ -611,7 +594,7 @@ p.dataset-name {
 <script id="phenotypeFilterLevel2" type="x-tmpl-mustache">
   <table class="datasets-filter">
     <tbody>
-    <tr>
+    <tr class="phenotype-level2-row">
     {{#phenotype}}
     <td class='phenotype-level2-option' style='width:13.7%' onclick='onClickPhenotype("{{.}}")'>{{.}}</td>
     {{/phenotype}}
@@ -639,7 +622,7 @@ p.dataset-name {
             </tr>
             </tbody>
         </table>
-        <div id="phenotypeFilterDisplay" class="form-inline"></div>
+        <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
         <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
     </div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
