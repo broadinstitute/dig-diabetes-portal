@@ -316,35 +316,52 @@ p.dataset-name {
     }
 </script>
 <script>
-    function onClickPhenotype(filterLevel2Phenotype){
-        console.log("hi");
-        //var filterLevel2Phenotype =  $(this).text();
-        console.log(filterLevel2Phenotype);
+    var jsonHolder={};
+    var jsonArray=[];
+    var phenotypeDatasetsMap = {};
+    var phenotypeLevel2holder = {};
+
+
+    function renderFilteredData(selectedLevel2Phenotype){
+
+        if(typeof selectedLevel2Phenotype !== 'undefined'){
+            console.log("I am filtering the dataset based on phenotype");
+            jsonArray = $.grep(jsonArray, function(element) {
+                console.log(element.name + "level2phenotype was clicked");
+                return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;
+            });
+        }
+        console.log(jsonArray);
+        jsonHolder["parents"] = jsonArray;
+        var template = $("#metaData2")[0].innerHTML;
+        var dynamic_html = Mustache.to_html(template,jsonHolder);
+        $("#metaDataDisplay").empty().append(dynamic_html);
+    }
+
+    function onClickPhenotype(selectedLevel2Phenotype){
+       // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         var allPhenotypes = $("td.phenotype-level2-option");
         _.forEach(allPhenotypes, function(k,v){
             $(k).css("background-color", "#eee");
             $(k).css("color", "#000000");
-            if($(k).text() == filterLevel2Phenotype){
+            if($(k).text() == selectedLevel2Phenotype){
                 //console.log("found" + $(k).text());
                 $(k).css("background-color", "#39f");
                 $(k).css("color", "#ffffff");
+                renderFilteredData(selectedLevel2Phenotype);
             }
         })
-        return filterLevel2Phenotype;
     }
     function displaySelectedTechnology(filterDatatype) {
-        //var selectedTech = $("#technologyTypeSelector").val();
-        //var selectedDatatype = $(".datatype-option").text();
-        //console.log("selectedDatatype" + filterDatatype);
         var selectedTech = "";
-        if(filterDatatype=="Show all"){ selectedTech="";}
-        else if(filterDatatype=="Exome Sequencing"){ selectedTech="ExSeq";}
+        if(filterDatatype=="Show all"){selectedTech="";}
+        else if(filterDatatype=="Exome Sequencing"){selectedTech="ExSeq";}
         else if(filterDatatype=="Whole genome Sequencing"){selectedTech="WGS";}
         else if(filterDatatype=="GWAS"){selectedTech="GWAS";}
         else if(filterDatatype=="Exome chip"){selectedTech="ExChip";}
         else if(filterDatatype=="1000 Genome"){selectedTech="1kg";}
         else if(filterDatatype=="ExAC"){selectedTech="ExAC";}
-        //console.log(selectedTech);
+
             $.ajax({
                 cache: false,
                 type: "get",
@@ -352,23 +369,23 @@ p.dataset-name {
                 data: {technology: selectedTech},
                 async: true
             }).done(function (data, textStatus, jqXHR) {
-                var jsonArray = [];
                 var informationGspFileNames=[];
                 var phenotypeGroupArray = [];
                 var uniqueGroupNameMap = {};
                 var uniqueGroupNameMap2 = {};
                 var distinctPhenotypeGroups = [];
-                var phenotypeGroupArrayholder = {};
                 var datasetPhenotypesMap = {};
                 var datasetArray = [];
-                var phenotypeDatasetsMap = {};
+                jsonArray = [];
+                phenotypeDatasetsMap = {};
+
+               // var phenotypeGroupArrayholder = {};
+
                 _.forEach(data.children, function (each_key,val) {
                     //console.log(selectedTech);
                     if(selectedTech == "") {
                         each_key["access"]= getAccessName(each_key.name);
-                        jsonArray.push(each_key)
-                        //console.log(each_key.phenotypes);
-                        //console.log(each_key);
+                        jsonArray.push(each_key);
                         datasetArray.push(each_key.name);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
@@ -392,7 +409,12 @@ p.dataset-name {
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else if (each_key.name.includes(selectedTech)) {
-                        each_key["access"]= getAccessName(each_key.name);
+                        //console.log(each_key.name + "was found");
+                        each_key["access"] = getAccessName(each_key.name);
+                        //add phenotype filter too
+                        // if(selectedLevel2Phenotype not empty){
+                    //
+                    //   }
                         jsonArray.push(each_key);
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
@@ -411,15 +433,15 @@ p.dataset-name {
                                 }
                             })
                             uniqueGroupNameMap2[groupName]= a;
+                            //console.log(uniqueGroupNameMap2);
                         })
                         informationGspFileNames.push("#" + each_key.name + '_script');
                     }
                     else {
-                        console.log("Not found in the selected technologies");
+                        console.log("Not found in the selected technologies" + each_key.name);
                     }
                 });
                 for(var key in datasetPhenotypesMap){
-                    console.log(datasetPhenotypesMap[key]);
                     c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
                            // console.log(nk.name + "-->" + key);
@@ -432,13 +454,28 @@ p.dataset-name {
                             }
                         })
                 }
-                
-                var holder = {};
-                holder["parents"] = jsonArray;
-                console.log(phenotypeDatasetsMap);
+
+                //console.log("selectedLevel2Phenotype1" + selectedLevel2Phenotype1);
+                //console.log(phenotypeDatasetsMap["CHOL"]);
+                //console.log(jsonArray);
+                //var selectedLevel2Phenotype1 = "CHOL";
 
 
-                phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
+                renderFilteredData();
+
+                //var holder = {};
+               // jsonHolder["parents"] = jsonArray;
+                //console.log(selectedLevel2Phenotype1);
+                //console.log(jsonArray);
+
+                //based on selected phenotype,
+               // var template = $("#metaData2")[0].innerHTML;
+                //var dynamic_html = Mustache.to_html(template,jsonHolder);
+                //$("#metaDataDisplay").empty().append(dynamic_html);
+
+               // console.log(selectedLevel2Phenotype1);
+
+                var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                // console.log(uniqueGroupNameMap2);
                 var phenotypeFilterTemplate = $("#phenotypeFilter")[0].innerHTML;
                 var filter_dynamic_html = Mustache.to_html(phenotypeFilterTemplate,phenotypeGroupArrayholder);
@@ -447,7 +484,7 @@ p.dataset-name {
                 $(".phenotype-option").click(function (event) {
                     var filterPhenotype = $(this).text();
                     //console.log(filterPhenotype);
-                    var phenotypeLevel2holder = {};
+
                     phenotypeLevel2holder["phenotype"] = uniqueGroupNameMap2[filterPhenotype];;
                     //console.log(phenotypeLevel2holder);
                     $(this).parent().find("td").each(function () {
@@ -458,14 +495,7 @@ p.dataset-name {
                     var phenotypeFilterLevel2Template = $("#phenotypeFilterLevel2")[0].innerHTML;
                     var filter_dynamic_html_level2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
                     $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);
-
                 });
-
-                //based on selected phenotype,
-                var template = $("#metaData2")[0].innerHTML;
-                var dynamic_html = Mustache.to_html(template,holder);
-                $("#metaDataDisplay").empty().append(dynamic_html);
-
 
                 //console.log(informationGspFileNames);
                 _.forEach(informationGspFileNames, function (each_Gspfile,val){
@@ -512,6 +542,7 @@ p.dataset-name {
             });
             $(this).css({"background-color": "#39f", "color": "#ffffff"});
             //console.log("i was clicked");
+            phenotypeLevel2holder = {};
             displaySelectedTechnology(filterDatatype);});});
 
 </script>
