@@ -23,6 +23,7 @@
             <div class="form-group">
                 <label for="phenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"
                                                               default="Change phenotype choice"/></label>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">&nbsp;<g:helpText title="pheno.help.header" placement="right" body="pheno.help.text"/></g:if>
                 &nbsp;
                 <select id="phenotypeTableChooser" name="phenotypeTableChooser"
                         onchange="refreshVAndAByPhenotype(this)">
