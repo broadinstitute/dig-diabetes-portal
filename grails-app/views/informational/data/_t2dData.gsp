@@ -325,13 +325,14 @@ p.dataset-name {
     function renderFilteredData(selectedLevel2Phenotype){
 
         if(typeof selectedLevel2Phenotype !== 'undefined'){
-            console.log("I am filtering the dataset based on phenotype");
+            //console.log("I am filtering the dataset based on phenotype");
             jsonArray = $.grep(jsonArray, function(element) {
-                console.log(element.name + "level2phenotype was clicked");
+                //console.log(element.name + "level2phenotype was clicked");
+                //console.log(phenotypeDatasetsMap["BMI"]);
                 return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;
             });
         }
-        console.log(jsonArray);
+       // console.log(jsonArray);
         jsonHolder["parents"] = jsonArray;
         var template = $("#metaData2")[0].innerHTML;
         var dynamic_html = Mustache.to_html(template,jsonHolder);
@@ -416,6 +417,7 @@ p.dataset-name {
                     //
                     //   }
                         jsonArray.push(each_key);
+                        datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!uniqueGroupNameMap.hasOwnProperty(k)){
@@ -527,11 +529,9 @@ p.dataset-name {
             //phenotypeLevel2holder = {};
             $('tr.phenotype-level2-row').empty();
             displaySelectedTechnology(filterDatatype);});});
-
 </script>
 
 <script id="metaData2" type="x-tmpl-mustache">
-
     <div class="row" style="padding-top:30px;">
         <h3>Datasets</h3>
         <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
