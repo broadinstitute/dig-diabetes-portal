@@ -2,51 +2,10 @@
 #functionalDataTableGoesHere_wrapper table.dataTable tbody td {
     padding: 0 0 0 5px;
 }
+div.graphicsDisplay {
+    display: -webkit-inline-box;
+}
 </style>
-<script id="functionalAnnotationTemplate"  type="x-tmpl-mustache">
-    <div class="row">
-        <div class="col-xs-5 text-left">
-            <span class="elementTissueSelectorLabel">Display element</span><select class="elementTissueSelector uniqueElements" onchange="mpgSoftware.variantInfo.displayChosenElements()">
-            {{#uniqueElements}}
-                <option>{{element}}</option>
-            {{/uniqueElements}}
-            </select>
-        </div>
-        <div class="col-xs-5 text-left">
-            <span class="elementTissueSelectorLabel">Display tissues</span><select class="elementTissueSelector uniqueTissues" onchange="mpgSoftware.variantInfo.displayChosenElements()">
-            {{#uniqueTissues}}
-                <option>{{source}}</option>
-            {{/uniqueTissues}}
-            </select>
-        </div>
-        <div class="col-xs-2"></div>
-     </div>
-    <div class="row">
-        <div class="col-xs-12 text-left">
-            <table class='functionDescrTable'>
-                {{#recordsExist}}
-                    <tr class='headers'>
-                        <th class='elementSpec' width=35%>Element</th>
-                        <th width=35%>Tissue</th>
-                        <th width=15%>Start position</th>
-                        <th width=15%>End position</th>
-                    </tr>
-                {{/recordsExist}}
-                {{#indivRecords}}
-                    <tr class="elementTissueRows {{element}}__{{source}} {{element}} {{source}}">
-                        <td class='elementSpec'>{{element}}</td>
-                        <td>{{source}}</td>
-                        <td>{{START}}</td>
-                        <td>{{STOP}}</td>
-                    </tr>
-                {{/indivRecords}}
-                {{^indivRecords}}
-                No functional data are available for this variant
-                {{/indivRecords}}
-            </table>
-        </div>
-    </div>
-</script>
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse"
@@ -64,11 +23,11 @@
                     <table id="functionalDataTableGoesHere"></table>
                 </div>
             </div>
-            <div style="margin-top:80px" class="row">
+            <div style="margin-top:80px" class="row graphicsDisplay">
                 <div class="md-col-6">
                     <div class="row">
-                        <div class="md-col-12">
-                            <h4 style="padding-left: 100px">Tissue summary</h4>
+                        <div class="md-col-12"  style="margin-left: 0px">
+                            <h4>Tissue summary</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -77,7 +36,19 @@
                         </div>
                     </div>
                 </div>
-                <div class="md-col-6"></div>
+                <div class="md-col-6" style="margin-left: 80px">
+                    <div class="row">
+                        <div class="xs-col-6"></div>
+                        <div class="xs-col-6" style="margin-left: 220px">
+                            <h4>Element positions</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="md-col-12">
+                            <div id="chart2"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>

@@ -1,0 +1,20 @@
+
+.line .crosshair {
+    fill: none;
+    stroke-width: 1px;
+}
+.line #crosshairX {
+    stroke: red;
+}
+.line #crosshairY {
+    stroke: blue;
+}
+.overlay {
+    fill: none;
+    stroke: black;
+    pointer-events: all;
+    stroke-width: 1px;
+}
+svg {
+    shape-rendering: crispEdges;
+}

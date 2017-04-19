@@ -65,6 +65,12 @@ modules = {
         resource url: 'js/lib/dport/matrix.js'
         resource url: 'css/dport/matrix.css'
     }
+    multiTrack {
+        dependsOn "core"
+
+        resource url: 'js/lib/dport/multiTrack.js'
+        resource url: 'css/dport/multiTrack.css'
+    }
     boxwhisker {
         dependsOn "d3tooltip"
 

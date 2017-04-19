@@ -1209,6 +1209,12 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     dataMatrix.push(currentRow);
                 }
+                var arrayOfArraysGroupedByTissue = [];
+                for (var j = 0 ; j < uniqueTissues.length ; j++){
+
+                    var arrayGroupedByTissue = _.filter(sortedData, {source:uniqueTissues[j].source});
+                    arrayOfArraysGroupedByTissue.push(arrayGroupedByTissue);
+                }
                 var allUniqueElementNames = _.map(uniqueElements,'element');
                 var allUniqueTissueNames = _.map(uniqueTissues,'source');
                 uniqueElements.push({element:'ALL'});
@@ -1223,6 +1229,9 @@ var mpgSoftware = mpgSoftware || {};
                 buildAnnotationMatrix (allUniqueElementNames,
                     allUniqueTissueNames,
                     dataMatrix);
+                buildMultiTrackDisplay(allUniqueElementNames,
+                    allUniqueTissueNames,
+                    arrayOfArraysGroupedByTissue);
                 $('select.uniqueElements').val('ALL');
                 $('select.uniqueTissues').val('ALL');
             }
@@ -1277,6 +1286,27 @@ var mpgSoftware = mpgSoftware || {};
                 .endColor('#3498db')
                 .dataHanger("#chart1", correlationMatrix);
             d3.select("#chart1").call(matrix.render);
+        };
+        var buildMultiTrackDisplay  = function(  allUniqueElementNames,
+                                                allUniqueTissueNames,
+                                                dataMatrix ){
+            var correlationMatrix = dataMatrix;
+            var xlabels = [];
+            var ylabels = allUniqueTissueNames;
+            var margin = {top: 50, right: 50, bottom: 100, left: 150},
+                width = 650 - margin.left - margin.right,
+                height = 800 - margin.top - margin.bottom;
+            var multiTrack = baget.multiTrack()
+                .height(height)
+                .width(width)
+                .margin(margin)
+                .renderCellText(0)
+                .xlabelsData(xlabels)
+                .ylabelsData(ylabels)
+                .startColor('#ffffff')
+                .endColor('#3498db')
+                .dataHanger("#chart2", correlationMatrix);
+            d3.select("#chart2").call(multiTrack.render);
         }
 
         var buildAnnotationTable = function(selectionToFill,

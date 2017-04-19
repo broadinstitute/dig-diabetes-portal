@@ -8,6 +8,9 @@
     <r:require module="locusZoom"/>
     <r:require modules="core, mustache"/>
     <r:require modules="burdenTest"/>
+    <r:require modules="multiTrack"/>
+    <r:require modules="matrix"/>
+
 
     <r:layoutResources/>
 
