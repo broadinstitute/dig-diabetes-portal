@@ -301,94 +301,31 @@ class SystemController {
     def updateRestServer() {
         String restServer = params.datatype
         String currentServer =  restServerService.whatIsMyCurrentServer()
-        if  (restServer == 'prodloadbalancedserver')  {
-            if (!(currentServer == 'prodloadbalancedserver')) {
-                restServerService.goWithTheProdLoadBalancedServer()
+        if  (restServer == 'prodServer')  {
+            if (!(currentServer == 'prodServer')) {
+                restServerService.goWithProdServer()
                 flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }
-        } else  if (restServer == 'qaloadbalancedserver')  {
-            if (!(currentServer == 'qaloadbalancedserver')) {
-                restServerService.goWithTheQaLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'dev01server')  {
-            if (!(currentServer == 'dev01server')) {
-                restServerService.goWithTheDev01Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'dev02server')  {
-            if (!(currentServer == 'dev02server')) {
-                restServerService.goWithTheDev02Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'prod01server')  {
-            if (!(currentServer == 'prod01server')) {
-                restServerService.goWithTheProd01Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'prod02server')  {
-            if (!(currentServer == 'prod02server')) {
-                restServerService.goWithTheProd02Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'devloadbalancedserver')  {
-            if (!(currentServer == 'devloadbalancedserver')) {
-                restServerService.goWithTheDevLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'aws01restserver')  {
-            if (!(currentServer == 'aws01restserver')) {
-                restServerService.goWithTheAws01RestServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'aws02restserver')  {
-            if (!(currentServer == 'aws02restserver')) {
-                restServerService.goWithTheAws02RestServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'aws02newcoderestserver')  {
-            if (!(currentServer == 'aws02newcoderestserver')) {
-                restServerService.goWithTheAws02NewCodeRestServer()
-                flash.message = "You are now using the ${restServer} new KB 2.0 code server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'toddServer')  {
-            if (!(currentServer == 'toddServer')) {
-                restServerService.goWithToddServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'prodserverbroad')  {
-            if (!(currentServer == 'prodserverbroad')) {
-                restServerService.goWithProdLoadBalancedBroadServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'localserver')  {
-            if (!(currentServer == 'localserver')) {
+        } else  if (restServer == 'localServer')  {
+            if (!(currentServer == 'localServer')) {
                 restServerService.goWithLocalServer()
                 flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        } else  if (restServer == 'ebiServer')  {
+            if (!(currentServer == 'ebiServer')) {
+                restServerService.goWithEbiServer()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
+            }  else {
+                flash.message = "But you were already using the ${currentServer} server!"
+            }
+        }  else  if (restServer == 'federatedServer')  {
+            if (!(currentServer == 'federatedServer')) {
+                restServerService.goWithFederatedServer()
+                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
             }  else {
                 flash.message = "But you were already using the ${currentServer} server!"
             }

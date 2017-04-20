@@ -200,8 +200,8 @@ t2dProd02BehindLoadBalancer {
 // individual servers
 t2dAws01RestServer {
 //    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
+    base = 'https://www.ebi.ac.uk/ega/t2d/'
+    name =  'dig-genome-store/'
     path = 'gs/'
 }
 
@@ -220,6 +220,26 @@ toddServer {
     path = 'gs/'
 }
 
+t2dProdRestServer {
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
+    name =  'dccservices/'
+    path = ''
+}
+
+t2dEbiRestServer {
+    base = 'https://www.ebi.ac.uk/ega/t2d/'
+    name =  'dig-genome-store/'
+    path = 'gs/'
+}
+
+
+t2dFederatedRestServer {
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
+    name =  'dccservices/'
+    path = 'distributed/'
+}
+
+
 t2dLocalhostRestServer {
     base = 'http://localhost:8888/'
     name =  'dig-genome-store/'
@@ -229,23 +249,6 @@ t2dLocalhostRestServer {
 // individual servers
 // NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
 // DIGP-136: changed to load balanced development machine
-t2dDevRestServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dProdRestServer {//current 'prod'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
 
 localServer {
 //    base = 'http://localhost:8888/'
