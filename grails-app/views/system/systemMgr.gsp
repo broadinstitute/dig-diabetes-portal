@@ -77,9 +77,9 @@
                             <div class="radio">
                                 <span>
                                     <label>
-                                        <input id="testserver" type="radio" name="datatype" value="aws01restserver"
-                                            <%=restServer.getCurrentServer()==restServer.getAws01RestServer()?" checked ":"" %> />
-                                        <g:message code="system.radio.rest_server.AWS01" /> (${restServer.getAws01RestServer()})
+                                        <input id="testserver" type="radio" name="datatype" value="prodServer"
+                                            <%=restServer.getCurrentServer()==restServer.getProdServer()?" checked ":"" %> />
+                                        Broad Prod KB - (${restServer.getProdServer()})
                                     </label>
 
                                 </span>
@@ -87,109 +87,28 @@
 
                             <div class="radio">
                                 <label>
-                                    <input id="testserver" type="radio" name="datatype" value="aws02restserver"
-                                        <%=restServer.getCurrentServer()==restServer.getAws02RestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS02" /> (${restServer.getAws02NewCodeRestServer()})
+                                    <input id="testserver" type="radio" name="datatype" value="ebiServer"
+                                        <%=restServer.getCurrentServer()==restServer.getEbiServer()?" checked ":"" %> />
+                                    EBI KB - (${restServer.getEbiServer()})
                                 </label>
                             </div>
 
                             <div class="radio">
                                 <label>
-                                    <input id="testserver" type="radio" name="datatype" value="aws02newcoderestserver"
-                                        <%=restServer.getCurrentServer()==restServer.getAws02NewCodeRestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS02NewCode" /> (${restServer.getAws02NewCodeRestServer()})
+                                    <input id="testserver" type="radio" name="datatype" value="federatedServer"
+                                        <%=restServer.getCurrentServer()==restServer.getFederatedServer()?" checked ":"" %> />
+                                    Federated KB - (${restServer.getFederatedServer()})
                                 </label>
                             </div>
 
                             <div class="radio">
                                 <label>
-                                    <input id="testserver" type="radio" name="datatype" value="dev01server"
-                                        <%=restServer.getCurrentServer()==restServer.getDev01()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.dev01" /> (${restServer.getDev01()})
+                                    <input id="testserver" type="radio" name="datatype" value="localServer"
+                                        <%=restServer.getCurrentServer()==restServer.getLocalServer()?" checked ":"" %> />
+                                    localhost KB - (${restServer.getLocalServer()})
                                 </label>
 
                             </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="dev02server"
-                                        <%=restServer.getCurrentServer()==restServer.getDev02()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.dev02" /> (${restServer.getDev02()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
-                                        <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.dev" /> (${restServer.getDevLoadBalanced()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="qaserver" type="radio" name="datatype" value="qaloadbalancedserver"
-                                        <%=restServer.getCurrentServer()==restServer.getQaLoadBalanced()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.qa" /> (${restServer.getQaLoadBalanced()})
-                                </label>
-
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="prod01server" type="radio" name="datatype" value="prod01server"
-                                        <%=restServer.getCurrentServer()==restServer.getProd01()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod01" /> (${restServer.getProd01()})
-                                </label>
-
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="prod02server" type="radio" name="datatype" value="prod02server"
-                                        <%=restServer.getCurrentServer()==restServer.getProd02()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod02" /> (${restServer.getProd02()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="prodserver" type="radio" name="datatype" value="prodloadbalancedserver"
-                                        <%=restServer.getCurrentServer()==restServer.getProdLoadBalanced()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod" /> (${restServer.getProdLoadBalanced()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="prodserverbroad" type="radio" name="datatype" value="prodserverbroad"
-                                        <%=restServer.getCurrentServer()==restServer.getProdLoadBalancedBroad()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod_broad" /> (${restServer.getProdLoadBalancedBroad()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="localserver" type="radio" name="datatype" value="localserver"
-                                        <%=restServer.getCurrentServer()==restServer.getLocal()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.local" /> (${restServer.getLocal()})
-                                </label>
-
-                            </div>
-
-
-                            <div class="radio">
-                                <label>
-                                    <input id="toddServer" type="radio" name="datatype" value="toddServer"
-                                        <%=restServer.getCurrentServer()==restServer.getToddServer()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.todd" /> (${restServer.getToddServer()})
-                                </label>
-
-                            </div>
-
                          </div>
                     </div>
                     <div class="col-md-3"></div>
@@ -211,16 +130,6 @@
                         <div class="col-md-2">Immediate cache reset</div>
                         <div class="col-md-10">
                             <ul>
-                                <li style="padding: 10px"><a href="http://dig-dev-01.broadinstitute.org:8888/dev/gs/reloadCache" class="btn btn-warning">reset http://dig-dev-01.broadinstitute.org:8888/dev/gs cache</a></li>
-                                <li style="padding: 10px"><a href="http://dig-dev-02.broadinstitute.org:8888/dev/gs/reloadCache" class="btn btn-warning">reset http://dig-dev-02.broadinstitute.org:8888/dev/gs cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getAws01RestServer()}reloadCache" class="btn btn-warning">reset ${restServer.getAws01RestServer()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getAws02RestServer()}reloadCache" class="btn btn-warning">reset ${restServer.getAws02RestServer()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getDevLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getDevLoadBalanced()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getQaLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getQaLoadBalanced()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getProdLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getProdLoadBalanced()} cache</a></li>
-                                <li style="padding: 10px"><a href="http://dig-prod-01.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-01.broadinstitute.org:8888/prod/gs cache</a></li>
-                                <li style="padding: 10px"><a href="http://dig-prod-02.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-02.broadinstitute.org:8888/prod/gs cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getToddServer()}reloadCache" class="btn btn-warning">reset ${restServer.getToddServer()} cache</a></li>
                             </ul>
                         </div>
                     </div>

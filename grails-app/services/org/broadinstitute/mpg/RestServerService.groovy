@@ -34,20 +34,11 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
 
-    private String PROD_LOAD_BALANCED_SERVER = ""
-    private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
+    private String PROD_SERVER = ""
+    private String FEDERATED_SERVER = ""
     private String LOCAL_SERVER = ""
-    private String TODD_SERVER = ""
-    private String QA_LOAD_BALANCED_SERVER = ""
-    private String DEV_LOAD_BALANCED_SERVER = ""
-    private String DEV_01_SERVER = ""
-    private String DEV_02_SERVER = ""
-    private String PROD_01_SERVER = ""
-    private String PROD_02_SERVER = ""
-    private String AWS01_REST_SERVER = ""
-    private String AWS02_REST_SERVER = ""
-    private String AWS02_NEW_CODE_REST_SERVER = ""
-    private String DEV_REST_SERVER = ""
+    private String EBI_SERVER = ""
+
     private String BASE_URL = ""
     private String REMEMBER_BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
@@ -137,41 +128,17 @@ class RestServerService {
         //current
 
         // load balancer with rest server(s) behind it
-        PROD_LOAD_BALANCED_SERVER = grailsApplication.config.t2dProdLoadBalancedServer.base + grailsApplication.config.t2dProdLoadBalancedServer.name + grailsApplication.config.t2dProdLoadBalancedServer.path
+        PROD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
 
         // load balancer with rest server(s) behind it
-        PROD_LOAD_BALANCED_BROAD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+        FEDERATED_SERVER = grailsApplication.config.t2dFederatedRestServer.base + grailsApplication.config.t2dFederatedRestServer.name + grailsApplication.config.t2dFederatedRestServer.path
 
         // local server for development
         LOCAL_SERVER = grailsApplication.config.localServer.base + grailsApplication.config.localServer.name + grailsApplication.config.localServer.path
 
         // qa load balancer with rest server(s) behind it
-        QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
+        EBI_SERVER = grailsApplication.config.t2dEbiRestServer.base + grailsApplication.config.t2dEbiRestServer.name + grailsApplication.config.t2dEbiRestServer.path
 
-        // test load balancer with rest server(s) behind it
-        DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
-
-        DEV_01_SERVER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
-        DEV_02_SERVER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
-
-        PROD_01_SERVER = grailsApplication.config.t2dProd01BehindLoadBalancer.base + grailsApplication.config.t2dProd01BehindLoadBalancer.name + grailsApplication.config.t2dProd01BehindLoadBalancer.path
-        PROD_02_SERVER = grailsApplication.config.t2dProd02BehindLoadBalancer.base + grailsApplication.config.t2dProd02BehindLoadBalancer.name + grailsApplication.config.t2dProd02BehindLoadBalancer.path
-
-        // dev rest server, not load balanced
-        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
-
-        // 'aws01'
-        AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
-
-        // 'stage aws01'
-        AWS02_NEW_CODE_REST_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
-
-        // 'stage aws01'
-        AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
-
-        TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
-
-        //
         //
         BASE_URL = grailsApplication.config.server.URL
         REMEMBER_BASE_URL = BASE_URL
@@ -185,57 +152,18 @@ class RestServerService {
     }
 
     // current below
-
-    public String getDev01() {
-        return DEV_01_SERVER ;
+    public String getProdServer() {
+        return PROD_SERVER ;
+    }
+    public String getFederatedServer() {
+        return FEDERATED_SERVER ;
+    }
+    public String getEbiServer() {
+        return EBI_SERVER ;
     }
 
-    public String getDev02() {
-        return DEV_02_SERVER;
-    }
-
-    public String getProd01() {
-        return PROD_01_SERVER ;
-    }
-
-    public String getProd02() {
-        return PROD_02_SERVER ;
-    }
-
-    public String getDevLoadBalanced() {
-        return DEV_LOAD_BALANCED_SERVER;
-    }
-
-    public String getAws01RestServer() {
-        return AWS01_REST_SERVER;
-    }
-
-    public String getAws02RestServer() {
-        return AWS02_REST_SERVER;
-    }
-
-    public String getAws02NewCodeRestServer() {
-        return AWS02_NEW_CODE_REST_SERVER;
-    }
-
-    public String getProdLoadBalanced() {
-        return PROD_LOAD_BALANCED_SERVER;
-    }
-
-    public String getProdLoadBalancedBroad() {
-        return PROD_LOAD_BALANCED_BROAD_SERVER;
-    }
-
-    public String getLocal() {
+    public String getLocalServer() {
         return LOCAL_SERVER;
-    }
-
-    public String getToddServer() {
-        return TODD_SERVER;
-    }
-
-    public String getQaLoadBalanced() {
-        return QA_LOAD_BALANCED_SERVER;
     }
 
     private List<String> getGeneColumns() {
@@ -292,58 +220,22 @@ class RestServerService {
     }
 
 
-    public void goWithTheProdLoadBalancedServer() {
-        pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheQaLoadBalancedServer() {
-        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
-    }
-
-
-        public void goWithTheDev01Server() {
-            pickADifferentRestServer(DEV_01_SERVER )
-        }
-
-        public void goWithTheDev02Server() {
-            pickADifferentRestServer(DEV_02_SERVER)
-        }
-
-        public void goWithTheProd01Server() {
-            pickADifferentRestServer(PROD_01_SERVER )
-        }
-
-        public void goWithTheProd02Server() {
-            pickADifferentRestServer(PROD_02_SERVER)
-        }
-
-    public void goWithTheDevLoadBalancedServer() {
-        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheAws01RestServer() {
-        pickADifferentRestServer(AWS01_REST_SERVER)
-    }
-
-    public void goWithTheAws02RestServer() {
-        pickADifferentRestServer(AWS02_REST_SERVER)
-    }
-
-    public void goWithTheAws02NewCodeRestServer() {
-        pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
-    }
-
-    public void goWithProdLoadBalancedBroadServer() {
-        pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
-    }
     public void goWithLocalServer() {
         pickADifferentRestServer(LOCAL_SERVER)
     }
 
-
-    public void goWithTheDevServer() {
-        pickADifferentRestServer(DEV_REST_SERVER)
+    public void goWithProdServer() {
+        pickADifferentRestServer(PROD_SERVER)
     }
+
+    public void goWithEbiServer() {
+        pickADifferentRestServer(EBI_SERVER)
+    }
+
+    public void goWithFederatedServer() {
+        pickADifferentRestServer(FEDERATED_SERVER)
+    }
+
 
     public String currentRestServer() {
         return BASE_URL;
@@ -354,15 +246,10 @@ class RestServerService {
             // add in all known servers
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws01);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws02);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerQa);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2NewCode);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2PassThrough);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerIntel);
         }
 
         return this.burdenServerList;

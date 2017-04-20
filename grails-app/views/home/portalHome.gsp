@@ -181,7 +181,7 @@
                     </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="variantInfo" action="variantInfo"
-                                               params="[id: 'rs13266634']"/>'>rs13266634</a>
+                                               params="[id: '8_145584072_G_A']"/>'>8_145584072_G_A</a>
                     </g:else>
                     <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                 body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,

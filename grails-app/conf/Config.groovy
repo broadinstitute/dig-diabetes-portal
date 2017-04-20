@@ -200,8 +200,8 @@ t2dProd02BehindLoadBalancer {
 // individual servers
 t2dAws01RestServer {
 //    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
+    base = 'https://www.ebi.ac.uk/ega/t2d/'
+    name =  'dig-genome-store/'
     path = 'gs/'
 }
 
@@ -220,6 +220,26 @@ toddServer {
     path = 'gs/'
 }
 
+t2dProdRestServer {
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
+    name =  'dccservices/'
+    path = ''
+}
+
+t2dEbiRestServer {
+    base = 'https://www.ebi.ac.uk/ega/t2d/'
+    name =  'dig-genome-store/'
+    path = 'gs/'
+}
+
+
+t2dFederatedRestServer {
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
+    name =  'dccservices/'
+    path = 'distributed/'
+}
+
+
 t2dLocalhostRestServer {
     base = 'http://localhost:8888/'
     name =  'dig-genome-store/'
@@ -229,23 +249,6 @@ t2dLocalhostRestServer {
 // individual servers
 // NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
 // DIGP-136: changed to load balanced development machine
-t2dDevRestServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dProdRestServer {//current 'prod'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
 
 localServer {
 //    base = 'http://localhost:8888/'
@@ -282,15 +285,10 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
-burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
-burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
-burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
+burdenRestServerDev = new ServerBean("Non Intel burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+burdenRestServerIntel = new ServerBean("Intel secure burden server", "http://rp-t2d-client.broadinstitute.org:8087/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -406,7 +404,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
@@ -418,6 +416,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
+        grails.serverURL = "http://intel-rp-env-new.us-east-1.elasticbeanstalk.com"             // new intel RP portal
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
