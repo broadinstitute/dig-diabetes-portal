@@ -257,11 +257,18 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 if(defaultPhenotype == 'T2D') {
                     // pull out t2d object and display that for primary
-                    var t2dData = _.find(phenotypeData, {phenotype: 'T2D'});
-                    fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
-                    // everything else is other
-                    var everythingElse = _.chain(phenotypeData).reject({phenotype: 'T2D'}).sortBy('bestPVal').value();
-                    fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
+                    try {
+                        var t2dData = _.find(phenotypeData, {phenotype: 'T2D'});
+                        fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
+                        // everything else is other
+                        var everythingElse = _.chain(phenotypeData).reject({phenotype: 'T2D'}).sortBy('bestPVal').value();
+                        fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
+                    } catch (e if e instanceof TypeError) {
+                        // otherwise, the primary phenotype is the one with the smallest p-value
+                        var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
+                        fillPrimaryPhenotypeBoxes(_.head(sortedPhenotypeData), variantAssociationStrings);
+                        fillOtherPhenotypeBoxes(_.tail(sortedPhenotypeData), variantAssociationStrings);
+                    }
                 } else {
                     // otherwise, the primary phenotype is the one with the smallest p-value
                     var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');

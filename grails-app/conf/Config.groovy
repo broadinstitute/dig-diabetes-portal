@@ -418,6 +418,7 @@ environments {
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
         grails.serverURL = "http://intel-rp-env-new.us-east-1.elasticbeanstalk.com"             // new intel RP portal
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+        grails.serverURL = "http://http://testdistributed.us-east-1.elasticbeanstalk.com"             // test distributed portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
