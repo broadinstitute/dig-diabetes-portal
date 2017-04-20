@@ -1,20 +1,17 @@
-<script class="panel-body" id="GWAS_PGC_mdv25_script" type="x-tmpl-mustache">
+<div class="panel-body" id="GWAS_PGC_mdv25_script" type="x-tmpl-mustache">
     <h4>Dataset</h4>
 
-    <p>Publication: 
-    <div class="paper">
+    <h4>Publications</h4>
 
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/21926972" target="_blank">
+                       <p><div class="paper">
+<g:message code="informational.shared.publications.PGC_2011_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.PGC_2011_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.PGC_2011_NatGenet.citation"></g:message> </div>
+</div></p>
 
-            Large-scale genome-wide association analysis of bipolar disorder identifies a new susceptibility locus near ODZ4.</a> <br/>
 
-        Psychiatric GWAS Consortium Bipolar Disorder Working Group.
 
-        <div class="citation">Nat Genet. 2011 Sep 18;43(10):977-83. doi: 10.1038/ng.943.</div>
-
-        </div>
-
-    Publication: <div class="paper">
+  <div class="paper">
 
         <a href="http://www.ncbi.nlm.nih.gov/pubmed/22472876" target="_blank">
 
@@ -60,5 +57,5 @@ Weilburg JB, Willemsen G, Zitman FG, Neale B, Daly M, Levinson DF, Sullivan PF.
     </small></h4>
 
     <p>PGC conducts meta-analyses of genome-wide association study data, focusing on autism, attention-deficit hyperactivity disorder, bipolar disorder, major depressive disorder, and schizophrenia.</p>
-</script>
+</div>
 
