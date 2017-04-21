@@ -70,7 +70,7 @@
                     'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
-                if ((!data.variant.is_error) && (data.variant.num_records>0)){
+                if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
                 }
