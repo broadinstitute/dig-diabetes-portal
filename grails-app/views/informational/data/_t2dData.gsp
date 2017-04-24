@@ -40,6 +40,7 @@
 <style type="text/css" class="init">
 
     div.datasets-filter {
+
     width:100%;
     }
 		.datasets-filter table {
@@ -47,6 +48,7 @@
 		}
 
 		.datasets-filter td {
+            cursor: pointer;
 			text-align: center;
 			background-color:#eee;
 			padding: 3px 0;
@@ -290,14 +292,14 @@ p.dataset-name {
 </style>
 
 <script>
-    $(document).ready(function() {
-        var data = {
-            dataType: "Data type:"
-        };
-        var template = $("#selectDataType")[0].innerHTML;
-        var dynamic_html = Mustache.to_html(template,data);
-        $("#DataTypeList").append(dynamic_html);
-    })
+//    $(document).ready(function() {
+//        var data = {
+//            dataType: "Data type:"
+//        };
+//        var template = $("#selectDataType")[0].innerHTML;
+//        var dynamic_html = Mustache.to_html(template,data);
+//        $("#DataTypeList").append(dynamic_html);
+//    })
 </script>
 
 <script>
@@ -323,6 +325,7 @@ p.dataset-name {
     var storedJsonArray=[];
     var phenotypeDatasetsMap = {};
     var phenotypeLevel2holder = {};
+    var datatype = [];
 
 
     function renderFilteredData(selectedLevel2Phenotype){
@@ -397,14 +400,14 @@ p.dataset-name {
     }
 
     function displaySelectedTechnology(filterDatatype) {
+        //console.log(filterDatatype + "filterDatatype inside displayfunctiontech call")
         var selectedTech = "";
         if(filterDatatype=="Show all"){selectedTech="";}
         else if(filterDatatype=="Exome Sequencing"){selectedTech="ExSeq";}
         else if(filterDatatype=="Whole genome Sequencing"){selectedTech="WGS";}
         else if(filterDatatype=="GWAS"){selectedTech="GWAS";}
         else if(filterDatatype=="Exome chip"){selectedTech="ExChip";}
-        else if(filterDatatype=="1000 Genome"){selectedTech="1kg";}
-        else if(filterDatatype=="ExAC"){selectedTech="ExAC";}
+        console.log(selectedTech + "selectedtech");
 
             $.ajax({
                 cache: false,
@@ -425,11 +428,12 @@ p.dataset-name {
                 var phenotypeGroupUniqueNameMap = {};
 
 
-               // var phenotypeGroupArrayholder = {};
-
                 _.forEach(data.children, function (each_key,val) {
+                    datatype.push(each_key.technology);
+                    //console.log(each_key.technology);
                     //console.log(selectedTech);
                     if(selectedTech == "") {
+                       // console.log(each_key.technology + " " + "in the eachkey technology");
                         each_key["access"]= getAccessName(each_key.name);
 
                         storedJsonArray.push(each_key);
@@ -449,11 +453,11 @@ p.dataset-name {
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
                         informationGspFileNames.push("#" + each_key.name + '_script');
+
                     }
-                    else if (each_key.name.includes(selectedTech)) {
+                    else if (selectedTech == each_key.technologyUntranslated){
                         //console.log(each_key.name + "was found");
                         each_key["access"] = getAccessName(each_key.name);
-
                         storedJsonArray.push(each_key);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
@@ -472,6 +476,7 @@ p.dataset-name {
                         console.log("Not found in the selected technologies" + each_key.name);
                     }
                 });
+                //console.log(addOnlyUniqueElements(datatype));
 
                 for(var key in datasetPhenotypesMap){
                     c = []
@@ -486,19 +491,29 @@ p.dataset-name {
                             }
                         })
                 }
-
+                console.log(informationGspFileNames);
                 renderFilteredData();
                 if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){
                     console.log("other");
                     phenotypeGroupArray[0] = "None";
+//
+//                    var phenotypeGroupArrayholdert = { "groups" : phenotypeGroupArray.sort(),
+//                        "size"  : 100/(phenotypeGroupArray.length)};
+//                    // console.log(phenotypeGroupArrayholder);
+//                    var phenotypeFilterLevel1Templatet = $("#phenotypeFiltert")[0].innerHTML;
+//                    var filter_dynamic_htmlt = Mustache.to_html(phenotypeFilterLevel1Templatet,phenotypeGroupArrayholdert);
+//                    $("#phenotypeFilterLevel1Displayt").empty().append(filter_dynamic_htmlt);
+
+                }
+                else{
+                    var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
+                        "size"  : 100/(phenotypeGroupArray.length +1)};
+                    // console.log(phenotypeGroupArrayholder);
+                    var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
+                    var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
+                    $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
                 }
 
-                var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
-                                                   "size"  : 100/(phenotypeGroupArray.length +1)};
-               // console.log(phenotypeGroupArrayholder);
-                var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
-                var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
-                $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
 
                 $(".phenotype-option").click(function (event) {
                     var filterPhenotype = $(this).text();
@@ -542,27 +557,12 @@ p.dataset-name {
     });
 </script>
 
-<script id="selectDataType" type="x-tmpl-mustache">
-    <div class="form-inline">
-        <label>Data Type</label>
-        <select id="technologyTypeSelector" class="form-control" onchange="displaySelectedTechnology()">
-            <option value="" selected="selected" >Show all</option>
-            <option value="ExSeq">Exome Sequencing</option>
-            <option value="WGS">Whole genome Sequencing</option>
-            <option value="GWAS">GWAS</option>
-            <option value="ExChip">Exome chip</option>
-            <option value="1kg">1000 Genome</option>
-            <option value="ExAC">ExAC</option>
-        </select>
-    </div>
-</script>
-
 <script>
     $(document).ready(function(){
         var filterDatatype = "Show all";
         $(".datatype-option").click(function (event) {
             filterDatatype = $(this).text();
-            //console.log(filterDatatype);
+            console.log(filterDatatype);
             $(this).parent().find("td").each(function () {
                 $(this).css({"background-color": "#eee", "color": "#000000"});
             });
@@ -616,6 +616,20 @@ p.dataset-name {
 </div>
 </script>
 
+<script id="datatypeFilter" type="x-tmpl-mustache">
+    <h5>Data type</h5>
+    <table class="datasets-filter" style='width:100%'>
+        <tbody>
+          <tr>
+            {{#datatype}}
+            <td class='datatype-option' style='width:{{size}}%'>{{.}}</td>
+            {{/datatype}}
+            <td class='datatype-option' style="width: 25%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
+          </tr>
+        </tbody>
+    </table>
+</script>
+
 <script id="phenotypeFilter" type="x-tmpl-mustache">
   <h5>Phenotype</h5>
   <table class="datasets-filter" style='width:100%'>
@@ -624,7 +638,20 @@ p.dataset-name {
     {{#groups}}
     <td class='phenotype-option' style='width:{{size}}%'>{{.}}</td>
     {{/groups}}
-    <td class='phenotype-option' style='width:{{size}}%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);'>Show all</td>
+    <td id="phenotypeShowall" class='phenotype-option' style='width:{{size}}%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);'>Show all</td>
+    </tr>
+    </tbody>
+    </table>
+</script>
+
+<script id="phenotypeFiltert" type="x-tmpl-mustache">
+  <h5>Phenotype</h5>
+  <table class="datasets-filter" style='width:100%'>
+    <tbody>
+    <tr>
+    {{#groups}}
+    <td class='phenotype-option' style='width:{{size}}%'>{{.}}</td>
+    {{/groups}}
     </tr>
     </tbody>
     </table>
@@ -649,38 +676,20 @@ p.dataset-name {
             <h4>Filter Dataset Table<small> (Click one to start)</small></h4>
         </div>
         <h5>Data type</h5>
-        <table class="datasets-filter">
+        <table class="datasets-filter" style='width:100%'>
             <tbody>
             <tr>
-                <td class='datatype-option' style='width:12.5%'>Exome Sequencing</td>
-                <td class='datatype-option' style='width:12.5%'>Whole genome Sequencing</td>
-                <td class='datatype-option' style='width:12.5%'>GWAS</td>
-                <td class='datatype-option' style='width:12.5%'>Exome chip</td>
-                <td class='datatype-option' style='width:12.5%'>1000 Genome</td>
-                <td class='datatype-option' style='width:12.5%'>ExAC</td>
-                <td class='datatype-option' style="width: 25%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
+                <td class='datatype-option' style='width:20%'>Exome Sequencing</td>
+                <td class='datatype-option' style='width:20%'>Whole genome Sequencing</td>
+                <td class='datatype-option' style='width:20%'>GWAS</td>
+                <td class='datatype-option' style='width:20%'>Exome chip</td>
+                <td class='datatype-option' style="width:20%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
             </tr>
             </tbody>
         </table>
         <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
+        <div id="phenotypeFilterLevel1Displayt" class="form-inline"></div>
         <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
     </div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
 </div>
-
-<script>
-    /*var datatypeFilter = "<h5>Data type</h5><table class=''><tr>";
-     var datatypeArray = ["Show all","Exome Sequencing","Whole genome Sequencing","GWAS","Exome chip","1000 Genome","ExAC"];
-
-     $.each(datatypeArray, function(datatypeIndex, datatypeValue) {
-     var datatypeTD = "<td class='datatype-option' style='width:" + 100 / (datatypeArray.length + 1) + "%'>" + datatypeValue + "</td>";
-     datatypeFilter += datatypeTD;
-     });
-
-     //datatypeFilter += "<td class='datatype-option' style='width:"+100/(datatypeArray.length+1)+"%'>Show all</td></tr></table>";
-     $(".datasets-filter").append(datatypeFilter);
-
-     var filterDatatype = "Show all";
-     */
-
-</script>
