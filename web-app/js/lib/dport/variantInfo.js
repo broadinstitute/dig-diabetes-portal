@@ -1231,7 +1231,8 @@ var mpgSoftware = mpgSoftware || {};
                     dataMatrix);
                 buildMultiTrackDisplay(allUniqueElementNames,
                     allUniqueTissueNames,
-                    arrayOfArraysGroupedByTissue);
+                    arrayOfArraysGroupedByTissue,
+                    {regionStart:data.variants.region_start,regionEnd:data.variants.region_end});
                 $('select.uniqueElements').val('ALL');
                 $('select.uniqueTissues').val('ALL');
             }
@@ -1287,9 +1288,10 @@ var mpgSoftware = mpgSoftware || {};
                 .dataHanger("#chart1", correlationMatrix);
             d3.select("#chart1").call(matrix.render);
         };
-        var buildMultiTrackDisplay  = function(  allUniqueElementNames,
-                                                allUniqueTissueNames,
-                                                dataMatrix ){
+        var buildMultiTrackDisplay  = function(     allUniqueElementNames,
+                                                    allUniqueTissueNames,
+                                                    dataMatrix,
+                                                    additionalParams ){
             var correlationMatrix = dataMatrix;
             var xlabels = [];
             var ylabels = allUniqueTissueNames;
@@ -1305,6 +1307,8 @@ var mpgSoftware = mpgSoftware || {};
                 .ylabelsData(ylabels)
                 .startColor('#ffffff')
                 .endColor('#3498db')
+                .endRegion(additionalParams.regionEnd)
+                .startRegion(additionalParams.regionStart)
                 .dataHanger("#chart2", correlationMatrix);
             d3.select("#chart2").call(multiTrack.render);
         }

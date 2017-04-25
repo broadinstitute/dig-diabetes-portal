@@ -30,6 +30,8 @@ var baget = baget || {};  // encapsulating variable
             ylabelsData,// dataform = ['ylab1','ylab2'],
             startColor = '#ffffff',
             endColor = '#3498db',
+            startRegion,
+            endRegion,
             renderCellText = 1;
 
         // private variables
@@ -60,21 +62,14 @@ var baget = baget || {};  // encapsulating variable
                 .append("g")
                 .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-            // gives us an outline around the drawing area
-            // var background = svg.append("rect")
-            //     .style("stroke", "black")
-            //     .style("stroke-width", "1px")
-            //     .style("fill", "white")
-            //     .attr("width", width)
-            //     .attr("height", height)
 
             var xDomain = [minValue,maxValue];
-            var x = d3.scale.linear()
+            var xScale = d3.scale.linear()
                 .domain(xDomain)
                 .range([0, width]);
 
             var yDomain = d3.range(numrows);
-            var y = d3.scale.ordinal()
+            var yScale = d3.scale.ordinal()
                 .domain(yDomain)
                 .rangeBands([0, height]);
 
@@ -82,18 +77,18 @@ var baget = baget || {};  // encapsulating variable
                 .data(data)
                 .enter().append("g")
                 .attr("class", "row")
-                .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
+                .attr("transform", function(d, i) { return "translate(0," + yScale(i) + ")"; });
 
             var element = row.selectAll(".element")
                 .data(function(d) { return d; })
                 .enter().append("g")
                 .attr("class", "element")
-                .attr("transform", function(d, i) { return "translate(" + x(d.START) + ", 0)"; });
+                .attr("transform", function(d, i) { return "translate(" + xScale(d.START) + ", 0)"; });
 
             element.append('rect')
                 .attr("width", function(v){
-                    return x(v.STOP)-x(v.START);})
-                .attr("height", y.rangeBand()/2)
+                    return xScale(v.STOP)-xScale(v.START);})
+                .attr("height", yScale.rangeBand()/2)
                 .style("stroke-width", 1)
                 .style("stroke", "black")
                 .style("fill",endColor)
@@ -102,7 +97,7 @@ var baget = baget || {};  // encapsulating variable
                 .attr('class', "labels");
 
             // x-axis
-            var xAxis = d3.svg.axis().scale(x).orient("bottom");
+            var xAxis = d3.svg.axis().scale(xScale).orient("bottom");
             var axG = svg.append("g")
                 .attr("class", "x axis")
                 .attr("transform", "translate(0," + height + ")")
@@ -124,21 +119,52 @@ var baget = baget || {};  // encapsulating variable
                     .data(ylabelsData)
                     .enter().append("g")
                     .attr("class", "row-label")
-                    .attr("transform", function(d, i) { return "translate(" + 0 + "," + y(i) + ")"; });
+                    .attr("transform", function(d, i) { return "translate(" + 0 + "," + yScale(i) + ")"; });
 
                 rowLabels.append("line")
                     .style("stroke-width", "1px")
                     .attr("x1", 0)
                     .attr("x2", -5)
-                    .attr("y1", (1*y.rangeBand() / 4))
-                    .attr("y2", (1*y.rangeBand() / 4));
+                    .attr("y1", (1*yScale.rangeBand() / 4))
+                    .attr("y2", (1*yScale.rangeBand() / 4));
 
                 rowLabels.append("text")
                     .attr("x", -8)
-                    .attr("y", (1*y.rangeBand() / 4))
+                    .attr("y", (1*yScale.rangeBand() / 4))
                     .attr("dy", ".32em")
                     .attr("text-anchor", "end")
                     .text(function(d, i) { return d; });
+            }
+
+            if (startRegion!==endRegion){
+                var indexPosition = svg.append("g")
+                    .attr("class", "rect");
+                indexPosition.append("rect")
+                    .attr("id", "indexPosition")
+                    .attr("class", "regionRect");
+                indexPosition.select("#indexPosition")
+                    .attr("x", xScale(startRegion))
+                    .attr("y", 0)
+                    .attr("width", xScale(endRegion)-xScale(startRegion))
+                    .attr("height", height);
+
+            } else if (typeof startRegion !== 'undefined') {
+                var indexPosition = svg.append("g")
+                    .attr("class", "line");
+                indexPosition.append("line")
+                    .attr("id", "indexPosition")
+                    .attr("class", "indexPosition");
+                indexPosition.select("#indexPosition")
+                    .attr("x1", xScale(startRegion))
+                    .attr("y1", 0)
+                    .attr("x2", xScale(startRegion))
+                    .attr("y2", height);
+                var indexPosLabel = labels.append("text")
+                    .attr("x", xScale(startRegion))
+                    .attr("y", 0 - 5)
+                    .attr("class", "mouseReporter")
+                    .style("text-anchor", "middle");
+                indexPosLabel.text("variant location "+startRegion)
             }
 
             // build a crosshair attached to the pointer
@@ -147,7 +173,6 @@ var baget = baget || {};  // encapsulating variable
                 .attr("y", height - 5)
                 .attr("class", "mouseReporter")
                 .style("text-anchor", "end");
-            var xScale = x;
             var crosshair = svg.append("g")
                 .attr("class", "line");
             crosshair.append("line")
@@ -166,7 +191,6 @@ var baget = baget || {};  // encapsulating variable
                 })
                 .on("mousemove", function() {
                     var mouse = d3.mouse(this);
-                    var x = mouse[0];
                     crosshair.select("#crosshairX")
                         .attr("x1", mouse[0])
                         .attr("y1", 0)
@@ -176,6 +200,11 @@ var baget = baget || {};  // encapsulating variable
                         return "position = "+Math.round(xScale.invert(mouse[0]));
                     });
                 });
+
+
+
+
+
 
         };
 
@@ -272,7 +301,16 @@ var baget = baget || {};  // encapsulating variable
             clickCallback = x;
             return instance;
         };
-
+        instance.endRegion = function (x) {
+            if (!arguments.length) return endRegion;
+            endRegion = x;
+            return instance;
+        };
+        instance.startRegion = function (x) {
+            if (!arguments.length) return startRegion;
+            startRegion = x;
+            return instance;
+        };
 
         /***
          * This is not a standard accessor.  The purpose of this method is to take a DOM element and to
