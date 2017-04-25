@@ -1,5 +1,3 @@
-
-
 <div class="panel-body">
 
 <h4><g:message code="informational.data.accessphase.70KforT2D"></g:message></h4>
@@ -25,7 +23,7 @@
 <h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-    <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
+    <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
     <tr><td>556</td><td>614</td><td><a onclick="showSection(event)">Northwestern NUGENE</a>
 

@@ -36,10 +36,10 @@ div.graphicsDisplay {
                         </div>
                     </div>
                 </div>
-                <div class="md-col-6" style="margin-left: 80px">
+                <div class="md-col-6" style="margin-left: 50px">
                     <div class="row">
                         <div class="xs-col-6"></div>
-                        <div class="xs-col-6" style="margin-left: 250px">
+                        <div class="xs-col-6" style="margin-left: 290px">
                             <h4>Element positions</h4>
                         </div>
                     </div>

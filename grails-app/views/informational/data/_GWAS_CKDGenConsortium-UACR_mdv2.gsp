@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_CKDGenConsortium-UACR_mdv25_script" type="x-tmpl-mustache">
     <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.CKDGen"></g:message></p>
     <p>Download URL - Download URL: <a href="https://fox.nhlbi.nih.gov/CKDGen/" target="_blank">https://fox.nhlbi.nih.gov/CKDGen/</a><br/>
@@ -33,4 +33,4 @@
 <h4>Accessing CKDGen GWAS - stratified UACR associations data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.CKDGen-UACR"></g:message></p>
 
-</div>
+</script>

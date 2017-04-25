@@ -104,7 +104,7 @@
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
 
             <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
-            <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.tutorial"/></p>
+<g:if test="${g.portalTypeString()?.equals('t2d')}"><p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.tutorial"/></p></g:if>
 
             <!-- tabs -->
             <ul class="nav nav-tabs" role="tablist">

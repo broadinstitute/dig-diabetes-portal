@@ -82,6 +82,11 @@
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="aboutTheData.stroke.descr" default="about the data"/>
                 </g:if>
+                <g:if test="${g.portalTypeString()?.equals('mi')}">
+                    <g:message code="aboutTheData.MI.descr" default="about the data"/>
+                </g:if>
+
+
                 <g:else><g:message code="aboutTheData.title" default="about the data"/></g:else>
             </p>
         </div>

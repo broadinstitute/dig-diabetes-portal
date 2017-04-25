@@ -16,7 +16,7 @@
     <h4>Dataset subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
         <tr><td>1861</td><td>10882</td><td><a onclick="showSection(event)">Oxford-based UK T2D case-control</a>
 
             <div style="display: none;" class="cohortDetail">

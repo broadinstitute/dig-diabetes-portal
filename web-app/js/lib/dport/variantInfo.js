@@ -1187,8 +1187,9 @@ var mpgSoftware = mpgSoftware || {};
                     sortedData.push({'CHROM':o.CHROM,
                         'START':o.START,
                         'STOP':o.STOP,
-                        'source':o.source,
-                        'element':o.element.replace(/[0-9]*/g, '').replace(/^_/,'').replace(/\//,'-')})
+                        'source':o.source_trans,
+                        'element':o.element_trans
+                    })
                 })
                 var uniqueElements = _.uniqBy(sortedData,function(item) {
                     return item.element;
@@ -1272,8 +1273,8 @@ var mpgSoftware = mpgSoftware || {};
             var correlationMatrix = dataMatrix;
             var xlabels = allUniqueElementNames;
             var ylabels = allUniqueTissueNames;
-            var margin = {top: 50, right: 50, bottom: 190, left: 150},
-                width = 400 - margin.left - margin.right,
+            var margin = {top: 50, right: 50, bottom: 190, left: 250},
+                width = 440 - margin.left - margin.right,
                 height = 890 - margin.top - margin.bottom;
             var matrix = baget.matrix()
                 .height(height)
@@ -1295,8 +1296,8 @@ var mpgSoftware = mpgSoftware || {};
             var correlationMatrix = dataMatrix;
             var xlabels = [];
             var ylabels = allUniqueTissueNames;
-            var margin = {top: 50, right: 50, bottom: 100, left: 150},
-                width = 650 - margin.left - margin.right,
+            var margin = {top: 50, right: 50, bottom: 100, left: 250},
+                width = 750 - margin.left - margin.right,
                 height = 800 - margin.top - margin.bottom;
             var multiTrack = baget.multiTrack()
                 .height(height)

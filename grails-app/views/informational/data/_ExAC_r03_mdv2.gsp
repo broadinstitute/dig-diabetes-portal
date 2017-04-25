@@ -1,5 +1,4 @@
-
-<script class="panel-body" id="testinformationgap" type = "x-tmpl-mustache">
+<div class="panel-body">
     <h4>Dataset</h4>
 
     <p>Dataset version: dv1<br/>
@@ -21,4 +20,4 @@
 <h4>Accessing ExAC data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.ExAC"></g:message></p>
 
-</script>
+</div>

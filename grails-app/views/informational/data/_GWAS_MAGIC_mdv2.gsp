@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_MAGIC_mdv25_script" type="x-tmpl-mustache">
     <h4>Dataset</h4>
 
     <p>
@@ -54,7 +54,7 @@
     <li><g:message code="informational.shared.traits.Ins30"></g:message></li>
 <li><g:message code="informational.shared.traits.Ins30adjBMI"></g:message></li>
     <li><g:message code="informational.shared.traits.AUCins"></g:message></li>
-<li><g:message code="informational.shared.traits.ISI"></g:message></li>
+<li><g:message code="informational.shared.traits.Matsuda_ISI"></g:message></li>
 
 </ul><br>
     
@@ -79,5 +79,5 @@
 <h5>April 2017 updates</h5>
 <p><g:message code="informational.data.exptsumm.MAGIC5a"> </g:message><g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet.author"></g:message><g:message code="informational.shared.publications.etal"> </g:message><g:message code="informational.data.exptsumm.MAGIC4b"></g:message>
 <g:message code="informational.data.exptsumm.MAGIC5b"></g:message></p>
-</div>
+</script>
 

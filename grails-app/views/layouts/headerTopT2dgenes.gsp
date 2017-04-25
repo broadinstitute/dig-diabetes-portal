@@ -31,13 +31,14 @@
             </g:elseif>
             <g:else>
                 <img src="${resource(dir: 'images', file:g.message(code:"files.t2dBannerText", default:"t2d_logo.png"))}" />
-            </g:else>
+
             <div class="container-fluid dk-t2d-user-banner">
                 <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>'>
                     <g:message code="portal.language.setting.setSpanish" default="En Español" /></a> |
                 <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>'>
                     <g:message code="portal.language.setting.setEnglish" default="In English" /></a>
             </div>
+            </g:else>
         </div>
     </g:renderT2dGenesSection>
 </div>
