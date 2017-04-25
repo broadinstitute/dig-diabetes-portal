@@ -128,7 +128,8 @@ class RestServerService {
         //current
 
         // load balancer with rest server(s) behind it
-        PROD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+//        PROD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+        PROD_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
 
         // load balancer with rest server(s) behind it
         FEDERATED_SERVER = grailsApplication.config.t2dFederatedRestServer.base + grailsApplication.config.t2dFederatedRestServer.name + grailsApplication.config.t2dFederatedRestServer.path
@@ -246,10 +247,10 @@ class RestServerService {
             // add in all known servers
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerIntel);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
         }
 
         return this.burdenServerList;

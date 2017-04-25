@@ -285,8 +285,8 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
-burdenRestServerDev = new ServerBean("Non Intel burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
-burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerDev = new ServerBean("Insecure Intel non RP burden server", "http://dig-dev.broadinstitute.org:8088/intel/burden");
+burdenRestServerProd = new ServerBean("Broad prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerIntel = new ServerBean("Intel secure burden server", "http://rp-t2d-client.broadinstitute.org:8087/burden");
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 
