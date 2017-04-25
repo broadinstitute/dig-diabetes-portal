@@ -145,7 +145,7 @@ class RestServerService {
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
 
-        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
+        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerProd;
 
         // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
 
@@ -248,8 +248,8 @@ class RestServerService {
             this.burdenServerList = new ArrayList<ServerBean>();
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerIntel);
+//            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerEbi);
         }
 
         return this.burdenServerList;

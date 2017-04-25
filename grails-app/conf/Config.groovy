@@ -285,9 +285,9 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
-burdenRestServerDev = new ServerBean("Non Intel burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
-burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerIntel = new ServerBean("Intel secure burden server", "http://rp-t2d-client.broadinstitute.org:8087/burden");
+burdenRestServerProd = new ServerBean("Production Broad burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
+//burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerEbi = new ServerBean("EBI burden server", "https://www.ebi.ac.uk/ega/t2d/dig-genome-store/burden/dig-analysis-engine/burden");
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
@@ -416,9 +416,9 @@ environments {
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
-        grails.serverURL = "http://intel-rp-env-new.us-east-1.elasticbeanstalk.com"             // new intel RP portal
+//        grails.serverURL = "http://intel-rp-env-new.us-east-1.elasticbeanstalk.com"             // new intel RP portal
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
-        grails.serverURL = "http://http://testdistributed.us-east-1.elasticbeanstalk.com"             // test distributed portal dev for now
+        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // test distributed portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
