@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_GENESIS_eu_mdv2_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_GENESIS_eu_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Publications</h4>
 

@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_CADISP_mdv2_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_CADISP_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publications: <a href="https://s3.amazonaws.com/broad-portal-resources/CADISP_publications.pdf" target="_blank">Download list of CADISP publications</a>
