@@ -1177,10 +1177,11 @@ $('#proposedMultiVariant').typeahead({
                 domElement.append('<div class="pValue_'+stratum+'"></div>');
                 domElement.append('<div class="orValue_'+stratum+'"></div>');
                 domElement.append('<div class="ciValue_'+stratum+'"></div>');
+                domElement.append('<div class="burdenServerAddress_'+stratum+'"></div>');
             };
 
 
-          var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isDichotomousTrait,currentStratum,additionalText){
+          var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,burdenServer,isDichotomousTrait,currentStratum,additionalText){
 
                 if (currentStratum==='ALL'){// We may have to calculate an ALL stratum, but we don't want to display it
                     return;
@@ -1203,7 +1204,7 @@ $('#proposedMultiVariant').typeahead({
                    ciDisplay = (ciLevel * 100) + '% CI: (' + ciLower + ' to ' + ciUpper + ')';
                 }
 
-                fillInResultsSection(currentStratum,'pValue = '+ pValue,
+                fillInResultsSection(currentStratum,'pValue = '+ pValue,burdenServer,
                     (isDichotomousTrait ? 'odds ratio = ' + oddsRatio : 'beta = ' + beta),
                     ciDisplay, isDichotomousTrait,additionalText);
 
@@ -1312,7 +1313,12 @@ $('#proposedMultiVariant').typeahead({
                                 var strataDomIdentifierClass = $('.'+currentStratum+'.strataHolder');
                                 addStrataSection(strataDomIdentifierClass,currentStratum);
                                 strataDomIdentifierClass.append('<div id="chart"></div>')
-                                printFullResultsSection(data.stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,isCategorical,currentStratum,'');
+
+                                // for Intel RP work; adding where the burden test was run
+//                                var burdenServer = 'Computational server used: ' + <%= restServerService?.getCurrentBurdenServer() %>;
+                                var burdenServer = 'Computational server used: ' + data.burden_endpoint;
+                                printFullResultsSection(data.stats,pValue,beta,oddsRatio,ciLevel,ciLower,ciUpper,burdenServer,isCategorical,currentStratum,'');
+
                                 if ((typeof numCases !== 'undefined')  && (numCases!=='')){
                                        var phenoName = $('#phenotypeFilter option:selected').text()
                                        mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, phenoName);
@@ -1355,7 +1361,7 @@ $('#proposedMultiVariant').typeahead({
 
 
 
-            var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDichotomousTrait,additionalText){
+            var fillInResultsSection = function (stratum,pValue, burdenServer, oddsRatio, stdError, isDichotomousTrait,additionalText){
 
 
 
@@ -1366,6 +1372,7 @@ $('#proposedMultiVariant').typeahead({
                 $('.pValue_'+stratum).text(pValue);
                 $('.orValue_'+stratum).text(oddsRatio);
                 $('.ciValue_'+stratum).text(stdError);
+                $('.burdenServerAddress_'+stratum).text(burdenServer);
 
                 displayTestResultsSection(true);
 
@@ -2517,6 +2524,8 @@ $( document ).ready( function (){
                         <div class="orValue orValue_{{stratum}}"></div>
 
                         <div class="ciValue ciValue_{{stratum}}"></div>
+
+                        <div class="ciValue burdenServerAddress_{{stratum}}"></div>
                     </div>
                 </div>
 

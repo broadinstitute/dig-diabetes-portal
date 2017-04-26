@@ -4,6 +4,7 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -414,6 +415,19 @@ def retrieveSampleSummary (){
         if (stratum){
             result.put('stratum',stratum)
         }
+
+        // Intel - add burden rest endpoint to response
+        ServerBean serverBean = this.restServerService.getCurrentBurdenServer();
+        String serverName = serverBean.name;
+        if (result != null) {
+            //            result?.put("burden_endpoint", "http://dig-dev.broadinstitute.org:8085/intel/burden/v1")
+            result?.put("burden_endpoint", serverName)
+        }
+
+        // log
+        log.info("Using rest server: " + serverName);
+        log.info("Got result: " + result);
+
         render(status: 200, contentType: "application/json") {result}
     }
 

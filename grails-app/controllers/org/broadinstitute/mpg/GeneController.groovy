@@ -369,6 +369,11 @@ class GeneController {
             //            result?.put("burden_endpoint", "http://dig-dev.broadinstitute.org:8085/intel/burden/v1")
             result?.put("burden_endpoint", serverName)
         }
+
+        // log
+        log.info("Using rest server: " + serverName);
+        log.info("Got result: " + result);
+
         // send json response back
         render(status: 200, contentType: "application/json") {result}
     }
