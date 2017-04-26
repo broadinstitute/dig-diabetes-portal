@@ -22,4 +22,4 @@
 <h4>Accessing ExAC data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.ExAC"></g:message></p>
 
-</script>
+</div>

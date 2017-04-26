@@ -2,6 +2,7 @@
 <g:render template="./data/ExAC_r03_mdv2" />
 <g:render template="./data/1kg_phase1_mdv2" />
 <g:render template="./data/ExChip_82k_mdv2"/>
+
 <g:render template="./data/ExChip_CAMP_mdv2"/>
 <g:render template="./data/ExChip_SIGMA1_mdv2"/>
 <g:render template="./data/ExChip_T2DGO_mdv2"/>
@@ -32,11 +33,9 @@
 <g:render template="./data/GWAS_Stroke_mdv2"/>
 <g:render template="./data/GWAS_VATGen_mdv2"/>
 <g:render template="./data/WGS_GoT2D_mdv2" />
-
+<g:render template="./data/WGS_GoT2Dimputed_mdv2"/>
 <g:render template="./data/WGS_WgnomAD_mdv2" />
-<g:render template="./data/ExAC_r03_mdv2" />
 
-<g:render template="./data/WGS_GoT2Dimputed_mdv2" />
 
 <style type="text/css" class="init">
 
@@ -390,11 +389,6 @@ p.dataset-name {
                 u[arr[i]] = 1;}}
         return a;}
 
-//    function sortBy(arr){
-//        //sort by sortorder if different sortORder else sort alphabetically
-//
-//    }
-
     var phenotypeGroupNameMap = {};
     var uniqueNames = [];
     function getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray){
@@ -489,15 +483,6 @@ p.dataset-name {
                                 phenotypeDatasetsMap[nk.name].push(key);}
                             else{
                                 phenotypeDatasetsMap[nk.name] = [key];}})}
-
-                //sorting function will come here
-
-                //console.log(sortOrderNameMap);
-
-                //console.log(storedJsonArray[0]);
-
-
-
 
                 renderFilteredData();
                 if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){

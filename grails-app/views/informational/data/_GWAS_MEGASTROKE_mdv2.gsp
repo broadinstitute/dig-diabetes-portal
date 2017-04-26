@@ -10,10 +10,10 @@
         </ul>
     </ul>
 
-    <h4>Data Set Subjects</h4>
+    <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Ethnicity</th><th>Study name</th><th>PI</th><th>Cases - all stroke</th><th>Cases - Ischemic stroke</th><th>Cases - LAS</th><th>Cases - CE</th><th>Cases - SVD</th><th>Controls_IS</th></tr>
+        <tr><th>Ancestry</th><th>Study name</th><th>PI</th><th>Cases - all stroke</th><th>Cases - Ischemic stroke</th><th>Cases - LAS</th><th>Cases - CE</th><th>Cases - SVD</th><th>Controls_IS</th></tr>
         <tr><td>European</td><td>DECODE</td><td>Kari Stefansson</td><td>5520</td><td>4483</td><td>512</td><td>1346</td><td>615</td><td>255213</td></tr>
         <tr><td>European</td><td>SIFAP</td><td>Arndt Rolfs</td><td>981</td><td>981</td><td>184</td><td>170</td><td>104</td><td>1824</td></tr>
         <tr><td>European</td><td>CHARGE</td><td>Stephanie Debette / Sudha Seshadri</td><td>4348</td><td>3028</td><td></td><td>602</td><td></td><td>84961</td></tr>
@@ -37,12 +37,12 @@
         <tr><td>Asian</td><td>RACE2</td><td>Danish Saleheen</td><td>1167</td><td>1167</td><td>155</td><td>193</td><td>122</td><td>4035</td></tr>
         <tr><td>Asian</td><td>INTERSTROKE asian</td><td>Guillaume Pare</td><td>365</td><td>222</td><td>34</td><td>31</td><td>134</td><td>333</td></tr>
         <tr><td>Asian</td><td>SDS</td><td>Dharambir Sanghera</td><td>52</td><td>52</td><td></td><td></td><td></td><td>1514</td></tr>
-        <tr><td>African Americans</td><td>COMPASS</td><td>Myriam Fornage</td><td>5541</td><td>5541</td><td></td><td></td><td></td><td>15154</td></tr>
-        <tr><td>African Americans</td><td>SLESS</td><td>Hugh Markus</td><td></td><td></td><td>102</td><td>173</td><td>271</td><td>868</td></tr>
-        <tr><td>African Americans</td><td>SIGN group3 african</td><td>Jonathan Rosand / Steven Kittner</td><td></td><td></td><td>23</td><td>77</td><td>78</td><td>361</td></tr>
-        <tr><td>African Americans</td><td>SIGN group4 african</td><td>Jonathan Rosand / Steven Kittner</td><td></td><td></td><td>102</td><td>118</td><td>301</td><td>2022</td></tr>
-        <tr><td>African Americans</td><td>INTERSTROKE african</td><td>Guillaume Pare</td><td>278</td><td>185</td><td>32</td><td>46</td><td>44</td><td>231</td></tr>
-        <tr><td>Latin Americans</td><td>INTERSTROKE latin</td><td>Guillaume Pare</td><td>865</td><td>555</td><td>41</td><td>99</td><td>86</td><td>692</td></tr>
+        <tr><td>African American</td><td>COMPASS</td><td>Myriam Fornage</td><td>5541</td><td>5541</td><td></td><td></td><td></td><td>15154</td></tr>
+        <tr><td>African American</td><td>SLESS</td><td>Hugh Markus</td><td></td><td></td><td>102</td><td>173</td><td>271</td><td>868</td></tr>
+        <tr><td>African American</td><td>SIGN group3 african</td><td>Jonathan Rosand / Steven Kittner</td><td></td><td></td><td>23</td><td>77</td><td>78</td><td>361</td></tr>
+        <tr><td>African American</td><td>SIGN group4 african</td><td>Jonathan Rosand / Steven Kittner</td><td></td><td></td><td>102</td><td>118</td><td>301</td><td>2022</td></tr>
+        <tr><td>African American</td><td>INTERSTROKE african</td><td>Guillaume Pare</td><td>278</td><td>185</td><td>32</td><td>46</td><td>44</td><td>231</td></tr>
+        <tr><td>Latin American</td><td>INTERSTROKE latin</td><td>Guillaume Pare</td><td>865</td><td>555</td><td>41</td><td>99</td><td>86</td><td>692</td></tr>
 
 
     </table>

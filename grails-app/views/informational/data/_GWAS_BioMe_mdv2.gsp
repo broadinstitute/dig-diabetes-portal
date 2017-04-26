@@ -39,7 +39,7 @@
     <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
         <tr><td>2,293</td><td>6,880</td><td><a onclick="showSection(event)">The Charles Bronfman Institute for Personalized Medicine BioMe Biobank</a>
 

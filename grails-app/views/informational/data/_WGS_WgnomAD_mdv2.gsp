@@ -4,6 +4,7 @@
 
     <p>Download URL: <a href="http://gnomad.broadinstitute.org/downloads" target="_blank">http://gnomad.broadinstitute.org/downloads</a><br/>
         Download date: 04/01/2017<br/>
+        Version: 2.0<br/>
 
         <h4>Publications</h4>
 

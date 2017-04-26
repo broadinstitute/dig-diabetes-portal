@@ -98,6 +98,12 @@
             $(".media").find("iframe").attr("src", "${links.GeneticsGuide}");
 
         });
+
+        $("#PhenotypeGuidePdf").click(function () {
+            $(".media").attr("href", "${links.PhenotypeGuide}");
+            $(".media").find("iframe").attr("src", "${links.PhenotypeGuide}");
+
+        });
     });
 
     function setPdfViewer() {
@@ -126,6 +132,8 @@
                     code="portal.variantResultsTableGuide.title"/></a></li>
             <li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message
                     code="portal.GeneticsGuide.title"/></a></li>
+            <li><a id="PhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.PhenotypeGuide.title"/></a></li>
         </ul>
 
 

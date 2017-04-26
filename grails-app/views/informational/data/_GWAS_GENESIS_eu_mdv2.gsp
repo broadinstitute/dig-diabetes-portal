@@ -47,7 +47,7 @@
     <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-    <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+    <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
         <tr><td>0</td><td>1,004</td><td><a
                 onclick="showSection(event)">RISC (Relationship between Insulin Sensitivity and Cardiovascular disease risk)</a>
 

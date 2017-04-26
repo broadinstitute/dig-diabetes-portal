@@ -4,7 +4,7 @@
     <p>Publications: <a href="https://s3.amazonaws.com/broad-portal-resources/CADISP_publications.pdf" target="_blank">Download list of CADISP publications</a>
 
         </p>
-        <h6 style="color:#ccc;">Data set phenotypes</h6>
+        <h4>Dataset phenotypes</h4>
 <ul>
 <li>Cardioembolic stroke</li>
     <li>Ischemic stroke</li>
@@ -14,10 +14,10 @@
     <li>Other undetermined</li>
 </ul>
 
-<h4>Data Set Subjects</h4>
+<h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
     <tr><td>555</td><td>0</td><td><a onclick="showSection(event)">CADISP</a>
     <div style="display: none;" class="cohortDetail">

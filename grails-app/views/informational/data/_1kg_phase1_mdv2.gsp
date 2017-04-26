@@ -18,7 +18,7 @@
     <h4>Dataset subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
-    <tr><th>Number of subjects</th><th>Cohort</th><th>Ethnicity</th></tr>
+    <tr><th>Number of subjects</th><th>Cohort</th><th>Ancestry</th></tr>
    
  <tr><td>246</td><td>1000 Genomes: African American
 

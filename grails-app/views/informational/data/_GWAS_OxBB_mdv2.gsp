@@ -27,7 +27,7 @@
     <h4>Data Set Subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
         <tr><td>0</td><td>4,522</td><td><a onclick="showSection(event)">Oxford BioBank</a>
 

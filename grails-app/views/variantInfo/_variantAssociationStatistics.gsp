@@ -42,6 +42,9 @@
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
     <h5><g:message code="variant.info.stroke.associations.description"/></h5>
     </g:if>
+    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+        <h5><g:message code="variant.info.mi.associations.description"/></h5>
+    </g:elseif>
     <g:else>
         <h5><g:message code="variant.info.associations.description"/></h5>
     </g:else>

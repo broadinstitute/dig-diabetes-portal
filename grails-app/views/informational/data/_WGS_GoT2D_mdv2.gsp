@@ -15,7 +15,7 @@
     <h4>Dataset subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
         <tr><td>493</td><td>486</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
             <div style="display: none;" class="cohortDetail">
@@ -120,4 +120,4 @@
 <p><g:message code="informational.data.accessing.GoT2DWGS"></g:message></p>
 
 
-</div>
+</script>

@@ -25,7 +25,8 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title"><g:message code="variantSearch.results.modal.addSubPheno" /></h4>
-                <p><g:message code="variantSearch.results.modal.addSubPheno.subtitle" /></p>
+<g:if test="${g.portalTypeString()?.equals('t2d')}"><p><g:message code="variantSearch.results.modal.addSubPheno.t2dsubtitle" /></p></g:if>
+                <g:else><p><g:message code="variantSearch.results.modal.addSubPheno.subtitle" /></p></g:else>
             </div>
             <div class="modal-body">
                 <div>

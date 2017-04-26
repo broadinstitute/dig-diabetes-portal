@@ -1,9 +1,10 @@
-<script class="panel-body" id="ExSeq_EgnomAD_mdv2_script" type="x-tmpl-mustache">
+<script class="panel-body" id="ExSeq_EgnomAD_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Dataset</h4>
 
     <p>Download URL: <a href="http://gnomad.broadinstitute.org/downloads" target="_blank">http://gnomad.broadinstitute.org/downloads</a><br/>
         Download date: 04/01/2017<br/>
+        Version: 2.0<br/>
 
         <h4>Publications</h4>
 

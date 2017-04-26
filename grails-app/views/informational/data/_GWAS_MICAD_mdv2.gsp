@@ -7,17 +7,17 @@
 
 <p></p>
 
-<h4>Data set phenotypes</h4>
+<h4>Dataset phenotypes</h4>
 
 <ul>
 
     <li><g:message code="informational.shared.traits.hypertension"></g:message></li>
 </ul>
 
-<h4>Data Set Subjects</h4>
+<h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-    <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+    <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
     <tr><td>0</td><td>4,522</td><td><a onclick="showSection(event)">Oxford BioBank</a>
 

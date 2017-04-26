@@ -1,64 +1,35 @@
 <script class="panel-body" id="GWAS_SIGMA1_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
+    <h4>Publications</h4>
 
-    <p>Publication: <div class="paper">
+                      <p><div class="paper">
+<g:message code="informational.shared.publications.SIGMA_2014_Nature"></g:message><br>
+<g:message code="informational.shared.publications.SIGMA_2014_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.SIGMA_2014_Nature.citation"></g:message> </div>
+</div></p>
 
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/24390345" target="_blank">
+<p><div class="paper">
+    <g:message code="informational.shared.publications.SIGMA_2014_JAMA"></g:message><br>
+    <g:message code="informational.shared.publications.SIGMA_2014_JAMA.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.SIGMA_2014_JAMA.citation"></g:message> </div>
+</div></p>
 
-            Sequence variants in SLC16A11 are a common risk factor for type 2 diabetes in Mexico.</a> <br/>
+<p><div class="paper">
+    <g:message code="informational.shared.publications.Majithia_2014_PNAS"></g:message><br>
+    <g:message code="informational.shared.publications.Majithia_2014_PNAS.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Majithia_2014_PNAS.citation"></g:message> </div>
+</div></p>
 
-        SIGMA Type 2 Diabetes Consortium, Williams AL, Jacobs SB, Moreno-Macías H,
-Huerta-Chagoya A, Churchhouse C, Márquez-Luna C, García-Ortíz H, Gómez-Vázquez
-MJ, Burtt NP, Aguilar-Salinas CA, González-Villalpando C, Florez JC, Orozco L,
-Haiman CA, Tusié-Luna T, Altshuler D.
 
-        <div class="citation">Nature. 2014 Feb 6;506(7486):97-101. doi: 10.1038/nature12828.</div>
-
-        </div>
-
-    Publication: <div class="paper">
-
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/24915262" target="_blank">
-
-            Association of a low-frequency variant in HNF1A with type 2 diabetes in a Latino population.</a> <br/>
-
-        SIGMA Type 2 Diabetes Consortium, Estrada K, Aukrust I, Bjørkhaug L, Burtt NP,
-Mercader JM, García-Ortiz H, Huerta-Chagoya A, Moreno-Macías H, Walford G,
-Flannick J, Williams AL, Gómez-Vázquez MJ, Fernandez-Lopez JC, Martínez-Hernández
-A, Jiménez-Morales S, Centeno-Cruz F, Mendoza-Caamal E, Revilla-Monsalve C,
-Islas-Andrade S, Córdova EJ, Soberón X, González-Villalpando ME, Henderson E,
-Wilkens LR, Le Marchand L, Arellano-Campos O, Ordóñez-Sánchez ML,
-Rodríguez-Torres M, Rodríguez-Guillén R, Riba L, Najmi LA, Jacobs SB, Fennell T, 
-Gabriel S, Fontanillas P, Hanis CL, Lehman DM, Jenkinson CP, Abboud HE, Bell GI, 
-Cortes ML, Boehnke M, González-Villalpando C, Orozco L, Haiman CA, Tusié-Luna T, 
-Aguilar-Salinas CA, Altshuler D, Njølstad PR, Florez JC, MacArthur DG.
-
-        <div class="citation">JAMA. 2014 Jun 11;311(22):2305-14. doi: 10.1001/jama.2014.6511.</div>
-
-        </div>
-
-    Publication: <div class="paper">
-
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/25157153" target="_blank">
-
-            Rare variants in PPARG with decreased activity in adipocyte differentiation are associated with increased risk of type 2 diabetes.</a> <br/>
-
-        Majithia AR, Flannick J, Shahinian P, Guo M, Bray MA, Fontanillas P, Gabriel
-SB; GoT2D Consortium; NHGRI JHS/FHS Allelic Spectrum Project; SIGMA T2D
-Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
-
-        <div class="citation">Proc Natl Acad Sci U S A. 2014 Sep 9;111(36):13127-32. doi: 10.1073/pnas.1410428111.</div>
-
-        </div></p>
-        <h6 style="color:#ccc;">Data set phenotypes</h6>
+        <h4>Dataset phenotypes</h4>
 <ul>
-<li>Type 2 diabetes</li>
+<li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
 
-<h4>Data Set Subjects</h4>
+<h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
     <tr><td>815</td><td>1138</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
     <div style="display: none;" class="cohortDetail">
@@ -149,11 +120,11 @@ Consortium; T2D-GENES Consortium, Rosen ED, Altshuler D.
 <tr><td>Total: 3,848</td><td>Total: 4,366</td><td></td><td></td></tr>
 </table>
 
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h4>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
     </small></h4>
 
-    <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
+    <p><g:message code="informational.data.project.SIGMA"></g:message></p>
 
 
 </script>
