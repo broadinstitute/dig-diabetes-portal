@@ -319,17 +319,30 @@ p.dataset-name {
     var phenotypeDatasetsMap = {};
     var phenotypeLevel2holder = {};
     var datatype = [];
+    var sort_order = "";
 
 
     function renderFilteredData(selectedLevel2Phenotype){
         if(typeof selectedLevel2Phenotype !== 'undefined'){
            var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                 return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
-            jsonHolder["parents"] = filteredjsonArray.sort();
+            jsonHolder["parents"] = filteredjsonArray;
             var templatef = $("#metaData2")[0].innerHTML;
             var dynamic_htmlf = Mustache.to_html(templatef,jsonHolder);
             $("#metaDataDisplay").empty().append(dynamic_htmlf);}
         else{
+            //console.log(sort_order + "sort inside render");
+            storedJsonArray.sort(
+                    function(x,y){
+                        //console.log(y);
+                        //console.log(x.sortOrder);
+                        console.log(y.sortOrder);
+                        if(x.sortOrder > y.sortOrder){
+                            return y;
+                        }
+                        return x;
+                    }
+            )
             jsonHolder["parents"] = storedJsonArray.sort();
             var template = $("#metaData2")[0].innerHTML;
             var dynamic_html = Mustache.to_html(template,jsonHolder);
@@ -355,11 +368,17 @@ p.dataset-name {
         _.forEach(allDatatypes, function(k,v){
             $(k).css("background-color", "#eee");
             $(k).css("color", "#000000");
+//            if($(k).text() == "Show all"){
+//                $(k).css("background-color", "#39f");
+//                $(k).css("color", "#ffffff");
+////                $('tr.phenotype-level2-row').empty();
+////                displaySelectedTechnology(selectedtech);
+//            }
             if($(k).text() == selectedtech){
                 //console.log("found" + $(k).text());
                 $(k).css("background-color", "#39f");
                 $(k).css("color", "#ffffff");
-                //$('tr.phenotype-level2-row').empty();
+                $('tr.phenotype-level2-row').empty();
                 displaySelectedTechnology(selectedtech);}
             })}
 
@@ -370,6 +389,11 @@ p.dataset-name {
                 a.push(arr[i]);
                 u[arr[i]] = 1;}}
         return a;}
+
+//    function sortBy(arr){
+//        //sort by sortorder if different sortORder else sort alphabetically
+//
+//    }
 
     var phenotypeGroupNameMap = {};
     var uniqueNames = [];
@@ -385,8 +409,10 @@ p.dataset-name {
                     phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
         return phenotypeGroupNameMap;}
 
+
     function displaySelectedTechnology(filterDatatype) {
-        if(filterDatatype=="Show all"){var selectedTech="";}
+        var selectedTech="";
+        if(filterDatatype=="Show all"){selectedTech="";}
         else if(filterDatatype=="Exome sequencing"){selectedTech="ExSeq";}
         else if(filterDatatype=="Whole genome sequencing"){selectedTech="WGS";}
         else if(filterDatatype=="GWAS"){selectedTech="GWAS";}
@@ -410,11 +436,16 @@ p.dataset-name {
                 phenotypeDatasetsMap = {};
                 var allPhenotypeArrayofArray = [];
                 var phenotypeGroupUniqueNameMap = {};
-                var datatypeFilter = [];
-                var datatypeFilterHolder = {};
+                //var datatypeFilter = [];
+                //var datatypeFilterHolder = {};
+                var sortOrderNameMap = {};
                 _.forEach(data.children, function (each_key,val) {
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
+                        sort_order = each_key.sortOrder;
+                        sortOrderNameMap[each_key.name] = sort_order;
+                        //console.log(sort_order + " " + each_key.name);
+
                         each_key["access"]= getAccessName(each_key.name);
                         storedJsonArray.push(each_key);
                         datasetArray.push(each_key.name);
@@ -458,6 +489,16 @@ p.dataset-name {
                                 phenotypeDatasetsMap[nk.name].push(key);}
                             else{
                                 phenotypeDatasetsMap[nk.name] = [key];}})}
+
+                //sorting function will come here
+
+                //console.log(sortOrderNameMap);
+
+                //console.log(storedJsonArray[0]);
+
+
+
+
                 renderFilteredData();
                 if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){
                     console.log("other");
@@ -553,7 +594,7 @@ p.dataset-name {
             {{#datatype}}
             <td class='datatype-option' style='width:{{size}}%' onclick='onClickdatatype("{{.}}")'>{{.}}</td>
             {{/datatype}}
-            <td class='datatype-option' style="width: 20%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
+            <td class='datatype-option' onclick='onClickdatatype("Show all")' style='width: 20%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);'>Show all</td>
           </tr>
         </tbody>
     </table>
