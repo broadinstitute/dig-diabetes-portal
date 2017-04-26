@@ -441,12 +441,14 @@ class RestServerService {
             String dataSetNameTranslated = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
             String technologyTranslated = g.message(code: 'metadata.' + "${metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId)}");
             String technologyUntranslated = metaDataService.getTechnologyPerSampleGroup(sampleGroup.systemId);
+
             List <Phenotype> phenotypeList = sampleGroup.getPhenotypes();
             ArrayList <String> phenotypeArrayList = phenotypeList.collect{return """{"name":"$it.name","group":"$it.group"}"""};
-            String jsonString = """{"name":"${dataSetName}","phenotypes":${phenotypeArrayList.toString()}, "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","col": 1""";
-            log.info(jsonString);
+            //String sort_order =
+            //String jsonString = """{"name":"${dataSetName}","phenotypes":${phenotypeArrayList.toString()}, "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","col": 1""";
+            //log.info(jsonString);
             
-            sb << """{"name":"${dataSetName}","phenotypes":${phenotypeArrayList.toString()}, "ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","technologyUntranslated":"${technologyUntranslated}","col": 1""".toString()
+            sb << """{"name":"${dataSetName}","sortOrder": ${sampleGroup.sortOrder},"phenotypes":${phenotypeArrayList.toString()},"ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","technologyUntranslated":"${technologyUntranslated}","col": 1""".toString()
         }
 
         // recurse, if necessary
