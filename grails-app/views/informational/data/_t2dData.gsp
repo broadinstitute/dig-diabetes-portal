@@ -32,10 +32,11 @@
 <g:render template="./data/GWAS_Stroke_mdv2"/>
 <g:render template="./data/GWAS_VATGen_mdv2"/>
 <g:render template="./data/WGS_GoT2D_mdv2" />
-<g:render template="./data/WGS_GoT2Dimputed_mdv2" />
+
 <g:render template="./data/WGS_WgnomAD_mdv2" />
 <g:render template="./data/ExAC_r03_mdv2" />
 
+<g:render template="./data/WGS_GoT2Dimputed_mdv2" />
 
 <style type="text/css" class="init">
 
@@ -292,34 +293,26 @@ p.dataset-name {
 </style>
 
 <script>
-//    $(document).ready(function() {
-//        var data = {
-//            dataType: "Data type:"
-//        };
-//        var template = $("#selectDataType")[0].innerHTML;
-//        var dynamic_html = Mustache.to_html(template,data);
-//        $("#DataTypeList").append(dynamic_html);
-//    })
+    $(document).ready(function(){
+        var filterDatatype = "Show all";
+        displaySelectedTechnology(filterDatatype);
+    });
 </script>
 
 <script>
     function getAccessName(dataTypeName){
         var access;
         if (dataTypeName.includes( "BioMe")){
-            access = "Early Access Phase 1";
-        }
+            access = "Early Access Phase 1";}
         else if(dataTypeName.includes('ForT2D')){
-            access = "Unpublished";
-        }
+            access = "Unpublished";}
         else if(dataTypeName.includes('CAMP')){
-            access = "Early Access Phase 2";
-        }
+            access = "Early Access Phase 2";}
         else{
-            access = "Open access";
-        }
-        return access;
-    }
+            access = "Open access";}
+        return access;}
 </script>
+
 <script>
     var jsonHolder={};
     var storedJsonArray=[];
@@ -329,31 +322,18 @@ p.dataset-name {
 
 
     function renderFilteredData(selectedLevel2Phenotype){
-
         if(typeof selectedLevel2Phenotype !== 'undefined'){
-            //console.log("I am filtering the dataset based on phenotype");
            var filteredjsonArray = $.grep(storedJsonArray, function(element) {
-                //console.log(element.name + "level2phenotype was clicked");
-                //console.log(phenotypeDatasetsMap["BMI"]);
-                return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;
-            });
-
+                return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
             jsonHolder["parents"] = filteredjsonArray.sort();
             var templatef = $("#metaData2")[0].innerHTML;
             var dynamic_htmlf = Mustache.to_html(templatef,jsonHolder);
-            $("#metaDataDisplay").empty().append(dynamic_htmlf);
-        }
+            $("#metaDataDisplay").empty().append(dynamic_htmlf);}
         else{
-            // console.log(storedJsonArray);
             jsonHolder["parents"] = storedJsonArray.sort();
             var template = $("#metaData2")[0].innerHTML;
             var dynamic_html = Mustache.to_html(template,jsonHolder);
-            $("#metaDataDisplay").empty().append(dynamic_html);
-
-        }
-
-
-    }
+            $("#metaDataDisplay").empty().append(dynamic_html);}}
 
     function onClickPhenotype(selectedLevel2Phenotype){
        // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
@@ -365,20 +345,31 @@ p.dataset-name {
                 //console.log("found" + $(k).text());
                 $(k).css("background-color", "#39f");
                 $(k).css("color", "#ffffff");
-                renderFilteredData(selectedLevel2Phenotype);
-            }
-        })
-    }
+                renderFilteredData(selectedLevel2Phenotype);}})}
+
+    function onClickdatatype(selectedtech){
+        console.log("i am clicked" + selectedtech);
+
+        // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
+        var allDatatypes = $("td.datatype-option");
+        _.forEach(allDatatypes, function(k,v){
+            $(k).css("background-color", "#eee");
+            $(k).css("color", "#000000");
+            if($(k).text() == selectedtech){
+                //console.log("found" + $(k).text());
+                $(k).css("background-color", "#39f");
+                $(k).css("color", "#ffffff");
+                //$('tr.phenotype-level2-row').empty();
+                displaySelectedTechnology(selectedtech);}
+            })}
+
     function addOnlyUniqueElements(arr) {
         var u = {}, a = [];
         for(var i = 0, l = arr.length; i < l; ++i){
             if(!u.hasOwnProperty(arr[i])) {
                 a.push(arr[i]);
-                u[arr[i]] = 1;
-            }
-        }
-        return a;
-    }
+                u[arr[i]] = 1;}}
+        return a;}
 
     var phenotypeGroupNameMap = {};
     var uniqueNames = [];
@@ -391,23 +382,16 @@ p.dataset-name {
                         b.push(k2.name);
                     }
 
-                    phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);
-                })
-            })
-        })
-
-        return phenotypeGroupNameMap;
-    }
+                    phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
+        return phenotypeGroupNameMap;}
 
     function displaySelectedTechnology(filterDatatype) {
-        //console.log(filterDatatype + "filterDatatype inside displayfunctiontech call")
-        var selectedTech = "";
-        if(filterDatatype=="Show all"){selectedTech="";}
-        else if(filterDatatype=="Exome Sequencing"){selectedTech="ExSeq";}
-        else if(filterDatatype=="Whole genome Sequencing"){selectedTech="WGS";}
+        if(filterDatatype=="Show all"){var selectedTech="";}
+        else if(filterDatatype=="Exome sequencing"){selectedTech="ExSeq";}
+        else if(filterDatatype=="Whole genome sequencing"){selectedTech="WGS";}
         else if(filterDatatype=="GWAS"){selectedTech="GWAS";}
         else if(filterDatatype=="Exome chip"){selectedTech="ExChip";}
-        console.log(selectedTech + "selectedtech");
+        //console.log(selectedTech + "selectedtech");
 
             $.ajax({
                 cache: false,
@@ -426,35 +410,24 @@ p.dataset-name {
                 phenotypeDatasetsMap = {};
                 var allPhenotypeArrayofArray = [];
                 var phenotypeGroupUniqueNameMap = {};
-
-
+                var datatypeFilter = [];
+                var datatypeFilterHolder = {};
                 _.forEach(data.children, function (each_key,val) {
                     datatype.push(each_key.technology);
-                    //console.log(each_key.technology);
-                    //console.log(selectedTech);
                     if(selectedTech == "") {
-                       // console.log(each_key.technology + " " + "in the eachkey technology");
                         each_key["access"]= getAccessName(each_key.name);
-
                         storedJsonArray.push(each_key);
                         datasetArray.push(each_key.name);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
-
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
-                        //console.log(distinctPhenotypeGroups);
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
                                // console.log(phenotypeGroupArray);
-                                map[k] = k;
-                            }
-                        })
-                      //console.log(each_key.phenotypes);
+                                map[k] = k;}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        informationGspFileNames.push("#" + each_key.name + '_script');
-
-                    }
+                        informationGspFileNames.push("#" + each_key.name + '_script');}
                     else if (selectedTech == each_key.technologyUntranslated){
                         //console.log(each_key.name + "was found");
                         each_key["access"] = getAccessName(each_key.name);
@@ -464,111 +437,67 @@ p.dataset-name {
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
-                                map[k] = [1];
-                            }
-                        })
+                                map[k] = [1];}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        
-                        informationGspFileNames.push("#" + each_key.name + '_script');
-                    }
+                        informationGspFileNames.push("#" + each_key.name + '_script');}
                     else {
-                        console.log("Not found in the selected technologies" + each_key.name);
-                    }
-                });
-                //console.log(addOnlyUniqueElements(datatype));
+                        console.log("Not found in the selected technologies" + each_key.name);}});
 
+                datatypeFilter = addOnlyUniqueElements(datatype);
+                datatypeFilterHolder = {"datatype":datatypeFilter, "size":100/(datatypeFilter.length +1)};
+                var datatypeFilterTemplate = $("#datatypeFilter")[0].innerHTML;
+                var filter_dynamic_html_d = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
+                $("#datatypeFilterDisplay").empty().append(filter_dynamic_html_d);
                 for(var key in datasetPhenotypesMap){
                     c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
                            // console.log(nk.name + "-->" + key);
                             if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
                                 //console.log("hi");
-                                phenotypeDatasetsMap[nk.name].push(key);
-                            }
+                                phenotypeDatasetsMap[nk.name].push(key);}
                             else{
-                                phenotypeDatasetsMap[nk.name] = [key];
-                            }
-                        })
-                }
-                console.log(informationGspFileNames);
+                                phenotypeDatasetsMap[nk.name] = [key];}})}
                 renderFilteredData();
                 if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){
                     console.log("other");
-                    phenotypeGroupArray[0] = "None";
-//
-//                    var phenotypeGroupArrayholdert = { "groups" : phenotypeGroupArray.sort(),
-//                        "size"  : 100/(phenotypeGroupArray.length)};
-//                    // console.log(phenotypeGroupArrayholder);
-//                    var phenotypeFilterLevel1Templatet = $("#phenotypeFiltert")[0].innerHTML;
-//                    var filter_dynamic_htmlt = Mustache.to_html(phenotypeFilterLevel1Templatet,phenotypeGroupArrayholdert);
-//                    $("#phenotypeFilterLevel1Displayt").empty().append(filter_dynamic_htmlt);
-
-                }
+                    phenotypeGroupArray[0] = "None";}
                 else{
                     var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
                         "size"  : 100/(phenotypeGroupArray.length +1)};
                     // console.log(phenotypeGroupArrayholder);
                     var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
                     var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
-                    $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
-                }
-
-
+                    $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);}
                 $(".phenotype-option").click(function (event) {
                     var filterPhenotype = $(this).text();
-
                     if(filterPhenotype == "Show all"){
                         $('tr.phenotype-level2-row').empty();
-                        displaySelectedTechnology(filterDatatype);
-                    }
-                    //console.log(filterPhenotype);
-
+                        displaySelectedTechnology(filterDatatype);}
                         phenotypeLevel2holder= {"phenotype": phenotypeGroupUniqueNameMap[filterPhenotype]};
-                        //console.log(phenotypeLevel2holder);
                         $(this).parent().find("td").each(function () {
                             $(this).css({"background-color": "#eee", "color": "#000000"});
                         });
                         $(this).css({"background-color": "#39f", "color": "#ffffff"});
-
                         var phenotypeFilterLevel2Template = $("#phenotypeFilterLevel2")[0].innerHTML;
                         var filter_dynamic_html_level2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
-                        $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);
-
-
-                });
-
-                //console.log(informationGspFileNames);
+                        $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);});
                 _.forEach(informationGspFileNames, function (each_Gspfile,val){
-                    //console.log(each_Gspfile);
                     $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
-                })
+//                    try{
+//                        $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
+//                    }
+//                    catch(e if e instanceof TypeError){
+//                        console.log(e);
+//                    }
+                    })
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
-                core.errorReporter(jqXHR, exception);
-            });
-        };
+                core.errorReporter(jqXHR, exception);});};
 </script>
 
 <script>
-    $(document).ready(function(){
-        var filterDatatype = "Show all";
-        displaySelectedTechnology(filterDatatype);
-    });
-</script>
 
-<script>
-    $(document).ready(function(){
-        var filterDatatype = "Show all";
-        $(".datatype-option").click(function (event) {
-            filterDatatype = $(this).text();
-            console.log(filterDatatype);
-            $(this).parent().find("td").each(function () {
-                $(this).css({"background-color": "#eee", "color": "#000000"});
-            });
-            $(this).css({"background-color": "#39f", "color": "#ffffff"});
-            $('tr.phenotype-level2-row').empty();
-            displaySelectedTechnology(filterDatatype);});});
 </script>
 
 <script id="metaData2" type="x-tmpl-mustache">
@@ -622,9 +551,9 @@ p.dataset-name {
         <tbody>
           <tr>
             {{#datatype}}
-            <td class='datatype-option' style='width:{{size}}%'>{{.}}</td>
+            <td class='datatype-option' style='width:{{size}}%' onclick='onClickdatatype("{{.}}")'>{{.}}</td>
             {{/datatype}}
-            <td class='datatype-option' style="width: 25%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
+            <td class='datatype-option' style="width: 20%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
           </tr>
         </tbody>
     </table>
@@ -638,20 +567,7 @@ p.dataset-name {
     {{#groups}}
     <td class='phenotype-option' style='width:{{size}}%'>{{.}}</td>
     {{/groups}}
-    <td id="phenotypeShowall" class='phenotype-option' style='width:{{size}}%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);'>Show all</td>
-    </tr>
-    </tbody>
-    </table>
-</script>
-
-<script id="phenotypeFiltert" type="x-tmpl-mustache">
-  <h5>Phenotype</h5>
-  <table class="datasets-filter" style='width:100%'>
-    <tbody>
-    <tr>
-    {{#groups}}
-    <td class='phenotype-option' style='width:{{size}}%'>{{.}}</td>
-    {{/groups}}
+    <td class='phenotype-option' style='width:{{size}}%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);'>Show all</td>
     </tr>
     </tbody>
     </table>
@@ -675,18 +591,7 @@ p.dataset-name {
         <div class="datasets-filter row">
             <h4>Filter Dataset Table<small> (Click one to start)</small></h4>
         </div>
-        <h5>Data type</h5>
-        <table class="datasets-filter" style='width:100%'>
-            <tbody>
-            <tr>
-                <td class='datatype-option' style='width:20%'>Exome Sequencing</td>
-                <td class='datatype-option' style='width:20%'>Whole genome Sequencing</td>
-                <td class='datatype-option' style='width:20%'>GWAS</td>
-                <td class='datatype-option' style='width:20%'>Exome chip</td>
-                <td class='datatype-option' style="width:20%; background-color: rgb(51, 153, 255); color: rgb(255, 255, 255);">Show all</td>
-            </tr>
-            </tbody>
-        </table>
+        <div id="datatypeFilterDisplay" class="form-inline"></div>
         <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
         <div id="phenotypeFilterLevel1Displayt" class="form-inline"></div>
         <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
