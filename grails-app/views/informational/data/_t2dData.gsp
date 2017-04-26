@@ -152,7 +152,7 @@
                                 <strong>No. cases:</strong> ${g.formatNumber(number: sg[0].getCasesNumber(), format: "###,###" )},
                                 <strong>No. controls:</strong> ${g.formatNumber(number: sg[0].getControlsNumber(), format: "###,###" )},
                             </g:if>
-                            <strong>Ethnicity:</strong> ${sg[0].getAncestry()}
+                            <strong>Ancestry:</strong> ${sg[0].getAncestry()}
                         </p>
                         <h5 class="panel-title">
                             <a class="collapsed open-info" role="button" data-toggle="collapse" data-parent="#accordion" href="#${sg[0].systemId}Collapse" aria-expanded="true" aria-controls="${sg[0].systemId}Collapse">
