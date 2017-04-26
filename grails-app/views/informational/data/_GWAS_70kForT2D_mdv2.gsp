@@ -141,6 +141,9 @@
 </table>
 
 <h4>Project</h4>
+<p><img src="${resource(dir: 'images/organizations', file: 'Logo_70K_mayus_forT2D_lines-3.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+</p>
 
 <p><g:message code="informational.data.project.70KforT2D"></g:message></p>
 
