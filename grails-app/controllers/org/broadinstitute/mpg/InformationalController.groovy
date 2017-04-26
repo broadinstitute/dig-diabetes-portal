@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -23,13 +22,18 @@ class InformationalController {
         List<String> technologies = metaDataService.getTechnologyListByVersion(currentVersion)
 
         Set<Experiment> allExperiments = metaDataService.getExperimentByVersionAndTechnology("","",metaDataService.METADATA_VARIANT)
-        List versionList = []
+//        List versionList = []
+        JSONArray listOfVersionsAsJson = new JSONArray();
+
         for (Experiment experiment in allExperiments){
-            versionList << "\"${experiment.version}\""
+//            versionList << "\"${experiment.version}\""
+            listOfVersionsAsJson.put(experiment.version);
         }
-        String listOfVersions = "["+versionList.unique().join(",")+"]"
-        JsonSlurper slurper = new JsonSlurper()
-        JSONArray listOfVersionsAsJson = slurper.parseText(listOfVersions)
+
+
+//        String listOfVersions = "["+versionList.unique().join(",")+"]"
+//        JsonSlurper slurper = new JsonSlurper()
+//        JSONArray listOfVersionsAsJson = slurper.parseText(listOfVersions)
 
         technologies.each {
             allExperimentsForGivenVersion.add(metaDataService.getExperimentByVersionAndTechnology(currentVersion, it, metaDataService.METADATA_VARIANT))
