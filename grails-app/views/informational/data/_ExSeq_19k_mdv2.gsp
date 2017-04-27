@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="ExSeq_19k_mdv25_script" type="x-tmpl-mustache">
 <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.19K"></g:message></p>
 <h4>Publications</h4>
@@ -502,6 +502,6 @@
 <h4>Accessing 19K exome sequence analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.19K"></g:message></p>
 
-</div>
+</script>
 
 

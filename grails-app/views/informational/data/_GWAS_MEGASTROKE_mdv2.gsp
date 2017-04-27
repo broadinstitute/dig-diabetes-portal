@@ -1,5 +1,5 @@
 <script class="panel-body" id="GWAS_MEGASTROKE_mdv25_script" type="x-tmpl-mustache">
-    <h4>Dataset phenotypes</h4>
+    <h6 style="color:#ccc;">Data set phenotypes</h6>
     <ul>
         <li>All stroke</li>
         <ul><li>Ischemic stroke</li>

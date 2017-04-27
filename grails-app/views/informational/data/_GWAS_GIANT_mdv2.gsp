@@ -1,5 +1,5 @@
 <script class="panel-body" id="GWAS_GIANT_mdv25_script" type="x-tmpl-mustache">
-    <h4>Dataset</h4>
+    <h6 style="color:#ccc;">Data set</h6>
 
     <p>Download URL: <a href="https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files" target="_blank">https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files</a><br/>
 
@@ -33,7 +33,6 @@
     </small></h4>
 
     <p>An international collaboration that seeks to identify genetic loci that modulate human body size and shape, including height and measures of obesity.</p>
-</div>
 
 <h4>Experiment summary</h4>
 <p>

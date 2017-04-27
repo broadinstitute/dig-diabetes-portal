@@ -1,4 +1,4 @@
-<script class="panel-body" id="WGS_GoT2D_mdv25_script" type="x-tmpl-mustache">
+<script class="panel-body" id = "WGS_GoT2D_mdv25_script" type="x-tmpl-mustache">
     <h4>Publication</h4>
 
 

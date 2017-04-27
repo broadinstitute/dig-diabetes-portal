@@ -1,5 +1,5 @@
 <script class="panel-body" id="GWAS_SIGN_mdv25_script" type="x-tmpl-mustache">
-    <h4>Dataset</h4>
+    <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publications:
     <p>Meschia, James F. et al. "Stroke Genetics Network (SiGN) Study: Design and Rationale for a Genome-Wide Association Study of Ischemic Stroke Subtypes." Stroke; a journal of cerebral circulation 44.10 (2013): 2694–2702.PMC. Web. 6 Oct. 2016.</p>

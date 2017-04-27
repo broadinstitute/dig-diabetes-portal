@@ -1,5 +1,5 @@
 <script class="panel-body" id="GWAS_GERFHS_mdv25_script" type="x-tmpl-mustache">
-    <h4>Dataset</h4>
+    <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publication: <div class="paper">
 

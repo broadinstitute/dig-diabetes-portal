@@ -1,5 +1,5 @@
-<div class="panel-body" id="GWAS_PGC_mdv25_script" type="x-tmpl-mustache">
-    <h4>Dataset</h4>
+<script class="panel-body" id="GWAS_PGC_mdv25_script" type="x-tmpl-mustache">
+    <h6 style="color:#ccc;">Data set</h6>
 
     <h4>Publications</h4>
 
@@ -30,5 +30,6 @@
     </small></h4>
 
     <p><g:message code="informational.data.project.PGC"></g:message></p>
-</div>
+    <p>PGC conducts meta-analyses of genome-wide association study data, focusing on autism, attention-deficit hyperactivity disorder, bipolar disorder, major depressive disorder, and schizophrenia.</p>
+</script>
 

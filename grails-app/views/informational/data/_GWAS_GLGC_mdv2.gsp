@@ -1,5 +1,5 @@
-<div class="panel-body" id="GWAS_GLGC_mdv25_script" type="x-tmpl-mustache">
-    <h4>Dataset</h4>
+<script class="panel-body" id="GWAS_GLGC_mdv25_script" type="x-tmpl-mustache">
+    <h6 style="color:#ccc;">Data set</h6>
 
     <p>Download URL: <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/" target="_blank">http://csg.sph.umich.edu//abecasis/public/lipids2013/</a><br/>
 
@@ -38,5 +38,5 @@
 <p><g:message code="informational.data.exptsumm.GLGC"></g:message></p>
 
 
-</div>
+</script>
 

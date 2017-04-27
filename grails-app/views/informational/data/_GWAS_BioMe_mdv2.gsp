@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_BioMe_mdv25_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.data.accessphase.BioMe"></g:message></h4>
 
@@ -95,4 +95,4 @@
 
 <h4>External Links to BioMe AMP T2D GWAS data</h4>
 <p><g:message code="informational.data.external.BioMe"></g:message></p>
-</div>
+</script>
