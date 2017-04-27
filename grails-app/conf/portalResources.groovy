@@ -15,6 +15,7 @@ modules = {
         resource url: 'js/lib/datatables/buttons.print.js'
         resource url: 'js/lib/datatables/dataTables.buttons.js'
         resource url: 'js/lib/datatables/dataTables.select.js'
+        resource url: 'js/lib/dport/datatablesSorting.js'
 
         resource url: 'css/lib/datatables/buttons.dataTables.css'
         resource url: 'css/lib/datatables/jquery.dataTables.css'
@@ -60,6 +61,18 @@ modules = {
         resource url: 'js/lib/dport/manhattan.js'
         resource url: 'css/dport/manhattan.css'
     }
+    matrix {
+        dependsOn "d3tooltip"
+
+        resource url: 'js/lib/dport/matrix.js'
+        resource url: 'css/dport/matrix.css'
+    }
+    multiTrack {
+        dependsOn "core"
+
+        resource url: 'js/lib/dport/multiTrack.js'
+        resource url: 'css/dport/multiTrack.css'
+    }
     boxwhisker {
         dependsOn "d3tooltip"
 
@@ -87,18 +100,21 @@ modules = {
 
     }
     variantInfo {
-        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest"
+
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "matrix"
 
         resource url: 'css/images/controls.png'
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
         resource url: 'css/dport/variant.css'
+        resource url: 'css/dport/variantInfo.css'
+        resource url: 'css/dport/jqDataTables.css'
 
         resource url: 'js/lib/dport/geneInfo.js'
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
-
+        resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantWF {
         resource url: 'css/dport/variantWorkflow.css'

@@ -277,6 +277,8 @@ class VariantInfoController {
          dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd )
 
         if (dataJsonObject.variants) {
+            dataJsonObject['region_start'] = startPos;
+            dataJsonObject['region_end'] = endPos;
             for (Map pval in dataJsonObject.variants){
 
 //                if (pval.containsKey("Consequence")){
@@ -287,12 +289,12 @@ class VariantInfoController {
 //                    }
 //                    pval["Consequence"] = translatedConsequenceList.join(", ")
 //                }
-//                if (pval.containsKey("dataset")){
-//                    pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
-//                }
-//                if (pval.containsKey("phenotype")){
-//                    pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
-//                }
+                if (pval.containsKey("element")){
+                    pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
+                }
+                if (pval.containsKey("source")){
+                    pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
+                }
 
             }
 
