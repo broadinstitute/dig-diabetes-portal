@@ -514,12 +514,6 @@ p.dataset-name {
                         $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);});
                 _.forEach(informationGspFileNames, function (each_Gspfile,val){
                     $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
-//                    try{
-//                        $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
-//                    }
-//                    catch(e if e instanceof TypeError){
-//                        console.log(e);
-//                    }
                     })
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
