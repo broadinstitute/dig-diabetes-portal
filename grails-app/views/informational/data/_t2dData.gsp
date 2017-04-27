@@ -319,6 +319,7 @@ p.dataset-name {
     var phenotypeLevel2holder = {};
     var datatype = [];
     var sort_order = "";
+    var sortedStoredJsonArray = [];
 
 
     function renderFilteredData(selectedLevel2Phenotype){
@@ -331,21 +332,26 @@ p.dataset-name {
             $("#metaDataDisplay").empty().append(dynamic_htmlf);}
         else{
             //console.log(sort_order + "sort inside render");
-            storedJsonArray.sort(
+            sortedStoredJsonArray = storedJsonArray.sort(
                     function(x,y){
                         //console.log(y);
                         //console.log(x.sortOrder);
                         console.log(y.sortOrder);
                         if(x.sortOrder > y.sortOrder){
-                            return y;
+                            return 1;
                         }
-                        return x;
+                        else if(x.sortOrder > y.sortOrder){
+                            return -1;
+                        }
+                        return 0;
                     }
             )
-            jsonHolder["parents"] = storedJsonArray.sort();
+            jsonHolder["parents"] = sortedStoredJsonArray;
             var template = $("#metaData2")[0].innerHTML;
             var dynamic_html = Mustache.to_html(template,jsonHolder);
-            $("#metaDataDisplay").empty().append(dynamic_html);}}
+            $("#metaDataDisplay").empty().append(dynamic_html);
+        }
+    }
 
     function onClickPhenotype(selectedLevel2Phenotype){
        // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
@@ -367,18 +373,13 @@ p.dataset-name {
         _.forEach(allDatatypes, function(k,v){
             $(k).css("background-color", "#eee");
             $(k).css("color", "#000000");
-//            if($(k).text() == "Show all"){
-//                $(k).css("background-color", "#39f");
-//                $(k).css("color", "#ffffff");
-////                $('tr.phenotype-level2-row').empty();
-////                displaySelectedTechnology(selectedtech);
-//            }
+
             if($(k).text() == selectedtech){
                 //console.log("found" + $(k).text());
                 $(k).css("background-color", "#39f");
                 $(k).css("color", "#ffffff");
                 $('tr.phenotype-level2-row').empty();
-                displaySelectedTechnology(selectedtech);}
+                displaySelectedTechnology(selectedtech, true);}
             })}
 
     function addOnlyUniqueElements(arr) {
@@ -404,7 +405,7 @@ p.dataset-name {
         return phenotypeGroupNameMap;}
 
 
-    function displaySelectedTechnology(filterDatatype) {
+    function displaySelectedTechnology(filterDatatype,doNotRedraw) {
         var selectedTech="";
         if(filterDatatype=="Show all"){selectedTech="";}
         else if(filterDatatype=="Exome sequencing"){selectedTech="ExSeq";}
@@ -471,9 +472,12 @@ p.dataset-name {
 
                 datatypeFilter = addOnlyUniqueElements(datatype);
                 datatypeFilterHolder = {"datatype":datatypeFilter, "size":100/(datatypeFilter.length +1)};
-                var datatypeFilterTemplate = $("#datatypeFilter")[0].innerHTML;
-                var filter_dynamic_html_d = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
-                $("#datatypeFilterDisplay").empty().append(filter_dynamic_html_d);
+                if(doNotRedraw != true){
+                    var datatypeFilterTemplate = $("#datatypeFilter")[0].innerHTML;
+                    var filter_dynamic_html_d = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
+                    $("#datatypeFilterDisplay").empty().append(filter_dynamic_html_d);
+                }
+
                 for(var key in datasetPhenotypesMap){
                     c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
