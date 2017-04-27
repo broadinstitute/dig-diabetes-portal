@@ -28,6 +28,8 @@ var baget = baget || {};  // encapsulating variable
             container, // text for a CSS selector
             xlabelsData,// dataform = ['xlab1','xlab2'],
             ylabelsData,// dataform = ['ylab1','ylab2'],
+            xAxisLabel,// no x label by default
+            yAxisLabel,// no y label by default
             startColor = '#ffffff',
             endColor = '#3498db',
             startRegion,
@@ -112,6 +114,16 @@ var baget = baget || {};  // encapsulating variable
                 .attr("text-anchor", "end")
                 .attr("transform", "rotate(-60)");
 
+            if (typeof xAxisLabel !== 'undefined'){
+                axG.append("text")
+                    .attr("class", "label")
+                    .attr("x", width / 2)
+                    .attr("y", 90)
+                    .style("text-anchor", "middle")
+                    .style("font-weight", "bold")
+                    .text(xAxisLabel);
+            }
+
 
             // label those tissues on the y-axis
             if (typeof ylabelsData !== 'undefined'){
@@ -156,9 +168,9 @@ var baget = baget || {};  // encapsulating variable
                     .attr("class", "indexPosition");
                 indexPosition.select("#indexPosition")
                     .attr("x1", xScale(startRegion))
-                    .attr("y1", 0)
+                    .attr("y1", 0-2)
                     .attr("x2", xScale(startRegion))
-                    .attr("y2", height);
+                    .attr("y2", height+2);
                 var indexPosLabel = labels.append("text")
                     .attr("x", xScale(startRegion))
                     .attr("y", 0 - 5)

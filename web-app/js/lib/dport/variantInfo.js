@@ -1284,6 +1284,8 @@ var mpgSoftware = mpgSoftware || {};
                 .renderCellText(0)
                 .xlabelsData(xlabels)
                 .ylabelsData(ylabels)
+                .xAxisLabel('chromatin state')
+                .yAxisLabel('well shit, howdy!')
                 .startColor('#ffffff')
                 .endColor('#3498db')
                 .dataHanger("#chart1", correlationMatrix);
@@ -1310,6 +1312,7 @@ var mpgSoftware = mpgSoftware || {};
                 .endColor('#3498db')
                 .endRegion(additionalParams.regionEnd)
                 .startRegion(additionalParams.regionStart)
+                .xAxisLabel('genomic position')
                 .dataHanger("#chart2", correlationMatrix);
             d3.select("#chart2").call(multiTrack.render);
         }

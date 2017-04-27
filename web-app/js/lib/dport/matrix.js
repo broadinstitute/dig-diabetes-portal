@@ -31,6 +31,8 @@ var baget = baget || {};  // encapsulating variable
             container, // text for a CSS selector
             xlabelsData,// dataform = ['xlab1','xlab2'],
             ylabelsData,// dataform = ['ylab1','ylab2'],
+            xAxisLabel,// no x label by default
+            yAxisLabel,// no y label by default
             startColor = '#ffffff',
             endColor = '#3498db',
             widthLegend = 100,
@@ -99,30 +101,6 @@ var baget = baget || {};  // encapsulating variable
 
 
 
-
-
-
-        //  private variable
-        // var tip = d3.tip()
-        //     .attr('class', 'd3-tip scatter-tip')
-        //     .style('z-index', 51)
-        //     .offset([-10, 0])
-        //     .html(function (d) {
-        //         var textToPresent = "";
-        //         if (d) {
-        //             if ((typeof(tooltipAccessor) !== "undefined")&&
-        //                 (typeof(tooltipAccessor(d)) !== "undefined")){
-        //                 textToPresent = tooltipAccessor(d);
-        //             }  else {
-        //                 var number = parseFloat(xAxisAccessor(d));
-        //                 textToPresent = "Expected p = "+number.toPrecision(3) ;
-        //             }
-        //         }
-        //         return "<strong><span>" + textToPresent + "</span></strong> ";
-        //     });
-
-
-
         // Now walk through the DOM and create the enrichment plot
         instance.render = function (currentSelection) {
 
@@ -176,9 +154,24 @@ var baget = baget || {};  // encapsulating variable
                 .attr("width", width)
                 .attr("height", height);
 
-            var x = d3.scale.ordinal()
+            var xScale = d3.scale.ordinal()
                 .domain(d3.range(numcols))
                 .rangeBands([0, width]);
+            var axG = svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", "translate(0," + height + ")")
+                .style('stroke-width',1)
+                .call(xScale);
+            if (typeof xAxisLabel !== 'undefined'){
+                axG.append("text")
+                    .attr("class", "label")
+                    .attr("x", width / 2)
+                    .attr("y", 170)
+                    .style("text-anchor", "middle")
+                    .style("font-weight", "bold")
+                    .text(xAxisLabel);
+            }
+
 
             var y = d3.scale.ordinal()
                 .domain(d3.range(numrows))
@@ -198,17 +191,17 @@ var baget = baget || {};  // encapsulating variable
                 .data(function(d) { return d; })
                 .enter().append("g")
                 .attr("class", "cell")
-                .attr("transform", function(d, i) { return "translate(" + x(i) + ", 0)"; });
+                .attr("transform", function(d, i) { return "translate(" + xScale(i) + ", 0)"; });
 
             cell.append('rect')
-                .attr("width", x.rangeBand())
+                .attr("width", xScale.rangeBand())
                 .attr("height", y.rangeBand())
                 .style("stroke-width", 0);
 
             if (renderCellText){
                 cell.append("text")
                     .attr("dy", ".32em")
-                    .attr("x", x.rangeBand() / 2)
+                    .attr("x", xScale.rangeBand() / 2)
                     .attr("y", y.rangeBand() / 2)
                     .attr("text-anchor", "middle")
                     .style("fill", function(d, i) { return d >= maxValue/2 ? 'white' : 'black'; })
@@ -227,13 +220,13 @@ var baget = baget || {};  // encapsulating variable
                     .data(xlabelsData)
                     .enter().append("g")
                     .attr("class", "column-label")
-                    .attr("transform", function(d, i) { return "translate(" + x(i) + "," + height + ")"; });
+                    .attr("transform", function(d, i) { return "translate(" + xScale(i) + "," + height + ")"; });
 
                 columnLabels.append("line")
                     .style("stroke", "black")
                     .style("stroke-width", "1px")
-                    .attr("x1", x.rangeBand() / 2)
-                    .attr("x2", x.rangeBand() / 2)
+                    .attr("x1", xScale.rangeBand() / 2)
+                    .attr("x2", xScale.rangeBand() / 2)
                     .attr("y1", 0)
                     .attr("y2", 5);
 
