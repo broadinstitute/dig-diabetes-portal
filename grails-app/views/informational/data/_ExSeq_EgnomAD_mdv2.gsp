@@ -1,9 +1,10 @@
-<div class="panel-body">
+<script class="panel-body" id="ExSeq_EgnomAD_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Dataset</h4>
 
     <p>Download URL: <a href="http://gnomad.broadinstitute.org/downloads" target="_blank">http://gnomad.broadinstitute.org/downloads</a><br/>
         Download date: 04/01/2017<br/>
+        Version: 2.0<br/>
 
         <h4>Publications</h4>
 
@@ -23,4 +24,4 @@
 <h4>Accessing gnomAD exome sequence data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.ExAC"></g:message></p>
 
-</div>
+</script>

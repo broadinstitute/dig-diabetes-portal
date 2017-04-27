@@ -213,6 +213,8 @@
             <hr />
             <div>
                 <h2 class="dk-search-title-homepage"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
+<g:if test="${g.portalTypeString()?.equals('t2d')}"><p class="dk-footnote"><g:message code="trait.search.specifics"/>
+                <g:helpText title="pheno.help.header" placement="right" body="pheno.help.text"/></p></g:if>
                 <div class="form-inline" style="padding-top: 10px;">
                     <select name="" id="trait-input" class="form-control input-sm" style="width: 70%;">
                     </select>
@@ -288,6 +290,11 @@
                     <a href="http://www.ninds.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIND.png')}" style="width: 165px;"></a>
                 </p>
             </g:if>
+
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                <p><g:message code="about.the.mi.portal.text"/></p>
+                </g:elseif>
+
             <g:else>
                 <p><g:message code="about.the.portal.text1"/>
                     <a href="${createLink(controller:'informational', action:'dataSubmission')}"><g:message code="portal.home.collaborate"/></a>

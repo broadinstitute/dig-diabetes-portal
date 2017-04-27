@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_GERFHS_mdv25_script" type="x-tmpl-mustache">
     <h6 style="color:#ccc;">Data set</h6>
 
     <p>Publication: <div class="paper">
@@ -15,12 +15,12 @@
 
 
 
-        <h6 style="color:#ccc;">Data set phenotypes</h6>
+        <h4>Dataset phenotypes</h4>
 <ul>
 <li>phenotype</li>
 </ul>
 
-<h4>Data Set Subjects</h4>
+<h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
 <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
@@ -42,18 +42,18 @@
 </td></tr>
 
             </table>
-    </div></td><td>ethnicity</td></tr>
+    </div></td><td>Ancestry</td></tr>
 
             </table>
 
 
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h4>Project name<small><a href="" target="_blank">Learn more ></a>
     </small></h4>
 
     <p>Project description.</p>
 
 
-</div>
+</script>
 
 

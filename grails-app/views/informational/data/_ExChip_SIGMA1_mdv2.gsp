@@ -1,13 +1,14 @@
+<script class="panel-body" id="ExChip_SIGMA1_mdv25_script" type="x-tmpl-mustache">
 <h6 style="color:#ccc;">Data set phenotypes</h6>
 <ul>
-    <li>Type 2 diabetes</li>
+    <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
-<div class="panel-body">
 
-    <h4>Data Set Subjects</h4>
+
+    <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
         <tr><td>815</td><td>1138</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
 
@@ -107,3 +108,4 @@
     <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
 
 </div>
+</script>

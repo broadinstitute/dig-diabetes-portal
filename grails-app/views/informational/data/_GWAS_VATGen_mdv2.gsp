@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_VATGen_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Dataset</h4>
 
@@ -35,4 +35,4 @@
 
 <p><g:message code="informational.data.accessing.VATGen"></g:message></p>
 
-</div>
+</script>

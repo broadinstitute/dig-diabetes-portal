@@ -1,6 +1,6 @@
 
 
-<div class="panel-body">
+<script class="panel-body" id="GWAS_70kForT2D_mdv25_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.data.accessphase.70KforT2D"></g:message></h4>
 <p><g:message code="informational.data.accessphase.70KforT2Da"></g:message></p>
@@ -25,7 +25,7 @@
 <h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-    <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
+    <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
     <tr><td>556</td><td>614</td><td><a onclick="showSection(event)">Northwestern NUGENE</a>
 
@@ -143,6 +143,9 @@
 </table>
 
 <h4>Project</h4>
+<p><img src="${resource(dir: 'images/organizations', file: 'Logo_70K_mayus_forT2D_lines-3.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+</p>
 
 <p><g:message code="informational.data.project.70KforT2D"></g:message></p>
 
@@ -159,4 +162,4 @@
 
 <p><g:message code="informational.data.external.70KforT2D1"></g:message></p>
 <p><g:message code="informational.data.external.70KforT2D2"></g:message></p>
-</div>
+</script>

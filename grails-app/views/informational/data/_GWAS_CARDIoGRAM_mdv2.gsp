@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_CARDIoGRAM_mdv25_script" type="x-tmpl-mustache">
 
 <h4>Dataset</h4>
 
@@ -43,4 +43,4 @@ Download date: October 2016<br />
 
 <h4>Accessing CARDIoGRAM GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.CARDIoGRAM"></g:message></p>
-</div>
+</script>

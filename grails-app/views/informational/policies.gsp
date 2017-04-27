@@ -88,7 +88,7 @@
 
 
 
-                <g:if test="${!g.portalTypeString()?.equals('stroke')}">
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
 
                     <div class="container dk-static-content">
                         <div class="row">
@@ -234,6 +234,11 @@
 
                     </div></div></div></div>
                 </g:if>
+
+        <g:if test="${g.portalTypeString()?.equals('mi')}">
+            <g:message code="MI.policies.title" default="Policies"/>
+        </g:if>
+
 <g:else>
                 <h1><g:message code="policies.title" default="Policies"/></h1>
     <div class="row pull-left medText col-xs-12">
@@ -272,7 +277,7 @@
             <p><strong><g:message code="informational.policies.conduct.availability.header"></g:message></strong></p>
         </div>
         <div class="row pull-left medText consortium-spacing col-xs-12">
-            <p><g:message code="informational.policies.conduct.section_1"></g:message></p>
+            <p><g:message code="informational.policies.conduct.section_1a"></g:message></p>
         </div>
 
         <div class="row pull-left medText consortium-spacing col-xs-12">

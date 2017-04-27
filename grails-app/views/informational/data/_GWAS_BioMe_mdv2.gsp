@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="GWAS_BioMe_mdv25_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.data.accessphase.BioMe"></g:message></h4>
 
@@ -39,7 +39,7 @@
     <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
         <tr><td>2,293</td><td>6,880</td><td><a onclick="showSection(event)">The Charles Bronfman Institute for Personalized Medicine BioMe Biobank</a>
 
@@ -95,4 +95,4 @@
 
 <h4>External Links to BioMe AMP T2D GWAS data</h4>
 <p><g:message code="informational.data.external.BioMe"></g:message></p>
-</div>
+</script>

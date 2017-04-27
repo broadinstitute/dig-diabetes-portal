@@ -1,4 +1,4 @@
-<div class="panel-body">
+<script class="panel-body" id="WGS_GoT2Dimputed_mdv25_script" type="x-tmpl-mustache">
     <h4>Publication</h4>
 
     <p><div class="paper">
@@ -14,7 +14,7 @@
     <h4>Dataset subjects</h4>
     <table class="table table-condensed table-responsive table-striped">
 
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
         <tr><td>132</td><td>455</td><td><a
                 onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe (Affy))</a>
 
@@ -277,4 +277,4 @@
 <h4>Accessing GoT2D WGS + replication data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.GoT2DWGS_replic"></g:message></p>
 
-</div>
+</script>
