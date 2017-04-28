@@ -444,8 +444,8 @@ class RestServerService {
             //List <Phenotype> phenotypeListUntranslated
             List <Phenotype> phenotypeList = sampleGroup.getPhenotypes();
            // String fullName =  "g.message(code: 'metadata.' + $it.name)";
-            //, "fullName": g.message(code: 'metadata.' + $it.name)
-            ArrayList <String> phenotypeArrayList = phenotypeList.collect{return """{"name":"$it.name","group":"$it.group"}"""};
+            //, "fullName": "g.message(code: 'metadata.' + $it.name)"
+            ArrayList <String> phenotypeArrayList = phenotypeList.collect{return """{"name":"$it.name","group":"$it.group", "fullName": "${g.message(code: 'metadata.' + "$it.name")}"}"""};
 
             
             sb << """{"name":"${dataSetName}","sortOrder": ${sampleGroup.sortOrder},"phenotypes":${phenotypeArrayList.toString()},"ancestry":"${sampleGroup.getAncestry()}", "label": "${dataSetNameTranslated}", "descr":"${dataSetNameTranslated}<br/>Total samples: ${sampleGroup.getSubjectsNumber()}","size": ${sampleGroup.getSubjectsNumber()},"technology":"${technologyTranslated}","technologyUntranslated":"${technologyUntranslated}","col": 1""".toString()
