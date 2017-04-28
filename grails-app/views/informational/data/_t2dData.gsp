@@ -1,40 +1,40 @@
 
-<g:render template="./data/ExAC_r03_mdv2" />
-<g:render template="./data/1kg_phase1_mdv2" />
-<g:render template="./data/ExChip_82k_mdv2"/>
+<g:render template="./data/ExAC_r03" />
+<g:render template="./data/1kg_phase1" />
+<g:render template="./data/ExChip_82k"/>
 
-<g:render template="./data/ExChip_CAMP_mdv2"/>
-<g:render template="./data/ExChip_SIGMA1_mdv2"/>
-<g:render template="./data/ExChip_T2DGO_mdv2"/>
-<g:render template="./data/ExSeq_13k_mdv2"/>
-<g:render template="./data/ExSeq_17k_mdv2"/>
-<g:render template="./data/ExSeq_19k_mdv2"/>
-<g:render template="./data/ExSeq_EgnomAD_mdv2"/>
-<g:render template="./data/ExSeq_EOMI_mdv2"/>
-<g:render template="./data/GWAS_70kForT2D_mdv2"/>
-<g:render template="./data/GWAS_BioMe_mdv2"/>
-<g:render template="./data/GWAS_CADISP_mdv2"/>
-<g:render template="./data/GWAS_CARDIoGRAM_mdv2"/>
-<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea_mdv2"/>
-<g:render template="./data/GWAS_CKDGenConsortium-UACR_mdv2"/>
-<g:render template="./data/GWAS_CKDGenConsortium_mdv2"/>
-<g:render template="./data/GWAS_DIAGRAM_mdv2"/>
-<g:render template="./data/GWAS_GENESIS_eu_mdv2"/>
-<g:render template="./data/GWAS_GERFHS_mdv2"/>
-<g:render template="./data/GWAS_GIANT_mdv2"/>
-<g:render template="./data/GWAS_GLGC_mdv2"/>
-<g:render template="./data/GWAS_MAGIC_mdv2"/>
-<g:render template="./data/GWAS_MEGASTROKE_mdv2"/>
-<g:render template="./data/GWAS_MICAD_mdv2"/>
-<g:render template="./data/GWAS_OxBB_mdv2"/>
-<g:render template="./data/GWAS_PGC_mdv2"/>
-<g:render template="./data/GWAS_SIGMA1_mdv2"/>
-<g:render template="./data/GWAS_SIGN_mdv2"/>
-<g:render template="./data/GWAS_Stroke_mdv2"/>
-<g:render template="./data/GWAS_VATGen_mdv2"/>
-<g:render template="./data/WGS_GoT2D_mdv2" />
-<g:render template="./data/WGS_GoT2Dimputed_mdv2"/>
-<g:render template="./data/WGS_WgnomAD_mdv2" />
+<g:render template="./data/ExChip_CAMP"/>
+<g:render template="./data/ExChip_SIGMA1"/>
+<g:render template="./data/ExChip_T2DGO"/>
+<g:render template="./data/ExSeq_13k"/>
+<g:render template="./data/ExSeq_17k"/>
+<g:render template="./data/ExSeq_19k"/>
+<g:render template="./data/ExSeq_EgnomAD"/>
+<g:render template="./data/ExSeq_EOMI"/>
+<g:render template="./data/GWAS_70kForT2D"/>
+<g:render template="./data/GWAS_BioMe"/>
+<g:render template="./data/GWAS_CADISP"/>
+<g:render template="./data/GWAS_CARDIoGRAM"/>
+<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
+<g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
+<g:render template="./data/GWAS_CKDGenConsortium"/>
+<g:render template="./data/GWAS_DIAGRAM"/>
+<g:render template="./data/GWAS_GENESIS_eu"/>
+<g:render template="./data/GWAS_GERFHS"/>
+<g:render template="./data/GWAS_GIANT"/>
+<g:render template="./data/GWAS_GLGC"/>
+<g:render template="./data/GWAS_MAGIC"/>
+<g:render template="./data/GWAS_MEGASTROKE"/>
+<g:render template="./data/GWAS_MICAD"/>
+<g:render template="./data/GWAS_OxBB"/>
+<g:render template="./data/GWAS_PGC"/>
+<g:render template="./data/GWAS_SIGMA1"/>
+<g:render template="./data/GWAS_SIGN"/>
+<g:render template="./data/GWAS_Stroke"/>
+<g:render template="./data/GWAS_VATGen"/>
+<g:render template="./data/WGS_GoT2D" />
+<g:render template="./data/WGS_GoT2Dimputed"/>
+<g:render template="./data/WGS_WgnomAD" />
 
 
 <style type="text/css" class="init">
@@ -401,13 +401,15 @@ p.dataset-name {
         // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         var allPhenotypes = $("div.phenotype-level2-option");
         _.forEach(allPhenotypes, function(k,v){
-            $(k).css("background-color", "#eee");
-            $(k).css("color", "#000000");
+            $(k).css("background-color", "rgb(204, 238, 255)");
+            $(k).css("color", "rgb(0, 0, 0)");
             if($(k).text() == selectedLevel2Phenotype){
-                //console.log("found" + $(k).text());
-                $(k).css("background-color", "#39f");
-                $(k).css("color", "#ffffff");
-                renderFilteredData(selectedLevel2Phenotype);}})}
+                $(k).css("background-color", "rgb(51, 153, 255)");
+                $(k).css("color", "rgb(255, 255, 255)");
+                renderFilteredData(selectedLevel2Phenotype);
+            }
+        })
+    }
 
     function addOnlyUniqueElements(arr) {
         var u = {}, a = [];
@@ -425,9 +427,8 @@ p.dataset-name {
             _.forEach(allPhenotypeArrayofArray, function(k1,v1){
                 _.forEach(k1, function(k2,v2){
                     if(k==k2.group){
-                        b.push(k2.name);
+                        b.push(k2.fullName);
                     }
-
                     phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
         return phenotypeGroupNameMap;}
 
@@ -454,19 +455,22 @@ p.dataset-name {
                 storedJsonArray = [];
                 phenotypeDatasetsMap = {};
                 var allPhenotypeArrayofArray = [];
+                var regexStr = "rrr";
 
                 //var datatypeFilter = [];
                 //var datatypeFilterHolder = {};
                 var sortOrderNameMap = {};
                 _.forEach(data.children, function (each_key,val) {
+
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
-                        sort_order = each_key.sortOrder;
-                        sortOrderNameMap[each_key.name] = sort_order;
-                        //console.log(sort_order + " " + each_key.name);
-
+                        regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
+//                        sort_order = each_key.sortOrder;
+//                        sortOrderNameMap[each_key.name] = sort_order;
                         each_key["access"]= getAccessName(each_key.name);
+                        each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
+                        //storedJsonArray.push(regexStr);
                         datasetArray.push(each_key.name);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
@@ -477,11 +481,15 @@ p.dataset-name {
                                 map[k] = k;}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        informationGspFileNames.push("#" + each_key.name + '_script');}
+
+                        informationGspFileNames.push("#" + regexStr + '_script');
+                    }
                     else if (selectedTech == each_key.technologyUntranslated){
-                        //console.log(each_key.name + "was found");
+                        regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         each_key["access"] = getAccessName(each_key.name);
+                        each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
+                        //storedJsonArray.push(regexStr);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
@@ -490,10 +498,12 @@ p.dataset-name {
                                 map[k] = [1];}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        informationGspFileNames.push("#" + each_key.name + '_script');}
+                        informationGspFileNames.push("#" + regexStr + '_script');
+                    }
                     else {
-                        console.log("Not found in the selected technologies" + each_key.name);}});
-
+                        console.log("Not found in the selected technologies" + each_key.name);
+                    }
+                });
                 datatypeFilter = addOnlyUniqueElements(datatype);
                 datatypeFilterHolder = {
                                          "datatype": datatypeFilter,
@@ -508,13 +518,12 @@ p.dataset-name {
                 for(var key in datasetPhenotypesMap){
                     c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
-                           // console.log(nk.name + "-->" + key);
-                            if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
-                                //console.log("hi");
-                                phenotypeDatasetsMap[nk.name].push(key);}
+                            if(phenotypeDatasetsMap.hasOwnProperty(nk.fullName)){
+                                phenotypeDatasetsMap[nk.fullName].push(key);}
                             else{
-                                phenotypeDatasetsMap[nk.name] = [key];}})}
-
+                                phenotypeDatasetsMap[nk.fullName] = [key];}
+                        })
+                }
                 renderFilteredData();
                 if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){
                     console.log("other");
