@@ -427,7 +427,6 @@ p.dataset-name {
                     if(k==k2.group){
                         b.push(k2.fullName);
                     }
-
                     phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
         return phenotypeGroupNameMap;}
 
@@ -454,19 +453,22 @@ p.dataset-name {
                 storedJsonArray = [];
                 phenotypeDatasetsMap = {};
                 var allPhenotypeArrayofArray = [];
+                var regexStr = "rrr";
 
                 //var datatypeFilter = [];
                 //var datatypeFilterHolder = {};
                 var sortOrderNameMap = {};
                 _.forEach(data.children, function (each_key,val) {
+
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
-                        sort_order = each_key.sortOrder;
-                        sortOrderNameMap[each_key.name] = sort_order;
-                        //console.log(sort_order + " " + each_key.name);
-
+                        regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
+//                        sort_order = each_key.sortOrder;
+//                        sortOrderNameMap[each_key.name] = sort_order;
                         each_key["access"]= getAccessName(each_key.name);
+                        each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
+                        //storedJsonArray.push(regexStr);
                         datasetArray.push(each_key.name);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
@@ -477,11 +479,15 @@ p.dataset-name {
                                 map[k] = k;}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        informationGspFileNames.push("#" + each_key.name + '_script');}
+
+                        informationGspFileNames.push("#" + regexStr + '_script');
+                    }
                     else if (selectedTech == each_key.technologyUntranslated){
-                        //console.log(each_key.name + "was found");
+                        regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         each_key["access"] = getAccessName(each_key.name);
+                        each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
+                        //storedJsonArray.push(regexStr);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
@@ -490,10 +496,13 @@ p.dataset-name {
                                 map[k] = [1];}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        informationGspFileNames.push("#" + each_key.name + '_script');}
-                    else {
-                        console.log("Not found in the selected technologies" + each_key.name);}});
 
+                        informationGspFileNames.push("#" + regexStr + '_script');
+                    }
+                    else {
+                        console.log("Not found in the selected technologies" + each_key.name);
+                    }
+                });
                 datatypeFilter = addOnlyUniqueElements(datatype);
                 datatypeFilterHolder = {
                                          "datatype": datatypeFilter,
@@ -508,13 +517,12 @@ p.dataset-name {
                 for(var key in datasetPhenotypesMap){
                     c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
-                           // console.log(nk.name + "-->" + key);
                             if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
-                                //console.log("hi");
                                 phenotypeDatasetsMap[nk.name].push(key);}
                             else{
-                                phenotypeDatasetsMap[nk.name] = [key];}})}
-
+                                phenotypeDatasetsMap[nk.name] = [key];}
+                        })
+                }
                 renderFilteredData();
                 if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){
                     console.log("other");
