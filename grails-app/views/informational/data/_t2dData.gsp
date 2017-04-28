@@ -1,40 +1,40 @@
 
-<g:render template="./data/ExAC_r03_mdv2" />
-<g:render template="./data/1kg_phase1_mdv2" />
-<g:render template="./data/ExChip_82k_mdv2"/>
+<g:render template="./data/ExAC_r03" />
+<g:render template="./data/1kg_phase1" />
+<g:render template="./data/ExChip_82k"/>
 
-<g:render template="./data/ExChip_CAMP_mdv2"/>
-<g:render template="./data/ExChip_SIGMA1_mdv2"/>
-<g:render template="./data/ExChip_T2DGO_mdv2"/>
-<g:render template="./data/ExSeq_13k_mdv2"/>
-<g:render template="./data/ExSeq_17k_mdv2"/>
-<g:render template="./data/ExSeq_19k_mdv2"/>
-<g:render template="./data/ExSeq_EgnomAD_mdv2"/>
-<g:render template="./data/ExSeq_EOMI_mdv2"/>
-<g:render template="./data/GWAS_70kForT2D_mdv2"/>
-<g:render template="./data/GWAS_BioMe_mdv2"/>
-<g:render template="./data/GWAS_CADISP_mdv2"/>
-<g:render template="./data/GWAS_CARDIoGRAM_mdv2"/>
-<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea_mdv2"/>
-<g:render template="./data/GWAS_CKDGenConsortium-UACR_mdv2"/>
-<g:render template="./data/GWAS_CKDGenConsortium_mdv2"/>
-<g:render template="./data/GWAS_DIAGRAM_mdv2"/>
-<g:render template="./data/GWAS_GENESIS_eu_mdv2"/>
-<g:render template="./data/GWAS_GERFHS_mdv2"/>
-<g:render template="./data/GWAS_GIANT_mdv2"/>
-<g:render template="./data/GWAS_GLGC_mdv2"/>
-<g:render template="./data/GWAS_MAGIC_mdv2"/>
-<g:render template="./data/GWAS_MEGASTROKE_mdv2"/>
-<g:render template="./data/GWAS_MICAD_mdv2"/>
-<g:render template="./data/GWAS_OxBB_mdv2"/>
-<g:render template="./data/GWAS_PGC_mdv2"/>
-<g:render template="./data/GWAS_SIGMA1_mdv2"/>
-<g:render template="./data/GWAS_SIGN_mdv2"/>
-<g:render template="./data/GWAS_Stroke_mdv2"/>
-<g:render template="./data/GWAS_VATGen_mdv2"/>
-<g:render template="./data/WGS_GoT2D_mdv2" />
-<g:render template="./data/WGS_GoT2Dimputed_mdv2"/>
-<g:render template="./data/WGS_WgnomAD_mdv2" />
+<g:render template="./data/ExChip_CAMP"/>
+<g:render template="./data/ExChip_SIGMA1"/>
+<g:render template="./data/ExChip_T2DGO"/>
+<g:render template="./data/ExSeq_13k"/>
+<g:render template="./data/ExSeq_17k"/>
+<g:render template="./data/ExSeq_19k"/>
+<g:render template="./data/ExSeq_EgnomAD"/>
+<g:render template="./data/ExSeq_EOMI"/>
+<g:render template="./data/GWAS_70kForT2D"/>
+<g:render template="./data/GWAS_BioMe"/>
+<g:render template="./data/GWAS_CADISP"/>
+<g:render template="./data/GWAS_CARDIoGRAM"/>
+<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
+<g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
+<g:render template="./data/GWAS_CKDGenConsortium"/>
+<g:render template="./data/GWAS_DIAGRAM"/>
+<g:render template="./data/GWAS_GENESIS_eu"/>
+<g:render template="./data/GWAS_GERFHS"/>
+<g:render template="./data/GWAS_GIANT"/>
+<g:render template="./data/GWAS_GLGC"/>
+<g:render template="./data/GWAS_MAGIC"/>
+<g:render template="./data/GWAS_MEGASTROKE"/>
+<g:render template="./data/GWAS_MICAD"/>
+<g:render template="./data/GWAS_OxBB"/>
+<g:render template="./data/GWAS_PGC"/>
+<g:render template="./data/GWAS_SIGMA1"/>
+<g:render template="./data/GWAS_SIGN"/>
+<g:render template="./data/GWAS_Stroke"/>
+<g:render template="./data/GWAS_VATGen"/>
+<g:render template="./data/WGS_GoT2D" />
+<g:render template="./data/WGS_GoT2Dimputed"/>
+<g:render template="./data/WGS_WgnomAD" />
 
 
 <style type="text/css" class="init">
@@ -425,7 +425,7 @@ p.dataset-name {
             _.forEach(allPhenotypeArrayofArray, function(k1,v1){
                 _.forEach(k1, function(k2,v2){
                     if(k==k2.group){
-                        b.push(k2.name);
+                        b.push(k2.fullName);
                     }
 
                     phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
