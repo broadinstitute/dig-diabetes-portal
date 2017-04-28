@@ -401,13 +401,15 @@ p.dataset-name {
         // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         var allPhenotypes = $("div.phenotype-level2-option");
         _.forEach(allPhenotypes, function(k,v){
-            $(k).css("background-color", "#eee");
-            $(k).css("color", "#000000");
+            $(k).css("background-color", "rgb(204, 238, 255)");
+            $(k).css("color", "rgb(0, 0, 0)");
             if($(k).text() == selectedLevel2Phenotype){
-                //console.log("found" + $(k).text());
-                $(k).css("background-color", "#39f");
-                $(k).css("color", "#ffffff");
-                renderFilteredData(selectedLevel2Phenotype);}})}
+                $(k).css("background-color", "rgb(51, 153, 255)");
+                $(k).css("color", "rgb(255, 255, 255)");
+                renderFilteredData(selectedLevel2Phenotype);
+            }
+        })
+    }
 
     function addOnlyUniqueElements(arr) {
         var u = {}, a = [];
@@ -496,7 +498,6 @@ p.dataset-name {
                                 map[k] = [1];}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-
                         informationGspFileNames.push("#" + regexStr + '_script');
                     }
                     else {
@@ -517,10 +518,10 @@ p.dataset-name {
                 for(var key in datasetPhenotypesMap){
                     c = []
                         _.forEach(datasetPhenotypesMap[key], function(nk,nv){
-                            if(phenotypeDatasetsMap.hasOwnProperty(nk.name)){
-                                phenotypeDatasetsMap[nk.name].push(key);}
+                            if(phenotypeDatasetsMap.hasOwnProperty(nk.fullName)){
+                                phenotypeDatasetsMap[nk.fullName].push(key);}
                             else{
-                                phenotypeDatasetsMap[nk.name] = [key];}
+                                phenotypeDatasetsMap[nk.fullName] = [key];}
                         })
                 }
                 renderFilteredData();
