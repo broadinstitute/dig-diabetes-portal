@@ -327,7 +327,19 @@ p.dataset-name {
         if(typeof selectedLevel2Phenotype !== 'undefined'){
            var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                 return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
-            jsonHolder["parents"] = filteredjsonArray;
+            sortedStoredJsonArray = filteredjsonArray.sort(
+                    function(x,y){
+                        console.log(y.sortOrder);
+                        if(x.sortOrder > y.sortOrder){
+                            return 1;
+                        }
+                        else if(x.sortOrder > y.sortOrder){
+                            return -1;
+                        }
+                        return 0;
+                    }
+            )
+            jsonHolder["parents"] = sortedStoredJsonArray;
             var templatef = $("#metaData2")[0].innerHTML;
             var dynamic_htmlf = Mustache.to_html(templatef,jsonHolder);
             $("#metaDataDisplay").empty().append(dynamic_htmlf);}
@@ -351,6 +363,19 @@ p.dataset-name {
         }
     }
 
+    function onClickdatatype(selectedtech){
+        console.log("i am clicked" + selectedtech);
+        var allDatatypes = $("div.datatype-option");
+        _.forEach(allDatatypes, function(k,v){
+            $(k).css("background-color", "rgb(255, 255, 204)");
+            $(k).css("color", "rgb(0, 0, 0)");
+            if($(k).text() == selectedtech){
+                //console.log("found" + $(k).text());
+                $(k).css("background-color", "rgb(255, 153, 68)");
+                $(k).css("color", "rgb(255, 255, 255)");
+                $('div.phenotype-level2-row').empty();
+                displaySelectedTechnology(selectedtech, true);}
+            })}
     function onClickPhenotypeGroup(selectedPhenotypegroup){
         // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         console.log(selectedPhenotypegroup);
@@ -359,23 +384,21 @@ p.dataset-name {
         var allPhenotypeGroups = $("div.phenotype-option");
 
         _.forEach(allPhenotypeGroups, function(k,v){
-            $(k).css("background-color", "#eee");
-            $(k).css("color", "#000000");
+            $(k).css("background-color", "rgb(204, 238, 255)");
+            $(k).css("color", "rgb(0, 0, 0)");
             if($(k).text() == selectedPhenotypegroup){
-                $(k).css("background-color", "#39f");
-                $(k).css("color", "#ffffff");
-                }
-            //displaySelectedTechnology("Show all");
-
+                $(k).css("background-color", "rgb(51, 153, 255)");
+                $(k).css("color", "rgb(255, 255, 255)");
+            }
             phenotypeLevel2holder= {"phenotype": phenotypeGroupUniqueNameMap[selectedPhenotypegroup]};
             var phenotypeFilterLevel2Template = $("#phenotypeFilterLevel2")[0].innerHTML;
             var filter_dynamic_html_level2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
             $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);
         });
-   }
+    }
 
     function onClickPhenotypelevel2(selectedLevel2Phenotype){
-       // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
+        // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         var allPhenotypes = $("div.phenotype-level2-option");
         _.forEach(allPhenotypes, function(k,v){
             $(k).css("background-color", "#eee");
@@ -385,20 +408,6 @@ p.dataset-name {
                 $(k).css("background-color", "#39f");
                 $(k).css("color", "#ffffff");
                 renderFilteredData(selectedLevel2Phenotype);}})}
-
-    function onClickdatatype(selectedtech){
-        console.log("i am clicked" + selectedtech);
-        var allDatatypes = $("div.datatype-option");
-        _.forEach(allDatatypes, function(k,v){
-            $(k).css("background-color", "#eee");
-            $(k).css("color", "#000000");
-            if($(k).text() == selectedtech){
-                //console.log("found" + $(k).text());
-                $(k).css("background-color", "#39f");
-                $(k).css("color", "#ffffff");
-                $('div.phenotype-level2-row').empty();
-                displaySelectedTechnology(selectedtech, true);}
-            })}
 
     function addOnlyUniqueElements(arr) {
         var u = {}, a = [];
@@ -598,9 +607,9 @@ p.dataset-name {
 
 <!--this panel would display only when phenotype Filter is clicked -->
 <script id="phenotypeFilterLevel2" type="x-tmpl-mustache">
-  <div class='' style='display:table-row'>
+  <div class='' style='display:table-row '>
 
-    <div class="phenotype-level2-row">
+    <div class="phenotype-level2-row" style='margin-top:10px'>
     {{#phenotype}}
     <div class='phenotype-level2-option' style='width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' onclick='onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
     {{/phenotype}}
