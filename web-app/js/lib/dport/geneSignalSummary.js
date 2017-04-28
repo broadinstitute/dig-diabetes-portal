@@ -14,10 +14,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 var columnToConsider;
                 if (settings.sInstance==="highImpactTemplateHolder"){
                     filterName = 'div.dsFilterHighImpact';
-                    columnToConsider = 5;
                 } else if (settings.sInstance==="commonVariantsLocationHolder") {
                     filterName = 'div.dsFilterCommon';
-                    columnToConsider = 4;
                 }
                 var filter = $(filterName).attr('dsfilter');
                 if ((typeof filter === 'undefined')||
@@ -173,24 +171,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "bAutoWidth" : false,
                 "order": [[ 1, "asc" ]],
                 "columnDefs":columnDefsForDatatable,
-
-//                    [
-//                     { "name": "VAR_ID",   "targets": [0], "type":"allAnchor", "title":"Variant ID"
-//                       , "sWidth": "20%"
-//                     },
-//                    { "name": "DBSNP_ID",   "targets": [1], "title":"dbSNP ID"
-//                        ,"sWidth": "15%"
-//                    },
-//                    { "name": "PVALUE",   "targets": [2], "title":"p-Value"
-//                       , "sWidth": "15%"
-//                    },
-//                    { "name": "EFFECT",   "targets": [3], "title":"Effect"
-//                        ,"sWidth": "15%"
-//                    },
-//                    { "name": "DS", class:"commonDataSet",  "targets": [4], "title":"Data set"
-//                        ,"sWidth": "35%"
-//                    }
-//                ],
                 "order": [[ 2, "asc" ]],
                 "scrollY":        "300px",
                 "scrollX": "100%",
@@ -214,17 +194,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         );
         var distinctDataSets = [];
         _.forEach(cvar,function(variantRec){
-//            var arrayOfRows = [];
-//            var variantID = variantRec.id;
-//            arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantID+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantID+'</a>');
-//            var DBSNP_ID = (variantRec.rsId)?variantRec.rsId:'';
-//            arrayOfRows.push(DBSNP_ID);
-//            arrayOfRows.push(variantRec.P_VALUE);
-//            arrayOfRows.push(variantRec.BETA);
-//            arrayOfRows.push('<span class="'+variantRec.ds+'">'+variantRec.dsr+'</span>');
-//            if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
-//                distinctDataSets.push(variantRec.dsr);
-//            }
             commonTable.dataTable().fnAddData( buildARowOfTheDatatable(requestedProperties,variantInfoUrl,distinctDataSets,variantRec) );
         });
 
@@ -286,18 +255,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "bAutoWidth" : false,
                 "order": [[ 1, "asc" ]],
                 "columnDefs": columnDefsForDatatable,
-//                  [  { "name": "VAR_ID",   "targets": [0], "type":"allAnchor", "title":"Variant ID",
-//                        "sWidth": "16%" },
-//                    { "name": "DBSNP_ID",   "targets": [1], "title":"dbSNP ID",
-//                        "sWidth": "13%"  },
-//                    { "name": "PREDICTED",   "targets": [2], "title":"Predicted<br/>impact",
-//                        "sWidth": "13%"  },
-//                    { "name": "PVALUE",   "targets": [3], "title":"p-Value",
-//                        "sWidth": "13%"  },
-//                    { "name": "EFFECT",   "targets": [4], "title":"Effect",
-//                        "sWidth": "15%" },
-//                    { "name": "DS",   class:"highImpactDataSet",  "targets": [5], "title":"Data set",
-//                        "sWidth": "30%" }],
                 "order": [[ 3, "asc" ]],
                 "scrollY":        "300px",
                 "scrollCollapse": true,
@@ -319,19 +276,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         );
         var distinctDataSets = [];
         _.forEach(rvar,function(variantRec){
-//            var arrayOfRows = [];
-//            var variantID = variantRec.VAR_ID;
-//            arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantID+'" class="boldItlink" custag="'+variantRec.CAT+'">'+variantID+'</a>');
-//            var DBSNP_ID = (variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'';
-//            arrayOfRows.push(DBSNP_ID);
-//            arrayOfRows.push(variantRec.Consequence);
-//            arrayOfRows.push(variantRec.P_VALUE);
-//            arrayOfRows.push(variantRec.BETA);
-//            arrayOfRows.push('<span class="'+variantRec.dataset+'">'+variantRec.dsr+'</span>');
-//            if (_.find(distinctDataSets,function(o){return variantRec.dsr===o})===undefined){
-//                distinctDataSets.push(variantRec.dsr);
-//            }
-//            highImpactTable.dataTable().fnAddData( arrayOfRows );
             highImpactTable.dataTable().fnAddData( buildARowOfTheDatatable(requestedProperties,variantInfoUrl,distinctDataSets,variantRec) );
         });
         $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');

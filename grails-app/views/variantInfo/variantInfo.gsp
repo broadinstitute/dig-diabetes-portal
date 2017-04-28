@@ -36,7 +36,9 @@
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
+<style>
 
+</style>
 
 <script>
 
@@ -242,8 +244,6 @@
                     "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
                     "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     '${igvIntro}');
-
-//            setUpIgv(igvParms.locus, igvParms.server);
         } else if (e.target.id === "collapseFunctionalData") {
             $("#functionalDataTableGoesHere").DataTable().draw();
         }

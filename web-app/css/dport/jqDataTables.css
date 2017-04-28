@@ -12,10 +12,15 @@ div.dataTables_scrollHeadInner table.dataTable thead tr.niceHeaders {
     background: -moz-linear-gradient(top,  #E0F4FC, #9BC5F4); /* for firefox 3.6+ */
 }
 div.dataTables_scrollHeadInner table.dataTable thead tr.niceHeaders th {
-    padding-left: 18px;
-    background-position: center left;
+   /* padding-left: 18px;*/
+    background-position: center right;
 }
-
+#dropdownCommonVariantDsButton {
+    max-width: 150px;
+}
+#dropdownHighImpactVariantMenuButton {
+     max-width: 150px;
+ }
 td.elementHdr{
     padding: 0 0 0 10px;
 }
