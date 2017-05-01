@@ -302,11 +302,11 @@ p.dataset-name {
     function getAccessName(dataTypeName){
         var access;
         if (dataTypeName.includes( "BioMe")){
-            access = "Early Access Phase 1";}
+            access = "Early Access Phase 2";}
         else if(dataTypeName.includes('ForT2D')){
             access = "Unpublished";}
-        else if(dataTypeName.includes('CAMP')){
-            access = "Early Access Phase 2";}
+//        else if(dataTypeName.includes('CAMP')){
+//            access = "Early Access Phase 2";}
         else{
             access = "Open access";}
         return access;}
