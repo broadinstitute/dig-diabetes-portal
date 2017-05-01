@@ -76,9 +76,9 @@ a.morePhenos:hover {
 }
 .chosenPhenotype{
     font-weight: bold;
-    border: 2px solid #000000;
-    font-size:18px;
-    padding: 8px;
+    /*border: 2px solid #000000;*/
+    /*font-size:18px;*/
+    /*padding: 8px;*/
 }
 .variantTableLabels {
     font-size:16px;

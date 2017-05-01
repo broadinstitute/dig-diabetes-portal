@@ -157,10 +157,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             requestedProperties.push("dataset");
         }
         var counter = 0;
-//        var columnDefsForDatatable = _.map(requestedProperties, function (o){
-//            return { "name": o,   "targets": [counter++], "type":"allAnchor", "title":o
-//            }
-//        });
         var columnDefsForDatatable = _.map(requestedProperties, function(o){
                 return buildAHeaderForTheDatatable(o,counter++,'commonDataSet');
             }
@@ -169,7 +165,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "bDestroy": true,
                 "className": "compact",
                 "bAutoWidth" : false,
-                "order": [[ 1, "asc" ]],
                 "columnDefs":columnDefsForDatatable,
                 "order": [[ 2, "asc" ]],
                 "scrollY":        "300px",
@@ -632,6 +627,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var launchUpdateSignalSummaryBasedOnPhenotype = function (phenocode,ds,phenoName) {
         $('.phenotypeStrength').removeClass('chosenPhenotype');
         $('#'+phenocode).addClass('chosenPhenotype');
+        // $('.variantTableLabels>a[href=#commonVariantTabHolder]').text('Common variants for '+phenoName);
+        // $('.variantTableLabels>a[href=#highImpactVariantTabHolder]').text('High-impact variants for '+phenoName);
         mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
             mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,
                 preferIgv:$('input[name=genomeBrowser]:checked').val()==="2"});
@@ -653,19 +650,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var signalLevel = assessSignalSignificance(renderData);
         updateDisplayBasedOnSignificanceLevel(signalLevel,params);
         var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData);
+        var overrideClickIndex = -1;
+        var favoredPhenotype = params.favoredPhenotype;
         if (listOfInterestingPhenotypes.length > 0) {
             $('.interestingPhenotypesHolder').css('display','block');
-            var phenotypeDescriptions = '<label>Phenotypes with signals</label>'+
-
-                '<ul class="nav nav-pills">';
-            _.forEach(listOfInterestingPhenotypes, function (o) {
+            var phenotypeDescriptions = '<label>Phenotypes with signals</label><ul class="nav nav-pills">';
+            _.forEach(listOfInterestingPhenotypes, function (o,curIndex) {
                 if (o['signalStrength'] == 1) {
                     phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                 } else if (o['signalStrength'] == 2) {
                     phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                 } else if (o['signalStrength'] == 3) {
                     phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
-                }
+                    if ((typeof favoredPhenotype !== 'undefined')&&
+                        (favoredPhenotype === o['phenotype'])) {
+                        overrideClickIndex = curIndex;
+                    }                }
             });
             phenotypeDescriptions += ('<li><a href="#" class="morePhenos"  onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Additional phenotypes...</a></li>');
             phenotypeDescriptions += ('<li><a href="#" class="noMorePhenos" style="display:none" onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Collapse phenotypes without signals</a></li>');
@@ -675,7 +675,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
 
         $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
-        $('.phenotypeStrength').first().click();
+        if (overrideClickIndex !== -1){
+            $($('.phenotypeStrength')[overrideClickIndex]).click();
+        } else {
+            $('.phenotypeStrength').first().click();
+        }
+
     };
 
     var assessOneSignalsSignificance = function (v,signalCategory) {

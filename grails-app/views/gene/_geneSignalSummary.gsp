@@ -538,7 +538,8 @@ $( document ).ready(function() {
    mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
            {redLightImage:'<r:img uri="/images/redlight.png"/>',
             yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
-            greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
+            greenLightImage:'<r:img uri="/images/greenlight.png"/>',
+           favoredPhenotype:'T2D'});
     mpgSoftware.geneSignalSummaryMethods.tableInitialization();
 
 
