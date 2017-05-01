@@ -396,7 +396,7 @@ var displayBurdenVariantSelector = function (){
                  dataSet = 'ExSeq_17k_mdv25';
                 } else if (datasetFilter.substring(0,'samples_19k_'.length)==='samples_19k_'){
                  //dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
-                 dataSet = 'ExSeq_19k_mdv25';
+                 dataSet = 'ExSeq_19k_mdv27';
                 } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
                     dataSet = 'GWAS_Stroke_mdv70';
                 }else if (datasetFilter.substring(0,'samples_camp_'.length)==='samples_camp_'){
