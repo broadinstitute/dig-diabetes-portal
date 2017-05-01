@@ -1,15 +1,6 @@
-<g:if test="${g.portalTypeString()?.equals('stroke')}">
-    <div class="container-fluid dk-amp-banner" style="background-image:url('${resource(dir:'images/stroke', file:'isgc_banner2.png')}');">
-        <div class="container-fluid dk-amp-name-wrapper">
-            <a href="http://www.strokegenetics.org">
-                <div class="dk-amp-banner-name">
-                    INTERNATIONAL STROKE GENETICS CONSORTIUM (ISGC)
-                </div>
-            </a>
-        </div>
-    </div>
-</g:if>
-<g:else>
+
+
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
     <div class="container-fluid dk-amp-banner" style="background-image:url('${resource(dir:'images', file:'AMP_banner_middle.png')}');">
         <div class="container-fluid dk-amp-name-wrapper" style="background-image:url('${resource(dir:'images', file:'AMP_banner_right.png')}');">
             <a href="http://www.nih.gov/research-training/accelerating-medicines-partnership-amp/type-2-diabetes">
@@ -19,7 +10,24 @@
             </a>
         </div>
     </div>
-</g:else>
+</g:if>
+
+<g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+    <div class="container-fluid dk-amp-banner">
+        <div class="container-fluid dk-amp-name-wrapper" style="background-image:url('/static/images/AMP_banner_middle.png');">
+            <a href="http://www.strokegenetics.org">
+                <div class="dk-amp-banner-name">
+                    INTERNATIONAL STROKE GENETICS CONSORTIUM (ISGC)
+                </div>
+            </a>
+        </div>
+    </div>
+</g:elseif>
+
+<g:else></g:else>
+
+
+
 <div id="header-top">
     <g:renderT2dGenesSection>
         <div class="container-fluid dk-t2d-banner" style="background-image: url('${resource(dir: 'images', file: 'logo_bg.jpg')}')">
