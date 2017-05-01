@@ -398,7 +398,6 @@ p.dataset-name {
     }
 
     function onClickPhenotypelevel2(selectedLevel2Phenotype){
-        // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         var allPhenotypes = $("div.phenotype-level2-option");
         _.forEach(allPhenotypes, function(k,v){
             $(k).css("background-color", "rgb(204, 238, 255)");
@@ -456,17 +455,11 @@ p.dataset-name {
                 phenotypeDatasetsMap = {};
                 var allPhenotypeArrayofArray = [];
                 var regexStr = "rrr";
-
-                //var datatypeFilter = [];
-                //var datatypeFilterHolder = {};
-                var sortOrderNameMap = {};
                 _.forEach(data.children, function (each_key,val) {
 
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
                         regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
-//                        sort_order = each_key.sortOrder;
-//                        sortOrderNameMap[each_key.name] = sort_order;
                         each_key["access"]= getAccessName(each_key.name);
                         each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
@@ -550,14 +543,13 @@ p.dataset-name {
 <script id="metaData2" type="x-tmpl-mustache">
     <div class="row" style="padding-top:30px;">
         <h3>Datasets</h3>
-        <h4>To view the sub dataset overlaps between the datasets, rollover a  dataset name. To view detailed dataset information, click a dataset  name.</h4>
         <table id="datasets" class="table table-condensed">
             <thead>
             <tr>
                 <th>Dataset</th>
                 <th>Access</th>
                 <th>Samples</th>
-                <th>Ethnicity</th>
+                <th>Ancestry</th>
                 <th>Data type</th>
             </tr>
             </thead>
@@ -580,7 +572,7 @@ p.dataset-name {
                         </div>
                     </div>
             </td>
-            <td class="access">{{access}}</td>
+            <td class="access" if({{access}}=="Open access"){style="color:green"} else {style="color:yellow"}>{{access}} </td>
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
             <td class="datatype">{{technology}}</td>
@@ -591,8 +583,6 @@ p.dataset-name {
     </table>
 </div>
 </script>
-
-
 
 <script id="datatypeFilter" type="x-tmpl-mustache">
     <h5>Data type</h5>
@@ -626,14 +616,15 @@ p.dataset-name {
     </div>
 </script>
 
-<div class="row" style="padding-top: 50px;">
+<div class="row" style="padding-top: 50px; display: inline-block">
     <div>
         <div class="datasets-filter row">
             <h4>Filter Dataset Table<small> (Click one to start)</small></h4>
-        </div>
+
         <div id="datatypeFilterDisplay" class="form-inline"></div>
         <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
         <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
     </div>
     <div  id ="metaDataDisplay" class="form-inline"></div>
+    </div>
 </div>
