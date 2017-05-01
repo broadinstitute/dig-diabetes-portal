@@ -1,7 +1,5 @@
 <script class="panel-body" id="GWAS_PGC_script" type="x-tmpl-mustache">
-    <h6 style="color:#ccc;">Data set</h6>
-
-    <h4>Publications</h4>
+   <h4>Publications</h4>
 
                        <p><div class="paper">
 <g:message code="informational.shared.publications.PGC_2011_NatGenet"></g:message><br>
