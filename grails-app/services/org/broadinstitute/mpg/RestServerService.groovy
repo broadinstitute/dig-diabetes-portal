@@ -721,47 +721,52 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     retValue = returnJSONObject
                 } else {
                     List newResults = returnJSONObject['variants']
-                    for (def resultCategories in newResults){
-                        for (def resultCategory in resultCategories){
-                            Map result = resultCategory as Map
-                            List keys = result.keySet() as List
-                            String key  = keys.first() as String
-                            int existingIndex = -1
-                            int existingIndexCounter = 0
-                            for (def existingResult in retValue['variants'][0]){
-                                Map resultExisting = existingResult as Map
-                                List keysExisting = resultExisting.keySet() as List
-                                String keyExisting  = keysExisting.first() as String
-                                if (key==keyExisting){
-                                    existingIndex = existingIndexCounter
+                    if (newResults!=null){
+                        for (def resultCategories in newResults){
+                            for (def resultCategory in resultCategories){
+                                Map result = resultCategory as Map
+                                List keys = result.keySet() as List
+                                String key  = keys.first() as String
+                                int existingIndex = -1
+                                int existingIndexCounter = 0
+                                if (retValue['variants'] == null){
+                                    continue;
                                 }
-                                existingIndexCounter++
-                            }
-                            if (existingIndex==-1){
-                                HashMap newEntry = [:]
-                                newEntry[key] = resultCategory[key]
-                                retValue['variants'][0] << newEntry
-                            } else { // must merge
-                                Map everythingToAdd = result[key] as Map
-                                List keysToAdd = everythingToAdd.keySet() as List
-                                for (def keyToAdd in keysToAdd) {
-                                    if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
-                                        List keysToAppend = result[key][keyToAdd].keySet() as List
-                                        for (String keyToAppend in keysToAppend){
-                                            retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
-                                        }
-                                    } else {
-                                        HashMap newEntryToAdd = [:]
-                                        newEntryToAdd[keyToAdd] = result[key][keyToAdd]
-                                        retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
+                                for (def existingResult in retValue['variants'][0]){
+                                    Map resultExisting = existingResult as Map
+                                    List keysExisting = resultExisting.keySet() as List
+                                    String keyExisting  = keysExisting.first() as String
+                                    if (key==keyExisting){
+                                        existingIndex = existingIndexCounter
                                     }
+                                    existingIndexCounter++
                                 }
+                                if (existingIndex==-1){
+                                    HashMap newEntry = [:]
+                                    newEntry[key] = resultCategory[key]
+                                    retValue['variants'][0] << newEntry
+                                } else { // must merge
+                                    Map everythingToAdd = result[key] as Map
+                                    List keysToAdd = everythingToAdd.keySet() as List
+                                    for (def keyToAdd in keysToAdd) {
+                                        if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
+                                            List keysToAppend = result[key][keyToAdd].keySet() as List
+                                            for (String keyToAppend in keysToAppend){
+                                                retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                            }
+                                        } else {
+                                            HashMap newEntryToAdd = [:]
+                                            newEntryToAdd[keyToAdd] = result[key][keyToAdd]
+                                            retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
+                                        }
+                                    }
 
+                                }
                             }
-                        }
 
+                        }
                     }
-                }
+                 }
             }
         //}
         return retValue

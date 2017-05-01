@@ -305,8 +305,6 @@ p.dataset-name {
             access = "Early Access Phase 2";}
         else if(dataTypeName.includes('ForT2D')){
             access = "Unpublished";}
-//        else if(dataTypeName.includes('CAMP')){
-//            access = "Early Access Phase 2";}
         else{
             access = "Open access";}
         return access;}
@@ -371,6 +369,10 @@ p.dataset-name {
         _.forEach(informationGspFileNames, function (each_Gspfile,val){
             $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
         })
+    }
+
+    function showSection(event) {
+        $(event.target.nextElementSibling).toggle();
     }
 
     function onClickdatatype(selectedtech){
@@ -579,6 +581,7 @@ p.dataset-name {
                         </div>
                     </div>
             </td>
+
             <td class="access" if({{access}}=="Open access"){style="color:green"} else {style="color:yellow"}>{{access}} </td>
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
