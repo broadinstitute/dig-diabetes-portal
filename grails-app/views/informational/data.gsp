@@ -161,6 +161,10 @@
             </g:renderBetaFeaturesDisplayedValue>
 
             <script>
+                function showSection(event) {
+                    $(event.target.nextElementSibling).toggle();
+                }
+
                 var mpgSoftware = mpgSoftware || {};
                 $(document).ready(function () {
                     "use strict";
