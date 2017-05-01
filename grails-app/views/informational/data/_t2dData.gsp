@@ -475,6 +475,14 @@ p.dataset-name {
                     if(selectedTech == "") {
                         regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         each_key["access"]= getAccessName(each_key.name);
+                        each_key["accessColor"] = function(){
+                            if(getAccessName(each_key.name) == "Open access"){
+                                return "green";
+                            }
+                            else {
+                                return "red";
+                            }
+                        };
                         each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
                         //storedJsonArray.push(regexStr);
@@ -494,6 +502,14 @@ p.dataset-name {
                     else if (selectedTech == each_key.technologyUntranslated){
                         regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         each_key["access"] = getAccessName(each_key.name);
+                        each_key["accessColor"] = function(){
+                            if(getAccessName(each_key.name) == "Open access"){
+                                return "green";
+                            }
+                            else {
+                                return "red";
+                            }
+                        };
                         each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
                         //storedJsonArray.push(regexStr);
@@ -550,7 +566,7 @@ p.dataset-name {
 </script>
 
 <script id="metaData2" type="x-tmpl-mustache">
-    <div class="row" style="padding-top:30px;">
+    <div class="row" style="padding-top:30px; cursor: pointer">
         <h3>Datasets</h3>
         <table id="datasets" class="table table-condensed">
             <thead>
@@ -582,7 +598,7 @@ p.dataset-name {
                     </div>
             </td>
 
-            <td class="access" if({{access}}=="Open access"){style="color:green"} else {style="color:yellow"}>{{access}} </td>
+            <td class="access" style="color:{{accessColor}}">{{access}} </td>
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
             <td class="datatype">{{technology}}</td>
@@ -596,11 +612,11 @@ p.dataset-name {
 
 <script id="datatypeFilter" type="x-tmpl-mustache">
     <h5>Data type</h5>
-    <div class='' style='display:table-row'>
+    <div class='' style='display:table-row' >
             {{#datatype}}
-            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
             {{/datatype}}
-            <div class='datatype-option' onclick='onClickdatatype("Show all")' style='float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
+            <div class='datatype-option' onclick='onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
     </div>
 </script>
 
@@ -608,9 +624,9 @@ p.dataset-name {
   <h5>Phenotype</h5>
   <div class='' style='display:table-row'>
     {{#groups}}
-    <div class='phenotype-option' onclick='onClickPhenotypeGroup("{{.}}")' style='float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+    <div class='phenotype-option' onclick='onClickPhenotypeGroup("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
     {{/groups}}
-    <div class='phenotype-option' onclick='onClickPhenotypeGroup("Show all")' style='float: left; text-align: center; background-color:#39f; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
+    <div class='phenotype-option' onclick='onClickPhenotypeGroup("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#39f; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
   </div>
 </script>
 
@@ -618,9 +634,9 @@ p.dataset-name {
 <script id="phenotypeFilterLevel2" type="x-tmpl-mustache">
   <div class='' style='display:table-row '>
 
-    <div class="phenotype-level2-row" style='margin-top:10px'>
+    <div class="phenotype-level2-row" style='margin-top:10px' cursor: pointer>
     {{#phenotype}}
-    <div class='phenotype-level2-option' style='width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' onclick='onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
+    <div class='phenotype-level2-option' style='cursor: pointer; width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' onclick='onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
     {{/phenotype}}
     </div>
     </div>
