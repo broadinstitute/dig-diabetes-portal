@@ -319,11 +319,14 @@ p.dataset-name {
     var phenotypeLevel2holder = {};
     var datatype = [];
     var sort_order = "";
-    var sortedStoredJsonArray = [];
+    var informationGspFileNames=[];
+
     var phenotypeGroupUniqueNameMap = {};
+    var regexStr = "";
 
 
     function renderFilteredData(selectedLevel2Phenotype){
+        var sortedStoredJsonArray = [];
         if(typeof selectedLevel2Phenotype !== 'undefined'){
            var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                 return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
@@ -339,10 +342,7 @@ p.dataset-name {
                         return 0;
                     }
             )
-            jsonHolder["parents"] = sortedStoredJsonArray;
-            var templatef = $("#metaData2")[0].innerHTML;
-            var dynamic_htmlf = Mustache.to_html(templatef,jsonHolder);
-            $("#metaDataDisplay").empty().append(dynamic_htmlf);}
+        }
         else{
             sortedStoredJsonArray = storedJsonArray.sort(
                     function(x,y){
@@ -356,11 +356,21 @@ p.dataset-name {
                         return 0;
                     }
             )
-            jsonHolder["parents"] = sortedStoredJsonArray;
-            var template = $("#metaData2")[0].innerHTML;
-            var dynamic_html = Mustache.to_html(template,jsonHolder);
-            $("#metaDataDisplay").empty().append(dynamic_html);
+
         }
+        _.forEach(sortedStoredJsonArray, function(kl,vl){
+            regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
+            informationGspFileNames.push("#" + regexStr + '_script');
+
+        })
+        jsonHolder["parents"] = sortedStoredJsonArray;
+        var template = $("#metaData2")[0].innerHTML;
+        var dynamic_html = Mustache.to_html(template,jsonHolder);
+        $("#metaDataDisplay").empty().append(dynamic_html);
+
+        _.forEach(informationGspFileNames, function (each_Gspfile,val){
+            $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
+        })
     }
 
     function onClickdatatype(selectedtech){
@@ -379,7 +389,7 @@ p.dataset-name {
     function onClickPhenotypeGroup(selectedPhenotypegroup){
         // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
         console.log(selectedPhenotypegroup);
-        renderFilteredData();
+
         $('div.phenotype-level2-row').empty();
         var allPhenotypeGroups = $("div.phenotype-option");
 
@@ -394,7 +404,9 @@ p.dataset-name {
             var phenotypeFilterLevel2Template = $("#phenotypeFilterLevel2")[0].innerHTML;
             var filter_dynamic_html_level2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
             $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);
+
         });
+        renderFilteredData();
     }
 
     function onClickPhenotypelevel2(selectedLevel2Phenotype){
@@ -445,7 +457,7 @@ p.dataset-name {
                 data: {technology: selectedTech},
                 async: true
             }).done(function (data, textStatus, jqXHR) {
-                var informationGspFileNames=[];
+
                 var phenotypeGroupArray = [];
                 var map = {};
                 var distinctPhenotypeGroups = [];
@@ -475,7 +487,7 @@ p.dataset-name {
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
 
-                        informationGspFileNames.push("#" + regexStr + '_script');
+                       //informationGspFileNames.push("#" + regexStr + '_script');
                     }
                     else if (selectedTech == each_key.technologyUntranslated){
                         regexStr = each_key.name.replace(/_mdv[0-9][0-9]/, "");
@@ -491,7 +503,7 @@ p.dataset-name {
                                 map[k] = [1];}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        informationGspFileNames.push("#" + regexStr + '_script');
+                        //informationGspFileNames.push("#" + regexStr + '_script');
                     }
                     else {
                         console.log("Not found in the selected technologies" + each_key.name);
@@ -518,19 +530,14 @@ p.dataset-name {
                         })
                 }
                 renderFilteredData();
-                if((phenotypeGroupArray.length) == 1 && phenotypeGroupArray[0] == "OTHER"){
-                    console.log("other");
-                    phenotypeGroupArray[0] = "None";}
-                else{
-                    var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
-                        "size"  : 100/(phenotypeGroupArray.length +1)};
-                    var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
-                    var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
-                    $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);}
 
-                _.forEach(informationGspFileNames, function (each_Gspfile,val){
-                    $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
-                    })
+                        var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
+                            "size"  : 100/(phenotypeGroupArray.length +1)};
+                        var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
+                        var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
+                        $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
+
+
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);});};
