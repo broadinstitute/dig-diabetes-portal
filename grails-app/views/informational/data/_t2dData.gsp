@@ -14,6 +14,7 @@
 <g:render template="./data/GWAS_70kForT2D"/>
 <g:render template="./data/GWAS_BioMe"/>
 <g:render template="./data/GWAS_CADISP"/>
+<g:render template="./data/GWAS_CAMP"/>
 <g:render template="./data/GWAS_CARDIoGRAM"/>
 <g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
 <g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
