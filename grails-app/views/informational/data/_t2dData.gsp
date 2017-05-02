@@ -583,6 +583,7 @@ p.dataset-name {
         <div class="accordion" id="accordion">
         {{#parents}}
         <tr>
+            <div>
             <td class="dataset">
                     <div class="accordion-group">
                         <div class="accordion-heading">
@@ -591,14 +592,14 @@ p.dataset-name {
                                    {{label}}
                                 </a>
                         </div>
-                        <div id="{{name}}_myTarget" class="accordion-body collapse">
+                        <div id="{{name}}_myTarget" class="accordion-body collapse" style="border:thin solid #8a95a8;margin-top:40px;padding-left: 20px;">
                             <div class="accordion-inner">
                                 <div id="{{name}}_script_holder"></div>
                             </div>
                         </div>
                     </div>
             </td>
-
+            </div>
             <td class="access" style="color:{{accessColor}}">{{access}} </td>
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
@@ -643,7 +644,7 @@ p.dataset-name {
     </div>
 </script>
 
-<div class="row" style="padding-top: 50px; display: inline-block">
+<div class="row" style="padding-top: 50px; display: inline-block;margin-bottom:70px">
     <div>
         <div class="datasets-filter row">
             <h4>Filter Dataset Table<small> (Click one to start)</small></h4>
