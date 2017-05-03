@@ -1,0 +1,2 @@
+//capable of doing everything that it needs to do (as is the case now), but that it should be very short,
+//and instead pack all of the functionality into the other three files (js, css, and the template file)
