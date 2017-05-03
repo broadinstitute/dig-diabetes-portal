@@ -253,7 +253,7 @@
 
                                     <div class="form-inline">
                                         <input id="chromosomeInput" type="text" class="form-control" style="width: 90%"
-                                               placeholder="Region chromosome: start - stop (e.g. chr9:21,940,000-22,190,000)"
+                                               placeholder="Region chromosome:start-stop (e.g. chr9:21940000-22190000)"
                                                data-type="advancedFilterInput"
                                                data-prop="chromosome" data-translatedname="chromosome"
                                                oninput="

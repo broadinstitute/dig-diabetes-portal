@@ -49,6 +49,10 @@ class InformationalController {
         render(view: 'dataSubmission')
     }
 
+    def downloads() {
+        render(view: 'downloads')
+    }
+
     /***
      * Get the contents for the filter drop-down box on the burden test section of the gene info page
      * @return
