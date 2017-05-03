@@ -567,7 +567,7 @@ p.dataset-name {
 </script>
 
 <script id="metaData2" type="x-tmpl-mustache">
-    <div class="row" style="padding-top:30px; cursor: pointer">
+    <div class="row" style="padding-top:30px; cursor: pointer;">
         <h3>Datasets</h3>
         <table id="datasets" class="table table-condensed">
             <thead>
@@ -616,7 +616,7 @@ p.dataset-name {
     <h5>Data type</h5>
     <div class='' style='display:table-row' >
             {{#datatype}}
-            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; '>{{.}}</div>
             {{/datatype}}
             <div class='datatype-option' onclick='onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
     </div>
@@ -653,6 +653,6 @@ p.dataset-name {
         <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
         <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
     </div>
-    <div  id ="metaDataDisplay" class="form-inline"></div>
+    <div  id ="metaDataDisplay" class="form-inline" style="width: 80em"></div>
     </div>
 </div>
