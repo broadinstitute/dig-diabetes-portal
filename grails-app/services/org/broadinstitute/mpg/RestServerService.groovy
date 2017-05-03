@@ -134,7 +134,7 @@ class RestServerService {
         FEDERATED_SERVER = grailsApplication.config.t2dFederatedRestServer.base + grailsApplication.config.t2dFederatedRestServer.name + grailsApplication.config.t2dFederatedRestServer.path
 
         // local server for development
-        LOCAL_SERVER = grailsApplication.config.localServer.base + grailsApplication.config.localServer.name + grailsApplication.config.localServer.path
+        LOCAL_SERVER = grailsApplication.config.t2dDistributedLocalhostServer.base + grailsApplication.config.t2dDistributedLocalhostServer.name + grailsApplication.config.t2dDistributedLocalhostServer.path
 
         // qa load balancer with rest server(s) behind it
         EBI_SERVER = grailsApplication.config.t2dEbiRestServer.base + grailsApplication.config.t2dEbiRestServer.name + grailsApplication.config.t2dEbiRestServer.path
@@ -247,9 +247,10 @@ class RestServerService {
             // could do this in config.groovy
             this.burdenServerList = new ArrayList<ServerBean>();
             this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerEbi);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
 //            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerEbi);
         }
 
         return this.burdenServerList;

@@ -288,7 +288,8 @@ experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 burdenRestServerProd = new ServerBean("Production Broad burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
 //burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerEbi = new ServerBean("EBI burden server", "https://www.ebi.ac.uk/ega/t2d/dig-genome-store/burden/dig-analysis-engine/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
+burdenRestServerFederated = new ServerBean("Federated burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/distributed/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
