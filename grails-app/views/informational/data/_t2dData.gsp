@@ -368,7 +368,7 @@ p.dataset-name {
         $("#metaDataDisplay").empty().append(dynamic_html);
 
         _.forEach(informationGspFileNames, function (each_Gspfile,val){
-            $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
+            $(each_Gspfile + "_holder").empty().append(Mustache.render($(each_Gspfile)[0].innerHTML));
         })
     }
 
@@ -634,7 +634,7 @@ p.dataset-name {
 
 <!--this panel would display only when phenotype Filter is clicked -->
 <script id="phenotypeFilterLevel2" type="x-tmpl-mustache">
-  <div class='' style='display:table-row '>
+  <div class='' style='display:table-row'>
 
     <div class="phenotype-level2-row" style='margin-top:10px' cursor: pointer>
     {{#phenotype}}
