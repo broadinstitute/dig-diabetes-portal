@@ -1,6 +1,42 @@
 %{--this will go inside grails-app/views/template(new folder created by BenA)--}%
 %{--this will have all the mustache templates--}%
 
+<g:render template="./data/ExAC_r03" />
+<g:render template="./data/1kg_phase1" />
+<g:render template="./data/ExChip_82k"/>
+<g:render template="./data/ExChip_CAMP"/>
+<g:render template="./data/ExChip_SIGMA1"/>
+<g:render template="./data/ExChip_T2DGO"/>
+<g:render template="./data/ExSeq_13k"/>
+<g:render template="./data/ExSeq_17k"/>
+<g:render template="./data/ExSeq_19k"/>
+<g:render template="./data/ExSeq_EgnomAD"/>
+<g:render template="./data/ExSeq_EOMI"/>
+<g:render template="./data/GWAS_70kForT2D"/>
+<g:render template="./data/GWAS_BioMe"/>
+<g:render template="./data/GWAS_CADISP"/>
+<g:render template="./data/GWAS_CARDIoGRAM"/>
+<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
+<g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
+<g:render template="./data/GWAS_CKDGenConsortium"/>
+<g:render template="./data/GWAS_DIAGRAM"/>
+<g:render template="./data/GWAS_GENESIS_eu"/>
+<g:render template="./data/GWAS_GERFHS"/>
+<g:render template="./data/GWAS_GIANT"/>
+<g:render template="./data/GWAS_GLGC"/>
+<g:render template="./data/GWAS_MAGIC"/>
+<g:render template="./data/GWAS_MEGASTROKE"/>
+<g:render template="./data/GWAS_MICAD"/>
+<g:render template="./data/GWAS_OxBB"/>
+<g:render template="./data/GWAS_PGC"/>
+<g:render template="./data/GWAS_SIGMA1"/>
+<g:render template="./data/GWAS_SIGN"/>
+<g:render template="./data/GWAS_Stroke"/>
+<g:render template="./data/GWAS_VATGen"/>
+<g:render template="./data/WGS_GoT2D" />
+<g:render template="./data/WGS_GoT2Dimputed"/>
+<g:render template="./data/WGS_WgnomAD" />
+
 <script id="metaData2" type="x-tmpl-mustache">
 
     <div class="row" style="padding-top:30px; cursor: pointer">
@@ -51,9 +87,9 @@
     <h5>Data type</h5>
     <div class='' style='display:table-row' >
             {{#datatype}}
-            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+            <div class='datatype-option'  onclick='mpgSoftware.datasetsPage.onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
             {{/datatype}}
-            <div class='datatype-option' onclick='onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
+            <div class='datatype-option' onclick='mpgSoftware.datasetsPage.onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
     </div>
 </script>
 

@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core,sunburst,mustache"/>
+    <r:require modules="core,sunburst,mustache,datasetsPage"/>
     <r:layoutResources/>
 
     <style>

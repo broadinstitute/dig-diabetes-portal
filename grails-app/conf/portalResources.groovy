@@ -104,6 +104,11 @@ modules = {
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
+
+    datasetsPage {
+        resource url: 'css/dport/datasets.css'
+        resource url: 'js/lib/dport/datasetsPage.js'
+    }
     variantSearchResults {
         dependsOn "tableViewer"
 
