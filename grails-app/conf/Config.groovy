@@ -276,7 +276,8 @@ prodKb2NewCodeServer {
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
 //server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
-server.URL = stageKb2NewCodeServer.base+stageKb2NewCodeServer.name+stageKb2NewCodeServer.path
+//server.URL = stageKb2NewCodeServer.base+stageKb2NewCodeServer.name+stageKb2NewCodeServer.path
+server.URL = prodKb2NewCodeServer.base+prodKb2NewCodeServer.name+prodKb2NewCodeServer.path
 
 //server.URL = 'http://localhost:8888/dig-genome-store/gs/'
 // qa is probably right, the right now we need the tests to pass

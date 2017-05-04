@@ -86,8 +86,41 @@ var mpgSoftware = mpgSoftware || {};
     }
     };
 
+        var initLocusZoomLayout = function(){
+            var mods = {
+                namespace: {
+                    default: "assoc",
+                    ld: "ld",
+                    gene: "gene",
+                    recomb: "recomb",
+                    intervals: "intervals"
+                }
+            };
+            var newLayout = LocusZoom.Layouts.get("plot", "standard_association", mods);
+            // Update HTML for variant tooltip to include "Add to Model" link
+            //newLayout.panels[0].data_layers[2].tooltip.html = "<strong>{{assoc:variant}}</strong><br>"
+            //    + "P Value: <strong>{{assoc:log_pvalue|logtoscinotation}}</strong><br>"
+            //    + "Ref. Allele: <strong>{{assoc:ref_allele}}</strong><br>"
+            //    + "<a href=\"javascript:void(0);\" onclick=\"LocusZoom.getToolTipPlot(this).CovariatesModel.add(LocusZoom.getToolTipData(this));\">Add to Model</a><br>";
 
+            // Add covariates model button/menu to the plot-level dashboard
+            newLayout.dashboard.components.push({
+                type: "covariates_model",
+                button_html: "Model",
+                button_title: "Use this feature to interactively build a model using variants from the data set",
+                position: "left"
+            });
+            // Add a track information button to the intervals panel
+            newLayout.panels[1].dashboard.components.push({
+                type: "menu",
+                color: "yellow",
+                position: "right",
+                button_html: "Track Info",
+                menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
+            });
 
+            return newLayout;
+        };
 
     var setNewDefaultLzPlot = function (key){
         currentLzPlotKey  = key;
@@ -96,7 +129,9 @@ var mpgSoftware = mpgSoftware || {};
     var initLocusZoom = function(selector, variantIdString) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-        standardLayout[currentLzPlotKey] =  (new createStandardLayout()).layout;
+        //standardLayout[currentLzPlotKey] =  (new createStandardLayout()).layout;
+        var newLayout = initLocusZoomLayout();
+        standardLayout[currentLzPlotKey] = newLayout;
         if(variantIdString != '') {
             setNewDefaultLzPlot(selector);
             standardLayout[currentLzPlotKey].state = {
@@ -105,10 +140,12 @@ var mpgSoftware = mpgSoftware || {};
         }
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ])
+            .add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
         var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
         // Create event hooks to clear the loader whenever a panel renders new data
@@ -357,6 +394,7 @@ var mpgSoftware = mpgSoftware || {};
                     ]
                 };
             }(variantInfoUrl));
+           // locusZoomPlot[currentLzPlotKey].addPanel(layout).addBasicLoader();
             locusZoomPlot[currentLzPlotKey].addPanel(layout).addBasicLoader();
         };
 
