@@ -97,9 +97,9 @@
   <h5>Phenotype</h5>
   <div class='' style='display:table-row'>
     {{#groups}}
-    <div class='phenotype-option' onclick='onClickPhenotypeGroup("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+    <div class='phenotype-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypeGroup("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
     {{/groups}}
-    <div class='phenotype-option' onclick='onClickPhenotypeGroup("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#39f; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
+    <div class='phenotype-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypeGroup("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#39f; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
   </div>
 </script>
 
@@ -109,7 +109,7 @@
 
     <div class="phenotype-level2-row" style='margin-top:10px' cursor: pointer>
     {{#phenotype}}
-    <div class='phenotype-level2-option' style='cursor: pointer; width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' onclick='onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
+    <div class='phenotype-level2-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypelevel2("{{.}}")' style='cursor: pointer; width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' >{{.}}</div>
     {{/phenotype}}
     </div>
     </div>
