@@ -335,10 +335,7 @@ p.dataset-name {
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
-                        else if(x.sortOrder > y.sortOrder){
-                            return -1;
-                        }
-                        return 0;
+                        return -1;
                     }
             )
         }
@@ -349,10 +346,7 @@ p.dataset-name {
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
-                        else if(x.sortOrder > y.sortOrder){
-                            return -1;
-                        }
-                        return 0;
+                        return -1;
                     }
             )
 
@@ -360,9 +354,9 @@ p.dataset-name {
         _.forEach(sortedStoredJsonArray, function(kl,vl){
             regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
             informationGspFileNames.push("#" + regexStr + '_script');
-
         })
         jsonHolder["parents"] = sortedStoredJsonArray;
+
         var template = $("#metaData2")[0].innerHTML;
         var dynamic_html = Mustache.to_html(template,jsonHolder);
         $("#metaDataDisplay").empty().append(dynamic_html);
@@ -377,7 +371,6 @@ p.dataset-name {
     }
 
     function onClickdatatype(selectedtech){
-        console.log("i am clicked" + selectedtech);
         var allDatatypes = $("div.datatype-option");
         _.forEach(allDatatypes, function(k,v){
             $(k).css("background-color", "rgb(255, 255, 204)");
@@ -390,9 +383,6 @@ p.dataset-name {
                 displaySelectedTechnology(selectedtech, true);}
             })}
     function onClickPhenotypeGroup(selectedPhenotypegroup){
-        // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
-        console.log(selectedPhenotypegroup);
-
         $('div.phenotype-level2-row').empty();
         var allPhenotypeGroups = $("div.phenotype-option");
 
@@ -493,7 +483,6 @@ p.dataset-name {
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
-                               // console.log(phenotypeGroupArray);
                                 map[k] = k;}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
@@ -524,9 +513,9 @@ p.dataset-name {
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
                         //informationGspFileNames.push("#" + regexStr + '_script');
                     }
-                    else {
-                        console.log("Not found in the selected technologies" + each_key.name);
-                    }
+//                    else {
+//                        console.log("Not found in the selected technologies" + each_key.name);
+//                    }
                 });
                 datatypeFilter = addOnlyUniqueElements(datatype);
                 datatypeFilterHolder = {
@@ -548,22 +537,17 @@ p.dataset-name {
                                 phenotypeDatasetsMap[nk.fullName] = [key];}
                         })
                 }
+                var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
+                    "size"  : 100/(phenotypeGroupArray.length +1)};
+                var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
+                var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
+                $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
+
                 renderFilteredData();
-
-                        var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
-                            "size"  : 100/(phenotypeGroupArray.length +1)};
-                        var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
-                        var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
-                        $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
-
 
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);});};
-</script>
-
-<script>
-
 </script>
 
 <script id="metaData2" type="x-tmpl-mustache">
