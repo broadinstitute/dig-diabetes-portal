@@ -61,6 +61,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
         Integer position;
         String varId;
         String chromosome;
+        String mdsScore;
         String referenceAllele;
         Double pValue;
 
@@ -114,6 +115,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
             chromosome = null;
             referenceAllele = null;
             pValue = null;
+            mdsScore = null;
 
             // get the variant
             Variant variant = resultList.get(i);
@@ -149,6 +151,12 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
                     chromosome = tempPropertyValue.getValue();
                 }
 
+                // add in the mdsScore
+                tempPropertyValue = variant.getPropertyValueFromCollection("MOST_DEL_SCORE", null, null);
+                if ((tempPropertyValue!=null)&&(tempPropertyValue.getValue() != null)) {
+                    mdsScore = tempPropertyValue.getValue();
+                }
+
                 // add in the pValue
                 tempPropertyValue = variant.getPropertyValueFromCollection(this.defaultPropertyKey, this.defaultDataSetKey, this.defaultPhenotypeKey);
                 if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)) {
@@ -168,7 +176,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
                 pValueArray.put(pValue);
                 chromosomeArray.put(chromosome);
                 idArray.put(varId);
-                scoreTestStatArray.put(null);
+                scoreTestStatArray.put(mdsScore);
                 refAlleleArray.put(referenceAllele);
 
             } catch (PortalException exception) {

@@ -96,7 +96,7 @@ var mpgSoftware = mpgSoftware || {};
                     intervals: "intervals"
                 }
             };
-            var newLayout = LocusZoom.Layouts.get("plot", "standard_association", mods);
+            var newLayout = LocusZoom.Layouts.get("plot", "interval_association", mods);
             // Update HTML for variant tooltip to include "Add to Model" link
             //newLayout.panels[0].data_layers[2].tooltip.html = "<strong>{{assoc:variant}}</strong><br>"
             //    + "P Value: <strong>{{assoc:log_pvalue|logtoscinotation}}</strong><br>"
@@ -212,7 +212,8 @@ var mpgSoftware = mpgSoftware || {};
                         "dataset=" + dataSetName + "&" +
                         "propertyName=" + propertyName + "&" +
                         "datatype="+ makeDynamic;
-                    if (state.model.covariates.length){
+
+                    if ((typeof state.model !== 'undefined')&&(state.model.covariates.length)){
                         var covariant_ids = "";
                         state.model.covariates.forEach(function(covariant){
                             _.forEach(covariant,function(v,k){
@@ -329,6 +330,7 @@ var mpgSoftware = mpgSoftware || {};
                                     phenotype + ":pvalue|scinotation",
                                     phenotype + ":pvalue|neglog10",
                                     phenotype + ":refAllele",
+                                    phenotype + ":scoreTestStat",
                                 "ld:state",
                                 "ld:isrefvar"
                             ],
@@ -354,20 +356,28 @@ var mpgSoftware = mpgSoftware || {};
                                 }
                             },
                             color: [
+                                // {
+                                //     scale_function: "if",
+                                //     field: "ld:isrefvar",
+                                //     parameters: {
+                                //         field_value: 1,
+                                //         then: "#9632b8"
+                                //     }
+                                // },
+                                // {
+                                //     scale_function: "numerical_bin",
+                                //     field: "ld:state",phenotype + ":position"
+                                //     parameters: {
+                                //         breaks: [0, 0.2, 0.4, 0.6, 0.8],
+                                //         values: ["#357ebd", "#46b8da", "#5cb85c", "#eea236", "#d43f3a"]
+                                //     }
+                                // },
                                 {
-                                    scale_function: "if",
-                                    field: "ld:isrefvar",
+                                    scale_function: "categorical_bin",
+                                    field: phenotype + ":scoreTestStat",
                                     parameters: {
-                                        field_value: 1,
-                                        then: "#9632b8"
-                                    }
-                                },
-                                {
-                                    scale_function: "numerical_bin",
-                                    field: "ld:state",
-                                    parameters: {
-                                        breaks: [0, 0.2, 0.4, 0.6, 0.8],
-                                        values: ["#357ebd", "#46b8da", "#5cb85c", "#eea236", "#d43f3a"]
+                                        categories: ["1","2","3","4","5"],
+                                        values: ["#ff0000", "#00ff00", "#0000ff", "#ff00ff", "#111111"]
                                     }
                                 },
                                 "#B8B8B8"
