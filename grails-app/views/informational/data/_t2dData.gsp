@@ -5,10 +5,7 @@
         var filterDatatype = "Show all";
         mpgSoftware.datasetsPage.displaySelectedTechnology(filterDatatype,undefined,"${createLink(controller:'informational',action: 'aboutTheDataAjax')}");
     });
-
 </script>
-
-
 
 <div class="row" style="padding-top: 50px; display: inline-block">
     <div>
