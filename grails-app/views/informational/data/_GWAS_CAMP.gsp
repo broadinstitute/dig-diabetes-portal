@@ -1,4 +1,4 @@
-<script class="panel-body" id="ExChip_CAMP_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_CAMP_script" type="x-tmpl-mustache">
 
 <h4>Dataset phenotypes</h4>
     <ul>
