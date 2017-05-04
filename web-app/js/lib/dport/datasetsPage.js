@@ -14,6 +14,13 @@ var mpgSoftware = mpgSoftware || {};
         var informationGspFileNames=[];
         var phenotypeGroupUniqueNameMap = {};
         var regexStr = "";
+        var sortedStoredJsonArray = [];
+        var phenotypeGroupArray = [];
+        var map = {};
+        var distinctPhenotypeGroups = [];
+        var datasetPhenotypesMap = {};
+        var datasetArray = [];
+        var allPhenotypeArrayofArray = [];
 
         function getAccessName(dataTypeName){
             var access;
@@ -25,12 +32,8 @@ var mpgSoftware = mpgSoftware || {};
                 access = "Open access";}
             return access;}
 
-
-
-       // var sortedStoredJsonArray = [];
-
         var renderFilteredData = function (selectedLevel2Phenotype){
-            var sortedStoredJsonArray = [];
+
             if(typeof selectedLevel2Phenotype !== 'undefined'){
                 var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                     return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
@@ -40,22 +43,16 @@ var mpgSoftware = mpgSoftware || {};
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
-                        else if(x.sortOrder > y.sortOrder){
-                            return -1;
-                        }
                         return 0;
                     }
                 )
             }
             else{
-                sortedStoredJsonArray = sortedStoredJsonArray.sort(
+                sortedStoredJsonArray = storedJsonArray.sort(
                     function(x,y){
                         console.log(y.sortOrder);
                         if(x.sortOrder > y.sortOrder){
                             return 1;
-                        }
-                        else if(x.sortOrder > y.sortOrder){
-                            return -1;
                         }
                         return 0;
                     }
@@ -67,7 +64,7 @@ var mpgSoftware = mpgSoftware || {};
                 informationGspFileNames.push("#" + regexStr + '_script');
 
             })
-            jsonHolder["parents"] = storedJsonArray;
+            jsonHolder["parents"] = sortedStoredJsonArray;
             var template = $("#metaData2")[0].innerHTML;
             var dynamic_html = Mustache.to_html(template,jsonHolder);
             $("#metaDataDisplay").empty().append(dynamic_html);
@@ -93,7 +90,7 @@ var mpgSoftware = mpgSoftware || {};
                     $(k).css("background-color", "rgb(255, 153, 68)");
                     $(k).css("color", "rgb(255, 255, 255)");
                     $('div.phenotype-level2-row').empty();
-                    displaySelectedTechnology(selectedtech, true);}
+                    displaySelectedTechnology(selectedtech, true,"/dig-diabetes-portal/informational/aboutTheDataAjax");}
             })}
 
         var onClickPhenotypeGroup= function (selectedPhenotypegroup){
@@ -141,8 +138,6 @@ var mpgSoftware = mpgSoftware || {};
             return a;}
 
         var phenotypeGroupNameMap = {};
-        var uniqueNames = [];
-
         function getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray){
             _.forEach(phenotypeGroupArray,function(k,v){
                 var b = [];
@@ -156,6 +151,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var displaySelectedTechnology = function (filterDatatype,doNotRedraw, aboutTheDataAjaxURL) {
             var selectedTech="";
+            storedJsonArray=[];
             if(filterDatatype=="Show all"){selectedTech="";}
             else if(filterDatatype=="Exome sequencing"){selectedTech="ExSeq";}
             else if(filterDatatype=="Whole genome sequencing"){selectedTech="WGS";}
@@ -169,14 +165,7 @@ var mpgSoftware = mpgSoftware || {};
                 async: true
             }).done(function (data, textStatus, jqXHR) {
 
-                var phenotypeGroupArray = [];
-                var map = {};
-                var distinctPhenotypeGroups = [];
-                var datasetPhenotypesMap = {};
-                var datasetArray = [];
-                var storedJsonArray = [];
-                var phenotypeDatasetsMap = {};
-                var allPhenotypeArrayofArray = [];
+
                 _.forEach(data.children, function (each_key,val) {
 
                     datatype.push(each_key.technology);
@@ -250,28 +239,14 @@ var mpgSoftware = mpgSoftware || {};
                             phenotypeDatasetsMap[nk.fullName] = [key];}
                     })
                 }
-                //this works but calling renderFilterData doesnt
-                jsonHolder["parents"] = storedJsonArray;
-                var template = $("#metaData2")[0].innerHTML;
-                var dynamic_html = Mustache.to_html(template,jsonHolder);
-                $("#metaDataDisplay").empty().append(dynamic_html);
-
-                _.forEach(storedJsonArray, function(kl,vl){
-                    regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
-                    informationGspFileNames.push("#" + regexStr + '_script');
-
-                })
-
-                _.forEach(informationGspFileNames, function (each_Gspfile,val){
-                    $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
-                })
-                //renderFilteredData();
 
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
                     "size"  : 100/(phenotypeGroupArray.length +1)};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
                 var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
                 $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
+
+                renderFilteredData();
 
                 return {
                     storedJsonArray: storedJsonArray,
@@ -289,9 +264,9 @@ var mpgSoftware = mpgSoftware || {};
         return {
 
             displaySelectedTechnology: displaySelectedTechnology,
-            onClickdatatype: onClickdatatype
-            //onClickPhenotypeGroup: onClickPhenotypeGroup,
-            //onClickPhenotypelevel2:onClickPhenotypelevel2
+            onClickdatatype: onClickdatatype,
+            onClickPhenotypeGroup: onClickPhenotypeGroup,
+            onClickPhenotypelevel2:onClickPhenotypelevel2
 
         }
 
