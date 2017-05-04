@@ -57,12 +57,10 @@ var mpgSoftware = mpgSoftware || {};
                         return 0;
                     }
                 )
-
             }
             _.forEach(sortedStoredJsonArray, function(kl,vl){
                 regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
                 informationGspFileNames.push("#" + regexStr + '_script');
-
             })
             jsonHolder["parents"] = sortedStoredJsonArray;
             var template = $("#metaData2")[0].innerHTML;
@@ -77,8 +75,6 @@ var mpgSoftware = mpgSoftware || {};
         function showSection(event) {
             $(event.target.nextElementSibling).toggle();
         }
-
-
         var onClickdatatype = function (selectedtech){
             console.log("i am clicked" + selectedtech);
             var allDatatypes = $("div.datatype-option");
@@ -164,10 +160,8 @@ var mpgSoftware = mpgSoftware || {};
                 data: {technology: selectedTech},
                 async: true
             }).done(function (data, textStatus, jqXHR) {
-
-
+                datasetPhenotypesMap = {};
                 _.forEach(data.children, function (each_key,val) {
-
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
                         console.log(each_key.name + " " + each_key.sortOrder);
@@ -215,9 +209,6 @@ var mpgSoftware = mpgSoftware || {};
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
                     }
-                    else {
-                        console.log("Not found in the selected technologies" + each_key.name);
-                    }
                 });
                 var datatypeFilter = addOnlyUniqueElements(datatype);
                 var datatypeFilterHolder = {
@@ -256,23 +247,13 @@ var mpgSoftware = mpgSoftware || {};
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);});
-
         };
-
-
-
         return {
-
             displaySelectedTechnology: displaySelectedTechnology,
             onClickdatatype: onClickdatatype,
             onClickPhenotypeGroup: onClickPhenotypeGroup,
             onClickPhenotypelevel2:onClickPhenotypelevel2
-
         }
-
     } ());
-
-
-
 })();
 
