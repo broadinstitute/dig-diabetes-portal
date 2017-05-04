@@ -22,4 +22,3 @@
         <div  id ="metaDataDisplay" class="form-inline"></div>
     </div>
 </div>
-
