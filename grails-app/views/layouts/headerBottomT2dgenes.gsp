@@ -38,6 +38,7 @@
             <li><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+                <li><a href="${createLink(controller:'informational', action:'downloads')}"><g:message code="portal.header.nav.downloads"/></a></li>
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 <li><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
