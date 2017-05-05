@@ -15,9 +15,9 @@ var mpgSoftware = mpgSoftware || {};
         var phenotypeGroupUniqueNameMap = {};
         var regexStr = "";
         var sortedStoredJsonArray = [];
-        var phenotypeGroupArray = [];
-        var map = {};
-        var distinctPhenotypeGroups = [];
+
+
+
         var datasetPhenotypesMap = {};
         var datasetArray = [];
         var allPhenotypeArrayofArray = [];
@@ -161,6 +161,11 @@ var mpgSoftware = mpgSoftware || {};
                 async: true
             }).done(function (data, textStatus, jqXHR) {
                 datasetPhenotypesMap = {};
+                var distinctPhenotypeGroups = [];
+                var phenotypeGroupArray = [];
+                var map = {};
+                phenotypeGroupUniqueNameMap = {};
+                allPhenotypeArrayofArray = [];
                 _.forEach(data.children, function (each_key,val) {
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
