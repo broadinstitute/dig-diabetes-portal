@@ -154,6 +154,22 @@ class MetaDataService {
         return phenotype;
     }
 
+    public String getDefaultDataset() {
+        String dataset;
+        String portalType = this.getPortalTypeFromSession();
+        String distributedKb = this.getDistributedKBFromSession()
+
+        if (distributedKb == 'EBI')  {
+            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[distributedKb]
+        } else {
+            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]
+        }
+
+
+        // return
+        return dataset+getDataVersion();
+    }
+
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
         this.forceProcessedMetadataOverride = forceProcessedMetadataOverride
         setForceProcessedSampleMetadataOverride(forceProcessedMetadataOverride)

@@ -403,6 +403,8 @@ var displayBurdenVariantSelector = function (){
                  dataSet = 'ExChip'+datasetFilter.substring('samples'.length);
                 } else if (datasetFilter.substring(0,'samples_biome_'.length)==='samples_biome_'){
                  dataSet = 'GWAS_BioMe_'+datasetFilter.substring('samples_biome_'.length);
+                } else if (datasetFilter.substring(0,'samples_mi_'.length)==='samples_mi_'){
+                 dataSet = 'ExSeq_EOMI_'+datasetFilter.substring('samples_mi_'.length);
                 }
                 return dataSet;
         };
