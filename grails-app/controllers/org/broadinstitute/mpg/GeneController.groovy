@@ -137,21 +137,21 @@ class GeneController {
 
         if (geneToStartWith)  {
             String portalType = g.portalTypeString() as String
-            String locusZoomDataset = ""
+            String locusZoomDataset = metaDataService.getDefaultDataset()
             // kludge alert
-            if (portalType=='t2d'){
-                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-                phenotype = 'T2D'
-            }else if (portalType=='stroke'){
-                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
-                phenotype = 'Stroke_all'
-            }
-            else  if (portalType=='mi') {
-                locusZoomDataset = "samples_mi_"+metaDataService.getDataVersion()
-            }
-            else {
-                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
-            }
+//            if (portalType=='t2d'){
+//                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+//                phenotype = 'T2D'
+//            }else if (portalType=='stroke'){
+//                locusZoomDataset = "GWAS_Stroke_"+metaDataService.getDataVersion()
+//                phenotype = 'Stroke_all'
+//            }
+//            else  if (portalType=='mi') {
+//                locusZoomDataset = "samples_mi_"+metaDataService.getDataVersion()
+//            }
+//            else {
+//                locusZoomDataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+//            }
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
