@@ -63,7 +63,7 @@
                                    {{label}}
                                 </a>
                         </div>
-                        <div id="{{name}}_myTarget" class="accordion-body collapse">
+                        <div id="{{name}}_myTarget" class="accordion-body collapse" style="border:thin solid #8a95a8;margin-top:40px;padding-left: 20px;">
                             <div class="accordion-inner">
                                 <div id="{{name}}_script_holder"></div>
                             </div>

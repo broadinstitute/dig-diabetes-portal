@@ -43,7 +43,7 @@ var mpgSoftware = mpgSoftware || {};
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
-                        return 0;
+                        return -1;
                     }
                 )
             }
@@ -54,7 +54,7 @@ var mpgSoftware = mpgSoftware || {};
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
-                        return 0;
+                        return -1;
                     }
                 )
             }

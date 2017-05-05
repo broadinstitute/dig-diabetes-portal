@@ -16,6 +16,6 @@
             <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
             <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
         </div>
-        <div  id ="metaDataDisplay" class="form-inline"></div>
+        <div  id ="metaDataDisplay" class="form-inline" style="width: 80em"></div>
     </div>
 </div>
