@@ -331,7 +331,6 @@ p.dataset-name {
                 return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
             sortedStoredJsonArray = filteredjsonArray.sort(
                     function(x,y){
-                        console.log(y.sortOrder);
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
@@ -342,7 +341,6 @@ p.dataset-name {
         else{
             sortedStoredJsonArray = storedJsonArray.sort(
                     function(x,y){
-                        console.log(y.sortOrder);
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
@@ -376,7 +374,6 @@ p.dataset-name {
             $(k).css("background-color", "rgb(255, 255, 204)");
             $(k).css("color", "rgb(0, 0, 0)");
             if($(k).text() == selectedtech){
-                //console.log("found" + $(k).text());
                 $(k).css("background-color", "rgb(255, 153, 68)");
                 $(k).css("color", "rgb(255, 255, 255)");
                 $('div.phenotype-level2-row').empty();
@@ -511,11 +508,7 @@ p.dataset-name {
                                 map[k] = [1];}})
                         allPhenotypeArrayofArray.push(each_key.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
-                        //informationGspFileNames.push("#" + regexStr + '_script');
                     }
-//                    else {
-//                        console.log("Not found in the selected technologies" + each_key.name);
-//                    }
                 });
                 datatypeFilter = addOnlyUniqueElements(datatype);
                 datatypeFilterHolder = {
