@@ -245,8 +245,8 @@ var mpgSoftware = mpgSoftware || {};
                     description: phenotype,
                     y_index: -1,
                     min_width: 400,
-                    min_height: 100,
-                    margin: {top: 35, right: 50, bottom: 40, left: 50},
+                    min_height: 240,
+                    margin: {top: 55, right: 50, bottom: 40, left: 50},
                     inner_border: "rgba(210, 210, 210, 0.85)",
                     axes: {
                         x: {
