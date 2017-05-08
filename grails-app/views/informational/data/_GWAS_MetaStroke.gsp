@@ -17,7 +17,10 @@
 
     <h4>Dataset phenotypes</h4>
     <ul>
-        <li><g:message code="informational.shared.traits.trait"></g:message></li>
+        <li><g:message code="informational.shared.traits.small-vessel_occlusion"></g:message></li>
+        <li><g:message code="informational.shared.traits.cardioembolism"></g:message></li>
+        <li><g:message code="informational.shared.traits.all_ischemic"></g:message></li>
+        <li><g:message code="informational.shared.traits.large-artery_atherosclerosis"></g:message></li>
     </ul>
 
     <h4>Dataset subjects</h4>
