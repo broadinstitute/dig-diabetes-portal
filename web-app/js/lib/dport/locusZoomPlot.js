@@ -90,10 +90,10 @@ var mpgSoftware = mpgSoftware || {};
             var mods = {
                 namespace: {
                     default: "assoc",
-                    ld: "ld",
-                    gene: "gene",
-                    recomb: "recomb",
-                    intervals: "intervals"
+                    // ld: "ld",
+                    // gene: "gene",
+                    // recomb: "recomb",
+//                    intervals: "intervals"
                 }
             };
             var newLayout = LocusZoom.Layouts.get("plot", "interval_association", mods);
@@ -104,20 +104,20 @@ var mpgSoftware = mpgSoftware || {};
             //    + "<a href=\"javascript:void(0);\" onclick=\"LocusZoom.getToolTipPlot(this).CovariatesModel.add(LocusZoom.getToolTipData(this));\">Add to Model</a><br>";
 
             // Add covariates model button/menu to the plot-level dashboard
-            newLayout.dashboard.components.push({
-                type: "covariates_model",
-                button_html: "Model",
-                button_title: "Use this feature to interactively build a model using variants from the data set",
-                position: "left"
-            });
+            // newLayout.dashboard.components.push({
+            //     type: "covariates_model",
+            //     button_html: "Model",
+            //     button_title: "Use this feature to interactively build a model using variants from the data set",
+            //     position: "left"
+            // });
             // Add a track information button to the intervals panel
-            newLayout.panels[1].dashboard.components.push({
-                type: "menu",
-                color: "yellow",
-                position: "right",
-                button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
-            });
+            // newLayout.panels[1].dashboard.components.push({
+            //     type: "menu",
+            //     color: "yellow",
+            //     position: "right",
+            //     button_html: "Track Info",
+            //     menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
+            // });
 
             return newLayout;
         };
@@ -140,7 +140,7 @@ var mpgSoftware = mpgSoftware || {};
         }
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
-            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+             .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
@@ -150,10 +150,11 @@ var mpgSoftware = mpgSoftware || {};
 
         // Create event hooks to clear the loader whenever a panel renders new data
         lzp.layout.panels.forEach(function(panel){
-            lzp.panels[panel.id].addBasicLoader();
+        //    lzp.panels[panel.id].addBasicLoader();
         });
 
         return {
+            layoutPanels:lzp.layout.panels,
             locusZoomPlot: lzp,
             dataSources: ds
         };
@@ -377,10 +378,13 @@ var mpgSoftware = mpgSoftware || {};
                                     field: phenotype + ":scoreTestStat",
                                     parameters: {
                                         categories: ["1","2","3","4","5"],
-                                        values: ["#ff0000", "#00ff00", "#0000ff", "#ff00ff", "#111111"]
+                                        values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
                                     }
                                 },
                                 "#B8B8B8"
+                            ],
+                            legend: [
+                                { shape: "circle", color: "#ff0000", size: 40, label: "MDS=1", class: "lz-data_layer-scatter" }
                             ],
                             transition: {
                                 duration: 500
@@ -404,7 +408,6 @@ var mpgSoftware = mpgSoftware || {};
                     ]
                 };
             }(variantInfoUrl));
-           // locusZoomPlot[currentLzPlotKey].addPanel(layout).addBasicLoader();
             locusZoomPlot[currentLzPlotKey].addPanel(layout).addBasicLoader();
         };
 
