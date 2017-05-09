@@ -23,55 +23,50 @@
         <li><g:message code="informational.shared.traits.large-artery_atherosclerosis"></g:message></li>
     </ul>
 
-    <h4>Dataset subjects</h4>
-
-    <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
-
-        <tr><td>n,nnn</td><td>n,nnn</td><td><a onclick="showSection(event)">Cohort name</a>
-
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
-                </table>
-            </div></td><td>Ancestry</td></tr>
-    </table>
-
     <h4>Project</h4>
 
-    <p><g:message code="informational.data.project.project"></g:message></p>
+    <p><g:message code="aboutTheData.stroke.datasets.metastroke.pi"></g:message><br>
+    <g:message code="aboutTheData.stroke.datasets.metastroke"></g:message></p>
+
+ <p><b><g:message code="aboutTheData.stroke.datasets.asgc.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.asgc.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.brains.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.brains.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.geos.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.geos.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.hps.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.hps.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.isgs_swiss.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.isgs_swiss.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.gasros.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.gasros.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.milan.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.milan.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.wtccc_deutschland.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.wtccc_deutschland.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.wtccc_england.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.wtccc_england.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.visp.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.visp.pi"></g:message></p>
+
+     <p><b><g:message code="aboutTheData.stroke.datasets.whi.title"></g:message></b><br>
+    <g:message code="aboutTheData.stroke.datasets.whi.pi"></g:message></p>
 
 
-<h4>Funding acknowledgments</h4>
-<p><g:message code="informational.data.funding.project"></g:message>
-
-<h4>Experiment summary</h4>
-<p><g:message code="informational.data.exptsumm.project"></g:message></p>
-
-<h4>Overview of analysis and results</h4>
-<p><g:message code="informational.data.overview.results"></g:message></p>
 
 
-<h4>Detailed reports</h4>
+<h4>Accessing METASTROKE 2012 data in the T2D Knowledge Portal</h4>
 
-<p>AMP-DCC Data Analysis Report (<a href="" target="_blank">download PDF</a>)</p>
-<p>Genotype Data Quality Control Report (<a href="" target="_blank">download PDF</a>)</p>
-
-<h4>Accessing (dataset name) data in the T2D Knowledge Portal</h4>
-
-<p><g:message code="informational.data.accessing.data"></g:message></p>
-
-<h4>Future plans for (dataset name) data in the T2D Knowledge Portal</h4>
-
-<p><g:message code="informational.data.future.data"></g:message></p>
-
-<h4>External Links to (dataset name) data</h4>
-
-<p><g:message code="informational.data.external.project"></g:message></p>
+<p><g:message code="informational.data.accessing.METASTROKE_2012"></g:message></p>
 </div>
-
 
 </script>
