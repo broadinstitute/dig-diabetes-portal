@@ -1,64 +1,58 @@
 <script class="panel-body" id="GWAS_SIGN_script" type="x-tmpl-mustache">
-    <h6 style="color:#ccc;">Data set</h6>
-
-    <p>Publications:
-    <p>Meschia, James F. et al. "Stroke Genetics Network (SiGN) Study: Design and Rationale for a Genome-Wide Association Study of Ischemic Stroke Subtypes." Stroke; a journal of cerebral circulation 44.10 (2013): 2694–2702.PMC. Web. 6 Oct. 2016.</p>
-    <p>Network, NINDS Stroke Genetics, and International Stroke Genetics Consortium. "Loci associated with ischaemic stroke and its subtypes (SiGN): a genome-wide association study." The Lancet Neurology 15.2 (2016): 174-184.</p>
 
 
-    </p>
-    <h4>Dataset phenotypes</h6>
+     <div class="panel-body">
+
+<h4>Dataset</h4>
+
+<p><g:message code="aboutTheData.stroke.datasets.SiGN_2016"></g:message></p>
+
+<h4>Publications</h4>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.NINDS_2016_LancetNeurol"></g:message><br>
+<g:message code="informational.shared.publications.NINDS_2016_LancetNeurol.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.NINDS_2016_LancetNeurol.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Meschia_2013_Stroke"></g:message><br>
+<g:message code="informational.shared.publications.Meschia_2013_Stroke.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Meschia_2013_Stroke.citation"></g:message> </div>
+</div></p>
+
+
+    <h4>Dataset phenotypes</h4>
     <ul>
-        <li>CCS causative Cardio-aortic embolism-major</li>
-        <li>CCS causative Large artery atherosclerosis</li>
-        <li>CCS causative Small artery occlusion</li>
-        <li>CCS causative Cryptogenic with Cardioembolism minor</li>
-        <li>CCS causative Incomplete + Unclassified</li>
-        <li>CCS causative Undetermined</li>
-        <li>CCS phenotype Cardio-aortic embolism-major</li>
-        <li>CCS phenotype Large artery atherosclerosis- major</li>
-        <li>CCS phenotype Small artery occlusion- major</li>
-        <li>CCS phenotype Cryptogenic</li>
-        <li>toast All stroke</li>
-        <li>toast Cardio-aortic embolism</li>
-        <li>toast Large artery atherosclerosis</li>
-        <li>toast Small artery occlusion</li>
-        <li>toast Other Undetermined</li>
+        <li><g:message code="informational.shared.traits.CCS_causative_Cardio-aortic_embolism-major"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_causative_Large_artery_atherosclerosis"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_causative_Small_artery_occlusion"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_causative_Cryptogenic_with_Cardioembolism_minor"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_causative_Incomplete_Unclassified"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_causative_Undetermined"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_phenotype_Cardio-aortic_embolism-major"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_phenotype_Large_artery_atherosclerosis-major"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_phenotype_Small_artery_occlusion-major"></g:message></li>
+        <li><g:message code="informational.shared.traits.CCS_phenotype_Cryptogenic"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_All_stroke"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
+
     </ul>
 
-    <h4>Dataset subjects</h4>
-
-    <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
-
-        <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">cohort</a>
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">
-                            <ul>
-                                <li>criterion
-                                </li>
-                            </ul>
-                        </td>
-                        <td valign="top">
-                            <ul>
-                                <li>criterion
-                                </li>
-                            </ul>
-                        </td></tr>
-
-                </table>
-            </div></td><td>Ancestry</td></tr>
-
-    </table>
-
     <h4>Project</h4>
-    <h4>project name<small><a href="http://www.cadisp.com/topic/index.html" target="_blank">Learn more ></a>
-    </small></h4>
 
-    <p>
+<h5><b><g:message code="aboutTheData.stroke.datasets.SIGN.title"></g:message></b></h5>
+    <p><g:message code="aboutTheData.stroke.datasets.SIGN.project"></g:message></p>
+
+<h4>Accessing SiGN 2016 data in the Cerebrovascular Disease Knowledge Portal</h4>
+
+<p><g:message code="informational.data.accessing.SiGN_2016"></g:message></p>
+</div>
+
+
 
 </script>
 

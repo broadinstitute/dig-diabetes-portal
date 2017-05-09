@@ -36,6 +36,7 @@
 <g:render template="./data/WGS_GoT2D" />
 <g:render template="./data/WGS_GoT2Dimputed"/>
 <g:render template="./data/WGS_WgnomAD" />
+<g:render template="./data/GWAS_MetaStroke" />
 
 
 <style type="text/css" class="init">
