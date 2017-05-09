@@ -1,6 +1,5 @@
 /**
  * datasetsPage.js has functions to do api call, filter the JSON data and render it as table on datasets page.
-
  */
 
 var mpgSoftware = mpgSoftware || {};
@@ -257,7 +256,6 @@ var mpgSoftware = mpgSoftware || {};
                     var filter_dynamic_html_d = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
                     $("#datatypeFilterDisplay").empty().append(filter_dynamic_html_d);
                 }
-
                 for(var key in datasetPhenotypesMap){
                     var c = [];
                     _.forEach(datasetPhenotypesMap[key], function(nk,nv){
@@ -267,25 +265,20 @@ var mpgSoftware = mpgSoftware || {};
                             phenotypeDatasetsMap[nk.fullName] = [key];}
                     })
                 }
-
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
                     "size"  : 100/(phenotypeGroupArray.length +1)};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
                 var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
                 $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
-
                 renderFilteredData();
-
                 return {
                     storedJsonArray: storedJsonArray,
                     phenotypeDatasetsMap: phenotypeDatasetsMap
                 };
-
             }).fail(function (jqXHR, textStatus, exception) {
                 loading.hide();
                 core.errorReporter(jqXHR, exception);});
         };
-        //
         return {
             displaySelectedTechnology: displaySelectedTechnology,
             onClickdatatype: onClickdatatype,
@@ -294,4 +287,3 @@ var mpgSoftware = mpgSoftware || {};
         }
     } ());
 })();
-
