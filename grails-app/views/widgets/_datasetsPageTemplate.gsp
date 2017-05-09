@@ -39,7 +39,7 @@
 
 <script id="metaData2" type="x-tmpl-mustache">
 
-    <div class="row" style="padding-top:30px; cursor: pointer">
+    <div class="row">
         <h3>Datasets</h3>
         <table id="datasets" class="table table-condensed">
             <thead>
@@ -63,7 +63,7 @@
                                    {{label}}
                                 </a>
                         </div>
-                        <div id="{{name}}_myTarget" class="accordion-body collapse" style="border:thin solid #8a95a8;margin-top:40px;padding-left: 20px;">
+                        <div id="{{name}}_myTarget" class="accordion-body collapse dataset-description" >
                             <div class="accordion-inner">
                                 <div id="{{name}}_script_holder"></div>
                             </div>
@@ -85,31 +85,30 @@
 
 <script id="datatypeFilter" type="x-tmpl-mustache">
     <h5>Data type</h5>
-    <div class='' style='display:table-row' >
+    <div class='filters-style' >
             {{#datatype}}
-            <div class='datatype-option'  onclick='mpgSoftware.datasetsPage.onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+            <div class='datatype-option'  onclick='mpgSoftware.datasetsPage.onClickdatatype("{{.}}")'>{{.}}</div>
             {{/datatype}}
-            <div class='datatype-option' onclick='mpgSoftware.datasetsPage.onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
+            <div class='datatype-option datatype-option-showall' onclick='mpgSoftware.datasetsPage.onClickdatatype("Show all")'>Show all</div>
     </div>
 </script>
 
 <script id="phenotypeFilter" type="x-tmpl-mustache">
   <h5>Phenotype</h5>
-  <div class='' style='display:table-row'>
+  <div class='filters-style'>
     {{#groups}}
-    <div class='phenotype-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypeGroup("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+    <div class='phenotype-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypeGroup("{{.}}")'>{{.}}</div>
     {{/groups}}
-    <div class='phenotype-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypeGroup("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#39f; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
+    <div class='phenotype-option phenotype-option-showall' onclick='mpgSoftware.datasetsPage.onClickPhenotypeGroup("Show all")' >Show all</div>
   </div>
 </script>
 
 <!--this panel would display only when phenotype Filter is clicked -->
 <script id="phenotypeFilterLevel2" type="x-tmpl-mustache">
-  <div class='' style='display:table-row '>
-
-    <div class="phenotype-level2-row" style='margin-top:10px' cursor: pointer>
+  <div class='filters-style'>
+    <div class="phenotype-level2-row">
     {{#phenotype}}
-    <div class='phenotype-level2-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypelevel2("{{.}}")' style='cursor: pointer; width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' >{{.}}</div>
+    <div class='phenotype-level2-option' onclick='mpgSoftware.datasetsPage.onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
     {{/phenotype}}
     </div>
     </div>

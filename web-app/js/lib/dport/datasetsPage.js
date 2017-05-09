@@ -1,3 +1,8 @@
+/**
+ * datasetsPage.js has functions to do api call, filter the JSON data and render it as table on datasets page.
+
+ */
+
 var mpgSoftware = mpgSoftware || {};
 
 
@@ -15,14 +20,15 @@ var mpgSoftware = mpgSoftware || {};
         var phenotypeGroupUniqueNameMap = {};
         var regexStr = "";
         var sortedStoredJsonArray = [];
-
-
-
         var datasetPhenotypesMap = {};
         var datasetArray = [];
         var allPhenotypeArrayofArray = [];
 
-        function getAccessName(dataTypeName){
+
+        /**
+         * Returns access names for special datasets
+         */
+        var getAccessName = function (dataTypeName){
             var access;
             if (dataTypeName.includes( "BioMe")){
                 access = "Early Access Phase 2";}
@@ -30,10 +36,13 @@ var mpgSoftware = mpgSoftware || {};
                 access = "Unpublished";}
             else{
                 access = "Open access";}
-            return access;}
+            return access;
+        }
 
+        /**
+         * Takes "selected level2 phenotype" as a parameter else renders all of the datasets without filtering.
+         */
         var renderFilteredData = function (selectedLevel2Phenotype){
-
             if(typeof selectedLevel2Phenotype !== 'undefined'){
                 var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                     return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
@@ -72,9 +81,16 @@ var mpgSoftware = mpgSoftware || {};
             })
         }
 
+        /**
+         * Expands cohort section inside dataset-description
+         */
         function showSection(event) {
             $(event.target.nextElementSibling).toggle();
         }
+
+        /**
+         * called on click of datatype filter, it renders datasets for selected datatype.
+         */
         var onClickdatatype = function (selectedtech){
             console.log("i am clicked" + selectedtech);
             var allDatatypes = $("div.datatype-option");
@@ -86,9 +102,14 @@ var mpgSoftware = mpgSoftware || {};
                     $(k).css("background-color", "rgb(255, 153, 68)");
                     $(k).css("color", "rgb(255, 255, 255)");
                     $('div.phenotype-level2-row').empty();
-                    displaySelectedTechnology(selectedtech, true,"/dig-diabetes-portal/informational/aboutTheDataAjax");}
-            })}
+                    displaySelectedTechnology(selectedtech, true,"/dig-diabetes-portal/informational/aboutTheDataAjax");
+                }
+            })
+        }
 
+        /**
+         * called on click of phenotype filter, it renders phenotype level2 filter
+         */
         var onClickPhenotypeGroup= function (selectedPhenotypegroup){
             // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
             console.log(selectedPhenotypegroup);
@@ -112,6 +133,9 @@ var mpgSoftware = mpgSoftware || {};
             renderFilteredData();
         }
 
+        /**
+         * called on click of phenotype level2 filter, it renders filtered dataset by calling "renderFilteredData" function
+         */
         var  onClickPhenotypelevel2 = function (selectedLevel2Phenotype){
             var allPhenotypes = $("div.phenotype-level2-option");
             _.forEach(allPhenotypes, function(k,v){
@@ -125,14 +149,21 @@ var mpgSoftware = mpgSoftware || {};
             })
         }
 
+        /**
+         * Helper function to add only unique elements to an array
+         */
         function addOnlyUniqueElements(arr) {
             var u = {}, a = [];
             for(var i = 0, l = arr.length; i < l; ++i){
                 if(!u.hasOwnProperty(arr[i])) {
                     a.push(arr[i]);
                     u[arr[i]] = 1;}}
-            return a;}
+            return a;
+        }
 
+        /**
+         * Helper function to create a map where key is phenotype group and value is an array of level2 phenotype
+         */
         var phenotypeGroupNameMap = {};
         function getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray){
             _.forEach(phenotypeGroupArray,function(k,v){
@@ -143,8 +174,12 @@ var mpgSoftware = mpgSoftware || {};
                             b.push(k2.fullName);
                         }
                         phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
-            return phenotypeGroupNameMap;}
+            return phenotypeGroupNameMap;
+        }
 
+        /**
+         * This function does the AJAX call and does filtering of data based on selected technology
+         */
         var displaySelectedTechnology = function (filterDatatype,doNotRedraw, aboutTheDataAjaxURL) {
             var selectedTech="";
             storedJsonArray=[];
