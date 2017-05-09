@@ -64,6 +64,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
         String mdsScore;
         String referenceAllele;
         Double pValue;
+        Double posteriorPValue;
 
         // make sure translator properly initialized
         if (this.defaultDataSetKey == null) {
@@ -115,6 +116,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
             chromosome = null;
             referenceAllele = null;
             pValue = null;
+            posteriorPValue = null;
             mdsScore = null;
 
             // get the variant
@@ -168,10 +170,21 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
                     }
                 }
 
+                // add in the posteriorPValue
+                tempPropertyValue = variant.getPropertyValueFromCollection("POSTERIOR_P_VALUE", this.defaultDataSetKey, this.defaultPhenotypeKey);
+                if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)  && (tempPropertyValue.getValue() != "null")) {
+                    try {
+                        posteriorPValue = Double.valueOf(tempPropertyValue.getValue());
+                    } catch (NumberFormatException exception) {
+                        // throw exception which will skip variant
+                        throw new PortalException("Got number format error for posteriorPValue for variant: " + variant + ": " + exception.getMessage());
+                    }
+                }
+
                 // if al values there and no issues, then add to arrays (want to make sure to keep arrays synched)
                 // add in the ref allele frequency
                 refAlleleFrequencyArray.put(null);
-                analysisArray.put(3);
+                analysisArray.put(posteriorPValue);
                 positionArray.put(position);
                 pValueArray.put(pValue);
                 chromosomeArray.put(chromosome);
