@@ -11,7 +11,7 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.datasetsPage = (function () {
 
-        var jsonHolder={};
+
         var storedJsonArray=[];
         var phenotypeDatasetsMap = {};
         var phenotypeLevel2holder = {};
@@ -43,6 +43,7 @@ var mpgSoftware = mpgSoftware || {};
          * Takes "selected level2 phenotype" as a parameter else renders all of the datasets without filtering.
          */
         var renderFilteredData = function (selectedLevel2Phenotype){
+            var jsonHolder={};
             if(typeof selectedLevel2Phenotype !== 'undefined'){
                 var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                     return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
@@ -111,9 +112,6 @@ var mpgSoftware = mpgSoftware || {};
          * called on click of phenotype filter, it renders phenotype level2 filter
          */
         var onClickPhenotypeGroup= function (selectedPhenotypegroup){
-            // selectedLevel2Phenotype1 = selectedLevel2Phenotype;
-            console.log(selectedPhenotypegroup);
-
             $('div.phenotype-level2-row').empty();
             var allPhenotypeGroups = $("div.phenotype-option");
 
@@ -164,8 +162,8 @@ var mpgSoftware = mpgSoftware || {};
         /**
          * Helper function to create a map where key is phenotype group and value is an array of level2 phenotype
          */
-        var phenotypeGroupNameMap = {};
         function getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray){
+            var phenotypeGroupNameMap = {};
             _.forEach(phenotypeGroupArray,function(k,v){
                 var b = [];
                 _.forEach(allPhenotypeArrayofArray, function(k1,v1){
@@ -239,7 +237,6 @@ var mpgSoftware = mpgSoftware || {};
                         };
                         each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
-                        //storedJsonArray.push(regexStr);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
@@ -288,6 +285,7 @@ var mpgSoftware = mpgSoftware || {};
                 loading.hide();
                 core.errorReporter(jqXHR, exception);});
         };
+        //
         return {
             displaySelectedTechnology: displaySelectedTechnology,
             onClickdatatype: onClickdatatype,

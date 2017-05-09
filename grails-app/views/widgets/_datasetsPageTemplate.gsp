@@ -63,11 +63,7 @@
                                    {{label}}
                                 </a>
                         </div>
-                        <div id="{{name}}_myTarget" class="accordion-body collapse dataset-description" >
-                            <div class="accordion-inner">
-                                <div id="{{name}}_script_holder"></div>
-                            </div>
-                        </div>
+
                     </div>
             </td>
 
@@ -75,6 +71,14 @@
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
             <td class="datatype">{{technology}}</td>
+        </tr>
+        <tr>
+        <td colspan="5" style="border: none; padding:0; margin: 0;"> <div id="{{name}}_myTarget" class="accordion-body collapse dataset-description" >
+                            <div class="accordion-inner">
+                                <div id="{{name}}_script_holder"></div>
+                            </div>
+                        </div>
+                            </td>
         </tr>
         </div>
         {{/parents}}

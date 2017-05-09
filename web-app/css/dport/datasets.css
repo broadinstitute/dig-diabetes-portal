@@ -1,6 +1,7 @@
 
 div.filters-style {
     display:table-row;
+    width:100%;
 }
 
 div.phenotype-level2-row{
@@ -9,6 +10,7 @@ div.phenotype-level2-row{
 
 div.row{
     padding-top:30px;
+    width: 100%
 }
 
 div.phenotype-level2-option{
