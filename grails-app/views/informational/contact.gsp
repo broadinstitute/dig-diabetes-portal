@@ -213,40 +213,40 @@
 
 
             <g:else>
-                %{--<div class="buttonHolder tabbed-about-page">--}%
+                <div class="buttonHolder tabbed-about-page">
 
-                    %{--<ul class="nav nav-pills">--}%
-                        %{--<div class="row">--}%
+                    <ul class="nav nav-pills">
+                        <div class="row">
 
-                            %{--<div class="col-md-3 text-center">--}%
-                                %{--<li role="presentation" id="contact_consortium" class="myPills activated">--}%
-                                    %{--<a href="#">--}%
-                                        %{--<g:message code="contact.consortium" default="Consortium"/>--}%
-                                    %{--</a>--}%
-                                %{--</li>--}%
-                            %{--</div>--}%
-                            %{--<div class="col-md-3 text-center">--}%
-                                %{--<li role="presentation" id="contact_cohort" class="myPills">--}%
-                                    %{--<a href="#">--}%
-                                        %{--<g:message code="contact.cohort" default="Studies"/>--}%
-                                    %{--</a>--}%
-                                %{--</li>--}%
-                            %{--</div>--}%
-                            %{--<div class="col-md-3 text-center">--}%
-                                %{--<li role="presentation" id="contact_portal" class="myPills active">--}%
-                                    %{--<a href="#">--}%
-                                        %{--<g:message code="contact.portal" default="Portal"/>--}%
-                                    %{--</a>--}%
-                                %{--</li>--}%
-                            %{--</div>--}%
+                            <div class="col-md-3 text-center">
+                                <li role="presentation" id="contact_consortium" class="myPills activated">
+                                    <a href="#">
+                                        <g:message code="contact.consortium" default="Consortium"/>
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <li role="presentation" id="contact_cohort" class="myPills">
+                                    <a href="#">
+                                        <g:message code="contact.cohort" default="Studies"/>
+                                    </a>
+                                </li>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <li role="presentation" id="contact_portal" class="myPills active">
+                                    <a href="#">
+                                        <g:message code="contact.portal" default="Portal"/>
+                                    </a>
+                                </li>
+                            </div>
 
 
-                            %{--<div class="col-md-3 text-center">--}%
-                            %{--</div>--}%
+                            <div class="col-md-3 text-center">
+                            </div>
 
-                        %{--</div>--}%
+                        </div>
 
-                    %{--</ul>--}%
+                    </ul>
                     <g:render template="contact/stroke_consortium"/>
                 <g:render template="contact/stroke_studies"/>
                 <g:render template="contact/stroke_portal"/>

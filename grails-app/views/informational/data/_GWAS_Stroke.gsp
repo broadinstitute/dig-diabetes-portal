@@ -1,5 +1,6 @@
 <script class="panel-body" id="GWAS_Stroke_script" type="x-tmpl-mustache">
     <div class="panel-body">
+
 <h4>Dataset</h4>
 
 <p><g:message code="aboutTheData.stroke.datasets.ICH_GWAS_2014"></g:message></p>
@@ -49,7 +50,7 @@
 <h4>Accessing ICH GWAS 2014 data in the Cerebrovascular Disease Knowledge Portal</h4>
 
 <p><g:message code="informational.data.accessing.ICH_GWAS_2014"></g:message></p>
-
+</div>
 
 
 </script>
