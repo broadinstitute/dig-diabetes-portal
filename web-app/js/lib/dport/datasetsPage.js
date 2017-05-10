@@ -41,7 +41,6 @@ var mpgSoftware = mpgSoftware || {};
                     return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
                 sortedStoredJsonArray = filteredjsonArray.sort(
                     function(x,y){
-                        console.log(y.sortOrder);
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
@@ -52,7 +51,6 @@ var mpgSoftware = mpgSoftware || {};
             else{
                 sortedStoredJsonArray = storedJsonArray.sort(
                     function(x,y){
-                        console.log(y.sortOrder);
                         if(x.sortOrder > y.sortOrder){
                             return 1;
                         }
@@ -66,11 +64,11 @@ var mpgSoftware = mpgSoftware || {};
             })
             jsonHolder["parents"] = sortedStoredJsonArray;
             var template = $("#metaData2")[0].innerHTML;
-            var dynamic_html = Mustache.to_html(template,jsonHolder);
-            $("#metaDataDisplay").empty().append(dynamic_html);
+            var dynamicHtml = Mustache.to_html(template,jsonHolder);
+            $("#metaDataDisplay").empty().append(dynamicHtml);
 
-            _.forEach(informationGspFileNames, function (each_Gspfile,val){
-                $(each_Gspfile + "_holder").append(Mustache.render($(each_Gspfile)[0].innerHTML));
+            _.forEach(informationGspFileNames, function (eachGspFile,val){
+                $(eachGspFile + "_holder").append(Mustache.render($(eachGspFile)[0].innerHTML));
             })
         }
 
@@ -85,13 +83,11 @@ var mpgSoftware = mpgSoftware || {};
          * called on click of datatype filter, it renders datasets for selected datatype.
          */
         var onClickdatatype = function (selectedtech){
-            console.log("i am clicked" + selectedtech);
             var allDatatypes = $("div.datatype-option");
             _.forEach(allDatatypes, function(k,v){
                 $(k).css("background-color", "rgb(255, 255, 204)");
                 $(k).css("color", "rgb(0, 0, 0)");
                 if($(k).text() == selectedtech){
-                    //console.log("found" + $(k).text());
                     $(k).css("background-color", "rgb(255, 153, 68)");
                     $(k).css("color", "rgb(255, 255, 255)");
                     $('div.phenotype-level2-row').empty();
@@ -117,8 +113,8 @@ var mpgSoftware = mpgSoftware || {};
                 }
                 phenotypeLevel2holder= {"phenotype": phenotypeGroupUniqueNameMap[selectedPhenotypegroup]};
                 var phenotypeFilterLevel2Template = $("#phenotypeFilterLevel2")[0].innerHTML;
-                var filter_dynamic_html_level2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
-                $("#phenotypeFilterLevel2Display").empty().append(filter_dynamic_html_level2);
+                var filterDynamicHtmlLevel2 = Mustache.to_html(phenotypeFilterLevel2Template,phenotypeLevel2holder);
+                $("#phenotypeFilterLevel2Display").empty().append(filterDynamicHtmlLevel2);
 
             });
             renderFilteredData();
@@ -193,51 +189,49 @@ var mpgSoftware = mpgSoftware || {};
                 var datatype = [];
                 phenotypeGroupUniqueNameMap = {};
                 var allPhenotypeArrayofArray = [];
-                _.forEach(data.children, function (each_key,val) {
-                    datatype.push(each_key.technology);
+                _.forEach(data.children, function (eachKey,val) {
+                    datatype.push(eachKey.technology);
                     if(selectedTech == "") {
-                        console.log(each_key.technology + "technologyUntranslated");
-                        each_key["access"]= getAccessName(each_key.name);
-                        each_key["accessColor"] = function(){
-                            if(getAccessName(each_key.name) == "Open access"){
+                        eachKey["access"]= getAccessName(eachKey.name);
+                        eachKey["accessColor"] = function(){
+                            if(getAccessName(eachKey.name) == "Open access"){
                                 return "green";
                             }
                             else {
                                 return "red";
                             }
                         };
-                        each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
-                        storedJsonArray.push(each_key);
-                       // datasetArray.push(each_key.name);
-                        datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
-                        distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
+                        eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        storedJsonArray.push(eachKey);
+                        datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
+                        distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
                                 map[k] = k;}
                         })
-                        allPhenotypeArrayofArray.push(each_key.phenotypes);
+                        allPhenotypeArrayofArray.push(eachKey.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
                     }
-                    else if (selectedTech == each_key.technologyUntranslated){
-                        each_key["access"] = getAccessName(each_key.name);
-                        each_key["accessColor"] = function(){
-                            if(getAccessName(each_key.name) == "Open access"){
+                    else if (selectedTech == eachKey.technologyUntranslated){
+                        eachKey["access"] = getAccessName(eachKey.name);
+                        eachKey["accessColor"] = function(){
+                            if(getAccessName(eachKey.name) == "Open access"){
                                 return "green";
                             }
                             else {
                                 return "red";
                             }
                         };
-                        each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
-                        storedJsonArray.push(each_key);
-                        datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
-                        distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
+                        eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        storedJsonArray.push(eachKey);
+                        datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
+                        distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
                                 map[k] = [1];}})
-                        allPhenotypeArrayofArray.push(each_key.phenotypes);
+                        allPhenotypeArrayofArray.push(eachKey.phenotypes);
                         phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
                     }
                 });
@@ -248,8 +242,8 @@ var mpgSoftware = mpgSoftware || {};
                 };
                 if(doNotRedraw != true){
                     var datatypeFilterTemplate = $("#datatypeFilter")[0].innerHTML;
-                    var filter_dynamic_html_d = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
-                    $("#datatypeFilterDisplay").empty().append(filter_dynamic_html_d);
+                    var filterDynamicHtmlD = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
+                    $("#datatypeFilterDisplay").empty().append(filterDynamicHtmlD);
                 }
 
                 _.forOwn(datasetPhenotypesMap, function(value, key){
@@ -263,8 +257,8 @@ var mpgSoftware = mpgSoftware || {};
 
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
-                var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
-                $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
+                var filterDynamicHtml = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
+                $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
                 return {
                     storedJsonArray: storedJsonArray,
