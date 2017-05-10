@@ -146,41 +146,41 @@ t2dProdLoadBalancedServer {
     path = 'gs/'
 }
 */
-t2dDistributedLocalhostServer {
-    base = 'http://localhost:8090/'
-    name =  'dccservices/'
-    path = 'distributed/'
-}
-t2dProdLoadBalancedServer {
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
-    name =  'dccservices/'
-    path = 'distributed/'
-}
-t2dQaLoadBalancedServer {
-    base = 'http://dig-api-qa.broadinstitute.org/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dQa01BehindLoadBalancer {
-    base = 'http://dig-qa-01.broadinstitute.org:8888/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dQa02BehindLoadBalancer {
-    base = 'http://dig-qa-02.broadinstitute.org:8888/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dDevLoadBalancedServer {
-    base = 'http://dig-api-dev.broadinstitute.org/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dDev01BehindLoadBalancer {
-    base = 'http://dig-dev-01.broadinstitute.org:8888/'
-    name =  'dev/'
-    path = 'gs/'
-}
+//t2dDistributedLocalhostServer {
+//    base = 'http://localhost:8090/'
+//    name =  'dccservices/'
+//    path = 'distributed/'
+//}
+//t2dProdLoadBalancedServer {
+//    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
+//    name =  'dccservices/'
+//    path = 'distributed/'
+//}
+//t2dQaLoadBalancedServer {
+//    base = 'http://dig-api-qa.broadinstitute.org/'
+//    name =  'qa/'
+//    path = 'gs/'
+//}
+//t2dQa01BehindLoadBalancer {
+//    base = 'http://dig-qa-01.broadinstitute.org:8888/'
+//    name =  'qa/'
+//    path = 'gs/'
+//}
+//t2dQa02BehindLoadBalancer {
+//    base = 'http://dig-qa-02.broadinstitute.org:8888/'
+//    name =  'qa/'
+//    path = 'gs/'
+//}
+//t2dDevLoadBalancedServer {
+//    base = 'http://dig-api-dev.broadinstitute.org/'
+//    name =  'dev/'
+//    path = 'gs/'
+//}
+//t2dDev01BehindLoadBalancer {
+//    base = 'http://dig-dev-01.broadinstitute.org:8888/'
+//    name =  'dev/'
+//    path = 'gs/'
+//}
 t2dDev02BehindLoadBalancer {
     base = 'http://dig-dev-02.broadinstitute.org:8888/'
     name =  'dev/'
@@ -296,6 +296,22 @@ burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://l
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+
+//Convert all the rest server variables into single string
+
+t2dDistributedLocalhostServer = new ServerBean("local server for deployment", "'http://localhost:8090/dccservices/distributed/'");
+
+t2dProdLoadBalancedServer = new ServerBean("Production load balancer server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/");
+
+t2dQaLoadBalancedServer = new ServerBean("QA load balancer server", "http://dig-api-qa.broadinstitute.org/qa/gs");
+
+t2dQa01BehindLoadBalancer = new ServerBean("T2D QA01 behind load balancer", "http://dig-qa-01.broadinstitute.org:8888/qa/gs");
+
+t2dDevLoadBalancedServer = new ServerBean("T2D Dev Load balancer server", "http://dig-api-dev.broadinstitute.org/dev/gs/");
+
+t2dDev01BehindLoadBalancer = new ServerBean("KB2 code burden pass-through server", "http://dig-dev-01.broadinstitute.org:8888/dev/gs/");
+burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
