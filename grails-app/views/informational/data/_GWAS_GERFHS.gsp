@@ -15,6 +15,58 @@
 
     </ul>
 
+<h4>Dataset subjects</h4>
+
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Cohort</th><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
+
+    %{--<tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Cohort name</a>--}%
+    %{--<div style="display: none;" class="cohortDetail">--}%
+
+<tr><td>GERFHS</td><td>628</td><td>573</td><td>European and African</td></tr>
+
+    %{--<table border="1">--}%
+                %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
+%{--<tr>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td></tr>--}%
+
+            %{--</table>--}%
+
+
+
+
+
+<tr><td>Cincinnati Control Cohort (CCC)</td><td>0</td><td>282</td><td>European and African</td></tr>
+
+    %{--<table border="1">--}%
+                %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
+%{--<tr>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td></tr>--}%
+
+            %{--</table>--}%
+
+ </table>
+
+<g:message code="aboutTheData.stroke.datasets.GERFHS2017.casecontrol"></g:message>
+
 
     <h4>Project</h4>
 

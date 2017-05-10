@@ -85,7 +85,7 @@
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
 </g:if>
 <g:else>
-    <h1><g:message code="contact.title.plural" default="Contact"/></h1>
+    %{--<h1><g:message code="contact.title.plural" default="Contact"/></h1>--}%
 </g:else>
 
     <div class="container dk-static-content">
@@ -213,49 +213,58 @@
 
 
             <g:else>
-                <div class="buttonHolder tabbed-about-page">
+                %{--<div class="buttonHolder tabbed-about-page">--}%
 
-                    <ul class="nav nav-pills">
-                        <div class="row">
+                    %{--<ul class="nav nav-pills">--}%
+                        %{--<div class="row">--}%
 
-                            <div class="col-md-3 text-center">
-                                <li role="presentation" id="contact_consortium" class="myPills activated">
-                                    <a href="#">
-                                        <g:message code="contact.consortium" default="Consortium"/>
-                                    </a>
-                                </li>
-                            </div>
-                            <div class="col-md-3 text-center">
-                                <li role="presentation" id="contact_cohort" class="myPills">
-                                    <a href="#">
-                                        <g:message code="contact.cohort" default="Studies"/>
-                                    </a>
-                                </li>
-                            </div>
-                            <div class="col-md-3 text-center">
-                                <li role="presentation" id="contact_portal" class="myPills active">
-                                    <a href="#">
-                                        <g:message code="contact.portal" default="Portal"/>
-                                    </a>
-                                </li>
-                            </div>
+                            %{--<div class="col-md-3 text-center">--}%
+                                %{--<li role="presentation" id="contact_consortium" class="myPills activated">--}%
+                                    %{--<a href="#">--}%
+                                        %{--<g:message code="contact.consortium" default="Consortium"/>--}%
+                                    %{--</a>--}%
+                                %{--</li>--}%
+                            %{--</div>--}%
+                            %{--<div class="col-md-3 text-center">--}%
+                                %{--<li role="presentation" id="contact_cohort" class="myPills">--}%
+                                    %{--<a href="#">--}%
+                                        %{--<g:message code="contact.cohort" default="Studies"/>--}%
+                                    %{--</a>--}%
+                                %{--</li>--}%
+                            %{--</div>--}%
+                            %{--<div class="col-md-3 text-center">--}%
+                                %{--<li role="presentation" id="contact_portal" class="myPills active">--}%
+                                    %{--<a href="#">--}%
+                                        %{--<g:message code="contact.portal" default="Portal"/>--}%
+                                    %{--</a>--}%
+                                %{--</li>--}%
+                            %{--</div>--}%
 
 
-                            <div class="col-md-3 text-center">
-                            </div>
+                            %{--<div class="col-md-3 text-center">--}%
+                            %{--</div>--}%
 
-                        </div>
+                        %{--</div>--}%
 
-                    </ul>
-                    <g:render template="contact/stroke_consortium"/>
-                <g:render template="contact/stroke_studies"/>
-                <g:render template="contact/stroke_portal"/>
+                    %{--</ul>--}%
+                    %{--<g:render template="contact/stroke_consortium"/>--}%
+                %{--<g:render template="contact/stroke_studies"/>--}%
+                %{--<g:render template="contact/stroke_portal"/>--}%
                     %{--<div class="content">--}%
                         %{--<div id="contactContent">--}%
                             %{--<g:render template="contact/${specifics}"/>--}%
                         %{--</div>--}%
                     %{--</div>--}%
+                %{--</div>--}%
+
+                <div id="main">
+
+                    <p><g:message code="contact.portal.broadAttribution"></g:message></p>
+                    <p><g:message code="contact.email.stroke"></g:message></p>
+                    <h2><g:message code="contact.portal"></g:message></h2>
+                    <p><g:message code="contact.stroke.portal_team"></g:message></p>
                 </div>
+
             </g:else>
         </div>
 
