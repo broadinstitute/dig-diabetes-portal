@@ -90,4 +90,20 @@
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_stroke_portal_history.header"/></h3>
 <p><g:message code="informational.about_stroke_portal_history.section_1"/></p>
 
-</div></div></div></div>
+</div>
+            <div class="col-md-3" id="t2dImageHolder">
+
+                <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.people.header"></g:message></h3>
+
+                <h4><g:message code="informational.about_stroke.people.header1"></g:message></h4>
+
+                <ul class="list-unstyled"><g:message code="informational.about_stroke.people.leaders"></g:message></ul>
+
+                <h4><g:message code="informational.about_stroke.people.header2"></g:message></h4>
+
+                <ul class="list-unstyled"><g:message code="informational.about_stroke.people_sc"></g:message></ul>
+
+
+            </div>
+
+        </div></div></div>
