@@ -10,19 +10,9 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.datasetsPage = (function () {
 
-
         var storedJsonArray=[];
         var phenotypeDatasetsMap = {};
-        var phenotypeLevel2holder = {};
-        var datatype = [];
-        var informationGspFileNames=[];
         var phenotypeGroupUniqueNameMap = {};
-        var regexStr = "";
-        var sortedStoredJsonArray = [];
-        var datasetPhenotypesMap = {};
-        var datasetArray = [];
-        var allPhenotypeArrayofArray = [];
-
 
         /**
          * Returns access names for special datasets
@@ -43,6 +33,9 @@ var mpgSoftware = mpgSoftware || {};
          */
         var renderFilteredData = function (selectedLevel2Phenotype){
             var jsonHolder={};
+            var informationGspFileNames=[];
+            var regexStr = "";
+            var sortedStoredJsonArray = [];
             if(typeof selectedLevel2Phenotype !== 'undefined'){
                 var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                     return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
@@ -111,6 +104,7 @@ var mpgSoftware = mpgSoftware || {};
          * called on click of phenotype filter, it renders phenotype level2 filter
          */
         var onClickPhenotypeGroup= function (selectedPhenotypegroup){
+            var phenotypeLevel2holder = {};
             $('div.phenotype-level2-row').empty();
             var allPhenotypeGroups = $("div.phenotype-option");
 
@@ -192,16 +186,17 @@ var mpgSoftware = mpgSoftware || {};
                 data: {technology: selectedTech},
                 async: true
             }).done(function (data, textStatus, jqXHR) {
-                datasetPhenotypesMap = {};
+                var datasetPhenotypesMap = {};
                 var distinctPhenotypeGroups = [];
                 var phenotypeGroupArray = [];
                 var map = {};
+                var datatype = [];
                 phenotypeGroupUniqueNameMap = {};
-                allPhenotypeArrayofArray = [];
+                var allPhenotypeArrayofArray = [];
                 _.forEach(data.children, function (each_key,val) {
                     datatype.push(each_key.technology);
                     if(selectedTech == "") {
-                        console.log(each_key.name + " " + each_key.sortOrder);
+                        console.log(each_key.technology + "technologyUntranslated");
                         each_key["access"]= getAccessName(each_key.name);
                         each_key["accessColor"] = function(){
                             if(getAccessName(each_key.name) == "Open access"){
@@ -213,7 +208,7 @@ var mpgSoftware = mpgSoftware || {};
                         };
                         each_key.name = each_key.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(each_key);
-                        datasetArray.push(each_key.name);
+                       // datasetArray.push(each_key.name);
                         datasetPhenotypesMap[each_key.name] = each_key.phenotypes;
                         distinctPhenotypeGroups =  _.chain(each_key.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
@@ -256,8 +251,12 @@ var mpgSoftware = mpgSoftware || {};
                     var filter_dynamic_html_d = Mustache.to_html(datatypeFilterTemplate,datatypeFilterHolder);
                     $("#datatypeFilterDisplay").empty().append(filter_dynamic_html_d);
                 }
+
+                _.forOwn(datasetPhenotypesMap, function(value, key){
+                    console.log(value + "val");
+                })
                 for(var key in datasetPhenotypesMap){
-                    var c = [];
+                    console.log(key + "I am key");
                     _.forEach(datasetPhenotypesMap[key], function(nk,nv){
                         if(phenotypeDatasetsMap.hasOwnProperty(nk.fullName)){
                             phenotypeDatasetsMap[nk.fullName].push(key);}
@@ -265,8 +264,7 @@ var mpgSoftware = mpgSoftware || {};
                             phenotypeDatasetsMap[nk.fullName] = [key];}
                     })
                 }
-                var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort(),
-                    "size"  : 100/(phenotypeGroupArray.length +1)};
+                var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
                 var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
                 $("#phenotypeFilterLevel1Display").empty().append(filter_dynamic_html);
