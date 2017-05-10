@@ -253,17 +253,14 @@ var mpgSoftware = mpgSoftware || {};
                 }
 
                 _.forOwn(datasetPhenotypesMap, function(value, key){
-                    console.log(value + "val");
-                })
-                for(var key in datasetPhenotypesMap){
-                    console.log(key + "I am key");
                     _.forEach(datasetPhenotypesMap[key], function(nk,nv){
                         if(phenotypeDatasetsMap.hasOwnProperty(nk.fullName)){
                             phenotypeDatasetsMap[nk.fullName].push(key);}
                         else{
                             phenotypeDatasetsMap[nk.fullName] = [key];}
                     })
-                }
+                })
+
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
                 var filter_dynamic_html = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
