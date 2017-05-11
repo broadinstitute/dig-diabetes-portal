@@ -146,130 +146,130 @@ t2dProdLoadBalancedServer {
     path = 'gs/'
 }
 */
-//t2dDistributedLocalhostServer {
-//    base = 'http://localhost:8090/'
-//    name =  'dccservices/'
-//    path = 'distributed/'
+t2dDistributedLocalhostServer {
+    base = 'http://localhost:8090/'
+    name =  'dccservices/'
+    path = 'distributed/'
+}
+t2dProdLoadBalancedServer {
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
+    name =  'dccservices/'
+    path = 'distributed/'
+}
+t2dQaLoadBalancedServer {
+    base = 'http://dig-api-qa.broadinstitute.org/'
+    name =  'qa/'
+    path = 'gs/'
+}
+t2dQa01BehindLoadBalancer {
+    base = 'http://dig-qa-01.broadinstitute.org:8888/'
+    name =  'qa/'
+    path = 'gs/'
+}
+t2dQa02BehindLoadBalancer {
+    base = 'http://dig-qa-02.broadinstitute.org:8888/'
+    name =  'qa/'
+    path = 'gs/'
+}
+t2dDevLoadBalancedServer {
+    base = 'http://dig-api-dev.broadinstitute.org/'
+    name =  'dev/'
+    path = 'gs/'
+}
+t2dDev01BehindLoadBalancer {
+    base = 'http://dig-dev-01.broadinstitute.org:8888/'
+    name =  'dev/'
+    path = 'gs/'
+}
+t2dDev02BehindLoadBalancer {
+    base = 'http://dig-dev-02.broadinstitute.org:8888/'
+    name =  'dev/'
+    path = 'gs/'
 //}
-//t2dProdLoadBalancedServer {
-//    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
-//    name =  'dccservices/'
-//    path = 'distributed/'
-//}
-//t2dQaLoadBalancedServer {
-//    base = 'http://dig-api-qa.broadinstitute.org/'
-//    name =  'qa/'
-//    path = 'gs/'
-//}
-//t2dQa01BehindLoadBalancer {
-//    base = 'http://dig-qa-01.broadinstitute.org:8888/'
-//    name =  'qa/'
-//    path = 'gs/'
-//}
-//t2dQa02BehindLoadBalancer {
-//    base = 'http://dig-qa-02.broadinstitute.org:8888/'
-//    name =  'qa/'
-//    path = 'gs/'
-//}
-//t2dDevLoadBalancedServer {
-//    base = 'http://dig-api-dev.broadinstitute.org/'
-//    name =  'dev/'
-//    path = 'gs/'
-//}
-//t2dDev01BehindLoadBalancer {
-//    base = 'http://dig-dev-01.broadinstitute.org:8888/'
-//    name =  'dev/'
-//    path = 'gs/'
-//}
-//t2dDev02BehindLoadBalancer {
-//    base = 'http://dig-dev-02.broadinstitute.org:8888/'
-//    name =  'dev/'
-//    path = 'gs/'
-////}
-//t2dProd01BehindLoadBalancer {
-//    base = 'http://dig-prod-01.broadinstitute.org:8888/'
-//    name =  'prod/'
-//    path = 'gs/'
-//}
+t2dProd01BehindLoadBalancer {
+    base = 'http://dig-prod-01.broadinstitute.org:8888/'
+    name =  'prod/'
+    path = 'gs/'
+}
 
 
-//t2dProd02BehindLoadBalancer {
-//    base = 'http://dig-prod-02.broadinstitute.org:8888/'
-//    name =  'prod/'
-//    path = 'gs/'
-//}
+t2dProd02BehindLoadBalancer {
+    base = 'http://dig-prod-02.broadinstitute.org:8888/'
+    name =  'prod/'
+    path = 'gs/'
+}
 
-// individual servers
-//t2dAws01RestServer {
-////    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-//    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
-//    name =  'aws/'
-//    path = 'gs/'
-//}
+ individual servers
+t2dAws01RestServer {
+//    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
+    name =  'aws/'
+    path = 'gs/'
+}
 
 
-//t2dAwsStage01RestServer {
-////    base = 'http://localhost:8888/'
-////    name =  'dig-genome-store/'
-//    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
-//    name =  'aws01/'
-//    path = 'gs/'
-//}
-
-//toddServer {
-//    base = 'http://dig-prod.broadinstitute.org:8087/'
-//    name =  'todd/'
-//    path = 'gs/'
-//}
-
-//t2dLocalhostRestServer {
+t2dAwsStage01RestServer {
 //    base = 'http://localhost:8888/'
 //    name =  'dig-genome-store/'
-//    path = 'gs/'
-//}
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
+    name =  'aws01/'
+    path = 'gs/'
+}
+
+toddServer {
+    base = 'http://dig-prod.broadinstitute.org:8087/'
+    name =  'todd/'
+    path = 'gs/'
+}
+
+t2dLocalhostRestServer {
+    base = 'http://localhost:8888/'
+    name =  'dig-genome-store/'
+    path = 'gs/'
+}
 
 // individual servers
 // NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
 // DIGP-136: changed to load balanced development machine
-//t2dDevRestServer {
-//    base = 'http://dig-api-prod.broadinstitute.org/'
-//    name =  'prod/'
+t2dDevRestServer {
+    base = 'http://dig-api-prod.broadinstitute.org/'
+    name =  'prod/'
+    path = 'gs/'
+}
+
+t2dProdRestServer {//current 'prod'
+    base = 'http://dig-api-prod.broadinstitute.org/'
+    name =  'prod/'
+    path = 'gs/'
+}
+
+t2dNewDevRestServer { //current 'dev'
+    base = 'http://dig-api-prod.broadinstitute.org/'
+    name =  'prod/'
+    path = 'gs/'
+}
+
+localServer {
+//    base = 'http://localhost:8888/'
+//    name =  'dig-genome-store/'
 //    path = 'gs/'
-//}
-
-//t2dProdRestServer {//current 'prod'
-//    base = 'http://dig-api-prod.broadinstitute.org/'
-//    name =  'prod/'
-//    path = 'gs/'
-//}
-
-//t2dNewDevRestServer { //current 'dev'
-//    base = 'http://dig-api-prod.broadinstitute.org/'
-//    name =  'prod/'
-//    path = 'gs/'
-//}
-//
-//localServer {
-////    base = 'http://localhost:8888/'
-////    name =  'dig-genome-store/'
-////    path = 'gs/'
-//    base = 'http://localhost:8090/'
-//    name =  'dccservices/'
-//    path = ''
-//}
+    base = 'http://localhost:8090/'
+    name =  'dccservices/'
+    path = ''
+}
 
 
 
-//stageKb2NewCodeServer {
-//    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
-//    name =  'dccservices/'
-//    path = ''
-//}
-//prodKb2NewCodeServer {
-//    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
-//    name =  'dccservices/'
-//    path = ''
-//}
+stageKb2NewCodeServer {
+    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
+    name =  'dccservices/'
+    path = ''
+}
+prodKb2NewCodeServer {
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
+    name =  'dccservices/'
+    path = ''
+}
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
