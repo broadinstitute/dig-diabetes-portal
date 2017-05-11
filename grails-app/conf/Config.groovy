@@ -181,92 +181,95 @@ t2dProdLoadBalancedServer {
 //    name =  'dev/'
 //    path = 'gs/'
 //}
-t2dDev02BehindLoadBalancer {
-    base = 'http://dig-dev-02.broadinstitute.org:8888/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dProd01BehindLoadBalancer {
-    base = 'http://dig-prod-01.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
-}
-t2dProd02BehindLoadBalancer {
-    base = 'http://dig-prod-02.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
-}
+//t2dDev02BehindLoadBalancer {
+//    base = 'http://dig-dev-02.broadinstitute.org:8888/'
+//    name =  'dev/'
+//    path = 'gs/'
+////}
+//t2dProd01BehindLoadBalancer {
+//    base = 'http://dig-prod-01.broadinstitute.org:8888/'
+//    name =  'prod/'
+//    path = 'gs/'
+//}
+
+
+//t2dProd02BehindLoadBalancer {
+//    base = 'http://dig-prod-02.broadinstitute.org:8888/'
+//    name =  'prod/'
+//    path = 'gs/'
+//}
 
 // individual servers
-t2dAws01RestServer {
-//    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
-    path = 'gs/'
-}
+//t2dAws01RestServer {
+////    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
+//    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
+//    name =  'aws/'
+//    path = 'gs/'
+//}
 
 
-t2dAwsStage01RestServer {
+//t2dAwsStage01RestServer {
+////    base = 'http://localhost:8888/'
+////    name =  'dig-genome-store/'
+//    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
+//    name =  'aws01/'
+//    path = 'gs/'
+//}
+
+//toddServer {
+//    base = 'http://dig-prod.broadinstitute.org:8087/'
+//    name =  'todd/'
+//    path = 'gs/'
+//}
+
+//t2dLocalhostRestServer {
 //    base = 'http://localhost:8888/'
 //    name =  'dig-genome-store/'
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
-    name =  'aws01/'
-    path = 'gs/'
-}
-
-toddServer {
-    base = 'http://dig-prod.broadinstitute.org:8087/'
-    name =  'todd/'
-    path = 'gs/'
-}
-
-t2dLocalhostRestServer {
-    base = 'http://localhost:8888/'
-    name =  'dig-genome-store/'
-    path = 'gs/'
-}
+//    path = 'gs/'
+//}
 
 // individual servers
 // NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
 // DIGP-136: changed to load balanced development machine
-t2dDevRestServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dProdRestServer {//current 'prod'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-localServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
+//t2dDevRestServer {
+//    base = 'http://dig-api-prod.broadinstitute.org/'
+//    name =  'prod/'
 //    path = 'gs/'
-    base = 'http://localhost:8090/'
-    name =  'dccservices/'
-    path = ''
-}
+//}
+
+//t2dProdRestServer {//current 'prod'
+//    base = 'http://dig-api-prod.broadinstitute.org/'
+//    name =  'prod/'
+//    path = 'gs/'
+//}
+
+//t2dNewDevRestServer { //current 'dev'
+//    base = 'http://dig-api-prod.broadinstitute.org/'
+//    name =  'prod/'
+//    path = 'gs/'
+//}
+//
+//localServer {
+////    base = 'http://localhost:8888/'
+////    name =  'dig-genome-store/'
+////    path = 'gs/'
+//    base = 'http://localhost:8090/'
+//    name =  'dccservices/'
+//    path = ''
+//}
 
 
-stageKb2NewCodeServer {
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
-    name =  'dccservices/'
-    path = ''
-}
-prodKb2NewCodeServer {
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
-    name =  'dccservices/'
-    path = ''
-}
+
+//stageKb2NewCodeServer {
+//    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
+//    name =  'dccservices/'
+//    path = ''
+//}
+//prodKb2NewCodeServer {
+//    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
+//    name =  'dccservices/'
+//    path = ''
+//}
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
@@ -297,21 +300,26 @@ burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-d
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
 
-//Convert all the rest server variables into single string
 
 t2dDistributedLocalhostServer = new ServerBean("local server for deployment", "'http://localhost:8090/dccservices/distributed/'");
-
 t2dProdLoadBalancedServer = new ServerBean("Production load balancer server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/");
-
 t2dQaLoadBalancedServer = new ServerBean("QA load balancer server", "http://dig-api-qa.broadinstitute.org/qa/gs");
-
 t2dQa01BehindLoadBalancer = new ServerBean("T2D QA01 behind load balancer", "http://dig-qa-01.broadinstitute.org:8888/qa/gs");
-
 t2dDevLoadBalancedServer = new ServerBean("T2D Dev Load balancer server", "http://dig-api-dev.broadinstitute.org/dev/gs/");
-
-t2dDev01BehindLoadBalancer = new ServerBean("KB2 code burden pass-through server", "http://dig-dev-01.broadinstitute.org:8888/dev/gs/");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
-
+t2dDev01BehindLoadBalancer = new ServerBean("T2D Dev01 Behind load balancer server", "http://dig-dev-01.broadinstitute.org:8888/dev/gs/");
+t2dDev02BehindLoadBalancer = new ServerBean("T2D Dev01 Behind load balancer server", "http://dig-dev-02.broadinstitute.org:8888/dev/gs/");
+t2dProd01BehindLoadBalancer = new ServerBean("T2D Prod01 behind load balancer server", "hhttp://dig-prod-01.broadinstitute.org:8888/prod/gs/");
+t2dProd02BehindLoadBalancer = new ServerBean("T2D Prod02 Behind load balancer server", "http://dig-prod-02.broadinstitute.org:8888/prod/gs/");
+t2dAws01RestServer = new ServerBean("T2D AWS01 Rest server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/aws/gs/");
+t2dAwsStage01RestServer = new ServerBean("T2D AWS Stage01 rest server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/");
+toddServer = new ServerBean("Todd's test server", "http://dig-prod.broadinstitute.org:8087/todd/gs/");
+t2dLocalhostRestServer = new ServerBean("t2d Local host Rest Server", "http://localhost:8888/dig-genome-store/gs/");
+t2dDevRestServer = new ServerBean("t2d Local host Rest Server", "http://dig-api-prod.broadinstitute.org/prod/gs/");
+t2dProdRestServer = new ServerBean("t2d Local host Rest Server", "http://dig-api-prod.broadinstitute.org/prod/gs/");
+t2dNewDevRestServer = new ServerBean("t2d Local host Rest Server", "http://dig-api-prod.broadinstitute.org/prod/gs/");
+localServer = new ServerBean("t2d Local host Rest Server", "http://localhost:8090/dccservices/");
+stageKb2NewCodeServer = new ServerBean("t2d Local host Rest Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/");
+prodKb2NewCodeServer = new ServerBean("t2d Local host Rest Server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
