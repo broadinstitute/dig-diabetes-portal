@@ -29,6 +29,7 @@ class SystemController {
                                           currentRestServer:restServerService.currentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
                                           burdenRestServerList: this.restServerService?.getBurdenServerList(),
+                                          restServerList: this.restServerService?.getRestServerList(),
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
         forceMetadataCacheOverride: this.metaDataService?.getMetadataOverrideStatus(),
@@ -240,6 +241,20 @@ class SystemController {
 
         if  (!(restServer == currentServer)) {
             restServerService.changeBurdenServer(restServer)
+            flash.message = "You are now using the ${restServer} server!"
+        } else {
+            flash.message = "But you were already using the ${currentServer} server!"
+        }
+
+        forward(action: "systemManager")
+    }
+
+    def updateRestServerList() {
+        String restServer = params.datatype
+        String currentServer =  restServerService.currentRestServer()
+
+        if  (!(restServer == currentServer)) {
+            restServerService.changeRestServer(restServer)
             flash.message = "You are now using the ${restServer} server!"
         } else {
             flash.message = "But you were already using the ${currentServer} server!"
