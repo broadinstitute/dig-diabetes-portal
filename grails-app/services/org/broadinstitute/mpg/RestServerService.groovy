@@ -88,8 +88,11 @@ class RestServerService {
 
 
     private List<ServerBean> burdenServerList;
+    private List<ServerBean> restServerList;
 
     private ServerBean BURDEN_REST_SERVER = null;
+
+    private ServerBean REST_SERVER = null;
 
     // okay
     static List<String> GENE_COLUMNS = [
@@ -175,8 +178,6 @@ class RestServerService {
 
         TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
 
-        //
-        //
         BASE_URL = grailsApplication.config.server.URL
         REMEMBER_BASE_URL = BASE_URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
@@ -184,7 +185,8 @@ class RestServerService {
 
         this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
-        // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+        //default rest server
+        this.REST_SERVER = grailsApplication.config.server.URL;
 
     }
 
@@ -378,11 +380,51 @@ class RestServerService {
         return this.burdenServerList;
     }
 
+
+    public List<ServerBean> getRestServerList() {
+        if (this.restServerList == null) {
+            // add in all known servers
+            // could do this in config.groovy
+            this.restServerList = new ArrayList<ServerBean>();
+            this.restServerList.add(grailsApplication.config.t2dDistributedLocalhostServer);
+            this.restServerList.add(grailsApplication.config.t2dProdLoadBalancedServer);
+            this.restServerList.add(grailsApplication.config.t2dQaLoadBalancedServer);
+            this.restServerList.add(grailsApplication.config.t2dQa01BehindLoadBalancer);
+            this.restServerList.add(grailsApplication.config.t2dDevLoadBalancedServer);
+            this.restServerList.add(grailsApplication.config.t2dDev01BehindLoadBalancer);
+            this.restServerList.add(grailsApplication.config.t2dDev02BehindLoadBalancer);
+            this.restServerList.add(grailsApplication.config.t2dProd01BehindLoadBalancer);
+            this.restServerList.add(grailsApplication.config.t2dProd02BehindLoadBalancer);
+            this.restServerList.add(grailsApplication.config.t2dAws01RestServer);
+            this.restServerList.add(grailsApplication.config.t2dAwsStage01RestServer);
+            this.restServerList.add(grailsApplication.config.toddServer);
+            this.restServerList.add(grailsApplication.config.t2dLocalhostRestServer);
+            this.restServerList.add(grailsApplication.config.t2dDevRestServer);
+            this.restServerList.add(grailsApplication.config.t2dProdRestServer);
+            this.restServerList.add(grailsApplication.config.t2dNewDevRestServer);
+            this.restServerList.add(grailsApplication.config.localServer);
+            this.restServerList.add(grailsApplication.config.prodKb2NewCodeServer);
+            this.restServerList.add(grailsApplication.config.stageKb2NewCodeServer);
+
+        }
+        return this.restServerList;
+    }
+
     public void changeBurdenServer(String serverName) {
         for (ServerBean serverBean : this.burdenServerList) {
             if (serverBean.getName().equals(serverName)) {
                 log.info("changing burden rest server from: " + this.BURDEN_REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
                 this.BURDEN_REST_SERVER = serverBean;
+                break;
+            }
+        }
+    }
+
+    public void changeRestServer(String serverName) {
+        for (ServerBean serverBean : this.restServerList) {
+            if (serverBean.getName().equals(serverName)) {
+                log.info("changing rest server from: " + this.REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
+                this.REST_SERVER = serverBean;
                 break;
             }
         }
@@ -395,6 +437,10 @@ class RestServerService {
      */
     public ServerBean getCurrentBurdenServer() {
         return this.BURDEN_REST_SERVER
+    }
+
+    public ServerBean getCurrentRestServer() {
+        return this.REST_SERVER
     }
 
     public String whatIsMyCurrentServer() {
@@ -631,6 +677,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return tempObject;
     }
 
+
     /***
      * perform a meta-analysis api call
      *
@@ -688,8 +735,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
     }
-
-
 
     public JSONObject postMultiJoinProtectedDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
         QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
@@ -768,7 +813,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     }
                  }
             }
-        //}
         return retValue
     }
 
