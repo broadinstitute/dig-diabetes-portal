@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import com.google.gson.JsonArray
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
@@ -257,7 +258,8 @@ class VariantInfoController {
         int startPos
         int endPos
         int pageStart = 0
-        int pageEnd = 1000
+        int pageEnd = 5000
+        Boolean lzFormat =  false
         if (params.chromosome) {
             chromosome = params.chromosome
             log.debug "retrieveFunctionalData params.chromosome = ${params.chromosome}"
@@ -270,30 +272,77 @@ class VariantInfoController {
             endPos =  Integer.parseInt(params.endPos)
             log.debug "retrieveFunctionalData params.endPos = ${params.endPos}"
         }
+        if (params.lzFormat) {
+            int formatIndicator =  Integer.parseInt(params.lzFormat)
+            if (formatIndicator>0){
+                lzFormat = true
+            }
+            log.debug "retrieveFunctionalData params.lzFormat = ${params.lzFormat}"
+        }
+
+        LinkedHashMap<String,LinkedHashMap> elementMapper = [:]
 
 
         JSONObject dataJsonObject
 
+        elementMapper["1_Active_TSS"] = [name:"Active Promoter",state_id:1]
+        elementMapper["2_Weak_TSS"] = [name:"Weak Promoter",state_id:2]
+        elementMapper["14_Bivalent/poised_TSS"] = [name:"Poised Promoter",state_id:3]
+        elementMapper["10_Active_enhancer_2"] = [name:"Strong enhancer",state_id:4]
+        elementMapper["9_Active_enhancer_1"] = [name:"Strong enhancer",state_id:5]
+        elementMapper["11_Weak_enhancer"] = [name:"Weak enhancer",state_id:6]
+        elementMapper["8_Genic_enhancer"] = [name:"Weak enhancer",state_id:7]
+        elementMapper["3_Flanking_TSS"] = [name:"Insulator",state_id:8]
+        elementMapper["5_Strong_transcription"] = [name:"Transcriptional elongation",state_id:10]
+        elementMapper["6_Weak_transcription"] = [name:"Weak transcribed",state_id:11]
+        elementMapper["17_Weak_repressed_polycomb"] = [name:"Polycomb-repressed",state_id:12]
+        elementMapper["16_Repressed_polycomb"] = [name:"Heterochromatin / low signal",state_id:13]
+        elementMapper["18_Quiescent/low_signal"] = [name:"Heterochromatin / low signal",state_id:13]
+
          dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd )
 
-        if (dataJsonObject.variants) {
-            dataJsonObject['region_start'] = startPos;
-            dataJsonObject['region_end'] = endPos;
-            for (Map pval in dataJsonObject.variants){
+        if (lzFormat){
+            JSONObject root = new JSONObject()
+            root["lastPage"] = null;
+            JSONObject rootData = new JSONObject()
+            rootData["chromosome"]=new JSONArray()
+            rootData["start"]=new JSONArray()
+            rootData["end"]=new JSONArray()
+            rootData["id"]=new JSONArray()
+            rootData["public_id"]=new JSONArray()
+            rootData["state_id"]=new JSONArray()
+            rootData["state_name"]=new JSONArray()
+            rootData["strand"]=new JSONArray()
+            JSONArray sorted = dataJsonObject.variants.sort{it["START"]}
+            for (Map pval in sorted){
+               // for (Map pval in dataJsonObject.variants){
+                String element = pval["element"]
+                LinkedHashMap map = elementMapper[element]
+                String elementTrans = g.message(code: "metadata." + element, default: element)
+                rootData["chromosome"].push(pval["CHROM"])
+                rootData["start"].push(pval["START"])
+                rootData["end"].push(pval["STOP"])
+                rootData["id"].push(16)
+                rootData["public_id"].push(null)
+                rootData["state_id"].push(map.state_id)
+                rootData["state_name"].push(map.name)
+                rootData["strand"].push(null)
+            }
+            root["data"] = rootData
+            dataJsonObject = root
+        } else {
+            if (dataJsonObject.variants) {
+                dataJsonObject['region_start'] = startPos;
+                dataJsonObject['region_end'] = endPos;
+                for (Map pval in dataJsonObject.variants){
 
-//                if (pval.containsKey("Consequence")){
-//                    List<String> consequenceList = pval["Consequence"]?.tokenize(",")
-//                    List<String> translatedConsequenceList = []
-//                    for (String consequence in consequenceList){
-//                        translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
-//                    }
-//                    pval["Consequence"] = translatedConsequenceList.join(", ")
-//                }
-                if (pval.containsKey("element")){
-                    pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
-                }
-                if (pval.containsKey("source")){
-                    pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
+                    if (pval.containsKey("element")){
+                        pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
+                    }
+                    if (pval.containsKey("source")){
+                        pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
+                    }
+
                 }
 
             }
@@ -301,9 +350,17 @@ class VariantInfoController {
         }
 
 
-        render(status: 200, contentType: "application/json") {
-            [variants: dataJsonObject]
+
+        if (lzFormat){
+            render(status: 200, contentType: "application/json") {
+                dataJsonObject
+            }
+        } else {
+            render(status: 200, contentType: "application/json") {
+                [variants: dataJsonObject]
+            }
         }
+
 
     }
 

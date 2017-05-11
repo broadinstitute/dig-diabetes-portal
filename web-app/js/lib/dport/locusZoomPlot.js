@@ -12,96 +12,15 @@ var mpgSoftware = mpgSoftware || {};
         var currentLzPlotKey = 'lz-47';
 
 
-    // var createStandardLayout = function(){
-    //   this.layout = {
-    //       responsive_resize: true,
-    //       min_width: 600,
-    //       min_height: 150,
-    //       width: 600,
-    //       height: 150,
-    //     aspect_ratio: 5,
-    //     dashboard: {
-    //         components: [
-    //             { type: "title", title: "LocusZoom", position: "left" },
-    //             { type: "covariates_model", button_html: "Model", button_title: "Click to view/remove covariates from this plot's model", position: "left" },
-    //             { type: "dimensions", position: "right" },
-    //             { type: "region_scale", position: "right" },
-    //             { type: "download", position: "right" }
-    //         ]
-    //     },
-    //     panels: [
-    //         {
-    //             id: 'genes',
-    //             margin: { top: 20, right: 50, bottom: 20, left: 50 },
-    //             axes: {},
-    //             dashboard: {
-    //                 components: [
-    //                     { type: "move_panel_up", position: "right" },
-    //                     { type: "move_panel_down", position: "right" }
-    //                 ]
-    //             },
-    //             interaction: {
-    //                 drag_background_to_pan: true,
-    //                 drag_x_ticks_to_scale: true,
-    //                 drag_y1_ticks_to_scale: true,
-    //                 drag_y2_ticks_to_scale: true,
-    //                 scroll_to_zoom: true,
-    //                 x_linked: true
-    //             },
-    //             data_layers: [
-    //                 {
-    //                     id: 'genes',
-    //                     type: "genes",
-    //                     fields: ["gene:gene", "constraint:constraint"],
-    //                     id_field: "gene_id",
-    //                     selectable: "one",
-    //                     highlighted: {
-    //                         onmouseover: "on",
-    //                         onmouseout: "off"
-    //                     },
-    //                     selected: {
-    //                         onclick: "toggle_exclusive",
-    //                         onshiftclick: "toggle"
-    //                     },
-    //                     tooltip: {
-    //                         closable: true,
-    //                         show: { or: ["highlighted", "selected"] },
-    //                         hide: { and: ["unhighlighted", "unselected"] },
-    //                         html: "<h4><strong><i>{{gene_name}}</i></strong></h4>"
-    //                             + "<div style=\"float: left;\">Gene ID: <strong>{{gene_id}}</strong></div>"
-    //                             + "<div style=\"float: right;\">Transcript ID: <strong>{{transcript_id}}</strong></div>"
-    //                             + "<div style=\"clear: both;\"></div>"
-    //                             + "<table>"
-    //                             + "<tr><th>Constraint</th><th>Expected variants</th><th>Observed variants</th><th>Const. Metric</th></tr>"
-    //                             + "<tr><td>Synonymous</td><td>{{exp_syn}}</td><td>{{n_syn}}</td><td>z = {{syn_z}}</td></tr>"
-    //                             + "<tr><td>Missense</td><td>{{exp_mis}}</td><td>{{n_mis}}</td><td>z = {{mis_z}}</td></tr>"
-    //                             + "<tr><td>LoF</td><td>{{exp_lof}}</td><td>{{n_lof}}</td><td>pLI = {{pLI}}</td></tr>"
-    //                             + "</table>"
-    //                             + "<div style=\"width: 100%; text-align: right;\"><a href=\"http://gnomad.broadinstitute.org/gene/{{gene_id}}\" target=\"_new\">More data on gnomAD</a></div>"
-    //                     }
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // }
-    // };
 
         var initLocusZoomLayout = function(){
             var mods = {
                 namespace: {
-                    default: "assoc",
-                    // ld: "ld",
-                    // gene: "gene",
-                    // recomb: "recomb",
-//                    intervals: "intervals"
-                }
+                    default: "assoc"
+                },
+                panel_ids_by_y_index: ['genes','intervals']
             };
             var newLayout = LocusZoom.Layouts.get("plot", "interval_association", mods);
-            // Update HTML for variant tooltip to include "Add to Model" link
-            //newLayout.panels[0].data_layers[2].tooltip.html = "<strong>{{assoc:variant}}</strong><br>"
-            //    + "P Value: <strong>{{assoc:log_pvalue|logtoscinotation}}</strong><br>"
-            //    + "Ref. Allele: <strong>{{assoc:ref_allele}}</strong><br>"
-            //    + "<a href=\"javascript:void(0);\" onclick=\"LocusZoom.getToolTipPlot(this).CovariatesModel.add(LocusZoom.getToolTipData(this));\">Add to Model</a><br>";
 
             // Add covariates model button/menu to the plot-level dashboard
             newLayout.dashboard.components.push({
@@ -118,7 +37,9 @@ var mpgSoftware = mpgSoftware || {};
                 button_html: "Track Info",
                 menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
             });
-
+            newLayout.panels = _.tail(newLayout.panels);
+            newLayout.panels[0].y_index = 1;
+            newLayout.panels[1].y_index = 2;
             return newLayout;
         };
 
@@ -126,7 +47,7 @@ var mpgSoftware = mpgSoftware || {};
         currentLzPlotKey  = key;
     }
     
-    var initLocusZoom = function(selector, variantIdString) {
+    var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
         //standardLayout[currentLzPlotKey] =  (new createStandardLayout()).layout;
@@ -140,18 +61,26 @@ var mpgSoftware = mpgSoftware || {};
         }
         var ds = new LocusZoom.DataSources();
         ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
-             .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ])
-            .add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
+            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+            //.add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
+        var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype) {
+            this.parseInit(init);
+            this.getURL = function (state, chain, fields) {
+                var url = this.url + "?" +
+                    "chromosome=" + state.chr + "&" +
+                    "startPos=" + state.start + "&" +
+                    "endPos=" + state.end + "&" +
+                    "lzFormat=1";
+                 return url;
+            }
+        }, "BroadT2D");
+        ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'T2D'));
         var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
-        // Create event hooks to clear the loader whenever a panel renders new data
-        lzp.layout.panels.forEach(function(panel){
-        //    lzp.panels[panel.id].addBasicLoader();
-        });
 
         return {
             layoutPanels:lzp.layout.panels,
@@ -227,7 +156,6 @@ var mpgSoftware = mpgSoftware || {};
                                     covariant_ids += (covariant_ids.length ? "," : "") + v.replace(/[^0-9ATCG]/g,"_");
                                 }
                             });
-                            //covariant_ids += (covariant_ids.length ? "," : "") + covariant.id.replace(/[^0-9ATCG]/g,"_");
                         });
                         url += "&conditionVariantId=" + covariant_ids;
                     }
@@ -253,6 +181,7 @@ var mpgSoftware = mpgSoftware || {};
                     namespace: { assoc: phenotype }
                 };
                 var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
+                panel_layout.y_index = -1;
                 panel_layout.data_layers[2].fields = [phenotype + ":id",
                     phenotype + ":position",
                     phenotype + ":pvalue|scinotation",
@@ -492,7 +421,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var resetLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescr,dataSetName,propName,phenotype,
-                                         geneGetLZ,variantInfoUrl,makeDynamic) {
+                                         geneGetLZ,variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -527,7 +456,7 @@ var mpgSoftware = mpgSoftware || {};
 
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
-                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
+                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId,retrieveFunctionalDataAjaxUrl);
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources = returned.dataSources;
 
@@ -546,7 +475,7 @@ var mpgSoftware = mpgSoftware || {};
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescription,
                                          phenoPropertyName,locusZoomDataset,junk,
-                                         geneGetLZ,variantInfoUrl,makeDynamic) {
+                                         geneGetLZ,variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -582,7 +511,7 @@ var mpgSoftware = mpgSoftware || {};
 
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
-                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId);
+                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId,retrieveFunctionalDataAjaxUrl);
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources = returned.dataSources;
 

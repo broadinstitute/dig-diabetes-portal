@@ -113,7 +113,8 @@ var mpgSoftware = mpgSoftware || {};
                 data: {
                     chromosome: variantObject.CHROM,
                     startPos: ""+variantObject.POS,
-                    endPos: ""+variantObject.POS
+                    endPos: ""+variantObject.POS,
+                    lzFormat:0
                 },
                 async: true
             }).done(function (data, textStatus, jqXHR) {
