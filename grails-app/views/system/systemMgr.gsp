@@ -74,6 +74,7 @@
                     <div class="col-md-2"></div>
                     <div class="col-md-7">
                         <div id="datatypes-form">
+                            
                             <div class="radio">
                                 <span>
                                     <label>
@@ -248,6 +249,52 @@
 
 
             <div class="separator"></div>
+
+                <g:form action='updateRestServerList' method='POST' id='updateRestServerList' class='form form-horizontal cssform' autocomplete='off'>
+                    <h4><g:message code="system.header.rest_server.burden_test" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer?.url}">${currentRestServer?.name}</a></em>)</h4>
+                    <div class="row clearfix">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-7">
+                            <div id="datatypes-formid">
+                                <g:each var="server" in="${restServerList}">
+                                    <div class="radio">
+                                        <label>
+                                            <input id="RestServer" type="radio" name="datatype" value="${server?.name}"
+                                                <%=currentRestServer==server?" checked ":"" %> />
+                                            ${server?.name} (${server.url})
+                                        </label>
+                                    </div>
+                                </g:each>
+                            </div>
+                        </div>
+                        <div class="col-md-3"></div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6">
+                            <div >
+                                <div style="text-align:center; padding-top: 20px;">
+                                    <input class="btn btn-primary btn-lg" type='submit' id="submitRestServer"
+                                           value='Commit'/>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div >
+                                <g:if test='${flash.message}'>
+                                    <div class="alert alert-danger">${flash.message}</div>
+                                </g:if>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+
+                    </div>
+                </g:form>
 
             <g:form action='updateBurdenRestServer' method='POST' id='updateBurdenRestServer' class='form form-horizontal cssform' autocomplete='off'>
                 <h4><g:message code="system.header.rest_server.burden_test" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${burdenCurrentRestServer?.url}">${burdenCurrentRestServer?.name}</a></em>)</h4>
