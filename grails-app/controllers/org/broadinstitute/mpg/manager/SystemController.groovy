@@ -249,9 +249,9 @@ class SystemController {
         forward(action: "systemManager")
     }
 
-    def updateRestServerList() {
+    def updateBackEndRestServer() {
         String restServer = params.datatype
-        String currentServer =  restServerService.currentRestServer()
+        String currentServer =  restServerService.getCurrentRestServer()?.getName()
 
         if  (!(restServer == currentServer)) {
             restServerService.changeRestServer(restServer)
