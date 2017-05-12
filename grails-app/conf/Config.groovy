@@ -132,93 +132,27 @@ if (grails.config.locations.isEmpty()){
 //server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
 
-// load balancers with multiple servers behind them
-/*
-t2dProdLoadBalancedServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-// EBI
-t2dProdLoadBalancedServer {
-    base = 'https://www.ebi.ac.uk/'
-    name =  'ega/t2d/dig-genome-store/'
-    path = 'gs/'
-}
-*/
-t2dDistributedLocalhostServer {
-    base = 'http://localhost:8090/'
+
+// final 4 servers for EBI
+t2dProdRestServer {
+    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
     name =  'dccservices/'
-    path = 'distributed/'
+    path = ''
 }
-t2dProdLoadBalancedServer {
+
+t2dEbiRestServer {
+    base = 'https://www.ebi.ac.uk/ega/t2d/'
+    name =  'dig-genome-store/'
+    path = 'gs/'
+}
+
+
+t2dFederatedRestServer {
     base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
     name =  'dccservices/'
     path = 'distributed/'
 }
-t2dQaLoadBalancedServer {
-    base = 'http://dig-api-qa.broadinstitute.org/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dQa01BehindLoadBalancer {
-    base = 'http://dig-qa-01.broadinstitute.org:8888/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dQa02BehindLoadBalancer {
-    base = 'http://dig-qa-02.broadinstitute.org:8888/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dDevLoadBalancedServer {
-    base = 'http://dig-api-dev.broadinstitute.org/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dDev01BehindLoadBalancer {
-    base = 'http://dig-dev-01.broadinstitute.org:8888/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dDev02BehindLoadBalancer {
-    base = 'http://dig-dev-02.broadinstitute.org:8888/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dProd01BehindLoadBalancer {
-    base = 'http://dig-prod-01.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
-}
-t2dProd02BehindLoadBalancer {
-    base = 'http://dig-prod-02.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
-}
 
-// individual servers
-t2dAws01RestServer {
-//    base = 'http://ec2-52-4-20-11.compute-1.amazonaws.com:8888/'
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
-    path = 'gs/'
-}
-
-
-t2dAwsStage01RestServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
-    name =  'aws01/'
-    path = 'gs/'
-}
-
-toddServer {
-    base = 'http://dig-prod.broadinstitute.org:8087/'
-    name =  'todd/'
-    path = 'gs/'
-}
 
 t2dLocalhostRestServer {
     base = 'http://localhost:8888/'
@@ -226,47 +160,7 @@ t2dLocalhostRestServer {
     path = 'gs/'
 }
 
-// individual servers
-// NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
-// DIGP-136: changed to load balanced development machine
-t2dDevRestServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
 
-t2dProdRestServer {//current 'prod'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-localServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
-//    path = 'gs/'
-    base = 'http://localhost:8090/'
-    name =  'dccservices/'
-    path = ''
-}
-
-
-stageKb2NewCodeServer {
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
-    name =  'dccservices/'
-    path = ''
-}
-prodKb2NewCodeServer {
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
-    name =  'dccservices/'
-    path = ''
-}
 
 //server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
 //server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
@@ -287,15 +181,11 @@ dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/
 //experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
-burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
-burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
-burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
-burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+burdenRestServerProd = new ServerBean("Production Broad burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
+//burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+burdenRestServerEbi = new ServerBean("EBI burden server", "https://www.ebi.ac.uk/ega/t2d/dig-genome-store/burden/dig-analysis-engine/burden");
+burdenRestServerFederated = new ServerBean("Federated burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/distributed/burden");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
