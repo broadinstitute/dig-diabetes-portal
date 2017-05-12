@@ -251,7 +251,7 @@
             <div class="separator"></div>
 
                 <g:form action='updateRestServerList' method='POST' id='updateRestServerList' class='form form-horizontal cssform' autocomplete='off'>
-                    <h4><g:message code="system.header.rest_server.burden_test" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer?.url}">${currentRestServer?.name}</a></em>)</h4>
+                    <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
                     <div class="row clearfix">
                         <div class="col-md-2"></div>
                         <div class="col-md-7">
