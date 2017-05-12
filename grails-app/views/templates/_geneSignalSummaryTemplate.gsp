@@ -59,7 +59,7 @@
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
-                                        '${it.dataType}','#lz-1')">
+                                        '${it.dataType}','#lz-1',{colorBy:2,positionBy:1})">
     ${g.message(code: "metadata." + it.name)}
     </a>
 </li>
@@ -79,7 +79,7 @@
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
-                                        '${it.dataType}','#lz-1')">
+                                        '${it.dataType}','#lz-1',{colorBy:2,positionBy:1})">
     ${g.message(code: "metadata." + it.name)}
     </a>
 </li>

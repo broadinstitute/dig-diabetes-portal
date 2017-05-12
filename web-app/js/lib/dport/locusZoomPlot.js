@@ -422,6 +422,8 @@ var mpgSoftware = mpgSoftware || {};
         var resetLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescr,dataSetName,propName,phenotype,
                                          geneGetLZ,variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+            var graphicalOptions = {colorBy:2,
+                positionBy:1};
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -466,7 +468,8 @@ var mpgSoftware = mpgSoftware || {};
                     dataSet: dataSetName,
                     propertyName: propName,
                     description: phenoTypeDescr
-                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId);
+                },dataSetName,geneGetLZ,variantInfoUrl,
+                    makeDynamic,lzGraphicDomId,graphicalOptions);
 
             }
         };
@@ -476,6 +479,8 @@ var mpgSoftware = mpgSoftware || {};
                                          phenoTypeName,phenoTypeDescription,
                                          phenoPropertyName,locusZoomDataset,junk,
                                          geneGetLZ,variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+            var graphicalOptions = {colorBy:2,
+                                    positionBy:1};
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -521,7 +526,8 @@ var mpgSoftware = mpgSoftware || {};
                     description: phenoTypeDescription,
                     propertyName:phenoPropertyName,
                     dataSet:locusZoomDataset
-                },dataSetName,geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId);
+                },dataSetName,geneGetLZ,variantInfoUrl,
+                    makeDynamic,lzGraphicDomId,graphicalOptions);
 
                 $(collapsingDom).on("shown.bs.collapse", function () {
                     locusZoomPlot[currentLzPlotKey].rescaleSVG();
