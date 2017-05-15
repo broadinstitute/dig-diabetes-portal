@@ -259,8 +259,8 @@ class SystemController {
         } else {
             flash.message = "But you were already using the ${currentServer} server!"
         }
-
-        forward(action: "systemManager")
+        params.datatype = "forceIt"
+        forward(action: "forceMetadataCacheUpdate")
     }
 
     /**
