@@ -2035,18 +2035,30 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd) {
+    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd, String source) {
         int revisedPageStart = 0;
         int revisedPageEnd = 1000;
         if (pageStart > 0){revisedPageStart = pageStart}
         if (pageEnd > 0){revisedPageEnd = pageEnd}
-        String specifyRequest = """{"passback":"abc123",
- "page_start": ${revisedPageStart},
- "page_size": ${revisedPageEnd},
- "chrom": "${chromosome}",
- "startPos": ${startPosition},
- "endPos": ${endPosition}
-}""".toString()
+        List <String> restApiParameterList = []
+        restApiParameterList << "\"passback\":\"abc123\""
+        restApiParameterList << "\"page_start\": ${revisedPageStart}"
+        restApiParameterList << "\"page_size\": ${revisedPageEnd}"
+        restApiParameterList << "\"chrom\": \"${chromosome}\""
+        restApiParameterList << "\"start_pos\": ${startPosition}"
+        restApiParameterList << "\"end_pos\": ${endPosition}"
+        if (source){
+            restApiParameterList << "\"source\": \"${source}\""
+        }
+        String specifyRequest = "{${restApiParameterList.join(",")}}"
+//
+//        String specifyRequest = """{"passback":"abc123",
+// "page_start": ${revisedPageStart},
+// "page_size": ${revisedPageEnd},
+// "chrom": "${chromosome}",
+// "startPos": ${startPosition},
+// "endPos": ${endPosition}
+//}""".toString()
         return postRestCall(specifyRequest, GET_REGION_URL)
     }
 

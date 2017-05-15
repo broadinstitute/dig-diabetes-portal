@@ -67,18 +67,19 @@ var mpgSoftware = mpgSoftware || {};
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
             .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
             //.add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
-        var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype) {
+        var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
             this.parseInit(init);
             this.getURL = function (state, chain, fields) {
                 var url = this.url + "?" +
                     "chromosome=" + state.chr + "&" +
                     "startPos=" + state.start + "&" +
                     "endPos=" + state.end + "&" +
+                    "source=" + tissue + "&" +
                     "lzFormat=1";
                  return url;
             }
         }, "BroadT2D");
-        ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'T2D'));
+        ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
         var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
 

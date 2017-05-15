@@ -255,6 +255,7 @@ class VariantInfoController {
 
     def retrieveFunctionalDataAjax (){
         String chromosome = ''
+        String source = ''
         int startPos
         int endPos
         int pageStart = 0
@@ -272,6 +273,11 @@ class VariantInfoController {
             endPos =  Integer.parseInt(params.endPos)
             log.debug "retrieveFunctionalData params.endPos = ${params.endPos}"
         }
+        if (params.source) {
+            source =  params.source
+            log.debug "retrieveFunctionalData params.source = ${params.source}"
+        }
+
         if (params.lzFormat) {
             int formatIndicator =  Integer.parseInt(params.lzFormat)
             if (formatIndicator>0){
@@ -299,7 +305,7 @@ class VariantInfoController {
         elementMapper["16_Repressed_polycomb"] = [name:"Heterochromatin / low signal",state_id:13]
         elementMapper["18_Quiescent/low_signal"] = [name:"Heterochromatin / low signal",state_id:13]
 
-         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd )
+         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source )
 
         if (lzFormat){
             JSONObject root = new JSONObject()
