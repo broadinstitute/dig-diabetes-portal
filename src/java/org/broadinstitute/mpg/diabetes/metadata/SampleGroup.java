@@ -60,4 +60,12 @@ public interface SampleGroup extends DataSet {
     public Integer getNestedLevel();
 
     public HashMap<String, HashMap> getHierarchy(String phenotype);
+
+    /**
+     * determines if the property has been tagged with a given metadata word
+     *
+     * @param meaningValue
+     * @return
+     */
+    public boolean hasMeaning(String meaningValue);
 }

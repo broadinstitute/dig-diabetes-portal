@@ -198,10 +198,14 @@ var displayBurdenVariantSelector = function (){
         */
         var retrieveExperimentMetadata = function (dropDownSelector) {
             var loading = $('#spinner').show();
+            // DIGKB-203: adding test for gene burden test dataset selection
+            var isGeneBurden = (getGeneForGait().length>0);
+            var urlString = ( "${createLink(controller: 'VariantInfo', action: 'sampleMetadataExperimentAjax')}?isGeneBurden=" + isGeneBurden);
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "${createLink(controller: 'VariantInfo', action: 'sampleMetadataExperimentAjax')}",
+//                url: ( "${createLink(controller: 'variantInfo', action: 'variantAndDsAjax')}?varid=" + curVariant +"&dataSet="+dataSet),
+                url: urlString,
                 data: {},
                 async: true,
                 success: function (data) {
