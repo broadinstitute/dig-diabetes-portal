@@ -293,6 +293,10 @@
 
                 <p><g:message code="informational.policies.stroke.citing"></g:message></p>
 
+                <p><g:message code="portal.stroke.use.citation.request"></g:message></p>
+
+                <p><g:message code="portal.stroke.use.citation.itself"></g:message></p>
+
 
             </div></div></div></div>
 

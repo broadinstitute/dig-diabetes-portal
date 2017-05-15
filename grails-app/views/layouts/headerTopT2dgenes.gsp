@@ -3,7 +3,7 @@
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
     <div class="container-fluid dk-amp-banner" style="background-image:url('${resource(dir:'images', file:'AMP_banner_middle.png')}');">
         <div class="container-fluid dk-amp-name-wrapper" style="background-image:url('${resource(dir:'images', file:'AMP_banner_right.png')}');">
-            <a href="http://www.nih.gov/research-training/accelerating-medicines-partnership-amp/type-2-diabetes">
+            <a href="http://www.nih.gov/research-training/accelerating-medicines-partnership-amp/type-2-diabetes" target="_blank">
                 <div class="dk-amp-banner-name" style="background-image:url('${resource(dir:'images', file:'AMP_banner_left.png')}');">
                     ACCELERATING MEDICINES PARTNERSHIP (AMP)
                 </div>
@@ -15,7 +15,7 @@
 <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
     <div class="container-fluid dk-amp-banner">
         <div class="container-fluid dk-amp-name-wrapper" style="background-image:url('/static/images/AMP_banner_middle.png');">
-            <a href="http://www.strokegenetics.org">
+            <a href="http://www.strokegenetics.org" target="_blank">
                 <div class="dk-amp-banner-name">
                     INTERNATIONAL STROKE GENETICS CONSORTIUM (ISGC)
                 </div>

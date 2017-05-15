@@ -82,33 +82,33 @@
             <div class="col-md-9">
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.ampt2d.header"></g:message></h3>
 
-                <p><g:message code="informational.about_t2d.ampt2d_sec1"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.ampt2d_sec1"></g:message></p>
 
-                <p><g:message code="informational.about_t2d.ampt2d_sec2"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.ampt2d_sec2"></g:message></p>
 
-                <p><g:message code="informational.about_t2d.ampt2d_sec3"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.ampt2d_sec3"></g:message></p>
 
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.t2dkp.header"></g:message></h3>
 
-                <p><g:message code="informational.about_t2d.t2dkp_sec1"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.t2dkp_sec1"></g:message></p>
 
-                <p><g:message code="informational.about_t2d.t2dkp_sec2"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.t2dkp_sec2"></g:message></p>
 
                 <ol><g:message code="informational.about_t2d.t2dkp_sec3"></g:message></ol>
 
-                <p><g:message code="informational.about_t2d.t2dkp_sec4"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.t2dkp_sec4"></g:message></p>
 
-                <p><g:message code="informational.about_t2d.t2dkp_sec5"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.t2dkp_sec5"></g:message></p>
 
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.history.header"></g:message></h3>
 
-                <p><g:message code="informational.about_t2d.history_sec1"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.history_sec1"></g:message></p>
 
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.funding.header"></g:message></h3>
 
-                <p><g:message code="informational.about_t2d.funding_sec1"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.funding_sec1"></g:message></p>
 
-                <p><g:message code="informational.about_t2d.funding_sec2"></g:message></p>
+                <p style="text-align:justify"><g:message code="informational.about_t2d.funding_sec2"></g:message></p>
 
                 <table class="table text-center" style="vertical-align:middle;"><tr><td>
                     <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir: 'images/organizations', file: 'NIH_NIDDK.png')}" style="width: 120px; padding-top:18px;"></a></td><td>

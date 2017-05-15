@@ -9,8 +9,13 @@
 </head>
 
 <body>
-<div class="panel-body">
+<div id="main">
+    <div class="container">
+
 <h2 align="center">Download summary statistics</h2>
+    <p>&nbsp;</p>
+    <p><g:message code="informational.download.stroke.info"></g:message></p>
+    <p>&nbsp;</p>
 <table class="table table-condensed table-responsive table-striped" border="1">
     <tr><th><b>PubMed Central ID</b></th><th><b>Title</b></th><th><b>Download files</b></th></tr>
     <tr><td><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3980413/" target="_blank">PMC3980413</a></td><td>Meta-analysis of Genome-wide Association Studies Identifies 1q22 as a Susceptibility Locus for Intracerebral Hemorrhage</td><td><a href="https://personal.broadinstitute.org/mvon/3980413.Woo.2014.zip">3980413.Woo.2014.zip</a></td></tr>
@@ -20,5 +25,6 @@
     <tr><td><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4912948/" target="_blank">PMC4912948</a></td><td>Loci associated with ischaemic stroke and its subtypes (SiGN): a genome-wide association study.</td><td><a href="https://personal.broadinstitute.org/mvon/4912948.SiGN.2015.zip">4912948.SiGN.2015.zip</a></td></tr>
 </table>
 </div>
+    </div>
 </body>
 </html>
