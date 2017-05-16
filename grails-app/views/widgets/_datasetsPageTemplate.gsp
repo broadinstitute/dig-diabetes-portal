@@ -38,10 +38,9 @@
 <g:render template="./data/WGS_WgnomAD" />
 
 <script id="metaData2" type="x-tmpl-mustache">
-
-    <div class="row">
+    <div>
         <h3>Datasets</h3>
-        <table id="datasets" class="table table-condensed">
+        <table id="datasets" class="table table-condensed" style="margin-left:20px">
             <thead>
             <tr>
                 <th>Dataset</th>
@@ -119,9 +118,9 @@
 </script>
 
 <div class="datasetsHolder">
-    <div class="row" style="padding-top: 50px; display: inline-block; width: 100%;">
+    <div style="display: inline-block; width: 100%;">
         <div>
-            <div class="datasets-filter row">
+            <div class="datasets-filter">
                 <h3>Filter Dataset Table<small> (Click one to start)</small></h3>
                 <div id="datatypeFilterDisplay" class="form-inline"></div>
                 <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
