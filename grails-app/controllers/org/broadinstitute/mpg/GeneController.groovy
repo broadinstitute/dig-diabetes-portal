@@ -155,6 +155,7 @@ class GeneController {
         List<PhenotypeBean> lzOptions = this.widgetService?.getHailPhenotypeMap()
 
         if (geneToStartWith)  {
+            locusZoomDataset = metaDataService.getDefaultDataset()
 
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
@@ -171,7 +172,7 @@ class GeneController {
                                              phenotype:phenotype,
                                              locale:locale,
                                              lzOptions:lzOptions,
-                                             sampleDataSet:"samples_17k_"+metaDataService.getDataVersion(),
+                                             sampleDataSet:"samples_19k_"+metaDataService.getDataVersion(),
                                              burdenDataSet:locusZoomDataset,
                                              dataVersion: metaDataService.getDataVersion(),
                                              locusZoomDataset:locusZoomDataset,

@@ -1502,7 +1502,7 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
     //kludge alert!!!
     if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
 
-        if (datasetFilter.substring(0, 'samples_17k_'.length) === 'samples_17k_') {
+        if (datasetFilter.substring(0, 'samples_19k_'.length) === 'samples_19k_') {
             dataSet = 'ExSeq' + datasetFilter.substring('samples'.length);
         } else if (datasetFilter.substring(0, 'samples_stroke_'.length) === 'samples_stroke_') {
             dataSet = 'GWAS' + datasetFilter.substring('samples'.length);

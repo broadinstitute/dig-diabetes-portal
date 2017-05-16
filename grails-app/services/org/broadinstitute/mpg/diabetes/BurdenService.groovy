@@ -351,9 +351,10 @@ class BurdenService {
 
 
         try {
+            String dataset = metaDataService.getDefaultDataset()
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
-            String pValueName = filterManagementService.findFavoredMeaningValue ( "ExSeq_17k_"+metaDataService.getDataVersion(), "T2D", "P_VALUE" )
-            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters("ExSeq_17k_"+metaDataService.getDataVersion(),1.0,"T2D",pValueName))
+            String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
+            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
