@@ -1,7 +1,7 @@
 <div id="main">
     <h2>Portal team</h2>
     <p><g:message code="contact.portal.broadAttribution"></g:message></p>
-    <p>Not sure who to contact? Try our group email address: <a href="mailto:cerebrovascularportal@gmail.com">cerebrovascularportal@gmail.com</a></p>
+    <p>Not sure who to contact? Try our group email address: <a href="mailto:help@CVDportal.org">help@CVDportal.org</a></p>
     <h3>Steering committee</h3>
     <p>Brad Worrall (Chair)<br>
     Devin Brown<br>
