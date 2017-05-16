@@ -91,10 +91,10 @@
 
         </div>
 
-        <div class="row pull-left col-xs-12" style="margin-top: 10px">
+        <div class="row" style="margin-top: 10px">
 
             <g:renderBetaFeaturesDisplayedValue>
-                <div class="row pull-left col-xs-12" style="margin-top: 5px">
+                <div style="margin-top: 5px">
                     <div class="col-xs-2"></div>
                     <div class="col-xs-10"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
                         <div class="row col-xs-12">
