@@ -13,12 +13,68 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
+
+        var customIntervalsDataLayer = function (layerName){
+            return {
+                namespace: { "intervals": layerName },
+                id: layerName,
+                type: "intervals",
+                fields: ["{{namespace[intervals]}}start","{{namespace[intervals]}}end","{{namespace[intervals]}}state_id","{{namespace[intervals]}}state_name"],
+                id_field: "{{namespace[intervals]}}start",
+                start_field: "{{namespace[intervals]}}start",
+                end_field: "{{namespace[intervals]}}end",
+                track_split_field: "{{namespace[intervals]}}state_id",
+                split_tracks: true,
+                always_hide_legend: false,
+                color: {
+                    field: "{{namespace[intervals]}}state_id",
+                    scale_function: "categorical_bin",
+                    parameters: {
+                        categories: [1,2,3,4,5,6,7,8,9,10,11,12,13],
+                        values: ["rgb(212,63,58)", "rgb(250,120,105)", "rgb(252,168,139)", "rgb(240,189,66)", "rgb(250,224,105)", "rgb(240,238,84)", "rgb(244,252,23)", "rgb(23,232,252)", "rgb(32,191,17)", "rgb(23,166,77)", "rgb(32,191,17)", "rgb(162,133,166)", "rgb(212,212,212)"],
+                        null_value: "#B8B8B8"
+                    }
+                },
+                legend: [
+                    { shape: "rect", color: "rgb(212,63,58)", width: 9, label: "Active Promoter", "{{namespace[intervals]}}state_id": 1 },
+                    { shape: "rect", color: "rgb(250,120,105)", width: 9, label: "Weak Promoter", "{{namespace[intervals]}}state_id": 2 },
+                    { shape: "rect", color: "rgb(252,168,139)", width: 9, label: "Poised Promoter", "{{namespace[intervals]}}state_id": 3 },
+                    { shape: "rect", color: "rgb(240,189,66)", width: 9, label: "Strong enhancer", "{{namespace[intervals]}}state_id": 4 },
+                    { shape: "rect", color: "rgb(250,224,105)", width: 9, label: "Strong enhancer", "{{namespace[intervals]}}state_id": 5 },
+                    { shape: "rect", color: "rgb(240,238,84)", width: 9, label: "Weak enhancer", "{{namespace[intervals]}}state_id": 6 },
+                    { shape: "rect", color: "rgb(244,252,23)", width: 9, label: "Weak enhancer", "{{namespace[intervals]}}state_id": 7 },
+                    { shape: "rect", color: "rgb(23,232,252)", width: 9, label: "Insulator", "{{namespace[intervals]}}state_id": 8 },
+                    { shape: "rect", color: "rgb(32,191,17)", width: 9, label: "Transcriptional transition", "{{namespace[intervals]}}state_id": 9 },
+                    { shape: "rect", color: "rgb(23,166,77)", width: 9, label: "Transcriptional elongation", "{{namespace[intervals]}}state_id": 10 },
+                    { shape: "rect", color: "rgb(136,240,129)", width: 9, label: "Weak transcribed", "{{namespace[intervals]}}state_id": 11 },
+                    { shape: "rect", color: "rgb(162,133,166)", width: 9, label: "Polycomb-repressed", "{{namespace[intervals]}}state_id": 12 },
+                    { shape: "rect", color: "rgb(212,212,212)", width: 9, label: "Heterochromatin / low signal", "{{namespace[intervals]}}state_id": 13 }
+                ],
+                behaviors: {
+                    onmouseover: [
+                        { action: "set", status: "highlighted" }
+                    ],
+                    onmouseout: [
+                        { action: "unset", status: "highlighted" }
+                    ],
+                    onclick: [
+                        { action: "toggle", status: "selected", exclusive: true }
+                    ],
+                    onshiftclick: [
+                        { action: "toggle", status: "selected" }
+                    ]
+                },
+                tooltip: LocusZoom.Layouts.get("tooltip", "standard_intervals", { unnamespaced: true })
+            }
+        };
+
         var initLocusZoomLayout = function(){
             var mods = {
                 namespace: {
                     default: "assoc"
-                },
-                panel_ids_by_y_index: ['genes','intervals']
+                }
+                // ,
+                // panel_ids_by_y_index: ['genes','intervals']
             };
             var newLayout = LocusZoom.Layouts.get("plot", "interval_association", mods);
 
@@ -37,9 +93,10 @@ var mpgSoftware = mpgSoftware || {};
                 button_html: "Track Info",
                 menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
             });
-            newLayout.panels = _.tail(newLayout.panels);
-            newLayout.panels[0].y_index = 1;
-            newLayout.panels[1].y_index = 2;
+            //newLayout.panels = _.tail(newLayout.panels);
+            newLayout.panels = [newLayout.panels[2]];
+            newLayout.panels[0].y_index = -1;
+           // newLayout.panels[1].y_index = 2;
             return newLayout;
         };
 
@@ -80,6 +137,7 @@ var mpgSoftware = mpgSoftware || {};
             }
         }, "BroadT2D");
         ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
+        ds.add('intervals-Islets', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
         var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
 
@@ -228,192 +286,24 @@ var mpgSoftware = mpgSoftware || {};
                 panel_layout.data_layers[2].tooltip.html = toolTipText;
                 return panel_layout;
             }
-            // var layout = (function (variantInfoLink) {
-            //     var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
-            //         + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
-            //         + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
-            //     if ((typeof makeDynamic !== 'undefined') &&
-            //         (makeDynamic==='dynamic')){
-            //         toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
-            //     }
-            //     toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
-            //     var panelLayoutDescr = {
-            //         id: phenotype+dataSetName,
-            //         title: {text:lzParameters.description+" ("+makeDynamic+")"},
-            //         description: phenotype,
-            //         y_index: -1,
-            //         min_width: 400,
-            //         min_height: 240,
-            //         margin: {top: 55, right: 50, bottom: 40, left: 50},
-            //         inner_border: "rgba(210, 210, 210, 0.85)",
-            //         axes: {
-            //             x: {
-            //                 label_function: "chromosome",
-            //                 label_offset: 32,
-            //                 tick_format: "region",
-            //                 extent: "state"
-            //             },
-            //             y1: {
-            //                 label: "-log10 p-value",
-            //                 label_offset: 28
-            //             },
-            //             y2: {
-            //                 label: "Recombination Rate (cM/Mb)",
-            //                 label_offset: 40
-            //             }
-            //         },
-            //         dashboard: {
-            //             components: [
-            //                 { type: "remove_panel", position: "right", color: "red" },
-            //                 { type: "move_panel_up", position: "right" },
-            //                 { type: "move_panel_down", position: "right" }
-            //             ]
-            //         },
-            //         interaction: {
-            //             drag_background_to_pan: true,
-            //             drag_x_ticks_to_scale: true,
-            //             drag_y1_ticks_to_scale: true,
-            //             drag_y2_ticks_to_scale: true,
-            //             scroll_to_zoom: true,
-            //             x_linked: true
-            //         },
-            //         data_layers: [
-            //             {
-            //                 id: 'significance',
-            //                 type: "line",
-            //                 z_index: 0,
-            //                 fields: ["sig:x", "sig:y"],
-            //                 style: {
-            //                     "stroke": "#D3D3D3",
-            //                     "stroke-width": "3px",
-            //                     "stroke-dasharray": "10px 10px"
-            //                 },
-            //                 x_axis: {
-            //                     field: "sig:x",
-            //                     decoupled: true
-            //                 },
-            //                 y_axis: {
-            //                     axis: 1,
-            //                     field: "sig:y"
-            //                 },
-            //                 tooltip: {
-            //                     html: "Significance Threshold: 3 × 10^-5"
-            //                 }
-            //             },
-            //             {
-            //                 id: 'recomb',
-            //                 type: "line",
-            //                 z_index: 1,
-            //                 fields: ["recomb:position", "recomb:recomb_rate"],
-            //                 style: {
-            //                     "stroke": "#0000FF",
-            //                     "stroke-width": "1.5px"
-            //                 },
-            //                 x_axis: {
-            //                     field: "recomb:position"
-            //                 },
-            //                 y_axis: {
-            //                     axis: 2,
-            //                     field: "recomb:recomb_rate",
-            //                     floor: 0,
-            //                     ceiling: 100
-            //                 }
-            //             },
-            //             {
-            //                 id: 'positions',
-            //                 type: "scatter",
-            //                 z_index: 2,
-            //                 fields: [phenotype + ":id",
-            //                         phenotype + ":position",
-            //                         phenotype + ":pvalue|scinotation",
-            //                         phenotype + ":pvalue|neglog10",
-            //                         phenotype + ":refAllele",
-            //                         phenotype + ":scoreTestStat",
-            //                     "ld:state",
-            //                     "ld:isrefvar"
-            //                 ],
-            //                 id_field: phenotype + ":id",
-            //                 x_axis: {
-            //                     field: phenotype + ":position"
-            //                 },
-            //                 y_axis: {
-            //                     axis: 1,
-            //                     field: phenotype + ":pvalue|neglog10",
-            //                     floor: 0,
-            //                     upper_buffer: 0.05,
-            //                     min_extent: [0, 10]
-            //                 },
-            //                 point_shape: "circle",
-            //                 point_size: {
-            //                     scale_function: "if",
-            //                     field: "ld:isrefvar",
-            //                     parameters: {
-            //                         field_value: 1,
-            //                         then: 80,
-            //                         else: 40
-            //                     }
-            //                 },
-            //                 color: [
-            //                     // {
-            //                     //     scale_function: "if",
-            //                     //     field: "ld:isrefvar",
-            //                     //     parameters: {
-            //                     //         field_value: 1,
-            //                     //         then: "#9632b8"
-            //                     //     }
-            //                     // },
-            //                     // {
-            //                     //     scale_function: "numerical_bin",
-            //                     //     field: "ld:state",phenotype + ":position"
-            //                     //     parameters: {
-            //                     //         breaks: [0, 0.2, 0.4, 0.6, 0.8],
-            //                     //         values: ["#357ebd", "#46b8da", "#5cb85c", "#eea236", "#d43f3a"]
-            //                     //     }
-            //                     // },
-            //                     {
-            //                         scale_function: "categorical_bin",
-            //                         field: phenotype + ":scoreTestStat",
-            //                         parameters: {
-            //                             categories: ["1","2","3","4","5"],
-            //                             values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
-            //                         }
-            //                     },
-            //                     "#B8B8B8"
-            //                 ],
-            //                 legend: [
-            //                     { shape: "circle", color: "#ff0000", size: 40, label: "MDS=1", class: "lz-data_layer-scatter" }
-            //                 ],
-            //                 transition: {
-            //                     duration: 500
-            //                 },
-            //                 behaviors: {
-            //                     onmouseover: [
-            //                         { action: "set", status: "highlighted" }
-            //                     ],
-            //                     onmouseout: [
-            //                         { action: "unset", status: "highlighted" }
-            //                     ],
-            //                     onclick: [
-            //                         { action: "toggle", status: "selected", exclusive: true }
-            //                     ],
-            //                     onshiftclick: [
-            //                         { action: "toggle", status: "selected" }
-            //                     ]
-            //                 },
-            //                 tooltip: {
-            //                     closable: true,
-            //                     show: { or: ["highlighted", "selected"] },
-            //                     hide: { and: ["unhighlighted", "unselected"] },
-            //                     html: toolTipText
-            //                 }
-            //             }
-            //         ]
-            //     };
-            // }(variantInfoUrl));
-            //colorBy:1=LD,2=MDS
+          //colorBy:1=LD,2=MDS
             //positionBy:1=pValue,2=posteriorPValue
+            var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+            // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
+            // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
+            if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
+                locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
+            } else {
+                intervalPanel.id = 'intervals-Islets';
+              //  intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
+              //  intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
+              //  locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
+            }
+
+
             var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl);
             locusZoomPlot[currentLzPlotKey].addPanel(panelLayout).addBasicLoader();
+
         };
 
 
