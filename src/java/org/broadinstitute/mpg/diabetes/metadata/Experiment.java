@@ -15,4 +15,12 @@ public interface Experiment extends DataSet {
     public String getInstitution();
 
     public List<SampleGroup> getSampleGroups();
+
+    /**
+     * determines if the property has been tagged with a given metadata word
+     *
+     * @param meaningValue
+     * @return
+     */
+    public boolean hasMeaning(String meaningValue);
 }

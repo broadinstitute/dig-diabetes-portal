@@ -345,6 +345,8 @@ public class JsonParser {
                 experiment.setInstitution( safeKeyRetrieval ( tempJson, PortalConstants.JSON_INSTITUTION_KEY ) );
                 experiment.setVersion( safeKeyRetrieval ( tempJson, PortalConstants.JSON_VERSION_KEY));
                 experimentList.add(experiment);
+
+                // add the parent
                 experiment.setParent(parent);
 
                 // look for sample groups
@@ -383,6 +385,11 @@ public class JsonParser {
             sampleGroup.setName(jsonObject.getString(PortalConstants.JSON_NAME_KEY));
             sampleGroup.setAncestry(jsonObject.getString(PortalConstants.JSON_ANCESTRY_KEY));
             sampleGroup.setSystemId(jsonObject.getString(PortalConstants.JSON_ID_KEY));
+
+            // DIGKB-203: abstracting out meaning property retrieval to its own method
+            sampleGroup.addAllMeanings(this.getMeaningsFromJsonObject(jsonObject));
+
+            // add the parent
             sampleGroup.setParent(parent);
 
             // add in sort order
@@ -497,25 +504,10 @@ public class JsonParser {
                 property.setSortOrder(Float.valueOf(tempJsonValue).intValue());
             }
 
-            // DIGP-198: add meaning; backward compatible for now and also assumes only one value
-            if (jsonObject.containsKey(PortalConstants.JSON_MEANING_KEY)) {
-                // DIGP-320: adding capability of parsing json array meaning fields; stay backwards compatible with single string meaning fields, which will be deprecated later
-                tempArray = jsonObject.optJSONArray(PortalConstants.JSON_MEANING_KEY);
-                // array will be null object at the key is not an array
-                if (tempArray != null) {
-                    for (int i = 0; i < tempArray.size(); i++) {
-                        String value = tempArray.getString(i);
-                        if ((value != null) && (value.trim().length() > 0)) {
-                            property.addMeaning(value.trim());
-                        }
-                    }
-                } else {
-                    tempJsonValue = jsonObject.getString(PortalConstants.JSON_MEANING_KEY);
-                    if (tempJsonValue != null) {
-                        property.addMeaning(tempJsonValue);
-                    }
-                }
-            }
+            // DIGKB-203: abstracting out meaning property retrieval to its own method
+            property.addAllMeanings(this.getMeaningsFromJsonObject(jsonObject));
+
+            // set the parent
             property.setParent(parent);
 
         } catch (JSONException exception) {
@@ -523,6 +515,43 @@ public class JsonParser {
         }
 
         return property;
+    }
+
+    /**
+     * method to rerieve a meaning string list from the json object
+     *
+     * @param jsonObject
+     * @return
+     * @throws PortalException
+     */
+    protected List<String> getMeaningsFromJsonObject(JSONObject jsonObject) throws PortalException {
+        // local variables
+        String tempJsonValue = null;
+        JSONArray tempArray = null;
+        List<String> meaningList = new ArrayList<String>();
+
+        // DIGP-198: add meaning; backward compatible for now and also assumes only one value
+        if (jsonObject.containsKey(PortalConstants.JSON_MEANING_KEY)) {
+            // DIGP-320: adding capability of parsing json array meaning fields; stay backwards compatible with single string meaning fields, which will be deprecated later
+            tempArray = jsonObject.optJSONArray(PortalConstants.JSON_MEANING_KEY);
+            // array will be null object at the key is not an array
+            if (tempArray != null) {
+                for (int i = 0; i < tempArray.size(); i++) {
+                    String value = tempArray.getString(i);
+                    if ((value != null) && (value.trim().length() > 0)) {
+                        meaningList.add(value.trim());
+                    }
+                }
+            } else {
+                tempJsonValue = jsonObject.getString(PortalConstants.JSON_MEANING_KEY);
+                if (tempJsonValue != null) {
+                    meaningList.add(tempJsonValue);
+                }
+            }
+        }
+
+        // return
+        return meaningList;
     }
 
     /**

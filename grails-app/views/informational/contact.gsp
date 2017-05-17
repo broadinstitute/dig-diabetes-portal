@@ -85,7 +85,7 @@
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
 </g:if>
 <g:else>
-    <h1><g:message code="contact.title.plural" default="Contact"/></h1>
+    %{--<h1><g:message code="contact.title.plural" default="Contact"/></h1>--}%
 </g:else>
 
     <div class="container dk-static-content">
@@ -247,15 +247,36 @@
                         %{--</div>--}%
 
                     %{--</ul>--}%
-                    <g:render template="contact/stroke_consortium"/>
-                <g:render template="contact/stroke_studies"/>
-                <g:render template="contact/stroke_portal"/>
+                    %{--<g:render template="contact/stroke_consortium"/>--}%
+                %{--<g:render template="contact/stroke_studies"/>--}%
+                %{--<g:render template="contact/stroke_portal"/>--}%
                     %{--<div class="content">--}%
                         %{--<div id="contactContent">--}%
                             %{--<g:render template="contact/${specifics}"/>--}%
                         %{--</div>--}%
                     %{--</div>--}%
+                %{--</div>--}%
+
+                <div id="main">
+
+                    <p><g:message code="contact.portal.broadAttribution"></g:message></p>
+                    <p><g:message code="contact.email.stroke"></g:message></p>
+                    %{--<h2><g:message code="contact.portal"></g:message></h2>--}%
+                    %{--<p><g:message code="contact.stroke.portal_team"></g:message></p>--}%
+
+                <div class="row">
+                <div class="col-md-9">
+                <h4 class="dk-blue-bordered"><g:message code="contact.stroke.team.title"></g:message></h4>
+
+                <table class="dk-team-list"><g:message code="contact.stroke.team.list"></g:message></table>
+
+
+
+
+
+
                 </div>
+
             </g:else>
         </div>
 

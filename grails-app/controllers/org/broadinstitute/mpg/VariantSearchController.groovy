@@ -376,7 +376,7 @@ class VariantSearchController {
 
         render(status: 200, contentType: "application/json") {[
                 sampleGroupMap: sampleGroupMap
-            ]
+        ]
         }
     }
 
@@ -409,7 +409,7 @@ class VariantSearchController {
 
 
 
-        def retrieveTopVariantsAcrossSgs (){
+    def retrieveTopVariantsAcrossSgs (){
         String phenotypeName = ''
         String geneName
         if (params.phenotype) {
@@ -440,24 +440,24 @@ class VariantSearchController {
 
 
         if (dataJsonObject.variants) {
-           for (Map pval in dataJsonObject.variants){
+            for (Map pval in dataJsonObject.variants){
                 //for (Map pval in result) {
-                    if (pval.containsKey("Consequence")){
-                        List<String> consequenceList = pval["Consequence"]?.tokenize(",")
-                        List<String> translatedConsequenceList = []
-                        for (String consequence in consequenceList){
-                            translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
-                        }
-                        pval["Consequence"] = translatedConsequenceList.join(", ")
+                if (pval.containsKey("Consequence")){
+                    List<String> consequenceList = pval["Consequence"]?.tokenize(",")
+                    List<String> translatedConsequenceList = []
+                    for (String consequence in consequenceList){
+                        translatedConsequenceList << g.message(code: "metadata." + consequence, default: consequence)
                     }
-                    if (pval.containsKey("dataset")){
-                        pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
-                    }
-                    if (pval.containsKey("phenotype")){
-                        pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
-                    }
+                    pval["Consequence"] = translatedConsequenceList.join(", ")
+                }
+                if (pval.containsKey("dataset")){
+                    pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
+                }
+                if (pval.containsKey("phenotype")){
+                    pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])
+                }
                 //}
-           }
+            }
 
         }
 
@@ -734,16 +734,16 @@ class VariantSearchController {
                 switch (currentQuery.prop) {
                     case 'gene':
                         // convert gene into chromosome and start/end points
-                        // also be prepared to handle ±value
+                        // also be prepared to handle Â±value
 
                         // assume that value is just the gene name
                         def gene = currentQuery.value
                         def adjustment
 
-                        // if the gene contains '±', then split to get the start and end
+                        // if the gene contains 'Â±', then split to get the start and end
                         // adjustments
-                        if (gene.indexOf('±') > -1) {
-                            (gene, adjustment) = currentQuery.value.split(' ± ')
+                        if (gene.indexOf('Â±') > -1) {
+                            (gene, adjustment) = currentQuery.value.split(' Â± ')
                         }
                         Gene geneObject = Gene.retrieveGene(gene)
                         String chromosome = geneObject.getChromosome()
@@ -790,7 +790,7 @@ class VariantSearchController {
                             // supporting ORing queries, this may change
                             break;
                         }
-                    // Otherwise, process the query like normal, so fall through to the next case
+                // Otherwise, process the query like normal, so fall through to the next case
                     case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
                         String comparator = currentQuery.comparator.replace(/=/, /|/)
                         processedQuery = '11=' + currentQuery.prop + comparator + currentQuery.value
@@ -1051,13 +1051,13 @@ class VariantSearchController {
         if (requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
             // if there are no specified properties, default to these
             requestForAdditionalProperties =
-                ["common-common-CLOSEST_GENE",
-                 "common-common-VAR_ID",
-                 "common-common-DBSNP_ID",
-                 "common-common-Protein_change",
-                 "common-common-Consequence",
-                 "common-common-CHROM",
-                 "common-common-POS"].join(":")
+                    ["common-common-CLOSEST_GENE",
+                     "common-common-VAR_ID",
+                     "common-common-DBSNP_ID",
+                     "common-common-Protein_change",
+                     "common-common-Consequence",
+                     "common-common-CHROM",
+                     "common-common-POS"].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)

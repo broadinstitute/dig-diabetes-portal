@@ -7,6 +7,7 @@ import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -380,9 +381,21 @@ class VariantInfoController {
      */
     def sampleMetadataExperimentAjax() {
         List<SampleGroup> sampleGroupList
-
+        boolean isGeneBurden = params.boolean('isGeneBurden');
         sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
 
+        // DIGKB-203: filter out non gene burden test sample groups (EBI)
+        if (isGeneBurden) {
+            List<SampleGroup> tempList = new ArrayList<SampleGroup>();
+            for (SampleGroup sampleGroup : sampleGroupList) {
+                if (sampleGroup.hasMeaning(PortalConstants.BurdenTest.GENE)) {
+                    tempList.add(sampleGroup)
+                }
+            }
+
+            // replace the list
+            sampleGroupList = tempList;
+        }
 
         JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
         JSONObject jsonConversionObject = new JSONObject()
@@ -540,7 +553,7 @@ def retrieveSampleSummary (){
          * to a predefined MDV number until we can find a more general solution
          */
         grailsApplication.config.portal.data.version.map[portalType]
-        dataset = dataset?.replaceAll(~/mdv\d+/,"${grailsApplication.config.portal.data.version.map[portalType]}")
+//        dataset = dataset?.replaceAll(~/mdv\d+/,"${grailsApplication.config.portal.data.version.map[portalType]}")
 //        if (portalType == 't2d'){
 //            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
 //        } else if (portalType == 'stroke'){

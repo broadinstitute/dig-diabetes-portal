@@ -240,60 +240,65 @@
         </g:if>
 
 <g:else>
-                <h1><g:message code="policies.title" default="Policies"/></h1>
-    <div class="row pull-left medText col-xs-12">
-    <g:message code="informational.policies.stroke.subheader"></g:message>
-    </div>
+    <div class="container dk-static-content">
+        <div class="row">
+            <h5 style="position:fixed; bottom:20px;"><a href="#"><g:message code="policies.tothetop"></g:message></a></h5>
+            <div class="col-md-3">
+                <h1><g:message code="policies.title"></g:message></h1>
+                <h4 class="dk-notice"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></h4>
+                <h4 class="dk-notice"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></h4>
+                %{--<h4 class="dk-notice"><a href="#reusing_text"><g:message code="policies.reusing"></g:message></a></h4>--}%
+                %{--<h4 class="dk-notice"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></h4>--}%
 
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <h2><g:message code="policies.dataUse"/></h2>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <p><g:message code="informational.policies.stroke.mission"></g:message></p>
-        </div>
+            </div>
 
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-          <p><g:message code="informational.policies.stroke.sharing"></g:message></p>
-        </div>
+            <div class="col-md-9">
 
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <h2><g:message code="informational.policies.stroke.deposition"></g:message></h2>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <g:message code="informational.policies.stroke.submission"></g:message>
-        </div>
+                <h2 id="data_use" class="dk-blue-bordered"><g:message code="policies.dataUse"></g:message></h2>
 
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <h2><g:message code="informational.policies.stroke.terms"></g:message></h2>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <strong><g:message code="informational.policies.stroke.registration"></g:message></strong>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <p><g:message code="informational.policies.stroke.google"></g:message></p>
-        </div>
+                <p> <g:message code="informational.policies.stroke.subheader"></g:message></p>
 
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <p><strong><g:message code="informational.policies.conduct.availability.header"></g:message></strong></p>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <p><g:message code="informational.policies.conduct.section_1a"></g:message></p>
-        </div>
+                <p><g:message code="informational.policies.stroke.mission"></g:message></p>
 
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <strong><g:message code="informational.policies.conduct.user_responsibilities.header"></g:message></strong>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <p><g:message code="informational.policies.conduct.section_3"></g:message></p>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <ol><g:message code="informational.policies.conduct.section_4"></g:message>
-            </ol>
-        </div>
-        <div class="row pull-left medText consortium-spacing col-xs-12">
-            <g:message code="informational.policies.conduct.section_5"></g:message>
-        </div>
+                <p><g:message code="informational.policies.stroke.sharing"></g:message></p>
 
+                <h4><g:message code="informational.policies.stroke.deposition"></g:message></h4>
+
+                <p><g:message code="informational.policies.stroke.submission1"></g:message>
+                <ul><g:message code="informational.policies.stroke.submission2"></g:message></ul>
+                </p>
+
+
+
+
+<h4><g:message code="informational.policies.stroke.terms"></g:message></h4>
+
+                <h5><g:message code="informational.policies.conduct.registration.header"></g:message></h5>
+
+                <p><g:message code="informational.policies.stroke.google"></g:message></p>
+
+                <h5><g:message code="informational.policies.conduct.availability.header"></g:message></h5>
+                <p><g:message code="informational.policies.conduct.stroke"></g:message></p>
+
+                <h5><g:message code="informational.policies.conduct.user_responsibilities.header"></g:message></h5>
+
+                <p><g:message code="informational.policies.conduct.section_3"></g:message></p>
+
+                <ol><g:message code="informational.policies.conduct.section_4"></g:message></ol>
+
+                <p><g:message code="informational.policies.conduct.section_5"></g:message></p>
+
+
+                <h2 id="citing_data" class="dk-blue-bordered"><g:message code="policies.citations"></g:message></h2>
+
+                <p><g:message code="informational.policies.stroke.citing"></g:message></p>
+
+                <p><g:message code="portal.stroke.use.citation.request"></g:message></p>
+
+                <p><g:message code="portal.stroke.use.citation.itself"></g:message></p>
+
+
+            </div></div></div></div>
 
     </g:else>
 

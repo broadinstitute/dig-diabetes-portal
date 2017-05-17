@@ -15,7 +15,11 @@
                     "id": "ExSeq_26k_mdv3",
                     "ancestry": "Mixed",
                     "sort_order": 50,
-                    "properties": [
+                    "meaning": [
+                      "GENE",
+                      "VARIANT"
+                    ],
+                  "properties": [
                         {
                             "name": "F_MISS",
                             "type": "FLOAT",
@@ -19050,7 +19054,11 @@
                     "id": "GWAS_MAGIC_mdv1",
                     "ancestry": "Mixed",
                     "sort_order": 10,
-                    "properties": [
+                    "meaning": [
+                      "GENE",
+                      "VARIANT"
+                    ],
+                  "properties": [
                         {
                             "name": "EAF",
                             "type": "FLOAT",

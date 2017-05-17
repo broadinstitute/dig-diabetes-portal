@@ -4,9 +4,12 @@ import org.broadinstitute.mpg.diabetes.metadata.visitor.DataSetVisitor;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Class to represent the metadata sample groups
@@ -22,6 +25,7 @@ public class SampleGroupBean implements SampleGroup, Comparable {
     private int sortOrder;
     private DataSet parent;
     private String systemId;
+    private Set<String> meaningSet = new HashSet<String>();     // hashset will take care of accidental duplicate insertions
 
     // DIGP-196: adding subjects/cases/controls per data set
     private Integer subjectsNumber;
@@ -44,6 +48,38 @@ public class SampleGroupBean implements SampleGroup, Comparable {
 
         // return the resulting list
         return allChildrenList;
+    }
+
+    /**
+     * add meaning values when building the property bean
+     *
+     * @param meaningValue
+     */
+    public void addMeaning(String meaningValue) {
+        this.meaningSet.add(meaningValue);
+    }
+
+    /**
+     * add all meaning values when building the property bean
+     *
+     * @param meanings
+     */
+    public void addAllMeanings(Collection<String> meanings) {
+        this.meaningSet.addAll(meanings);
+    }
+
+    /**
+     * determines if the property has been tagged with a given metadata word
+     *
+     * @param meaningValue
+     * @return
+     */
+    public boolean hasMeaning(String meaningValue) {
+        if (meaningValue == null) {
+            return false;
+        } else {
+            return this.meaningSet.contains(meaningValue);
+        }
     }
 
     /**

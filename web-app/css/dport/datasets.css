@@ -1,0 +1,581 @@
+
+div.filters-style {
+    display:table-row;
+    width:100%;
+}
+
+div.phenotype-level2-row{
+    margin-top:10px;
+}
+
+div.row{
+    padding-top:30px;
+    width: 100%
+}
+
+div.phenotype-level2-option{
+    cursor: pointer;
+    width:auto;
+    float: left;
+    text-align: center;
+    background-color:#cef;
+    padding: 3px 30px;
+    border: solid 1px #9cf;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    border-radius: 3px;
+}
+
+div.phenotype-option{
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    background-color:#cef;
+    padding: 3px 30px;
+    border: solid 1px #9cf;
+    margin: 0 3px 3px 0;
+    border-radius: 3px;
+}
+
+div.datatype-option{
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    background-color:#ffc;
+    padding: 3px 30px;
+    border: solid 1px #fc4;
+    margin: 0 3px 3px 0;
+    border-radius: 3px;
+}
+div.datasets-filter {
+
+    width:100%;
+}
+
+div.dataset-description{
+    border:thin solid #8a95a8;
+    margin-top:40px;
+    padding-left: 20px;
+}
+
+div.datatype-option-showall{
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    background-color:#f94;
+    padding: 3px 30px;
+    border: solid 1px #fc4;
+    margin: 0 3px 3px 0;
+    border-radius: 3px;
+    color:#fff;
+}
+
+div.phenotype-option-showall{
+    cursor: pointer;
+    float: left;
+    text-align: center;
+    background-color:#39f;
+    padding: 3px 30px;
+    border: solid 1px #9cf;
+    margin: 0 3px 3px 0;
+    border-radius: 3px;
+    color:#fff;
+}
+
+
+.datasets-filter table {
+    width:100%;
+}
+
+.datasets-filter td {
+    cursor: pointer;
+    text-align: center;
+    background-color:#eee;
+    padding: 3px 0;
+    border: solid 1px #fff;
+}
+
+.phenotypetip {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+
+.phenotypetip .phenotypetiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.phenotypetip .phenotypetiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.phenotypetip:hover .phenotypetiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.dataset {
+    font-weight: bold;
+}
+
+.dataset-filter table {
+    width:100%;
+}
+
+.dataset-filter td {
+    text-align: center;
+    background-color:#eee;
+    padding: 3px 0;
+    border: solid 1px #fff;
+}
+
+.greyBG {
+    background-color: #ccc;
+}
+
+.defaultBG {
+    background-color: #fff;
+    color: #000;
+    display:td;
+}
+
+.blueBG {
+    background-color:#e5f5Ff;
+    display:td;
+}
+
+.whiteBG {
+    background-color: #fff;
+    color: #aaa;
+    display:none;
+}
+
+.overlapBG {
+    background-color:#39F;
+    color: #fff;
+}
+
+
+.panel-body1 {
+    padding: 15px 0 20px 30px !important;
+
+    border: none;
+}
+
+.popover{
+
+    min-width: 400px;
+
+}
+
+.popover-title {
+
+    font-size: 14pt;
+
+    font-weight: bold;
+
+    text-align: left;
+
+}
+
+.popover-content {
+
+    font-size: 12pt;
+
+    max-width: 500px;
+
+}
+
+.aboutIconHolder {
+
+    margin: auto;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    height: 170px;
+
+}
+
+
+
+.consortium-spacing {
+
+    padding-top: 25px;
+
+}
+
+
+
+p.dataset-name {
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    margin: 0;
+
+}
+
+
+
+.datapage-body {
+
+    font-size: 16px;
+
+}
+
+
+.dataset-summary {
+
+    display: block;
+
+    position: relative;
+
+    font-size: 18px;
+
+    font-weight: 200;
+
+    float: right;
+
+    color: #36c;
+
+    top: 5px;
+
+}
+
+
+
+.data-status-open-access {
+
+    color: #393;
+
+}
+
+
+
+.data-status-early-phase1-access {
+
+    color: red;
+
+}
+
+
+
+.dataset-info {
+
+    color: #777;
+
+}
+
+
+
+.open-info {
+
+    display: block;
+
+    color: #39F !important;
+
+    font-size: 14px;
+
+}
+
+.notice  {
+
+    font-weight: bold;
+    line-height: 20px;
+    text-decoration: none;
+    margin: 0 auto 0 auto;
+    color: #588fd3;
+    margin: 0;
+
+}
+
+.notice .messageText {
+    font-weight: bold;
+    font-style: italic;
+    color: black;
+    margin: 0 auto 0 auto;
+    font-size: 20px;
+}
+.notice  hr {
+    width: 100%;
+    color: black;
+}
+/* only applies to tables for cohort information */
+.cohortDetail th {
+    width: 50%;
+}
+
+
+div.datasets-filter {
+
+    width:100%;
+}
+.datasets-filter table {
+    width:100%;
+}
+
+.datasets-filter td {
+    cursor: pointer;
+    text-align: center;
+    background-color:#eee;
+    padding: 3px 0;
+    border: solid 1px #fff;
+}
+
+.phenotypetip {
+    position: relative;
+    width: 100%;
+    display: inline-block;
+}
+
+.phenotypetip .phenotypetiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #555;
+    color: #fff;
+    font-size: 12px;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.phenotypetip .phenotypetiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+.phenotypetip:hover .phenotypetiptext {
+    visibility: visible;
+    opacity: 1;
+}
+
+.dataset {
+    font-weight: bold;
+}
+
+.dataset-filter table {
+    width:100%;
+}
+
+.dataset-filter td {
+    text-align: center;
+    background-color:#eee;
+    padding: 3px 0;
+    border: solid 1px #fff;
+}
+
+.greyBG {
+    background-color: #ccc;
+}
+
+.defaultBG {
+    background-color: #fff;
+    color: #000;
+    display:td;
+}
+
+.blueBG {
+    background-color:#e5f5Ff;
+    display:td;
+}
+
+.whiteBG {
+    background-color: #fff;
+    color: #aaa;
+    display:none;
+}
+
+.overlapBG {
+    background-color:#39F;
+    color: #fff;
+}
+
+
+.panel-body1 {
+    padding: 15px 0 20px 30px !important;
+
+    border: none;
+}
+
+.popover{
+
+    min-width: 400px;
+
+}
+
+.popover-title {
+
+    font-size: 14pt;
+
+    font-weight: bold;
+
+    text-align: left;
+
+}
+
+.popover-content {
+
+    font-size: 12pt;
+
+    max-width: 500px;
+
+}
+
+.aboutIconHolder {
+
+    margin: auto;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    height: 170px;
+
+}
+
+
+
+.consortium-spacing {
+
+    padding-top: 25px;
+
+}
+
+
+
+p.dataset-name {
+
+    font-size: 25px;
+
+    font-weight: 500;
+
+    margin: 0;
+
+}
+
+
+
+.datapage-body {
+
+    font-size: 16px;
+
+}
+
+
+.dataset-summary {
+
+    display: block;
+
+    position: relative;
+
+    font-size: 18px;
+
+    font-weight: 200;
+
+    float: right;
+
+    color: #36c;
+
+    top: 5px;
+
+}
+
+
+
+.data-status-open-access {
+
+    color: #393;
+
+}
+
+
+
+.data-status-early-phase1-access {
+
+    color: red;
+
+}
+
+
+
+.dataset-info {
+
+    color: #777;
+
+}
+
+
+
+.open-info {
+
+    display: block;
+
+    color: #39F !important;
+
+    font-size: 14px;
+
+}
+
+.notice  {
+
+    font-weight: bold;
+    line-height: 20px;
+    text-decoration: none;
+    margin: 0 auto 0 auto;
+    color: #588fd3;
+    margin: 0;
+
+}
+
+.notice .messageText {
+    font-weight: bold;
+    font-style: italic;
+    color: black;
+    margin: 0 auto 0 auto;
+    font-size: 20px;
+}
+.notice  hr {
+    width: 100%;
+    color: black;
+}
+/* only applies to tables for cohort information */
+.cohortDetail th {
+    width: 50%;
+}

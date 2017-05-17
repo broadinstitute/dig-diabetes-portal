@@ -512,7 +512,7 @@ class GeneController {
             }
         }
         respond geneResults, model:[geneInstanceCount: Gene.count()]
-       // respond Gene.list(params+[sort:'name1']), model:[geneInstanceCount: Gene.count()]
+        // respond Gene.list(params+[sort:'name1']), model:[geneInstanceCount: Gene.count()]
     }
 
     def show(Gene geneInstance) {

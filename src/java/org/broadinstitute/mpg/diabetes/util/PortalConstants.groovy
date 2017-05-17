@@ -1,5 +1,7 @@
 package org.broadinstitute.mpg.diabetes.util
 
+
+
 /**
  * Class to contain the portal constants as static strings
  *
@@ -238,6 +240,11 @@ class PortalConstants {
     //  types of metadata
     public static final String METADATA_VARIANT                             = "VARIANT";
     public static final String METADATA_SAMPLE                              = "SAMPLE";
+
+    public class BurdenTest {
+        public static final String VARIANT                                  = "VARIANT";
+        public static final String GENE                                     = "GENE";
+    }
 
 
 

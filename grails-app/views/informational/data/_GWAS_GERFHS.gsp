@@ -1,58 +1,83 @@
 <script class="panel-body" id="GWAS_GERFHS_script" type="x-tmpl-mustache">
-    <h6 style="color:#ccc;">Data set</h6>
 
-    <p>Publication: <div class="paper">
+    <div class="panel-body">
 
-        <a href="http://www.ncbi.nlm.nih.gov/pubmed/nnnnn" target="_blank">
+<h4>Dataset</h4>
 
-            Title</a> <br/>
-
-        Authors.
-
-        <div class="citation">Citation.</div>
-
-        </div>
+<p><g:message code="aboutTheData.stroke.datasets.GERFHS_III_2017"></g:message></p>
 
 
 
-        <h4>Dataset phenotypes</h4>
-<ul>
-<li>phenotype</li>
-</ul>
+
+    <h4>Dataset phenotypes</h4>
+    <ul>
+        <li><g:message code="informational.shared.traits.ICH"></g:message></li>
+
+    </ul>
 
 <h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ethnicity</th></tr>
+<tr><th>Cohort</th><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
 
-    <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Cohort name</a>
-    <div style="display: none;" class="cohortDetail">
-    <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-<tr>
-<td valign="top">
-<ul>
-<li>criterion</li>
-</ul>
-</td>
-<td valign="top">
-<ul>
-<li>criterion</li>
-</ul>
-</td></tr>
+    %{--<tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Cohort name</a>--}%
+    %{--<div style="display: none;" class="cohortDetail">--}%
 
-            </table>
-    </div></td><td>Ancestry</td></tr>
+<tr><td>GERFHS</td><td>628</td><td>573</td><td>European and African</td></tr>
 
-            </table>
+    %{--<table border="1">--}%
+                %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
+%{--<tr>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td></tr>--}%
+
+            %{--</table>--}%
+
+
+
+
+
+<tr><td>Cincinnati Control Cohort (CCC)</td><td>0</td><td>282</td><td>European and African</td></tr>
+
+    %{--<table border="1">--}%
+                %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
+%{--<tr>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td>--}%
+%{--<td valign="top">--}%
+%{--<ul>--}%
+%{--<li>criterion</li>--}%
+%{--</ul>--}%
+%{--</td></tr>--}%
+
+            %{--</table>--}%
+
+ </table>
+
+<g:message code="aboutTheData.stroke.datasets.GERFHS2017.casecontrol"></g:message>
 
 
     <h4>Project</h4>
-    <h4>Project name<small><a href="" target="_blank">Learn more ></a>
-    </small></h4>
 
-    <p>Project description.</p>
+<h5><b><g:message code="aboutTheData.stroke.datasets.GERFHS_III_2017.title"></g:message></b></h5>
+    <p><g:message code="aboutTheData.stroke.datasets.Cincinnati.project"></g:message></p>
 
+
+<h4>Accessing GERFHS III 2017 data in the Cerebrovascular Disease Knowledge Portal</h4>
+
+<p><g:message code="informational.data.accessing.GERFHS_III_2017"></g:message></p>
+</div>
 
 </script>
 

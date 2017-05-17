@@ -222,11 +222,14 @@
                 </div>
             </div>
             <hr />
+%{--<g:if test="${!g.portalTypeString()?.equals('stroke')}">--}%
             <img src="${resource(dir: 'images/icons', file: 'data_icon.png')}" style="width: 110px; margin-right: 10px;" align="left" >
+    %{--</g:if>--}%
             <h2><g:message code="portal.aboutTheData" default="About the data" /></h2>
             <p>
                 <g:if test="${g.portalTypeString()?.equals('stroke')}">
                     <g:message code="portal.stroke.about.the.data.text" />
+                    %{--<p><g:message code="portal.stroke.about.AHA.discovery"></g:message></p>--}%
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <g:message code="portal.mi.about.the.data.text" />
