@@ -6,7 +6,10 @@ $( document ).ready( function (){
     mpgSoftware.burdenTestShared.buildGaitInterface('.gaitSectionGoesHere',{
             accordionHeaderClass:'${accordionHeaderClass}',
             modifiedTitle:'${modifiedTitle}',
-            modifiedTitleStyling:'${modifiedTitleStyling}'
+            modifiedTitleStyling:'${modifiedTitleStyling}',
+            allowExperimentChoice: ${allowExperimentChoice},
+            allowPhenotypeChoice : ${allowPhenotypeChoice},
+            allowStratificationChoice: ${allowStratificationChoice}
         },
         '${geneName}',
         true,

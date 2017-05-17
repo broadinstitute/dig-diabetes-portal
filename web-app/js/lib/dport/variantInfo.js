@@ -130,7 +130,7 @@ var mpgSoftware = mpgSoftware || {};
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic) {
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
@@ -164,7 +164,7 @@ var mpgSoftware = mpgSoftware || {};
                 mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
                     lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,'junk',
                     geneLocusZoomUrl,
-                    variantInfoUrl,makeDynamic);
+                    variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl);
 //            }
 
             $('[data-toggle="popover"]').popover();

@@ -452,8 +452,8 @@ if  (Environment.current == Environment.PRODUCTION)  {
 
 
 appName = grails.util.Metadata.current.'app.name'
-//def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
-def baseURL = grails.serverURL ?: "http://GPAD4-DCF.broadinstitute.org:${System.getProperty('server.port', '8080')}/${appName}"
+def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
+//def baseURL = grails.serverURL ?: "http://GPAD4-DCF.broadinstitute.org:${System.getProperty('server.port', '8080')}/${appName}"
 
 
 println("\n\n>>>>>>>>>>>>baseURL=${baseURL}<<<<<<<<<<<<<<<<<<<<<<")

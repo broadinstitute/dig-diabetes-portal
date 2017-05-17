@@ -327,6 +327,7 @@ mpgSoftware.burdenTestShared = (function () {
             stratifyDesignationDropdown.val('none')
         }
         displayTestResultsSection(false);
+        setValuesInTopOfGaitDisplay(params);
         $('.caatSpinner').hide();
     };
 
@@ -451,34 +452,84 @@ mpgSoftware.burdenTestShared = (function () {
     };
 
 
-    var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator,changeExperiment,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
-                                       generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl, burdenTestVariantSelectionOptionsAjaxUrl) {
-        if ((typeof changeExperiment !== 'undefined') &&
-            (changeExperiment)){
-            loadExperimentMetadata($(datasetFilter).val(),refreshTopOfGaitDisplay,sampleMetadataAjaxUrl,{dropDownPhenoSelector:phenotypeFilter,stratifyDesignation:stratifyDesignation,
-                linkToTypeaheadUrl:linkToTypeaheadUrl,sampleMetadataAjaxUrl:sampleMetadataAjaxUrl,variantInfoUrl:variantInfoUrl,retrieveSampleSummaryUrl:retrieveSampleSummaryUrl,
-                generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,variantAndDsAjaxUrl:variantAndDsAjaxUrl,
-                burdenTestVariantSelectionOptionsAjaxUrl:burdenTestVariantSelectionOptionsAjaxUrl})
-        }
+
+    var setValuesInTopOfGaitDisplay = function(parmHolder){
         var sampleMetadata = getStoredSampleMetadata();
-        var phenotypeFilterValue = $(phenotypeFilter).val();
-        var stratifyDesignationValue = $(stratifyDesignation).val();
+        var phenotypeFilterValue = $(parmHolder.dropDownPhenoSelector).val();
+        var stratifyDesignationValue = $(parmHolder.stratifyDesignation).val();
         var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
         var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames||o.name===phenotypeFilterValue;})
         if (typeof filterDetails !== 'undefined'){
             if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
-                $(caseControlDesignator).prop('checked', false);
-                $(caseControlDesignator).prop('disabled', true);
+                $(parmHolder.caseControlDesignator).prop('checked', false);
+                $(parmHolder.caseControlDesignator).prop('disabled', true);
             } else {
-                $(caseControlDesignator).prop('disabled', false);
+                $(parmHolder.caseControlDesignator).prop('disabled', false);
             }
         }
-        //populateSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters);
         $('#stratsTabs').empty();
         var caseControlFiltering = $('#caseControlFiltering').prop('checked');
-        stratifiedSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
-            linkToTypeaheadUrl,generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,burdenTestVariantSelectionOptionsAjaxUrl);
+        stratifiedSampleAndCovariateSection($(parmHolder.datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
+            parmHolder.linkToTypeaheadUrl,
+            parmHolder.generateListOfVariantsFromFiltersAjaxUrl,
+            parmHolder.variantInfoUrl,
+            parmHolder.retrieveSampleSummaryUrl,
+            parmHolder.variantAndDsAjaxUrl,
+            parmHolder.burdenTestVariantSelectionOptionsAjaxUrl);
         displayTestResultsSection(false);
+    };
+
+
+    var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator,changeExperiment,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
+                                       generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl, burdenTestVariantSelectionOptionsAjaxUrl) {
+        if ((typeof changeExperiment !== 'undefined') &&
+            (changeExperiment)){
+            loadExperimentMetadata($(datasetFilter).val(),refreshTopOfGaitDisplay,sampleMetadataAjaxUrl,
+                {   dropDownPhenoSelector:phenotypeFilter,
+                    stratifyDesignation:stratifyDesignation,
+                    linkToTypeaheadUrl:linkToTypeaheadUrl,
+                    sampleMetadataAjaxUrl:sampleMetadataAjaxUrl,
+                    variantInfoUrl:variantInfoUrl,
+                    retrieveSampleSummaryUrl:retrieveSampleSummaryUrl,
+                    generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,
+                    variantAndDsAjaxUrl:variantAndDsAjaxUrl,
+                    burdenTestVariantSelectionOptionsAjaxUrl:burdenTestVariantSelectionOptionsAjaxUrl,
+                    caseControlDesignator:caseControlDesignator,
+                    datasetFilter:datasetFilter
+                });
+        }
+        else {
+            setValuesInTopOfGaitDisplay( {   dropDownPhenoSelector:phenotypeFilter,
+                stratifyDesignation:stratifyDesignation,
+                linkToTypeaheadUrl:linkToTypeaheadUrl,
+                sampleMetadataAjaxUrl:sampleMetadataAjaxUrl,
+                variantInfoUrl:variantInfoUrl,
+                retrieveSampleSummaryUrl:retrieveSampleSummaryUrl,
+                generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,
+                variantAndDsAjaxUrl:variantAndDsAjaxUrl,
+                burdenTestVariantSelectionOptionsAjaxUrl:burdenTestVariantSelectionOptionsAjaxUrl,
+                caseControlDesignator:caseControlDesignator,
+                datasetFilter:datasetFilter
+            });
+        }
+        //var sampleMetadata = getStoredSampleMetadata();
+        //var phenotypeFilterValue = $(phenotypeFilter).val();
+        //var stratifyDesignationValue = $(stratifyDesignation).val();
+        //var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
+        //var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames||o.name===phenotypeFilterValue;})
+        //if (typeof filterDetails !== 'undefined'){
+        //    if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
+        //        $(caseControlDesignator).prop('checked', false);
+        //        $(caseControlDesignator).prop('disabled', true);
+        //    } else {
+        //        $(caseControlDesignator).prop('disabled', false);
+        //    }
+        //}
+        //$('#stratsTabs').empty();
+        //var caseControlFiltering = $('#caseControlFiltering').prop('checked');
+        //stratifiedSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
+        //    linkToTypeaheadUrl,generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,burdenTestVariantSelectionOptionsAjaxUrl);
+        //displayTestResultsSection(false);
     };
 
 
@@ -763,14 +814,14 @@ mpgSoftware.burdenTestShared = (function () {
             var unrecognizedVariants = [];
             var duplicateVariants = [];
             var datasetFilter = $('#datasetFilter').val();
-            var dataSet;
-            if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
-                dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
-            } else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
-                dataSet = 'GWAS_Stroke_mdv70';
-            }else {
-                dataSet = 'ExChip_CAMP_mdv23';
-            }
+            var dataSet = metadata.conversion[datasetFilter];
+            //if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
+            //    dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
+            //} else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
+            //    dataSet = 'GWAS_Stroke_mdv70';
+            //}else {
+            //    dataSet = 'ExChip_CAMP_mdv23';
+            //}
             _.forEach(allVariants,function(oneVariantRaw){
                 var oneVariant = oneVariantRaw.trim();
                 if (oneVariant.length > 0){
@@ -862,11 +913,12 @@ mpgSoftware.burdenTestShared = (function () {
 
 // kludge alert!  Currently we have no way of specifying whether or not a data set can be used for stratification.
 //  For now I will erase the hide the stratification section if it doesn't apply to a data set, but clearly we need to do better
-            if ($('#datasetFilter').val()==="samples_camp_mdv23"){
-                $('.stratificationHolder').css('display','none');
-            } else {
+            if (_.find(sampleMetadata.filters,{name:'origin'})) {
                 $('.stratificationHolder').css('display','block');
+            } else {
+                $('.stratificationHolder').css('display','none');
             }
+
 
             $("#chooseFiltersLocation").empty();
             $("#chooseCovariatesLocation").empty();
@@ -1501,16 +1553,17 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
     var dataSet;
     //kludge alert!!!
     if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
-
-        if (datasetFilter.substring(0, 'samples_19k_'.length) === 'samples_19k_') {
-            dataSet = 'ExSeq' + datasetFilter.substring('samples'.length);
-        } else if (datasetFilter.substring(0, 'samples_stroke_'.length) === 'samples_stroke_') {
-            dataSet = 'GWAS' + datasetFilter.substring('samples'.length);
-            //dataSet = 'GWAS_Stroke_mdv70';
-        } else {
-            dataSet = 'ExChip' + datasetFilter.substring('samples'.length);
-            // dataSet = 'ExChip_CAMP_mdv23';
-        }
+        var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+        dataSet = metadata.conversion[datasetFilter];
+        //if (datasetFilter.substring(0, 'samples_19k_'.length) === 'samples_19k_') {
+        //    dataSet = 'ExSeq' + datasetFilter.substring('samples'.length);
+        //} else if (datasetFilter.substring(0, 'samples_stroke_'.length) === 'samples_stroke_') {
+        //    dataSet = 'GWAS' + datasetFilter.substring('samples'.length);
+        //    //dataSet = 'GWAS_Stroke_mdv70';
+        //} else {
+        //    dataSet = 'ExChip' + datasetFilter.substring('samples'.length);
+        //    // dataSet = 'ExChip_CAMP_mdv23';
+        //}
 
         $('#rSpinner').show();
         var promise = $.ajax({
@@ -2509,7 +2562,8 @@ return {
     setPortalTypeWithAncestry: setPortalTypeWithAncestry,
     initializeGaitUi:initializeGaitUi,
     fillVariantOptionFilterDropDown:fillVariantOptionFilterDropDown,
-    buildGaitInterface:buildGaitInterface
+    buildGaitInterface:buildGaitInterface,
+    getStoredSampleMetadata:getStoredSampleMetadata
 }
 
 }());

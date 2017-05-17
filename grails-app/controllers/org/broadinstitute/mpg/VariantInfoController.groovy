@@ -259,7 +259,7 @@ class VariantInfoController {
         int startPos
         int endPos
         int pageStart = 0
-        int pageEnd = 5000
+        int pageEnd = 500
         Boolean lzFormat =  false
         if (params.chromosome) {
             chromosome = params.chromosome
@@ -385,6 +385,13 @@ class VariantInfoController {
 
 
         JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
+        JSONObject jsonConversionObject = new JSONObject()
+        for (SampleGroup sampleGroup in sampleGroupList) {
+            if (sampleGroup.parent) {
+                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+            }
+        }
+        jsonObject['conversion'] = jsonConversionObject
 
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}
@@ -398,6 +405,10 @@ class VariantInfoController {
     def sampleMetadataAjax() {
         String dataset = params.dataset
         SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(dataset)
+        JSONObject jsonConversionObject = new JSONObject()
+        if (sampleGroup.parent) {
+            jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+        }
         JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
         List filtersOfTypeString = jsonObject?.filters?.findAll{it.type=="STRING"}
         for (Map allLevels in filtersOfTypeString){
@@ -410,7 +421,7 @@ class VariantInfoController {
             }
             allLevels.levels = filteredLevels
         }
-
+        jsonObject['conversion'] = jsonConversionObject
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}
     }
@@ -421,6 +432,12 @@ class VariantInfoController {
      */
     def sampleMetadataAjaxWithAssumedExperiment() {
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
+        JSONObject jsonConversionObject = new JSONObject()
+        for (SampleGroup sampleGroup in sampleGroupList) {
+            if (sampleGroup.parent) {
+                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+            }
+        }
         if (sampleGroupList.size()>0){
             SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
             JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
@@ -435,6 +452,7 @@ class VariantInfoController {
                 }
                 allLevels.levels = filteredLevels
             }
+            jsonObject['conversion'] = jsonConversionObject
             render(status: 200, contentType: "application/json") {jsonObject}
             return
         }

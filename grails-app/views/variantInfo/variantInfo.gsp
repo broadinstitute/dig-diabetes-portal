@@ -71,7 +71,8 @@
                     variantSummaryText,
                     'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
+                    '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}',
+                        '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}');
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
@@ -138,7 +139,11 @@
                         <div class="separator"></div>
 
                     <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
-                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
+                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch,
+                                                                           'accordionHeaderClass': 'accordion-heading',
+                                                                           'allowExperimentChoice': 1,
+                                                                           'allowPhenotypeChoice' : 1,
+                                                                           'allowStratificationChoice': 1   ]"/>
 
                     </g:if>
 
