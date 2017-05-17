@@ -875,7 +875,7 @@ class VariantSearchController {
                 key = entry.getKey();
                 value = entry.getValue();
             }
-            errorMsg = "Properties can currently retrieved only from a single institution.  Please return to the Search page and restart your search"
+            errorMsg = "Currently, searches in the Oxford BioBank GWAS data set may not be combined with searches in any other data set. Please return to the Search page and modify your search."
             render(status: 200, contentType: "application/json") {
                 [
 
