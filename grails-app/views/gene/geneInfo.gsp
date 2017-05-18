@@ -127,15 +127,10 @@
                 </g:renderNotBetaFeaturesDisplayedValue>
                 <g:renderNotBetaFeaturesDisplayedValue>
 
-                </g:renderNotBetaFeaturesDisplayedValue>
-                   %{----}%
-                    %{--<g:renderBetaFeaturesDisplayedValue>--}%
-                    %{--<div class="separator"></div>--}%
-                    %{--<g:render template="/widgets/gwasRegionSummary"--}%
-                              %{--model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>--}%
-                    %{--</g:renderBetaFeaturesDisplayedValue>--}%
-                    %{----}%
+                    <div class="separator"></div>
+
                     <g:render template="../templates/igvBrowserTemplate"/>
+
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
@@ -153,11 +148,19 @@
                         </div>
                     </div>
 
+                </g:renderNotBetaFeaturesDisplayedValue>
+                   %{----}%
+                    %{--<g:renderBetaFeaturesDisplayedValue>--}%
+                    %{--<div class="separator"></div>--}%
+                    %{--<g:render template="/widgets/gwasRegionSummary"--}%
+                              %{--model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>--}%
+                    %{--</g:renderBetaFeaturesDisplayedValue>--}%
+                    %{----}%
+
 
                 <script>
                     $('#accordion2').on('shown.bs.collapse', function (e) {
                         if (e.target.id === "collapseIgv") {
-//                            var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
 
                             igvLauncher.setUpIgv('<%=geneName%>',
                                     '.igvGoesHere',
@@ -200,6 +203,7 @@
                         <div class="separator"></div>
 
                         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
+                                                                               'accordionHeaderClass': 'accordion-heading',
                                                                                'modifiedTitle': 'Interactive burden test',
                                                                                'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
                                                                                'allowExperimentChoice': 0,
