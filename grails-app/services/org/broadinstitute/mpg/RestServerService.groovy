@@ -1531,21 +1531,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public String getMetadata() {
         String retdat;
-        String restUrl = REST_SERVER?.url + METADATA_URL;
         retdat = getRestCallBase(METADATA_URL, REST_SERVER?.url);
-//        retdat = getRestCall(restUrl);
         return retdat;
     }
-
 
     public String getSampleMetadata() {
         String retdat
         retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, currentRestServer())
         return retdat
     }
-
-
-
 
     /***
      * Make multiple calls to fill up the 'variation across continental ancestries' table, then combine all of those
