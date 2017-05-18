@@ -186,8 +186,7 @@ class RestServerService {
         this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
         //default rest server
-        this.REST_SERVER = grailsApplication.config.restServer;
-
+        this.REST_SERVER = grailsApplication.config.digdev01Server;
     }
 
     // current below
@@ -383,32 +382,13 @@ class RestServerService {
 
     public List<ServerBean> getRestServerList() {
         if (this.restServerList == null) {
-            // add in all known servers
-            // could do this in config.groovy
             this.restServerList = new ArrayList<ServerBean>();
-            this.restServerList.add(grailsApplication.config.t2dDistributedLocalhostServer);
-            this.restServerList.add(grailsApplication.config.t2dProdLoadBalancedServer);
-            this.restServerList.add(grailsApplication.config.t2dQaLoadBalancedServer);
-
-
-//            this.restServerList.add(grailsApplication.config.t2dQaLoadBalancedServer);
-//            this.restServerList.add(grailsApplication.config.t2dQa01BehindLoadBalancer);
-//            this.restServerList.add(grailsApplication.config.t2dDevLoadBalancedServer);
-//            this.restServerList.add(grailsApplication.config.t2dDev01BehindLoadBalancer);
-//            this.restServerList.add(grailsApplication.config.t2dDev02BehindLoadBalancer);
-//            this.restServerList.add(grailsApplication.config.t2dProd01BehindLoadBalancer);
-//            this.restServerList.add(grailsApplication.config.t2dProd02BehindLoadBalancer);
-//            this.restServerList.add(grailsApplication.config.t2dAws01RestServer);
-//            this.restServerList.add(grailsApplication.config.t2dAwsStage01RestServer);
-//            this.restServerList.add(grailsApplication.config.toddServer);
-//            this.restServerList.add(grailsApplication.config.t2dLocalhostRestServer);
-//            this.restServerList.add(grailsApplication.config.t2dDevRestServer);
-//            this.restServerList.add(grailsApplication.config.t2dProdRestServer);
-//            this.restServerList.add(grailsApplication.config.t2dNewDevRestServer);
-//            this.restServerList.add(grailsApplication.config.localServer);
-//            this.restServerList.add(grailsApplication.config.prodKb2NewCodeServer);
-//            this.restServerList.add(grailsApplication.config.stageKb2NewCodeServer);
-
+            this.restServerList.add(grailsApplication.config.digdev01Server);
+            this.restServerList.add(grailsApplication.config.digdev02Server);
+            this.restServerList.add(grailsApplication.config.digqa01Server);
+            this.restServerList.add(grailsApplication.config.digqa02Server);
+            this.restServerList.add(grailsApplication.config.digprod01Server);
+            this.restServerList.add(grailsApplication.config.digprod02Server);
         }
         return this.restServerList;
     }
