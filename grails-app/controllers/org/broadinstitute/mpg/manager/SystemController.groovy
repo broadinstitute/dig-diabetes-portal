@@ -26,7 +26,7 @@ class SystemController {
         log.info("LZ endpoint is: " + test)
         log.info("LZ map is: " + this.widgetService?.getLocusZoomEndpointList())
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
+                                          currentRestServer:restServerService?.getCurrentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
                                           burdenRestServerList: this.restServerService?.getBurdenServerList(),
                                           restServerList: this.restServerService?.getRestServerList(),
