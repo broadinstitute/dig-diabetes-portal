@@ -164,7 +164,7 @@
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                         <a href='<g:createLink controller="gene" action="geneInfo"
-                                               params="[id: 'LDLR']"/>'>LDLR</a>
+                                               params="[id: 'LPA']"/>'>LPA</a>
                     </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="gene" action="geneInfo"
@@ -222,13 +222,18 @@
                 </div>
             </div>
             <hr />
+<g:if test="${!g.portalTypeString()?.equals('stroke')}">
             <img src="${resource(dir: 'images/icons', file: 'data_icon.png')}" style="width: 110px; margin-right: 10px;" align="left" >
+    </g:if>
             <h2><g:message code="portal.aboutTheData" default="About the data" /></h2>
             <p>
-                <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                    <g:message code="portal.stroke.about.the.data.text" />
-                </g:if>
-                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+            <g:if test="${g.portalTypeString()?.equals('stroke')}"> <g:message code="portal.stroke.about.the.data.text" /> 
+                 <hr />
+                <a href="http://institute.heart.org" target="_blank"></a><img src="${resource(dir: 'images/organizations', file: 'AHA_Precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a> 
+                <p><g:message code="portal.stroke.about.AHA.discovery"></g:message></p>
+                <hr /> </g:if>
+
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <g:message code="portal.mi.about.the.data.text" />
                 </g:elseif>
                 <g:else>

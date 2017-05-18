@@ -1,0 +1,32 @@
+
+.line .crosshair {
+    fill: none;
+    stroke-width: 1px;
+}
+.line #crosshairX {
+    stroke: red;
+}
+.line #crosshairY {
+    stroke: blue;
+}
+.line .indexPosition {
+    fill: none;
+    stroke-width: 1px;
+}
+.line #indexPosition {
+    stroke: green;
+}
+.rect .regionRect {
+    fill: green;
+    stroke-width: 1px;
+    opacity: 0.2;
+}
+.overlay {
+    fill: none;
+    stroke: black;
+    pointer-events: all;
+    stroke-width: 1px;
+}
+svg {
+    shape-rendering: crispEdges;
+}

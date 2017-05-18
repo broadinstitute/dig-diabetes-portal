@@ -59,6 +59,7 @@ class RestServerService {
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
+    private String GET_REGION_URL = "getRegion"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -694,6 +695,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject postGetDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_URL);
+    }
+    public JSONObject postGetAggDataCall(String jsonString) {
+        return this.postRestCall(jsonString, this.GET_DATA_AGGREGATION_URL);
     }
 
     public JSONObject postGetHailDataCall(String jsonString, String URL) {
@@ -2038,10 +2042,55 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName) {
-        String specifyRequest = """{"version":"${sharedToolsService.getCurrentDataVersion()}","gene":"${geneName}","phenotype":"${phenotype}"}"""
-        return postRestCall(specifyRequest, GET_DATA_AGGREGATION_URL)
+
+    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, int  startHere, int pageSize ) {
+        List<String> specifyRequestList = []
+        //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "\"phenotype\":\"${phenotype}\""
+        }
+        if (startHere != -1) {
+            specifyRequestList << "\"page_start\":${startHere}"
+        }
+        if (pageSize != -1) {
+            specifyRequestList << "\"page_size\":${pageSize}"
+        }
+        if ((geneName) && (geneName.length() > 0)) {
+            specifyRequestList << "\"gene\":\"${geneName}\""
+        }
+        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
+
+
+    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd, String source) {
+        int revisedPageStart = 0;
+        int revisedPageEnd = 1000;
+        if (pageStart > 0){revisedPageStart = pageStart}
+        if (pageEnd > 0){revisedPageEnd = pageEnd}
+        List <String> restApiParameterList = []
+        restApiParameterList << "\"passback\":\"abc123\""
+        restApiParameterList << "\"page_start\": ${revisedPageStart}"
+        restApiParameterList << "\"page_size\": ${revisedPageEnd}"
+        restApiParameterList << "\"chrom\": \"${chromosome}\""
+        restApiParameterList << "\"start_pos\": ${startPosition}"
+        restApiParameterList << "\"end_pos\": ${endPosition}"
+        if (source){
+            restApiParameterList << "\"source\": \"${source}\""
+        }
+        String specifyRequest = "{${restApiParameterList.join(",")}}"
+//
+//        String specifyRequest = """{"passback":"abc123",
+// "page_start": ${revisedPageStart},
+// "page_size": ${revisedPageEnd},
+// "chrom": "${chromosome}",
+// "startPos": ${startPosition},
+// "endPos": ${endPosition}
+//}""".toString()
+        return postRestCall(specifyRequest, GET_REGION_URL)
+    }
+
+
+
 
 
 

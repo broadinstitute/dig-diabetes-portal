@@ -53,6 +53,23 @@ public class QueryJsonBuilder {
         stringBuilder.append(query.getLimit());
         stringBuilder.append(", \"count\": ");
         stringBuilder.append(query.isCount());
+
+        // add the optional fields
+        if (query.getVersion()!=null){
+            stringBuilder.append(", \"version\": \"");
+            stringBuilder.append(query.getVersion());
+            stringBuilder.append("\"");
+        }
+        if (query.getGene()!=null){
+            stringBuilder.append(", \"gene\": \"");
+            stringBuilder.append(query.getGene());
+            stringBuilder.append("\"");
+        }
+        if (query.getPhenotype()!=null){
+            stringBuilder.append(", \"phenotype\": \"");
+            stringBuilder.append(query.getPhenotype());
+            stringBuilder.append("\"");
+        }
         stringBuilder.append(", ");
 
         // get the rest of the payload

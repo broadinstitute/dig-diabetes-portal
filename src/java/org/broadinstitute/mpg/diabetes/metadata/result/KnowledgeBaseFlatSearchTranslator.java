@@ -61,8 +61,10 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
         Integer position;
         String varId;
         String chromosome;
+        String mdsScore;
         String referenceAllele;
         Double pValue;
+        Double posteriorPValue;
 
         // make sure translator properly initialized
         if (this.defaultDataSetKey == null) {
@@ -114,6 +116,8 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
             chromosome = null;
             referenceAllele = null;
             pValue = null;
+            posteriorPValue = null;
+            mdsScore = null;
 
             // get the variant
             Variant variant = resultList.get(i);
@@ -149,6 +153,12 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
                     chromosome = tempPropertyValue.getValue();
                 }
 
+                // add in the mdsScore
+                tempPropertyValue = variant.getPropertyValueFromCollection("MOST_DEL_SCORE", null, null);
+                if ((tempPropertyValue!=null)&&(tempPropertyValue.getValue() != null)) {
+                    mdsScore = tempPropertyValue.getValue();
+                }
+
                 // add in the pValue
                 tempPropertyValue = variant.getPropertyValueFromCollection(this.defaultPropertyKey, this.defaultDataSetKey, this.defaultPhenotypeKey);
                 if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)) {
@@ -160,15 +170,26 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
                     }
                 }
 
+                // add in the posteriorPValue
+                tempPropertyValue = variant.getPropertyValueFromCollection("POSTERIOR_P_VALUE", this.defaultDataSetKey, this.defaultPhenotypeKey);
+                if ((tempPropertyValue != null) && (tempPropertyValue.getValue() != null)  && (tempPropertyValue.getValue() != "null")) {
+                    try {
+                        posteriorPValue = Double.valueOf(tempPropertyValue.getValue());
+                    } catch (NumberFormatException exception) {
+                        // throw exception which will skip variant
+                        throw new PortalException("Got number format error for posteriorPValue for variant: " + variant + ": " + exception.getMessage());
+                    }
+                }
+
                 // if al values there and no issues, then add to arrays (want to make sure to keep arrays synched)
                 // add in the ref allele frequency
                 refAlleleFrequencyArray.put(null);
-                analysisArray.put(3);
+                analysisArray.put(posteriorPValue);
                 positionArray.put(position);
                 pValueArray.put(pValue);
                 chromosomeArray.put(chromosome);
                 idArray.put(varId);
-                scoreTestStatArray.put(null);
+                scoreTestStatArray.put(mdsScore);
                 refAlleleArray.put(referenceAllele);
 
             } catch (PortalException exception) {

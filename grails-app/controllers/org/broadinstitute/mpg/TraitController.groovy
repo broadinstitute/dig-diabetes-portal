@@ -310,6 +310,7 @@ class TraitController {
 
     }
 
+
     /**
      * new method to use the getData call to get the data in trait-search REST call result format
      *
@@ -341,6 +342,47 @@ class TraitController {
         }
 
     }
+
+
+
+    /**
+     * new method to use the getData call to get the data in trait-search REST call result format
+     *
+     * @return
+     */
+    def traitVariantCrossGetDataByGeneAjax() {
+        String regionsSpecification = params.id
+        String geneSpecification =  params.gene
+        List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = null;
+
+        // log
+        log.info("for traitVariantCrossGetDataByGeneAjax call, got params: " + params)
+
+        // get the phenotype list
+        // DIGP-291: centralize metadata version
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+
+        // submit query
+        //JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
+        JSONObject jsonObject = this.metaDataService.searchTraitByGene(geneSpecification, regionsSpecification, phenotypeList);
+
+        // log
+        log.info("for traitVariantCrossAjax, got json results object: " + jsonObject);
+
+        if (jsonObject) {
+            render(status: 200, contentType: "application/json") {
+                [variants: jsonObject['variants']]
+            }
+        } else {
+            render(status: 300, contentType: "application/json")
+        }
+
+    }
+
+
+
+
+
 
     /***
      * called by regionInfo, this provides information across 25 phenotypes. Use it to populate our big region graphic (the one that

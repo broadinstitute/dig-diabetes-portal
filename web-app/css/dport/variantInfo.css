@@ -1,0 +1,148 @@
+/* for associations at a glance */
+.smallRow {
+    border-top-style: solid;
+    border-top-width: 2px;
+    border-color: #1fff11;
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 5px 0px 10px;
+}
+
+.t2d-info-box-wrapper, .other-traits-info-box-wrapper, #primaryPhenotype {
+    padding: 20px 0 0;
+}
+
+.t2d-info-box-wrapper ul, .other-traits-info-box-wrapper ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.t2d-info-box-wrapper li, .other-traits-info-box-wrapper li {
+    display: inline-block;
+    vertical-align: top;
+}
+
+.normal-info-box-holder h3 {
+    font-size: 20px;
+    line-height: 20px;
+    margin-top: 0;
+}
+
+.normal-info-box-holder > ul > li > h3 {
+    font-weight: 400;
+}
+
+.normal-info-box-holder span.p-value {
+    display: block;
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: -5px;
+}
+
+.normal-info-box-holder span.p-value-significance {
+    font-size: 11px;
+}
+
+.normal-info-box-holder span.observation {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.small-info-box-holder {
+    margin-top: 10px;
+    margin-right: 20px;
+    padding: 5px 0 10px;
+    border-top: solid 2px; /* color is defined on each item */
+}
+
+.small-info-box-holder h3 {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 600;
+    margin-top: 0;
+}
+
+.small-info-box-holder > ul > li > h3 {
+    font-weight: 400;
+}
+
+/* clear out the margin so the border doesn't have an extra tail */
+.small-info-box-holder > ul > li:nth-last-child(1) {
+    margin-right: 0;
+}
+
+.small-info-box-holder span.p-value {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: -5px;
+}
+
+.small-info-box-holder span.p-value-significance {
+    font-size: 9px;
+}
+
+.small-info-box-holder span.extra-info {
+    font-size: 12px;
+}
+
+.info-box {
+    position: relative;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    text-align: center;
+    /* just in case the text isn't otherwise colored */
+    color: white;
+}
+
+.normal-info-box {
+    width: 170px;
+    height: 170px;
+}
+
+.small-info-box {
+    width: 140px;
+    height: 140px;
+}
+
+.not-significant-box {
+    border: solid 1px black;
+}
+
+.parentsFont {
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+}
+
+.mbar_xaxis text {
+    font-size: 14px;
+}
+
+/* functional annotation classes */
+select.elementTissueSelector{
+    margin: 5px 0 10px 0;
+}
+table.functionDescrTable{
+    width: 100%;
+    border: 1px inset #4682b4;
+    margin: 5px;
+}
+table.functionDescrTable th {
+    font-weight: bold;
+    text-decoration: underline;
+}
+table.functionDescrTable td.elementSpec {
+    padding-left: 10px;
+}
+table.functionDescrTable th.elementSpec {
+    padding-left: 10px;
+}
+
+span.elementTissueSelectorLabel{
+    font-weight: bold;
+    margin: 0 5px 0 5px;
+}

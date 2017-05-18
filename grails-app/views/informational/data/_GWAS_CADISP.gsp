@@ -23,9 +23,9 @@
 <h4>Dataset subjects</h4>
 
 <table class="table table-condensed table-responsive table-striped">
-<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
 
-    <tr><td>555</td><td>0</td><td>CADISP
+    <tr><td>555</td><td>0</td>
     %{--<div style="display: none;" class="cohortDetail">--}%
 
 
@@ -33,11 +33,11 @@
 
 
     %{--</div>--}%
-    </td><td>European</td></tr>
+    <td>European</td></tr>
 
 </table>
 
-    <table border="1">
+    <table>
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
 <tr>
 <td valign="top">

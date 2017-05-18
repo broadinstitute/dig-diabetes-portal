@@ -56,17 +56,19 @@ public class KnowledgeBaseResultParser {
                 jsonArray = jsonObject.getJSONArray(PortalConstants.JSON_VARIANTS_KEY);
 
                 // the variants json array is a series of json object arrays
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONArray tempArray = jsonArray.getJSONArray(i);
+                if (recordCountIndicated>0){
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONArray tempArray = jsonArray.getJSONArray(i);
 
-                    // create variant
-                    Variant variant = new VariantBean();
+                        // create variant
+                        Variant variant = new VariantBean();
 
-                    // parse
-                    variant.addAllToPropertyValues(this.parsePropertyValues(tempArray));
+                        // parse
+                        variant.addAllToPropertyValues(this.parsePropertyValues(tempArray));
 
-                    // add variant to the list
-                    variantList.add(variant);
+                        // add variant to the list
+                        variantList.add(variant);
+                    }
                 }
             } else {
                 throw new PortalException("Got null getData string to parse");
@@ -79,6 +81,79 @@ public class KnowledgeBaseResultParser {
         // return
         return variantList;
     }
+
+
+
+
+
+    public List<Variant> parseAggResult() throws PortalException {
+        // local variables
+        Integer recordCountIndicated = null;
+        String tempString = null;
+        JSONObject jsonObject;
+        JSONArray jsonArray;
+        List<Variant> variantList = new ArrayList<Variant>();
+
+        try {
+            if (this.jsonString != null) {
+                // get the json object
+                jsonObject = new JSONObject(this.jsonString);
+
+                // get the property count given
+                tempString = jsonObject.getString(PortalConstants.JSON_NUMBER_RECORDS_KEY);
+                recordCountIndicated = Integer.parseInt(tempString);
+
+                if (recordCountIndicated>0){
+
+                    // get the property json array
+                    jsonArray = jsonObject.getJSONArray(PortalConstants.JSON_VARIANTS_KEY);
+
+                    // the variants json array is a series of json object arrays
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject tempArray = jsonArray.getJSONObject(i);
+
+                        // create variant
+                        VariantBean variant = new VariantBean();
+
+                        // parse
+                        if ((tempArray.get("VAR_ID")!= null)&&(tempArray.get("VAR_ID")!= JSONObject.NULL)) {
+                            variant.setVariantId((String)tempArray.get("VAR_ID"));
+                        }
+                        if ((tempArray.get("P_VALUE")!= null)&&(tempArray.get("P_VALUE")!= JSONObject.NULL)) {
+                            variant.setPValue(new Float(tempArray.get("P_VALUE").toString()));
+                        }
+                        if ((tempArray.get("BETA")!= null)&&(tempArray.get("BETA")!= JSONObject.NULL)) {
+                            variant.setBeta(new Float(tempArray.get("BETA").toString()));
+                        }
+                        if ((tempArray.get("AF")!= null)&&(tempArray.get("AF")!= JSONObject.NULL)) {
+                            variant.setAlleleFrequency(new Float(tempArray.get("AF").toString()));
+                        }
+
+                        if ((tempArray.get("phenotype")!= null)&&(tempArray.get("phenotype")!= JSONObject.NULL)) {
+                            variant.setPhenotype(tempArray.get("phenotype").toString());
+                        }
+
+                        // add variant to the list
+                        variantList.add(variant);
+                    }
+                }
+            } else {
+                throw new PortalException("Got null getData string to parse");
+            }
+
+        } catch (JSONException exception) {
+            throw new PortalException("Got json parsing exception: " + exception.getMessage());
+        }
+
+        // return
+        return variantList;
+    }
+
+
+
+
+
 
     /**
      * parse the json array of json objects comprising one variant result entity

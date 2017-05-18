@@ -1,24 +1,117 @@
+
 var mpgSoftware = mpgSoftware || {};
 
 (function () {
     "use strict";
 
     mpgSoftware.variantSearchResults = (function () {
-        // hoisted here
+        // function for selecting strings
         var translationFunction;
+        // dom node responsible for spinner
         var loading;
+        // default variable to hold a load of URLs, dom selectors, and other variables to remember.  Better yet,
+        //  however, is to hang everything off of the DOM element defined by .uniqueRoot
+        var varsToRemember;
+        // this is how requested properties beyond what's included in the search get added
+        var additionalProperties = [];
+
+        var getAdditionalProperties = function(){
+            return additionalProperties;
+        };
+
+        var setVarsToRemember = function(myVarsToRemember){
+            if (typeof myVarsToRemember !== 'undefined'){
+                if (typeof myVarsToRemember.uniqueRoot === 'undefined'){
+                    varsToRemember = myVarsToRemember;
+                } else {
+                    // create strings that will be used as IDs, guaranteed unique based on uniqueRoot
+                    myVarsToRemember["variantTableResults"] = myVarsToRemember.uniqueRoot+'variantTableResults';
+                    myVarsToRemember["variantTableHeaderRow"] = myVarsToRemember.uniqueRoot+'variantTableHeaderRow';
+                    myVarsToRemember["variantTableHeaderRow2"] = myVarsToRemember.variantTableHeaderRow+"2";
+                    myVarsToRemember["variantTableHeaderRow3"] = myVarsToRemember.variantTableHeaderRow+"3";
+                    myVarsToRemember["variantTableBody"] = myVarsToRemember.uniqueRoot+"variantTableBody";
+                    myVarsToRemember["dataModalGoesHere"] = myVarsToRemember.uniqueRoot+"dataModalGoesHere";
+                    myVarsToRemember["dataModal"] = myVarsToRemember.uniqueRoot+"dataModal";
+                    myVarsToRemember["phenotypeModal"] = myVarsToRemember.uniqueRoot+"phenotypeModal";
+                    myVarsToRemember["datasetModal"] = myVarsToRemember.uniqueRoot+"datasetModal";
+                    myVarsToRemember["propertiesModal"] = myVarsToRemember.uniqueRoot+"propertiesModal";
+                    myVarsToRemember["datasetTabList"] = myVarsToRemember.uniqueRoot+"datasetTabList";
+                    myVarsToRemember["datasetSelections"] = myVarsToRemember.uniqueRoot+"datasetSelections";
+                    myVarsToRemember["propertiesTabList"] = myVarsToRemember.uniqueRoot+"propertiesTabList";
+                    myVarsToRemember["propertiesTabPanes"] = myVarsToRemember.uniqueRoot+"propertiesTabPanes";
+                    myVarsToRemember["add_phenotype"] = myVarsToRemember.uniqueRoot+"add_phenotype";
+                    myVarsToRemember["subtract_phenotype"] = myVarsToRemember.uniqueRoot+"subtract_phenotype";
+                    myVarsToRemember["holderForVariantSearchResults"] = myVarsToRemember.uniqueRoot+"holderForVariantSearchResults";
+                    myVarsToRemember["phenotypeAddition"] = myVarsToRemember.uniqueRoot+"phenotypeAddition";
+                    myVarsToRemember["phenotypeAdditionDataset"] = myVarsToRemember.uniqueRoot+"phenotypeAdditionDataset";
+                    myVarsToRemember["phenotypeAdditionCohort"] = myVarsToRemember.uniqueRoot+"phenotypeAdditionCohort";
+                    myVarsToRemember["phenotypeCohorts"] = myVarsToRemember.uniqueRoot+"phenotypeCohorts";
+                    myVarsToRemember["subtractPhenotypesCheckboxes"] = myVarsToRemember.uniqueRoot+"subtractPhenotypesCheckboxes";
+                    myVarsToRemember["linkToSave"] = myVarsToRemember.uniqueRoot+"linkToSave";
+                    var dataNodeName = myVarsToRemember.uniqueRoot+"_data";
+                    // additional data preprocessing
+                    myVarsToRemember["allGenes"] = myVarsToRemember.geneNamesToDisplay.replace("[","").replace("]","").split(',');
+                    myVarsToRemember["namedGeneArray"] = [];
+                    if ((myVarsToRemember["allGenes"].length>0)&&
+                        (myVarsToRemember["allGenes"][0].length>0)) {
+                        myVarsToRemember["namedGeneArray"] = _.map(myVarsToRemember["allGenes"], function (o) {
+                            return {'name': o}
+                        });
+                    }
+                    var dataNode = $('#'+dataNodeName);
+                    if (!$.contains($('body'),dataNode[0])){
+                        $('body').append('<div id="'+dataNodeName+'">');
+                        dataNode = $('#'+dataNodeName);
+                    }
+                    $.data(dataNode[0],"variantResultsTableData",myVarsToRemember);
+                }
+            }
+            return myVarsToRemember;
+
+        };
+        var getVarsToRemember = function(overrideVarsToRemember,specificVarsRootName){
+            var returnValue;
+            if (typeof overrideVarsToRemember === 'undefined') {
+                if (typeof specificVarsRootName === 'undefined') {
+                    returnValue = varsToRemember;
+                } else {
+                    var dataNodeName = specificVarsRootName+"_data";
+                    var dataNode = $('#'+dataNodeName);
+                    if (!dataNode.length){
+                        console.log('ERROR: data structure holder named '+dataNodeName+' was unexpectedly missing');
+                    } else {
+                        returnValue = $.data(dataNode[0],"variantResultsTableData");
+                    }
+                }
+            } else {
+                returnValue = overrideVarsToRemember;
+            }
+            if (typeof returnValue === 'undefined') {
+                console.log('ERROR: null data structure passed to Variant Results Table functions');
+            }
+            return returnValue;
+        };
+
+        // the URL may specify properties to add (so that users can share searches). if this is
+        // the case, those properties will be passed down in string format via the additionalProperties
+        // variable. then, set additionalProperties appropriately, so it can be modified later
+        var initializeAdditionalProperties  = function  (additionalPropertiesFromServer){
+            if(additionalPropertiesFromServer.length > 0) {
+                additionalProperties = additionalPropertiesFromServer.split(':');
+            }
+        };
 
         // this gets the data that builds the table structure. the table is populated via a later call to
         // variantProcessing.iterativeVariantTableFiller
-        var loadVariantTableViaAjax = function (queryFilters, additionalProps, searchUrl) {
-            additionalProps = encodeURIComponent(additionalProps.join(':'));
+        var loadVariantTableViaAjax = function (queryFilters, searchUrl) {
+            //additionalProperties = encodeURIComponent(additionalProperties.join(':'));
             loading = $('#spinner').show();
             return $.ajax({
                 type: 'POST',
                 cache: false,
                 data: {
                     'filters': queryFilters,
-                    'properties': additionalProps
+                    'properties': encodeURIComponent(additionalProperties.join(':'))
                 },
                 url: searchUrl,
                 timeout: 90 * 1000,
@@ -36,21 +129,62 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var dynamicFillTheFields = function (data) {
+
+
+        // this gets the data that builds the table structure. the table is populated via a later call to
+        // variantProcessing.iterativeVariantTableFiller
+        var loadVariantTableFromAggregatedTableViaAjax = function (variableHolder) {
+            //additionalProperties = encodeURIComponent(additionalProperties.join(':'));
+            loading = $('#spinner').show();
+            return $.ajax({
+                type: 'POST',
+                cache: false,
+                data: {
+                    'geneToSummarize': variableHolder.geneName,
+                    'phenotype': variableHolder.phenotypeCode
+                    //'filtersAsJson': variableHolder.filtersAsJsonInfo
+                },
+                url: variableHolder.retrieveTopVariantsAcrossSgs,
+                timeout: 90 * 1000,
+                async: true,
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if(errorThrown == 'timeout') {
+                        // attach the data for the error message so we know what queries are taking a long time
+                        XMLHttpRequest.data = this.data;
+                        var errorMessage = $('<h4></h4>').text('The query you requested took too long to perform. Please try restricting your criteria and searching again.').css('color', 'red');
+                        $('#variantTable').html(errorMessage);
+                    }
+                    loading.hide();
+                    core.errorReporter(XMLHttpRequest, errorThrown);
+                }
+            });
+        };
+
+
+        var setTranslationFunction = function(data){
+            translationFunction = function (stringToTranslate) {
+                return data.translationDictionary[stringToTranslate] || stringToTranslate
+            };
+        }
+
+
+
+        var dynamicFillTheFields = function (data,variantTableSelector,variantTableSelectorName) {
+            variantTableSelector = getVarsToRemember(variantTableSelector,variantTableSelectorName);
+
             /**
              * This function exists to avoid having to do
              * "if translationDictionary[string] defined, return that, else return string"
              */
-            translationFunction = function (stringToTranslate) {
-                return data.translationDictionary[stringToTranslate] || stringToTranslate
-            };
+            setTranslationFunction(data);
+
             // clear out the table
-            if ( $.fn.DataTable.isDataTable( '#variantTable' ) ) {
-                $('#variantTable').DataTable().destroy();
+            if ( $.fn.DataTable.isDataTable( /*'#variantTable'*/ '#'+variantTableSelector.variantTableResults ) ) {
+                $( '#'+variantTableSelector.variantTableResults).DataTable().destroy();
             }
-            $('#variantTableHeaderRow').html('<th colspan=5 class="datatype-header dk-common"/>');
-            $('#variantTableHeaderRow2').html('<th colspan=5 class="datatype-header dk-common"><g:message code="variantTable.columnHeaders.commonProperties"/></th>');
-            $('#variantTableHeaderRow3, #variantTableBody').empty();
+            $('#'+variantTableSelector.variantTableHeaderRow).html('<th colspan=5 class="datatype-header  dk-common niceHeadersInvisible"/>');
+            $('#'+variantTableSelector.variantTableHeaderRow2).html('<th colspan=5 class="datatype-header dk-common niceHeadersBackdrop">'+variantTableSelector.commonPropsMsg+'</th>');
+            $('#'+variantTableSelector.variantTableHeaderRow3+', #'+variantTableSelector.variantTableBody).empty();
 
             // common props section
             var totCol = 0;
@@ -64,15 +198,15 @@ var mpgSoftware = mpgSoftware || {};
                 var translatedColName = translationFunction(colName);
                 if (!((colName === 'VAR_ID') && (commonWidth > 0))) { // VAR_ID never shows up other than in the first column
                     // the data-colname attribute is used in the table generation function
-                    var newHeaderElement = $('<th>', {class: 'datatype-header dk-common', html: translatedColName}).attr('data-colName', colName);
-                    $('#variantTableHeaderRow3').append(newHeaderElement);
+                    var newHeaderElement = $('<th>', {class: 'datatype-header dk-common niceHeaders', html: translatedColName}).attr('data-colName', colName);
+                    $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     commonWidth++;
                 }
 
             }
 
-            $('#variantTableHeaderRow').children().first().attr('colspan', commonWidth);
-            $('#variantTableHeaderRow2').children().first().attr('colspan', commonWidth);
+            $('#'+variantTableSelector.variantTableHeaderRow).children().first().attr('colspan', commonWidth);
+            $('#'+variantTableSelector.variantTableHeaderRow2).children().first().attr('colspan', commonWidth);
             totCol += commonWidth;
 
             // dataset props and pheno specific props
@@ -96,7 +230,7 @@ var mpgSoftware = mpgSoftware || {};
                         dataset_width++;
                         // the data-colname attribute is used in the table generation function
                         var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisPhenotypeColor, html: columnDisp}).attr('data-colName', column + '.' + dataset);
-                        $('#variantTableHeaderRow3').append(newHeaderElement);
+                        $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     }
                     for (var i = 0; i < data.columns.pproperty[pheno][dataset].length; i++) {
                         var column = data.columns.pproperty[pheno][dataset][i];
@@ -105,14 +239,14 @@ var mpgSoftware = mpgSoftware || {};
                         dataset_width++;
                         // the data-colname attribute is used in the table generation function
                         var newHeaderElement = $('<th>', {class: 'datatype-header ' + thisPhenotypeColor, html: columnDisp}).attr('data-colName', column + '.' + dataset + '.' + pheno);
-                        $('#variantTableHeaderRow3').append(newHeaderElement);
+                        $('#'+variantTableSelector.variantTableHeaderRow3).append(newHeaderElement);
                     }
                     if (dataset_width > 0) {
                         var newTableHeader = document.createElement('th');
                         newTableHeader.setAttribute('class', 'datatype-header ' + thisPhenotypeColor);
                         newTableHeader.setAttribute('colspan', dataset_width);
                         $(newTableHeader).append(datasetDisp);
-                        $('#variantTableHeaderRow2').append(newTableHeader);
+                        $('#'+variantTableSelector.variantTableHeaderRow2).append(newTableHeader);
                     }
                 }
                 if (pheno_width > 0) {
@@ -120,15 +254,20 @@ var mpgSoftware = mpgSoftware || {};
                     newTableHeader.setAttribute('class', 'datatype-header ' + thisPhenotypeColor);
                     newTableHeader.setAttribute('colspan', pheno_width);
                     $(newTableHeader).append(phenoDisp);
-                    $('#variantTableHeaderRow').append(newTableHeader);
+                    $('#'+variantTableSelector.variantTableHeaderRow).append(newTableHeader);
                 }
                 totCol += pheno_width;
             });
-            
-            
+
+
             // used to provide info to the table loader
             return totCol;
-            
+
+        };
+
+        var displayPropertiesForDataset = function (dataset) {
+            $('div[data-dataset]').hide();
+            $('div[data-dataset="' + dataset + '"]').show();
         };
 
         // given the dataset map that reflects the structure of datasets and cohorts,
@@ -144,15 +283,17 @@ var mpgSoftware = mpgSoftware || {};
             return toReturn;
         };
 
-        function generateModal(data, phenotypeUrl, commonPropsHeader) {
+        function generateModal( data, passedInVars,passedInVarsName ) {
+            passedInVars = getVarsToRemember(passedInVars,passedInVarsName);
+
             // populate the modals to add/remove properties
             // first do some processing on the search queries, so we know what can't
             // be removed
-            var phenotypesInQueries = _.chain(filtersAsJson).map('phenotype').uniq().filter().value();
-            var datasetsInQueries = _.chain(filtersAsJson).map(function(q) {
+            var phenotypesInQueries = _.chain(passedInVars.filtersAsJsonInfo).map('phenotype').uniq().filter().value();
+            var datasetsInQueries = _.chain(passedInVars.filtersAsJsonInfo).map(function(q) {
                 return q.phenotype + '-' + q.dataset;
             }).uniq().value();
-            var propertiesInQueries = _.chain(filtersAsJson).map(function(q) {
+            var propertiesInQueries = _.chain(passedInVars.filtersAsJsonInfo).map(function(q) {
                 return q.phenotype + '-' + q.dataset + '-' + q.prop;
             }).uniq().value();
 
@@ -163,12 +304,12 @@ var mpgSoftware = mpgSoftware || {};
 
             // subtract phenotypes tab
             // first, remove any phenotypes listed that are no longer displayed
-            _.forEach($('#subtractPhenotypesCheckboxes > div'), function(item) {
+            _.forEach($('#'+passedInVars.subtractPhenotypesCheckboxes+' > div'), function(item) {
                 if(! displayedPhenotypes.includes($(item).attr('data-phenotype'))) {
                     $(item).remove();
                 }
             });
-            var listedPhenotypes = _.map($('#subtractPhenotypesCheckboxes > div'), function(item) {
+            var listedPhenotypes = _.map($('#'+passedInVars.subtractPhenotypesCheckboxes+' > div'), function(item) {
                 return $(item).attr('data-phenotype');
             });
             // phenotypesToAdd is any phenotype that wasn't previously displayed
@@ -184,19 +325,20 @@ var mpgSoftware = mpgSoftware || {};
                 var label = $('<label />').append(newBox);
                 label.append(translationFunction(phenotype));
                 var checkboxDiv = $('<div />').addClass('checkbox').attr({'data-phenotype': phenotype}).append(label);
-                $('#subtractPhenotypesCheckboxes').append(checkboxDiv);
+                $('#'+passedInVars.subtractPhenotypesCheckboxes).append(checkboxDiv);
             });
 
             // add phenotypes tab
+            var rememberPhenotypeAddition = passedInVars.phenotypeAddition;
             $.ajax({
                 cache: false,
                 type: "post",
-                url: phenotypeUrl,
+                url: passedInVars.retrievePhenotypesAjaxUrl,
                 data: {getNonePhenotype: true},
                 async: true,
                 success: function (data) {
                     if ( data && data.datasets ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeAddition', true, displayedPhenotypes);
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#'+rememberPhenotypeAddition, true, displayedPhenotypes);
                     }
                 },
                 error: function (jqXHR, exception) {
@@ -233,7 +375,7 @@ var mpgSoftware = mpgSoftware || {};
                     tabItem.addClass('active');
                 }
                 tabItem.append(tabAnchor);
-                $('#datasetTabList').append(tabItem);
+                $('#'+passedInVars.datasetTabList).append(tabItem);
 
                 // create the list of datasets
                 var displayedDatasets = _.keys(data.columns.pproperty[phenotype]);
@@ -263,12 +405,12 @@ var mpgSoftware = mpgSoftware || {};
                     tabPanel.addClass('active');
                 }
                 tabPanel.append(formHolder);
-                $('#datasetSelections').append(tabPanel);
+                $('#'+passedInVars.datasetSelections).append(tabPanel);
 
             });
 
             // now check if any phenotypes got removed, so we can remove their tabs
-            _.forEach($('#datasetTabList li'), function(tab) {
+            _.forEach($('#'+passedInVars.datasetTabList+' li'), function(tab) {
                 var tabPhenotype = $(tab).attr('data-phenotype');
                 if(! displayedPhenotypes.includes(tabPhenotype)) {
                     $(tab).remove();
@@ -280,7 +422,7 @@ var mpgSoftware = mpgSoftware || {};
             // add/subtract properties -------------------------------------------
             // make a tab for each displayed phenotype, plus common properties
             // first clear out any existing tabs
-            $('#propertiesTabList, #propertiesTabPanes').empty();
+            $('#'+passedInVars.propertiesTabList+', #'+passedInVars.propertiesTabPanes).empty();
             _.forEach(displayedPhenotypes, function(phenotype, index) {
                 // build tab
                 var tabAnchor = $('<a/>').attr({
@@ -296,7 +438,7 @@ var mpgSoftware = mpgSoftware || {};
                     tabItem.addClass('active');
                 }
                 tabItem.append(tabAnchor);
-                $('#propertiesTabList').append(tabItem);
+                $('#'+passedInVars.propertiesTabList).append(tabItem);
 
                 // break the datasets and their properties into two separate arrays
                 // this is because they're displayed in two different lists, so we can't
@@ -374,21 +516,21 @@ var mpgSoftware = mpgSoftware || {};
                 var propertiesInputsTemplate = $('#propertiesInputsTemplate').html();
                 Mustache.parse(propertiesInputsTemplate);
                 var rendered = Mustache.render(propertiesInputsTemplate, renderData);
-                $('#propertiesTabPanes').append(rendered);
+                $('#'+passedInVars.propertiesTabPanes).append(rendered);
             });
 
             // common properties
             var tabAnchor = $('<a/>').attr({
-                href: '#commonPropertiesSelection',
-                'aria-controls': 'commonPropertiesSelection',
+                href: '.commonPropertiesSelection',
+                'aria-controls': '.commonPropertiesSelection',
                 role: 'tab',
                 'data-toggle': 'tab'
-            }).html(commonPropsHeader);
+            }).html(passedInVars.commonPropsMsg);
             var tabItem = $('<li />').attr({
                 role: 'presentation'
             });
             tabItem.append(tabAnchor);
-            $('#propertiesTabList').append(tabItem);
+            $('#'+passedInVars.propertiesTabList).append(tabItem);
 
             var commonProps = _.map(data.cProperties.dataset, function(prop) {
                 return {
@@ -402,15 +544,260 @@ var mpgSoftware = mpgSoftware || {};
             var commonPropsInputTemplate = $('#commonPropertiesInputsTemplate').html();
             Mustache.parse(commonPropsInputTemplate);
             var rendered = Mustache.render(commonPropsInputTemplate, {properties: commonProps});
-            $('#propertiesTabPanes').append(rendered);
+            $('#'+passedInVars.propertiesTabPanes).append(rendered);
 
             // add/subtract properties -------------------------------------------
+        };
+
+        // when this is called, the table is generated/regenerated
+        // it's here because of all the URLs/data that need to be filled in
+        var loadTheTable = function (variantTableSelector,domHolderName) {
+            variantTableSelector = getVarsToRemember(variantTableSelector,domHolderName);
+            if (variantTableSelector.makeAggregatedDataCall){
+                loadVariantTableFromAggregatedTableViaAjax( variantTableSelector ).then(function (data, status) {
+                        if (status != 'success') {
+                            // just give up
+                            return;
+                        }
+                        if (data.errorMsg != ''){
+                            alert(data.errorMsg);
+                            var loader = $('#spinner');
+                            loader.hide();
+                            return;
+                        }
+                        var additionalProps = encodeURIComponent(additionalProperties.join(':'));
+                        var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector,domHolderName);
+
+                        var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
+                        variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
+                            variantTableSelector.retrieveTopVariantsAcrossSgs,
+                            variantTableSelector.variantInfoUrl,
+                            variantTableSelector.geneInfoUrl,
+                            proteinEffectList.proteinEffectMap,
+                            variantTableSelector.localeInfo,
+                            variantTableSelector.copyMsg,
+                            variantTableSelector.printMsg,
+                            {
+                                filters: variantTableSelector.queryFiltersInfo,
+                                properties: additionalProps
+                            },
+                            variantTableSelector.translatedFiltersInfo,
+                            variantTableSelector
+                        );
+                        generateModal(data,variantTableSelector,domHolderName);
+                    });
+            } else {
+                mpgSoftware.variantSearchResults.loadVariantTableViaAjax( variantTableSelector.queryFiltersInfo,
+                    variantTableSelector.variantSearchAndResultColumnsInfoUrl ).then(function (data, status) {
+                        if (status != 'success') {
+                            // just give up
+                            return;
+                        }
+                        if (data.errorMsg != ''){
+                            alert(data.errorMsg);
+                            var loader = $('#spinner');
+                            loader.hide();
+                            return;
+                        }
+                        var additionalProps = encodeURIComponent(additionalProperties.join(':'));
+                        var totCol = mpgSoftware.variantSearchResults.dynamicFillTheFields(data,variantTableSelector,domHolderName);
+
+                        var proteinEffectList = new UTILS.proteinEffectListConstructor(decodeURIComponent(variantTableSelector.proteinEffectsListInfo));
+                        variantProcessing.iterativeVariantTableFiller(data, totCol, variantTableSelector.filtersAsJsonInfo, '#'+variantTableSelector.variantTableResults,
+                            variantTableSelector.variantSearchAndResultColumnsDataUrl,
+                            variantTableSelector.variantInfoUrl,
+                            variantTableSelector.geneInfoUrl,
+                            proteinEffectList.proteinEffectMap,
+                            variantTableSelector.localeInfo,
+                            variantTableSelector.copyMsg,
+                            variantTableSelector.printMsg,
+                            {
+                                filters: variantTableSelector.queryFiltersInfo,
+                                properties: additionalProps
+                            },
+                            variantTableSelector.translatedFiltersInfo,
+                            variantTableSelector
+                        );
+                        generateModal(data,variantTableSelector,domHolderName);
+                    });
+            }
+
+        }
+
+        // the following functions are here (instead of in a separate JS file or something) because
+        // they either update the page state (in the form of additionalProperties), or need server-
+        // generated URLs/strings
+        var  confirmAddingProperties  = function(target,domSelectors,domSelectorName) {
+            domSelectors = getVarsToRemember(domSelectors,domSelectorName);
+            var matchingSelectedInputs = $('input[data-category="' + target + '"]:checked:not(:disabled)').get();
+            var matchingUnselectedInputs = $('input[data-category="' + target + '"]:not(:checked,:disabled)').get();
+            var valuesToInclude = _.map(matchingSelectedInputs, function (input) {
+                return $(input).val();
+            });
+            var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
+                return $(input).val();
+            });
+
+            // if we're coming off the phenotype tab, we need to see if the user selected a dataset
+            // to add
+            if(target == 'phenotype' ) {
+                var phenotypeSelection = $('#'+domSelectors.phenotypeAddition).val();
+                var datasetSelection = $('#'+domSelectors.phenotypeAdditionDataset).val();
+                if(phenotypeSelection != 'default' && datasetSelection != 'default') {
+                    // first see if a cohort was selected
+                    var cohortSelection = $('#'+domSelectors.phenotypeAdditionCohort).val();
+                    if(cohortSelection != 'default' && cohortSelection) {
+                        datasetSelection = cohortSelection;
+                    }
+
+                    var propertyToAdd = phenotypeSelection + '-' + datasetSelection;
+                    valuesToInclude.push(propertyToAdd);
+                }
+
+                // the other part of this is removing datasets/properties for phenotypes that have been
+                // unselected. this isn't handled above because we don't add just a phenotype to
+                // additionalProperties, it's always a phenotype+dataset. therefore, for the phentoypes
+                // that have been unselected, go through additionalProperties and remove any dataset/property
+                // that is from that phenotype.
+                _.forEach(additionalProperties, function(prop) {
+                    var propComponents = prop.split('-');
+                    if(_.includes(valuesToRemove, propComponents[0])) {
+                        valuesToRemove.push(prop);
+                    }
+                });
+            }
+            additionalProperties = _.difference(additionalProperties, valuesToRemove);
+            additionalProperties = _.union(additionalProperties, valuesToInclude);
+
+            loadTheTable(domSelectors,domSelectorName);
+
+            // any necessary clean up
+            // reset the dataset/cohort dropdowns on the phenotype addition tab
+            $('#'+domSelectors.phenotypeAdditionDataset).empty();
+            $('#'+domSelectors.phenotypeCohorts).hide();
+        };
+        var datasetSelected = function(domSelectors,domSelectorsHolder) {
+            domSelectors = getVarsToRemember(domSelectors,domSelectorsHolder);
+            var selectedDataset = $('#'+domSelectors.phenotypeAdditionDataset+' option:selected');
+            var cohorts = selectedDataset.data();
+            if(! _.isEmpty(cohorts)) {
+                $('#'+domSelectors.phenotypeCohorts).show();
+                var cohortOptions = $('#'+domSelectors.phenotypeAdditionCohort);
+                cohortOptions.empty();
+                cohortOptions.append("<option selected value=default>-- &nbsp;&nbsp;all cohorts&nbsp;&nbsp; --</option>");
+                var displayData = UTILS.flattenDatasetMap(cohorts, 0);
+                _.forEach(displayData, function(cohort) {
+                    var newOption = $("<option />").val(cohort.value).html(cohort.name);
+                    cohortOptions.append(newOption);
+                });
+            } else {
+                $('#'+domSelectors.phenotypeCohorts).hide();
+            }
+        };
+        var phenotypeSelected = function (domSelectors,domSelectorsName){
+            domSelectors = getVarsToRemember(domSelectors,domSelectorsName);
+            var phenotype = $('#'+domSelectors.phenotypeAddition).val();
+            var rememberPhenotypeAdditionDataset = domSelectors.phenotypeAdditionDataset;
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: domSelectors.retrieveDatasetsAjaxUrl,
+                data: {phenotype: phenotype},
+                async: true,
+                success: function (data) {
+                    if (data) {
+                        var sampleGroupMap = data.sampleGroupMap;
+                        var options = $('#'+rememberPhenotypeAdditionDataset);
+                        options.empty();
+
+                        options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a dataset&nbsp;&nbsp; --</option>");
+
+                        var datasetList = _.keys(sampleGroupMap);
+                        _.each(datasetList, function(dataset) {
+                            var newOption = $("<option />").val(dataset).html(sampleGroupMap[dataset].name);
+                            // check to see if this dataset has any values besides "name" defined--if so, then
+                            // it has child cohorts. in that case, attach them as data (via jquery) so that we
+                            // can easily access them if the user chooses this dataset.
+                            var childDatasets = _.chain(sampleGroupMap[dataset]).omit('name').value();
+                            if(_.keys(childDatasets).length > 0) {
+                                newOption.data(childDatasets);
+                            }
+                            options.append(newOption);
+                        });
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+        var saveLink = function (domSelectors,dataHolderName){
+            domSelectors = getVarsToRemember(domSelectors,dataHolderName);
+            var url = domSelectors.launchAVariantSearchUrl;
+            url = url.concat('&props=' + encodeURIComponent(additionalProperties.join(':')));
+
+            var reference = $('#'+domSelectors.linkToSave);
+            // it appears the the browser may interrupt the copy if the element that's being
+            // copied isn't visible, so show the element long enough to grab the url
+            reference.show();
+            // save the url
+            reference.val(url);
+            reference.focus();
+            reference.select();
+            var success = document.execCommand('copy');
+            reference.hide();
+            // if for whatever reason that fails (browser doesn't support it?), then display an error
+            // and the URL
+            if(! success ) {
+                $('#'+domSelectors.linkToSave).show();
+                alert('Sorry, this functionality isn\'t supported on your browser. Please copy the link from the text box.')
+            }
+        };
+
+        var buildVariantResultsTable = function (drivingVariables){
+            setVarsToRemember(drivingVariables); // since this is our first Variant Results Table call, store the driving variables here
+            var root = drivingVariables.uniqueRoot;
+            drivingVariables = getVarsToRemember(undefined,root);
+            initializeAdditionalProperties (drivingVariables.additionalPropertiesInfo);
+            $(drivingVariables.interfaceGoesHere).empty().append(Mustache.render( $('#variantResultsMainStructuralTemplate')[0].innerHTML,
+                drivingVariables));
+            $("#"+drivingVariables.holderForVariantSearchResults).empty().append(
+                Mustache.render( $('#variantSearchResultsTemplate')[0].innerHTML,drivingVariables));
+            $(".dk-t2d-back-to-search").empty().append(
+                Mustache.render( $('#topOfVariantResultsPageTemplate')[0].innerHTML,drivingVariables));
+            loadTheTable(drivingVariables,root);
+
+            $('[data-toggle="tooltip"]').tooltip();
+
+            $("#"+drivingVariables.dataModalGoesHere).empty().append(
+                Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
+            if (drivingVariables["namedGeneArray"].length>0){
+                $(".regionDescr").empty().append(
+                    Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables));
+            }
+            var translatedFilterArray = drivingVariables.translatedFiltersInfo.split(',');
+            var namedTranslatedFilterArray = _.map(translatedFilterArray,function(o){return {'name':o}});
+            $(".variantResultsFilterHolder").empty().append(
+                Mustache.render( $('#variantResultsFilterHolderTemplate')[0].innerHTML,
+                    { 'translatedFilters': namedTranslatedFilterArray})
+            );
         };
 
         return {
             loadVariantTableViaAjax: loadVariantTableViaAjax,
             dynamicFillTheFields: dynamicFillTheFields,
-            generateModal: generateModal
+            generateModal: generateModal,
+            displayPropertiesForDataset: displayPropertiesForDataset,
+            initializeAdditionalProperties:initializeAdditionalProperties,
+            getAdditionalProperties: getAdditionalProperties,
+            confirmAddingProperties:confirmAddingProperties,
+            datasetSelected:datasetSelected,
+            phenotypeSelected:phenotypeSelected,
+            saveLink:saveLink,
+            loadTheTable:loadTheTable,
+            buildVariantResultsTable:buildVariantResultsTable,
+            setVarsToRemember:setVarsToRemember,
+            setTranslationFunction:setTranslationFunction
         }
 
     }());

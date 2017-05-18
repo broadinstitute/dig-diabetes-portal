@@ -104,9 +104,16 @@ public class LocusZoomJsonBuilder {
         pValueProperty.setParent(phenotypeBean);
         // end property spoofing
 
+
+        Property posteriorPValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
+
         // get the query properties
+        if (posteriorPValue != null){
+            query.addQueryProperty(posteriorPValue);
+        }
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
+        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
         query.addQueryProperty(pValueProperty);
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));

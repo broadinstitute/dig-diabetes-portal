@@ -33,6 +33,7 @@
 </div>
 <script>
     var loading = $('#spinner').show();
+    $(document).ready(function() {
     $.ajax({
         cache: false,
         type: "post",
@@ -46,7 +47,7 @@
             html: true,
             template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
         });
-
+        $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
         var genePageExtent = 100000;
 
         var positioningInformation = {
@@ -54,20 +55,13 @@
             startPosition: data.geneInfo.BEG - genePageExtent,
             endPosition: data.geneInfo.END + genePageExtent
         };
-        $(document).ready(function() {
-            // call this inside the ready function because the page is still loading when the the parent
-            // ajax calls returns
-            <g:renderNotBetaFeaturesDisplayedValue>
-                mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                        "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                        '${lzOptions.first().dataType}');
-            </g:renderNotBetaFeaturesDisplayedValue>
-            $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
-            $('#variantPageText').hide();
-            $('#genePageText').show();
-        });
+        <g:renderNotBetaFeaturesDisplayedValue>
+        mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',
+                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                '${lzOptions.first().dataType}','${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}');
+        </g:renderNotBetaFeaturesDisplayedValue>
 
 
         $(".pop-top").popover({placement: 'top'});
@@ -80,6 +74,18 @@
         loading.hide();
         core.errorReporter(jqXHR, exception);
     });
+
+        // call this inside the ready function because the page is still loading when the the parent
+        // ajax calls returns
+
+
+        $('#variantPageText').hide();
+        $('#genePageText').show();
+
+
+    });
+    $('#collapseVariantAssociationStatistics').collapse({hide: false})
+
 </script>
 
 <div id="main">
@@ -96,11 +102,13 @@
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 <g:renderBetaFeaturesDisplayedValue>
+                    <g:render template="../templates/geneSignalSummaryTemplate"/>
                     <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
                 </g:renderBetaFeaturesDisplayedValue>
 
 
                 <div class="accordion" id="accordion2">
+                <g:renderNotBetaFeaturesDisplayedValue>
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
@@ -116,73 +124,64 @@
                             </div>
                         </div>
                     </div>
+                </g:renderNotBetaFeaturesDisplayedValue>
+                <g:renderNotBetaFeaturesDisplayedValue>
 
-
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <g:renderBetaFeaturesDisplayedValue>
-                        %{--<div class="separator"></div>--}%
-                        %{--<g:render template="/widgets/gwasRegionSummary"--}%
-                                  %{--model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>--}%
-                        </g:renderBetaFeaturesDisplayedValue>
-                    </g:if>
-                    <g:if test="${1}">
-
-                        <div class="separator"></div>
-
-                        <div class="accordion-group">
-                            <div class="accordion-heading">
-                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
-                                   href="#collapseIgv">
-                                    <h2><strong><g:message code="gene.igv.title"
-                                                           default="Explore variants with IGV"/></strong></h2>
-                                </a>
-                            </div>
-
-                            <div id="collapseIgv" class="accordion-body collapse">
-                                <div class="accordion-inner">
-                                    <g:render template="../trait/igvBrowser"/>
-                                </div>
-                            </div>
-                        </div>
-
-                        <script>
-                            $('#accordion2').on('shown.bs.collapse', function (e) {
-                                if (e.target.id === "collapseIgv") {
-                                    setUpIgv('<%=geneName%>');
-                                }
-
-                            });
-                            $('#collapseOne').collapse({hide: true})
-                        </script>
-
-                    </g:if>
-                    <script>
-                        $('#collapseOne').collapse({hide: true})
-                    </script>
-
-
-
-
-
-
-                    <div class="separator"></div>
-
+                </g:renderNotBetaFeaturesDisplayedValue>
+                   %{----}%
+                    %{--<g:renderBetaFeaturesDisplayedValue>--}%
+                    %{--<div class="separator"></div>--}%
+                    %{--<g:render template="/widgets/gwasRegionSummary"--}%
+                              %{--model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>--}%
+                    %{--</g:renderBetaFeaturesDisplayedValue>--}%
+                    %{----}%
+                    <g:render template="../templates/igvBrowserTemplate"/>
                     <div class="accordion-group">
                         <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
-                               href="#collapseTwo">
-                                <h2><strong><g:message code="gene.continentalancestry.title"
-                                                       default="variation across continental ancestry"/></strong>
-                                </h2>
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
+                               href="#collapseIgv">
+                                <h2><strong><g:message code="variant.igvBrowser.title"
+                                                       default="Explore with IGV"/></strong></h2>
                             </a>
                         </div>
 
-                        <g:render template="variationAcrossContinents"/>
-
+                        <div id="collapseIgv" class="accordion-body collapse">
+                            <div class="accordion-inner">
+                                <div class="igvGoesHere"></div>
+                                <g:render template="../templates/igvBrowserTemplate"/>
+                            </div>
+                        </div>
                     </div>
 
 
+                <script>
+                    $('#accordion2').on('shown.bs.collapse', function (e) {
+                        if (e.target.id === "collapseIgv") {
+//                            var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
 
+                            igvLauncher.setUpIgv('<%=geneName%>',
+                                    '.igvGoesHere',
+                                    "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
+                                    "<g:message code='controls.shared.igv.tracks.genes' />",
+                                    "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
+                                    "${createLink(controller:'trait', action:'getData', absolute:'false')}",
+                                    "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
+                                    "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
+                                    '${igvIntro}');
+                        } else if (e.target.id === "collapseFunctionalData") {
+                            $("#functionalDataTableGoesHere").DataTable().draw();
+                        }
+
+                    });
+                    $('#accordion2').on('show.bs.collapse', function (e) {
+                        if (e.target.id === "collapseIgv") {
+
+                        }
+                    });
+
+
+                    $('#collapseOne').collapse({hide: true})
+                    </script>
 
 
                         <g:renderNotBetaFeaturesDisplayedValue>
@@ -193,15 +192,20 @@
 
                         </g:renderNotBetaFeaturesDisplayedValue>
 
-                <g:if test="${g.portalTypeString()?.equals('stroke')||g.portalTypeString()?.equals('t2d')||
-                        g.portalTypeString()?.equals('mi')}">
+                <g:if test="${g.portalTypeString()?.equals('stroke')||
+                                g.portalTypeString()?.equals('t2d')||
+                                g.portalTypeString()?.equals('mi')}">
 
+                    <g:renderNotBetaFeaturesDisplayedValue>
                         <div class="separator"></div>
 
                         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                                'modifiedTitle': 'Interactive burden test',
-                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.']"/>
-
+                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
+                                                                               'allowExperimentChoice': 0,
+                                                                               'allowPhenotypeChoice' : 1,
+                                                                               'allowStratificationChoice': 1    ]"/>
+                    </g:renderNotBetaFeaturesDisplayedValue>
                     </g:if>
 
 
@@ -230,7 +234,7 @@
     </div>
 
 </div>
-
+<g:render template="/templates/burdenTestSharedTemplate" />
 </body>
 </html>
 

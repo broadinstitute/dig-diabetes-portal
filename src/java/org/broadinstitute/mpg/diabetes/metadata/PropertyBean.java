@@ -5,6 +5,7 @@ import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,6 +76,15 @@ public class PropertyBean implements Property, Comparable {
      */
     public void addMeaning(String meaningValue) {
         this.meaningSet.add(meaningValue);
+    }
+
+    /**
+     * add all meaning values when building the property bean
+     *
+     * @param meanings
+     */
+    public void addAllMeanings(Collection<String> meanings) {
+        this.meaningSet.addAll(meanings);
     }
 
     public List<String> getMeanings() {

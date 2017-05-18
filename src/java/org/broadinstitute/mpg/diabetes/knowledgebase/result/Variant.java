@@ -34,6 +34,12 @@ public interface Variant {
 
     public String getVariantIdWithFormat(String formatKey) throws PortalException;
 
+    public String getDataset();
+    public String getPhenotype();
+    public float getBeta();
+    public float getPValue();
+    public float getAlleleFrequency();
+
     /**
      * returns the given property value if the given property search terms find one; null otherwise
      *
@@ -63,4 +69,10 @@ public interface Variant {
     public void setPolyphenHvarPredictor(String polyphenHvarPredictor);
     public void setPolyphenHdivPredictor(String polyphenHdivPredictor);
     public void setMaf(float maf);
+    public void setDataset(String dataSet);
+    public void setPhenotype(String phenotype);
+    public void setBeta(float beta);
+    public void setPValue(float pValue);
+    public void setAlleleFrequency(float alleleFrequency);
+
 }

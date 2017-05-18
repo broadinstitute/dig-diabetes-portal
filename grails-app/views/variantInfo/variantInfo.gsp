@@ -8,134 +8,11 @@
     <r:require module="locusZoom"/>
     <r:require modules="core, mustache"/>
     <r:require modules="burdenTest"/>
+    <r:require modules="multiTrack"/>
+    <r:require modules="matrix"/>
+
 
     <r:layoutResources/>
-    <style>
-    /* for associations at a glance */
-    .smallRow {
-        border-top-style: solid;
-        border-top-width: 2px;
-        border-color: #1fff11;
-        margin-top: 10px;
-        margin-right: 10px;
-        padding: 5px 0px 10px;
-    }
-
-    .t2d-info-box-wrapper, .other-traits-info-box-wrapper, #primaryPhenotype {
-        padding: 20px 0 0;
-    }
-
-    .t2d-info-box-wrapper ul, .other-traits-info-box-wrapper ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .t2d-info-box-wrapper li, .other-traits-info-box-wrapper li {
-        display: inline-block;
-        vertical-align: top;
-    }
-
-    .normal-info-box-holder h3 {
-        font-size: 20px;
-        line-height: 20px;
-        margin-top: 0;
-    }
-
-    .normal-info-box-holder > ul > li > h3 {
-        font-weight: 400;
-    }
-
-    .normal-info-box-holder span.p-value {
-        display: block;
-        font-size: 18px;
-        font-weight: 500;
-        margin-bottom: -5px;
-    }
-
-    .normal-info-box-holder span.p-value-significance {
-        font-size: 11px;
-    }
-
-    .normal-info-box-holder span.observation {
-        display: block;
-        font-size: 14px;
-        font-weight: 500;
-    }
-
-    .small-info-box-holder {
-        margin-top: 10px;
-        margin-right: 20px;
-        padding: 5px 0 10px;
-        border-top: solid 2px; /* color is defined on each item */
-    }
-
-    .small-info-box-holder h3 {
-        font-size: 14px;
-        line-height: 14px;
-        font-weight: 600;
-        margin-top: 0;
-    }
-
-    .small-info-box-holder > ul > li > h3 {
-        font-weight: 400;
-    }
-
-    /* clear out the margin so the border doesn't have an extra tail */
-    .small-info-box-holder > ul > li:nth-last-child(1) {
-        margin-right: 0;
-    }
-
-    .small-info-box-holder span.p-value {
-        display: block;
-        font-size: 14px;
-        font-weight: 500;
-        margin-bottom: -5px;
-    }
-
-    .small-info-box-holder span.p-value-significance {
-        font-size: 9px;
-    }
-
-    .small-info-box-holder span.extra-info {
-        font-size: 12px;
-    }
-
-    .info-box {
-        position: relative;
-        margin-right: 10px;
-        margin-bottom: 10px;
-        padding: 10px;
-        text-align: center;
-        /* just in case the text isn't otherwise colored */
-        color: white;
-    }
-
-    .normal-info-box {
-        width: 170px;
-        height: 170px;
-    }
-
-    .small-info-box {
-        width: 140px;
-        height: 140px;
-    }
-
-    .not-significant-box {
-        border: solid 1px black;
-    }
-
-    .parentsFont {
-        font-family: inherit;
-        font-weight: inherit;
-        font-size: inherit;
-    }
-
-    .mbar_xaxis text {
-        font-size: 14px;
-    }
-    </style>
-
 
     <link type="application/font-woff">
     <link type="application/vnd.ms-fontobject">
@@ -159,7 +36,12 @@
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
+<style>
+
+</style>
+
 <script>
+
     // generate the texts here so that the appropriate one can be selected in initializePage
     // the keys (1,2,3,4) map to the assignments for MOST_DEL_SCORE
     var variantSummaryText = {
@@ -169,10 +51,12 @@
         4: "${g.message(code: "variant.summaryText.noncoding")}"
     };
 
-    var loading = $('#spinner').show();
+
+
     // sometimes the headers weren't fully loaded before the initializePage function was called,
     // so don't run it until the DOM is ready
     $(document).ready(function () {
+        var loading = $('#spinner').show();
         $.ajax({
             cache: false,
             type: "get",
@@ -187,7 +71,12 @@
                     variantSummaryText,
                     'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
                         '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}');
+                    '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}',
+                        '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}');
+                if ((!data.variant.is_error) && (data.variant.numRecords>0)){
+                    mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
+                            {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
+                }
 
 
         }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -211,7 +100,14 @@
 
                 <g:render template="variantPageHeader"/>
 
+
+
                 <div class="accordion" id="accordionVariant">
+
+                    <g:render template="functionalAnnotation"/>
+
+
+
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle" data-toggle="collapse"
@@ -235,14 +131,19 @@
                               model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
 
+                <g:if test="${g.portalTypeString()?.equals('stroke')||
+                        g.portalTypeString()?.equals('t2d')||
 
-
-                <g:if test="${g.portalTypeString()?.equals('stroke')||g.portalTypeString()?.equals('t2d')||
                         g.portalTypeString()?.equals('mi')}">
 
                         <div class="separator"></div>
 
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch]"/>
+                    <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
+                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch,
+                                                                           'accordionHeaderClass': 'accordion-heading',
+                                                                           'allowExperimentChoice': 1,
+                                                                           'allowPhenotypeChoice' : 1,
+                                                                           'allowStratificationChoice': 1   ]"/>
 
                     </g:if>
 
@@ -301,7 +202,8 @@
 
                         <div id="collapseIgv" class="accordion-body collapse">
                             <div class="accordion-inner">
-                                <g:render template="../trait/igvBrowser"/>
+                                <div class="igvGoesHere"></div>
+                                <g:render template="../templates/igvBrowserTemplate"/>
                             </div>
                         </div>
                     </div>
@@ -337,7 +239,18 @@
     $('#accordionVariant').on('shown.bs.collapse', function (e) {
         if (e.target.id === "collapseIgv") {
             var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
-            setUpIgv(igvParms.locus, igvParms.server);
+
+           igvLauncher.setUpIgv(igvParms.locus,
+                    '.igvGoesHere',
+                    "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
+                    "<g:message code='controls.shared.igv.tracks.genes' />",
+                    "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
+                    "${createLink(controller:'trait', action:'getData', absolute:'false')}",
+                    "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
+                    "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
+                    '${igvIntro}');
+        } else if (e.target.id === "collapseFunctionalData") {
+            $("#functionalDataTableGoesHere").DataTable().draw();
         }
 
     });

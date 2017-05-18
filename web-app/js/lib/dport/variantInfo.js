@@ -102,11 +102,36 @@ var mpgSoftware = mpgSoftware || {};
             var transcriptTableHtml = Mustache.render(transcriptTemplate, renderData);
             $('#transcriptHeader').append(transcriptTableHtml);
         };
+        var retrieveFunctionalData = function(callingData,callback,additionalData){
+            var loading = $('#spinner');
+            var args = _.flatten([{}, callingData.variant.variants[0]]);
+            var variantObject = _.merge.apply(_, args);
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: additionalData.retrieveFunctionalDataAjaxUrl,
+                data: {
+                    chromosome: variantObject.CHROM,
+                    startPos: ""+variantObject.POS,
+                    endPos: ""+variantObject.POS,
+                    lzFormat:0
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
 
+                callback(data,additionalData);
+
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                core.errorReporter(jqXHR, errorThrown)
+            });
+        };
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic) {
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+            var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
             if ( typeof data !== 'undefined')  {
@@ -139,7 +164,7 @@ var mpgSoftware = mpgSoftware || {};
                 mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
                     lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,'junk',
                     geneLocusZoomUrl,
-                    variantInfoUrl,makeDynamic);
+                    variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl);
 //            }
 
             $('[data-toggle="popover"]').popover();
@@ -1115,8 +1140,282 @@ var mpgSoftware = mpgSoftware || {};
                 return variantPosition;
             };
 
+        var tableInitialization = function() {
+            $.fn.DataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var filterName1;
+                    var column1ToConsider;
+                    var filterName2;
+                    var column2ToConsider;
+                    if (settings.sInstance === "functionalDataTableGoesHere") {
+                        filterName1 = 'div.elementFilter';
+                        column1ToConsider = 0;
+                        filterName2 = 'div.tissueFilter';
+                        column2ToConsider = 1;
+
+                    }
+                    var elementFilter = $('select.elementFilter').val();
+                    var tissueFilter = $('select.tissueFilter').val();
+                    if ((typeof elementFilter === 'undefined') ||
+                        (typeof tissueFilter === 'undefined')){
+                        return true;
+                    } else {
+                        var passesElementFilter = false;
+                        var passesTissueFilter = false;
+                        if ((elementFilter==='ALL')||(data[column1ToConsider] === elementFilter)){
+                            passesElementFilter = true;
+                        }
+                        if ((tissueFilter==='ALL')||(data[column2ToConsider] === tissueFilter)){
+                            passesTissueFilter = true;
+                        }
+                        return passesElementFilter&&passesTissueFilter;
+                    }
+
+                }
+            );
+        };
+        var displayFunctionalData = function(data,additionalData){
+            if ((typeof data !== 'undefined') &&
+                (typeof data.variants !== 'undefined') &&
+                (!data.variants.is_error)){
+                var rawSortedData = _.sortBy(data.variants.variants,[function(item) {
+                    return item.element;
+                }, function(item) {
+                    return item.source;
+                }]);
+                var sortedData = [];
+                _.forEach(rawSortedData,function(o){
+                    sortedData.push({'CHROM':o.CHROM,
+                        'START':o.START,
+                        'STOP':o.STOP,
+                        'source':o.source_trans,
+                        'element':o.element_trans
+                    })
+                })
+                var uniqueElements = _.uniqBy(sortedData,function(item) {
+                    return item.element;
+                });
+                var uniqueTissues = _.uniqBy(sortedData,function(item) {
+                    return item.source;
+                });
+                var dataMatrix = [];
+                for (var i = 0 ; i < uniqueTissues.length ; i++ ) {
+                    var currentRow = [];
+                    for (var j = 0 ; j < uniqueElements.length ; j++){
+
+                        if (_.find(sortedData, {source:uniqueTissues[i].source,element:uniqueElements[j].element})){
+                            currentRow.push(1);
+                        } else {
+                            currentRow.push(0);
+                        }
+                    }
+                    dataMatrix.push(currentRow);
+                }
+                var arrayOfArraysGroupedByTissue = [];
+                for (var j = 0 ; j < uniqueTissues.length ; j++){
+
+                    var arrayGroupedByTissue = _.filter(sortedData, {source:uniqueTissues[j].source});
+                    arrayOfArraysGroupedByTissue.push(arrayGroupedByTissue);
+                }
+                var allUniqueElementNames = _.map(uniqueElements,'element');
+                var allUniqueTissueNames = _.map(uniqueTissues,'source');
+                uniqueElements.push({element:'ALL'});
+                uniqueTissues.push({source:'ALL'});
+
+                var renderData = {  'recordsExist': (sortedData.length>1),
+                    'indivRecords':sortedData,
+                    'uniqueElements':uniqueElements,
+                    'uniqueTissues':uniqueTissues};
+
+                buildAnnotationTable('#functionalDataTableGoesHere','urlToFillIn',renderData,{});
+                buildAnnotationMatrix (allUniqueElementNames,
+                    allUniqueTissueNames,
+                    dataMatrix);
+                buildMultiTrackDisplay(allUniqueElementNames,
+                    allUniqueTissueNames,
+                    arrayOfArraysGroupedByTissue,
+                    {regionStart:data.variants.region_start,regionEnd:data.variants.region_end});
+                $('select.uniqueElements').val('ALL');
+                $('select.uniqueTissues').val('ALL');
+            }
+        };
+
+        var displayChosenElements = function (){
+            $('table.functionDescrTable tr').hide();
+            var chosenElement = $('select.uniqueElements').val();
+            var chosenTissue = $('select.uniqueTissues').val();
+            var specificCombinationIdentifier = 'table.functionDescrTable tr.'+chosenElement+"__"+chosenTissue;
+            if (($(specificCombinationIdentifier).length>0)||
+                (chosenElement==='ALL')||
+                (chosenTissue==='ALL')){
+                $('table.functionDescrTable tr.headers').show();
+            }
+            if ((chosenElement==='ALL')&&(chosenTissue==='ALL')){
+                $('table.functionDescrTable tr').show();
+            }
+            else if (chosenElement==='ALL'){
+                $('table.functionDescrTable tr.'+chosenTissue).show();
+            }
+            else if (chosenTissue==='ALL'){
+                $('table.functionDescrTable tr.'+chosenElement).show();
+            } else {
+                $('table.functionDescrTable tr.'+chosenElement+"__"+chosenTissue).show();
+            }
+
+        };
+
         var firstResponders = {
         };
+
+
+        var buildAnnotationMatrix  = function(  allUniqueElementNames,
+                                                allUniqueTissueNames,
+                                                dataMatrix ){
+            var correlationMatrix = dataMatrix;
+            var xlabels = allUniqueElementNames;
+            var ylabels = allUniqueTissueNames;
+            var margin = {top: 50, right: 50, bottom: 190, left: 250},
+                width = 440 - margin.left - margin.right,
+                height = 890 - margin.top - margin.bottom;
+            var matrix = baget.matrix()
+                .height(height)
+                .width(width)
+                .margin(margin)
+                .renderLegend(0)
+                .renderCellText(0)
+                .xlabelsData(xlabels)
+                .ylabelsData(ylabels)
+                .xAxisLabel('chromatin state')
+                .yAxisLabel('well shit, howdy!')
+                .startColor('#ffffff')
+                .endColor('#3498db')
+                .dataHanger("#chart1", correlationMatrix);
+            d3.select("#chart1").call(matrix.render);
+        };
+        var buildMultiTrackDisplay  = function(     allUniqueElementNames,
+                                                    allUniqueTissueNames,
+                                                    dataMatrix,
+                                                    additionalParams ){
+            var correlationMatrix = dataMatrix;
+            var xlabels = [];
+            var ylabels = allUniqueTissueNames;
+            var margin = {top: 50, right: 50, bottom: 100, left: 250},
+                width = 750 - margin.left - margin.right,
+                height = 800 - margin.top - margin.bottom;
+            var multiTrack = baget.multiTrack()
+                .height(height)
+                .width(width)
+                .margin(margin)
+                .renderCellText(0)
+                .xlabelsData(xlabels)
+                .ylabelsData(ylabels)
+                .startColor('#ffffff')
+                .endColor('#3498db')
+                .endRegion(additionalParams.regionEnd)
+                .startRegion(additionalParams.regionStart)
+                .xAxisLabel('genomic position')
+                .dataHanger("#chart2", correlationMatrix);
+            d3.select("#chart2").call(multiTrack.render);
+        }
+
+        var buildAnnotationTable = function(selectionToFill,
+                                        variantInfoUrl,
+                                        renderData, parameters){
+            tableInitialization();
+            var rowsToDisplay = renderData.indivRecords;
+            var requestedProperties = _.map(renderData.propertiesToInclude, function(o){
+                var propertyNamePieces = o.substring("common-common-".length);
+                if (propertyNamePieces.length > 0){
+                    return propertyNamePieces;
+                } else {
+                    return "prop";
+                }
+            });
+            var counter = 0;
+            var commonTable  = $(selectionToFill).dataTable({
+                    "bDestroy": true,
+                    "className": "compact",
+                    "bAutoWidth" : false,
+                    "order": [[ 1, "asc" ]],
+                    "columnDefs":                   [
+                        { "name": "Element",   "targets": [0],  "title":"Element"
+                            , "sWidth": "30%", "class":"elementHdr"
+                        },
+                        { "name": "Tissue",   "targets": [1], "title":"Tissue"
+                           ,"sWidth": "30%", "class":"tissueHdr"
+                        },
+                        { "name": "startpos",   "targets": [2], "title":"Start position"
+                          , "sWidth": "20%"
+                        },
+                        { "name": "endpos",   "targets": [3], "title":"End position"
+                           ,"sWidth": "20%"
+                        }
+                    ],
+                    "scrollY":        "300px",
+                    "scrollX": "100%",
+                    "scrollCollapse": true,
+                    "paging":         false,
+                    "bFilter": true,
+                    "bLengthChange" : true,
+                    "bInfo":false,
+                    "bProcessing": true,
+                    // "fnRowCallback": function( nRow, aData, iDisplayIndex ) {
+                    //     nRow.className = $(aData[0]).attr('custag');
+                    //     return nRow;
+                    // },
+                dom: 'lBtip',
+                    buttons: [
+                        { extend: "copy", text: "Copy" },
+                        { extend: 'csv', filename: "commonVariants" },
+                        { extend: 'pdf', orientation: 'landscape'}
+                    ]
+                }
+            );
+
+            var distinctElements =  _.chain(rowsToDisplay).uniqBy('element').map('element').value();
+            var distinctTissues =  _.chain(rowsToDisplay).uniqBy('source').map('source').value();
+            _.forEach(rowsToDisplay,function(variantRec){
+               var arrayOfRows = [];
+
+                arrayOfRows.push('<span class="elementSpec">'+variantRec.element+'</span>');
+              //  arrayOfRows.push(variantRec.element);
+               arrayOfRows.push(variantRec.source);
+               arrayOfRows.push(variantRec.START);
+               arrayOfRows.push(variantRec.STOP);
+
+               commonTable.dataTable().fnAddData( arrayOfRows );
+            });
+
+            // $('#commonVariantsLocationHolder_filter').css('display','none');
+            $('div.dataTables_scrollHeadInner table.dataTable thead tr').addClass('niceHeaders');
+            $('tr.niceHeaders th.elementHdr').append('<select class="hdrFilter elementFilter" type="button" data-toggle="dropdown" aria-haspopup="true" '+
+                'aria-expanded="false"></select>');
+            $('tr.niceHeaders th.tissueHdr').append('<select class="hdrFilter tissueFilter" type="button" data-toggle="dropdown" aria-haspopup="true" '+
+                'aria-expanded="false"></select>');
+            $('select.elementFilter').on("click", UTILS.disableClickPropagation);
+            $('select.tissueFilter').on("click", UTILS.disableClickPropagation);
+            $('select.elementFilter').append("<option value='ALL'>All</option>");
+            $('select.tissueFilter').append("<option value='ALL'>All</option>");
+            _.forEach(distinctElements.sort(),function (o){
+                $('select.elementFilter').append("<option value='"+o+"'>"+o+"</option>");
+            });
+            _.forEach(distinctTissues.sort(),function (o){
+                $('select.tissueFilter').append("<option value='"+o+"'>"+o+"</option>");
+            });
+            $('select.elementFilter').val('ALL');
+            $('select.tissueFilter').val('ALL');
+            $('select.elementFilter').change(function(h){
+                // $('div.elementFilter').attr('elementFilter',$(this).val());
+                commonTable.DataTable().columns(1).search('').draw();
+            });
+            $('select.tissueFilter').change(function(h){
+                commonTable.DataTable().columns(1).search('').draw();
+            });
+
+            //commonTable.dataTable().fnDraw();
+
+        };
+
 
         return {
             // private routines MADE PUBLIC FOR UNIT TESTING ONLY (find a way to do this in test mode only)
@@ -1134,7 +1433,11 @@ var mpgSoftware = mpgSoftware || {};
             // ---------------------------------------
             firstReponders: firstResponders,
             retrieveVariantPhenotypeData: retrieveVariantPhenotypeData,
-            initializePage: initializePage
+            initializePage: initializePage,
+            retrieveFunctionalData:retrieveFunctionalData,
+            displayFunctionalData:displayFunctionalData,
+            displayChosenElements:displayChosenElements,
+            buildAnnotationTable:buildAnnotationTable
         }
 
 

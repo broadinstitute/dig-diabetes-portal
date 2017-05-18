@@ -579,4 +579,34 @@ class JsonParserTest extends TestCase {
         assertNull(sampleGroupWithoutNumbers.getCasesNumber());
         assertNull(sampleGroupWithoutNumbers.getControlsNumber());
     }
+
+    @Test
+    public void testExperimentMeaning() {
+        // local variables
+        String meaning1 = "GENE";
+        String meaning2 = "VARIANT";
+        String sampleGroupMagic = "GWAS_MAGIC_mdv1";
+        String sampleGroupEx26k = "ExSeq_26k_mdv3";
+        String sampleGroupNoMeaning = "GWAS_GLGC_mdv2";
+        SampleGroup sampleGroup = null;
+
+        // for the magic sample group, make sure it has the meanings
+        sampleGroup = this.jsonParser.getSampleGroupByName(sampleGroupMagic);
+        assertNotNull(sampleGroup);
+        assertTrue(sampleGroup.hasMeaning(meaning1));
+        assertTrue(sampleGroup.hasMeaning(meaning2));
+
+        // for the magic sample group, make sure it has the meanings
+        sampleGroup = this.jsonParser.getSampleGroupByName(sampleGroupEx26k);
+        assertNotNull(sampleGroup);
+        assertTrue(sampleGroup.hasMeaning(meaning1));
+        assertTrue(sampleGroup.hasMeaning(meaning2));
+
+        // for the magic sample group, make sure it has the meanings
+        sampleGroup = this.jsonParser.getSampleGroupByName(sampleGroupNoMeaning);
+        assertNotNull(sampleGroup);
+        assertFalse(sampleGroup.hasMeaning(meaning1));
+        assertFalse(sampleGroup.hasMeaning(meaning2));
+    }
+
 }

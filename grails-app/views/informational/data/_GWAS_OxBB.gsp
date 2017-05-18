@@ -29,7 +29,7 @@
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
-        <tr><td>0</td><td>4,522</td><td><a onclick="showSection(event)">Oxford BioBank</a>
+        <tr><td>0</td><td>7,193</td><td><a onclick="showSection(event)">Oxford BioBank</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">

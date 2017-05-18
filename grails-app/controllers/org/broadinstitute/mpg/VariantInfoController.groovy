@@ -1,11 +1,13 @@
 package org.broadinstitute.mpg
 
+import com.google.gson.JsonArray
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -32,8 +34,25 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         String locusZoomDataset
+        String phenotype = "T2D"
         String portalType = g.portalTypeString() as String
-        String phenotype
+        String igvIntro = ""
+        switch (portalType){
+            case 't2d':
+                igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'T2D'
+                break
+            case 'mi':
+                igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'EOMI'
+                break
+            case 'stroke':
+                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
+                phenotype = 'Stroke_all'
+                break
+            default:
+                break
+        }
 
         locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
 
@@ -60,7 +79,8 @@ class VariantInfoController {
                             restServer: restServerService.currentRestServer(),
                             lzOptions   : lzOptions,
                             locusZoomDataset:locusZoomDataset,
-                            phenotype:phenotype
+                            phenotype:phenotype,
+                            igvIntro: igvIntro
                     ])
 
         }
@@ -153,7 +173,7 @@ class VariantInfoController {
      */
     def variantDiseaseRisk (){
         String variantId = params.variantId
-        JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase(), "ExSeq_17k_"+metaDataService.getDataVersion())
+        JSONObject jsonObject =  restServerService.combinedVariantDiseaseRisk ( variantId.trim().toUpperCase(),  metaDataService.getDefaultDataset())
         render(status:200, contentType:"application/json") {
             [variantInfo:jsonObject]
         }
@@ -233,6 +253,127 @@ class VariantInfoController {
     }
 
 
+
+    def retrieveFunctionalDataAjax (){
+        String chromosome = ''
+        String source = ''
+        int startPos
+        int endPos
+        int pageStart = 0
+        int pageEnd = 500
+        Boolean lzFormat =  false
+        if (params.chromosome) {
+            chromosome = params.chromosome
+            log.debug "retrieveFunctionalData params.chromosome = ${params.chromosome}"
+        }
+        if (params.startPos) {
+            startPos = Integer.parseInt(params.startPos)
+            log.debug "retrieveFunctionalData params.startPos = ${params.startPos}"
+        }
+        if (params.endPos) {
+            endPos =  Integer.parseInt(params.endPos)
+            log.debug "retrieveFunctionalData params.endPos = ${params.endPos}"
+        }
+        if (params.source) {
+            source =  params.source
+            log.debug "retrieveFunctionalData params.source = ${params.source}"
+        }
+
+        if (params.lzFormat) {
+            int formatIndicator =  Integer.parseInt(params.lzFormat)
+            if (formatIndicator>0){
+                lzFormat = true
+            }
+            log.debug "retrieveFunctionalData params.lzFormat = ${params.lzFormat}"
+        }
+
+        LinkedHashMap<String,LinkedHashMap> elementMapper = [:]
+
+
+        JSONObject dataJsonObject
+
+        elementMapper["1_Active_TSS"] = [name:"Active Promoter",state_id:1]
+        elementMapper["2_Weak_TSS"] = [name:"Weak Promoter",state_id:2]
+        elementMapper["14_Bivalent/poised_TSS"] = [name:"Poised Promoter",state_id:3]
+        elementMapper["10_Active_enhancer_2"] = [name:"Strong enhancer",state_id:4]
+        elementMapper["9_Active_enhancer_1"] = [name:"Strong enhancer",state_id:5]
+        elementMapper["11_Weak_enhancer"] = [name:"Weak enhancer",state_id:6]
+        elementMapper["8_Genic_enhancer"] = [name:"Weak enhancer",state_id:7]
+        elementMapper["3_Flanking_TSS"] = [name:"Insulator",state_id:8]
+        elementMapper["5_Strong_transcription"] = [name:"Transcriptional elongation",state_id:10]
+        elementMapper["6_Weak_transcription"] = [name:"Weak transcribed",state_id:11]
+        elementMapper["17_Weak_repressed_polycomb"] = [name:"Polycomb-repressed",state_id:12]
+        elementMapper["16_Repressed_polycomb"] = [name:"Heterochromatin / low signal",state_id:13]
+        elementMapper["18_Quiescent/low_signal"] = [name:"Heterochromatin / low signal",state_id:13]
+
+         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source )
+
+        if (lzFormat){
+            JSONObject root = new JSONObject()
+            root["lastPage"] = null;
+            JSONObject rootData = new JSONObject()
+            rootData["chromosome"]=new JSONArray()
+            rootData["start"]=new JSONArray()
+            rootData["end"]=new JSONArray()
+            rootData["id"]=new JSONArray()
+            rootData["public_id"]=new JSONArray()
+            rootData["state_id"]=new JSONArray()
+            rootData["state_name"]=new JSONArray()
+            rootData["strand"]=new JSONArray()
+            JSONArray sorted = dataJsonObject.variants.sort{it["START"]}
+            for (Map pval in sorted){
+               // for (Map pval in dataJsonObject.variants){
+                String element = pval["element"]
+                LinkedHashMap map = elementMapper[element]
+                String elementTrans = g.message(code: "metadata." + element, default: element)
+                rootData["chromosome"].push(pval["CHROM"])
+                rootData["start"].push(pval["START"])
+                rootData["end"].push(pval["STOP"])
+                rootData["id"].push(16)
+                rootData["public_id"].push(null)
+                rootData["state_id"].push(map.state_id)
+                rootData["state_name"].push(map.name)
+                rootData["strand"].push(null)
+            }
+            root["data"] = rootData
+            dataJsonObject = root
+        } else {
+            if (dataJsonObject.variants) {
+                dataJsonObject['region_start'] = startPos;
+                dataJsonObject['region_end'] = endPos;
+                for (Map pval in dataJsonObject.variants){
+
+                    if (pval.containsKey("element")){
+                        pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
+                    }
+                    if (pval.containsKey("source")){
+                        pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
+                    }
+
+                }
+
+            }
+
+        }
+
+
+
+        if (lzFormat){
+            render(status: 200, contentType: "application/json") {
+                dataJsonObject
+            }
+        } else {
+            render(status: 200, contentType: "application/json") {
+                [variants: dataJsonObject]
+            }
+        }
+
+
+    }
+
+
+
+
     /***
      * Returns the names for available data sets so that the user can choose between them
      *
@@ -240,11 +381,30 @@ class VariantInfoController {
      */
     def sampleMetadataExperimentAjax() {
         List<SampleGroup> sampleGroupList
-
+        boolean isGeneBurden = params.boolean('isGeneBurden');
         sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
 
+        // DIGKB-203: filter out non gene burden test sample groups (EBI)
+        if (isGeneBurden) {
+            List<SampleGroup> tempList = new ArrayList<SampleGroup>();
+            for (SampleGroup sampleGroup : sampleGroupList) {
+                if (sampleGroup.hasMeaning(PortalConstants.BurdenTest.GENE)) {
+                    tempList.add(sampleGroup)
+                }
+            }
+
+            // replace the list
+            sampleGroupList = tempList;
+        }
 
         JSONObject jsonObject = burdenService.convertSampleGroupListToJson (sampleGroupList)
+        JSONObject jsonConversionObject = new JSONObject()
+        for (SampleGroup sampleGroup in sampleGroupList) {
+            if (sampleGroup.parent) {
+                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+            }
+        }
+        jsonObject['conversion'] = jsonConversionObject
 
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}
@@ -258,6 +418,10 @@ class VariantInfoController {
     def sampleMetadataAjax() {
         String dataset = params.dataset
         SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(dataset)
+        JSONObject jsonConversionObject = new JSONObject()
+        if (sampleGroup.parent) {
+            jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+        }
         JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
         List filtersOfTypeString = jsonObject?.filters?.findAll{it.type=="STRING"}
         for (Map allLevels in filtersOfTypeString){
@@ -270,7 +434,7 @@ class VariantInfoController {
             }
             allLevels.levels = filteredLevels
         }
-
+        jsonObject['conversion'] = jsonConversionObject
         // send json response back
         render(status: 200, contentType: "application/json") {jsonObject}
     }
@@ -281,6 +445,12 @@ class VariantInfoController {
      */
     def sampleMetadataAjaxWithAssumedExperiment() {
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
+        JSONObject jsonConversionObject = new JSONObject()
+        for (SampleGroup sampleGroup in sampleGroupList) {
+            if (sampleGroup.parent) {
+                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+            }
+        }
         if (sampleGroupList.size()>0){
             SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
             JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
@@ -295,6 +465,7 @@ class VariantInfoController {
                 }
                 allLevels.levels = filteredLevels
             }
+            jsonObject['conversion'] = jsonConversionObject
             render(status: 200, contentType: "application/json") {jsonObject}
             return
         }
@@ -382,7 +553,7 @@ def retrieveSampleSummary (){
          * to a predefined MDV number until we can find a more general solution
          */
         grailsApplication.config.portal.data.version.map[portalType]
-        dataset = dataset?.replaceAll(~/mdv\d+/,"${grailsApplication.config.portal.data.version.map[portalType]}")
+//        dataset = dataset?.replaceAll(~/mdv\d+/,"${grailsApplication.config.portal.data.version.map[portalType]}")
 //        if (portalType == 't2d'){
 //            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
 //        } else if (portalType == 'stroke'){

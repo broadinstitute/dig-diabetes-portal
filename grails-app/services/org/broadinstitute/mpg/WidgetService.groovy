@@ -602,7 +602,8 @@ class WidgetService {
         String jsonResultString = null;
 
         if((dataset == null) || (dataset == "default")) {
-            dataset = "ExSeq_17k_"+metaDataService.getDataVersion()
+            dataset = metaDataService.getDefaultDataset()
+           // dataset = "ExSeq_17k_"+metaDataService.getDataVersion()
         }
         if(phenotype == null) {
             phenotype = this.phenotypeKey

@@ -281,8 +281,8 @@ var variantProcessing = (function () {
     };
 
     // given a query, find the index of the column
-    function getColumnIndexGivenQuery(query) {
-        var columns = _.map($('#variantTableHeaderRow3 th'), function (h) {
+    function getColumnIndexGivenQuery(query,headerRootName) {
+        var columns = _.map($('#'+headerRootName+' th'), function (h) {
             return $(h).attr('data-colname');
         });
         var criteriaArray = [query.prop, query.dataset, query.phenotype];
@@ -306,8 +306,9 @@ var variantProcessing = (function () {
                                                  copyText,          // text to display in the copy button
                                                  printText,         // text to display in the print button
                                                  querySpecifications,  // the filters and properties that are being requested
-                                                 translatedFilters  // filters with translated phenotype, dataset, and property names
-    ) {
+                                                 translatedFilters,  // filters with translated phenotype, dataset, and property names
+                                                 variableHolder
+        ) {
         var languageSetting = {};
         // check if the browser is using Spanish
         if ( locale.startsWith("es")  ) {
@@ -329,11 +330,11 @@ var variantProcessing = (function () {
                 return query.prop.indexOf('P_') == 0;
             });
             if (queryIndex != -1) {
-                sortCol = getColumnIndexGivenQuery(filters[queryIndex]);
+                sortCol = getColumnIndexGivenQuery(filters[queryIndex],variableHolder.variantTableHeaderRow3);
                 break;
             }
             // case 2
-            var columns = _.map($('#variantTableHeaderRow3 th'), function (h) {
+            var columns = _.map($('#'+variableHolder.variantTableHeaderRow3+' th'), function (h) {
                 return $(h).attr('data-colname');
             });
             sortCol = _.findIndex(columns, function (column) {
@@ -350,7 +351,7 @@ var variantProcessing = (function () {
             // then we're dealing with a dprop or cprop, and the generated column name
             // may differ from what the colname actually is, so you'll usually end up
             // sorting on VAR_ID anyway
-            sortCol = getColumnIndexGivenQuery(filters[0]);
+            sortCol = getColumnIndexGivenQuery(filters[0],variableHolder.variantTableHeaderRow3);
             if(sortCol == -1) {
                 sortCol = 0;
                 break;
@@ -367,7 +368,7 @@ var variantProcessing = (function () {
         // and dataset parts do not exist as appropriate.
         // we do this to ensure that the right data is put in each column. without this, we'd have to guarantee
         // that the server and the client always order the columns in the same way.
-        var headers = $('#variantTableHeaderRow3').children('th');
+        var headers = $('#'+variableHolder.variantTableHeaderRow3).children('th');
         var columnInfo = _.map(headers, function(header) {
             var name = $(header).attr('data-colname');
             return {
@@ -445,7 +446,8 @@ var variantProcessing = (function () {
                 data: function(d) {
                     d.filters = querySpecifications.filters;
                     d.properties = querySpecifications.properties;
-                    // d.properties = '';
+                    d.geneToSummarize = variableHolder.geneName;
+                    d.phenotype = variableHolder.phenotypeCode;
                     d.numberOfVariants = data.numberOfVariants;
                     // need to stringify because otherwise Groovy gets a lot of
                     // parameters that aren't grouped correctly
@@ -457,8 +459,7 @@ var variantProcessing = (function () {
             buttons: [
                 { extend: "copy", text: copyText },
                 { extend: 'csv', filename: filename },
-                { extend: 'pdf', orientation: 'landscape'},
-                { extend: "print", text: printText, filename: filename }
+                { extend: 'pdf', orientation: 'landscape'}
             ],
             drawCallback: function(settings) {
                 $('#spinner').hide();

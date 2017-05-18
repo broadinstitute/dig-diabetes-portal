@@ -261,8 +261,20 @@
 
                     <p><g:message code="contact.portal.broadAttribution"></g:message></p>
                     <p><g:message code="contact.email.stroke"></g:message></p>
-                    <h2><g:message code="contact.portal"></g:message></h2>
-                    <p><g:message code="contact.stroke.portal_team"></g:message></p>
+                    %{--<h2><g:message code="contact.portal"></g:message></h2>--}%
+                    %{--<p><g:message code="contact.stroke.portal_team"></g:message></p>--}%
+
+                <div class="row">
+                <div class="col-md-9">
+                <h4 class="dk-blue-bordered"><g:message code="contact.stroke.team.title"></g:message></h4>
+
+                <table class="dk-team-list"><g:message code="contact.stroke.team.list"></g:message></table>
+
+
+
+
+
+
                 </div>
 
             </g:else>

@@ -1,3 +1,4 @@
+
 import grails.util.Environment
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 // locations to search for config files that get merged into the main config;
@@ -126,20 +127,13 @@ if (grails.config.locations.isEmpty()){
     }
 }
 
-//
 //    default server on start up
-//
-//server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
 restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
 
 // load balancers with multiple servers behind them
-
-
-
-
-
 server.URL = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
+//default  BackEndRestServer
 restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
@@ -162,40 +156,22 @@ digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute
 digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
 digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
 digdevlocalServer = new ServerBean("digdevlocalServer", "http://localhost:8090/dccservices/")
+digAWSKBV2prodServer = new ServerBean("digAWSKBV2prodServer", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
+toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 
  getRestServerList = [
-         //this.restServerList = new ArrayList<ServerBean>(),
          digdev01Server,
          digdev02Server,
          digqa01Server,
          digqa02Server,
          digprod01Server,
          digprod02Server,
-         digdevlocalServer
+         digdevlocalServer,
+         digAWSKBV2prodServer,
+         digAWS02KBV2prodServer,
+         toddTestServer
  ]
-
-
-
-
-
-//newserverlist = getRestServerList();
-
-//t2dQa01BehindLoadBalancer = new ServerBean("T2D QA01 behind load balancer", "http://dig-qa-01.broadinstitute.org:8888/qa/gs");
-//t2dDevLoadBalancedServer = new ServerBean("T2D Dev Load balancer server", "http://dig-api-dev.broadinstitute.org/dev/gs/");
-//t2dDev01BehindLoadBalancer = new ServerBean("T2D Dev01 Behind load balancer server", "http://dig-dev-01.broadinstitute.org:8888/dev/gs/");
-//t2dDev02BehindLoadBalancer = new ServerBean("T2D Dev01 Behind load balancer server", "http://dig-dev-02.broadinstitute.org:8888/dev/gs/");
-//t2dProd01BehindLoadBalancer = new ServerBean("T2D Prod01 behind load balancer server", "hhttp://dig-prod-01.broadinstitute.org:8888/prod/gs/");
-//t2dProd02BehindLoadBalancer = new ServerBean("T2D Prod02 Behind load balancer server", "http://dig-prod-02.broadinstitute.org:8888/prod/gs/");
-//t2dAws01RestServer = new ServerBean("T2D AWS01 Rest server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/aws/gs/");
-//t2dAwsStage01RestServer = new ServerBean("T2D AWS Stage01 rest server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/");
-//toddServer = new ServerBean("Todd's test server", "http://dig-prod.broadinstitute.org:8087/todd/gs/");
-//t2dLocalhostRestServer = new ServerBean("t2d Local host Rest Server", "http://localhost:8888/dig-genome-store/gs/");
-//t2dDevRestServer = new ServerBean("t2d Local host Rest Server", "http://dig-api-prod.broadinstitute.org/prod/gs/");
-//t2dProdRestServer = new ServerBean("t2d Local host Rest Server", "http://dig-api-prod.broadinstitute.org/prod/gs/");
-//t2dNewDevRestServer = new ServerBean("t2d Local host Rest Server", "http://dig-api-prod.broadinstitute.org/prod/gs/");
-//localServer = new ServerBean("t2d Local host Rest Server", "http://localhost:8090/dccservices/");
-//stageKb2NewCodeServer = new ServerBean("t2d Local host Rest Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/");
-//prodKb2NewCodeServer = new ServerBean("t2d Local host Rest Server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/");
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -545,5 +521,8 @@ portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_17k_", "stroke": "
 portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
+
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+
 
 
