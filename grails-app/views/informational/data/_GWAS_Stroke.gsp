@@ -5,8 +5,10 @@
 
 <p><g:message code="aboutTheData.stroke.datasets.ICH_GWAS_2014"></g:message></p>
 
-<hr /> <a href="http://institute.heart.org" target="_blank"></a><img src="${resource(dir: 'images/organizations', file: 'AHA_Precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>  
-<p><g:message code="portal.stroke.about.AHA.discovery.datasets"></g:message></p> <hr />
+ <hr /><table>
+                <tr><td><g:message code="portal.stroke.about.AHA.discovery.datasets"></g:message></td><td><a href="http://institute.heart.org" target="_blank"></a><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a> </td></tr>
+
+                </table>
 <h4>Publications</h4>
 
 <p><div class="paper">

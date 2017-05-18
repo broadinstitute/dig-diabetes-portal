@@ -73,8 +73,8 @@ var mpgSoftware = mpgSoftware || {};
                 namespace: {
                     default: "assoc"
                 }
-                // ,
-                // panel_ids_by_y_index: ['genes','intervals']
+                ,
+                panel_ids_by_y_index: ['genes']
             };
             var newLayout = LocusZoom.Layouts.get("plot", "interval_association", mods);
 
@@ -96,7 +96,6 @@ var mpgSoftware = mpgSoftware || {};
             //newLayout.panels = _.tail(newLayout.panels);
             newLayout.panels = [newLayout.panels[2]];
             newLayout.panels[0].y_index = -1;
-           // newLayout.panels[1].y_index = 2;
             return newLayout;
         };
 
