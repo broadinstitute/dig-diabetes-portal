@@ -161,6 +161,7 @@ digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute
 digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
 digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
 digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
+digdevlocalServer = new ServerBean("digdevlocalServer", "http://localhost:8090/dccservices/")
 
  getRestServerList = [
          //this.restServerList = new ArrayList<ServerBean>(),
@@ -169,7 +170,8 @@ digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadins
          digqa01Server,
          digqa02Server,
          digprod01Server,
-         digprod02Server
+         digprod02Server,
+         digdevlocalServer
  ]
 
 
