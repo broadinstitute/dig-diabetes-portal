@@ -66,205 +66,26 @@
 
                 </div>
 
-                <div class="separator"></div>
-
-                <g:form action='updateRestServer' method='POST' id='updateRestServer' class='form form-horizontal cssform' autocomplete='off'>
-                <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
-                <div class="row clearfix">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-7">
-                        <div id="datatypes-form">
-
-                            <div class="radio">
-                                <span>
-                                    <label>
-                                        <input id="testserver" type="radio" name="datatype" value="aws01restserver"
-                                            <%=restServer.getCurrentServer()==restServer.getAws01RestServer()?" checked ":"" %> />
-                                        <g:message code="system.radio.rest_server.AWS01" /> (${restServer.getAws01RestServer()})
-                                    </label>
-
-                                </span>
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="aws01newcoderestserver"
-                                        <%=restServer.getCurrentServer()==restServer.getAws01NewCodeRestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS01NewCode" /> (${restServer.getAws01NewCodeRestServer()})
-                                </label>
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="aws02restserver"
-                                        <%=restServer.getCurrentServer()==restServer.getAws02RestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS02" /> (${restServer.getAws02RestServer()})
-                                </label>
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="aws02newcoderestserver"
-                                        <%=restServer.getCurrentServer()==restServer.getAws02NewCodeRestServer()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.AWS02NewCode" /> (${restServer.getAws02NewCodeRestServer()})
-                                </label>
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="dev01server"
-                                        <%=restServer.getCurrentServer()==restServer.getDev01()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.dev01" /> (${restServer.getDev01()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="dev02server"
-                                        <%=restServer.getCurrentServer()==restServer.getDev02()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.dev02" /> (${restServer.getDev02()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="testserver" type="radio" name="datatype" value="devloadbalancedserver"
-                                        <%=restServer.getCurrentServer()==restServer.getDevLoadBalanced()?" checked ":"" %> />
-                                    <g:message code="system.radio.rest_server.dev" /> (${restServer.getDevLoadBalanced()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="qaserver" type="radio" name="datatype" value="qaloadbalancedserver"
-                                        <%=restServer.getCurrentServer()==restServer.getQaLoadBalanced()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.qa" /> (${restServer.getQaLoadBalanced()})
-                                </label>
-
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="prod01server" type="radio" name="datatype" value="prod01server"
-                                        <%=restServer.getCurrentServer()==restServer.getProd01()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod01" /> (${restServer.getProd01()})
-                                </label>
-
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input id="prod02server" type="radio" name="datatype" value="prod02server"
-                                        <%=restServer.getCurrentServer()==restServer.getProd02()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod02" /> (${restServer.getProd02()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="prodserver" type="radio" name="datatype" value="prodloadbalancedserver"
-                                        <%=restServer.getCurrentServer()==restServer.getProdLoadBalanced()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod" /> (${restServer.getProdLoadBalanced()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="prodserverbroad" type="radio" name="datatype" value="prodserverbroad"
-                                        <%=restServer.getCurrentServer()==restServer.getProdLoadBalancedBroad()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.prod_broad" /> (${restServer.getProdLoadBalancedBroad()})
-                                </label>
-
-                            </div>
-
-                            <div class="radio">
-                                <label>
-                                    <input id="localserver" type="radio" name="datatype" value="localserver"
-                                        <%=restServer.getCurrentServer()==restServer.getLocal()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.local" /> (${restServer.getLocal()})
-                                </label>
-
-                            </div>
-
-
-                            <div class="radio">
-                                <label>
-                                    <input id="toddServer" type="radio" name="datatype" value="toddServer"
-                                        <%=restServer.getCurrentServer()==restServer.getToddServer()?" checked ":"" %>  />
-                                    <g:message code="system.radio.rest_server.todd" /> (${restServer.getToddServer()})
-                                </label>
-
-                            </div>
-
-                         </div>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-                <div class="row clearfix">
-                    <div class="col-md-6"></div>
-                    <div class="col-md-6">
-                        <div >
-                            <div style="text-align:center; padding-top: 20px;">
-                                <input class="btn btn-primary btn-lg" type='submit' id="submit"
-                                       value='Commit'/>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                    <div class="row clearfix" style="margin: 10px; border: 1px solid grey; padding: 10px">
-                        <div class="col-md-2">Immediate cache reset</div>
-                        <div class="col-md-10">
-                            <ul>
-                                <li style="padding: 10px"><a href="http://dig-dev-01.broadinstitute.org:8888/dev/gs/reloadCache" class="btn btn-warning">reset http://dig-dev-01.broadinstitute.org:8888/dev/gs cache</a></li>
-                                <li style="padding: 10px"><a href="http://dig-dev-02.broadinstitute.org:8888/dev/gs/reloadCache" class="btn btn-warning">reset http://dig-dev-02.broadinstitute.org:8888/dev/gs cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getAws01RestServer()}reloadCache" class="btn btn-warning">reset ${restServer.getAws01RestServer()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getAws02RestServer()}reloadCache" class="btn btn-warning">reset ${restServer.getAws02RestServer()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getDevLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getDevLoadBalanced()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getQaLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getQaLoadBalanced()} cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getProdLoadBalanced()}reloadCache" class="btn btn-warning">reset ${restServer.getProdLoadBalanced()} cache</a></li>
-                                <li style="padding: 10px"><a href="http://dig-prod-01.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-01.broadinstitute.org:8888/prod/gs cache</a></li>
-                                <li style="padding: 10px"><a href="http://dig-prod-02.broadinstitute.org:8888/prod/gs/reloadCache" class="btn btn-warning">reset http://dig-prod-02.broadinstitute.org:8888/prod/gs cache</a></li>
-                                <li style="padding: 10px"><a href="${restServer.getToddServer()}reloadCache" class="btn btn-warning">reset ${restServer.getToddServer()} cache</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                <div class="row clearfix">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <div >
-                            <g:if test='${flash.message}'>
-                                <div class="alert alert-danger">${flash.message}</div>
-                            </g:if>
-                         </div>
-                    </div>
-                    <div class="col-md-2"></div>
-
-                </div>
-                </g:form>
-
-
-            <div class="separator"></div>
 
                 <g:form action='updateBackEndRestServer' method='POST' id='updateBackEndRestServer' class='form form-horizontal cssform' autocomplete='off'>
-                    <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer}">${currentRestServer}</a></em>)</h4>
-                    <div> Hello I am the new one</div>
+                    <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer.url}">${currentRestServer.name}</a></em>)</h4>
+                    %{--<div> Hello I am the new one</div>--}%
                     <div class="row clearfix">
                         <div class="col-md-2"></div>
                         <div class="col-md-7">
                             <div id="datatypes-formid">
                                 <g:each var="server" in="${restServerList}">
-                                    <div class="radio">
-                                        <label>
-                                            <input id="RestServer" type="radio" name="datatype" value="${server?.name}"
-                                                <%=currentRestServer==server?" checked ":"" %> />
-                                            ${server?.name} (${server.url})
-                                        </label>
+                                    <div>
+                                        <div class="radio">
+                                            <label>
+                                                <input id="RestServer" type="radio" name="datatype" value="${server?.name}"
+                                                    <%=currentRestServer==server?" checked ":"" %> />
+                                                ${server?.name} (${server.url})
+                                                <ul> <li class="btn btn-warning"><a href="${server.url}reloadCache"> Reset</a> </li></ul>
+                                            </label>
+                                        </div>
                                     </div>
+
                                 </g:each>
                             </div>
                         </div>
