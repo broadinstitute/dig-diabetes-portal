@@ -162,6 +162,22 @@ digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute
 digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
 digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
 
+ getRestServerList = [
+         //this.restServerList = new ArrayList<ServerBean>(),
+         digdev01Server,
+         digdev02Server,
+         digqa01Server,
+         digqa02Server,
+         digprod01Server,
+         digprod02Server
+ ]
+
+
+
+
+
+//newserverlist = getRestServerList();
+
 //t2dQa01BehindLoadBalancer = new ServerBean("T2D QA01 behind load balancer", "http://dig-qa-01.broadinstitute.org:8888/qa/gs");
 //t2dDevLoadBalancedServer = new ServerBean("T2D Dev Load balancer server", "http://dig-api-dev.broadinstitute.org/dev/gs/");
 //t2dDev01BehindLoadBalancer = new ServerBean("T2D Dev01 Behind load balancer server", "http://dig-dev-01.broadinstitute.org:8888/dev/gs/");
@@ -263,7 +279,7 @@ environments {
         // DIGKB-23: keep this here as placeholder for U Michigan setup
 //        grails.serverURL = "http://portaldev.sph.umich.edu/dig-diabetes-portal"
         grails.logging.jul.usebridge = true
-        
+
         if (System.properties['server.URL']) {
             server.URL = System.properties['server.URL']
             println "server.URL=${server.URL}"

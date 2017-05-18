@@ -29,7 +29,7 @@ class SystemController {
                                           currentRestServer:restServerService?.getCurrentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
                                           burdenRestServerList: this.restServerService?.getBurdenServerList(),
-                                          restServerList: this.restServerService?.getRestServerList(),
+                                          restServerList: grailsApplication.config.getRestServerList,
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
         forceMetadataCacheOverride: this.metaDataService?.getMetadataOverrideStatus(),

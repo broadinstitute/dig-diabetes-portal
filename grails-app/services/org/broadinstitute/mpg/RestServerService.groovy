@@ -379,19 +379,18 @@ class RestServerService {
         return this.burdenServerList;
     }
 
-
-    public List<ServerBean> getRestServerList() {
-        if (this.restServerList == null) {
-            this.restServerList = new ArrayList<ServerBean>();
-            this.restServerList.add(grailsApplication.config.digdev01Server);
-            this.restServerList.add(grailsApplication.config.digdev02Server);
-            this.restServerList.add(grailsApplication.config.digqa01Server);
-            this.restServerList.add(grailsApplication.config.digqa02Server);
-            this.restServerList.add(grailsApplication.config.digprod01Server);
-            this.restServerList.add(grailsApplication.config.digprod02Server);
-        }
-        return this.restServerList;
-    }
+//    public List<ServerBean> getRestServerList() {
+//        if (this.restServerList == null) {
+//            this.restServerList = new ArrayList<ServerBean>();
+//            this.restServerList.add(grailsApplication.config.digdev01Server);
+//            this.restServerList.add(grailsApplication.config.digdev02Server);
+//            this.restServerList.add(grailsApplication.config.digqa01Server);
+//            this.restServerList.add(grailsApplication.config.digqa02Server);
+//            this.restServerList.add(grailsApplication.config.digprod01Server);
+//            this.restServerList.add(grailsApplication.config.digprod02Server);
+//        }
+//        return this.restServerList;
+//    }
 
     public void changeBurdenServer(String serverName) {
         for (ServerBean serverBean : this.burdenServerList) {
