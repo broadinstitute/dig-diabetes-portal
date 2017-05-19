@@ -11,7 +11,7 @@ div.graphicsDisplay {
         <a class="accordion-toggle" data-toggle="collapse"
            data-parent="#accordionVariant"
            href="#collapseFunctionalData">
-            <h2><strong>Functional annotations</strong></h2>
+            <h2><strong>Epigenomic annotations</strong></h2>
         </a>
     </div>
 
@@ -40,7 +40,7 @@ div.graphicsDisplay {
                     <div class="row">
                         <div class="xs-col-6"></div>
                         <div class="xs-col-6" style="margin-left: 290px">
-                            <h4>Element positions</h4>
+                            <h4>Chromatin state positions</h4>
                         </div>
                     </div>
                     <div class="row">
