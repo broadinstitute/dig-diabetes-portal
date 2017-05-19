@@ -100,7 +100,8 @@
     <div class="container">
 
         <div class="variantWF-container">
-            <p style="text-align: right; padding:0"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a> </p>
+<g:if test="${g.portalTypeString()?.equals('t2d')}"><p style="text-align: right; padding:0"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a> </p></g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p style="text-align: right; padding:0"><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf" target="_blank">Variant Finder tutorial</a> </p></g:elseif>
             <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
 
             <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>

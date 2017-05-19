@@ -6,6 +6,7 @@ div.graphicsDisplay {
     display: -webkit-inline-box;
 }
 </style>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
 <div class="accordion-group">
     <div class="accordion-heading">
         <a class="accordion-toggle" data-toggle="collapse"
@@ -55,3 +56,4 @@ div.graphicsDisplay {
         </div>
     </div>
 </div>
+</g:if>
