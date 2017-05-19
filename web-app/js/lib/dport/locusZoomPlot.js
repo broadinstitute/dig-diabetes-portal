@@ -288,6 +288,13 @@ var mpgSoftware = mpgSoftware || {};
           //colorBy:1=LD,2=MDS
             //positionBy:1=pValue,2=posteriorPValue
             var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+            intervalPanel.dashboard.components.push({
+                type: "menu",
+                color: "yellow",
+                position: "right",
+                button_html: "Track Info",
+                menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
+            });
             // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
             // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
             if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){

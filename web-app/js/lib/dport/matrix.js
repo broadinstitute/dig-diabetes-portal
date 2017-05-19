@@ -184,14 +184,27 @@ var baget = baget || {};  // encapsulating variable
             var row = svg.selectAll(".row")
                 .data(data)
                 .enter().append("g")
-                .attr("class", "row")
-                .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
+                .attr("class",  function(d, i) {
+                    var markRow = "";
+                    if (typeof xlabelsData !== 'undefined'){
+                        var indexOfNonZeroElement =_.findIndex(d,function(o){
+                            return (o!==0);
+                        });
+                        markRow = xlabelsData[indexOfNonZeroElement].replace(/[ \/]/g,"_");
+                    }
+                    return "row "+markRow;
+                })
+                .attr("transform", function(d, i) {
+                    return "translate(0," + y(i) + ")";
+                });
 
             var cell = row.selectAll(".cell")
                 .data(function(d) { return d; })
                 .enter().append("g")
                 .attr("class", "cell")
-                .attr("transform", function(d, i) { return "translate(" + xScale(i) + ", 0)"; });
+                .attr("transform", function(d, i) {
+                    return "translate(" + xScale(i) + ", 0)";
+                });
 
             cell.append('rect')
                 .attr("width", xScale.rangeBand())
@@ -210,7 +223,14 @@ var baget = baget || {};  // encapsulating variable
 
             row.selectAll(".cell")
                 .data(function(d, i) { return data[i]; })
-                .style("fill", colorMap);
+                .attr('class',function(d, i) {
+                    if (d===1){
+                       return 'cell chosen'
+                    } else {
+                        return 'cell notChosen'
+                    }
+
+                });
 
             var labels = svg.append('g')
                 .attr('class', "labels");
