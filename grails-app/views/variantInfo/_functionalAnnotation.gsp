@@ -14,9 +14,9 @@ div.graphicsDisplay {
             <h2><strong>Epigenomic annotations</strong></h2>
         </a>
     </div>
-
     <div id="collapseFunctionalData" class="accordion-body collapse">
-        <div class="accordion-inner">
+        <div class="accordion-inner"><p><g:message code="variant.epigenomic.text1"></g:message></p>
+            <p><g:message code="variant.epigenomic.text2"></g:message></p>
             <div class="row">
                 <div class="xs-col-12">
                     <div id="functionalDateGoesHere"></div>
@@ -27,7 +27,8 @@ div.graphicsDisplay {
                 <div class="md-col-6">
                     <div class="row">
                         <div class="md-col-12"  style="margin-left: 150px">
-                            <h4>Tissue summary</h4>
+                            <h4>Tissue summary <g:helpText title="variant.epigenomic.tissue_summary.help.header" placement="right" body="variant.epigenomic.tissue_summary.help.text"/></h4>
+
                         </div>
                     </div>
                     <div class="row">
@@ -40,7 +41,7 @@ div.graphicsDisplay {
                     <div class="row">
                         <div class="xs-col-6"></div>
                         <div class="xs-col-6" style="margin-left: 290px">
-                            <h4>Chromatin state positions</h4>
+                            <h4>Chromatin state positions <g:helpText title="variant.epigenomic.chromatin_states.help.header" placement="top" body="variant.epigenomic.chromatin_states.help.text"/></h4>
                         </div>
                     </div>
                     <div class="row">
