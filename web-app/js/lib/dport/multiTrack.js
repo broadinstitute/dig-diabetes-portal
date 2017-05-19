@@ -30,6 +30,7 @@ var baget = baget || {};  // encapsulating variable
             ylabelsData,// dataform = ['ylab1','ylab2'],
             xAxisLabel,// no x label by default
             yAxisLabel,// no y label by default
+            mappingInfo,// figure out how to label rows so that we can color them
             startColor = '#ffffff',
             endColor = '#3498db',
             startRegion,
@@ -79,7 +80,21 @@ var baget = baget || {};  // encapsulating variable
                 .data(data)
                 .enter().append("g")
                 .attr("class", "row")
-                .attr("transform", function(d, i) { return "translate(0," + yScale(i) + ")"; });
+                .attr("class",  function(d, i) {
+                    var markRow = "";
+                    if (typeof xlabelsData !== 'undefined'){
+                        var indexOfNonZeroElement =_.findIndex(mappingInfo[i] ,function(o){
+                            return (o!==0);
+                        });
+                        if (indexOfNonZeroElement > -1){
+                            markRow = xlabelsData[indexOfNonZeroElement].replace(/[ \/]/g,"_");
+                        }
+                    }
+                    return "row "+markRow;
+                })
+                .attr("transform", function(d, i) {
+                    return "translate(0," + yScale(i) + ")";
+                });
 
             var element = row.selectAll(".element")
                 .data(function(d) { return d; })
@@ -92,8 +107,8 @@ var baget = baget || {};  // encapsulating variable
                     return xScale(v.STOP)-xScale(v.START);})
                 .attr("height", yScale.rangeBand()/2)
                 .style("stroke-width", 1)
-                .style("stroke", "black")
-                .style("fill",endColor)
+                .style("stroke", "black");
+             //   .style("fill",endColor);
 
             var labels = svg.append('g')
                 .attr('class', "labels");
@@ -299,6 +314,12 @@ var baget = baget || {};  // encapsulating variable
         instance.margin = function (x) {
             if (!arguments.length) return margin;
             margin = x;
+            return instance;
+        };
+
+        instance.mappingInfo = function (x) {
+            if (!arguments.length) return mappingInfo;
+            mappingInfo = x;
             return instance;
         };
 

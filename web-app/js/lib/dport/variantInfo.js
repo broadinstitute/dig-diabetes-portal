@@ -1234,7 +1234,7 @@ var mpgSoftware = mpgSoftware || {};
                 buildMultiTrackDisplay(allUniqueElementNames,
                     allUniqueTissueNames,
                     arrayOfArraysGroupedByTissue,
-                    {regionStart:data.variants.region_start,regionEnd:data.variants.region_end});
+                    {regionStart:data.variants.region_start,regionEnd:data.variants.region_end,stateColorBy:allUniqueElementNames,mappingInformation:dataMatrix});
                 $('select.uniqueElements').val('ALL');
                 $('select.uniqueTissues').val('ALL');
             }
@@ -1297,7 +1297,7 @@ var mpgSoftware = mpgSoftware || {};
                                                     dataMatrix,
                                                     additionalParams ){
             var correlationMatrix = dataMatrix;
-            var xlabels = [];
+            var xlabels = additionalParams.stateColorBy;
             var ylabels = allUniqueTissueNames;
             var margin = {top: 50, right: 50, bottom: 100, left: 250},
                 width = 750 - margin.left - margin.right,
@@ -1314,6 +1314,7 @@ var mpgSoftware = mpgSoftware || {};
                 .endRegion(additionalParams.regionEnd)
                 .startRegion(additionalParams.regionStart)
                 .xAxisLabel('genomic position')
+                .mappingInfo(additionalParams.mappingInformation)
                 .dataHanger("#chart2", correlationMatrix);
             d3.select("#chart2").call(multiTrack.render);
         }

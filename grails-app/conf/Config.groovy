@@ -160,6 +160,9 @@ digAWSKBV2prodServer = new ServerBean("digAWSKBV2prodServer", "http://ec2-52-90-
 digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 
+// this will be your default
+defaultRestServer = digAWS02KBV2prodServer
+
  getRestServerList = [
          digdev01Server,
          digdev02Server,
