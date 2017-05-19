@@ -127,171 +127,15 @@ if (grails.config.locations.isEmpty()){
     }
 }
 
-//
 //    default server on start up
-//
-//server.URL = 'http://t2dgenetics.org/mysql/rest/server/'
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
+restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
 
 // load balancers with multiple servers behind them
-/*
-t2dProdLoadBalancedServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-// EBI
-t2dProdLoadBalancedServer {
-    base = 'https://www.ebi.ac.uk/'
-    name =  'ega/t2d/dig-genome-store/'
-    path = 'gs/'
-}
-*/
-t2dDistributedLocalhostServer {
-    base = 'http://localhost:8090/'
-    name =  'dccservices/'
-    path = 'distributed/'
-}
-t2dProdLoadBalancedServer {
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/'
-    name =  'dccservices/'
-    path = 'distributed/'
-}
-t2dQaLoadBalancedServer {
-    base = 'http://dig-api-qa.broadinstitute.org/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dQa01BehindLoadBalancer {
-    base = 'http://dig-qa-01.broadinstitute.org:8888/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dQa02BehindLoadBalancer {
-    base = 'http://dig-qa-02.broadinstitute.org:8888/'
-    name =  'qa/'
-    path = 'gs/'
-}
-t2dDevLoadBalancedServer {
-    base = 'http://dig-api-dev.broadinstitute.org/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dDev01BehindLoadBalancer {
-    base = 'http://dig-dev-01.broadinstitute.org:8888/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dDev02BehindLoadBalancer {
-    base = 'http://dig-dev-02.broadinstitute.org:8888/'
-    name =  'dev/'
-    path = 'gs/'
-}
-t2dProd01BehindLoadBalancer {
-    base = 'http://dig-prod-01.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
-}
-t2dProd02BehindLoadBalancer {
-    base = 'http://dig-prod-02.broadinstitute.org:8888/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-// individual servers
-t2dAws01RestServer {
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/'
-    name =  'aws/'
-    path = 'gs/'
-}
-
-
-t2dAwsStage01RestServer {
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/'
-    name =  'aws01/'
-    path = 'gs/'
-}
-
-stageKb2NewCodeServer {
-    base = 'http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/'
-    name =  'dccservices/'
-    path = ''
-}
-
-
-toddServer {
-    base = 'http://dig-prod.broadinstitute.org:8087/'
-    name =  'todd/'
-    path = 'gs/'
-}
-
-//t2dLocalhostRestServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
-//    path = 'gs/'
-//}
-t2dLocalhostRestServer {
-    base = 'http://localhost:8090/'
-    name =  'dccservices/'
-    path = ''
-}
-
-
-// individual servers
-// NOTE: the bottom two are most likely used for the CI build testing, so keep them at steady AWS pointer for CI testing
-// DIGP-136: changed to load balanced development machine
-t2dDevRestServer {
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dProdRestServer {//current 'prod'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-t2dNewDevRestServer { //current 'dev'
-    base = 'http://dig-api-prod.broadinstitute.org/'
-    name =  'prod/'
-    path = 'gs/'
-}
-
-localServer {
-//    base = 'http://localhost:8888/'
-//    name =  'dig-genome-store/'
-//    path = 'gs/'
-    base = 'http://localhost:8090/'
-    name =  'dccservices/'
-    path = ''
-
-}
-prodKb2NewCodeServer {
-    base = 'http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/'
-    name =  'dccservices/'
-    path = ''
-}
-
-//server.URL = t2dDevRestServer.base+t2dDevRestServer.name+t2dDevRestServer.path
-//server.URL = t2dAws01RestServer.base+t2dAws01RestServer.name+t2dAws01RestServer.path
-//server.URL = t2dProdRestServer.base+t2dProdRestServer.name+t2dProdRestServer.path
-//server.URL = stageKb2NewCodeServer.base+stageKb2NewCodeServer.name+stageKb2NewCodeServer.path
-server.URL = prodKb2NewCodeServer.base+prodKb2NewCodeServer.name+prodKb2NewCodeServer.path
-
-//server.URL = 'http://localhost:8888/dig-genome-store/gs/'
-// qa is probably right, the right now we need the tests to pass
-//server.URL = t2dQaLoadBalancedServer.base+t2dQaLoadBalancedServer.name+t2dQaLoadBalancedServer.path
-// currently operational t2d server
-//server.URL = "http://ec2-52-90-97-40.compute-1.amazonaws.com:8888/aws/gs/"
-//for stroke
-//server.URL = "http://dig-api-dev.broadinstitute.org/dev/gs/"
-
-
+server.URL = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
+//default  BackEndRestServer
+restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
-//dbtRestServer.URL = 'http://diabetesgeneticsportal2.broadinstitute.org:8888/dev/burden/'
-//experimentalRestServer.URL = 'http://69.173.71.178:8888/dev2/server/'
-//experimentalRestServer.URL = 'http://dig-dev.broadinstitute.org:8888/dev/gs/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
 burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
@@ -302,8 +146,32 @@ burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-ap
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
+burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
 
+
+digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
+digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
+digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
+digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
+digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
+digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
+digdevlocalServer = new ServerBean("digdevlocalServer", "http://localhost:8090/dccservices/")
+digAWSKBV2prodServer = new ServerBean("digAWSKBV2prodServer", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
+toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
+
+ getRestServerList = [
+         digdev01Server,
+         digdev02Server,
+         digqa01Server,
+         digqa02Server,
+         digprod01Server,
+         digprod02Server,
+         digdevlocalServer,
+         digAWSKBV2prodServer,
+         digAWS02KBV2prodServer,
+         toddTestServer
+ ]
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -389,7 +257,7 @@ environments {
         // DIGKB-23: keep this here as placeholder for U Michigan setup
 //        grails.serverURL = "http://portaldev.sph.umich.edu/dig-diabetes-portal"
         grails.logging.jul.usebridge = true
-        
+
         if (System.properties['server.URL']) {
             server.URL = System.properties['server.URL']
             println "server.URL=${server.URL}"
@@ -419,7 +287,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
@@ -453,7 +321,6 @@ if  (Environment.current == Environment.PRODUCTION)  {
 
 appName = grails.util.Metadata.current.'app.name'
 def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
-//def baseURL = grails.serverURL ?: "http://GPAD4-DCF.broadinstitute.org:${System.getProperty('server.port', '8080')}/${appName}"
 
 
 println("\n\n>>>>>>>>>>>>baseURL=${baseURL}<<<<<<<<<<<<<<<<<<<<<<")
@@ -650,11 +517,12 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 diabetes.data.version = "mdv27";
 portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv90", "EBI": "mdv25"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "ExSeq_EOMI_", "EBI":"FG"]
+portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_17k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
 portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
 oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
+
 
 

@@ -28,6 +28,6 @@ $( document ).ready( function (){
 
 </g:javascript>
 
-<div class="row">
-    <div class="gaitSectionGoesHere col-xs-12"></div>
+<div class="">
+    <div class="gaitSectionGoesHere"></div>
 </div>
