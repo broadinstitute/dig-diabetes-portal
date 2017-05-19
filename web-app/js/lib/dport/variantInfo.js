@@ -1338,7 +1338,7 @@ var mpgSoftware = mpgSoftware || {};
                     "bAutoWidth" : false,
                     "order": [[ 1, "asc" ]],
                     "columnDefs":                   [
-                        { "name": "Element",   "targets": [0],  "title":"Element"
+                        { "name": "Element",   "targets": [0],  "title":"Chromatin state"
                             , "sWidth": "30%", "class":"elementHdr"
                         },
                         { "name": "Tissue",   "targets": [1], "title":"Tissue"
