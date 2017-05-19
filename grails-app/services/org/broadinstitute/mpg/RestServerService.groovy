@@ -404,7 +404,7 @@ class RestServerService {
     }
 
     public void changeRestServer(String serverName) {
-        for (ServerBean serverBean : this.restServerList) {
+        for (ServerBean serverBean : grailsApplication.config.getRestServerList) {
             if (serverBean.getName().equals(serverName)) {
                 //log.info("changing rest server from: " + this.REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
                 this.REST_SERVER = serverBean;
