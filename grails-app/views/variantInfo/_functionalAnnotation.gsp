@@ -24,7 +24,33 @@ div.graphicsDisplay {
                         <table id="functionalDataTableGoesHere"></table>
                 </div>
             </div>
-            <div style="margin-top:80px" class="row graphicsDisplay">
+            <div style="margin-top:80px">
+            <table><tr>
+                <td>
+                    <g:message code="variant.variantAssociations.legend.colorkey" default="Color key"/>:
+                </td>
+                <td style="padding-right: 20px;"><div
+                        style="background-color: #006633; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                            style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.genomewide"
+                                                                                default="p &lt; 5e-8" />  <g:helpText title="variant.variantAssociations.colorkeyGenomewide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyGenomewide.help.text"/></span>
+                </div>
+                </td>
+                <td style="padding-right: 20px;"><div
+                        style="background-color: #7AB317; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                            style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.locuswide"
+                                                                                default="p &lt; 5e-5" />  <g:helpText title="variant.variantAssociations.colorkeyLocuswide.help.header" placement="bottom" body="variant.variantAssociations.colorkeyLocuswide.help.text"/></span>
+                </div>
+                </td>
+                <td style="padding-right: 20px;"><div
+                        style="background-color: #9ED54C; color: #fff; width:auto; margin-left: 5px; float: left; padding: 0 5px;"><span
+                            style="color: #FFFFFF; font-size: 12px;"><g:message code="variant.variantAssociations.legend.colorkey.nominal"
+                                                                                default="p &lt; 0.05" />  <g:helpText title="variant.variantAssociations.colorkeyNominal.help.header" placement="bottom" body="variant.variantAssociations.colorkeyNominal.help.text"/></span>
+                </div>
+                </td>
+            </tr></table>
+            </div>
+
+            <div style="margin-top:20px" class="row graphicsDisplay">
                 <div class="md-col-6">
                     <div class="row">
                         <div class="md-col-12"  style="margin-left: 150px">
