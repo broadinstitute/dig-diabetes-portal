@@ -89,8 +89,11 @@ class RestServerService {
 
 
     private List<ServerBean> burdenServerList;
+    private List<ServerBean> restServerList;
 
     private ServerBean BURDEN_REST_SERVER = null;
+
+    private ServerBean REST_SERVER = null;
 
     // okay
     static List<String> GENE_COLUMNS = [
@@ -139,45 +142,43 @@ class RestServerService {
         //current
 
         // load balancer with rest server(s) behind it
-        PROD_LOAD_BALANCED_SERVER = grailsApplication.config.t2dProdLoadBalancedServer.base + grailsApplication.config.t2dProdLoadBalancedServer.name + grailsApplication.config.t2dProdLoadBalancedServer.path
+//        PROD_LOAD_BALANCED_SERVER = grailsApplication.config.t2dProdLoadBalancedServer.base + grailsApplication.config.t2dProdLoadBalancedServer.name + grailsApplication.config.t2dProdLoadBalancedServer.path
 
-        // load balancer with rest server(s) behind it
-        PROD_LOAD_BALANCED_BROAD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+//        // load balancer with rest server(s) behind it
+//        PROD_LOAD_BALANCED_BROAD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
+//
+//        // local server for development
+//        LOCAL_SERVER = grailsApplication.config.localServer.base + grailsApplication.config.localServer.name + grailsApplication.config.localServer.path
+//
+//        // qa load balancer with rest server(s) behind it
+//        QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
+//
+//        // test load balancer with rest server(s) behind it
+//        DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
+//
+//        DEV_01_SERVER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
+//        DEV_02_SERVER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
+//
+//        PROD_01_SERVER = grailsApplication.config.t2dProd01BehindLoadBalancer.base + grailsApplication.config.t2dProd01BehindLoadBalancer.name + grailsApplication.config.t2dProd01BehindLoadBalancer.path
+//        PROD_02_SERVER = grailsApplication.config.t2dProd02BehindLoadBalancer.base + grailsApplication.config.t2dProd02BehindLoadBalancer.name + grailsApplication.config.t2dProd02BehindLoadBalancer.path
+//
+//        // dev rest server, not load balanced
+//        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
+//
+//        // 'aws01'
+//        AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
+//
+//        // 'stage kbv2'
+//        AWS02_NEW_CODE_REST_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
+//
+//        // 'prod kbv2'
+//        AWS01_NEW_CODE_REST_SERVER = grailsApplication.config.prodKb2NewCodeServer.base + grailsApplication.config.prodKb2NewCodeServer.name + grailsApplication.config.prodKb2NewCodeServer.path
+//
+//        // 'stage aws01'
+//        AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
+//
+//        TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
 
-        // local server for development
-        LOCAL_SERVER = grailsApplication.config.localServer.base + grailsApplication.config.localServer.name + grailsApplication.config.localServer.path
-
-        // qa load balancer with rest server(s) behind it
-        QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
-
-        // test load balancer with rest server(s) behind it
-        DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
-
-        DEV_01_SERVER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
-        DEV_02_SERVER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
-
-        PROD_01_SERVER = grailsApplication.config.t2dProd01BehindLoadBalancer.base + grailsApplication.config.t2dProd01BehindLoadBalancer.name + grailsApplication.config.t2dProd01BehindLoadBalancer.path
-        PROD_02_SERVER = grailsApplication.config.t2dProd02BehindLoadBalancer.base + grailsApplication.config.t2dProd02BehindLoadBalancer.name + grailsApplication.config.t2dProd02BehindLoadBalancer.path
-
-        // dev rest server, not load balanced
-        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
-
-        // 'aws01'
-        AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
-
-        // 'stage kbv2'
-        AWS02_NEW_CODE_REST_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
-
-        // 'prod kbv2'
-        AWS01_NEW_CODE_REST_SERVER = grailsApplication.config.prodKb2NewCodeServer.base + grailsApplication.config.prodKb2NewCodeServer.name + grailsApplication.config.prodKb2NewCodeServer.path
-
-        // 'stage aws01'
-        AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
-
-        TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
-
-        //
-        //
         BASE_URL = grailsApplication.config.server.URL
         REMEMBER_BASE_URL = BASE_URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
@@ -185,8 +186,8 @@ class RestServerService {
 
         this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
-        // pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
-
+        //default rest server
+        this.REST_SERVER = grailsApplication.config.digdev01Server;
     }
 
     // current below
@@ -357,7 +358,7 @@ class RestServerService {
     }
 
     public String currentRestServer() {
-        return BASE_URL;
+        return this.REST_SERVER.url;
     }
 
     public List<ServerBean> getBurdenServerList() {
@@ -379,11 +380,34 @@ class RestServerService {
         return this.burdenServerList;
     }
 
+//    public List<ServerBean> getRestServerList() {
+//        if (this.restServerList == null) {
+//            this.restServerList = new ArrayList<ServerBean>();
+//            this.restServerList.add(grailsApplication.config.digdev01Server);
+//            this.restServerList.add(grailsApplication.config.digdev02Server);
+//            this.restServerList.add(grailsApplication.config.digqa01Server);
+//            this.restServerList.add(grailsApplication.config.digqa02Server);
+//            this.restServerList.add(grailsApplication.config.digprod01Server);
+//            this.restServerList.add(grailsApplication.config.digprod02Server);
+//        }
+//        return this.restServerList;
+//    }
+
     public void changeBurdenServer(String serverName) {
         for (ServerBean serverBean : this.burdenServerList) {
             if (serverBean.getName().equals(serverName)) {
                 log.info("changing burden rest server from: " + this.BURDEN_REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
                 this.BURDEN_REST_SERVER = serverBean;
+                break;
+            }
+        }
+    }
+
+    public void changeRestServer(String serverName) {
+        for (ServerBean serverBean : this.restServerList) {
+            if (serverBean.getName().equals(serverName)) {
+                //log.info("changing rest server from: " + this.REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
+                this.REST_SERVER = serverBean;
                 break;
             }
         }
@@ -396,6 +420,10 @@ class RestServerService {
      */
     public ServerBean getCurrentBurdenServer() {
         return this.BURDEN_REST_SERVER
+    }
+
+    public ServerBean getCurrentRestServer() {
+        return this.REST_SERVER
     }
 
     public String whatIsMyCurrentServer() {
@@ -632,6 +660,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return tempObject;
     }
 
+
     /***
      * perform a meta-analysis api call
      *
@@ -692,8 +721,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
     }
-
-
 
     public JSONObject postMultiJoinProtectedDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
         QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
@@ -772,7 +799,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     }
                  }
             }
-        //}
         return retValue
     }
 
@@ -1507,20 +1533,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @return
      */
     public String getMetadata() {
-        String retdat
-        retdat = getRestCall(METADATA_URL)
-        return retdat
+        String retdat;
+        retdat = getRestCallBase(METADATA_URL, REST_SERVER?.url);
+        return retdat;
     }
-
 
     public String getSampleMetadata() {
         String retdat
         retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, currentRestServer())
         return retdat
     }
-
-
-
 
     /***
      * Make multiple calls to fill up the 'variation across continental ancestries' table, then combine all of those

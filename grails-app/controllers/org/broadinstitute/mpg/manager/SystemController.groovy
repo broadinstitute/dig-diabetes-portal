@@ -26,9 +26,10 @@ class SystemController {
         log.info("LZ endpoint is: " + test)
         log.info("LZ map is: " + this.widgetService?.getLocusZoomEndpointList())
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
-                                          currentRestServer:restServerService.currentRestServer(),
+                                          currentRestServer:restServerService?.getCurrentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
                                           burdenRestServerList: this.restServerService?.getBurdenServerList(),
+                                          restServerList: grailsApplication.config.getRestServerList,
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
         forceMetadataCacheOverride: this.metaDataService?.getMetadataOverrideStatus(),
@@ -246,6 +247,20 @@ class SystemController {
         }
 
         forward(action: "systemManager")
+    }
+
+    def updateBackEndRestServer() {
+        String restServer = params.datatype
+        String currentServer =  restServerService.getCurrentRestServer()?.getName()
+
+        if  (!(restServer == currentServer)) {
+            restServerService.changeRestServer(restServer)
+            flash.message = "You are now using the ${restServer} server!"
+        } else {
+            flash.message = "But you were already using the ${currentServer} server!"
+        }
+        params.datatype = "forceIt"
+        forward(action: "forceMetadataCacheUpdate")
     }
 
     /**
