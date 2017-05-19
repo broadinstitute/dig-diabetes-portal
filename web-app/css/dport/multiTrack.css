@@ -30,3 +30,42 @@
 svg {
     shape-rendering: crispEdges;
 }
+g.row.Active_transcription_start_site>g.element>rect {
+    fill: #ff0000;
+}
+g.row.Weak_transcription_start_site>g.element>rect {
+    fill: #ff4500;
+}
+g.row.Flanking_transcription_start_site>g.element>rect {
+    fill: #ff4500;
+}
+g.row.Strong_transcription>g.element>rect {
+    fill: #008000;
+}
+g.row.Weak_transcription>g.element>rect {
+    fill: #006400;
+}
+g.row.Genic_enhancer>g.element>rect {
+    fill: #c2e105;
+}
+g.row.Active_enhancer_1>g.element>rect {
+    fill: #ffff00;
+}
+g.row.Active_enhancer_2>g.element>rect {
+    fill: #ffff00;
+}
+g.row.Weak_enhancer>g.element>rect {
+    fill: #ffff00;
+}
+g.row.Bivalent_poised_transcription_start_site>g.element>rect {
+    fill: #cd5c5c;
+}
+g.row.Repressed_polycomb>g.element>rect {
+    fill: #808080;
+}
+g.row.Weak_repressed_polycomb>g.element>rect {
+    fill: #c0c0c0;
+}
+g.row.Quiescent_low_signal>g.element>rect {
+    fill: #dddddd;
+}

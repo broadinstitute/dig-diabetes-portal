@@ -187,7 +187,7 @@ class RestServerService {
         this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
         //default rest server
-        this.REST_SERVER = grailsApplication.config.digdev01Server;
+        this.REST_SERVER = grailsApplication.config.defaultRestServer;
     }
 
     // current below
