@@ -161,7 +161,7 @@ digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 
 // this will be your default
-defaultRestServer = digAWS02KBV2prodServer
+defaultRestServer = digAWSKBV2prodServer
 
  getRestServerList = [
          digdev01Server,
