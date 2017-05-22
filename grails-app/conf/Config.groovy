@@ -147,6 +147,8 @@ burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://l
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 
 
 digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
@@ -158,6 +160,8 @@ digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadins
 digdevlocalServer = new ServerBean("digdevlocalServer", "http://localhost:8090/dccservices/")
 digAWSKBV2prodServer = new ServerBean("digAWSKBV2prodServer", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
+federatedAwsProdKBV2Server = new ServerBean("Federated Prod Server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 
 // this will be your default
@@ -173,6 +177,8 @@ defaultRestServer = digAWSKBV2prodServer
          digdevlocalServer,
          digAWSKBV2prodServer,
          digAWS02KBV2prodServer,
+         federatedAwsProdKBV2Server,
+         federatedAwsStageKBV2Server,
          toddTestServer
  ]
 
