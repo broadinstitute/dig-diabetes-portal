@@ -102,8 +102,45 @@ var mpgSoftware = mpgSoftware || {};
     var setNewDefaultLzPlot = function (key){
         currentLzPlotKey  = key;
     }
-    
-    var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
+
+
+
+        // these get defined when the LZ plot is initialized
+        var locusZoomPlot = {};
+        var standardLayout = {};
+        var dataSources;
+
+        function conditioning(myThis) {
+            locusZoomPlot[currentLzPlotKey].CovariatesModel.add(LocusZoom.getToolTipData(myThis));
+            LocusZoom.getToolTipData(myThis).deselect();
+        }
+
+
+
+        function conditionOnVariant(variantId, phenotype,datasetName) {
+            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
+            // locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
+            locusZoomPlot[currentLzPlotKey].state[phenotype+datasetName+".positions"].selected = [];
+            var newStateObject = {
+                condition_on_variant: variantId
+            };
+            locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
+        }
+
+        function changeLDReference(variantId, phenotype,datasetName) {
+            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
+            // locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
+            var newStateObject = {
+                ldrefvar: variantId
+            };
+            locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
+        }
+
+
+
+
+
+        var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
         //standardLayout[currentLzPlotKey] =  (new createStandardLayout()).layout;
@@ -121,8 +158,8 @@ var mpgSoftware = mpgSoftware || {};
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
-            //.add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
+            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ])
+            .add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
         var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
             this.parseInit(init);
             this.getURL = function (state, chain, fields) {
@@ -135,7 +172,7 @@ var mpgSoftware = mpgSoftware || {};
                  return url;
             }
         }, "BroadT2D");
-        ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
+     //   ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
         ds.add('intervals-Islets', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
         var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
@@ -148,35 +185,26 @@ var mpgSoftware = mpgSoftware || {};
     };
 
 
-        // these get defined when the LZ plot is initialized
-        var locusZoomPlot = {};
-        var standardLayout = {};
-        var dataSources;
-
-        function conditioning(myThis) {
-            locusZoomPlot[currentLzPlotKey].CovariatesModel.add(LocusZoom.getToolTipData(myThis));
-            LocusZoom.getToolTipData(myThis).deselect();
-        }
-
-
-
-        function conditionOnVariant(variantId, phenotype,datasetName) {
-            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
-           // locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
-            locusZoomPlot[currentLzPlotKey].state[phenotype+datasetName+".positions"].selected = [];
-            var newStateObject = {
-                condition_on_variant: variantId
-            };
-            locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
-        }
-
-        function changeLDReference(variantId, phenotype,datasetName) {
-            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
-           // locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
-            var newStateObject = {
-                ldrefvar: variantId
-            };
-            locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
+        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
+            var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+            intervalPanel.dashboard.components.push({
+                type: "menu",
+                color: "yellow",
+                position: "right",
+                button_html: "Track Info",
+                menu_html: "<strong>Pancreatic islet ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
+            });
+            // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
+            // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
+            if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
+                intervalPanel.id = 'intervals-'+tissueId;
+                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
+            } else {
+                intervalPanel.id = 'intervals-'+tissueId;
+                //  intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
+                //  intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
+                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
+            }
         }
 
 
@@ -287,24 +315,25 @@ var mpgSoftware = mpgSoftware || {};
             }
           //colorBy:1=LD,2=MDS
             //positionBy:1=pValue,2=posteriorPValue
-            var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
-            intervalPanel.dashboard.components.push({
-                type: "menu",
-                color: "yellow",
-                position: "right",
-                button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
-            });
-            // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
-            // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
-            if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
-                locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
-            } else {
-                intervalPanel.id = 'intervals-Islets';
-              //  intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
-              //  intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
-              //  locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
-            }
+            addIntervalTrack(locusZoomPlot[currentLzPlotKey],"pancreatic islet","Islets");
+            // var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+            // intervalPanel.dashboard.components.push({
+            //     type: "menu",
+            //     color: "yellow",
+            //     position: "right",
+            //     button_html: "Track Info",
+            //     menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
+            // });
+            // // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
+            // // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
+            // if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
+            //     locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
+            // } else {
+            //     intervalPanel.id = 'intervals-Islets';
+            //   //  intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
+            //   //  intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
+            //    locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
+            // }
 
 
             var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl);
