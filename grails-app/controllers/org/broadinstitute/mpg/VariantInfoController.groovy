@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import com.google.gson.JsonArray
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.BurdenService
@@ -419,9 +418,26 @@ class VariantInfoController {
         String dataset = params.dataset
         SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(dataset)
         JSONObject jsonConversionObject = new JSONObject()
-        if (sampleGroup.parent) {
-            jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+
+        // TODO - DIGKB-217: store linked variant sample group in dataset sample group meaning field
+        Iterator<String> meaningIterator = sampleGroup?.getMeaningSet().iterator();
+        String variantDataSet = null;
+        while (meaningIterator.hasNext()) {
+            variantDataSet = meaningIterator.next();
+            if (variantDataSet.contains("DATASET_")) {
+                variantDataSet = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
+                break;
+            }
         }
+
+        if (variantDataSet == null) {
+            if (sampleGroup.parent) {
+                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+            }
+        } else {
+            jsonConversionObject[sampleGroup.systemId] = variantDataSet
+        }
+
         JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
         List filtersOfTypeString = jsonObject?.filters?.findAll{it.type=="STRING"}
         for (Map allLevels in filtersOfTypeString){

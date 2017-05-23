@@ -82,6 +82,10 @@ public class SampleGroupBean implements SampleGroup, Comparable {
         }
     }
 
+    public Set<String> getMeaningSet() {
+        return meaningSet;
+    }
+
     /**
      * return the subjects number for the sample group
      *
