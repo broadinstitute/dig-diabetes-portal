@@ -20,10 +20,10 @@ g.row.Genic_enhancer>g.cell.chosen {
     fill: #c2e105;
 }
 g.row.Active_enhancer_1>g.cell.chosen {
-    fill: #ffff00;
+    fill: #FFC34D;
 }
 g.row.Active_enhancer_2>g.cell.chosen {
-    fill: #ffff00;
+    fill: #FFC34D;
 }
 g.row.Weak_enhancer>g.cell.chosen {
     fill: #ffff00;

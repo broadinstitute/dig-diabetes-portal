@@ -49,10 +49,10 @@ g.row.Genic_enhancer>g.element>rect {
     fill: #c2e105;
 }
 g.row.Active_enhancer_1>g.element>rect {
-    fill: #ffff00;
+    fill: #FFC34D;
 }
 g.row.Active_enhancer_2>g.element>rect {
-    fill: #ffff00;
+    fill: #FFC34D;
 }
 g.row.Weak_enhancer>g.element>rect {
     fill: #ffff00;
