@@ -139,9 +139,73 @@ var mpgSoftware = mpgSoftware || {};
             return newLayout;
         };
 
-    var setNewDefaultLzPlot = function (key){
+        var buildPanelLayout = function (colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoLink,lzParameters){
+            var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
+                + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
+                + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
+            if ((typeof makeDynamic !== 'undefined') &&
+                (makeDynamic==='dynamic')){
+                toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
+            }
+            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
+
+            var mods = {
+                id: phenotype+dataSetName,
+                title: { text: lzParameters.description+" ("+makeDynamic+")" },
+                namespace: { assoc: phenotype }
+            };
+            var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
+            panel_layout.y_index = -1;
+            panel_layout.data_layers[2].fields = [phenotype + ":id",
+                phenotype + ":position",
+                phenotype + ":pvalue|scinotation",
+                phenotype + ":pvalue|neglog10",
+                phenotype + ":refAllele",
+                phenotype + ":analysis",
+                phenotype + ":scoreTestStat",
+                "ld:state",
+                "ld:isrefvar"
+            ];
+            panel_layout.data_layers[2].id_field = phenotype + ":id";
+            switch (positionBy){
+                case 1:
+                    panel_layout.data_layers[2].y_axis.field = phenotype + ":pvalue|neglog10";
+                    break;
+                case 2:
+                    panel_layout.data_layers[2].y_axis.field = phenotype + ":analysis";
+                    panel_layout.data_layers[2].y_axis.min_extent= [0, 1];
+                    break;
+                default: break;
+            }
+            switch (colorBy){
+                case 1: break;
+                case 2:
+                    panel_layout.data_layers[2].color = [
+                        {
+                            scale_function: "categorical_bin",
+                            field: phenotype + ":scoreTestStat",
+                            parameters: {
+                                categories: ["1","2","3","4","5"],
+                                values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
+                            }
+                        },
+                        "#B8B8B8"
+                    ];
+                    panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTS", class: "lz-data_layer-scatter" },
+                        { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
+                        { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
+                        { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
+                    break;
+                default: break;
+            }
+            panel_layout.data_layers[2].tooltip.html = toolTipText;
+            return panel_layout;
+        }
+
+
+        var setNewDefaultLzPlot = function (key){
         currentLzPlotKey  = key;
-    }
+    };
 
 
 
@@ -176,95 +240,8 @@ var mpgSoftware = mpgSoftware || {};
             locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
         }
 
-
-
-
-
-    var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
-        // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
-        // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-        var newLayout = initLocusZoomLayout();
-        standardLayout[currentLzPlotKey] = newLayout;
-        if(variantIdString != '') {
-            setNewDefaultLzPlot(selector);
-            standardLayout[currentLzPlotKey].state = {
-                ldrefvar: variantIdString
-            };
-        }
-        var ds = new LocusZoom.DataSources();
-        ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
-            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
-            .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
-            .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
-            .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
-            //.add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
-        var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
-            this.parseInit(init);
-            this.getURL = function (state, chain, fields) {
-                var url = this.url + "?" +
-                    "chromosome=" + state.chr + "&" +
-                    "startPos=" + state.start + "&" +
-                    "endPos=" + state.end + "&" +
-                    "source=" + tissue + "&" +
-                    "lzFormat=1";
-                 return url;
-            }
-        }, "BroadT2D");
-     //   ds.add('intervals', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
-        ds.add('intervals-Islets', new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, 'Islets'));
-        var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
-
-
-        return {
-            layoutPanels:lzp.layout.panels,
-            locusZoomPlot: lzp,
-            dataSources: ds
-        };
-    };
-
-
-        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
-            var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
-
-
-            intervalPanel = customIntervalsPanel("intervals-Islets");
-            intervalPanel.dashboard.components.push({
-                type: "menu",
-                color: "yellow",
-                position: "right",
-                button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
-            });
-            // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
-            // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
-            if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
-          //      intervalPanel.id = 'intervals-'+tissueId;
-                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
-            } else {
-                intervalPanel.id = 'intervals-'+tissueId;
-                //  intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
-                //  intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
-                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
-            }
-        }
-
-
-        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId,graphicalOptions) {
-            var colorBy = 1;
-            var positionBy = 1;
-            if (typeof graphicalOptions !== 'undefined') {
-                colorBy = graphicalOptions.colorBy;
-                positionBy = graphicalOptions.positionBy;
-            }
-            var rawPhenotype = lzParameters.phenotype;
-            var phenotype = lzParameters.phenotype+"_"+makeDynamic;
-            var localDataSet = lzParameters.dataSet;
-            var propertyName = lzParameters.propertyName;
-            var dataSet = dataSetName;
-            var domId = lzGraphicDomId;
-            setNewDefaultLzPlot(lzGraphicDomId);
-            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype,dataSetName) {
+        var buildAssociationSource = function(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic){
+            var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype,dataSetName,propertyName,makeDynamic) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -290,76 +267,101 @@ var mpgSoftware = mpgSoftware || {};
                     return url;
                 }
             }, "BroadT2D");
-            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName));
+            dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
+        };
+
+        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,tissueAsId,rawTissue){
+             var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
+                this.parseInit(init);
+                this.getURL = function (state, chain, fields) {
+                    var url = this.url + "?" +
+                        "chromosome=" + state.chr + "&" +
+                        "startPos=" + state.start + "&" +
+                        "endPos=" + state.end + "&" +
+                        "source=" + tissue + "&" +
+                        "lzFormat=1";
+                    return url;
+                }
+            }, "BroadT2D");
+            dataSources.add(tissueAsId, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
+        };
+
+
+
+
+    var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
+        // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
+        // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
+        var newLayout = initLocusZoomLayout();
+        standardLayout[currentLzPlotKey] = newLayout;
+        if(variantIdString != '') {
+            setNewDefaultLzPlot(selector);
+            standardLayout[currentLzPlotKey].state = {
+                ldrefvar: variantIdString
+            };
+        }
+        var ds = new LocusZoom.DataSources();
+        ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+            .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
+            .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+            .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
+            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+        
+        var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
+
+        return {
+            layoutPanels:lzp.layout.panels,
+            locusZoomPlot: lzp,
+            dataSources: ds
+        };
+    };
+
+
+        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
+            var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+
+
+            intervalPanel = customIntervalsPanel("intervals-Islets");
+            intervalPanel.dashboard.components.push({
+                type: "menu",
+                color: "yellow",
+                position: "right",
+                button_html: "Track Info",
+                menu_html: "<strong>Pancreatic islet ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
+            });
+            if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
+                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
+            } else {
+                intervalPanel.id = 'intervals-'+tissueId;
+                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
+            }
+        };
+
+
+        function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId,graphicalOptions) {
+            var colorBy = 1;
+            var positionBy = 1;
+            if (typeof graphicalOptions !== 'undefined') {
+                colorBy = graphicalOptions.colorBy;
+                positionBy = graphicalOptions.positionBy;
+            }
+            var rawPhenotype = lzParameters.phenotype;
+            var phenotype = lzParameters.phenotype+"_"+makeDynamic;
+            var propertyName = lzParameters.propertyName;
+            var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
+            setNewDefaultLzPlot(lzGraphicDomId);
+
+            buildAssociationSource(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic);
+
             //colorBy:1=LD,2=MDS
             //positionBy:1=pValue,2=posteriorPValue
-            var buildPanelLayout = function (colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoLink){
-                var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
-                    + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
-                    + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
-                if ((typeof makeDynamic !== 'undefined') &&
-                    (makeDynamic==='dynamic')){
-                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
-                }
-                toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
+           // var ds = new LocusZoom.DataSources();
+            buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,'intervals-Islets','Islets');
 
-                var mods = {
-                    id: phenotype+dataSetName,
-                    title: { text: lzParameters.description+" ("+makeDynamic+")" },
-                    namespace: { assoc: phenotype }
-                };
-                var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
-                panel_layout.y_index = -1;
-                panel_layout.data_layers[2].fields = [phenotype + ":id",
-                    phenotype + ":position",
-                    phenotype + ":pvalue|scinotation",
-                    phenotype + ":pvalue|neglog10",
-                    phenotype + ":refAllele",
-                    phenotype + ":analysis",
-                    phenotype + ":scoreTestStat",
-                    "ld:state",
-                    "ld:isrefvar"
-                ];
-                panel_layout.data_layers[2].id_field = phenotype + ":id";
-                switch (positionBy){
-                    case 1:
-                        panel_layout.data_layers[2].y_axis.field = phenotype + ":pvalue|neglog10";
-                        break;
-                    case 2:
-                        panel_layout.data_layers[2].y_axis.field = phenotype + ":analysis";
-                        panel_layout.data_layers[2].y_axis.min_extent= [0, 1];
-                        break;
-                    default: break;
-                }
-                switch (colorBy){
-                    case 1: break;
-                    case 2:
-                        panel_layout.data_layers[2].color = [
-                            {
-                                scale_function: "categorical_bin",
-                                field: phenotype + ":scoreTestStat",
-                                parameters: {
-                                    categories: ["1","2","3","4","5"],
-                                    values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
-                                }
-                            },
-                            "#B8B8B8"
-                        ];
-                        panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTS", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
-                        break;
-                    default: break;
-                }
-                panel_layout.data_layers[2].tooltip.html = toolTipText;
-                return panel_layout;
-            }
-          //colorBy:1=LD,2=MDS
-            //positionBy:1=pValue,2=posteriorPValue
             addIntervalTrack(locusZoomPlot[currentLzPlotKey],"pancreatic islet","Islets");
 
-            var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl);
+            var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
             locusZoomPlot[currentLzPlotKey].addPanel(panelLayout).addBasicLoader();
 
         };
@@ -413,10 +415,11 @@ var mpgSoftware = mpgSoftware || {};
 
                 // default panel
                 addLZPhenotype({
-                    phenotype: defaultPhenotypeName,
-                    dataSet: dataSetName,
-                    propertyName: propName,
-                    description: phenoTypeDescr
+                        phenotype: defaultPhenotypeName,
+                        dataSet: dataSetName,
+                        propertyName: propName,
+                        description: phenoTypeDescr,
+                        retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
                 },dataSetName,geneGetLZ,variantInfoUrl,
                     makeDynamic,lzGraphicDomId,graphicalOptions);
 
@@ -471,10 +474,11 @@ var mpgSoftware = mpgSoftware || {};
 
                 // default panel
                 addLZPhenotype({
-                    phenotype: defaultPhenotypeName,
-                    description: phenoTypeDescription,
-                    propertyName:phenoPropertyName,
-                    dataSet:locusZoomDataset
+                        phenotype: defaultPhenotypeName,
+                        description: phenoTypeDescription,
+                        propertyName:phenoPropertyName,
+                        dataSet:locusZoomDataset,
+                        retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
                 },dataSetName,geneGetLZ,variantInfoUrl,
                     makeDynamic,lzGraphicDomId,graphicalOptions);
 
