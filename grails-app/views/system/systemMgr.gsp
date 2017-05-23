@@ -69,27 +69,22 @@
 
                 <g:form action='updateBackEndRestServer' method='POST' id='updateBackEndRestServer' class='form form-horizontal cssform' autocomplete='off'>
                     <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer.url}">${currentRestServer.name}</a></em>)</h4>
-                    %{--<div> Hello I am the new one</div>--}%
-                    <div class="row clearfix">
-                        <div class="col-md-2"></div>
-                        <div class="col-md-7">
+             
+                    <div>
                             <div id="datatypes-formid">
                                 <g:each var="server" in="${restServerList}">
-                                    <div>
-                                        <div class="radio">
-                                            <label>
-                                                <input id="RestServer" type="radio" name="datatype" value="${server?.name}"
-                                                    <%=currentRestServer==server?" checked ":"" %> />
-                                                ${server?.name} (${server.url})
-                                                <ul> <li class="btn btn-warning"><a href="${server.url}reloadCache"> Reset</a> </li></ul>
+                                        <div class="radio" >
+                                            <label style="display: inline-flex">
+                                                    <input id="RestServer" type="radio" name="datatype" value="${server?.name}"
+                                                        <%=currentRestServer==server?" checked ":"" %> />
+                                                    ${server?.name} (${server.url})
+                                                    <ul> <li class="btn btn-warning"><a href="${server.url}reloadCache"> Reset</a> </li></ul>
                                             </label>
                                         </div>
-                                    </div>
-
                                 </g:each>
                             </div>
-                        </div>
-                        <div class="col-md-3"></div>
+
+
                     </div>
                     <div class="row clearfix">
                         <div class="col-md-6"></div>
