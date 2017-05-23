@@ -15,19 +15,20 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var customIntervalsDataLayer = function (layerName){
-            return {
+            var stateIdSpec = layerName+":state_id";
+            var developingStructure =  {
                 namespace: { "intervals": layerName },
                 id: layerName,
                 type: "intervals",
-                fields: ["{{namespace[intervals]}}start","{{namespace[intervals]}}end","{{namespace[intervals]}}state_id","{{namespace[intervals]}}state_name"],
-                id_field: "{{namespace[intervals]}}start",
-                start_field: "{{namespace[intervals]}}start",
-                end_field: "{{namespace[intervals]}}end",
-                track_split_field: "{{namespace[intervals]}}state_id",
+                fields: [layerName+":start",layerName+":end",layerName+":state_id",layerName+":state_name"],
+                id_field: layerName+":start",
+                start_field: layerName+":start",
+                end_field: layerName+":end",
+                track_split_field: layerName+":state_id",
                 split_tracks: true,
                 always_hide_legend: false,
                 color: {
-                    field: "{{namespace[intervals]}}state_id",
+                    field: layerName+":state_id",
                     scale_function: "categorical_bin",
                     parameters: {
                         categories: [1,2,3,4,5,6,7,8,9,10,11,12,13],
@@ -36,19 +37,19 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
                 legend: [
-                    { shape: "rect", color: "rgb(212,63,58)", width: 9, label: "Active Promoter", "{{namespace[intervals]}}state_id": 1 },
-                    { shape: "rect", color: "rgb(250,120,105)", width: 9, label: "Weak Promoter", "{{namespace[intervals]}}state_id": 2 },
-                    { shape: "rect", color: "rgb(252,168,139)", width: 9, label: "Poised Promoter", "{{namespace[intervals]}}state_id": 3 },
-                    { shape: "rect", color: "rgb(240,189,66)", width: 9, label: "Strong enhancer", "{{namespace[intervals]}}state_id": 4 },
-                    { shape: "rect", color: "rgb(250,224,105)", width: 9, label: "Strong enhancer", "{{namespace[intervals]}}state_id": 5 },
-                    { shape: "rect", color: "rgb(240,238,84)", width: 9, label: "Weak enhancer", "{{namespace[intervals]}}state_id": 6 },
-                    { shape: "rect", color: "rgb(244,252,23)", width: 9, label: "Weak enhancer", "{{namespace[intervals]}}state_id": 7 },
-                    { shape: "rect", color: "rgb(23,232,252)", width: 9, label: "Insulator", "{{namespace[intervals]}}state_id": 8 },
-                    { shape: "rect", color: "rgb(32,191,17)", width: 9, label: "Transcriptional transition", "{{namespace[intervals]}}state_id": 9 },
-                    { shape: "rect", color: "rgb(23,166,77)", width: 9, label: "Transcriptional elongation", "{{namespace[intervals]}}state_id": 10 },
-                    { shape: "rect", color: "rgb(136,240,129)", width: 9, label: "Weak transcribed", "{{namespace[intervals]}}state_id": 11 },
-                    { shape: "rect", color: "rgb(162,133,166)", width: 9, label: "Polycomb-repressed", "{{namespace[intervals]}}state_id": 12 },
-                    { shape: "rect", color: "rgb(212,212,212)", width: 9, label: "Heterochromatin / low signal", "{{namespace[intervals]}}state_id": 13 }
+                    { shape: "rect", color: "rgb(212,63,58)", width: 9, label: "Active Promoter" },
+                    { shape: "rect", color: "rgb(250,120,105)", width: 9, label: "Weak Promoter" },
+                    { shape: "rect", color: "rgb(252,168,139)", width: 9, label: "Poised Promoter" },
+                    { shape: "rect", color: "rgb(240,189,66)", width: 9, label: "Strong enhancer" },
+                    { shape: "rect", color: "rgb(250,224,105)", width: 9, label: "Strong enhancer" },
+                    { shape: "rect", color: "rgb(240,238,84)", width: 9, label: "Weak enhancer" },
+                    { shape: "rect", color: "rgb(244,252,23)", width: 9, label: "Weak enhancer" },
+                    { shape: "rect", color: "rgb(23,232,252)", width: 9, label: "Insulator" },
+                    { shape: "rect", color: "rgb(32,191,17)", width: 9, label: "Transcriptional transition" },
+                    { shape: "rect", color: "rgb(23,166,77)", width: 9, label: "Transcriptional elongation" },
+                    { shape: "rect", color: "rgb(136,240,129)", width: 9, label: "Weak transcribed" },
+                    { shape: "rect", color: "rgb(162,133,166)", width: 9, label: "Polycomb-repressed" },
+                    { shape: "rect", color: "rgb(212,212,212)", width: 9, label: "Heterochromatin / low signal" }
                 ],
                 behaviors: {
                     onmouseover: [
@@ -65,6 +66,45 @@ var mpgSoftware = mpgSoftware || {};
                     ]
                 },
                 tooltip: LocusZoom.Layouts.get("tooltip", "standard_intervals", { unnamespaced: true })
+            };
+            _.forEach(developingStructure.legend,function(o,i){
+                o[stateIdSpec] = (i+1);
+            });
+            return developingStructure;
+        };
+
+        var customIntervalsPanel = function (layerName){
+            return {   id: layerName,
+                    width: 1000,
+                    height: 50,
+                    min_width: 500,
+                    min_height: 50,
+                    margin: { top: 25, right: 150, bottom: 5, left: 50 },
+                dashboard: (function(){
+                    var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
+                    l.components.push({
+                        type: "toggle_split_tracks",
+                        data_layer_id: layerName,
+                        position: "right"
+                    });
+                    return l;
+                })(),
+                    axes: {},
+                interaction: {
+                    drag_background_to_pan: true,
+                        scroll_to_zoom: true,
+                        x_linked: true
+                },
+                legend: {
+                    hidden: true,
+                        orientation: "horizontal",
+                        origin: { x: 50, y: 0 },
+                    pad_from_bottom: 5
+                },
+                data_layers: [
+                    customIntervalsDataLayer(layerName)
+                    //LocusZoom.Layouts.get("data_layer", "intervals", { unnamespaced: true })
+                ]
             }
         };
 
@@ -140,10 +180,9 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
+    var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-        //standardLayout[currentLzPlotKey] =  (new createStandardLayout()).layout;
         var newLayout = initLocusZoomLayout();
         standardLayout[currentLzPlotKey] = newLayout;
         if(variantIdString != '') {
@@ -158,8 +197,8 @@ var mpgSoftware = mpgSoftware || {};
             .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ])
-            .add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
+            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+            //.add("intervals", ["IntervalLZ", { url: apiBase + "annotation/intervals/results/", params: {source: 16} }]);
         var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
             this.parseInit(init);
             this.getURL = function (state, chain, fields) {
@@ -187,6 +226,9 @@ var mpgSoftware = mpgSoftware || {};
 
         var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
             var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+
+
+            intervalPanel = customIntervalsPanel("intervals-Islets");
             intervalPanel.dashboard.components.push({
                 type: "menu",
                 color: "yellow",
@@ -197,7 +239,7 @@ var mpgSoftware = mpgSoftware || {};
             // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
             // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
             if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
-                intervalPanel.id = 'intervals-'+tissueId;
+          //      intervalPanel.id = 'intervals-'+tissueId;
                 locusZoomVar.addPanel(intervalPanel).addBasicLoader();
             } else {
                 intervalPanel.id = 'intervals-'+tissueId;
@@ -316,25 +358,6 @@ var mpgSoftware = mpgSoftware || {};
           //colorBy:1=LD,2=MDS
             //positionBy:1=pValue,2=posteriorPValue
             addIntervalTrack(locusZoomPlot[currentLzPlotKey],"pancreatic islet","Islets");
-            // var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
-            // intervalPanel.dashboard.components.push({
-            //     type: "menu",
-            //     color: "yellow",
-            //     position: "right",
-            //     button_html: "Track Info",
-            //     menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
-            // });
-            // // intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
-            // // intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
-            // if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
-            //     locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
-            // } else {
-            //     intervalPanel.id = 'intervals-Islets';
-            //   //  intervalPanel.dashboard.components[3].data_layer_id = 'intervals-Islets';
-            //   //  intervalPanel.data_layers = [customIntervalsDataLayer('intervals-Islets')];
-            //    locusZoomPlot[currentLzPlotKey].addPanel(intervalPanel).addBasicLoader();
-            // }
-
 
             var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl);
             locusZoomPlot[currentLzPlotKey].addPanel(panelLayout).addBasicLoader();
