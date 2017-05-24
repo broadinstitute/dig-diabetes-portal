@@ -146,7 +146,7 @@ burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-ap
 burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden");
+burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
 burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 

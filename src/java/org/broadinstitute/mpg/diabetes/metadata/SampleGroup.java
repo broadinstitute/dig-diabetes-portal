@@ -2,6 +2,7 @@ package org.broadinstitute.mpg.diabetes.metadata;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface to be implemented by the classes representing the metadata sample groups
@@ -26,6 +27,8 @@ public interface SampleGroup extends DataSet {
     public String getName();
 
     public String getAncestry();
+
+    public Set<String> getMeaningSet();
 
     /**
      * return the subjects number for the sample group

@@ -104,7 +104,7 @@
 
                 <div class="accordion" id="accordionVariant">
 
-                    <g:render template="functionalAnnotation"/>
+
 
 
 
@@ -126,6 +126,8 @@
                     </div>
 
                     <div class="separator"></div>
+
+                    <g:render template="functionalAnnotation"/>
 
                     <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
                               model="[variantIdentifier: variantToSearch, locale: locale]"/>
