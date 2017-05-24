@@ -392,7 +392,7 @@ var mpgSoftware = mpgSoftware || {};
                                          geneGetLZ,variantInfoUrl,makeDynamic,
                                          retrieveFunctionalDataAjaxUrl,
                                          pageInitialization,functionalTrack) {
-            var graphicalOptions = {colorBy:2,
+            var graphicalOptions = {colorBy:1,
                                     positionBy:1};
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
