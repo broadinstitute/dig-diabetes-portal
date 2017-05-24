@@ -277,22 +277,14 @@
                                 '${igvIntro}',
                                 phenotypeName);
                     } else {
-                        if (!mpgSoftware.locusZoom.plotAlreadyExists()) {
-                            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                                    "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
-                                    '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                    '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                    '${lzOptions.first().dataType}',
-                                    '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
-                            );
-                        } else {
-                            mpgSoftware.locusZoom.resetLZPage('geneInfo', null, positioningInformation,
-                                    "#lz-1", "#collapseExample", phenotypeName, pName, datasetName, '${lzOptions.first().propertyName}', 'junk',
-                                    '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                    '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                    '${lzOptions.first().dataType}',
-                                    '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}');
-                        }
+                        mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                                "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
+                                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                '${lzOptions.first().dataType}',
+                                '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                                !mpgSoftware.locusZoom.plotAlreadyExists(),
+                            {});
                     }
                 if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
                     ( sampleBasedPhenotypeName.length > 0)) {

@@ -66,6 +66,7 @@
 </g:each>
                     </ul>
                 </li>
+
                 <li class="dropdown" id="tracks-menu-dropdown-static">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (static)<b class="caret"></b></a>
                     <ul id="trackList-static" class="dropdown-menu">
@@ -86,7 +87,19 @@
 </g:each>
                     </ul>
                 </li>
+                <li class="dropdown" id="tracks-menu-dropdown-functional">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
+                       <ul id="trackList-tissue" class="dropdown-menu">
+                           <li>
+                              <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                        tissueCode: 'Adipose',
+                        tissueDescriptiveName: 'adipose tissue',
+                        retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
+                    },'#lz-1',{colorBy:2,positionBy:1});">Adipose</a>
+                           </li>
 
+                       </ul>
+                </li>
                 <li style="margin: auto;">
                     <b>Region: <span id="lzRegion"></span></b>
                 </li>

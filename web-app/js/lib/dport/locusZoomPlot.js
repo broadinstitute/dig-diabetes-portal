@@ -359,84 +359,39 @@ var mpgSoftware = mpgSoftware || {};
             var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
             setNewDefaultLzPlot(lzGraphicDomId);
 
-
-
-            buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,'Islets');
-            addIntervalTrack(locusZoomPlot[currentLzPlotKey],"pancreatic islet","Islets");
-
             buildAssociationSource(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic);
             addAssociationTrack(locusZoomPlot[currentLzPlotKey],colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters)
-            // var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
-            //
-            // locusZoomPlot[currentLzPlotKey].addPanel(panelLayout).addBasicLoader();
+
 
         };
 
 
 
 
-
-        var resetLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,phenoTypeDescr,dataSetName,propName,phenotype,
-                                         geneGetLZ,variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
-            var graphicalOptions = {colorBy:2,
-                positionBy:1};
-            var loading = $('#spinner').show();
-            var lzGraphicDomId = "#lz-1";
-            var defaultPhenotypeName = "T2D";
-            if (typeof domId1 !== 'undefined') {
-                lzGraphicDomId = domId1;
+        function addLZTissueAnnotations(lzParameters,  lzGraphicDomId, graphicalOptions) {
+            var colorBy = 1;  //colorBy:1=LD,2=MDS
+            var positionBy = 1;  //positionBy:1=pValue,2=posteriorPValue
+            if (typeof graphicalOptions !== 'undefined') {
+                colorBy = graphicalOptions.colorBy;
+                positionBy = graphicalOptions.positionBy;
             }
+            var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
+            var tissueCode = lzParameters.tissueCode;
+            var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
             setNewDefaultLzPlot(lzGraphicDomId);
-            if (typeof phenoTypeName !== 'undefined') {
-                defaultPhenotypeName = phenoTypeName;
-            }
 
-            var chromosome = positionInfo.chromosome;
-            // make sure we don't get a negative start point
-            var startPosition = Math.max(0, positionInfo.startPosition);
-            var endPosition = positionInfo.endPosition;
-
-            var locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
-            $(lzGraphicDomId).attr("data-region", locusZoomInput);
-            $("#lzRegion").text(locusZoomInput);
-            loading.hide();
-
-            var lzVarId = '';
-            // need to process the varId to match the IDs that LZ is getting, so that
-            // the correct reference variant is displayed
-            if ((page == 'variantInfo')&& (typeof variantId !== 'undefined') ) {
-                lzVarId = variantId;
-                // we have format: 8_118184783_C_T
-                // need to get format like: 8:118184783_C/T
-                var splitVarId = variantId.split('_');
-                lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
-            }
-
-            if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
-
-                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId,retrieveFunctionalDataAjaxUrl);
-                locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
-                dataSources = returned.dataSources;
-
-                // default panel
-                addLZPhenotype({
-                        phenotype: defaultPhenotypeName,
-                        dataSet: dataSetName,
-                        propertyName: propName,
-                        description: phenoTypeDescr,
-                        retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
-                },dataSetName,geneGetLZ,variantInfoUrl,
-                    makeDynamic,lzGraphicDomId,graphicalOptions);
-
-            }
+            buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,tissueCode);
+            addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode);
         };
+
 
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescription,
                                          phenoPropertyName,locusZoomDataset,junk,
-                                         geneGetLZ,variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+                                         geneGetLZ,variantInfoUrl,makeDynamic,
+                                         retrieveFunctionalDataAjaxUrl,
+                                         pageInitialization,functionalTrack) {
             var graphicalOptions = {colorBy:2,
                                     positionBy:1};
             var loading = $('#spinner').show();
@@ -488,14 +443,26 @@ var mpgSoftware = mpgSoftware || {};
                 },dataSetName,geneGetLZ,variantInfoUrl,
                     makeDynamic,lzGraphicDomId,graphicalOptions);
 
-                $(collapsingDom).on("shown.bs.collapse", function () {
-                    locusZoomPlot[currentLzPlotKey].rescaleSVG();
-                });
+                if (typeof functionalTrack !== 'undefined'){
+                    addLZTissueAnnotations({
+                        tissueCode: 'Islets',
+                        tissueDescriptiveName: 'pancreatic islet',
+                        retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
+                    },lzGraphicDomId,graphicalOptions);
+                }
+                if ((typeof pageInitialization !== 'undefined')&&
+                    (pageInitialization)){
 
-                var clearCurtain = function() {
-                    locusZoomPlot[currentLzPlotKey].curtain.hide();
-                };
-                locusZoomPlot[currentLzPlotKey].on('data_rendered', clearCurtain);
+                    $(collapsingDom).on("shown.bs.collapse", function () {
+                        locusZoomPlot[currentLzPlotKey].rescaleSVG();
+                    });
+
+                    var clearCurtain = function() {
+                        locusZoomPlot[currentLzPlotKey].curtain.hide();
+                    };
+                    locusZoomPlot[currentLzPlotKey].on('data_rendered', clearCurtain);
+
+                }
             }
         };
 
@@ -527,8 +494,8 @@ var mpgSoftware = mpgSoftware || {};
         conditioning:conditioning,
         initLocusZoom : initLocusZoom,
         initializeLZPage:initializeLZPage,
-        resetLZPage:resetLZPage,
         addLZPhenotype:addLZPhenotype,
+        addLZTissueAnnotations:addLZTissueAnnotations,
         changeLDReference:changeLDReference,
         conditionOnVariant:conditionOnVariant,
         rescaleSVG:rescaleSVG,

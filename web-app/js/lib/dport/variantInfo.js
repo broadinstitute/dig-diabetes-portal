@@ -160,12 +160,11 @@ var mpgSoftware = mpgSoftware || {};
                 endPosition: variantObject.POS + locusZoomRange
             };
 
-//            if (portalType === 't2d'){
-                mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
-                    lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,'junk',
-                    geneLocusZoomUrl,
-                    variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl);
-//            }
+            mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
+                lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,'junk',
+                geneLocusZoomUrl,
+                variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,true);
+
 
             $('[data-toggle="popover"]').popover();
 

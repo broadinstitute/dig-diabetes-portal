@@ -60,7 +60,7 @@
                 "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junk',
                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                 '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                '${lzOptions.first().dataType}','${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}');
+                '${lzOptions.first().dataType}','${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',true);
         </g:renderNotBetaFeaturesDisplayedValue>
 
 
