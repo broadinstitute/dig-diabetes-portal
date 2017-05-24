@@ -307,7 +307,7 @@ var mpgSoftware = mpgSoftware || {};
             .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
             .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
             .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
-        
+
         var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
 
         return {
