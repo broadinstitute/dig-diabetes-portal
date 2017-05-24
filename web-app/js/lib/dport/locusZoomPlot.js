@@ -200,7 +200,7 @@ var mpgSoftware = mpgSoftware || {};
             }
             panel_layout.data_layers[2].tooltip.html = toolTipText;
             return panel_layout;
-        }
+        };
 
 
         var setNewDefaultLzPlot = function (key){
@@ -270,7 +270,7 @@ var mpgSoftware = mpgSoftware || {};
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
 
-        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,tissueAsId,rawTissue){
+        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue){
              var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
@@ -283,6 +283,7 @@ var mpgSoftware = mpgSoftware || {};
                     return url;
                 }
             }, "BroadT2D");
+            var tissueAsId = 'intervals-'+rawTissue;
             dataSources.add(tissueAsId, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
         };
 
@@ -318,11 +319,18 @@ var mpgSoftware = mpgSoftware || {};
     };
 
 
+        var addAssociationTrack = function (locusZoomVar,colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters){
+            var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
+            locusZoomVar.addPanel(panelLayout).addBasicLoader();
+        };
+
+
+
         var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
-            var intervalPanel = LocusZoom.Layouts.get("panel", "intervals");
+            var intervalPanelName = "intervals-"+tissueId;
 
-
-            intervalPanel = customIntervalsPanel("intervals-Islets");
+            // we can't use the standard interval panel, but we can derive our own
+            var intervalPanel = customIntervalsPanel(intervalPanelName);
             intervalPanel.dashboard.components.push({
                 type: "menu",
                 color: "yellow",
@@ -330,18 +338,17 @@ var mpgSoftware = mpgSoftware || {};
                 button_html: "Track Info",
                 menu_html: "<strong>Pancreatic islet ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
             });
-            if (typeof locusZoomPlot[currentLzPlotKey].panels['intervals'] === 'undefined'){
+            if (typeof locusZoomPlot[currentLzPlotKey].panels[intervalPanelName] === 'undefined'){
                 locusZoomVar.addPanel(intervalPanel).addBasicLoader();
             } else {
-                intervalPanel.id = 'intervals-'+tissueId;
-                locusZoomVar.addPanel(intervalPanel).addBasicLoader();
+                console.log(' we already had a panel for tissue='+tissueId+'.')
             }
         };
 
 
         function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId,graphicalOptions) {
-            var colorBy = 1;
-            var positionBy = 1;
+            var colorBy = 1;  //colorBy:1=LD,2=MDS
+            var positionBy = 1;  //positionBy:1=pValue,2=posteriorPValue
             if (typeof graphicalOptions !== 'undefined') {
                 colorBy = graphicalOptions.colorBy;
                 positionBy = graphicalOptions.positionBy;
@@ -352,17 +359,16 @@ var mpgSoftware = mpgSoftware || {};
             var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
             setNewDefaultLzPlot(lzGraphicDomId);
 
-            buildAssociationSource(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic);
 
-            //colorBy:1=LD,2=MDS
-            //positionBy:1=pValue,2=posteriorPValue
-           // var ds = new LocusZoom.DataSources();
-            buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,'intervals-Islets','Islets');
 
+            buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,'Islets');
             addIntervalTrack(locusZoomPlot[currentLzPlotKey],"pancreatic islet","Islets");
 
-            var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
-            locusZoomPlot[currentLzPlotKey].addPanel(panelLayout).addBasicLoader();
+            buildAssociationSource(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic);
+            addAssociationTrack(locusZoomPlot[currentLzPlotKey],colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters)
+            // var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
+            //
+            // locusZoomPlot[currentLzPlotKey].addPanel(panelLayout).addBasicLoader();
 
         };
 
