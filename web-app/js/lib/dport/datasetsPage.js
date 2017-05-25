@@ -4,6 +4,14 @@
 
 var mpgSoftware = mpgSoftware || {};
 
+//var callbackURL= "${createLink(controller:'informational',action: 'aboutTheDataAjax')}"; //need to be set
+//var setCallbackURL = (function () {
+//    setCallbackURL = callbackURL;
+//})
+//var getCallbackURL = (function () {
+//        return callbackURL;
+//})
+
 
 (function () {
     "use strict";
@@ -51,8 +59,6 @@ var mpgSoftware = mpgSoftware || {};
                 )
             }
             else if((typeof selectedLevel2Phenotype !== 'undefined' && selectedLevel2Phenotype !== 'Show all' && isPhenlevel2 == false)){
-
-
                 _.forEach(storedJsonArray, function(k,v){
                     _.forEach(k.phenotypes, function(kl,vl){
                         if(kl.group == selectedLevel2Phenotype){
@@ -73,16 +79,13 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 )
             }
-            var sortedStoredJsonArray = _.uniq(sortedStoredJsonArray, 'name');
+            sortedStoredJsonArray = _.uniq(sortedStoredJsonArray, 'name');
 
 
             _.forEach(sortedStoredJsonArray, function(kl,vl){
                 regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
                 informationGspFileNames.push("#" + regexStr + '_script');
             })
-
-
-
 
             jsonHolder["parents"] = sortedStoredJsonArray;
             var template = $("#metaData2")[0].innerHTML;
@@ -104,7 +107,7 @@ var mpgSoftware = mpgSoftware || {};
         /**
          * called on click of datatype filter, it renders datasets for selected datatype.
          */
-        var onClickdatatype = function (selectedtech){
+        var onClickdatatype = function (selectedtech,displaySelectedTechnologyURL){
             var allDatatypes = $("div.datatype-option");
             _.forEach(allDatatypes, function(k,v){
                 $(k).css("background-color", "rgb(255, 255, 204)");
@@ -113,7 +116,7 @@ var mpgSoftware = mpgSoftware || {};
                     $(k).css("background-color", "rgb(255, 153, 68)");
                     $(k).css("color", "rgb(255, 255, 255)");
                     $('div.phenotype-level2-row').empty();
-                    displaySelectedTechnology(selectedtech, true,"/dig-diabetes-portal/informational/aboutTheDataAjax");
+                    displaySelectedTechnology(selectedtech, true,displaySelectedTechnologyURL);
                 }
             })
         }
@@ -169,30 +172,6 @@ var mpgSoftware = mpgSoftware || {};
                     u[arr[i]] = 1;}}
             return a;
         }
-
-        /**
-         * Helper function to create a map where key is phenotype group and value is an array of datasets
-         */
-        function getPhenotypeGroupDatasetMap(phenotypeGroupUniqueNameMap,phenotypeDatasetsMap){
-            var phenotypeGroupDatasetMap = {};
-
-            //console.log(phenotypeGroupUniqueNameMap);
-            //console.log(phenotypeDatasetsMap);
-
-            _.forOwn(phenotypeGroupUniqueNameMap, function(value, key){
-               // console.log(value);
-                var a = []
-                _.forEach(value, function(k,v){
-                    //this gives all datasets for each phenotypename
-                    //console.log(phenotypeDatasetsMap[k]);
-                    a.push(phenotypeDatasetsMap[k])
-                })
-                phenotypeGroupDatasetMap[key] = a
-            })
-            //console.log(phenotypeGroupDatasetMap);
-          return phenotypeGroupDatasetMap;
-        }
-
 
         /**
          * Helper function to create a map where key is phenotype group and value is an array of level2 phenotype
@@ -254,7 +233,6 @@ var mpgSoftware = mpgSoftware || {};
                         eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
-                        datasetPhenotypesMap2[eachKey.name] = eachKey;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
@@ -277,7 +255,6 @@ var mpgSoftware = mpgSoftware || {};
                         eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
-                        datasetPhenotypesMap2[eachKey.name] = eachKey;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
@@ -307,9 +284,6 @@ var mpgSoftware = mpgSoftware || {};
                             phenotypeDatasetsMap[nk.fullName] = [key];}
                     })
                 })
-                //console.log(phenotypeDatasetsMap);
-                getPhenotypeGroupDatasetMap(phenotypeGroupUniqueNameMap,phenotypeDatasetsMap);
-
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
                 var filterDynamicHtml = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);

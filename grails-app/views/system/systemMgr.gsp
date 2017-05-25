@@ -69,7 +69,7 @@
 
                 <g:form action='updateBackEndRestServer' method='POST' id='updateBackEndRestServer' class='form form-horizontal cssform' autocomplete='off'>
                     <h4><g:message code="system.header.rest_server.prod" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${currentRestServer.url}">${currentRestServer.name}</a></em>)</h4>
-             
+
                     <div>
                             <div id="datatypes-formid">
                                 <g:each var="server" in="${restServerList}">
@@ -83,7 +83,6 @@
                                         </div>
                                 </g:each>
                             </div>
-
 
                     </div>
                     <div class="row clearfix">

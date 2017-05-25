@@ -90,9 +90,9 @@
     <h5>Data type</h5>
     <div class='filters-style' >
             {{#datatype}}
-            <div class='datatype-option'  onclick='mpgSoftware.datasetsPage.onClickdatatype("{{.}}")'>{{.}}</div>
+            <div class='datatype-option'  onclick='mpgSoftware.datasetsPage.onClickdatatype("{{.}}","${createLink(controller:'informational',action: 'aboutTheDataAjax')}")'>{{.}}</div>
             {{/datatype}}
-            <div class='datatype-option datatype-option-showall' onclick='mpgSoftware.datasetsPage.onClickdatatype("Show all")'>Show all</div>
+            <div class='datatype-option datatype-option-showall' onclick='mpgSoftware.datasetsPage.onClickdatatype("Show all","${createLink(controller:'informational',action: 'aboutTheDataAjax')}")'>Show all</div>
     </div>
 </script>
 

@@ -10,6 +10,7 @@
 <script>
     $(document).ready(function(){
         var filterDatatype = "Show all";
+        %{--mpgSoftware.datasetsPage.setCallbackURL("${createLink(controller:'informational',action: 'aboutTheDataAjax')}");--}%
         mpgSoftware.datasetsPage.displaySelectedTechnology(filterDatatype,undefined,"${createLink(controller:'informational',action: 'aboutTheDataAjax')}");
     });
 </script>
