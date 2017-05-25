@@ -11,7 +11,17 @@ var mpgSoftware = mpgSoftware || {};
         var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
         var currentLzPlotKey = 'lz-47';
 
-
+        var customIntervalsToolTip = function (namespace){
+            var htmlRef = "{{"+namespace+":state_name}}<br>"+"{{"+namespace+":start}}-"+"{{"+namespace+":end}}";
+            var developingStructure =  {
+                namespace: { "intervals": namespace },
+                closable: false,
+                show: { or: ["highlighted", "selected"] },
+                hide: { and: ["unhighlighted", "unselected"] }
+            };
+            developingStructure['html'] = htmlRef;
+            return developingStructure;
+        }
 
 
         var customIntervalsDataLayer = function (layerName){
@@ -26,7 +36,7 @@ var mpgSoftware = mpgSoftware || {};
                 end_field: layerName+":end",
                 track_split_field: layerName+":state_id",
                 split_tracks: true,
-                always_hide_legend: false,
+                always_hide_legend: true,
                 color: {
                     field: layerName+":state_id",
                     scale_function: "categorical_bin",
@@ -64,8 +74,9 @@ var mpgSoftware = mpgSoftware || {};
                     onshiftclick: [
                         { action: "toggle", status: "selected" }
                     ]
-                },
-                tooltip: LocusZoom.Layouts.get("tooltip", "standard_intervals", { unnamespaced: true })
+                }
+                // ,
+                // tooltip: customIntervalsToolTip(layerName)
             };
             _.forEach(developingStructure.legend,function(o,i){
                 o[stateIdSpec] = (i+1);
@@ -103,7 +114,6 @@ var mpgSoftware = mpgSoftware || {};
                 },
                 data_layers: [
                     customIntervalsDataLayer(layerName)
-                    //LocusZoom.Layouts.get("data_layer", "intervals", { unnamespaced: true })
                 ]
             }
         };
@@ -125,17 +135,8 @@ var mpgSoftware = mpgSoftware || {};
                 button_title: "Use this feature to interactively build a model using variants from the data set",
                 position: "left"
             });
-            // Add a track information button to the intervals panel
-            newLayout.panels[1].dashboard.components.push({
-                type: "menu",
-                color: "yellow",
-                position: "right",
-                button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
-            });
-            //newLayout.panels = _.tail(newLayout.panels);
             newLayout.panels = [newLayout.panels[2]];
-            newLayout.panels[0].y_index = -1;
+            newLayout.panels[0].y_index = 1000;
             return newLayout;
         };
 
@@ -319,16 +320,36 @@ var mpgSoftware = mpgSoftware || {};
     };
 
 
+    var reorderPanels = function(plot){
+        var currentPanelOrdering = plot.panel_ids_by_y_index;
+        var newPanelOrdering = [];
+        var intervalPanels = [];
+        var genePanel = [];
+        _.forEach(currentPanelOrdering, function (o){
+            if (o==='genes'){
+                genePanel.push(o);
+            } else if (o.substr(0,"intervals-".length)==='intervals-'){
+                intervalPanels.push(o);
+            } else {
+                newPanelOrdering.push(o);
+            }
+        });
+        _.forEach(intervalPanels,function(o){newPanelOrdering.push(o)});
+        _.forEach(genePanel,function(o){newPanelOrdering.push(o)});
+        plot.panel_ids_by_y_index = newPanelOrdering;
+    }
+
         var addAssociationTrack = function (locusZoomVar,colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters){
             var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
+            panelLayout.y_index = 0;
             locusZoomVar.addPanel(panelLayout).addBasicLoader();
+            reorderPanels(locusZoomVar);
         };
 
 
 
         var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
             var intervalPanelName = "intervals-"+tissueId;
-
             // we can't use the standard interval panel, but we can derive our own
             var intervalPanel = customIntervalsPanel(intervalPanelName);
             intervalPanel.dashboard.components.push({
@@ -336,13 +357,16 @@ var mpgSoftware = mpgSoftware || {};
                 color: "yellow",
                 position: "right",
                 button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
+                menu_html: "<strong>"+tissueName+" ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
             });
+            intervalPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
             if (typeof locusZoomPlot[currentLzPlotKey].panels[intervalPanelName] === 'undefined'){
+
                 locusZoomVar.addPanel(intervalPanel).addBasicLoader();
             } else {
                 console.log(' we already had a panel for tissue='+tissueId+'.')
             }
+            reorderPanels(locusZoomVar);
         };
 
 
@@ -382,6 +406,8 @@ var mpgSoftware = mpgSoftware || {};
 
             buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,tissueCode);
             addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode);
+
+            rescaleSVG();
         };
 
 

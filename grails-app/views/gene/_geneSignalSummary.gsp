@@ -285,6 +285,9 @@
                                 '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                                 !mpgSoftware.locusZoom.plotAlreadyExists(),
                             {});
+                        $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
+                            mpgSoftware.locusZoom.rescaleSVG();
+                        });
                     }
                 if ( ( typeof sampleBasedPhenotypeName !== 'undefined') &&
                     ( sampleBasedPhenotypeName.length > 0)) {
