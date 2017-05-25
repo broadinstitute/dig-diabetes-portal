@@ -10,7 +10,7 @@
 
 <p><g:message code="informational.shared.projectpublications.Oxford"></g:message></p>
 
-    <h4>Data set phenotypes</h4>
+    <h4>Dataset phenotypes</h4>
 
 <ul>
     <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
@@ -24,7 +24,7 @@
     <li><g:message code="informational.shared.traits.pulse_pressure"></g:message></li>
 </ul>
 
-    <h4>Data Set Subjects</h4>
+    <h4>Datas subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
@@ -47,7 +47,7 @@
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.OxfordBB"></g:message></p>
 
-<h4>Accessing Oxford BioBank GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing Oxford BioBank exome chip analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.OxfordBB"></g:message></p>
 
 </script>
