@@ -11,7 +11,17 @@ var mpgSoftware = mpgSoftware || {};
         var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
         var currentLzPlotKey = 'lz-47';
 
-
+        var customIntervalsToolTip = function (namespace){
+            var htmlRef = "{{"+namespace+":state_name}}<br>"+"{{"+namespace+":start}}-"+"{{"+namespace+":end}}";
+            var developingStructure =  {
+                namespace: { "intervals": namespace },
+                closable: false,
+                show: { or: ["highlighted", "selected"] },
+                hide: { and: ["unhighlighted", "unselected"] }
+            };
+            developingStructure['html'] = htmlRef;
+            return developingStructure;
+        }
 
 
         var customIntervalsDataLayer = function (layerName){
@@ -64,8 +74,9 @@ var mpgSoftware = mpgSoftware || {};
                     onshiftclick: [
                         { action: "toggle", status: "selected" }
                     ]
-                },
-                tooltip: LocusZoom.Layouts.get("tooltip", "standard_intervals", { unnamespaced: true })
+                }
+                // ,
+                // tooltip: customIntervalsToolTip(layerName)
             };
             _.forEach(developingStructure.legend,function(o,i){
                 o[stateIdSpec] = (i+1);
@@ -103,7 +114,6 @@ var mpgSoftware = mpgSoftware || {};
                 },
                 data_layers: [
                     customIntervalsDataLayer(layerName)
-                    //LocusZoom.Layouts.get("data_layer", "intervals", { unnamespaced: true })
                 ]
             }
         };
