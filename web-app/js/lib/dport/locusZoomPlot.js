@@ -36,7 +36,7 @@ var mpgSoftware = mpgSoftware || {};
                 end_field: layerName+":end",
                 track_split_field: layerName+":state_id",
                 split_tracks: true,
-                always_hide_legend: false,
+                always_hide_legend: true,
                 color: {
                     field: layerName+":state_id",
                     scale_function: "categorical_bin",
@@ -136,7 +136,7 @@ var mpgSoftware = mpgSoftware || {};
                 position: "left"
             });
             newLayout.panels = [newLayout.panels[2]];
-            newLayout.panels[0].y_index = -1;
+            newLayout.panels[0].y_index = 1000;
             return newLayout;
         };
 
@@ -320,16 +320,36 @@ var mpgSoftware = mpgSoftware || {};
     };
 
 
+    var reorderPanels = function(plot){
+        var currentPanelOrdering = plot.panel_ids_by_y_index;
+        var newPanelOrdering = [];
+        var intervalPanels = [];
+        var genePanel = [];
+        _.forEach(currentPanelOrdering, function (o){
+            if (o==='genes'){
+                genePanel.push(o);
+            } else if (o.substr(0,"intervals-".length)==='intervals-'){
+                intervalPanels.push(o);
+            } else {
+                newPanelOrdering.push(o);
+            }
+        });
+        _.forEach(intervalPanels,function(o){newPanelOrdering.push(o)});
+        _.forEach(genePanel,function(o){newPanelOrdering.push(o)});
+        plot.panel_ids_by_y_index = newPanelOrdering;
+    }
+
         var addAssociationTrack = function (locusZoomVar,colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters){
             var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
+            panelLayout.y_index = 0;
             locusZoomVar.addPanel(panelLayout).addBasicLoader();
+            reorderPanels(locusZoomVar);
         };
 
 
 
         var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
             var intervalPanelName = "intervals-"+tissueId;
-
             // we can't use the standard interval panel, but we can derive our own
             var intervalPanel = customIntervalsPanel(intervalPanelName);
             intervalPanel.dashboard.components.push({
@@ -339,11 +359,14 @@ var mpgSoftware = mpgSoftware || {};
                 button_html: "Track Info",
                 menu_html: "<strong>"+tissueName+" ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
             });
+            intervalPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
             if (typeof locusZoomPlot[currentLzPlotKey].panels[intervalPanelName] === 'undefined'){
+
                 locusZoomVar.addPanel(intervalPanel).addBasicLoader();
             } else {
                 console.log(' we already had a panel for tissue='+tissueId+'.')
             }
+            reorderPanels(locusZoomVar);
         };
 
 
