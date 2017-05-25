@@ -6,9 +6,15 @@
 <p><g:message code="aboutTheData.stroke.datasets.ICH_GWAS_2014"></g:message></p>
 
  <hr /><table>
-                <tr><td><g:message code="portal.stroke.about.AHA.discovery.datasets"></g:message></td><td><a href="http://institute.heart.org" target="_blank"></a><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a> </td></tr>
+                <tr>
+                    <td><g:message code="portal.stroke.about.AHA.discovery.datasets"></g:message></td>
+                    <td><a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a> </td>
+                </tr>
+                <tr><td><h4><g:message code="portal.stroke.AHA_discovery.link"></g:message></h4></td><td></td></tr>
 
-                </table> <hr />
+                </table>
+                <hr />
+
 <h4>Publications</h4>
 
 <p><div class="paper">
