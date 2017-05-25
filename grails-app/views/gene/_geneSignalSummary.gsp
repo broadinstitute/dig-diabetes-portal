@@ -27,15 +27,15 @@
             <div class="col-md-5 col-xs-12">
                 <div class="row">
                     <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                        No evidence of a signal
+                        No evidence for signal
                     </div>
 
                     <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                        Absence of strong evidence
+                        Suggestive evidence for signal
                     </div>
 
                     <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                        Signal exists
+                        Strong evidence for signal
                     </div>
                 </div>
             </div>

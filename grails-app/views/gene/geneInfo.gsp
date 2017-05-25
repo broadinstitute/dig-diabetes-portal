@@ -98,7 +98,9 @@
                 <h1>
                     <em><%=geneName%></em>
                 </h1>
-
+                <div style="text-align: right;">
+                    <a href="" target="_blank">Gene Page guide</a>
+                </div>
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 <g:renderBetaFeaturesDisplayedValue>
