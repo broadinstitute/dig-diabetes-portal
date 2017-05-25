@@ -616,12 +616,12 @@ class BurdenService {
                 boolean ptv = (variant.getMostDelScore() == 1)
                 boolean ptvOrMissense = (variant.getMostDelScore() == 1 || variant.getMostDelScore() == 2)
                 boolean nsStrict = ((variant.getMutationTasterPredictor()?.contains("D"))&&
-                        (variant.getSiftPredictor()?.contains("deleterious"))&&
+                        (variant.getSiftPredictor()?.contains("D"))&&
                         (variant.getLrtPredictor()?.contains("D"))&&
                         (variant.getPolyphenHvarPredictor()?.contains("D"))&&
                         (variant.getPolyphenHdivPredictor()?.contains("D")))
                 boolean nsBroad = ((variant.getMutationTasterPredictor()?.contains("D"))||
-                        (variant.getSiftPredictor()?.contains("deleterious"))||
+                        (variant.getSiftPredictor()?.contains("D"))||
                         (variant.getLrtPredictor()?.contains("D"))||
                         (variant.getPolyphenHvarPredictor()?.contains("D"))||
                         (variant.getPolyphenHdivPredictor()?.contains("D")))
