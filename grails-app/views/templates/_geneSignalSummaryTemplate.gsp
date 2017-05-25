@@ -90,14 +90,15 @@
                 <li class="dropdown" id="tracks-menu-dropdown-functional">
                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
                        <ul id="trackList-tissue" class="dropdown-menu">
+                           <g:each in="${lzOptions?.findAll{it.dataType=='tissue'}}">
                            <li>
                               <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                        tissueCode: 'Adipose',
-                        tissueDescriptiveName: 'adipose tissue',
+                        tissueCode: '${it.name}',
+                        tissueDescriptiveName: '${it.description}',
                         retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
-                    },'#lz-1',{colorBy:2,positionBy:1});">Adipose</a>
+                    },'#lz-1',{colorBy:2,positionBy:1});">${it.description}</a>
                            </li>
-
+                           </g:each>
                        </ul>
                 </li>
                 <li style="margin: auto;">

@@ -125,15 +125,6 @@ var mpgSoftware = mpgSoftware || {};
                 button_title: "Use this feature to interactively build a model using variants from the data set",
                 position: "left"
             });
-            // Add a track information button to the intervals panel
-            newLayout.panels[1].dashboard.components.push({
-                type: "menu",
-                color: "yellow",
-                position: "right",
-                button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet chromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: pancreatic islet</div>"
-            });
-            //newLayout.panels = _.tail(newLayout.panels);
             newLayout.panels = [newLayout.panels[2]];
             newLayout.panels[0].y_index = -1;
             return newLayout;
@@ -336,7 +327,7 @@ var mpgSoftware = mpgSoftware || {};
                 color: "yellow",
                 position: "right",
                 button_html: "Track Info",
-                menu_html: "<strong>Pancreatic islet ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
+                menu_html: "<strong>"+tissueName+" ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
             });
             if (typeof locusZoomPlot[currentLzPlotKey].panels[intervalPanelName] === 'undefined'){
                 locusZoomVar.addPanel(intervalPanel).addBasicLoader();
@@ -382,6 +373,8 @@ var mpgSoftware = mpgSoftware || {};
 
             buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,tissueCode);
             addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode);
+
+            rescaleSVG();
         };
 
 
