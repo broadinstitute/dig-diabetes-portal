@@ -31,12 +31,14 @@ var mpgSoftware = mpgSoftware || {};
         /**
          * Takes "selected level2 phenotype" as a parameter else renders all of the datasets without filtering.
          */
-        var renderFilteredData = function (selectedLevel2Phenotype){
+        var renderFilteredData = function (selectedLevel2Phenotype,isPhenlevel2){
             var jsonHolder={};
             var informationGspFileNames=[];
             var regexStr = "";
             var sortedStoredJsonArray = [];
-            if(typeof selectedLevel2Phenotype !== 'undefined'){
+            var datasetArray = [];
+            var PhenotypeGroupToDatasetsMap = {};
+            if(typeof selectedLevel2Phenotype !== 'undefined' && isPhenlevel2){
                 var filteredjsonArray = $.grep(storedJsonArray, function(element) {
                     return $.inArray(element.name, phenotypeDatasetsMap[selectedLevel2Phenotype] ) !== -1;});
                 sortedStoredJsonArray = filteredjsonArray.sort(
@@ -48,7 +50,20 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 )
             }
+            else if((typeof selectedLevel2Phenotype !== 'undefined' && selectedLevel2Phenotype !== 'Show all' && isPhenlevel2 == false)){
+
+
+                _.forEach(storedJsonArray, function(k,v){
+                    _.forEach(k.phenotypes, function(kl,vl){
+                        if(kl.group == selectedLevel2Phenotype){
+                            sortedStoredJsonArray.push(k);
+                        }
+                    })
+                })
+
+            }
             else{
+
                 sortedStoredJsonArray = storedJsonArray.sort(
                     function(x,y){
                         if(x.sortOrder > y.sortOrder){
@@ -58,10 +73,17 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 )
             }
+            var sortedStoredJsonArray = _.uniq(sortedStoredJsonArray, 'name');
+
+
             _.forEach(sortedStoredJsonArray, function(kl,vl){
                 regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
                 informationGspFileNames.push("#" + regexStr + '_script');
             })
+
+
+
+
             jsonHolder["parents"] = sortedStoredJsonArray;
             var template = $("#metaData2")[0].innerHTML;
             var dynamicHtml = Mustache.to_html(template,jsonHolder);
@@ -117,7 +139,7 @@ var mpgSoftware = mpgSoftware || {};
                 $("#phenotypeFilterLevel2Display").empty().append(filterDynamicHtmlLevel2);
 
             });
-            renderFilteredData();
+            renderFilteredData(selectedPhenotypegroup,false);
         }
 
         /**
@@ -131,7 +153,7 @@ var mpgSoftware = mpgSoftware || {};
                 if($(k).text() == selectedLevel2Phenotype){
                     $(k).css("background-color", "rgb(51, 153, 255)");
                     $(k).css("color", "rgb(255, 255, 255)");
-                    renderFilteredData(selectedLevel2Phenotype);
+                    renderFilteredData(selectedLevel2Phenotype,true);
                 }
             })
         }
@@ -149,6 +171,30 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         /**
+         * Helper function to create a map where key is phenotype group and value is an array of datasets
+         */
+        function getPhenotypeGroupDatasetMap(phenotypeGroupUniqueNameMap,phenotypeDatasetsMap){
+            var phenotypeGroupDatasetMap = {};
+
+            //console.log(phenotypeGroupUniqueNameMap);
+            //console.log(phenotypeDatasetsMap);
+
+            _.forOwn(phenotypeGroupUniqueNameMap, function(value, key){
+               // console.log(value);
+                var a = []
+                _.forEach(value, function(k,v){
+                    //this gives all datasets for each phenotypename
+                    //console.log(phenotypeDatasetsMap[k]);
+                    a.push(phenotypeDatasetsMap[k])
+                })
+                phenotypeGroupDatasetMap[key] = a
+            })
+            //console.log(phenotypeGroupDatasetMap);
+          return phenotypeGroupDatasetMap;
+        }
+
+
+        /**
          * Helper function to create a map where key is phenotype group and value is an array of level2 phenotype
          */
         function getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray){
@@ -160,7 +206,10 @@ var mpgSoftware = mpgSoftware || {};
                         if(k==k2.group){
                             b.push(k2.fullName);
                         }
-                        phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);})})})
+                        phenotypeGroupNameMap[k] = addOnlyUniqueElements(b);
+                    })
+                })
+            })
             return phenotypeGroupNameMap;
         }
 
@@ -189,6 +238,7 @@ var mpgSoftware = mpgSoftware || {};
                 var datatype = [];
                 phenotypeGroupUniqueNameMap = {};
                 var allPhenotypeArrayofArray = [];
+                var datasetPhenotypesMap2 = {};
                 _.forEach(data.children, function (eachKey,val) {
                     datatype.push(eachKey.technology);
                     if(selectedTech == "") {
@@ -204,6 +254,7 @@ var mpgSoftware = mpgSoftware || {};
                         eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
+                        datasetPhenotypesMap2[eachKey.name] = eachKey;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
@@ -226,15 +277,17 @@ var mpgSoftware = mpgSoftware || {};
                         eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
+                        datasetPhenotypesMap2[eachKey.name] = eachKey;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
                         _.forEach(distinctPhenotypeGroups, function (k,v){
                             if(!map.hasOwnProperty(k)){
                                 phenotypeGroupArray.push(k);
                                 map[k] = [1];}})
                         allPhenotypeArrayofArray.push(eachKey.phenotypes);
-                        phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray );
+                        phenotypeGroupUniqueNameMap = getPhenotypeGroupNameMap(allPhenotypeArrayofArray,phenotypeGroupArray);
                     }
                 });
+                //console.log(datasetPhenotypesMap2);
                 var datatypeFilter = addOnlyUniqueElements(datatype);
                 var datatypeFilterHolder = {
                     "datatype": datatypeFilter,
@@ -254,6 +307,8 @@ var mpgSoftware = mpgSoftware || {};
                             phenotypeDatasetsMap[nk.fullName] = [key];}
                     })
                 })
+                //console.log(phenotypeDatasetsMap);
+                getPhenotypeGroupDatasetMap(phenotypeGroupUniqueNameMap,phenotypeDatasetsMap);
 
                 var phenotypeGroupArrayholder = { "groups" : phenotypeGroupArray.sort()};
                 var phenotypeFilterLevel1Template = $("#phenotypeFilter")[0].innerHTML;
