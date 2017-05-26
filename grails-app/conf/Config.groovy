@@ -163,6 +163,7 @@ digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52
 federatedAwsProdKBV2Server = new ServerBean("Federated Prod Server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
+digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 
 // this will be your default
 defaultRestServer = digAWSKBV2prodServer
@@ -179,7 +180,8 @@ defaultRestServer = digAWSKBV2prodServer
          digAWS02KBV2prodServer,
          federatedAwsProdKBV2Server,
          federatedAwsStageKBV2Server,
-         toddTestServer
+         toddTestServer,
+         digdevmarcin
  ]
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
