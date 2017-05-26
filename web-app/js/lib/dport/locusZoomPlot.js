@@ -35,7 +35,7 @@ var mpgSoftware = mpgSoftware || {};
                 start_field: layerName+":start",
                 end_field: layerName+":end",
                 track_split_field: layerName+":state_id",
-                split_tracks: true,
+                split_tracks: false,
                 always_hide_legend: true,
                 color: {
                     field: layerName+":state_id",

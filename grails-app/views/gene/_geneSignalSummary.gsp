@@ -284,7 +284,7 @@
                                 '${lzOptions.first().dataType}',
                                 '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                                 !mpgSoftware.locusZoom.plotAlreadyExists(),
-                            {});
+                                {},${defaultTissues});
                         $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
                             mpgSoftware.locusZoom.rescaleSVG();
                         });
