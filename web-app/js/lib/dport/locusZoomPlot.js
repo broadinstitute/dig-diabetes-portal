@@ -417,7 +417,7 @@ var mpgSoftware = mpgSoftware || {};
                                          phenoPropertyName,locusZoomDataset,junk,
                                          geneGetLZ,variantInfoUrl,makeDynamic,
                                          retrieveFunctionalDataAjaxUrl,
-                                         pageInitialization,functionalTrack) {
+                                         pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions) {
             var graphicalOptions = {colorBy:1,
                                     positionBy:1};
             var loading = $('#spinner').show();
@@ -470,11 +470,16 @@ var mpgSoftware = mpgSoftware || {};
                     makeDynamic,lzGraphicDomId,graphicalOptions);
 
                 if (typeof functionalTrack !== 'undefined'){
-                    addLZTissueAnnotations({
-                        tissueCode: 'Islets',
-                        tissueDescriptiveName: 'pancreatic islet',
-                        retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
-                    },lzGraphicDomId,graphicalOptions);
+                    if ( typeof defaultTissues !== 'undefined'){
+                        _.forEach(defaultTissues,function(o,i){
+                            addLZTissueAnnotations({
+                                tissueCode: o,
+                                tissueDescriptiveName: defaultTissuesDescriptions[i],
+                                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
+                            },lzGraphicDomId,graphicalOptions);
+                        });
+                    }
+
                 }
                 if ((typeof pageInitialization !== 'undefined')&&
                     (pageInitialization)){

@@ -191,7 +191,12 @@ class GeneController {
 
         if (geneToStartWith)  {
             locusZoomDataset = metaDataService.getDefaultDataset()
-
+            JSONArray passDefaultTissues = []
+            JSONArray passDefaultTissuesDescriptions = []
+            for (String tissue in defaultTissues){
+                passDefaultTissues.put("'${tissue}'")
+                passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
+            }
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -212,8 +217,8 @@ class GeneController {
                                              dataVersion: metaDataService.getDataVersion(),
                                              locusZoomDataset:locusZoomDataset,
                                              igvIntro: igvIntro,
-                                             defaultTissues:(defaultTissues as JSONArray),
-                                             defaultTissues2:defaultTissues
+                                             defaultTissues:passDefaultTissues,
+                                             defaultTissuesDescriptions:passDefaultTissuesDescriptions
             ] )
         }
     }
