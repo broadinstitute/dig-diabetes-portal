@@ -533,7 +533,6 @@ portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
 
