@@ -40,7 +40,7 @@
 <p><g:message code="informational.data.exptsumm.DIAGRAMg"></g:message></p>
 <p><g:message code="informational.data.exptsumm.DIAGRAMh"></g:message></p>
 
-<h4>Accessing DIAGRAM trans-ehtnic meta-analysis data in the T2D Knowledge Portal</h4>
+<h4>Accessing DIAGRAM trans-ethnic meta-analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.DIAGRAM"></g:message></p>
 
 </script>
