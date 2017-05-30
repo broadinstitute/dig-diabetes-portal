@@ -5,13 +5,13 @@ g.row.Active_transcription_start_site>g.cell.chosen {
     fill: #ff0000;
 }
 g.row.Weak_transcription_start_site>g.cell.chosen {
-    fill: #ff4500;
+    fill: #ff8c1a;
 }
 g.row.Flanking_transcription_start_site>g.cell.chosen {
-    fill: #ff4500;
+    fill: #ff8c1a;
 }
 g.row.Strong_transcription>g.cell.chosen {
-    fill: #008000;
+    fill: #00e600;
 }
 g.row.Weak_transcription>g.cell.chosen {
     fill: #006400;
@@ -29,7 +29,7 @@ g.row.Weak_enhancer>g.cell.chosen {
     fill: #ffff00;
 }
 g.row.Bivalent_poised_transcription_start_site>g.cell.chosen {
-    fill: #cd5c5c;
+    fill: #994d00;
 }
 g.row.Repressed_polycomb>g.cell.chosen {
     fill: #808080;
