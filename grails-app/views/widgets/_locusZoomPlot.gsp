@@ -31,26 +31,29 @@
         </div>
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
             <g:renderIfWeHaveDynamicDataValue>
-                <li class="dropdown" id="tracks-menu-dropdown-dynamic">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
-                    <ul id="trackList-dynamic" class="dropdown-menu">
-                        <g:each in="${lzOptions?.findAll{it.dataType=='dynamic'}}">
-                            <li>
-                                <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                                            phenotype: '${it.key}',
-                                            dataSet: '${it.dataSet}',
-                                            propertyName: '${it.propertyName}',
-                                            description: '${it.description}'
-                                        },
-                                        '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
-                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '${it.dataType}','#lz-47')">
-                                    ${g.message(code: "metadata." + it.name)}
-                                </a>
-                            </li>
-                        </g:each>
-                    </ul>
-                </li>
+                <g:if test="${g.portalTypeString()?.equals('t2d')||
+                        g.portalTypeString()?.equals('mi')}">
+                    <li class="dropdown" id="tracks-menu-dropdown-dynamic">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
+                        <ul id="trackList-dynamic" class="dropdown-menu">
+                            <g:each in="${lzOptions?.findAll{it.dataType=='dynamic'}}">
+                                <li>
+                                    <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                                phenotype: '${it.key}',
+                                                dataSet: '${it.dataSet}',
+                                                propertyName: '${it.propertyName}',
+                                                description: '${it.description}'
+                                            },
+                                            '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                            '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                            '${it.dataType}','#lz-47')">
+                                        ${g.message(code: "metadata." + it.name)}
+                                    </a>
+                                </li>
+                            </g:each>
+                        </ul>
+                    </li>
+                </g:if>
             </g:renderIfWeHaveDynamicDataValue>
             <li class="dropdown" id="tracks-menu-dropdown-static">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (static)<b class="caret"></b></a>
