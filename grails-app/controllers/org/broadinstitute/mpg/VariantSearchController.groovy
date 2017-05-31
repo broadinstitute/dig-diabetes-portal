@@ -4,12 +4,7 @@ import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
-import org.broadinstitute.mpg.diabetes.metadata.Property
-import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean
-import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
+import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -1092,7 +1087,13 @@ class VariantSearchController {
 
                 }
             }
-            JSONArray JsonGeneHolder = slurper.parseText("${identifiedGenes.collect{return "\"$it\""}}")
+
+            List tempList = identifiedGenes.collect{return "\"$it\""};
+            JSONArray JsonGeneHolder = new JSONArray();
+            for (String text in tempList) {
+                JsonGeneHolder.add(text);
+            }
+//            JSONArray JsonGeneHolder = slurper.parseText("${identifiedGenes.collect{return "\"$it\""}}")
 
             // get locale to provide to table-building plugin
             String locale = RequestContextUtils.getLocale(request)
