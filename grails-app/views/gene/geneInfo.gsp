@@ -98,9 +98,11 @@
                 <h1>
                     <em><%=geneName%></em>
                 </h1>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
                 <div style="text-align: right;">
                     <a href="" target="_blank">Gene Page guide</a>
-                </div>
+                </div></g:if>
+    </div>
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 <g:renderBetaFeaturesDisplayedValue>
