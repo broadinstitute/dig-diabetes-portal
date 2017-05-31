@@ -83,6 +83,17 @@ class WidgetService {
             case "ORBLOCK":
             case "ANDBLOCK": break;
             case "INTEGER":
+//                if (propertyValue?.length() < 1) {
+//                    generateFilter = false
+//                } else { // currently we can only send in one value.
+//                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
+//                    if (listOfSelectedValues.size() > 1) {
+//                        generateFilter = false
+//                    } else {
+//                        propertyValue = "${propertyValue}"
+//                    }
+//                }
+//                break;
             case "STRING":
                 if (propertyValue?.length() < 1) {
                     generateFilter = false
