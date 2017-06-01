@@ -2,10 +2,7 @@ package org.broadinstitute.mpg.diabetes.json.builder;
 
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
-import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean;
-import org.broadinstitute.mpg.diabetes.metadata.Property;
-import org.broadinstitute.mpg.diabetes.metadata.PropertyBean;
-import org.broadinstitute.mpg.diabetes.metadata.SampleGroupBean;
+import org.broadinstitute.mpg.diabetes.metadata.*;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.metadata.query.Covariate;
 import org.broadinstitute.mpg.diabetes.metadata.query.CovariateBean;
@@ -58,14 +55,14 @@ public class LocusZoomJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList) throws PortalException {
+    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,int maximumNumberOfPointsToRetrieve) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         String jsonQueryString;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
@@ -84,7 +81,7 @@ public class LocusZoomJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList) throws PortalException {
+    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,int maximumNumberOfPointsToRetrieve) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
@@ -118,11 +115,13 @@ public class LocusZoomJsonBuilder {
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
-        query.setLimit(5000);
+        query.setLimit(maximumNumberOfPointsToRetrieve);
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
-        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, String.valueOf(0.0));
+        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(0.5));
+        QueryFilterBean queryFilterBean = new QueryFilterBean(pValueProperty,"", String.valueOf(0.0));
+        query.addOrderByQueryFilter(queryFilterBean);
 
         // add the covariates
         if ((covariateList != null) && (covariateList.size() > 0)) {
