@@ -59,7 +59,7 @@
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
-                                        '${it.dataType}','#lz-1',{colorBy:2,positionBy:1})">
+                                        '${it.dataType}','#lz-1',{colorBy:1,positionBy:1})">
     ${g.message(code: "metadata." + it.name)}
     </a>
 </li>
@@ -80,7 +80,7 @@
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
-                                        '${it.dataType}','#lz-1',{colorBy:2,positionBy:1})">
+                                        '${it.dataType}','#lz-1',{colorBy:1,positionBy:1})">
     ${g.message(code: "metadata." + it.name)}
     </a>
 </li>
@@ -96,7 +96,7 @@
                         tissueCode: '${it.name}',
                         tissueDescriptiveName: '${it.description}',
                         retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
-                    },'#lz-1',{colorBy:2,positionBy:1});">${it.description}</a>
+                    },'#lz-1',{colorBy:1,positionBy:1});">${it.description}</a>
                            </li>
                            </g:each>
                        </ul>

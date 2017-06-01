@@ -96,6 +96,7 @@
 
 <div id="BurdenHiddenHere" style="display:none">
     <g:render template="/templates/burdenTestSharedTemplate" />
+    <g:render template="/templates/igvBrowserTemplate" />
 </div>
 <g:render template="/templates/variantSearchResultsTemplate" />
 
