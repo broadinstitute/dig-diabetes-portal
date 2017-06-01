@@ -83,6 +83,17 @@ class WidgetService {
             case "ORBLOCK":
             case "ANDBLOCK": break;
             case "INTEGER":
+//                if (propertyValue?.length() < 1) {
+//                    generateFilter = false
+//                } else { // currently we can only send in one value.
+//                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
+//                    if (listOfSelectedValues.size() > 1) {
+//                        generateFilter = false
+//                    } else {
+//                        propertyValue = "${propertyValue}"
+//                    }
+//                }
+//                break;
             case "STRING":
                 if (propertyValue?.length() < 1) {
                     generateFilter = false
@@ -450,6 +461,9 @@ class WidgetService {
         List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+        // KLUDGE alert
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')}
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
             Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
@@ -472,13 +486,17 @@ class WidgetService {
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
         } else if (metaDataService.portalTypeFromSession=='stroke') {
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"&& (!it.parent?.systemId?.contains("SIGN")) &&
+                                                                                                                  (!it.parent?.systemId?.contains("MetaStroke"))}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"&& (!it.parent?.systemId?.contains("SIGN"))&&
+                    (!it.parent?.systemId?.contains("MetaStroke"))}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&
+                    it.group!="ISCHEMIC STROKE"&& (!it.parent?.systemId?.contains("SIGN"))&&
+                    (!it.parent?.systemId?.contains("MetaStroke"))}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
         } else if (metaDataService.portalTypeFromSession=='mi') {
