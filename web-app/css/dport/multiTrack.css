@@ -34,13 +34,13 @@ g.row.Active_transcription_start_site>g.element>rect {
     fill: #ff0000;
 }
 g.row.Weak_transcription_start_site>g.element>rect {
-    fill: #ff4500;
+    fill: #ff8c1a;
 }
 g.row.Flanking_transcription_start_site>g.element>rect {
-    fill: #ff4500;
+    fill: #ff8c1a;
 }
 g.row.Strong_transcription>g.element>rect {
-    fill: #008000;
+    fill: #00e600;
 }
 g.row.Weak_transcription>g.element>rect {
     fill: #006400;
@@ -58,7 +58,7 @@ g.row.Weak_enhancer>g.element>rect {
     fill: #ffff00;
 }
 g.row.Bivalent_poised_transcription_start_site>g.element>rect {
-    fill: #cd5c5c;
+    fill: #994d00;
 }
 g.row.Repressed_polycomb>g.element>rect {
     fill: #808080;

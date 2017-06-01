@@ -56,7 +56,7 @@ div.graphicsDisplay {
             </div>
 <hr>
 
-            <img src="${resource(dir:'images', file:'epigenomic_color_key.png')}">
+            <img src="${resource(dir:'images', file:'epigenomic_color_key.png')}" style="width: 1100px;">
 
 
             </div>

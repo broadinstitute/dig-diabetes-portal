@@ -96,6 +96,7 @@
 
 <div id="BurdenHiddenHere" style="display:none">
     <g:render template="/templates/burdenTestSharedTemplate" />
+    <g:render template="/templates/igvBrowserTemplate" />
 </div>
 <g:render template="/templates/variantSearchResultsTemplate" />
 
@@ -277,6 +278,8 @@
                                 '${igvIntro}',
                                 phenotypeName);
                     } else {
+                        var defaultTissues = ${(defaultTissues as String).encodeAsJSON()};
+                        var defaultTissuesDescriptions = ${(defaultTissuesDescriptions as String).encodeAsJSON()};
                         mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
                                 "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
@@ -284,7 +287,7 @@
                                 '${lzOptions.first().dataType}',
                                 '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                                 !mpgSoftware.locusZoom.plotAlreadyExists(),
-                            {});
+                                {},defaultTissues,defaultTissuesDescriptions);
                         $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
                             mpgSoftware.locusZoom.rescaleSVG();
                         });

@@ -1,7 +1,10 @@
 package org.broadinstitute.mpg
 import grails.transaction.Transactional
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValueBean
+import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -9,6 +12,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.Covariate
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTranslator
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
+import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -83,6 +87,17 @@ class WidgetService {
             case "ORBLOCK":
             case "ANDBLOCK": break;
             case "INTEGER":
+//                if (propertyValue?.length() < 1) {
+//                    generateFilter = false
+//                } else { // currently we can only send in one value.
+//                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
+//                    if (listOfSelectedValues.size() > 1) {
+//                        generateFilter = false
+//                    } else {
+//                        propertyValue = "${propertyValue}"
+//                    }
+//                }
+//                break;
             case "STRING":
                 if (propertyValue?.length() < 1) {
                     generateFilter = false
@@ -450,6 +465,9 @@ class WidgetService {
         List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+        // KLUDGE alert
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')}
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
             Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
@@ -472,13 +490,17 @@ class WidgetService {
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
         } else if (metaDataService.portalTypeFromSession=='stroke') {
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"&& (!it.parent?.systemId?.contains("SIGN")) &&
+                                                                                                                  (!it.parent?.systemId?.contains("MetaStroke"))}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"&& (!it.parent?.systemId?.contains("SIGN"))&&
+                    (!it.parent?.systemId?.contains("MetaStroke"))}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&it.group!="ISCHEMIC STROKE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&
+                    it.group!="ISCHEMIC STROKE"&& (!it.parent?.systemId?.contains("SIGN"))&&
+                    (!it.parent?.systemId?.contains("MetaStroke"))}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
         } else if (metaDataService.portalTypeFromSession=='mi') {
@@ -528,7 +550,7 @@ class WidgetService {
                                                                                                             String dataType,
                                                                                                             List<String> covariateVariants ) throws PortalException {
         // local variables
-        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList;
+        List<org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant> variantList = []
         String jsonResultString, jsonGetDataString;
         LocusZoomJsonBuilder locusZoomJsonBuilder = null;
         KnowledgeBaseResultParser knowledgeBaseResultParser;
@@ -555,8 +577,15 @@ class WidgetService {
             covariateList = locusZoomJsonBuilder.parseLzVariants(covariateVariants);
         }
 
+        int maximumNumberOfPointsToRetrieve = 1000
+        if (metaDataService.portalTypeFromSession=='t2d') {
+            maximumNumberOfPointsToRetrieve = 5000
+        } else if (metaDataService.portalTypeFromSession=='stroke') {
+            maximumNumberOfPointsToRetrieve = 500
+        }
+
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList);
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -577,8 +606,26 @@ class WidgetService {
         if (metaDataService.portalTypeFromSession=='stroke'){
             jsonResultString = jsonResultString.replaceAll(~/P_FIRTH_FE_IV/,"P_VALUE")
         }
-        knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonResultString);
-        variantList = knowledgeBaseResultParser.parseResult();
+
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject parsedJson = slurper.parseText(jsonResultString)
+        if (!parsedJson.is_error){
+            knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonResultString);
+            variantList = knowledgeBaseResultParser.parseResult();
+        }
+        // failed attempt to fake a record and to thereby keep LZ from creating a big ugly error message
+//        else {
+//            VariantBean variantBean = new VariantBean()
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME),"1"))
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE),"A"))
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE),"1"))
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION),"1"))
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE),"T"))
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID),"ABC"))
+//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_root_ExChip_82k_mdv10_82kFGP_VALUE"),"0.1"))
+//            variantList = [variantBean]
+//        }
+
 
         // return
         return variantList;

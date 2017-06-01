@@ -377,6 +377,7 @@ class RestServerService {
             this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2PassThrough);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated01);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated02);
+            this.burdenServerList.add(grailsApplication.config.burdenRestServerPassThrough);
         }
 
         return this.burdenServerList;

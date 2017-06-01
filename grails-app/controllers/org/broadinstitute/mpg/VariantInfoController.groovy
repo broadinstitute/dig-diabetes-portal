@@ -33,6 +33,7 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         String locusZoomDataset
+        List <String> defaultTissues = []
         String phenotype = "T2D"
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
@@ -54,6 +55,7 @@ class VariantInfoController {
         }
 
         locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
+        defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
 
 
 
