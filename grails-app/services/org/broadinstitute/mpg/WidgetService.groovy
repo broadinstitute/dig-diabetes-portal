@@ -573,8 +573,15 @@ class WidgetService {
             covariateList = locusZoomJsonBuilder.parseLzVariants(covariateVariants);
         }
 
+        int maximumNumberOfPointsToRetrieve = 1000
+        if (metaDataService.portalTypeFromSession=='t2d') {
+            maximumNumberOfPointsToRetrieve = 5000
+        } else if (metaDataService.portalTypeFromSession=='stroke') {
+            maximumNumberOfPointsToRetrieve = 500
+        }
+
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList);
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
 
         // submit the post request
         if (!attemptDynamicCall){

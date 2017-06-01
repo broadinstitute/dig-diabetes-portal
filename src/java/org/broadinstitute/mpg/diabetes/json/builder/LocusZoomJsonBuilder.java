@@ -55,14 +55,14 @@ public class LocusZoomJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList) throws PortalException {
+    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,int maximumNumberOfPointsToRetrieve) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         String jsonQueryString;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
@@ -81,11 +81,10 @@ public class LocusZoomJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList) throws PortalException {
+    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,int maximumNumberOfPointsToRetrieve) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
-       // PropertyBean mafProperty;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString+" "+this.propertyName);
         // get a dummy p-value property--we don't want to look it up because we don't know (or care) about
         // dataset, we just need to add a p-value property to the query
@@ -95,18 +94,11 @@ public class LocusZoomJsonBuilder {
         pValueProperty.setVariableType(PortalConstants.OPERATOR_TYPE_FLOAT);
         PhenotypeBean phenotypeBean = new PhenotypeBean();
         phenotypeBean.setName(this.phenotypeString);
-
         SampleGroupBean sgBean = new SampleGroupBean();
-        // look for MAF
-//        mafProperty = new PropertyBean();
-//        mafProperty.setName("MAF");
-//        mafProperty.setVariableType(PortalConstants.OPERATOR_TYPE_FLOAT);
-
         sgBean.setName(this.rootDataSetString);
         sgBean.setSystemId(this.rootDataSetString);
         phenotypeBean.setParent(sgBean);
         pValueProperty.setParent(phenotypeBean);
-//        mafProperty.setParent(phenotypeBean);
         // end property spoofing
 
 
@@ -123,14 +115,11 @@ public class LocusZoomJsonBuilder {
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
-        query.setLimit(500);
+        query.setLimit(maximumNumberOfPointsToRetrieve);
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
-        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, String.valueOf(0.0));
-//        if (mafProperty!=null){
-//            query.addFilterProperty(mafProperty, PortalConstants.OPERATOR_MORE_THAN_NOT_EQUALS, String.valueOf(0.05));
-//        }
+        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(0.5));
         QueryFilterBean queryFilterBean = new QueryFilterBean(pValueProperty,"", String.valueOf(0.0));
         query.addOrderByQueryFilter(queryFilterBean);
 
