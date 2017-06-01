@@ -122,7 +122,7 @@
                             <div class="row">
                                 <div class="col-lg-1">
                                             <ul class='aggregatingVariantsLabels'>
-                                              <li style="text-align: right">pValue</li>
+                                              <li style="text-align: right">p-value</li>
                                               <li style="text-align: right">beta</li>
                                               <li style="text-align: right">CI (95%)</li>
                                             </ul>
@@ -130,23 +130,23 @@
                                 <div class="col-lg-11">
                                     <div class="boxOfVariants">
                                         <div class="row">
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">all variants</span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">All variants&nbsp;<g:helpText title="geneSignalSummary.allVariants.help.header" placement="right" body="geneSignalSummary.allVariants.help.text"/></span>
                                                 <div id="allVariants"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">all coding&nbsp;<g:helpText title="geneSignalSummary.allCoding.help.header" placement="right" body="geneSignalSummary.allCoding.help.text"/></span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">All coding&nbsp;<g:helpText title="geneSignalSummary.allCoding.help.header" placement="right" body="geneSignalSummary.allCoding.help.text"/></span>
                                                 <div id="allCoding"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV + NS 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NS-1.help.header" placement="right" body="geneSignalSummary.PTV-NS-1.help.text"/></span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NS 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NS-1.help.header" placement="right" body="geneSignalSummary.PTV-NS-1.help.text"/></span>
                                                 <div id="allMissense"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+ NSbroad 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NSbroad-1.help.header" placement="right" body="geneSignalSummary.PTV-NSbroad-1.help.text"/></span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NSbroad 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NSbroad-1.help.header" placement="right" body="geneSignalSummary.PTV-NSbroad-1.help.text"/></span>
                                                 <div id="possiblyDamaging"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV + NSstrict&nbsp;<g:helpText title="geneSignalSummary.PTV-NSstrict.help.header" placement="right" body="geneSignalSummary.PTV-NSstrict.help.text"/></span>
+                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NSstrict&nbsp;<g:helpText title="geneSignalSummary.PTV-NSstrict.help.header" placement="right" body="geneSignalSummary.PTV-NSstrict.help.text"/></span>
                                                 <div id="probablyDamaging"></div>
                                             </div>
 
