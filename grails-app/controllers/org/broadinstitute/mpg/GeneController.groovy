@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 
@@ -81,6 +82,7 @@ class GeneController {
         String phenotype = "T2D"
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
+        List <String> defaultTissues = []
         switch (portalType){
             case 't2d':
                 igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
@@ -98,7 +100,7 @@ class GeneController {
                 break
         }
         String locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
-
+        defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser
@@ -189,7 +191,12 @@ class GeneController {
 
         if (geneToStartWith)  {
             locusZoomDataset = metaDataService.getDefaultDataset()
-
+            JSONArray passDefaultTissues = []
+            JSONArray passDefaultTissuesDescriptions = []
+            for (String tissue in defaultTissues){
+                passDefaultTissues.put("'${tissue}'")
+                passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
+            }
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -209,7 +216,9 @@ class GeneController {
                                              burdenDataSet:locusZoomDataset,
                                              dataVersion: metaDataService.getDataVersion(),
                                              locusZoomDataset:locusZoomDataset,
-                                             igvIntro: igvIntro
+                                             igvIntro: igvIntro,
+                                             defaultTissues:passDefaultTissues,
+                                             defaultTissuesDescriptions:passDefaultTissuesDescriptions
             ] )
         }
     }
