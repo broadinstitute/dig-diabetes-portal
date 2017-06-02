@@ -5,6 +5,7 @@
 <g:render template="./data/1kg_phase1" />
 <g:render template="./data/ExChip_82k"/>
 <g:render template="./data/ExChip_CAMP"/>
+<g:render template="./data/GWAS_CAMP"/>
 <g:render template="./data/ExChip_SIGMA1"/>
 <g:render template="./data/ExChip_T2DGO"/>
 <g:render template="./data/ExSeq_13k"/>
