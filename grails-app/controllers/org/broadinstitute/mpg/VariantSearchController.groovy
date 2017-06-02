@@ -1079,7 +1079,7 @@ class VariantSearchController {
                         int endExtent = positioningInformation.endingExtentSpecified as Long
                         if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
                                 ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-                            identifiedGenes << gene.name1 as String
+                            identifiedGenes << gene.name2 as String
                         }
                     } catch (e) {
                         redirect(controller: 'home', action: 'portalHome')

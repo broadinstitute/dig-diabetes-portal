@@ -34,6 +34,7 @@ class WidgetService {
     private String locusZoomEndpointSelection = LOCUSZOOM_HAIL_ENDPOINT_QA;
     private
     final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
+    private final Integer MAXIMUM_RANGE_FOR_HAIL = 600000
 
     // constants for now
     private final String dataSetKey = "ExSeq_17k_mdv2";
@@ -577,11 +578,23 @@ class WidgetService {
             covariateList = locusZoomJsonBuilder.parseLzVariants(covariateVariants);
         }
 
+        //
+        //  Let's impose some limitations to try to get LZ not to fold
+        //
         int maximumNumberOfPointsToRetrieve = 1000
         if (metaDataService.portalTypeFromSession=='t2d') {
-            maximumNumberOfPointsToRetrieve = 5000
+            maximumNumberOfPointsToRetrieve = 2500
         } else if (metaDataService.portalTypeFromSession=='stroke') {
             maximumNumberOfPointsToRetrieve = 500
+        }
+
+        //
+        //  Hail currently has a limit on the number of points it will return.  Therefore if we are undertaking a dynamic call make sure we don't exceed that limit!
+        //
+        if ((attemptDynamicCall)&&((endPosition-startPosition)>=MAXIMUM_RANGE_FOR_HAIL)){
+            int midpoint = ((endPosition+startPosition)/2);
+            startPosition = (midpoint-(MAXIMUM_RANGE_FOR_HAIL/2))+1
+            endPosition = (midpoint+(MAXIMUM_RANGE_FOR_HAIL/2))-1
         }
 
         // get json getData query string
