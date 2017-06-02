@@ -73,7 +73,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.each(columns,function(columnName){
             switch(columnName){
                 case 'VAR_ID':
-                    arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantRec.VAR_ID+'" class="boldItlink" dsname="'+variantRec.dsr+'" pval="'+variantRec['P_VALUE']+'" custag="'+variantRec.CAT+'">'+variantRec.VAR_ID+'</a>');
+                    arrayOfRows.push('<a href="'+variantInfoUrl+'/'+variantRec.VAR_ID+'" target="_blank" class="boldItlink" dsname="'+variantRec.dsr+'" pval="'+variantRec['P_VALUE']+'" custag="'+variantRec.CAT+'">'+variantRec.VAR_ID+'</a>');
                     break;
                 case 'DBSNP_ID':
                     arrayOfRows.push((variantRec.DBSNP_ID)?variantRec.DBSNP_ID:'');

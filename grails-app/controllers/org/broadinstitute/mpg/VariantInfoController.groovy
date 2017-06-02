@@ -293,19 +293,19 @@ class VariantInfoController {
 
         JSONObject dataJsonObject
 
-        elementMapper["1_Active_TSS"] = [name:"Active Promoter",state_id:1]
-        elementMapper["2_Weak_TSS"] = [name:"Weak Promoter",state_id:2]
-        elementMapper["14_Bivalent/poised_TSS"] = [name:"Poised Promoter",state_id:3]
-        elementMapper["10_Active_enhancer_2"] = [name:"Strong enhancer",state_id:4]
-        elementMapper["9_Active_enhancer_1"] = [name:"Strong enhancer",state_id:5]
-        elementMapper["11_Weak_enhancer"] = [name:"Weak enhancer",state_id:6]
-        elementMapper["8_Genic_enhancer"] = [name:"Weak enhancer",state_id:7]
-        elementMapper["3_Flanking_TSS"] = [name:"Insulator",state_id:8]
-        elementMapper["5_Strong_transcription"] = [name:"Transcriptional elongation",state_id:10]
-        elementMapper["6_Weak_transcription"] = [name:"Weak transcribed",state_id:11]
-        elementMapper["17_Weak_repressed_polycomb"] = [name:"Polycomb-repressed",state_id:12]
-        elementMapper["16_Repressed_polycomb"] = [name:"Heterochromatin / low signal",state_id:13]
-        elementMapper["18_Quiescent/low_signal"] = [name:"Heterochromatin / low signal",state_id:13]
+        elementMapper["1_Active_TSS"] = [name:"Active transcription start site",state_id:1]
+        elementMapper["2_Weak_TSS"] = [name:"Weak transcription start site",state_id:2]
+        elementMapper["3_Flanking_TSS"] = [name:"Flanking transcription start site",state_id:3]
+        elementMapper["5_Strong_transcription"] = [name:"Strong transcription",state_id:4]
+        elementMapper["6_Weak_transcription"] = [name:"Weak transcription",state_id:5]
+        elementMapper["8_Genic_enhancer"] = [name:"Genic enhancer",state_id:6]
+        elementMapper["9_Active_enhancer_1"] = [name:"Active enhancer 1",state_id:7]
+        elementMapper["10_Active_enhancer_2"] = [name:"Active enhancer 2",state_id:8]
+        elementMapper["11_Weak_enhancer"] = [name:"Weak enhancer",state_id:9]
+        elementMapper["14_Bivalent/poised_TSS"] = [name:"Bivalent poised TSS",state_id:10]
+        elementMapper["16_Repressed_polycomb"] = [name:"Repressed polycomb",state_id:11]
+        elementMapper["17_Weak_repressed_polycomb"] = [name:"Weak repressed polycomb",state_id:12]
+        elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
          dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source )
 

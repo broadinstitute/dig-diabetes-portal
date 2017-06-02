@@ -2,41 +2,41 @@ g.row>g.cell.notChosen {
     fill: #ffffff;
 }
 g.row.Active_transcription_start_site>g.cell.chosen {
-    fill: #ff0000;
+    fill: #ff0000;//255,0,0
 }
 g.row.Weak_transcription_start_site>g.cell.chosen {
-    fill: #ff8c1a;
+    fill: #ff8c1a;//255,140,26
 }
 g.row.Flanking_transcription_start_site>g.cell.chosen {
-    fill: #ff8c1a;
+    fill: #ff8c1a;//255,140,26
 }
 g.row.Strong_transcription>g.cell.chosen {
-    fill: #00e600;
+    fill: #00e600;//0,230,0
 }
 g.row.Weak_transcription>g.cell.chosen {
-    fill: #006400;
+    fill: #006400;//0,100,0
 }
 g.row.Genic_enhancer>g.cell.chosen {
-    fill: #c2e105;
+    fill: #c2e105;//194,225,5
 }
 g.row.Active_enhancer_1>g.cell.chosen {
-    fill: #FFC34D;
+    fill: #FFC34D;//255,195,77
 }
 g.row.Active_enhancer_2>g.cell.chosen {
-    fill: #FFC34D;
+    fill: #FFC34D;/255,195,77
 }
 g.row.Weak_enhancer>g.cell.chosen {
-    fill: #ffff00;
+    fill: #ffff00;//255,255,0
 }
 g.row.Bivalent_poised_transcription_start_site>g.cell.chosen {
-    fill: #994d00;
+    fill: #994d00;//255,255,0
 }
 g.row.Repressed_polycomb>g.cell.chosen {
-    fill: #808080;
+    fill: #808080;//128,128,128
 }
 g.row.Weak_repressed_polycomb>g.cell.chosen {
-    fill: #c0c0c0;
+    fill: #c0c0c0;//192,192,192
 }
 g.row.Quiescent_low_signal>g.cell.chosen {
-    fill: #dddddd;
+    fill: #dddddd;//221,221,221
 }
