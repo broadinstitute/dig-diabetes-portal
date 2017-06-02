@@ -108,22 +108,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 obj = { "name": colName,  class:dataSetColmnClassName+" codeName_"+colName,  "targets": [target], "title": "Data set" };
                 break;
             case 'EFFECT':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "effect" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Effect" };
                 break;
             case 'MOST_DEL_SCORE':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "impact" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Deleteriousness<br/>category" };
                 break;
             case 'DBSNP_ID':
                 obj = { "name": colName, "class":"codeName_"+colName,  "targets": [target], "title": "dbSNP ID" };
                 break;
             case 'Protein_change':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "protein change" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Protein change" };
                 break;
             case 'PVALUE':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "pValue" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "p-Value" };
                 break;
             case 'GENE':
-                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "gene" };
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Gene" };
                 break;
             case 'Consequence':
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Predicted<br/>impact" };
@@ -551,7 +551,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             } else if (data.stats.pValue < 0.01) {
                 mpgSoftware.geneSignalSummary.updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
             }
-
+            $("[data-toggle=popover]").popover();
         }
     };
 

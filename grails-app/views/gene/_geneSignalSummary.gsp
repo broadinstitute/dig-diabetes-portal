@@ -162,7 +162,15 @@
                                          dproperty:[],
                                          cproperty:['VAR_ID','DBSNP_ID','PVALUE','EFFECT','dataset']
                                      },
-                        translationDictionary:{'DBSNP_ID':'dbSNP ID'}};
+                        translationDictionary:{'DBSNP_ID':'dbSNP ID',
+                            'VAR_ID': 'Variant ID',
+                            'PVALUE': 'p-Value',
+                            'EFFECT':'Effect',
+                            'GENE': 'Gene',
+                            'MOST_DEL_SCORE': 'Deleteriousness category',
+                            'Protein_change': 'Protein change',
+                            'Consequence':' Predicted impact',
+                            'dataset': 'Data set'}};
                     mpgSoftware.variantSearchResults.setTranslationFunction(fakeData);
                     mpgSoftware.variantSearchResults.generateModal(fakeData,drivingVariables,drivingVariables.uniqueRoot);
                 };
