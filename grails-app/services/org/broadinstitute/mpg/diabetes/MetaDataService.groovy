@@ -1,7 +1,6 @@
 package org.broadinstitute.mpg.diabetes
 
 import grails.transaction.Transactional
-import groovy.json.JsonSlurper
 import groovy.json.internal.LazyMap
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
@@ -168,6 +167,22 @@ class MetaDataService {
 
         // return
         return dataset+getDataVersion();
+    }
+
+    public String getDynamicLocusZoomDataset() {
+        String dataset;
+        String portalType = this.getPortalTypeFromSession();
+        String distributedKb = this.getDistributedKBFromSession()
+
+        if (distributedKb == 'EBI')  {
+            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[distributedKb]
+        } else {
+            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
+        }
+
+
+        // return
+        return dataset;
     }
 
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {

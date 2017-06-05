@@ -313,6 +313,7 @@ environments {
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+//        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -536,6 +537,7 @@ portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
+portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27", "stroke": "GWAS_Stroke_mdv70", "mi" : "GWAS_CARDIoGRAM_mdv90", "EBI":"FG"]
 
 
 

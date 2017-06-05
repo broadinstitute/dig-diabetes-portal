@@ -1,14 +1,13 @@
 package org.broadinstitute.mpg.diabetes
 
+import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.RestServerService
-import grails.transaction.Transactional
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
-import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
