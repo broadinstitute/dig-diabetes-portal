@@ -185,6 +185,21 @@ class MetaDataService {
         return dataset;
     }
 
+    public SampleGroup getDefaultBurdenGeneDataset() {
+        // local variables
+        SampleGroup sampleGroup = null;
+        List<DataSet> dataSetList = null;
+
+        // get the sample group
+        dataSetList = this.getJsonSampleParser().findAllDatasetsByTypeAndMeaning(PortalConstants.BurdenTest.GENE, PortalConstants.TYPE_SAMPLE_GROUP_KEY, this.getDataVersion());
+        if (dataSetList.size() >= 1) {
+            sampleGroup = (SampleGroup)dataSetList.get(0);
+        }
+
+        // return
+        return sampleGroup;
+    }
+
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
         this.forceProcessedMetadataOverride = forceProcessedMetadataOverride
         setForceProcessedSampleMetadataOverride(forceProcessedMetadataOverride)

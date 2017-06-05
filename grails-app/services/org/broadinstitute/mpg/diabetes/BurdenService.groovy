@@ -350,7 +350,7 @@ class BurdenService {
 
 
         try {
-            String dataset = metaDataService.getDefaultDataset()
+            String dataset = (dataSet == null ? metaDataService.getDefaultDataset() : dataSet)
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
             String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
             queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
