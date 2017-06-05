@@ -27,9 +27,7 @@ var mpgSoftware = mpgSoftware || {};
          */
         var getAccessName = function (dataTypeName){
             var access;
-            if (dataTypeName.includes( "BioMe")){
-                access = "Early Access Phase 2";}
-            else if(dataTypeName.includes('ForT2D')){
+            if (dataTypeName.includes('ForT2D')){
                 access = "Unpublished";}
             else{
                 access = "Open access";}
