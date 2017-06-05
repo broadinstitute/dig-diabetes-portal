@@ -6,6 +6,15 @@ var mpgSoftware = mpgSoftware || {};
 mpgSoftware.geneSignalSummaryMethods = (function () {
     var loading = $('#rSpinner');
     var commonTable;
+    var signalSummarySectionVariables;
+
+    var setSignalSummarySectionVariables = function(incomingSignalSummarySectionVariables){
+        signalSummarySectionVariables = incomingSignalSummarySectionVariables;
+    };
+
+    var getSignalSummarySectionVariables = function(){
+        return signalSummarySectionVariables;
+    };
 
     var tableInitialization = function(){
         $.fn.DataTable.ext.search.push(
@@ -594,7 +603,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     }
                     if (existingRec['pValue'] > v['P_VALUEV']) {
                         existingRec['pValue'] = v['P_VALUEV'];
-                        existingRec['ds'] = v['ds'];
+                        existingRec['ds'] = v['dataset'];
                         existingRec['pname'] = v['pname'];
                     }
                 } else {
@@ -729,12 +738,50 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('#signalLevelHolder').text(significanceLevel);
     };
 
+    var refreshTopVariants = function ( callBack, params ) {
+        var rememberCallBack = callBack;
+        var rememberParams = params;
+        var propertiesToIncludeQuoted = [];
+        var propertiesToRemoveQuoted = [];
+        _.each(params.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
+        _.each(params.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        rememberParams['redLightImage']= signalSummarySectionVariables.redLightImage;
+        rememberParams['yellowLightImage']= signalSummarySectionVariables.yellowLightImage;
+        rememberParams['greenLightImage']= signalSummarySectionVariables.greenLightImage;
+        rememberParams['retrieveTopVariantsAcrossSgsUrl']= signalSummarySectionVariables.retrieveTopVariantsAcrossSgsUrl;
+        var callingObj = {
+            geneToSummarize:signalSummarySectionVariables.geneName,
+            propertiesToInclude: propertiesToIncludeQuoted.join(","),
+            propertiesToRemove: propertiesToRemoveQuoted.join(",")
+        };
+        if (typeof params.currentPhenotype !== 'undefined') {
+            callingObj["phenotype"] = params.currentPhenotype;
+        };
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: params.retrieveTopVariantsAcrossSgsUrl,
+            data: callingObj,
+            async: true,
+            success: function (data) {
+                rememberCallBack(data,rememberParams);
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    };
+
 
 
 
 
 // public routines are declared below
     return {
+        setSignalSummarySectionVariables:setSignalSummarySectionVariables,
+        refreshTopVariants:refreshTopVariants,
         buildCommonTable:buildCommonTable,
         buildHighImpactTable:buildHighImpactTable,
         processAggregatedData:processAggregatedData,
