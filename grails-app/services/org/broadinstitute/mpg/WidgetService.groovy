@@ -583,7 +583,7 @@ class WidgetService {
         //
         int maximumNumberOfPointsToRetrieve = 1000
         if (metaDataService.portalTypeFromSession=='t2d') {
-            maximumNumberOfPointsToRetrieve = 2500
+            maximumNumberOfPointsToRetrieve = 2000
         } else if (metaDataService.portalTypeFromSession=='stroke') {
             maximumNumberOfPointsToRetrieve = 500
         }
@@ -768,7 +768,7 @@ class WidgetService {
             boolean firstTime = true
             if (metaDataService.portalTypeFromSession=='t2d') {
                 // KLUDGE ALERT add credible set by hand
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set", dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv25", propertyName: "P_VALUE", dataType: "static", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set", dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", propertyName: "P_VALUE", dataType: "static", defaultSelected: false));
             }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]

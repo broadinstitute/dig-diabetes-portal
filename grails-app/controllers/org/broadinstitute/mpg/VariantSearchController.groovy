@@ -433,7 +433,7 @@ class VariantSearchController {
             dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
         }
         for (JSONObject jsonObject in dataJsonObject['variants'].findAll{((String)it.dataset).startsWith('GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet')}){
-            jsonObject.dataset = "GWAS_DIAGRAM_"+ sharedToolsService.getCurrentDataVersion()
+            jsonObject.dataset = "GWAS_DIAGRAM_mdv27"//+ sharedToolsService.getCurrentDataVersion()
         }
 
         if (dataJsonObject.variants) {
