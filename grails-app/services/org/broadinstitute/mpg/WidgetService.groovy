@@ -463,7 +463,7 @@ class WidgetService {
 
 
     private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         // KLUDGE alert
@@ -755,6 +755,10 @@ class WidgetService {
 
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
+            if (metaDataService.portalTypeFromSession=='t2d') {
+                // KLUDGE ALERT add credible set by hand
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set", dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv25", propertyName: "P_VALUE", dataType: "static", defaultSelected: false));
+            }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
                 beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet, propertyName:phenotypeDataSetCombo.property,dataType:"static",

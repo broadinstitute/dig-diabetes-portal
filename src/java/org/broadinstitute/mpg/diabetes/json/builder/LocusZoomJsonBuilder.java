@@ -119,7 +119,7 @@ public class LocusZoomJsonBuilder {
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
-        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(0.5));
+        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(0.95));
         QueryFilterBean queryFilterBean = new QueryFilterBean(pValueProperty,"", String.valueOf(0.0));
         query.addOrderByQueryFilter(queryFilterBean);
 

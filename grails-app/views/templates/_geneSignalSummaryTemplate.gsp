@@ -25,26 +25,6 @@
 <script id="locusZoomTemplate"  type="x-tmpl-mustache">
         <div style="margin-top: 20px">
 
-
-
-
-            <div style="display: flex; justify-content: space-around;">
-                <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
-
-                <p><i class="fa fa-circle" style="color: #d43f3a"></i> 1 - 0.8</p>
-
-                <p><i class="fa fa-circle" style="color: #eea236"></i> 0.8 - 0.6</p>
-
-                <p><i class="fa fa-circle" style="color: #5cb85c"></i> 0.6 - 0.4</p>
-
-                <p><i class="fa fa-circle" style="color: #46b8da"></i> 0.4 - 0.2</p>
-
-                <p><i class="fa fa-circle" style="color: #357ebd"></i> 0.2 - 0</p>
-
-                <p><i class="fa fa-circle" style="color: #B8B8B8"></i> no information</p>
-
-                <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
-            </div>
             <ul class="nav navbar-nav navbar-left" style="display: flex;">
                 <li class="dropdown" id="tracks-menu-dropdown-dynamic">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
@@ -81,7 +61,7 @@
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variant")}',
                                         '${it.dataType}','#lz-1',{colorBy:1,positionBy:1})">
-    ${g.message(code: "metadata." + it.name)}
+    ${g.message(code: "metadata." + it.name)+"("+g.message(code: "metadata." + it.dataSet)+")"}
     </a>
 </li>
 </g:each>

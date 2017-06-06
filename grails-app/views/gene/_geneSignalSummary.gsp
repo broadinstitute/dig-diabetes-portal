@@ -303,7 +303,7 @@
                         var defaultTissues = ${(defaultTissues as String).encodeAsJSON()};
                         var defaultTissuesDescriptions = ${(defaultTissuesDescriptions as String).encodeAsJSON()};
                         mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
+                                "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junkGSS',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                                 '${createLink(controller:"variantInfo", action:"variantInfo")}',
                                 '${lzOptions.first().dataType}',

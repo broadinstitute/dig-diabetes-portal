@@ -432,7 +432,9 @@ class VariantSearchController {
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
             dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
         }
-
+        for (JSONObject jsonObject in dataJsonObject['variants'].findAll{((String)it.dataset).startsWith('GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet')}){
+            jsonObject.dataset = "GWAS_DIAGRAM_"+ sharedToolsService.getCurrentDataVersion()
+        }
 
         if (dataJsonObject.variants) {
             for (Map pval in dataJsonObject.variants){

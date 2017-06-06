@@ -41,7 +41,10 @@ var mpgSoftware = mpgSoftware || {};
             });
 
             var variantIdentifier =  (typeof variant.DBSNP_ID!=='undefined') ? variant.DBSNP_ID :  variant.VAR_ID;
-            var variantNameAbbreviation = (variantIdentifier.length > 14) ?   variantIdentifier.substring(0,13) :   variantIdentifier;
+            var variantNameAbbreviation = '';
+            if (typeof variantIdentifier!=='undefined'){
+                variantNameAbbreviation = (variantIdentifier.length > 14) ?   variantIdentifier.substring(0,13) :   variantIdentifier;
+            }
             retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/" + variantIdentifier + "'>" + variantNameAbbreviation + "</a>");
             // we may not have a closest gene; if so, just display an empty string
             var closestGeneLink = variant.CLOSEST_GENE ? "<a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a>" : ''

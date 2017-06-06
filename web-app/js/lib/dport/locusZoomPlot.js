@@ -169,6 +169,7 @@ var mpgSoftware = mpgSoftware || {};
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
             panel_layout.y_index = -1;
+            panel_layout.height = 270;
             panel_layout.data_layers[2].fields = [phenotype + ":id",
                 phenotype + ":position",
                 phenotype + ":pvalue|scinotation",
@@ -191,7 +192,8 @@ var mpgSoftware = mpgSoftware || {};
                 default: break;
             }
             switch (colorBy){
-                case 1: break;
+                case 1:
+                    break;
                 case 2:
                     panel_layout.data_layers[2].color = [
                         {
@@ -209,7 +211,19 @@ var mpgSoftware = mpgSoftware || {};
                         { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
                         { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
                     break;
-                default: break;
+                default:
+                    panel_layout.data_layers[2].point_shape = [
+                        {
+                            scale_function: "categorical_bin",
+                            field: phenotype + ":scoreTestStat",
+                            parameters: {
+                                categories: ["1","2","3","4","5"],
+                                values: ["triangle", "square", "diamond", "circle", "square"]
+                            }
+                        },
+                        "circle"
+                    ];
+                    break;
             }
             panel_layout.data_layers[2].tooltip.html = toolTipText;
             return panel_layout;

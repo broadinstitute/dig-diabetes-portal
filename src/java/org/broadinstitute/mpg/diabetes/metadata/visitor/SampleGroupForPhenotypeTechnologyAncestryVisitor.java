@@ -45,7 +45,14 @@ public class SampleGroupForPhenotypeTechnologyAncestryVisitor implements DataSet
             experiment = (Experiment)dataSet;
 
             // if of proper tech and version, visit; if not, skip since phenotype children of no interest
-            if (experiment.getTechnology().equals(this.technologyName)) {
+            if ((this.technologyName!=null)&&   // make technology matching optional
+                    (this.technologyName.length()>0)) {
+                if (experiment.getTechnology().equals(this.technologyName)) {
+                    if (experiment.getVersion().equals(this.metadataVersion)) {
+                        visitChildren = true;
+                    }
+                }
+            } else {
                 if (experiment.getVersion().equals(this.metadataVersion)) {
                     visitChildren = true;
                 }

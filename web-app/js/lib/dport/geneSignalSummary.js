@@ -365,53 +365,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var mafValue;
             var mdsValue;
             var pValue;
-//            if (key === 'VAR_ID') {
-//                obj['id'] = (val) ? val : '';
-//            } else if (key === 'DBSNP_ID') {
-//                obj['rsId'] = (val) ? val : '';
-//            } else if (key === 'Protein_change') {
-//                obj['impact'] = (val) ? val : '';
-//            } else if (key === 'Consequence') {
-//                obj['deleteriousness'] = (val) ? val : '';
-//            } else if (key === 'Reference_Allele') {
-//                obj['referenceAllele'] = (val) ? val : '';
-//            } else if (key === 'Effect_Allele') {
-//                obj['effectAllele'] = (val) ? val : '';
-//            } else if (key === 'MOST_DEL_SCORE') {
-//                obj['MOST_DEL_SCORE'] = (val) ? val : '';
-//            } else if (key === 'dataset') {
-//                obj['ds'] = (val) ? val : '';
-//            } else if (key === 'dsr') {
-//                obj['dsr'] = (val) ? val : '';
-//            } else if (key === 'pname') {
-//                obj['pname'] = (val) ? val : '';
-//            } else if (key === 'phenotype') {
-//                obj['pheno'] = (val) ? val : '';
-//            } else if (key === 'datasetname') {
-//                obj['datasetname'] = (val) ? val : '';
-//            } else if (key === 'meaning') {
-//                obj['meaning'] = (val) ? val : '';
-//            } else if (key === 'AF') {
-//                obj['MAF'] = UTILS.realNumberFormatter((val) ? val : 1);
-//            } else if ((key === 'P_FIRTH_FE_IV') ||
-//                (key === 'P_VALUE') ||
-//                (key === 'P_FE_INV') ||
-//                (key === 'P_FIRTH')
-//                ) {
-//                obj['property'] = key;
-//                obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
-//                obj['P_VALUEV'] = (val) ? val : 1;
-//            } else if (key === 'BETA') {
-//                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
-//                obj['BETAV'] = Math.exp((val) ? val : 1);
-//
-//            }
-
-
-
-
-
-
               if (key === 'phenotype') {
                 obj['pheno'] = (val) ? val : '';
             } else if (key === 'datasetname') {
