@@ -88,7 +88,7 @@ public class LocusZoomJsonBuilder {
         System.out.println(this.phenotypeString + " " + this.rootDataSetString+" "+this.propertyName);
         // get a dummy p-value property--we don't want to look it up because we don't know (or care) about
         // dataset, we just need to add a p-value property to the query
-        // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
+        // TODO: DIGKB-135: Figure out a way to pull the Hail dataset programmatically, not hard code
         pValueProperty = new PropertyBean();
         pValueProperty.setName(this.propertyName);
         pValueProperty.setVariableType(PortalConstants.OPERATOR_TYPE_FLOAT);

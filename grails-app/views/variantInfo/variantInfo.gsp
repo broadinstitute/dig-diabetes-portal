@@ -126,12 +126,16 @@
                         </div>
                     </div>
 
-                    <div class="separator"></div>
+                <div class="separator"></div>
+
+                <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
+                          model="[variantIdentifier: variantToSearch, locale: locale]"/>
+
+                <div class="separator"></div>
 
                     <g:render template="functionalAnnotation"/>
 
-                    <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
-                              model="[variantIdentifier: variantToSearch, locale: locale]"/>
+
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||
@@ -139,7 +143,7 @@
 
                         g.portalTypeString()?.equals('mi')}">
 
-                        <div class="separator"></div>
+
 
                     <g:render template="/templates/burdenTestSharedTemplate" model="['variantIdentifier': variantToSearch, 'accordionHeaderClass': 'accordion-heading']"/>
                     <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': variantToSearch,

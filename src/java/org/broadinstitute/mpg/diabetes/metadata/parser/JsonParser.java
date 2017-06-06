@@ -264,6 +264,27 @@ public class JsonParser {
     }
 
 
+    /**
+     * find all datasets by type and whether they have given meaning
+     *
+     * @param meaning
+     * @param datasetType
+     * @return
+     * @throws PortalException
+     */
+    public List<DataSet> findAllDatasetsByTypeAndMeaning(String meaning, String datasetType, String version) throws PortalException {
+        // local variables
+        List<DataSet> dataSetList = null;
+
+        // visit the metadata root
+        DataSetByMeaningAndTypeVisitor visitor = new DataSetByMeaningAndTypeVisitor(meaning, datasetType, version);
+        this.getMetaDataRoot().acceptVisitor(visitor);
+        dataSetList = visitor.getDataSetList();
+
+        // return
+        return dataSetList;
+    }
+
     public List<Phenotype> getAllPhenotypesWithName(String phenotypeName, String version, String technology) throws PortalException {
         List<Phenotype> phenotypeList = new ArrayList<Phenotype>();
         List<Experiment> experimentList;

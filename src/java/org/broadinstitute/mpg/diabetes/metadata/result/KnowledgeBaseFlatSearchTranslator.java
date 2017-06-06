@@ -8,6 +8,7 @@ import org.codehaus.groovy.grails.web.json.JSONArray;
 import org.codehaus.groovy.grails.web.json.JSONObject;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by mduby on 12/8/15.
@@ -27,6 +28,7 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
 
 
     // instance variables
+    Logger translatorLogger = Logger.getLogger(this.getClass().getName());
     private String defaultDataSetKey = null;
     private String defaultPhenotypeKey = null;
     private String defaultPropertyKey = null;
@@ -56,6 +58,9 @@ public class KnowledgeBaseFlatSearchTranslator implements KnowledgeBaseResultTra
         JSONObject rootObject = new JSONObject();
         PropertyValue tempPropertyValue;
         JSONObject dataObject = new JSONObject();
+
+        // log
+        this.translatorLogger.info("Translating: " + resultList.size() + " variants usign dataset: " + this.defaultDataSetKey + " and phenotype: " + this.defaultPhenotypeKey + " and property: " + this.defaultPropertyKey);
 
         // variables to store properties
         Integer position;

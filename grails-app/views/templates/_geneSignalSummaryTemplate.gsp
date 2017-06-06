@@ -102,9 +102,9 @@
                             <div class="row">
                                 <div class="col-lg-1">
                                             <ul class='aggregatingVariantsLabels'>
-                                              <li style="text-align: right">p-value</li>
-                                              <li style="text-align: right">beta</li>
-                                              <li style="text-align: right">CI (95%)</li>
+                                              <li style="text-align: right">pValue&nbsp;<g:helpText title="variantTable.columnHeaders.sigma.pValue.help.header" placement="right" body="variantTable.columnHeaders.sigma.pValue.help.text"/></li>
+                                              <li style="text-align: right">beta&nbsp;<g:helpText title="variantTable.columnHeaders.shared.effect.help.header" placement="right" body="variantTable.columnHeaders.shared.effect.help.text"/></li>
+                                              <li style="text-align: right">95% CI&nbsp;<g:helpText title="geneSignalSummary.CI.help.header" placement="right" body="geneSignalSummary.CI.help.text"/></li>
                                             </ul>
                                 </div>
                                 <div class="col-lg-11">
@@ -241,7 +241,7 @@
                 <div role="tabpanel" class="tab-pane active" id="commonVariantTabHolder">
                     <div class="row"   style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder">
+                            <div class="variantCategoryHolder">The Common variants tab shows information about variants associated with the selected phenotype whose minor allele frequency (MAF) is greater than 5%.
 
                                 <div id="commonVariantsLocation"></div>
                                 <div class="browserChooserGoesHere"></div>
@@ -254,7 +254,7 @@
                 <div role="tabpanel" class="tab-pane" id="highImpactVariantTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder">
+                            <div class="variantCategoryHolder">The High-impact variants tab shows information about variants associated with the selected phenotype that are predicted to cause missense or protein-truncating mutations in the encoded protein. High-impact variants with MAF > 5% will also be shown on the Common variants tab.
                                 <div id="highImpactVariantsLocation"></div>
                                 <div id="aggregateVariantsLocation"></div>
                                 <div class="row">

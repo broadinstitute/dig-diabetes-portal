@@ -99,7 +99,7 @@ class GeneController {
             default:
                 break
         }
-        String locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
+        String locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
         defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
 
         if (params.phenotypeChooser){
@@ -187,6 +187,24 @@ class GeneController {
         lzOptions << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue")
         lzOptions << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue")
 
+        // DIGKB-217: get the default samples data set from the metadata
+        SampleGroup defaultGeneBurdenSampleGroup = this.metaDataService.getDefaultBurdenGeneDataset();
+        String defaultGeneBurdenSamplesDataSetName = defaultGeneBurdenSampleGroup?.getSystemId();
+        String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
+        if (defaultGeneBurdenSampleGroup == null) {
+            defaultGeneBurdenSamplesDataSetName = "samples_19k_"+metaDataService.getDataVersion();
+
+        } else {
+            // TODO - DIGKB-217: store linked variant sample group in dataset sample group meaning field
+            Iterator<String> meaningIterator = defaultGeneBurdenSampleGroup?.getMeaningSet().iterator();
+            while (meaningIterator.hasNext()) {
+                String variantDataSet = meaningIterator.next();
+                if (variantDataSet.contains("DATASET_")) {
+                    defaultGeneBurdenDataSetName = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
+                    break;
+                }
+            }
+        }
 
 
         if (geneToStartWith)  {
@@ -212,8 +230,8 @@ class GeneController {
                                              phenotype:phenotype,
                                              locale:locale,
                                              lzOptions:lzOptions,
-                                             sampleDataSet:"samples_19k_"+metaDataService.getDataVersion(),
-                                             burdenDataSet:locusZoomDataset,
+                                             sampleDataSet: defaultGeneBurdenSamplesDataSetName,
+                                             burdenDataSet:defaultGeneBurdenDataSetName,
                                              dataVersion: metaDataService.getDataVersion(),
                                              locusZoomDataset:locusZoomDataset,
                                              igvIntro: igvIntro,
