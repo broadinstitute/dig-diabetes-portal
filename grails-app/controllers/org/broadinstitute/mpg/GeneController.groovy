@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
@@ -537,7 +538,13 @@ class GeneController {
             endInteger = Integer.parseInt(endString);
 
             if (chromosome != null) {
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype, propertyName, dataType, conditionVariants);
+
+                if (dataType=='static'){ // dynamically get the property name for static datasets
+                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,'P_VALUE')
+                    propertyName = property.name
+                }
+
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, dataType, conditionVariants);
             } else {
                 jsonReturn = errorJson;
             }
