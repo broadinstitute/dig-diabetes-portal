@@ -264,6 +264,10 @@ class BurdenService {
         }
 
         try {
+            if ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
+                mafValue = 0.01
+            }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 
             // get the getData results payload
@@ -351,6 +355,10 @@ class BurdenService {
 
         try {
             String dataset = (dataSet == null ? metaDataService.getDefaultDataset() : dataSet)
+            if ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
+                mafValue = 0.01
+            }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
             String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
             queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
