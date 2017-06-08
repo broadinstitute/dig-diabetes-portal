@@ -404,7 +404,7 @@ var mpgSoftware = mpgSoftware || {};
                 positionBy = graphicalOptions.positionBy;
             }
             var rawPhenotype = lzParameters.phenotype;
-            var phenotype = lzParameters.phenotype+"_"+makeDynamic;
+            var phenotype = lzParameters.phenotype+"_"+makeDynamic+"_"+dataSetName;
             var propertyName = lzParameters.propertyName;
             var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
             setNewDefaultLzPlot(lzGraphicDomId);
