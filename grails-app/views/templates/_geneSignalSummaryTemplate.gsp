@@ -305,7 +305,7 @@
                 <div role="tabpanel" class="tab-pane" id="commonVariantTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder" id=">
+                            <div class="variantCategoryHolder">
                                 <div id="commonVariantsLocation"></div>
                                 <div class="browserChooserGoesHere"></div>
                                 <div id="locusZoomLocation" class="locusZoomLocation"></div>
