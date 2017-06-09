@@ -100,7 +100,7 @@
                 </h1>
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                 <div style="text-align: right;">
-                    <a href="" target="_blank">Gene Page guide</a>
+                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
                 </div></g:if>
     </div>
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>

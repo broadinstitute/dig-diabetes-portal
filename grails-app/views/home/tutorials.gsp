@@ -104,6 +104,12 @@
             $(".media").find("iframe").attr("src", "${links.PhenotypeGuide}");
 
         });
+
+        $("#GenePageGuidePdf").click(function () {
+            $(".media").attr("href", "${links.GenePageGuide}");
+            $(".media").find("iframe").attr("src", "${links.GenePageGuide}");
+
+        });
     });
 
     function setPdfViewer() {
@@ -153,6 +159,8 @@
                         code="portal.GeneticsGuide.title"/></a></li>
                 <li><a id="PhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message
                 code="portal.PhenotypeGuide.title"/></a></li>
+                <li><a id="GenePageGuidePdf" class="btn btn-default btn-sm"><g:message
+                        code="portal.GenePageGuide.title"/></a></li>
             </ul>
 
         </g:elseif>
