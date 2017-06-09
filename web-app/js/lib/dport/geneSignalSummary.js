@@ -6,6 +6,15 @@ var mpgSoftware = mpgSoftware || {};
 mpgSoftware.geneSignalSummaryMethods = (function () {
     var loading = $('#rSpinner');
     var commonTable;
+    var signalSummarySectionVariables;
+
+    var setSignalSummarySectionVariables = function(incomingSignalSummarySectionVariables){
+        signalSummarySectionVariables = incomingSignalSummarySectionVariables;
+    };
+
+    var getSignalSummarySectionVariables = function(){
+        return signalSummarySectionVariables;
+    };
 
     var tableInitialization = function(){
         $.fn.DataTable.ext.search.push(
@@ -356,53 +365,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var mafValue;
             var mdsValue;
             var pValue;
-//            if (key === 'VAR_ID') {
-//                obj['id'] = (val) ? val : '';
-//            } else if (key === 'DBSNP_ID') {
-//                obj['rsId'] = (val) ? val : '';
-//            } else if (key === 'Protein_change') {
-//                obj['impact'] = (val) ? val : '';
-//            } else if (key === 'Consequence') {
-//                obj['deleteriousness'] = (val) ? val : '';
-//            } else if (key === 'Reference_Allele') {
-//                obj['referenceAllele'] = (val) ? val : '';
-//            } else if (key === 'Effect_Allele') {
-//                obj['effectAllele'] = (val) ? val : '';
-//            } else if (key === 'MOST_DEL_SCORE') {
-//                obj['MOST_DEL_SCORE'] = (val) ? val : '';
-//            } else if (key === 'dataset') {
-//                obj['ds'] = (val) ? val : '';
-//            } else if (key === 'dsr') {
-//                obj['dsr'] = (val) ? val : '';
-//            } else if (key === 'pname') {
-//                obj['pname'] = (val) ? val : '';
-//            } else if (key === 'phenotype') {
-//                obj['pheno'] = (val) ? val : '';
-//            } else if (key === 'datasetname') {
-//                obj['datasetname'] = (val) ? val : '';
-//            } else if (key === 'meaning') {
-//                obj['meaning'] = (val) ? val : '';
-//            } else if (key === 'AF') {
-//                obj['MAF'] = UTILS.realNumberFormatter((val) ? val : 1);
-//            } else if ((key === 'P_FIRTH_FE_IV') ||
-//                (key === 'P_VALUE') ||
-//                (key === 'P_FE_INV') ||
-//                (key === 'P_FIRTH')
-//                ) {
-//                obj['property'] = key;
-//                obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
-//                obj['P_VALUEV'] = (val) ? val : 1;
-//            } else if (key === 'BETA') {
-//                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
-//                obj['BETAV'] = Math.exp((val) ? val : 1);
-//
-//            }
-
-
-
-
-
-
               if (key === 'phenotype') {
                 obj['pheno'] = (val) ? val : '';
             } else if (key === 'datasetname') {
@@ -594,7 +556,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     }
                     if (existingRec['pValue'] > v['P_VALUEV']) {
                         existingRec['pValue'] = v['P_VALUEV'];
-                        existingRec['ds'] = v['ds'];
+                        existingRec['ds'] = v['dataset'];
                         existingRec['pname'] = v['pname'];
                     }
                 } else {
@@ -729,12 +691,50 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('#signalLevelHolder').text(significanceLevel);
     };
 
+    var refreshTopVariants = function ( callBack, params ) {
+        var rememberCallBack = callBack;
+        var rememberParams = params;
+        var propertiesToIncludeQuoted = [];
+        var propertiesToRemoveQuoted = [];
+        _.each(params.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
+        _.each(params.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        rememberParams['redLightImage']= signalSummarySectionVariables.redLightImage;
+        rememberParams['yellowLightImage']= signalSummarySectionVariables.yellowLightImage;
+        rememberParams['greenLightImage']= signalSummarySectionVariables.greenLightImage;
+        rememberParams['retrieveTopVariantsAcrossSgsUrl']= signalSummarySectionVariables.retrieveTopVariantsAcrossSgsUrl;
+        var callingObj = {
+            geneToSummarize:signalSummarySectionVariables.geneName,
+            propertiesToInclude: propertiesToIncludeQuoted.join(","),
+            propertiesToRemove: propertiesToRemoveQuoted.join(",")
+        };
+        if (typeof params.currentPhenotype !== 'undefined') {
+            callingObj["phenotype"] = params.currentPhenotype;
+        };
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: params.retrieveTopVariantsAcrossSgsUrl,
+            data: callingObj,
+            async: true,
+            success: function (data) {
+                rememberCallBack(data,rememberParams);
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    };
+
 
 
 
 
 // public routines are declared below
     return {
+        setSignalSummarySectionVariables:setSignalSummarySectionVariables,
+        refreshTopVariants:refreshTopVariants,
         buildCommonTable:buildCommonTable,
         buildHighImpactTable:buildHighImpactTable,
         processAggregatedData:processAggregatedData,

@@ -541,7 +541,7 @@ var UTILS = {
 
             var pValueGreyedOut = (variant.PVALUE > .05) ? "greyedout" : "normal";
 
-            retVal += "<td><a class='boldlink' href='../variant/variantInfo/" + variant.DBSNP_ID + "'>" + variant.DBSNP_ID + "</a></td>";
+            retVal += "<td><a class='boldlink' href='../variantInfo/variantInfo/" + variant.DBSNP_ID + "'>" + variant.DBSNP_ID + "</a></td>";
 
             retVal += "<td><a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a></td>";
 

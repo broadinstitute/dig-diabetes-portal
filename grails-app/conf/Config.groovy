@@ -147,8 +147,8 @@ burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://l
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
-burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
 
 
@@ -300,7 +300,7 @@ environments {
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-        grails.serverURL = "http://cerebrovascularportal.org"
+//        grails.serverURL = "http://cerebrovascularportal.org"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
@@ -313,6 +313,7 @@ environments {
 //      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -536,6 +537,7 @@ portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
+portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27", "stroke": "GWAS_Stroke_mdv70", "mi" : "GWAS_CARDIoGRAM_mdv90", "EBI":"FG"]
 
 
 

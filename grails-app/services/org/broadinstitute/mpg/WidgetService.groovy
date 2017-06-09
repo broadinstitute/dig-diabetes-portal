@@ -1,10 +1,9 @@
 package org.broadinstitute.mpg
+
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
-import org.broadinstitute.mpg.diabetes.knowledgebase.result.PropertyValueBean
-import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -12,7 +11,6 @@ import org.broadinstitute.mpg.diabetes.metadata.query.Covariate
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTranslator
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
-import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -463,7 +461,7 @@ class WidgetService {
 
 
     private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         // KLUDGE alert
@@ -563,11 +561,13 @@ class WidgetService {
         Boolean attemptDynamicCall =  (dataType == 'dynamic')
 
         // build the LZ json builder
+        // TODO - DIGKB-135: add way to programmatically determine Hail dataset
+        String locusZoomDataset = metaDataService?.getDynamicLocusZoomDataset();
         if (attemptDynamicCall) {
             if (metaDataService.portalTypeFromSession=='t2d') {
-                locusZoomJsonBuilder = new LocusZoomJsonBuilder("ExSeq_17k_mdv${restServerService.SAMPLE_DATA_VERSION_T2D}", phenotype, "P_FIRTH_FE_IV");
+                locusZoomJsonBuilder = new LocusZoomJsonBuilder(locusZoomDataset, phenotype, "P_FIRTH_FE_IV");
             } else if (metaDataService.portalTypeFromSession=='stroke') {
-                locusZoomJsonBuilder = new LocusZoomJsonBuilder("GWAS_Stroke_mdv${restServerService.SAMPLE_DATA_VERSION_STROKE}", phenotype, "P_VALUE");
+                locusZoomJsonBuilder = new LocusZoomJsonBuilder(locusZoomDataset, phenotype, "P_VALUE");
             }
         } else { // option while we get real refs working
             locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName );
@@ -583,7 +583,7 @@ class WidgetService {
         //
         int maximumNumberOfPointsToRetrieve = 1000
         if (metaDataService.portalTypeFromSession=='t2d') {
-            maximumNumberOfPointsToRetrieve = 2500
+            maximumNumberOfPointsToRetrieve = 2000
         } else if (metaDataService.portalTypeFromSession=='stroke') {
             maximumNumberOfPointsToRetrieve = 500
         }
@@ -603,15 +603,19 @@ class WidgetService {
         // submit the post request
         if (!attemptDynamicCall){
         //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
+            log.info("Got LZ static request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
         } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_DEV) {
+            log.info("Got LZ dynamic request to: " + RestServerService.HAIL_SERVER_URL_DEV + " for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
             jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_DEV);
 
         } else if (this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_HAIL_ENDPOINT_QA) {
+            log.info("Got LZ dynamic request to: " + RestServerService.HAIL_SERVER_URL_QA + " for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
             jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_QA);
 
         } else {
+            log.info("Got LZ dynamic request to: " + RestServerService.HAIL_SERVER_URL_DEV + " for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
             jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString, RestServerService.HAIL_SERVER_URL_DEV);
         }
 
@@ -621,11 +625,15 @@ class WidgetService {
         }
 
         JsonSlurper slurper = new JsonSlurper()
+        log.info("Slurping json for correctness???");
+
         JSONObject parsedJson = slurper.parseText(jsonResultString)
+        log.info("Done slurping json for correctness???");
         if (!parsedJson.is_error){
             knowledgeBaseResultParser = new KnowledgeBaseResultParser(jsonResultString);
             variantList = knowledgeBaseResultParser.parseResult();
         }
+        log.info("Got LZ variant result list size of: " + variantList?.size());
         // failed attempt to fake a record and to thereby keep LZ from creating a big ugly error message
 //        else {
 //            VariantBean variantBean = new VariantBean()
@@ -668,23 +676,26 @@ class WidgetService {
         if(phenotype == null) {
             phenotype = this.phenotypeKey
         }
+
+        log.info("Got LZ request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
+
         Property property
         // get the query result and translate to a json string
         try {
             // get the variant list
             variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 
-            // TODO: DIGP-354: Review property spoofing for Hail multiple phenotype call to see if appropriate
+            // TODO: DIGKB-135: Figure out a way to pull the Hail dataset programmatically, not hard code
+            String locusZoomDataset = metaDataService?.getDynamicLocusZoomDataset();
 
             //
             if (dataType=='static'){
                 knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator( dataset, phenotype, propertyName );
             } else {
-
                 if (metaDataService.portalTypeFromSession=='t2d') {
-                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "ExSeq_17k_mdv23", "T2D", "P_FIRTH_FE_IV" );
+                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(locusZoomDataset, "T2D", "P_FIRTH_FE_IV" );
                 } else if (metaDataService.portalTypeFromSession=='stroke') {
-                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(  "GWAS_Stroke_mdv70", phenotype, "P_FIRTH_FE_IV" );
+                    knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(locusZoomDataset, phenotype, "P_FIRTH_FE_IV" );
                 }
             }
 
@@ -755,6 +766,10 @@ class WidgetService {
 
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
+            if (metaDataService.portalTypeFromSession=='t2d') {
+                // KLUDGE ALERT add credible set by hand
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set", dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", propertyName: "P_VALUE", dataType: "static", defaultSelected: false));
+            }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
                 beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet, propertyName:phenotypeDataSetCombo.property,dataType:"static",

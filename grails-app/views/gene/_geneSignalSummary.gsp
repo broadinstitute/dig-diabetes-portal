@@ -175,6 +175,20 @@
                     mpgSoftware.variantSearchResults.generateModal(fakeData,drivingVariables,drivingVariables.uniqueRoot);
                 };
 
+
+
+            var initializeSignalSummarySection = function(){
+                var drivingVariables = {
+                    geneName: '<%=geneName%>',
+                    vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
+                    redLightImage: '<r:img uri="/images/redlight.png"/>',
+                    yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
+                    greenLightImage: '<r:img uri="/images/greenlight.png"/>',
+                    retrieveTopVariantsAcrossSgsUrl: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}"
+                };
+                mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
+            };
+
             var updateCommonTable = function (data,additionalParameters) {
                 var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
                 renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
@@ -289,10 +303,10 @@
                         var defaultTissues = ${(defaultTissues as String).encodeAsJSON()};
                         var defaultTissuesDescriptions = ${(defaultTissuesDescriptions as String).encodeAsJSON()};
                         mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                                "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.first().propertyName}', datasetName, 'junk',
+                                "#lz-1", "#collapseExample", phenotypeName, pName, '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}', datasetName, 'junkGSS',
                                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                                 '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                '${lzOptions.first().dataType}',
+                                '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                                 '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                                 !mpgSoftware.locusZoom.plotAlreadyExists(),
                                 {},defaultTissues,defaultTissuesDescriptions);
@@ -346,7 +360,7 @@
                     });
                     var currentPhenotype = $('.chosenPhenotype').attr('id');
                     if (domSelectors == 'common'){
-                        mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
+                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
                                     currentPhenotype: currentPhenotype,
@@ -356,7 +370,7 @@
                                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                                     greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
                     } else {
-                        mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummary.updateHighImpactTable,
+                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummary.updateHighImpactTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
                                     currentPhenotype: currentPhenotype,
@@ -412,36 +426,7 @@
 
                         };
 
-                        var refreshTopVariants = function ( callBack, params ) {
-                            var rememberCallBack = callBack;
-                            var rememberParams = params;
-                            var propertiesToIncludeQuoted = [];
-                            var propertiesToRemoveQuoted = [];
-                            _.each(params.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
-                            _.each(params.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
-                            var callingObj = {
-                                geneToSummarize:"${geneName}",
-                                propertiesToInclude: propertiesToIncludeQuoted.join(","),
-                                propertiesToRemove: propertiesToRemoveQuoted.join(",")
-                            };
-                            if (typeof params.currentPhenotype !== 'undefined') {
-                                callingObj["phenotype"] = params.currentPhenotype;
-                            };
-                            $.ajax({
-                                cache: false,
-                                type: "post",
-                                url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
-                                data: callingObj,
-                                async: true,
-                                success: function (data) {
-                                    rememberCallBack(data,rememberParams);
-                                },
-                                error: function (jqXHR, exception) {
-                                    core.errorReporter(jqXHR, exception);
-                                }
-                            });
 
-                        };
                         var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
                             var rememberCallBack = callBack;
                             var rememberParameter = parameter;
@@ -532,14 +517,15 @@ return {
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
-    refreshTopVariants:refreshTopVariants,
+//    refreshTopVariants:refreshTopVariants,
     refreshLZ:refreshLZ,
     updateDisplayBasedOnStoredSignificanceLevel:updateDisplayBasedOnStoredSignificanceLevel,
     displayVariantResultsTable:displayVariantResultsTable,
     updateGenePageTables:updateGenePageTables,
     updateCommonTable:updateCommonTable,
     updateHighImpactTable:updateHighImpactTable,
-    adjustProperties:adjustProperties
+    adjustProperties:adjustProperties,
+    initializeSignalSummarySection:initializeSignalSummarySection
 }
 }());
 
@@ -547,11 +533,9 @@ return {
 })();
 
 $( document ).ready(function() {
-   mpgSoftware.geneSignalSummary.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
-           {redLightImage:'<r:img uri="/images/redlight.png"/>',
-            yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
-            greenLightImage:'<r:img uri="/images/greenlight.png"/>',
-           favoredPhenotype:'T2D'});
+    mpgSoftware.geneSignalSummary.initializeSignalSummarySection();
+    mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
+           {favoredPhenotype:'T2D'});
     mpgSoftware.geneSignalSummaryMethods.tableInitialization();
 
 

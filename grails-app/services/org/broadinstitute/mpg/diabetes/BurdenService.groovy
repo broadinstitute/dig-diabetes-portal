@@ -1,14 +1,13 @@
 package org.broadinstitute.mpg.diabetes
 
+import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.RestServerService
-import grails.transaction.Transactional
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
-import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
@@ -265,6 +264,10 @@ class BurdenService {
         }
 
         try {
+            if ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
+                mafValue = 0.01
+            }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 
             // get the getData results payload
@@ -351,7 +354,11 @@ class BurdenService {
 
 
         try {
-            String dataset = metaDataService.getDefaultDataset()
+            String dataset = (dataSet == null ? metaDataService.getDefaultDataset() : dataSet)
+            if ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
+                mafValue = 0.01
+            }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
             String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
             queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))

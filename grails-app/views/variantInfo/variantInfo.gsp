@@ -69,10 +69,14 @@
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}',
-                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}','${lzOptions.first().dataType}',
-                        '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().key}',
+                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
+                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
+                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
+                    '${createLink(controller:"gene", action:"getLocusZoom")}',
+                    '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
+                    '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                     ${defaultTissues});
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
