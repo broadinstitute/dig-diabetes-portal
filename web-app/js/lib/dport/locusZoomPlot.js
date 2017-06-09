@@ -183,9 +183,13 @@ var mpgSoftware = mpgSoftware || {};
             }
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
 
+            var addendumToName = '';
+            if ( typeof lzParameters.datasetReadableName !== 'undefined'){
+                addendumToName = (" ("+lzParameters.datasetReadableName+")");
+            }
             var mods = {
                 id: phenotype+dataSetName,
-                title: { text: lzParameters.description+" ("+makeDynamic+")" },
+                title: { text: lzParameters.description+addendumToName},
                 namespace: { assoc: phenotype }
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
@@ -464,7 +468,7 @@ var mpgSoftware = mpgSoftware || {};
                                          phenoPropertyName,locusZoomDataset,junk,
                                          geneGetLZ,variantInfoUrl,makeDynamic,
                                          retrieveFunctionalDataAjaxUrl,
-                                         pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions) {
+                                         pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions,datasetReadableName) {
             var graphicalOptions = {colorBy:1,
                                     positionBy:1};
             var loading = $('#spinner').show();
@@ -512,6 +516,7 @@ var mpgSoftware = mpgSoftware || {};
                         description: phenoTypeDescription,
                         propertyName:phenoPropertyName,
                         dataSet:locusZoomDataset,
+                        datasetReadableName:datasetReadableName,
                         retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
                 },dataSetName,geneGetLZ,variantInfoUrl,
                     makeDynamic,lzGraphicDomId,graphicalOptions);
