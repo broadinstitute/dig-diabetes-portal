@@ -24,6 +24,26 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
+        var standardDashBoadWithoutMove = function(){
+            return  {
+                components: [
+                    {
+                        type: "remove_panel",
+                        position: "right",
+                        color: "red",
+                        group_position: "end"
+                    },
+                    {
+                        type: "toggle_split_tracks",
+                        data_layer_id: layerName,
+                        position: "right"
+                    }
+                ]
+            }
+        }
+
+
+
         var customIntervalsDataLayer = function (layerName){
             var stateIdSpec = layerName+":state_id";
             var developingStructure =  {
@@ -104,6 +124,7 @@ var mpgSoftware = mpgSoftware || {};
                     min_height: 50,
                     margin: { top: 25, right: 150, bottom: 5, left: 50 },
                 dashboard: (function(){
+                    //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
                     l.components.push({
                         type: "toggle_split_tracks",

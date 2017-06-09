@@ -280,12 +280,7 @@
                 </div>
             </div>
             <div id="cDataModalGoesHere"></div>
-            <div class="row">
-                <div class="col-xs-9"></div>
-                <div class="col-xs-3">
-                    <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#cDataModalGoesHere">Add / Subtract Data</button>
-                </div>
-            </div>
+
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="highImpactVariantTabHolder">
                     <div class="row"  style="border: none">
