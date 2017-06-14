@@ -463,9 +463,9 @@ class TraitController {
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> staticPhenotypeMap = phenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->phenotypeBean.dataType=='static'}
-        t2dDefaultDataSources.addAll(staticPhenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->( phenotypeBean.key=='T2D'||
-                                                                                                                                phenotypeBean.key=='FG'||
-                                                                                                                                phenotypeBean.key=='FI')} )
+        t2dDefaultDataSources.addAll(staticPhenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->( phenotypeBean.name=='T2D'||
+                                                                                                                                phenotypeBean.name=='FG'||
+                                                                                                                                phenotypeBean.name=='FI')} )
         strokeDefaultDataSources.addAll(staticPhenotypeMap.findAll{org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean->(  phenotypeBean.key=='Stroke_all'||
                                                                                                                                     phenotypeBean.key=='Stroke_deep'||
                                                                                                                                     phenotypeBean.key=='Stroke_lobar')} )

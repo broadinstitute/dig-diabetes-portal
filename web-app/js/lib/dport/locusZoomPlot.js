@@ -24,6 +24,26 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
+        var standardDashBoadWithoutMove = function(){
+            return  {
+                components: [
+                    {
+                        type: "remove_panel",
+                        position: "right",
+                        color: "red",
+                        group_position: "end"
+                    },
+                    {
+                        type: "toggle_split_tracks",
+                        data_layer_id: layerName,
+                        position: "right"
+                    }
+                ]
+            }
+        }
+
+
+
         var customIntervalsDataLayer = function (layerName){
             var stateIdSpec = layerName+":state_id";
             var developingStructure =  {
@@ -104,6 +124,7 @@ var mpgSoftware = mpgSoftware || {};
                     min_height: 50,
                     margin: { top: 25, right: 150, bottom: 5, left: 50 },
                 dashboard: (function(){
+                    //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
                     l.components.push({
                         type: "toggle_split_tracks",
@@ -162,9 +183,13 @@ var mpgSoftware = mpgSoftware || {};
             }
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
 
+            var addendumToName = '';
+            if ( typeof lzParameters.datasetReadableName !== 'undefined'){
+                addendumToName = (" ("+lzParameters.datasetReadableName+")");
+            }
             var mods = {
                 id: phenotype+dataSetName,
-                title: { text: lzParameters.description+" ("+makeDynamic+")" },
+                title: { text: lzParameters.description+addendumToName},
                 namespace: { assoc: phenotype }
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
@@ -443,7 +468,7 @@ var mpgSoftware = mpgSoftware || {};
                                          phenoPropertyName,locusZoomDataset,junk,
                                          geneGetLZ,variantInfoUrl,makeDynamic,
                                          retrieveFunctionalDataAjaxUrl,
-                                         pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions) {
+                                         pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions,datasetReadableName) {
             var graphicalOptions = {colorBy:1,
                                     positionBy:1};
             var loading = $('#spinner').show();
@@ -491,6 +516,7 @@ var mpgSoftware = mpgSoftware || {};
                         description: phenoTypeDescription,
                         propertyName:phenoPropertyName,
                         dataSet:locusZoomDataset,
+                        datasetReadableName:datasetReadableName,
                         retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
                 },dataSetName,geneGetLZ,variantInfoUrl,
                     makeDynamic,lzGraphicDomId,graphicalOptions);

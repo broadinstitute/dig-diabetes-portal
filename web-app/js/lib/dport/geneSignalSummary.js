@@ -558,13 +558,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                         existingRec['pValue'] = v['P_VALUEV'];
                         existingRec['ds'] = v['dataset'];
                         existingRec['pname'] = v['pname'];
+                        existingRec['dsr'] = v['dsr'];
                     }
                 } else {
                     listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
                         'ds': v['dataset'],
                         'pname': v['pname'],
                         'signalStrength': newSignalCategory,
-                        'pValue': v['P_VALUEV']})
+                        'pValue': v['P_VALUEV'],
+                        'dsr': v['dsr']})
                 }
             }
         });
@@ -586,20 +588,21 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             }
         }
     };
-    var launchUpdateSignalSummaryBasedOnPhenotype = function (phenocode,ds,phenoName) {
+    var launchUpdateSignalSummaryBasedOnPhenotype = function (phenocode,ds,phenoName,dsr) {
         $('.phenotypeStrength').removeClass('chosenPhenotype');
         $('#'+phenocode).addClass('chosenPhenotype');
         // $('.variantTableLabels>a[href=#commonVariantTabHolder]').text('Common variants for '+phenoName);
         // $('.variantTableLabels>a[href=#highImpactVariantTabHolder]').text('High-impact variants for '+phenoName);
         mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
-            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,
+            mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,dsr:dsr,
                 preferIgv:$('input[name=genomeBrowser]:checked').val()==="2"});
     };
     var updateSignalSummaryBasedOnPhenotype = function () {
         var phenocode = $(this).attr('id');
         var ds = $(this).attr('ds');
+        var dsr = $(this).attr('dsr');
         var phenoName = $(this).text();
-        launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
+        launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName,dsr);
     };
     var refreshSignalSummaryBasedOnPhenotype = function () {
         var phenocode = $('.phenotypeStrength.chosenPhenotype').attr('id');
@@ -619,11 +622,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var phenotypeDescriptions = '<label>Phenotypes with signals</label><ul class="nav nav-pills">';
             _.forEach(listOfInterestingPhenotypes, function (o,curIndex) {
                 if (o['signalStrength'] == 1) {
-                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" dsr="'+o['dsr']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                 } else if (o['signalStrength'] == 2) {
-                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" dsr="'+o['dsr']+'" class="nav-item yellowPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                 } else if (o['signalStrength'] == 3) {
-                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
+                    phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" dsr="'+o['dsr']+'" class="nav-item greenPhenotype phenotypeStrength">' + o['pname'] + '</li>');
                     if ((typeof favoredPhenotype !== 'undefined')&&
                         (favoredPhenotype === o['phenotype'])) {
                         overrideClickIndex = curIndex;

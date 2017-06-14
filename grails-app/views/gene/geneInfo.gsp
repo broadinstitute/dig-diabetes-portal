@@ -55,13 +55,13 @@
             startPosition: data.geneInfo.BEG - genePageExtent,
             endPosition: data.geneInfo.END + genePageExtent
         };
-        <g:renderNotBetaFeaturesDisplayedValue>
+        <g:renderBetaFeaturesDisplayedValue>
         mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
                 "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junkGI',
                 '${createLink(controller:"gene", action:"getLocusZoom")}',
                 '${createLink(controller:"variantInfo", action:"variantInfo")}',
                 '${lzOptions.first().dataType}','${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',true);
-        </g:renderNotBetaFeaturesDisplayedValue>
+        </g:renderBetaFeaturesDisplayedValue>
 
 
         $(".pop-top").popover({placement: 'top'});
@@ -105,14 +105,14 @@
     </div>
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
-                <g:renderBetaFeaturesDisplayedValue>
+                <g:renderNotBetaFeaturesDisplayedValue>
                     <g:render template="../templates/geneSignalSummaryTemplate"/>
                     <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
-                </g:renderBetaFeaturesDisplayedValue>
+                </g:renderNotBetaFeaturesDisplayedValue>
 
 
                 <div class="accordion" id="accordion2">
-                <g:renderNotBetaFeaturesDisplayedValue>
+                <g:renderBetaFeaturesDisplayedValue>
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
@@ -128,8 +128,8 @@
                             </div>
                         </div>
                     </div>
-                </g:renderNotBetaFeaturesDisplayedValue>
-                <g:renderNotBetaFeaturesDisplayedValue>
+                </g:renderBetaFeaturesDisplayedValue>
+                <g:renderBetaFeaturesDisplayedValue>
 
                     <div class="separator"></div>
 
@@ -152,7 +152,7 @@
                         </div>
                     </div>
 
-                </g:renderNotBetaFeaturesDisplayedValue>
+                </g:renderBetaFeaturesDisplayedValue>
                    %{----}%
                     %{--<g:renderBetaFeaturesDisplayedValue>--}%
                     %{--<div class="separator"></div>--}%
@@ -191,18 +191,18 @@
                     </script>
 
 
-                        <g:renderNotBetaFeaturesDisplayedValue>
+                        <g:renderBetaFeaturesDisplayedValue>
 
                             <div class="separator"></div>
 
                             <g:render template="/widgets/locusZoomPlot"/>
 
-                        </g:renderNotBetaFeaturesDisplayedValue>
+                        </g:renderBetaFeaturesDisplayedValue>
 
                 <g:if test="${g.portalTypeString()?.equals('t2d')||
                                 g.portalTypeString()?.equals('mi')}">
 
-                    <g:renderNotBetaFeaturesDisplayedValue>
+                    <g:renderBetaFeaturesDisplayedValue>
                         <div class="separator"></div>
 
                         <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
@@ -212,7 +212,7 @@
                                                                                'allowExperimentChoice': 0,
                                                                                'allowPhenotypeChoice' : 1,
                                                                                'allowStratificationChoice': 1    ]"/>
-                    </g:renderNotBetaFeaturesDisplayedValue>
+                    </g:renderBetaFeaturesDisplayedValue>
                     </g:if>
 
 

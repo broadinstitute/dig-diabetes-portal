@@ -41,6 +41,7 @@
                                     <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
                                                 phenotype: '${it.key}',
                                                 dataSet: '${it.dataSet}',
+                                                datasetReadableName: '${g.message(code: "metadata." + it.name)}',
                                                 propertyName: '${it.propertyName}',
                                                 description: '${it.description}'
                                             },
@@ -63,13 +64,14 @@
                             <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
                                         phenotype: '${it.key}',
                                         dataSet: '${it.dataSet}',
+                                        datasetReadableName: '${g.message(code: "metadata." + it.dataSet)}',
                                         propertyName: '${it.propertyName}',
                                         description: '${it.description}'
                                     },
                                     '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                                     '${it.dataType}','#lz-47')">
-                                ${g.message(code: "metadata." + it.name)}
+                                ${g.message(code: "metadata." + it.name)+"("+g.message(code: "metadata." + it.dataSet)+")"}
                             </a>
                         </li>
                     </g:each>

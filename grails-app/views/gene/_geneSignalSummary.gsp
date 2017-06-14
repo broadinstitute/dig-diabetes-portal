@@ -72,6 +72,13 @@
 
                 </div>
             </div>
+
+            <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
+Note: traits from the GLGC project and Oxford Biobank are currently missing from this analysis.  We hope to rectify this problem soon.
+            </div>
+            <div class="col-xs-2">
+
+            </div>
         </div>
 
 
@@ -214,6 +221,7 @@
             var updateSignificantVariantDisplay = function (data,additionalParameters) {
                     var phenotypeName = additionalParameters.phenotype;
                     var datasetName = additionalParameters.ds;
+                    var datasetReadableName = additionalParameters.dsr;
                     var pName = additionalParameters.pname;
                     var useIgvNotLz = additionalParameters.preferIgv;
                     //  until LZ is fixed
@@ -309,7 +317,7 @@
                                 '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                                 '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                                 !mpgSoftware.locusZoom.plotAlreadyExists(),
-                                {},defaultTissues,defaultTissuesDescriptions);
+                                {},defaultTissues,defaultTissuesDescriptions,datasetReadableName);
                         $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
                             mpgSoftware.locusZoom.rescaleSVG();
                         });
@@ -449,6 +457,8 @@
                         };
                         var refreshTopVariantsByPhenotype = function (sel, callBack) {
                             var phenotypeName = sel.value;
+                            var dataSetName = sel.attr('dsr');
+                            console.log('dsr='+dataSetName);
                             refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
                         };
 
