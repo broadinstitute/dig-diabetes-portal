@@ -235,9 +235,9 @@
                     </div></div></div></div>
                 </g:if>
 
-        <g:if test="${g.portalTypeString()?.equals('mi')}">
+        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <g:message code="MI.policies.title" default="Policies"/>
-        </g:if>
+        </g:elseif>
 
 <g:else>
     <div class="container dk-static-content">
