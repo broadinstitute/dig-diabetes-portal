@@ -41,28 +41,7 @@
             </div>
 
             <div class="col-md-5 col-xs-12">
-                %{--<button name="adjustSignalSummaryDisplay"--}%
-                        %{--class="btn btn-secondary btn-sm burden-test-btn vcenter"--}%
-                        %{--type="button" data-toggle="collapse" data-target="#signalSummaryDisplay" aria-expanded="false" aria-controls="signalSummaryDisplay">Adjust display</button>--}%
-                %{--<div class="collapse" id="signalSummaryDisplay">--}%
-                    %{--<div class="signalSummaryDisplay">--}%
-                        %{--<div class="row" style="margin-bottom: 5px">--}%
-                            %{--<div class="col-xs-5">--}%
-                                %{--<label class="radio-inline" style="font-weight: bold">Genome browser</label>--}%
-                            %{--</div>--}%
-                            %{--<div class="col-xs-4">--}%
-                                %{--<label class="radio-inline"><input type="radio"  name="genomeBrowser" value=1--}%
-                                                                   %{--onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()"--}%
-                                                                   %{--checked>LocusZoom</label>--}%
-                            %{--</div>--}%
-                            %{--<div class="col-xs-3">--}%
-                                %{--<label class="radio-inline"><input type="radio"  name="genomeBrowser" value=2--}%
-                                                                   %{--onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">IGV</label>--}%
-                            %{--</div>--}%
-                        %{--</div>--}%
-                    %{--</div>--}%
 
-                %{--</div>--}%
             </div>
 
         </div>
@@ -181,6 +160,16 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     mpgSoftware.variantSearchResults.setTranslationFunction(fakeData);
                     mpgSoftware.variantSearchResults.generateModal(fakeData,drivingVariables,drivingVariables.uniqueRoot);
                 };
+
+
+            var setRememberSignalSummaryVariables  = function(thisRememberSignalSummaryVariables) {
+                rememberSignalSummaryVariables = thisRememberSignalSummaryVariables;
+            };
+
+
+            var getRememberSignalSummaryVariables  = function() {
+                return rememberSignalSummaryVariables;
+            };
 
 
 
@@ -344,44 +333,23 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
 
 
 
-
-
-                var updateGenePageTables = function (domSelectors,domSelectorName) {
-                    var matchingSelectedInputs = $('input[data-category="properties"]:checked:not(:disabled)').get();
-                    var matchingUnselectedInputs = $('input[data-category="properties"]:not(:checked,:disabled)').get();
-                    var valuesToInclude = _.map(matchingSelectedInputs, function (input) {
-                        return $(input).val();
-                    });
-                    var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
-                        return $(input).val();
-                    });
-                    var currentPhenotype = $('.chosenPhenotype').attr('id');
-                    if (domSelectors == 'common'){
-                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateCommonTable,
-                                {   propertiesToInclude:valuesToInclude,
-                                    propertiesToRemove:valuesToRemove,
-                                    currentPhenotype: currentPhenotype,
-                                    gene: '<%=geneName%>',
-                                    vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
-                                    redLightImage: '<r:img uri="/images/redlight.png"/>',
-                                    yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>',
-                                    variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}' });
-                    } else {
-                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable,
-                                {   propertiesToInclude:valuesToInclude,
-                                    propertiesToRemove:valuesToRemove,
-                                    currentPhenotype: currentPhenotype,
-                                    gene: '<%=geneName%>',
-                                    redLightImage: '<r:img uri="/images/redlight.png"/>',
-                                    yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>',
-                                    variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}'
-                                });
-
+            var initializePageVariables = function(){
+                setRememberSignalSummaryVariables(
+                    {
+                        gene: '<%=geneName%>',
+                        vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
+                        redLightImage: '<r:img uri="/images/redlight.png"/>',
+                        yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
+                        greenLightImage: '<r:img uri="/images/greenlight.png"/>',
+                        variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
+                        currentPhenotype: $('.chosenPhenotype').attr('id')
                     }
+                );
+            };
 
-                };
+
+
+
 
 
 
@@ -454,77 +422,16 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                             refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
                         };
 
-                var refreshLZ = function(varId,dataSetName,propName,phenotype){
-                    var parseId = varId.split("_");
-                    var locusZoomRange = 80000;
-                    var variantPos = parseInt(parseId[1]);
-                    var begPos = 0;
-                    var endPos =  variantPos + locusZoomRange;
-                    if (variantPos > locusZoomRange ){
-                        begPos =  variantPos - locusZoomRange;
-                    }
-                    var positioningInformation = {
-                        chromosome: parseId[0],
-                        startPosition: begPos,
-                        endPosition: endPos
-                    };
-                    mpgSoftware.locusZoom.removeAllPanels();
-
-
-    };
-    var setCheckBoxes = function(tableId){
-        var hdrMap = {};
-        // Get the names of the columns from the table headers and store them in a map
-        var hdrs = $(tableId).DataTable().columns().header();
-        _.forEach(hdrs,function(o){
-            var hdrDom = $(o);
-            var classList = hdrDom.attr('class').split(/\s+/);
-            var nameWeWant = _.find(classList,function(o){return o.startsWith('codeName_')});
-            var codeName = nameWeWant.substr("codeName_".length);
-            var displayName = hdrDom.html();
-            if (displayName.indexOf('<')>-1){
-                displayName = displayName.substr(0,displayName.indexOf('<'));
-            }
-            hdrMap[codeName] = displayName;
-        });
-        // now get the elements from the modal box
-        var props = $('.dk-modal-form-input-group>div.checkbox>label>input');
-        _.forEach(props,function(o){
-            var fullPropertyName = $(o).attr('value');
-            var propertyName = fullPropertyName.substr('common-common-'.length)
-            if (hdrMap[propertyName]){
-                $(o).prop('checked',true);
-            } else {
-                $(o).prop('checked',false);
-            }
-        });
-
-    }
-    var adjustProperties  = function(origDom){
-        var whichTable = $(origDom).attr('tableSpec');
-        var checkBoxes = $('.dk-modal-form-input-group>div.checkbox>label>input')
-        if (whichTable=='common'){
-            setCheckBoxes('#commonVariantsLocationHolder');
-            $('.confirmPropertyChange').attr('onclick',"mpgSoftware.geneSignalSummary.updateGenePageTables('common','x')");
-
-        } else if (whichTable=='highImpact'){
-            setCheckBoxes('#highImpactTemplateHolder');
-            $('.confirmPropertyChange').attr('onclick',"mpgSoftware.geneSignalSummary.updateGenePageTables('highImpact','x')");
-        }
-    }
-
-
 
 return {
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
-    refreshLZ:refreshLZ,
     updateDisplayBasedOnStoredSignificanceLevel:updateDisplayBasedOnStoredSignificanceLevel,
     displayVariantResultsTable:displayVariantResultsTable,
-    updateGenePageTables:updateGenePageTables,
-    adjustProperties:adjustProperties,
-    initializeSignalSummarySection:initializeSignalSummarySection
+    initializeSignalSummarySection:initializeSignalSummarySection,
+    initializePageVariables: initializePageVariables,
+    getRememberSignalSummaryVariables: getRememberSignalSummaryVariables
 }
 }());
 
@@ -532,6 +439,7 @@ return {
 })();
 
 $( document ).ready(function() {
+    mpgSoftware.geneSignalSummary.initializePageVariables();
     mpgSoftware.geneSignalSummary.initializeSignalSummarySection();
     mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
            {favoredPhenotype:'T2D'});

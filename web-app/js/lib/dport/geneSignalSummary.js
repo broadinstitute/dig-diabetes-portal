@@ -739,7 +739,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
             additionalParameters.variantInfoUrl,
             renderData, additionalParameters);
-    }
+    };
 
     var updateHighImpactTable = function (data,additionalParameters) {
         var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
@@ -750,9 +750,68 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
             additionalParameters.variantInfoUrl,
             renderData,additionalParameters);
-    }
+    };
 
+    var updateGenePageTables = function (domSelectors) {
+        var matchingSelectedInputs = $('input[data-category="properties"]:checked:not(:disabled)').get();
+        var matchingUnselectedInputs = $('input[data-category="properties"]:not(:checked,:disabled)').get();
+        var valuesToInclude = _.map(matchingSelectedInputs, function (input) {
+            return $(input).val();
+        });
+        var valuesToRemove = _.map(matchingUnselectedInputs, function (input) {
+            return $(input).val();
+        });
+        var currentPhenotype = $('.chosenPhenotype').attr('id');
+        var commonVars = mpgSoftware.geneSignalSummary.getRememberSignalSummaryVariables();
+        commonVars['propertiesToInclude'] = valuesToInclude;
+        commonVars['propertiesToRemove'] = valuesToRemove;
+        if (domSelectors == 'common'){
+            mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateCommonTable,commonVars);
+        } else {
+            mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable,commonVars);
+        }
 
+    };
+    var setCheckBoxes = function(tableId){
+        var hdrMap = {};
+        // Get the names of the columns from the table headers and store them in a map
+        var hdrs = $(tableId).DataTable().columns().header();
+        _.forEach(hdrs,function(o){
+            var hdrDom = $(o);
+            var classList = hdrDom.attr('class').split(/\s+/);
+            var nameWeWant = _.find(classList,function(o){return o.startsWith('codeName_')});
+            var codeName = nameWeWant.substr("codeName_".length);
+            var displayName = hdrDom.html();
+            if (displayName.indexOf('<')>-1){
+                displayName = displayName.substr(0,displayName.indexOf('<'));
+            }
+            hdrMap[codeName] = displayName;
+        });
+        // now get the elements from the modal box
+        var props = $('.dk-modal-form-input-group>div.checkbox>label>input');
+        _.forEach(props,function(o){
+            var fullPropertyName = $(o).attr('value');
+            var propertyName = fullPropertyName.substr('common-common-'.length)
+            if (hdrMap[propertyName]){
+                $(o).prop('checked',true);
+            } else {
+                $(o).prop('checked',false);
+            }
+        });
+
+    };
+    var adjustProperties  = function(origDom){
+        var whichTable = $(origDom).attr('tableSpec');
+        var checkBoxes = $('.dk-modal-form-input-group>div.checkbox>label>input')
+        if (whichTable=='common'){
+            setCheckBoxes('#commonVariantsLocationHolder');
+            $('.confirmPropertyChange').attr('onclick',"mpgSoftware.geneSignalSummaryMethods.updateGenePageTables('common')");
+
+        } else if (whichTable=='highImpact'){
+            setCheckBoxes('#highImpactTemplateHolder');
+            $('.confirmPropertyChange').attr('onclick',"mpgSoftware.geneSignalSummaryMethods.updateGenePageTables('highImpact')");
+        }
+    };
 
 // public routines are declared below
     return {
@@ -779,7 +838,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         disableClickPropagation:disableClickPropagation,
         startVRT:startVRT,
         updateCommonTable:updateCommonTable,
-        updateHighImpactTable:updateHighImpactTable
+        updateHighImpactTable:updateHighImpactTable,
+        updateGenePageTables:updateGenePageTables,
+        adjustProperties:adjustProperties
     }
 
 }());
