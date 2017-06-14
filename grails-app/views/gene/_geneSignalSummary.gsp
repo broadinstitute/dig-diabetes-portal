@@ -196,25 +196,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
             };
 
-            var updateCommonTable = function (data,additionalParameters) {
-                var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
-                renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
-                renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
-                renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
-                $("#commonVariantsLocation").empty().append(Mustache.render($('#commonVariantTemplate')[0].innerHTML, renderData));
-                mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
-                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}", renderData, rememberSignalSummaryVariables);
-            }
 
-            var updateHighImpactTable = function (data,additionalParameters) {
-                var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
-                renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
-                renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
-                renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
-                $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
-                mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
-                        "${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData,rememberSignalSummaryVariables);
-            }
 
 
 
@@ -228,6 +210,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                    // useIgvNotLz = true;
                     additionalParameters['gene'] = '<%=geneName%>';
                     additionalParameters['vrtUrl'] =  '<g:createLink absolute="true" controller="variantSearch" action="gene" />';
+                    additionalParameters['variantInfoUrl'] = "${createLink(controller: 'VariantInfo', action: 'variantInfo')}";
                     rememberSignalSummaryVariables = additionalParameters;
                     var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
                     var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
@@ -243,7 +226,8 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     if (commonSectionShouldComeFirst) {
                         $("#collapseExample div.wellPlace").empty().append(Mustache.render( $('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,{pName:pName}));
                     } else {
-                        $("#collapseExample div.wellPlace").empty().append(Mustache.render( $('#organizeSignalSummaryHighImpactFirstTemplate')[0].innerHTML,{pName:pName}));
+                        $("#collapseExample div.wellPlace").empty().append(Mustache.render( $('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,{pName:pName}));
+                       // $("#collapseExample div.wellPlace").empty().append(Mustache.render( $('#organizeSignalSummaryHighImpactFirstTemplate')[0].innerHTML,{pName:pName}));
 
                     }
                     if (useIgvNotLz){
@@ -255,11 +239,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                         $("#locusZoomLocation").empty().append(Mustache.render( $('#locusZoomTemplate')[0].innerHTML,renderData));
                     }
 
-
-                    %{--$("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));--}%
-                    %{--mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",--}%
-                            %{--"${createLink(controller: 'VariantInfo', action: 'variantInfo')}",renderData,additionalParameters);--}%
-                    updateHighImpactTable(data,additionalParameters);
+                    mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable(data,additionalParameters);
 
                     //  set up the gait interface
                     mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere',{
@@ -286,7 +266,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
 
                     $("#aggregateVariantsLocation").empty().append(Mustache.render( $('#aggregateVariantsTemplate')[0].innerHTML,renderData));
 
-                    updateCommonTable(data,additionalParameters);
+                    mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data,additionalParameters);
 
                     //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
                     var sampleBasedPhenotypeName = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForSampleData(phenotypeName);
@@ -341,19 +321,28 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                         if (mpgSoftware.locusZoom.plotAlreadyExists()) {
                             mpgSoftware.locusZoom.rescaleSVG();
                         }
-                    });
-                    mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
-                    $("#xpropertiesModal").on("shown.bs.modal", function(){
-                        $("#xpropertiesModal li a").click();
-                    });
-                    $('a[href="#highImpactVariantTabHolder"]').on('shown.bs.tab', function (e) {
-                        $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
-                    });
-                    $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
-                        $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
-                    });
+                });
 
-                };
+                mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
+                $("#xpropertiesModal").on("shown.bs.modal", function(){
+                    $("#xpropertiesModal li a").click();
+                });
+                $('a[href="#highImpactVariantTabHolder"]').on('shown.bs.tab', function (e) {
+                    $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
+                });
+                $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
+                    $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
+                });
+
+                if (!commonSectionShouldComeFirst) {
+                    $('.commonVariantChooser').removeClass('active');
+                    $('.highImpacVariantChooser').addClass('active');
+                    $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
+                }
+
+            };
+
+
 
 
 
@@ -368,7 +357,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     });
                     var currentPhenotype = $('.chosenPhenotype').attr('id');
                     if (domSelectors == 'common'){
-                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummary.updateCommonTable,
+                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateCommonTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
                                     currentPhenotype: currentPhenotype,
@@ -376,16 +365,19 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                                     vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
                                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
+                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>',
+                                    variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}' });
                     } else {
-                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummary.updateHighImpactTable,
+                        mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable,
                                 {   propertiesToInclude:valuesToInclude,
                                     propertiesToRemove:valuesToRemove,
                                     currentPhenotype: currentPhenotype,
                                     gene: '<%=geneName%>',
                                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>' });
+                                    greenLightImage: '<r:img uri="/images/greenlight.png"/>',
+                                    variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}'
+                                });
 
                     }
 
@@ -527,13 +519,10 @@ return {
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
     refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
     refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
-//    refreshTopVariants:refreshTopVariants,
     refreshLZ:refreshLZ,
     updateDisplayBasedOnStoredSignificanceLevel:updateDisplayBasedOnStoredSignificanceLevel,
     displayVariantResultsTable:displayVariantResultsTable,
     updateGenePageTables:updateGenePageTables,
-    updateCommonTable:updateCommonTable,
-    updateHighImpactTable:updateHighImpactTable,
     adjustProperties:adjustProperties,
     initializeSignalSummarySection:initializeSignalSummarySection
 }

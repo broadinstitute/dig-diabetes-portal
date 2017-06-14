@@ -730,7 +730,27 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     };
 
+    var updateCommonTable = function (data,additionalParameters) {
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+        renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
+        renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
+        renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
+        $("#commonVariantsLocation").empty().append(Mustache.render($('#commonVariantTemplate')[0].innerHTML, renderData));
+        mpgSoftware.geneSignalSummaryMethods.buildCommonTable("#commonVariantsLocationHolder",
+            additionalParameters.variantInfoUrl,
+            renderData, additionalParameters);
+    }
 
+    var updateHighImpactTable = function (data,additionalParameters) {
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+        renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
+        renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
+        renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
+        $("#highImpactVariantsLocation").empty().append(Mustache.render( $('#highImpactTemplate')[0].innerHTML,renderData));
+        mpgSoftware.geneSignalSummaryMethods.buildHighImpactTable("#highImpactTemplateHolder",
+            additionalParameters.variantInfoUrl,
+            renderData,additionalParameters);
+    }
 
 
 
@@ -757,8 +777,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         commonTableDsFilter:commonTableDsFilter,
         highImpactTableDsFilter:highImpactTableDsFilter,
         disableClickPropagation:disableClickPropagation,
-        startVRT:startVRT
-
+        startVRT:startVRT,
+        updateCommonTable:updateCommonTable,
+        updateHighImpactTable:updateHighImpactTable
     }
 
 }());
