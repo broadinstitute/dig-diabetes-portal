@@ -768,36 +768,53 @@ class WidgetService {
             boolean firstTime = true
             if (metaDataService.portalTypeFromSession=='t2d') {
                 // KLUDGE ALERT add credible set by hand
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set", dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", propertyName: "P_VALUE", dataType: "static", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set",
+                        dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
+                        suitableForDefaultDisplay: false ));
             }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
                 beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet, propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime))
+                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
 
                 firstTime = false
             }
 
             // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
             if (metaDataService.portalTypeFromSession=='t2d') {
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: true));
-                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: true, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
 
             } else if (metaDataService.portalTypeFromSession=='stroke') {
 
-                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: true));
-                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
-                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic", defaultSelected: false));
+                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: true, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
+                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",propertyName:"hailProp",
+                        defaultSelected: false, suitableForDefaultDisplay: true));
 
             }
 

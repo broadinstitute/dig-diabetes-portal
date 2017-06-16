@@ -17,6 +17,7 @@ class VariantSearchController {
     SharedToolsService sharedToolsService
     MetaDataService metaDataService
     SearchBuilderService searchBuilderService
+    WidgetService widgetService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -405,6 +406,20 @@ class VariantSearchController {
 
 
     def retrieveTopVariantsAcrossSgs (){
+        Closure convertDynamicStructToJson = { incoming ->
+            List<String> allOptions = []
+            incoming.each { org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean ->
+                List<String> perOptionFields = []
+
+                perOptionFields << " \"trait\":\"${phenotypeBean.name}\" "
+                perOptionFields << " \"dataset\":\"${phenotypeBean.dataSet}\" "
+                perOptionFields << " \"name\":\"${phenotypeBean.description}\" "
+                perOptionFields << " \"suitableForDefaultDisplay\":\"${phenotypeBean.suitableForDefaultDisplay}\" "
+                allOptions << "{${perOptionFields.join(",")}}"
+            }
+            return "[${allOptions.join(",")}]"
+        }
+
         String phenotypeName = ''
         String geneName
         if (params.phenotype) {
@@ -432,9 +447,11 @@ class VariantSearchController {
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
             dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
         }
-        for (JSONObject jsonObject in dataJsonObject['variants'].findAll{((String)it.dataset).startsWith('GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet')}){
-            jsonObject.dataset = "GWAS_DIAGRAM_mdv27"//+ sharedToolsService.getCurrentDataVersion()
-        }
+//        for (JSONObject jsonObject in dataJsonObject['variants'].findAll{((String)it.dataset).startsWith('GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet')}){
+//            jsonObject.dataset = "GWAS_DIAGRAM_mdv27"//+ sharedToolsService.getCurrentDataVersion()
+//        }
+
+        List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
 
         if (dataJsonObject.variants) {
             for (Map pval in dataJsonObject.variants){
@@ -458,11 +475,13 @@ class VariantSearchController {
 
         }
 
+        JsonSlurper slurper = new JsonSlurper()
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject,
-             propertiesToInclude:(new JsonSlurper().parseText(groovy.json.JsonOutput.toJson(propertiesToInclude))) as JSONArray,
-             propertiesToRemove:(new JsonSlurper().parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray
+             propertiesToInclude:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToInclude))) as JSONArray,
+             propertiesToRemove:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray,
+             datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap))
             ]
         }
 
