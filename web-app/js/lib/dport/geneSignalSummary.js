@@ -71,7 +71,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
-    var startVRT = function(callbackData){
+    var startVRT = function(callbackData,callbackDataStf){
         var ds = $(_.last(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data()))).attr('class');
         var pv = $(_.last(callbackData.data.tablePtr.DataTable().rows( { filter : 'applied'} ).data())[0]).attr('pval');
         window.location.href = callbackData.data.vrtUrl+'/'+callbackData.data.gene+'?sig='+pv+'&dataset='+ds+'&phenotype='+callbackData.data.phenotype+'&ignoreMdsFilter=1';
@@ -211,7 +211,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('select.dsFilter.common').append("<option value='"+o+"'>"+o+"</option>");
         });
         $('#dropdownCommonVariantDsButton').after('<div class="boldlink commonVariantVRTLink pull-right" style="display:none">Explore</div>');
-        $('.commonVariantVRTLink').on("click", null, {  gene:parameters.gene,
+        $('.commonVariantVRTLink').on("click", null, {  gene:parameters.geneName,
                                                         phenotype:parameters.phenotype,
                                                         vrtUrl:parameters.vrtUrl,
                                                         tablePtr:commonTable,
@@ -292,7 +292,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('select.dsFilter.highImpact').append("<option value='"+o+"'>"+o+"</option>");
         });
         $('#dropdownHighImpactVariantMenuButton').after('<div class="boldlink highImpactVariantVRTLink pull-right" style="display:none">Explore</div>');
-        $('.highImpactVariantVRTLink').on("click", null, {  gene:parameters.gene,
+        $('.highImpactVariantVRTLink').on("click", null, {  gene:parameters.geneName,
                 phenotype:parameters.phenotype,
                 vrtUrl:parameters.vrtUrl,
                 tablePtr:highImpactTable,
@@ -509,9 +509,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 "<li class='list-group-item'>" + UTILS.realNumberFormatter(data.stats.ciLower) + " : " + UTILS.realNumberFormatter(data.stats.ciUpper) + "</li>" +
                 "</ul>");
             if (data.stats.pValue < 0.000001) {
-                mpgSoftware.geneSignalSummary.updateDisplayBasedOnStoredSignificanceLevel(3);//green light
+                updateDisplayBasedOnStoredSignificanceLevel(3);//green light
             } else if (data.stats.pValue < 0.01) {
-                mpgSoftware.geneSignalSummary.updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
+                updateDisplayBasedOnStoredSignificanceLevel(2);//yellow light
             }
             $("[data-toggle=popover]").popover();
         }
@@ -543,31 +543,35 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     }
 
 
-    var buildListOfInterestingPhenotypes = function (renderData) {
+    var buildListOfInterestingPhenotypes = function (renderData,unacceptableDatasets) {
         var listOfInterestingPhenotypes = [];
         _.forEach(renderData.variants, function (v) {
-            var newSignalCategory = assessOneSignalsSignificance(v);
-            if (newSignalCategory > 0) {
-                var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
-                if (existingRecIndex > -1) {
-                    var existingRec = listOfInterestingPhenotypes[existingRecIndex];
-                    if (existingRec['signalStrength'] < newSignalCategory) {
-                        existingRec['signalStrength'] = newSignalCategory;
+            var vvv=_.findIndex(unacceptableDatasets,function(o){return o===v['dataset']});
+            if (vvv===-1){
+                var newSignalCategory = assessOneSignalsSignificance(v);
+                if (newSignalCategory > 0) {
+                    var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
+                    if (existingRecIndex > -1) {
+                        var existingRec = listOfInterestingPhenotypes[existingRecIndex];
+                        if (existingRec['signalStrength'] < newSignalCategory) {
+                            existingRec['signalStrength'] = newSignalCategory;
+                        }
+                        if (existingRec['pValue'] > v['P_VALUEV']) {
+                            existingRec['pValue'] = v['P_VALUEV'];
+                            existingRec['ds'] = v['dataset'];
+                            existingRec['pname'] = v['pname'];
+                            existingRec['dsr'] = v['dsr'];
+                        }
+                    } else {
+                        listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
+                            'ds': v['dataset'],
+                            'pname': v['pname'],
+                            'signalStrength': newSignalCategory,
+                            'pValue': v['P_VALUEV'],
+                            'dsr': v['dsr']})
                     }
-                    if (existingRec['pValue'] > v['P_VALUEV']) {
-                        existingRec['pValue'] = v['P_VALUEV'];
-                        existingRec['ds'] = v['dataset'];
-                        existingRec['pname'] = v['pname'];
-                        existingRec['dsr'] = v['dsr'];
-                    }
-                } else {
-                    listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
-                        'ds': v['dataset'],
-                        'pname': v['pname'],
-                        'signalStrength': newSignalCategory,
-                        'pValue': v['P_VALUEV'],
-                        'dsr': v['dsr']})
                 }
+
             }
         });
         return _.sortBy(listOfInterestingPhenotypes,[function(o){return o.pValue}]);
@@ -593,7 +597,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('#'+phenocode).addClass('chosenPhenotype');
         // $('.variantTableLabels>a[href=#commonVariantTabHolder]').text('Common variants for '+phenoName);
         // $('.variantTableLabels>a[href=#highImpactVariantTabHolder]').text('High-impact variants for '+phenoName);
-        mpgSoftware.geneSignalSummary.refreshTopVariantsDirectlyByPhenotype(phenocode,
+        refreshTopVariantsDirectlyByPhenotype(phenocode,
             mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,dsr:dsr,
                 preferIgv:$('input[name=genomeBrowser]:checked').val()==="2"});
     };
@@ -613,8 +617,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var displayInterestingPhenotypes = function (data,params) {
         var renderData = buildRenderData(data, 0.05);
         var signalLevel = assessSignalSignificance(renderData);
+        var acceptableDatasetObjs =_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==='false'});
+        var acceptableDatasets = _.uniq(acceptableDatasetObjs.map(function(t){return t.dataset}));
         updateDisplayBasedOnSignificanceLevel(signalLevel,params);
-        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData);
+        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData,acceptableDatasets);
         var overrideClickIndex = -1;
         var favoredPhenotype = params.favoredPhenotype;
         if (listOfInterestingPhenotypes.length > 0) {
@@ -762,7 +768,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             return $(input).val();
         });
         var currentPhenotype = $('.chosenPhenotype').attr('id');
-        var commonVars = mpgSoftware.geneSignalSummary.getRememberSignalSummaryVariables();
+        var commonVars = getSignalSummarySectionVariables();
         commonVars['propertiesToInclude'] = valuesToInclude;
         commonVars['propertiesToRemove'] = valuesToRemove;
         if (domSelectors == 'common'){
@@ -813,6 +819,72 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
     };
 
+    var updateDisplayBasedOnStoredSignificanceLevel = function (newSignificanceLevel) {
+        var currentSignificanceLevel = $('#signalLevelHolder').text();
+        if (newSignificanceLevel>=currentSignificanceLevel){
+            return;
+        }
+        updateDisplayBasedOnSignificanceLevel(newSignificanceLevel,getSignalSummarySectionVariables());
+    };
+
+
+
+
+    var refreshVariantAggregates = function (phenotypeName, filterNum, sampleDataSet, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
+        var rememberCallBack = callBack;
+        var rememberCallBackParameter = callBackParameter;
+        var coreVariables = getSignalSummarySectionVariables();
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: coreVariables.burdenTestAjaxUrl,
+            data: { geneName:geneName,
+                dataSet:dataSet,
+                sampleDataSet:sampleDataSet,
+                filterNum:filterNum,
+                burdenTraitFilterSelectedOption: phenotypeName,
+                mafOption:mafOption,
+                mafValue:mafValue   },
+            async: true,
+            success: function (data) {
+                rememberCallBack(data,rememberCallBackParameter);
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    };
+
+
+    var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
+        var rememberCallBack = callBack;
+        var rememberParameter = parameter;
+        var coreVariables = getSignalSummarySectionVariables();
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: coreVariables.retrieveTopVariantsAcrossSgsUrl,
+            data: {
+                phenotype: phenotypeName,
+                geneToSummarize:coreVariables.geneName},
+            async: true,
+            success: function (data) {
+                rememberCallBack(data, rememberParameter);
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    };
+    var refreshTopVariantsByPhenotype = function (sel, callBack) {
+        var phenotypeName = sel.value;
+        var dataSetName = sel.attr('dsr');
+        refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
+    };
+
+
 // public routines are declared below
     return {
         setSignalSummarySectionVariables:setSignalSummarySectionVariables,
@@ -840,7 +912,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         updateCommonTable:updateCommonTable,
         updateHighImpactTable:updateHighImpactTable,
         updateGenePageTables:updateGenePageTables,
-        adjustProperties:adjustProperties
+        adjustProperties:adjustProperties,
+        refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
+        refreshVariantAggregates:refreshVariantAggregates
     }
 
 }());

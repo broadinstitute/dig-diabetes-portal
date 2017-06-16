@@ -449,6 +449,7 @@ class TraitController {
                 perOptionFields << " \"dataset\":\"${phenotypeBean.dataSet}\" "
                 perOptionFields << " \"pvalue\":\"${phenotypeBean.propertyName}\" "
                 perOptionFields << " \"name\":\"${phenotypeBean.description}\" "
+                perOptionFields << " \"suitableForDefaultDisplay\":\"${phenotypeBean.suitableForDefaultDisplay}\" "
                 allOptions << "{${perOptionFields.join(",")}}"
             }
             return "[${allOptions.join(",")}]"

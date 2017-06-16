@@ -8,7 +8,7 @@
                                                             default="Change phenotype choice"/></label>
         &nbsp;
         <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
-                onchange="mpgSoftware.geneSignalSummary.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,
+                onchange="mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,
                         {preferIgv:($('input[name=genomeBrowser]:checked').val()==='2')})">
         </select>
     </div>
@@ -95,7 +95,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
 
         mpgSoftware.geneSignalSummary = (function () {
 
-                var rememberSignalSummaryVariables = {};
+                //var rememberSignalSummaryVariables = {};
 
                 var displayVariantResultsTable = function(phenotypeCode){
 
@@ -162,14 +162,14 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                 };
 
 
-            var setRememberSignalSummaryVariables  = function(thisRememberSignalSummaryVariables) {
-                rememberSignalSummaryVariables = thisRememberSignalSummaryVariables;
-            };
-
-
-            var getRememberSignalSummaryVariables  = function() {
-                return rememberSignalSummaryVariables;
-            };
+//            var setRememberSignalSummaryVariables  = function(thisRememberSignalSummaryVariables) {
+//                rememberSignalSummaryVariables = thisRememberSignalSummaryVariables;
+//            };
+//
+//
+//            var getRememberSignalSummaryVariables  = function() {
+//                return rememberSignalSummaryVariables;
+//            };
 
 
 
@@ -180,12 +180,29 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                     greenLightImage: '<r:img uri="/images/greenlight.png"/>',
-                    retrieveTopVariantsAcrossSgsUrl: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}"
+                    variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
+                    currentPhenotype: $('.chosenPhenotype').attr('id'),
+                    retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
+                    burdenTestAjaxUrl:'${createLink(controller: "gene", action: "burdenTestAjax")}'
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
             };
 
-
+            %{--var initializePageVariables = function(){--}%
+                %{--setRememberSignalSummaryVariables(--}%
+                    %{--{--}%
+                        %{--gene: '<%=geneName%>',--}%
+                        %{--vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',--}%
+                        %{--redLightImage: '<r:img uri="/images/redlight.png"/>',--}%
+                        %{--yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',--}%
+                        %{--greenLightImage: '<r:img uri="/images/greenlight.png"/>',--}%
+                        %{--variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',--}%
+                        %{--currentPhenotype: $('.chosenPhenotype').attr('id'),--}%
+                        %{--retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',--}%
+                        %{--burdenTestAjaxUrl:'${createLink(controller: "gene", action: "burdenTestAjax")}'--}%
+                    %{--}--}%
+                %{--);--}%
+            %{--};--}%
 
 
 
@@ -197,10 +214,10 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     var useIgvNotLz = additionalParameters.preferIgv;
                     //  until LZ is fixed
                    // useIgvNotLz = true;
-                    additionalParameters['gene'] = '<%=geneName%>';
+                    additionalParameters['geneName'] = '<%=geneName%>';
                     additionalParameters['vrtUrl'] =  '<g:createLink absolute="true" controller="variantSearch" action="gene" />';
                     additionalParameters['variantInfoUrl'] = "${createLink(controller: 'VariantInfo', action: 'variantInfo')}";
-                    rememberSignalSummaryVariables = additionalParameters;
+                    //rememberSignalSummaryVariables = additionalParameters;
                     var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
                     var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
                     var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
@@ -295,12 +312,18 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     ( sampleBasedPhenotypeName.length > 0)) {
                     $('#aggregateVariantsLocation').css('display','block');
                     $('#noAggregatedVariantsLocation').css('display','none');
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allVariants");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allCoding");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allMissense")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#possiblyDamaging");
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#probablyDamaging")
-                    refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>","1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#proteinTruncating");
+                    mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName,"0","<%=sampleDataSet%>","<%=burdenDataSet%>",
+                        "1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allVariants");
+                    mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName,"1","<%=sampleDataSet%>","<%=burdenDataSet%>",
+                        "1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allCoding");
+                    mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName,"8","<%=sampleDataSet%>","<%=burdenDataSet%>",
+                        "1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#allMissense")
+                    mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName,"7","<%=sampleDataSet%>","<%=burdenDataSet%>",
+                        "1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#possiblyDamaging");
+                    mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName,"6","<%=sampleDataSet%>","<%=burdenDataSet%>",
+                        "1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#probablyDamaging")
+                    mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName,"5","<%=sampleDataSet%>","<%=burdenDataSet%>",
+                        "1","1","<%=geneName%>",mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay,"#proteinTruncating");
                 } else {
                     $('#aggregateVariantsLocation').css('display','none');
                     $('#noAggregatedVariantsLocation').css('display','block');
@@ -333,19 +356,6 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
 
 
 
-            var initializePageVariables = function(){
-                setRememberSignalSummaryVariables(
-                    {
-                        gene: '<%=geneName%>',
-                        vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',
-                        redLightImage: '<r:img uri="/images/redlight.png"/>',
-                        yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
-                        greenLightImage: '<r:img uri="/images/greenlight.png"/>',
-                        variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
-                        currentPhenotype: $('.chosenPhenotype').attr('id')
-                    }
-                );
-            };
 
 
 
@@ -354,84 +364,14 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
 
 
 
-                        var updateDisplayBasedOnStoredSignificanceLevel = function (newSignificanceLevel) {
-                            var currentSignificanceLevel = $('#signalLevelHolder').text();
-                            if (newSignificanceLevel>=currentSignificanceLevel){
-                                return;
-                            }
-                            mpgSoftware.geneSignalSummaryMethods.updateDisplayBasedOnSignificanceLevel(newSignificanceLevel,
-                                    {redLightImage:'<r:img uri="/images/redlight.png"/>',
-                                        yellowLightImage:'<r:img uri="/images/yellowlight.png"/>',
-                                        greenLightImage:'<r:img uri="/images/greenlight.png"/>'});
-                        };
-
-
-
-
-                        var refreshVariantAggregates = function (phenotypeName, filterNum, sampleDataSet, dataSet,mafOption, mafValue, geneName, callBack,callBackParameter) {
-                            var rememberCallBack = callBack;
-                            var rememberCallBackParameter = callBackParameter;
-
-                            $.ajax({
-                                cache: false,
-                                type: "post",
-                                url: "${createLink(controller: 'gene', action: 'burdenTestAjax')}",
-                                data: { geneName:geneName,
-                                        dataSet:dataSet,
-                                        sampleDataSet:sampleDataSet,
-                                        filterNum:filterNum,
-                                        burdenTraitFilterSelectedOption: phenotypeName,
-                                        mafOption:mafOption,
-                                        mafValue:mafValue   },
-                                async: true,
-                                success: function (data) {
-                                    rememberCallBack(data,rememberCallBackParameter);
-                                },
-                                error: function (jqXHR, exception) {
-                                    core.errorReporter(jqXHR, exception);
-                                }
-                            });
-
-                        };
-
-
-                        var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
-                            var rememberCallBack = callBack;
-                            var rememberParameter = parameter;
-                            $.ajax({
-                                cache: false,
-                                type: "post",
-                                url: "${createLink(controller: 'VariantSearch', action: 'retrieveTopVariantsAcrossSgs')}",
-                                data: {
-                                    phenotype: phenotypeName,
-                                    geneToSummarize:"${geneName}"},
-                                async: true,
-                                success: function (data) {
-                                    rememberCallBack(data, rememberParameter);
-                                },
-                                error: function (jqXHR, exception) {
-                                    core.errorReporter(jqXHR, exception);
-                                }
-                            });
-
-                        };
-                        var refreshTopVariantsByPhenotype = function (sel, callBack) {
-                            var phenotypeName = sel.value;
-                            var dataSetName = sel.attr('dsr');
-                            console.log('dsr='+dataSetName);
-                            refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
-                        };
 
 
 return {
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
-    refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
-    refreshTopVariantsByPhenotype:refreshTopVariantsByPhenotype,
-    updateDisplayBasedOnStoredSignificanceLevel:updateDisplayBasedOnStoredSignificanceLevel,
     displayVariantResultsTable:displayVariantResultsTable,
-    initializeSignalSummarySection:initializeSignalSummarySection,
-    initializePageVariables: initializePageVariables,
-    getRememberSignalSummaryVariables: getRememberSignalSummaryVariables
+    initializeSignalSummarySection:initializeSignalSummarySection
+   // initializePageVariables: initializePageVariables
+   // getRememberSignalSummaryVariables: getRememberSignalSummaryVariables
 }
 }());
 
@@ -439,7 +379,7 @@ return {
 })();
 
 $( document ).ready(function() {
-    mpgSoftware.geneSignalSummary.initializePageVariables();
+   // mpgSoftware.geneSignalSummary.initializePageVariables();
     mpgSoftware.geneSignalSummary.initializeSignalSummarySection();
     mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
            {favoredPhenotype:'T2D'});
