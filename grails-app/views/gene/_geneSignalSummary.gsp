@@ -162,15 +162,6 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                 };
 
 
-//            var setRememberSignalSummaryVariables  = function(thisRememberSignalSummaryVariables) {
-//                rememberSignalSummaryVariables = thisRememberSignalSummaryVariables;
-//            };
-//
-//
-//            var getRememberSignalSummaryVariables  = function() {
-//                return rememberSignalSummaryVariables;
-//            };
-
 
 
             var initializeSignalSummarySection = function(){
@@ -186,24 +177,11 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     burdenTestAjaxUrl:'${createLink(controller: "gene", action: "burdenTestAjax")}'
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
+                mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
+                    {favoredPhenotype:'T2D'});
+                mpgSoftware.geneSignalSummaryMethods.tableInitialization();
+
             };
-
-            %{--var initializePageVariables = function(){--}%
-                %{--setRememberSignalSummaryVariables(--}%
-                    %{--{--}%
-                        %{--gene: '<%=geneName%>',--}%
-                        %{--vrtUrl:  '<g:createLink absolute="true" controller="variantSearch" action="gene" />',--}%
-                        %{--redLightImage: '<r:img uri="/images/redlight.png"/>',--}%
-                        %{--yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',--}%
-                        %{--greenLightImage: '<r:img uri="/images/greenlight.png"/>',--}%
-                        %{--variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',--}%
-                        %{--currentPhenotype: $('.chosenPhenotype').attr('id'),--}%
-                        %{--retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',--}%
-                        %{--burdenTestAjaxUrl:'${createLink(controller: "gene", action: "burdenTestAjax")}'--}%
-                    %{--}--}%
-                %{--);--}%
-            %{--};--}%
-
 
 
             var updateSignificantVariantDisplay = function (data,additionalParameters) {
@@ -370,8 +348,6 @@ return {
     updateSignificantVariantDisplay:updateSignificantVariantDisplay,
     displayVariantResultsTable:displayVariantResultsTable,
     initializeSignalSummarySection:initializeSignalSummarySection
-   // initializePageVariables: initializePageVariables
-   // getRememberSignalSummaryVariables: getRememberSignalSummaryVariables
 }
 }());
 
@@ -379,16 +355,7 @@ return {
 })();
 
 $( document ).ready(function() {
-   // mpgSoftware.geneSignalSummary.initializePageVariables();
     mpgSoftware.geneSignalSummary.initializeSignalSummarySection();
-    mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
-           {favoredPhenotype:'T2D'});
-    mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-
-
-
-
-
 
 });
 
