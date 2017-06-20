@@ -310,9 +310,9 @@ environments {
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
+//      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
-//        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
@@ -533,12 +533,10 @@ portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv90", "E
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
 portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"], "stroke": ["Adipose"], "mi" : ["Adipose"]]
-portal.type.override = "stroke"     // options are "t2d" or "stroke" or "mi"
+portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
 portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27", "stroke": "GWAS_Stroke_mdv70", "mi" : "GWAS_CARDIoGRAM_mdv90", "EBI":"FG"]
 
 
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
