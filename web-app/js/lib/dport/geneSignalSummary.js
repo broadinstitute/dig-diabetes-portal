@@ -601,9 +601,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         coreVariables['pname'] = phenoName;
         coreVariables['ds'] = ds;
         coreVariables['dsr'] = dsr;
+        $('#rSpinner').show();
         refreshTopVariantsDirectlyByPhenotype(phenocode,
-            //mpgSoftware.geneSignalSummary.updateSignificantVariantDisplay,{updateLZ:true,phenotype:phenocode,pname:phenoName,ds:ds,dsr:dsr,
-            //    preferIgv:$('input[name=genomeBrowser]:checked').val()==="2"});
         updateSignificantVariantDisplay,coreVariables);
     };
     var updateSignalSummaryBasedOnPhenotype = function () {
@@ -839,24 +838,25 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var rememberCallBack = callBack;
         var rememberCallBackParameter = callBackParameter;
         var coreVariables = getSignalSummarySectionVariables();
-        $.ajax({
+        var thisRequest = $.ajax({
             cache: false,
             type: "post",
             url: coreVariables.burdenTestAjaxUrl,
-            data: { geneName:geneName,
-                dataSet:dataSet,
-                sampleDataSet:sampleDataSet,
-                filterNum:filterNum,
+            data: {
+                geneName: geneName,
+                dataSet: dataSet,
+                sampleDataSet: sampleDataSet,
+                filterNum: filterNum,
                 burdenTraitFilterSelectedOption: phenotypeName,
-                mafOption:mafOption,
-                mafValue:mafValue   },
-            async: true,
-            success: function (data) {
-                rememberCallBack(data,rememberCallBackParameter);
+                mafOption: mafOption,
+                mafValue: mafValue
             },
-            error: function (jqXHR, exception) {
-                core.errorReporter(jqXHR, exception);
-            }
+            async: true
+        });
+        return thisRequest.done( function (data) {
+                rememberCallBack(data,rememberCallBackParameter);
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+            core.errorReporter(jqXHR, errorThrown);
         });
 
     };
@@ -995,18 +995,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             ( sampleBasedPhenotypeName.length > 0)) {
                 $('#aggregateVariantsLocation').css('display', 'block');
                 $('#noAggregatedVariantsLocation').css('display', 'none');
-                mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "0", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                    "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allVariants");
-                mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "1", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                    "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allCoding");
-                mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "8", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                    "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allMissense")
-                mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "7", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                    "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#possiblyDamaging");
-                mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "6", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                    "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#probablyDamaging")
-                mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "5", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
-                    "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#proteinTruncating");
+                var arrayOfPromises = [];
+                arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "0", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
+                        "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allVariants"));
+                arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "1", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
+                        "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allCoding"));
+                arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "8", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
+                        "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#allMissense"))
+                arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "7", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
+                        "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#possiblyDamaging"));
+                arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "6", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
+                        "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#probablyDamaging"));
+                arrayOfPromises.push(mpgSoftware.geneSignalSummaryMethods.refreshVariantAggregates(sampleBasedPhenotypeName, "5", additionalParameters.sampleDataSet, additionalParameters.burdenDataSet,
+                        "1", "1", additionalParameters.geneName, mpgSoftware.geneSignalSummaryMethods.updateAggregateVariantsDisplay, "#proteinTruncating"));
+                $.when.apply($, arrayOfPromises).then(function() {
+                    $('#rSpinner').hide();
+                });
         } else {
             $('#aggregateVariantsLocation').css('display', 'none');
             $('#noAggregatedVariantsLocation').css('display', 'block');
