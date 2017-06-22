@@ -402,6 +402,18 @@ class GeneController {
         }
     }
 
+
+    def vectorDataAjax() {
+        String geneToStartWith = params.geneName
+        if (geneToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
+            render(status:200, contentType:"application/json") {
+                [geneInfo:jsonObject['gene-info']]
+            }
+
+        }
+    }
+
     /***
      * This call supports the burden test on the gene info page
      * @return
@@ -564,7 +576,89 @@ class GeneController {
         // return
         render(jsonReturn)
     }
+    /**
+     * call the vector data rest service with the given json payload string
+     *
+     * @param burdenCallJsonPayloadString
+     * @return
+     */
+    protected JSONObject getVectorDataRestCallResults(String vectorDataJsonPayloadString) {
+        JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
+        return VectorDataJson;
+    }
 
+    /**
+     * method to serve LZ requests of filled line plot in the format needed
+     *
+     * @return
+     */
+    def getLocusZoomFilledPlot() {
+        String jsonReturn;
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
+        String assay_id = params.assay_id
+        String tissue_id = params.tissue_id
+
+        int startInteger;
+        int endInteger;
+        String errorJson = "{\"data\": {}, \"error\": true}";
+
+        // log
+        log.info("got LZ request with params: for filled line plot " + params);
+
+        // log start
+        Date startTime = new Date();
+
+        // if have all the information, call the widget service
+        try {
+            startInteger = Integer.parseInt(startString);
+            endInteger = Integer.parseInt(endString);
+
+            if (chromosome != null) {
+                //jsonReturn = widgetService.getBigwigJsonForLocusZoomString(chromosome, startInteger, endInteger, assay_id,tissue_id);
+                jsonReturn = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
+                jsonReturn = tranlsateVector(jsonReturn);
+
+            } else {
+                jsonReturn = errorJson;
+            }
+
+            // log
+            log.info("got LZ result: " + jsonReturn);
+
+            // log end
+            Date endTime = new Date();
+            log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
+
+        } catch (NumberFormatException exception) {
+            log.error("got incorrect parameters for LZ call: " + params);
+            jsonReturn = errorJson;
+        }
+
+        // return
+        render(jsonReturn)
+    }
+
+    def tranlsateVector(JSONObject returnJsonVector){
+        // returnJsonVector.regions.val
+        JSONObject resultLZJson = null;
+        List<String> pvalList = [];
+        List<String> chrList = [];
+        List<String> scoreTestStatList = [];
+        List<String> refAlleleFreqList = []
+        List<String> refAlleleList = []
+        List<String> analysisList = []
+        for (Map map in returnJsonVector.regions){
+            resultLZJson['pvalue'] = pvalList.add(map.val);
+            resultLZJson['chr'] = chrList.add(map.chr);
+            resultLZJson['scoreTestStat']  = scoreTestStatList.add(null);
+            resultLZJson['refAlleleFreq']  = refAlleleFreqList.add(null);
+            resultLZJson['refAllele']  = refAlleleList.add(null);
+            resultLZJson['analysis']  = analysisList.add(null);
+        }
+        return resultLZJson.toString();
+    }
 
 
     def list(Integer max) {
