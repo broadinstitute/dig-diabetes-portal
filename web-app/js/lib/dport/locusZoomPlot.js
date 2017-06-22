@@ -183,6 +183,13 @@ var mpgSoftware = mpgSoftware || {};
             }
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
 
+
+
+            colorBy=1;
+
+
+
+
             var addendumToName = '';
             if ( typeof lzParameters.datasetReadableName !== 'undefined'){
                 addendumToName = (" ("+lzParameters.datasetReadableName+")");
@@ -218,6 +225,24 @@ var mpgSoftware = mpgSoftware || {};
             }
             switch (colorBy){
                 case 1:
+                    panel_layout.data_layers[2].color = [
+                                {
+                                    scale_function: "if",
+                                    field: "ld:isrefvar",
+                                    parameters: {
+                                    field_value: 1,
+                                        then: "#9632b8"
+                                }
+                                },
+                                {
+                                    scale_function: "numerical_bin",
+                                    field: "ld:state",
+                                    parameters: {
+                                        breaks: [0, 0.2, 0.4, 0.6, 0.8],
+                                        values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"]
+                                    }
+                                },
+                    "#c8c8c8"]
                     break;
                 case 2:
                     panel_layout.data_layers[2].color = [
