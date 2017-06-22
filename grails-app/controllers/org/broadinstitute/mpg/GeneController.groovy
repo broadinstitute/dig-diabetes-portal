@@ -402,6 +402,18 @@ class GeneController {
         }
     }
 
+
+    def vectorDataAjax() {
+        String geneToStartWith = params.geneName
+        if (geneToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
+            render(status:200, contentType:"application/json") {
+                [geneInfo:jsonObject['gene-info']]
+            }
+
+        }
+    }
+
     /***
      * This call supports the burden test on the gene info page
      * @return
@@ -564,7 +576,104 @@ class GeneController {
         // return
         render(jsonReturn)
     }
+    /**
+     * call the vector data rest service with the given json payload string
+     *
+     * @param burdenCallJsonPayloadString
+     * @return
+     */
+    protected JSONObject getVectorDataRestCallResults(String vectorDataJsonPayloadString) {
+        JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
+        return VectorDataJson;
+    }
 
+    /**
+     * method to serve LZ requests of filled line plot in the format needed
+     *
+     * @return
+     */
+    def getLocusZoomFilledPlot() {
+        String jsonReturn;
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
+        String assay_id = params.assay_id
+        String tissue_id = params.tissue_id
+        JSONObject returnJsonVector = null;
+
+        int startInteger;
+        int endInteger;
+        String errorJson = "{\"data\": {}, \"error\": true}";
+
+        // log
+        log.info("got LZ request with params: for filled line plot " + params);
+
+        // log start
+        Date startTime = new Date();
+
+        // if have all the information, call the widget service
+        try {
+            startInteger = Integer.parseInt(startString);
+            endInteger = Integer.parseInt(endString);
+
+            if (chromosome != null) {
+                //jsonReturn = widgetService.getVectorDataRestCallResults(chromosome, startInteger, endInteger);
+                returnJsonVector = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
+                JSONObject resultLZJson = tranlsateVector(returnJsonVector);
+
+            } else {
+                jsonReturn = errorJson;
+            }
+
+            // log
+            log.info("got LZ result: " + jsonReturn);
+
+            // log end
+            Date endTime = new Date();
+            log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
+
+        } catch (NumberFormatException exception) {
+            log.error("got incorrect parameters for LZ call: " + params);
+            jsonReturn = errorJson;
+        }
+
+        // return
+        return resultLZJson;
+    }
+
+    def tranlsateVector(JSONObject returnJsonVector){
+        // returnJsonVector.regions.val
+        JSONObject resultLZJson = new JSONObject();
+        List<String> pvalueList = [];
+        List<String> chrList = [];
+        List<String> positionList = [];
+        List<String> scoreTestStatList = [];
+        List<String> refAlleleFreqList = []
+        List<String> refAlleleList = [];
+        List<String> analysisList = [];
+        List<String>  idList = [];
+        for (Map map in returnJsonVector.regions){
+            pvalueList <<  """${map.val}""".toString();
+            chrList  <<  """${map.chr}""".toString()
+            positionList << """${(map.start + map.stop)/2}"""
+            scoreTestStatList << """null""".toString()
+            refAlleleFreqList << """null""".toString()
+            refAlleleList << """null""".toString()
+            analysisList << """null""".toString();
+            idList << """${pvalueList.size()}""".toString();
+        }
+        resultLZJson['pvalue'] = pvalueList;
+        resultLZJson['chr'] = chrList;
+        resultLZJson['position'] = positionList;
+        resultLZJson['scoreTestStat'] = scoreTestStatList;
+        resultLZJson['refAlleleFreq'] = refAlleleFreqList;
+        resultLZJson['refAllele'] = refAlleleList;
+        resultLZJson['analysis'] = analysisList;
+        resultLZJson['id'] = idList;
+
+
+        return resultLZJson.toString();
+    }
 
 
     def list(Integer max) {

@@ -429,6 +429,8 @@ class RestServerService {
         return this.REST_SERVER
     }
 
+
+
     public String whatIsMyCurrentServer() {
         return currentRestServer()
     }
@@ -651,6 +653,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         log.info(logStatus)
         return returnValue
     }
+
+
+    /**
+     * get the bigwig data (api call) to the REST server
+     *
+     * @param jsonString {"chr":"chr1", "start":17370,"stop":91447}
+     * @return
+     */
+    public JSONObject postVectorDataRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, "", "http://localhost:8090/dccservices/getVectorData");
+        return tempObject;
+    }
+
 
     /**
      * burden call to the REST server
