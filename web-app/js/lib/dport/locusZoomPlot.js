@@ -151,6 +151,63 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
+
+
+        var customCurvePanel = function (layerName){
+           return { id: layerName,
+            width: 800,
+            height: 225,
+            min_width:  400,
+            min_height: 200,
+            proportional_width: 1,
+            margin: { top: 35, right: 50, bottom: 40, left: 50 },
+            inner_border: "rgb(210, 210, 210)",
+            dashboard: (function(){
+                var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
+                l.components.push({
+                    type: "toggle_legend",
+                    position: "right"
+                });
+                return l;
+            })(),
+            axes: {
+                x: {
+                    label: "Chromosome {{chr}} (Mb)",
+                    label_offset: 32,
+                    tick_format: "region",
+                    extent: "state"
+                },
+                y1: {
+                    label: "-log10 p-value",
+                    label_offset: 28
+                },
+                y2: {
+                    label: "Recombination Rate (cM/Mb)",
+                    label_offset: 40
+                }
+            },
+            legend: {
+                orientation: "vertical",
+                origin: { x: 55, y: 40 },
+                hidden: true
+            },
+            interaction: {
+                drag_background_to_pan: true,
+                drag_x_ticks_to_scale: true,
+                drag_y1_ticks_to_scale: true,
+                drag_y2_ticks_to_scale: true,
+                scroll_to_zoom: true,
+                x_linked: true
+            },
+            data_layers: [
+                LocusZoom.Layouts.get("data_layer", "recomb_rate", { unnamespaced: true }),
+            ]
+        }
+        };
+
+
+
+
         var initLocusZoomLayout = function(){
             var mods = {
                 namespace: {
@@ -172,6 +229,39 @@ var mpgSoftware = mpgSoftware || {};
             newLayout.panels[0].y_index = 1000;
             return newLayout;
         };
+
+
+
+
+
+
+
+
+        var buildAccessibilityLayout = function ( phenotype,lzParameters){
+            var addendumToName = '';
+            var mods = {
+                id: "accessibility-"+phenotype,
+                title: { text: "accessibility-"+phenotype},
+                namespace: { assoc: phenotype }
+            };
+            var panel_layout = customCurvePanel("accessibility-"+phenotype + ":id");
+            panel_layout.y_index = -1;
+            panel_layout.height = 270;
+            panel_layout.data_layers[0].id_field = "accessibility-"+phenotype + ":id";
+
+            return panel_layout;
+        };
+
+
+
+
+
+
+
+
+
+
+
 
         var buildPanelLayout = function (colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoLink,lzParameters){
             var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
@@ -364,10 +454,27 @@ var mpgSoftware = mpgSoftware || {};
             dataSources.add(tissueAsId, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
         };
 
+        var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue){
+            var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
+                this.parseInit(init);
+                this.getURL = function (state, chain, fields) {
+                    var url = this.url + "?" +
+                        "chromosome=" + state.chr + "&" +
+                        "start=" + state.start + "&" +
+                        "end=" + state.end + "&" +
+                        "source=" + tissue + "&" +
+                        "lzFormat=1";
+                    return url;
+                }
+            }, "BroadT2D");
+            var tissueAsId = 'accessibility-'+rawTissue;
+            dataSources.add(tissueAsId, new broadIntervalsSource(getLocusZoomFilledPlotUrl, rawTissue));
+        };
 
 
 
-    var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
+
+        var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
         // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
         // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
         var newLayout = initLocusZoomLayout();
@@ -446,6 +553,22 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+        var addChromatinAccessibilityTrack = function(locusZoomVar,tissueName,tissueId){
+            var accessibilityPanelName = "accessibility-"+tissueId;
+            // we can't use the standard interval panel, but we can derive our own
+            var accessibilityPanel = buildAccessibilityLayout(accessibilityPanelName)
+            accessibilityPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
+            if (typeof locusZoomPlot[currentLzPlotKey].panels[accessibilityPanel] === 'undefined'){
+                locusZoomVar.addPanel(accessibilityPanel).addBasicLoader();
+            } else {
+                console.log(' we already had a panel for tissue='+tissueId+'.')
+            }
+            reorderPanels(locusZoomVar);
+        };
+
+
+
+
         function addLZPhenotype(lzParameters,  dataSetName, geneGetLZ,variantInfoUrl,makeDynamic,lzGraphicDomId,graphicalOptions) {
             var colorBy = 1;  //colorBy:1=LD,2=MDS
             var positionBy = 1;  //positionBy:1=pValue,2=posteriorPValue
@@ -485,12 +608,22 @@ var mpgSoftware = mpgSoftware || {};
 
             rescaleSVG();
         };
+        function addLZTissueChromatinAccessibility(lzParameters,  lzGraphicDomId, graphicalOptions) {
+            var getLocusZoomFilledPlotUrl = lzParameters.getLocusZoomFilledPlotUrl;
+            var tissueCode = lzParameters.tissueCode;
+            var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
+            setNewDefaultLzPlot(lzGraphicDomId);
 
+            buildChromatinAccessibilitySource(dataSources,getLocusZoomFilledPlotUrl,tissueCode);
+            addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode);
 
+            rescaleSVG();
+
+        };
 
         var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
                                          phenoTypeName,phenoTypeDescription,
-                                         phenoPropertyName,locusZoomDataset,junk,
+                                         phenoPropertyName,locusZoomDataset,getLocusZoomFilledPlotUrl,
                                          geneGetLZ,variantInfoUrl,makeDynamic,
                                          retrieveFunctionalDataAjaxUrl,
                                          pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions,datasetReadableName) {
@@ -558,6 +691,12 @@ var mpgSoftware = mpgSoftware || {};
                     }
 
                 }
+
+                addLZTissueChromatinAccessibility({
+                    tissueCode: 'tissue',
+                    tissueDescriptiveName: 'tissue description',
+                    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl
+                },lzGraphicDomId,graphicalOptions);
                 if ((typeof pageInitialization !== 'undefined')&&
                     (pageInitialization)){
 

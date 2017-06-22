@@ -200,7 +200,8 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     getDataUrl: "${createLink(controller:'trait', action:'getData', absolute:'false')}",
                     traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
+                    retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}'
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
