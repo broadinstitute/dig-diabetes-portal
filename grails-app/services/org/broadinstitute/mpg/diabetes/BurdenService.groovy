@@ -43,6 +43,19 @@ class BurdenService {
         return BurdenJsonBuilder.getBurdenJsonBuilder();
     }
 
+
+
+    /**
+     * call the vector data rest service with the given json payload string
+     *
+     * @param burdenCallJsonPayloadString
+     * @return
+     */
+    protected JSONObject getVectorDataRestCallResults(String vectorDataJsonPayloadString) {
+        JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
+        return VectorDataJson;
+    }
+
     /**
      * call the burden test rest service with the given json payload string
      *
@@ -514,6 +527,7 @@ class BurdenService {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
+        JSONObject returnJsonVector = null;
 
 
         // TODO: remove this workaround when the backend can gather samples on its own
@@ -558,6 +572,9 @@ class BurdenService {
 
             // get the results of the burden call
             returnJson = this.getBurdenRestCallResults(jsonObject.toString());
+            returnJsonVector = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
+           // JSONObject resultLZJson = tranlsateVector(returnJsonVector);
+            log.info("got Vector Data result: " + resultLZJson);
             log.info("got burden rest result: " + returnJson);
 
             // add json array of variant strings to the return json
@@ -571,6 +588,40 @@ class BurdenService {
         // return
         return returnJson;
     }
+
+//    def tranlsateVector(JSONObject returnJsonVector){
+//        // returnJsonVector.regions.val
+//        JSONObject resultLZJson = new JSONObject();
+//        List<String> pvalueList = [];
+//        List<String> chrList = [];
+//        List<String> positionList = [];
+//        List<String> scoreTestStatList = [];
+//        List<String> refAlleleFreqList = []
+//        List<String> refAlleleList = [];
+//        List<String> analysisList = [];
+//        List<String>  idList = [];
+//        for (Map map in returnJsonVector.regions){
+//            pvalueList <<  """${map.val}""".toString();
+//            chrList  <<  """${map.chr}""".toString()
+//            positionList << """${(map.start + map.stop)/2}"""
+//            scoreTestStatList << """null""".toString()
+//            refAlleleFreqList << """null""".toString()
+//            refAlleleList << """null""".toString()
+//            analysisList << """null""".toString();
+//            idList << """${pvalueList.size()}""".toString();
+//        }
+//        resultLZJson['pvalue'] = pvalueList;
+//        resultLZJson['chr'] = chrList;
+//        resultLZJson['position'] = positionList;
+//        resultLZJson['scoreTestStat'] = scoreTestStatList;
+//        resultLZJson['refAlleleFreq'] = refAlleleFreqList;
+//        resultLZJson['refAllele'] = refAlleleList;
+//        resultLZJson['analysis'] = analysisList;
+//        resultLZJson['id'] = idList;
+//
+//
+//        return resultLZJson.toString();
+//    }
 
     /**
      * take a variant list and turn it into a variant name list, with filtering added for polyphen/sift predictors
