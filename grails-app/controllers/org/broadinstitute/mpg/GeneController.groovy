@@ -599,6 +599,7 @@ class GeneController {
         String endString = params.end; // ex "29937203"
         String assay_id = params.assay_id
         String tissue_id = params.tissue_id
+        JSONObject returnJsonVector = null;
 
         int startInteger;
         int endInteger;
@@ -616,9 +617,9 @@ class GeneController {
             endInteger = Integer.parseInt(endString);
 
             if (chromosome != null) {
-                //jsonReturn = widgetService.getBigwigJsonForLocusZoomString(chromosome, startInteger, endInteger, assay_id,tissue_id);
-                jsonReturn = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
-                jsonReturn = tranlsateVector(jsonReturn);
+                //jsonReturn = widgetService.getVectorDataRestCallResults(chromosome, startInteger, endInteger);
+                returnJsonVector = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
+                JSONObject resultLZJson = tranlsateVector(returnJsonVector);
 
             } else {
                 jsonReturn = errorJson;
@@ -637,26 +638,40 @@ class GeneController {
         }
 
         // return
-        render(jsonReturn)
+        return resultLZJson;
     }
 
     def tranlsateVector(JSONObject returnJsonVector){
         // returnJsonVector.regions.val
-        JSONObject resultLZJson = null;
-        List<String> pvalList = [];
+        JSONObject resultLZJson = new JSONObject();
+        List<String> pvalueList = [];
         List<String> chrList = [];
+        List<String> positionList = [];
         List<String> scoreTestStatList = [];
         List<String> refAlleleFreqList = []
-        List<String> refAlleleList = []
-        List<String> analysisList = []
+        List<String> refAlleleList = [];
+        List<String> analysisList = [];
+        List<String>  idList = [];
         for (Map map in returnJsonVector.regions){
-            resultLZJson['pvalue'] = pvalList.add(map.val);
-            resultLZJson['chr'] = chrList.add(map.chr);
-            resultLZJson['scoreTestStat']  = scoreTestStatList.add(null);
-            resultLZJson['refAlleleFreq']  = refAlleleFreqList.add(null);
-            resultLZJson['refAllele']  = refAlleleList.add(null);
-            resultLZJson['analysis']  = analysisList.add(null);
+            pvalueList <<  """${map.val}""".toString();
+            chrList  <<  """${map.chr}""".toString()
+            positionList << """${(map.start + map.stop)/2}"""
+            scoreTestStatList << """null""".toString()
+            refAlleleFreqList << """null""".toString()
+            refAlleleList << """null""".toString()
+            analysisList << """null""".toString();
+            idList << """${pvalueList.size()}""".toString();
         }
+        resultLZJson['pvalue'] = pvalueList;
+        resultLZJson['chr'] = chrList;
+        resultLZJson['position'] = positionList;
+        resultLZJson['scoreTestStat'] = scoreTestStatList;
+        resultLZJson['refAlleleFreq'] = refAlleleFreqList;
+        resultLZJson['refAllele'] = refAlleleList;
+        resultLZJson['analysis'] = analysisList;
+        resultLZJson['id'] = idList;
+
+
         return resultLZJson.toString();
     }
 
