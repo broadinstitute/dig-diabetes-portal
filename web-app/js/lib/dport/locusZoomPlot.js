@@ -242,7 +242,7 @@ var mpgSoftware = mpgSoftware || {};
                                         values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"]
                                     }
                                 },
-                    "#00ff00"]
+                    "#c8c8c8"]
                     break;
                 case 2:
                     panel_layout.data_layers[2].color = [
