@@ -69,6 +69,10 @@ svg.lz-locuszoom {
     stroke: rgb(24, 24, 24);
     stroke-opacity: 1;
     stroke-width: 1px; }
+  svg.lz-data_layer-line-area {
+        fill: yellow;
+        stroke-width:0px;
+        }
   svg.lz-locuszoom path.lz-data_layer-line {
     stroke: rgb(24, 24, 24);
     stroke-opacity: 1;

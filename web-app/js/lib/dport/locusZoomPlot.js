@@ -151,6 +151,28 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
+        var customCurveDataLayer = function (layerName){
+            var stateIdSpec = layerName+":state_id";
+            var developingStructure = {
+                namespace: {layerName: layerName},
+                id: "recombratenew",
+                type: "filledLine",
+                fields: [layerName+":position", layerName+":pvalue"],
+                z_index: 1,
+                style: {
+                    "stroke": "#0000FF",
+                    "stroke-width": "1.5px"
+                },
+                x_axis: {
+                    field: layerName+":position"
+                },
+                y_axis: {
+                    axis: 1,
+                    field: layerName+":pvalue"
+                }
+            };
+            return developingStructure;
+        };
 
 
         var customCurvePanel = function (layerName){
@@ -178,12 +200,8 @@ var mpgSoftware = mpgSoftware || {};
                     extent: "state"
                 },
                 y1: {
-                    label: "-log10 p-value",
+                    label: "Density",
                     label_offset: 28
-                },
-                y2: {
-                    label: "Recombination Rate (cM/Mb)",
-                    label_offset: 40
                 }
             },
             legend: {
@@ -200,7 +218,7 @@ var mpgSoftware = mpgSoftware || {};
                 x_linked: true
             },
             data_layers: [
-                LocusZoom.Layouts.get("data_layer", "recomb_rate", { unnamespaced: true }),
+                customCurveDataLayer('accessibility-tissue')
             ]
         }
         };
@@ -237,17 +255,18 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var buildAccessibilityLayout = function ( phenotype,lzParameters){
+        var buildAccessibilityLayout = function ( accessibilityPanelName,phenotypeName){
             var addendumToName = '';
             var mods = {
-                id: "accessibility-"+phenotype,
-                title: { text: "accessibility-"+phenotype},
-                namespace: { assoc: phenotype }
+                id: accessibilityPanelName,
+                title: { text: "chromatin accessibility in Aorta"},
+                namespace: { assoc: phenotypeName }
             };
-            var panel_layout = customCurvePanel("accessibility-"+phenotype + ":id");
-            panel_layout.y_index = -1;
-            panel_layout.height = 270;
-            panel_layout.data_layers[0].id_field = "accessibility-"+phenotype + ":id";
+            var panel_layout = customCurvePanel(accessibilityPanelName + ":id");
+            //panel_layout.y_index = -1;
+            panel_layout.height = 210;
+            panel_layout.data_layers[0].id = accessibilityPanelName;
+            panel_layout.data_layers[0].id_field = accessibilityPanelName+":start"
 
             return panel_layout;
         };
@@ -455,7 +474,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue){
-            var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
+            var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -468,7 +487,7 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }, "BroadT2D");
             var tissueAsId = 'accessibility-'+rawTissue;
-            dataSources.add(tissueAsId, new broadIntervalsSource(getLocusZoomFilledPlotUrl, rawTissue));
+            dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue));
         };
 
 
@@ -553,10 +572,10 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var addChromatinAccessibilityTrack = function(locusZoomVar,tissueName,tissueId){
+        var addChromatinAccessibilityTrack = function(locusZoomVar,tissueName,tissueId,phenotypeName){
             var accessibilityPanelName = "accessibility-"+tissueId;
             // we can't use the standard interval panel, but we can derive our own
-            var accessibilityPanel = buildAccessibilityLayout(accessibilityPanelName)
+            var accessibilityPanel = buildAccessibilityLayout(accessibilityPanelName,phenotypeName)
             accessibilityPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
             if (typeof locusZoomPlot[currentLzPlotKey].panels[accessibilityPanel] === 'undefined'){
                 locusZoomVar.addPanel(accessibilityPanel).addBasicLoader();
@@ -612,10 +631,11 @@ var mpgSoftware = mpgSoftware || {};
             var getLocusZoomFilledPlotUrl = lzParameters.getLocusZoomFilledPlotUrl;
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
+            var phenotypeName = lzParameters.phenotypeName;
             setNewDefaultLzPlot(lzGraphicDomId);
 
-            buildChromatinAccessibilitySource(dataSources,getLocusZoomFilledPlotUrl,tissueCode);
-            addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode);
+            buildChromatinAccessibilitySource(dataSources,getLocusZoomFilledPlotUrl,tissueCode,phenotypeName);
+            addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,phenotypeName);
 
             rescaleSVG();
 
@@ -694,8 +714,9 @@ var mpgSoftware = mpgSoftware || {};
 
                 addLZTissueChromatinAccessibility({
                     tissueCode: 'tissue',
-                    tissueDescriptiveName: 'tissue description',
-                    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl
+                    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
+                    phenoTypeName:phenoTypeName
                 },lzGraphicDomId,graphicalOptions);
                 if ((typeof pageInitialization !== 'undefined')&&
                     (pageInitialization)){
