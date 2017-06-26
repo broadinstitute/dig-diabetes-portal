@@ -54,7 +54,7 @@
 
 
 
-<tr><td>Cincinnati Control Cohort (CCC)</td><td>0</td><td>282</td><td>European and African</td></tr>
+%{--<tr><td>Cincinnati Control Cohort (CCC)</td><td>0</td><td>282</td><td>European and African</td></tr>--}%
 
     %{--<table border="1">--}%
                 %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
