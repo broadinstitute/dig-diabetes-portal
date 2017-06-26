@@ -572,9 +572,7 @@ class BurdenService {
 
             // get the results of the burden call
             returnJson = this.getBurdenRestCallResults(jsonObject.toString());
-            returnJsonVector = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
-           // JSONObject resultLZJson = tranlsateVector(returnJsonVector);
-            log.info("got Vector Data result: " + resultLZJson);
+
             log.info("got burden rest result: " + returnJson);
 
             // add json array of variant strings to the return json
@@ -635,9 +633,8 @@ class BurdenService {
         List<String> variantStringList = new ArrayList<String>();
         boolean qualifyingVariant = false;
 
-        // for logic, see DIGP-102
         // loop through all variants in the list
-        for (Variant variant: variantList) {
+        for (Variant variant : variantList) {
             // depending on the variant selection option passed in, add appropriate variants to the list
             if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE_POSS_DELETERIOUS) {
                 // include for following conditions
@@ -660,47 +657,57 @@ class BurdenService {
                 // MDS == 1
                 if (variant.getMostDelScore() == 2) {
                     if (variant.getPolyphenPredictor()?.equalsIgnoreCase(PortalConstants.POLYPHEN_PRED_PROBABLY_DAMAGING) &&
-                        variant.getSiftPredictor()?.equalsIgnoreCase(PortalConstants.SIFT_PRED_DELETERIOUS)) {
+                            variant.getSiftPredictor()?.equalsIgnoreCase(PortalConstants.SIFT_PRED_DELETERIOUS)) {
                         qualifyingVariant = true;
                     }
                 } else if (variant.getMostDelScore() == 1) {
                     qualifyingVariant = true;
                 }
 
-            } else if ( (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT)||
-                        (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD)||
-                        (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)){
+            } else if ((variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT) ||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD) ||
+                    (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_NS)) {
                 float maf = variant.getMaf()
                 boolean ptv = (variant.getMostDelScore() == 1)
                 boolean ptvOrMissense = (variant.getMostDelScore() == 1 || variant.getMostDelScore() == 2)
-                boolean nsStrict = ((variant.getMutationTasterPredictor()?.contains("D"))&&
-                        (variant.getSiftPredictor()?.contains("D"))&&
-                        (variant.getLrtPredictor()?.contains("D"))&&
-                        (variant.getPolyphenHvarPredictor()?.contains("D"))&&
+                boolean nsStrict = ((variant.getMutationTasterPredictor()?.contains("D")) &&
+                        (variant.getSiftPredictor()?.contains("D")) &&
+                        (variant.getLrtPredictor()?.contains("D")) &&
+                        (variant.getPolyphenHvarPredictor()?.contains("D")) &&
                         (variant.getPolyphenHdivPredictor()?.contains("D")))
-                boolean nsBroad = ((variant.getMutationTasterPredictor()?.contains("D"))||
-                        (variant.getSiftPredictor()?.contains("D"))||
-                        (variant.getLrtPredictor()?.contains("D"))||
-                        (variant.getPolyphenHvarPredictor()?.contains("D"))||
+                boolean nsBroad = ((variant.getMutationTasterPredictor()?.contains("D")) ||
+                        (variant.getSiftPredictor()?.contains("D")) ||
+                        (variant.getLrtPredictor()?.contains("D")) ||
+                        (variant.getPolyphenHvarPredictor()?.contains("D")) ||
                         (variant.getPolyphenHdivPredictor()?.contains("D")))
-                switch (variantSelectionOptionId){
+                switch (variantSelectionOptionId) {
                     case PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT:
                         qualifyingVariant = (ptv || nsStrict)
                         break
                     case PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD:
-                        qualifyingVariant = (ptv || nsStrict || (nsBroad && maf<0.01))
+                        qualifyingVariant = (ptv || nsStrict || (nsBroad && maf < 0.01))
                         break
                     case PortalConstants.BURDEN_VARIANT_OPTION_NS:
-                        qualifyingVariant = (ptv || nsStrict || nsBroad || (ptvOrMissense && maf<0.01))
+                        qualifyingVariant = (ptv || nsStrict || nsBroad || (ptvOrMissense && maf < 0.01))
                         break
                     default:
                         qualifyingVariant = true
                         break
                 }
             } else {
-            // for any other call, all the variants are included, so simply set to true
-            qualifyingVariant = true;
-        }
+                // for any other call, all the variants are included, so simply set to true
+                qualifyingVariant = true;
+            }
+
+            // We can only include multiallelics variants when we are performing no filtering.  In
+            //  all other cases there is the potential that one of the alternate alleles would disqualify
+            //  the variant from consideration.
+            if ( (qualifyingVariant)&&
+                 (variantSelectionOptionId != PortalConstants.BURDEN_VARIANT_OPTION_ALL)){
+                if (variant.getVariantId().contains(",")){
+                    qualifyingVariant = false
+                }
+            }
 
             if (qualifyingVariant) {
                 variantStringList.add(variant.getVariantId());
