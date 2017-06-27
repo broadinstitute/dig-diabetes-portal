@@ -121,11 +121,12 @@
 </table>
 
     <h4>Project</h4>
-    <h4>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
-    </small></h4>
+    <h5>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
+    </small></h5>
 
     <p><g:message code="informational.data.project.SIGMA"></g:message></p>
 
-
+   <h4>Accessing GWAS SIGMA data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.SIGMA"></g:message></p>
 </script>
 

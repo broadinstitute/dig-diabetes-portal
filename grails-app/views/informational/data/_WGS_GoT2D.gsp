@@ -111,10 +111,10 @@
 
 
     <h4>Project</h4>
-    <h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a>
-    </small></h4>
+    <h5>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a>
+    </small></h5>
 
-    <p>The GoT2D consortium aims to understand the allelic architecture of type 2 diabetes through whole-genome sequencing, high-density SNP genotyping, and imputation. The reference panel based on this work is intended as a comprehensive inventory of low-frequency variants in Europeans, including SNPs, small insertions and deletions, and structural variants.</p>
+ <p><g:message code="informational.project.descr.GoT2D"></g:message></p>
 
 <h4>Accessing GoT2D WGS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.GoT2DWGS"></g:message></p>

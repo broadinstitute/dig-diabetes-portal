@@ -101,11 +101,14 @@
         <tr><td>Total: 3,848</td><td>Total: 4,366</td><td></td><td></td></tr>
     </table>
     <h6 style="color:#ccc;">Project</h6>
-    <h4>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a
+    <h5>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a
             href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
-    </small></h4>
+    </small></h5>
 
-    <p>The SIGMA partnership aims to understand the genomic basis of type 2 diabetes in Mexican and Latin American populations.</p>
+    <p><g:message code="informational.data.project.SIGMA"></g:message></p>
+
+   <h4>Accessing SIGMA exome chip analysis data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.ExChip_SIGMA"></g:message></p>
 
 </div>
 </script>

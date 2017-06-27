@@ -45,7 +45,5 @@
 <h4>Accessing CAMP data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.CAMP"></g:message></p>
 
-<h4>Future plans for CAMP data in the T2D Knowledge Portal</h4>
-<p><g:message code="informational.data.future.CAMP"></g:message></p>
 
 </script>
