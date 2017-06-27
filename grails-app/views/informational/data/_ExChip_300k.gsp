@@ -1,6 +1,5 @@
-<script class="panel-body" id="ExSeq_EOMI_script" type="x-tmpl-mustache">
-
-<div class="panel-body">
+<script class="panel-body" id="ExChip_300k_script" type="x-tmpl-mustache">
+   <div class="panel-body">
 
 <h4>Dataset</h4>
 
@@ -64,7 +63,6 @@
 
 <p><g:message code="informational.data.external.project"></g:message></p>
 </div>
-
 
 
 </script>

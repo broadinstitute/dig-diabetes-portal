@@ -28,7 +28,7 @@
     <li><g:message code="informational.shared.traits.pulse_pressure"></g:message></li>
 </ul>
 
-    <h4>Datas subjects</h4>
+    <h4>Dataset subjects</h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
