@@ -26,6 +26,7 @@ class GeneController {
     SqlService sqlService
     BurdenService burdenService
     WidgetService widgetService
+    EpigenomeService epigenomeService
     GrailsApplication grailsApplication
 
 
@@ -576,16 +577,6 @@ class GeneController {
         // return
         render(jsonReturn)
     }
-    /**
-     * call the vector data rest service with the given json payload string
-     *
-     * @param burdenCallJsonPayloadString
-     * @return
-     */
-    protected JSONObject getVectorDataRestCallResults(String vectorDataJsonPayloadString) {
-        JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
-        return VectorDataJson;
-    }
 
     /**
      * method to serve LZ requests of filled line plot in the format needed
@@ -612,14 +603,15 @@ class GeneController {
         Date startTime = new Date();
 
         // if have all the information, call the widget service
+        JSONObject resultLZJson
         try {
             startInteger = Integer.parseInt(startString);
             endInteger = Integer.parseInt(endString);
+            String callingJson = """{"chr":"chr${chromosome}", "start":${startString},"stop":${endString},"page_size":5000}""".toString()
 
             if (chromosome != null) {
-                //jsonReturn = widgetService.getVectorDataRestCallResults(chromosome, startInteger, endInteger);
-                returnJsonVector = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
-                JSONObject resultLZJson = tranlsateVector(returnJsonVector);
+                returnJsonVector = epigenomeService.getVectorDataRestCallResults(callingJson);
+                resultLZJson = epigenomeService.tranlsateVector(returnJsonVector);
 
             } else {
                 jsonReturn = errorJson;
@@ -638,41 +630,8 @@ class GeneController {
         }
 
         // return
-        return resultLZJson;
-    }
-
-    def tranlsateVector(JSONObject returnJsonVector){
-        // returnJsonVector.regions.val
-        JSONObject resultLZJson = new JSONObject();
-        List<String> pvalueList = [];
-        List<String> chrList = [];
-        List<String> positionList = [];
-        List<String> scoreTestStatList = [];
-        List<String> refAlleleFreqList = []
-        List<String> refAlleleList = [];
-        List<String> analysisList = [];
-        List<String>  idList = [];
-        for (Map map in returnJsonVector.regions){
-            pvalueList <<  """${map.val}""".toString();
-            chrList  <<  """${map.chr}""".toString()
-            positionList << """${(map.start + map.stop)/2}"""
-            scoreTestStatList << """null""".toString()
-            refAlleleFreqList << """null""".toString()
-            refAlleleList << """null""".toString()
-            analysisList << """null""".toString();
-            idList << """${pvalueList.size()}""".toString();
-        }
-        resultLZJson['pvalue'] = pvalueList;
-        resultLZJson['chr'] = chrList;
-        resultLZJson['position'] = positionList;
-        resultLZJson['scoreTestStat'] = scoreTestStatList;
-        resultLZJson['refAlleleFreq'] = refAlleleFreqList;
-        resultLZJson['refAllele'] = refAlleleList;
-        resultLZJson['analysis'] = analysisList;
-        resultLZJson['id'] = idList;
-
-
-        return resultLZJson.toString();
+        render(status: 200, contentType: "application/json") {resultLZJson}
+        return;
     }
 
 

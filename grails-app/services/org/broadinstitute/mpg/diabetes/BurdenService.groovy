@@ -43,19 +43,6 @@ class BurdenService {
         return BurdenJsonBuilder.getBurdenJsonBuilder();
     }
 
-
-
-    /**
-     * call the vector data rest service with the given json payload string
-     *
-     * @param burdenCallJsonPayloadString
-     * @return
-     */
-    protected JSONObject getVectorDataRestCallResults(String vectorDataJsonPayloadString) {
-        JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
-        return VectorDataJson;
-    }
-
     /**
      * call the burden test rest service with the given json payload string
      *
@@ -373,8 +360,8 @@ class BurdenService {
                 mafValue = 0.01
             }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
-            String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
-            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
+//            String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
+//            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
@@ -572,9 +559,8 @@ class BurdenService {
 
             // get the results of the burden call
             returnJson = this.getBurdenRestCallResults(jsonObject.toString());
-            returnJsonVector = this.getVectorDataRestCallResults("{\"chr\":\"chr1\", \"start\":17370,\"stop\":91447}");
            // JSONObject resultLZJson = tranlsateVector(returnJsonVector);
-            log.info("got Vector Data result: " + resultLZJson);
+           // log.info("got Vector Data result: " + resultLZJson);
             log.info("got burden rest result: " + returnJson);
 
             // add json array of variant strings to the return json
@@ -588,6 +574,8 @@ class BurdenService {
         // return
         return returnJson;
     }
+
+
 
 //    def tranlsateVector(JSONObject returnJsonVector){
 //        // returnJsonVector.regions.val
