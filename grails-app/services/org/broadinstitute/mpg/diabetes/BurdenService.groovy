@@ -360,8 +360,8 @@ class BurdenService {
                 mafValue = 0.01
             }
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
-            String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
-            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
+//            String pValueName = filterManagementService.findFavoredMeaningValue ( dataset, "T2D", "P_VALUE" )
+//            queryFilterList.addAll(this.getBurdenJsonBuilder().getPValueFilters(dataset, 1.0, "T2D", pValueName))
 
             // get the getData results payload
             jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
@@ -514,6 +514,7 @@ class BurdenService {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
+        JSONObject returnJsonVector = null;
 
 
         // TODO: remove this workaround when the backend can gather samples on its own
@@ -558,6 +559,8 @@ class BurdenService {
 
             // get the results of the burden call
             returnJson = this.getBurdenRestCallResults(jsonObject.toString());
+           // JSONObject resultLZJson = tranlsateVector(returnJsonVector);
+           // log.info("got Vector Data result: " + resultLZJson);
             log.info("got burden rest result: " + returnJson);
 
             // add json array of variant strings to the return json
@@ -571,6 +574,42 @@ class BurdenService {
         // return
         return returnJson;
     }
+
+
+
+//    def tranlsateVector(JSONObject returnJsonVector){
+//        // returnJsonVector.regions.val
+//        JSONObject resultLZJson = new JSONObject();
+//        List<String> pvalueList = [];
+//        List<String> chrList = [];
+//        List<String> positionList = [];
+//        List<String> scoreTestStatList = [];
+//        List<String> refAlleleFreqList = []
+//        List<String> refAlleleList = [];
+//        List<String> analysisList = [];
+//        List<String>  idList = [];
+//        for (Map map in returnJsonVector.regions){
+//            pvalueList <<  """${map.val}""".toString();
+//            chrList  <<  """${map.chr}""".toString()
+//            positionList << """${(map.start + map.stop)/2}"""
+//            scoreTestStatList << """null""".toString()
+//            refAlleleFreqList << """null""".toString()
+//            refAlleleList << """null""".toString()
+//            analysisList << """null""".toString();
+//            idList << """${pvalueList.size()}""".toString();
+//        }
+//        resultLZJson['pvalue'] = pvalueList;
+//        resultLZJson['chr'] = chrList;
+//        resultLZJson['position'] = positionList;
+//        resultLZJson['scoreTestStat'] = scoreTestStatList;
+//        resultLZJson['refAlleleFreq'] = refAlleleFreqList;
+//        resultLZJson['refAllele'] = refAlleleList;
+//        resultLZJson['analysis'] = analysisList;
+//        resultLZJson['id'] = idList;
+//
+//
+//        return resultLZJson.toString();
+//    }
 
     /**
      * take a variant list and turn it into a variant name list, with filtering added for polyphen/sift predictors

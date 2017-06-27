@@ -26,6 +26,7 @@ class GeneController {
     SqlService sqlService
     BurdenService burdenService
     WidgetService widgetService
+    EpigenomeService epigenomeService
     GrailsApplication grailsApplication
 
 
@@ -402,6 +403,18 @@ class GeneController {
         }
     }
 
+
+    def vectorDataAjax() {
+        String geneToStartWith = params.geneName
+        if (geneToStartWith)      {
+            JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
+            render(status:200, contentType:"application/json") {
+                [geneInfo:jsonObject['gene-info']]
+            }
+
+        }
+    }
+
     /***
      * This call supports the burden test on the gene info page
      * @return
@@ -565,6 +578,61 @@ class GeneController {
         render(jsonReturn)
     }
 
+    /**
+     * method to serve LZ requests of filled line plot in the format needed
+     *
+     * @return
+     */
+    def getLocusZoomFilledPlot() {
+        String jsonReturn;
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
+        String assay_id = params.assay_id
+        String tissue_id = params.tissue_id
+        JSONObject returnJsonVector = null;
+
+        int startInteger;
+        int endInteger;
+        String errorJson = "{\"data\": {}, \"error\": true}";
+
+        // log
+        log.info("got LZ request with params: for filled line plot " + params);
+
+        // log start
+        Date startTime = new Date();
+
+        // if have all the information, call the widget service
+        JSONObject resultLZJson
+        try {
+            startInteger = Integer.parseInt(startString);
+            endInteger = Integer.parseInt(endString);
+            String callingJson = """{"chr":"chr${chromosome}", "start":${startString},"stop":${endString},"page_size":5000}""".toString()
+
+            if (chromosome != null) {
+                returnJsonVector = epigenomeService.getVectorDataRestCallResults(callingJson);
+                resultLZJson = epigenomeService.tranlsateVector(returnJsonVector);
+
+            } else {
+                jsonReturn = errorJson;
+            }
+
+            // log
+            log.info("got LZ result: " + jsonReturn);
+
+            // log end
+            Date endTime = new Date();
+            log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
+
+        } catch (NumberFormatException exception) {
+            log.error("got incorrect parameters for LZ call: " + params);
+            jsonReturn = errorJson;
+        }
+
+        // return
+        render(status: 200, contentType: "application/json") {resultLZJson}
+        return;
+    }
 
 
     def list(Integer max) {
