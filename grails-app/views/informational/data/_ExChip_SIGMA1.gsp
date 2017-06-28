@@ -1,5 +1,5 @@
 <script class="panel-body" id="ExChip_SIGMA1_script" type="x-tmpl-mustache">
-<h6 style="color:#ccc;">Data set phenotypes</h6>
+<h4>Dataset phenotypes</h4>
 <ul>
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
@@ -100,7 +100,7 @@
 
         <tr><td>Total: 3,848</td><td>Total: 4,366</td><td></td><td></td></tr>
     </table>
-    <h6 style="color:#ccc;">Project</h6>
+    <h4>Project</h4>
     <h5>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a
             href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
     </small></h5>

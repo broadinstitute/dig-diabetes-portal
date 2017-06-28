@@ -22,7 +22,7 @@
 </ul>
 
     <h4>Project</h4>
-    <h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
+    <h5>Chronic Kidney Disease Genetics Consortium (CKDGen)</h5>
 
     <p>CKDGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
 
