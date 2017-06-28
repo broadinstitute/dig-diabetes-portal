@@ -43,7 +43,7 @@
     <h5>The International Genome Sample Resource (IGSR) <small><a href="http://www.1000genomes.org/" target="_blank">Learn more ></a>
     </small></h5>
 
-    <p></p>
+    <p><g:message code="informational.project.descr.1000k"></g:message></p>
 
 <h4>Accessing 1000 Genomes data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.1000g"></g:message></p>
