@@ -16,6 +16,12 @@
         <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
+        <li><g:message code="informational.shared.traits.BMI"></g:message></li>
+        <li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
+        <li><g:message code="informational.shared.traits.height"></g:message></li>
+        <li><g:message code="informational.shared.traits.waist_circumference"></g:message></li>
+         <li><g:message code="informational.shared.traits.hip_circumference"></g:message></li>
+          <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
         <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
         <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
         <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
