@@ -776,9 +776,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         commonVars['propertiesToInclude'] = valuesToInclude;
         commonVars['propertiesToRemove'] = valuesToRemove;
         if (domSelectors == 'common'){
-            mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateCommonTable,commonVars);
+            refreshTopVariantsDirectlyByPhenotype(currentPhenotype,mpgSoftware.geneSignalSummaryMethods.updateCommonTable,commonVars);
         } else {
-            mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable,commonVars);
+            refreshTopVariantsDirectlyByPhenotype(currentPhenotype,mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable,commonVars);
         }
 
     };
@@ -866,13 +866,21 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var rememberCallBack = callBack;
         var rememberParameter = parameter;
         var coreVariables = getSignalSummarySectionVariables();
+        var propertiesToIncludeQuoted = [];
+        var propertiesToRemoveQuoted = [];
+        _.each(parameter.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
+        _.each(parameter.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
+
         $.ajax({
             cache: false,
             type: "post",
             url: coreVariables.retrieveTopVariantsAcrossSgsUrl,
             data: {
                 phenotype: phenotypeName,
-                geneToSummarize:coreVariables.geneName},
+                geneToSummarize:coreVariables.geneName,
+                propertiesToInclude: propertiesToIncludeQuoted.join(","),
+                propertiesToRemove: propertiesToRemoveQuoted.join(",")
+            },
             async: true,
             success: function (data) {
                 rememberCallBack(data, rememberParameter);

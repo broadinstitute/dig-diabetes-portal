@@ -607,7 +607,7 @@ class GeneController {
         try {
             startInteger = Integer.parseInt(startString);
             endInteger = Integer.parseInt(endString);
-            String callingJson = """{"chr":"chr${chromosome}", "start":${startString},"stop":${endString},"page_size":5000}""".toString()
+            String callingJson = """{"chr":"${chromosome}", "start":${startString},"stop":${endString},"page_size":5000}""".toString()
 
             if (chromosome != null) {
                 returnJsonVector = epigenomeService.getVectorDataRestCallResults(callingJson);
