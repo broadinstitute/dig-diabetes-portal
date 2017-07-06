@@ -24,11 +24,11 @@
 <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
     <h4>Project</h4>
-    <h4>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
-    </small></h4>
+    <h5>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
+    </small></h5>
 
 
-    <p>The DIAGRAM consortium performs large-scale studies to characterize the genetic basis of type 2 diabetes, primarily focusing on samples of European descent.</p>
+    <p><g:message code="informational.project.descr.DIAGRAM"></g:message></p>
 
     <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.DIAGRAMa"></g:message></p>
@@ -40,7 +40,7 @@
 <p><g:message code="informational.data.exptsumm.DIAGRAMg"></g:message></p>
 <p><g:message code="informational.data.exptsumm.DIAGRAMh"></g:message></p>
 
-<h4>Accessing DIAGRAM trans-ethnic meta-analysis data in the T2D Knowledge Portal</h4>
+<h4>Accessing DIAGRAM Transethnic meta-analysis data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.DIAGRAM"></g:message></p>
 
 </script>

@@ -1,5 +1,5 @@
 <script class="panel-body" id="GWAS_GLGC_script" type="x-tmpl-mustache">
-    <h6 style="color:#ccc;">Data set</h6>
+    <h4>Dataset</h4>
 
     <p>Download URL: <a href="http://csg.sph.umich.edu//abecasis/public/lipids2013/" target="_blank">http://csg.sph.umich.edu//abecasis/public/lipids2013/</a><br/>
 
@@ -30,13 +30,15 @@
 
 
     <h4>Project</h4>
-    <h4>Global Lipids Genetics Consortium (GLGC) <small><a href="http://lipidgenetics.org/" target="_blank">Learn more ></a>
-    </small></h4>
+    <h5>Global Lipids Genetics Consortium (GLGC) <small><a href="http://lipidgenetics.org/" target="_blank">Learn more ></a>
+    </small></h5>
 
     <p><g:message code="informational.data.project.GLGC"></g:message></p>
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.GLGC"></g:message></p>
 
+<h4>Accessing GLGC GWAS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.GLGC"></g:message></p>
 
 </script>
 

@@ -35,7 +35,6 @@
 
 <h4>Dataset phenotypes</h4>
 <ul>
-    <li><g:message code="informational.shared.traits.t2d"></g:message></li>
     <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
     <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
     <li><g:message code="informational.shared.traits.two_hour_glucose"></g:message></li>
@@ -61,8 +60,8 @@
 
 
 <h4>Project</h4>
-<h4>Meta-Analyses of Glucose and Insulin-related traits Consortium (MAGIC) <small><a href="http://www.magicinvestigators.org/" target="_blank">Learn more ></a>
-</small></h4>
+<h5>Meta-Analyses of Glucose and Insulin-related traits Consortium (MAGIC) <small><a href="http://www.magicinvestigators.org/" target="_blank">Learn more ></a>
+</small></h5>
 
 <p><g:message code="informational.project.descr.MAGIC"></g:message></p>
 <h4>Experiment summary</h4>
@@ -79,5 +78,10 @@
 <h5>April 2017 updates</h5>
 <p><g:message code="informational.data.exptsumm.MAGIC5a"> </g:message><g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet.author"></g:message><g:message code="informational.shared.publications.etal"> </g:message><g:message code="informational.data.exptsumm.MAGIC4b"></g:message>
 <g:message code="informational.data.exptsumm.MAGIC5b"></g:message></p>
+
+   <h4>Accessing MAGIC GWAS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.MAGIC"></g:message></p>
+
+
 </script>
 

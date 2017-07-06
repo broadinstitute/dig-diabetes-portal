@@ -16,8 +16,8 @@
 
 <p><g:message code="informational.shared.projectpublications.gnomAD"></g:message></p>
 <h4>Project</h4>
-<h4>Genome Aggregation Database (gnomAD) <small><a href="http://gnomad.broadinstitute.org/" target="_blank">Learn more ></a>
-</small></h4>
+<h5>Genome Aggregation Database (gnomAD) <small><a href="http://gnomad.broadinstitute.org/" target="_blank">Learn more ></a>
+</small></h5>
 
 <p><g:message code="informational.data.exptsumm.gnomAD"></g:message></p>
 

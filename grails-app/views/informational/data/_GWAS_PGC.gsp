@@ -24,10 +24,13 @@
 
 
     <h4>Project</h4>
-    <h4>Psychiatric GWAS Consortium (PGC) <small><a href="https://www.nimhgenetics.org/available_data/data_biosamples/pgc_public.php" target="_blank">Learn more ></a>
-    </small></h4>
+    <h5>Psychiatric GWAS Consortium (PGC) <small><a href="https://www.nimhgenetics.org/available_data/data_biosamples/pgc_public.php" target="_blank">Learn more ></a>
+    </small></h5>
 
     <p><g:message code="informational.data.project.PGC"></g:message></p>
-    <p>PGC conducts meta-analyses of genome-wide association study data, focusing on autism, attention-deficit hyperactivity disorder, bipolar disorder, major depressive disorder, and schizophrenia.</p>
+
+    <h4>Accessing PGC GWAS data in the T2D Knowledge Portal</h4>
+<p><g:message code="informational.data.accessing.PGC"></g:message></p>
+
 </script>
 

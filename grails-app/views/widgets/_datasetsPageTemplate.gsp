@@ -37,6 +37,10 @@
 <g:render template="./data/WGS_GoT2D" />
 <g:render template="./data/WGS_GoT2Dimputed"/>
 <g:render template="./data/WGS_WgnomAD" />
+<g:render template="./data/ExChip_AFGen" />
+<g:render template="./data/GWAS_AFGen" />
+<g:render template="./data/ExChip_MICAD" />
+<g:render template="./data/ExChip_300k" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>

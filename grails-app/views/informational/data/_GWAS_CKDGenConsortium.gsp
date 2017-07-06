@@ -27,9 +27,9 @@
 </ul>
 
 <h4>Project</h4>
-<h4>Chronic Kidney Disease Genetics Consortium (CKDGen)</h4>
+<h5>Chronic Kidney Disease Genetics Consortium (CKDGen)</h5>
 
-<p>CKDGen is a consortium of researchers investigating genetic loci associated with kidney function and disease.</p>
+<p><g:message code="informational.project.descr.CKDGen"></g:message></p>
 
 <h4>Accessing CKDGen GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.CKDGen"></g:message></p>
