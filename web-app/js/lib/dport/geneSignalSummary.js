@@ -99,6 +99,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 case 'EFFECT':
                     arrayOfRows.push(variantRec['BETA']);
                     break;
+                case 'AF':
+                    arrayOfRows.push(UTILS.realNumberFormatter(parseFloat(variantRec['AF']),2));
+                    break;
                 default:
                     arrayOfRows.push(variantRec[columnName]);
                     break;
@@ -137,6 +140,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             case 'Consequence':
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Predicted<br/>impact" };
                 break;
+            case 'AF':
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "MAF" };
+                break;
+            case 'Reference_allele':
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Major<br/>allele" };
+                break;
+            case 'Effect_allele':
+                obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target], "title": "Minor<br/>allele" };
+                break;
             default:
                 obj = { "name": colName,  "class":"codeName_"+colName, "targets": [target],  "title": colName };
                 break;
@@ -161,8 +173,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (requestedProperties.length===0){
             requestedProperties.push("VAR_ID");
             requestedProperties.push("DBSNP_ID");
+            requestedProperties.push("Reference_allele");
+            requestedProperties.push("Effect_allele");
+            requestedProperties.push("Consequence");
             requestedProperties.push("PVALUE");
             requestedProperties.push("EFFECT");
+            requestedProperties.push("AF");
             requestedProperties.push("dataset");
         }
         var counter = 0;
@@ -170,12 +186,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 return buildAHeaderForTheDatatable(o,counter++,'commonDataSet');
             }
         );
+        pValueIndex = _.findIndex(requestedProperties,function (o){o=="PVALUE"});
+        if (pValueIndex === -1) {pValueIndex = 0;};
         commonTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
                 "className": "compact",
                 "bAutoWidth" : false,
                 "columnDefs":columnDefsForDatatable,
-                "order": [[ 2, "asc" ]],
+                "order": [[ pValueIndex, "asc" ]],
                 "scrollY":        "300px",
                 "scrollX": "100%",
                 "scrollCollapse": true,
@@ -243,9 +261,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (requestedProperties.length===0){
             requestedProperties.push("VAR_ID");
             requestedProperties.push("DBSNP_ID");
+            requestedProperties.push("Reference_allele");
+            requestedProperties.push("Effect_allele");
             requestedProperties.push("Consequence");
+            requestedProperties.push("Protein_change");
             requestedProperties.push("PVALUE");
             requestedProperties.push("EFFECT");
+            requestedProperties.push("AF");
             requestedProperties.push("dataset");
         }
         var counter = 0;
@@ -253,13 +275,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 return buildAHeaderForTheDatatable(o,counter++,'highImpactDataSet');
             }
         );
+        pValueIndex = _.findIndex(requestedProperties,function (o){o=="PVALUE"});
+        if (pValueIndex === -1) {pValueIndex = 0;};
         var highImpactTable  = $(selectionToFill).dataTable({
                 "bDestroy": true,
                 "className": "compact",
                 "bAutoWidth" : false,
-                "order": [[ 1, "asc" ]],
                 "columnDefs": columnDefsForDatatable,
-                "order": [[ 3, "asc" ]],
+                "order": [[ pValueIndex, "asc" ]],
                 "scrollY":        "300px",
                 "scrollCollapse": true,
                 "paging":         false,

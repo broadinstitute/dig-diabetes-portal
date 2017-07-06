@@ -140,7 +140,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     drivingVariables = mpgSoftware.variantSearchResults.setVarsToRemember(drivingVariables);
                     $("#cDataModalGoesHere").empty().append(
                             Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
-                    var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','Consequence','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
+                    var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','Consequence','Reference_allele','Effect_allele','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
                                                  is_error: false,
                                                  numRecords: 3},
                                      columns:{
@@ -156,6 +156,8 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                             'MOST_DEL_SCORE': 'Deleteriousness category',
                             'Protein_change': 'Protein change',
                             'Consequence':' Predicted impact',
+                            'Reference_allele': 'Major allele',
+                            'Effect_allele': 'Minor allele',
                             'dataset': 'Data set'}};
                     mpgSoftware.variantSearchResults.setTranslationFunction(fakeData);
                     mpgSoftware.variantSearchResults.generateModal(fakeData,drivingVariables,drivingVariables.uniqueRoot);
