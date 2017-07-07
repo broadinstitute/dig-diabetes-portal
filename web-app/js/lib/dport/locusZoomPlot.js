@@ -712,7 +712,14 @@ var mpgSoftware = mpgSoftware || {};
 
                 }
 
- is
+                 //addLZTissueChromatinAccessibility({
+                 //    tissueCode: 'tissue',
+                 //    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                 //    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
+                 //    phenoTypeName:phenoTypeName
+                 //},lzGraphicDomId,graphicalOptions);
+
+
                 if ((typeof pageInitialization !== 'undefined')&&
                     (pageInitialization)){
 

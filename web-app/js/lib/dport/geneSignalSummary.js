@@ -103,7 +103,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     arrayOfRows.push(UTILS.realNumberFormatter(parseFloat(variantRec['AF']),2));
                     break;
                 default:
-                    arrayOfRows.push(variantRec[columnName]);
+                    if ( typeof variantRec[columnName] === 'undefined'){
+                        arrayOfRows.push(" ");
+                    } else {
+                        arrayOfRows.push(variantRec[columnName]);
+                    }
+
                     break;
             }
         });
