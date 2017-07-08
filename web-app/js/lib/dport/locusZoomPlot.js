@@ -10,6 +10,15 @@ var mpgSoftware = mpgSoftware || {};
     mpgSoftware.locusZoom = (function (){
         var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
         var currentLzPlotKey = 'lz-47';
+        var pageVars = {};
+
+        var setPageVars = function (thisPageVars){
+            pageVars = thisPageVars;
+        };
+        var getPageVars = function (){
+            return pageVars;
+        };
+
 
         var customIntervalsToolTip = function (namespace){
             var htmlRef = "{{"+namespace+":state_name}}<br>"+"{{"+namespace+":start}}-"+"{{"+namespace+":end}}";
@@ -290,6 +299,7 @@ var mpgSoftware = mpgSoftware || {};
                 (makeDynamic==='dynamic')){
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
             }
+            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this);\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
 
 
@@ -392,7 +402,9 @@ var mpgSoftware = mpgSoftware || {};
         var setNewDefaultLzPlot = function (key){
         currentLzPlotKey  = key;
     };
-
+        var getNewDefaultLzPlot = function (){
+            return currentLzPlotKey;
+        };
 
 
         // these get defined when the LZ plot is initialized
@@ -403,6 +415,56 @@ var mpgSoftware = mpgSoftware || {};
         function conditioning(myThis) {
             locusZoomPlot[currentLzPlotKey].CovariatesModel.add(LocusZoom.getToolTipData(myThis));
             LocusZoom.getToolTipData(myThis).deselect();
+        }
+
+        var retrieveFunctionalData = function(callingData,callback,additionalData){
+            var pageVars = getPageVars();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: pageVars.retrieveFunctionalDataAjaxUrl,
+                data: {
+                    chromosome: callingData.CHROM,
+                    startPos: ""+callingData.POS,
+                    endPos: ""+callingData.POS,
+                    lzFormat:0
+                },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+
+                callback(data,additionalData);
+
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                core.errorReporter(jqXHR, errorThrown)
+            });
+        };
+        var processEpigeneticData = function (data,additionalData){
+            var matchedTissue = _.filter(data.variants.variants,function(v,k){console.log(v);return v.element.indexOf('enhancer')!==-1});
+            _.forEach(matchedTissue,function(o,i){
+                addLZTissueAnnotations({
+                    tissueCode: 'intervals_'+o,
+                    tissueDescriptiveName: o,
+                    retrieveFunctionalDataAjaxUrl:additionalData.retrieveFunctionalDataAjaxUrl
+                },getNewDefaultLzPlot(),additionalData);
+            });
+        };
+        function replaceTissues(myThis) {
+            var lzMyThis = LocusZoom.getToolTipData(myThis);
+            // remove the old tissue tracks
+            var tissueTracks = _.filter(lzMyThis.getDataLayer().parent_plot.panels,function(v,k){return (k.indexOf('intervals')===0)});
+            _.forEach(tissueTracks, function (panel){
+                panel.dashboard.hide(true);
+                d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
+                d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
+                return panel.parent.removePanel(panel.id);
+            });
+            LocusZoom.getToolTipData(myThis).deselect();
+            // figure out the tissues we need
+            var callingData = {};
+            callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
+            callingData.CHROM = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            retrieveFunctionalData(callingData,processEpigeneticData,callingData);
         }
 
 
@@ -649,6 +711,9 @@ var mpgSoftware = mpgSoftware || {};
                                          pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions,datasetReadableName) {
             var graphicalOptions = {colorBy:1,
                                     positionBy:1};
+            setPageVars({   retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                            colorBy:graphicalOptions.colorBy,
+                            positionBy:graphicalOptions.positionBy});
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
@@ -762,6 +827,7 @@ var mpgSoftware = mpgSoftware || {};
     return {
         setNewDefaultLzPlot: setNewDefaultLzPlot,
         conditioning:conditioning,
+        replaceTissues:replaceTissues,
         initLocusZoom : initLocusZoom,
         initializeLZPage:initializeLZPage,
         addLZPhenotype:addLZPhenotype,
