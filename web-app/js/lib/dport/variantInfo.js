@@ -1174,69 +1174,23 @@ var mpgSoftware = mpgSoftware || {};
             );
         };
         var displayFunctionalData = function(data,additionalData){
-            if ((typeof data !== 'undefined') &&
-                (typeof data.variants !== 'undefined') &&
-                (!data.variants.is_error)){
-                var rawSortedData = _.sortBy(data.variants.variants,[function(item) {
-                    return parseInt(item.element.split('_')[0], 10);
-                }, function(item) {
-                    return item.source;
-                }]);
-                var sortedData = [];
-                _.forEach(rawSortedData,function(o){
-                    sortedData.push({'CHROM':o.CHROM,
-                        'START':o.START,
-                        'STOP':o.STOP,
-                        'source':o.source_trans,
-                        'element':o.element_trans
-                    })
-                })
-                var uniqueElements = _.uniqBy(sortedData,function(item) {
-                    return item.element;
-                });
-                var uniqueTissues = _.uniqBy(sortedData,function(item) {
-                    return item.source;
-                });
-                var dataMatrix = [];
-                for (var i = 0 ; i < uniqueTissues.length ; i++ ) {
-                    var currentRow = [];
-                    for (var j = 0 ; j < uniqueElements.length ; j++){
+                var renderData = UTILS.processChromatinStateData(data);
+                if (renderData.recordsExist){
+                    buildAnnotationTable('#functionalDataTableGoesHere','urlToFillIn',renderData,{});
+                    buildAnnotationMatrix (renderData.uniqueElements,
+                        renderData.uniqueTissues,
+                        renderData.dataMatrix);
+                    buildMultiTrackDisplay(renderData.uniqueElements,
+                        renderData.uniqueTissues,
+                        renderData.arrayOfArraysGroupedByTissue,
+                        {   regionStart:renderData.regionStart,
+                            regionEnd:renderData.regionEnd,
+                            stateColorBy:renderData.uniqueElements,
+                            mappingInformation:renderData.dataMatrix});
 
-                        if (_.find(sortedData, {source:uniqueTissues[i].source,element:uniqueElements[j].element})){
-                            currentRow.push(1);
-                        } else {
-                            currentRow.push(0);
-                        }
-                    }
-                    dataMatrix.push(currentRow);
                 }
-                var arrayOfArraysGroupedByTissue = [];
-                for (var j = 0 ; j < uniqueTissues.length ; j++){
-
-                    var arrayGroupedByTissue = _.filter(sortedData, {source:uniqueTissues[j].source});
-                    arrayOfArraysGroupedByTissue.push(arrayGroupedByTissue);
-                }
-                var allUniqueElementNames = _.map(uniqueElements,'element');
-                var allUniqueTissueNames = _.map(uniqueTissues,'source');
-                uniqueElements.push({element:'ALL'});
-                uniqueTissues.push({source:'ALL'});
-
-                var renderData = {  'recordsExist': (sortedData.length>1),
-                    'indivRecords':sortedData,
-                    'uniqueElements':uniqueElements,
-                    'uniqueTissues':uniqueTissues};
-
-                buildAnnotationTable('#functionalDataTableGoesHere','urlToFillIn',renderData,{});
-                buildAnnotationMatrix (allUniqueElementNames,
-                    allUniqueTissueNames,
-                    dataMatrix);
-                buildMultiTrackDisplay(allUniqueElementNames,
-                    allUniqueTissueNames,
-                    arrayOfArraysGroupedByTissue,
-                    {regionStart:data.variants.region_start,regionEnd:data.variants.region_end,stateColorBy:allUniqueElementNames,mappingInformation:dataMatrix});
                 $('select.uniqueElements').val('ALL');
                 $('select.uniqueTissues').val('ALL');
-            }
         };
 
         var displayChosenElements = function (){
@@ -1285,7 +1239,6 @@ var mpgSoftware = mpgSoftware || {};
                 .xlabelsData(xlabels)
                 .ylabelsData(ylabels)
                 .xAxisLabel('chromatin state')
-                .yAxisLabel('well shit, howdy!')
                 .startColor('#ffffff')
                 .endColor('#3498db')
                 .dataHanger("#chart1", correlationMatrix);

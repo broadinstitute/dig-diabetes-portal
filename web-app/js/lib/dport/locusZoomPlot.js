@@ -450,11 +450,56 @@ var mpgSoftware = mpgSoftware || {};
                 },getNewDefaultLzPlot(),additionalData);
             });
         };
+        var buildMultiTrackDisplay  = function(     allUniqueElementNames,
+                                                    allUniqueTissueNames,
+                                                    dataMatrix,
+                                                    selector,
+                                                    additionalParams ){
+            var correlationMatrix = dataMatrix;
+            var xlabels = additionalParams.xLabels;
+            var ylabels = allUniqueTissueNames;
+            var margin = {top: 50, right: 50, bottom: 100, left: 250},
+                width = 750 - margin.left - margin.right,
+                height = 800 - margin.top - margin.bottom;
+            var multiTrack = baget.multiTrack()
+                .height(height)
+                .width(width)
+                .margin(margin)
+                .renderCellText(0)
+                .xlabelsData(xlabels)
+                .ylabelsData(ylabels)
+                .startColor('#ffffff')
+                .endColor('#3498db')
+                .endRegion(additionalParams.regionEnd)
+                .startRegion(additionalParams.regionStart)
+                .xAxisLabel('genomic position')
+                .mappingInfo(additionalParams.mappingInformation)
+                .dataHanger(selector, correlationMatrix);
+            d3.select(selector).call(multiTrack.render);
+        };
+        var buildExpandedDisplay  = function(data,additionalData){
+            var renderData = UTILS.processChromatinStateData(data);
+            if (renderData.recordsExist) {
+                buildMultiTrackDisplay(renderData.uniqueElements,
+                    renderData.uniqueTissues,
+                    renderData.arrayOfArraysGroupedByTissue,
+                    '#chromatinStateDisplay',
+                    {   regionStart:renderData.regionStart,
+                        regionEnd:renderData.regionEnd,
+                        xLabels:renderData.uniqueElements,
+                        mappingInformation:renderData.dataMatrix});
+            }
+        }
         function expandedView(myThis) {
             var lzMyThis = LocusZoom.getToolTipData(myThis);
             // remove the old tissue tracks
             var tooltipContents = lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML;
-            lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML  =  tooltipContents + '<h1>foot3</h1>';
+            var callingData = {};
+            callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
+            callingData.CHROM = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML  =  tooltipContents +
+                '<div id="chromatinStateDisplay"></div>';
+            retrieveFunctionalData(callingData,buildExpandedDisplay,callingData);
             //LocusZoom.getToolTipData(myThis).deselect();
             // figure out the tissues we need
         }
@@ -786,12 +831,15 @@ var mpgSoftware = mpgSoftware || {};
 
                 }
 
-                 addLZTissueChromatinAccessibility({
-                    tissueCode: 'tissue',
-                    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
-                    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
-                    phenoTypeName:phenoTypeName
-                 },lzGraphicDomId,graphicalOptions);
+                if ((typeof getLocusZoomFilledPlotUrl !== 'undefined') &&
+                    (getLocusZoomFilledPlotUrl !== 'junk')){
+                    addLZTissueChromatinAccessibility({
+                        tissueCode: 'tissue',
+                        tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                        getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
+                        phenoTypeName:phenoTypeName
+                    },lzGraphicDomId,graphicalOptions);
+                }
 
 
                 if ((typeof pageInitialization !== 'undefined')&&
