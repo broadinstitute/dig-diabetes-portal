@@ -300,6 +300,7 @@ var mpgSoftware = mpgSoftware || {};
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
             }
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this);\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
+            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.expandedView(this);\" style=\"cursor: pointer;\">Expanded view</a><br>";
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
 
 
@@ -443,12 +444,20 @@ var mpgSoftware = mpgSoftware || {};
             var matchedTissue = _.filter(data.variants.variants,function(v,k){console.log(v);return v.element.indexOf('enhancer')!==-1});
             _.forEach(matchedTissue,function(o,i){
                 addLZTissueAnnotations({
-                    tissueCode: 'intervals_'+o,
-                    tissueDescriptiveName: o,
-                    retrieveFunctionalDataAjaxUrl:additionalData.retrieveFunctionalDataAjaxUrl
+                    tissueCode: o.source,
+                    tissueDescriptiveName: o.source_trans,
+                    retrieveFunctionalDataAjaxUrl:getPageVars().retrieveFunctionalDataAjaxUrl
                 },getNewDefaultLzPlot(),additionalData);
             });
         };
+        function expandedView(myThis) {
+            var lzMyThis = LocusZoom.getToolTipData(myThis);
+            // remove the old tissue tracks
+            var tooltipContents = lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML;
+            lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML  =  tooltipContents + '<h1>foot3</h1>';
+            //LocusZoom.getToolTipData(myThis).deselect();
+            // figure out the tissues we need
+        }
         function replaceTissues(myThis) {
             var lzMyThis = LocusZoom.getToolTipData(myThis);
             // remove the old tissue tracks
@@ -777,12 +786,12 @@ var mpgSoftware = mpgSoftware || {};
 
                 }
 
-                 //addLZTissueChromatinAccessibility({
-                 //    tissueCode: 'tissue',
-                 //    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
-                 //    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
-                 //    phenoTypeName:phenoTypeName
-                 //},lzGraphicDomId,graphicalOptions);
+                 addLZTissueChromatinAccessibility({
+                    tissueCode: 'tissue',
+                    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                    getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
+                    phenoTypeName:phenoTypeName
+                 },lzGraphicDomId,graphicalOptions);
 
 
                 if ((typeof pageInitialization !== 'undefined')&&
@@ -828,6 +837,7 @@ var mpgSoftware = mpgSoftware || {};
         setNewDefaultLzPlot: setNewDefaultLzPlot,
         conditioning:conditioning,
         replaceTissues:replaceTissues,
+        expandedView:expandedView,
         initLocusZoom : initLocusZoom,
         initializeLZPage:initializeLZPage,
         addLZPhenotype:addLZPhenotype,

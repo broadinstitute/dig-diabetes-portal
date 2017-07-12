@@ -3633,7 +3633,6 @@ LocusZoom.DataLayers.add("filledLine", function(layout){
 
     // Var for storing the generated line function itself
     this.line = null;
-//    this.area = null;
 
     this.tooltip_timeout = null;
 
@@ -3785,9 +3784,7 @@ LocusZoom.DataLayers.add("filledLine", function(layout){
         //define the area under the line
         this.line = d3.svg.area()
             .x(function(d) { return parseFloat(panel[x_scale](d[x_field])); })
-            .y0(function(d) {
-                return parseFloat(panel[y_scale](0));
-            })
+            .y0(function(d) {return parseFloat(panel[y_scale](0));})
             .y1(function(d) { return parseFloat(panel[y_scale](d[y_field])); })
             .interpolate(this.layout.interpolate);
 
@@ -7677,6 +7674,9 @@ LocusZoom.Plot.prototype.removePanel = function(id){
         throw ("Unable to remove panel, ID not found: " + id);
     }
 
+    // Height of layout needs to decrease based on the panel that is being removed
+    var departingPanelHeight = this.panels[id].layout.height;
+
     // Hide all panel boundaries
     this.panel_boundaries.hide();
 
@@ -7712,12 +7712,14 @@ LocusZoom.Plot.prototype.removePanel = function(id){
 
     // Call positionPanels() to keep panels from overlapping and ensure filling all available vertical space
     if (this.initialized){
+        this.layout.min_height = this.layout.height-departingPanelHeight;
         this.positionPanels();
         // An extra call to setDimensions with existing discrete dimensions fixes some rounding errors with tooltip
         // positioning. TODO: make this additional call unnecessary.
         this.setDimensions(this.layout.width, this.layout.height);
     }
-
+    // this.layout.min_height = 100;
+    // this.setDimensions(this.layout.width, 100);
     return this;
 };
 
