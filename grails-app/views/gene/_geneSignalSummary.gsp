@@ -53,7 +53,7 @@
             </div>
 
             <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-Note: traits from the GLGC project and Oxford Biobank are currently missing from this analysis.  We hope to rectify this problem soon.
+Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
             </div>
             <div class="col-xs-2">
 
