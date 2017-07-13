@@ -422,7 +422,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/springSecurityOAuth/**':          ['permitAll'],
         '/dbconsole/**':      ['ROLE_ADMIN'],
         '/localization/**':   ['ROLE_ADMIN'],
-        '/metadatainfo/**':       ['ROLE_USER']
+        '/metadatainfo/**':       ['ROLE_USER'],
+        '/regionInfo/**':      ['ROLE_USER']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false

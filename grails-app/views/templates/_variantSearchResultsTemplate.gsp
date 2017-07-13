@@ -314,9 +314,13 @@
     </div>
 </script>
 <script id="dataRegionTemplate"  type="x-tmpl-mustache">
+    {{#supressTitle}}
+    {{/supressTitle}}
+    {{^supressTitle}}
     <g:message code="variantTable.regionSummary.regionContains" default="This region contains the following genes:"/>
+    {{/supressTitle}}
 <div class="row clearfix" style="margin:5px 0 5px 0">
-    <div class="col-md-6" style="text-align: left; max-height: 200px; overflow-y: auto">
+    <div class="col-md-6" style="text-align: left; max-height: 200px; overflow-y: auto; padding-left:0">
         <ul id="geneNames">
             {{#namedGeneArray}}
                 <li><a class="genelink" href="<g:createLink controller='gene'
@@ -326,7 +330,7 @@
         </ul>
     </div>
 
-    <div class="col-md-6" style="text-align: right; vertical-align: middle">
+    <div class="col-md-6" style="text-align: right; vertical-align: middle; display:none">
         <a class="boldlink pull-right"
            href="<g:createLink controller="trait" action="regionInfo"/>/{{regionSpecification}}">
             <g:message code="variantTable.regionSummary.clickForGwasSummary" default="Click here"/></a>

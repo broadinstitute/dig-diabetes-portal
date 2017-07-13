@@ -1089,32 +1089,32 @@ class VariantSearchController {
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
             LinkedHashMap<String, String> positioningInformation = getDataQueryHolder.positioningInformation()
-            def slurper = new JsonSlurper()
-            if (positioningInformation.size() > 2) {
-
-                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
-                for (Gene gene in geneList) {
-                    try {
-                        int startExtent = positioningInformation.beginningExtentSpecified as Long
-                        int endExtent = positioningInformation.endingExtentSpecified as Long
-                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-                            identifiedGenes << gene.name2 as String
-                        }
-                    } catch (e) {
-                        redirect(controller: 'home', action: 'portalHome')
-                    }
-
-                }
-            }
+            regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
+            identifiedGenes = restServerService.retrieveGenesInExtents(positioningInformation)
+//            if (positioningInformation.size() > 2) {
+//
+//                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
+//                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
+//                for (Gene gene in geneList) {
+//                    try {
+//                        int startExtent = positioningInformation.beginningExtentSpecified as Long
+//                        int endExtent = positioningInformation.endingExtentSpecified as Long
+//                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+//                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
+//                            identifiedGenes << gene.name2 as String
+//                        }
+//                    } catch (e) {
+//                        redirect(controller: 'home', action: 'portalHome')
+//                    }
+//
+//                }
+//            }
 
             List tempList = identifiedGenes.collect{return "\"$it\""};
             JSONArray JsonGeneHolder = new JSONArray();
             for (String text in tempList) {
                 JsonGeneHolder.add(text);
             }
-//            JSONArray JsonGeneHolder = slurper.parseText("${identifiedGenes.collect{return "\"$it\""}}")
 
             // get locale to provide to table-building plugin
             String locale = RequestContextUtils.getLocale(request)

@@ -255,7 +255,7 @@ class GeneController {
                 (extractedNumbers["startExtent"])   &&
                 (extractedNumbers["endExtent"])&&
                 (extractedNumbers["chromosomeNumber"]) ){
-            redirect(controller:'region',action:'regionInfo', params: [id: params.id])
+            redirect(controller:'regionInfo',action:'regionInfo', params: [id: params.id])
             return
         }
         // It's not a region.  Is our string a gene?
