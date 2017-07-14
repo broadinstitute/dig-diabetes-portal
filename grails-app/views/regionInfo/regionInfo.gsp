@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core,mustache"/>
+    <r:require modules="core,mustache,regionInfo"/>
     <r:layoutResources/>
 
     <link type="application/font-woff">
@@ -33,6 +33,7 @@
 
     <div class="container">
         <g:render template="regionHdr" />
+        <g:render template="regionInfoHeatmap" />
     </div>
 </div>
 

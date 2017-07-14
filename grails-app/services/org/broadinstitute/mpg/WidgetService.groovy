@@ -652,6 +652,28 @@ class WidgetService {
         return variantList;
     }
 
+
+
+
+    public String getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
+                                                   String dataset, String phenotype, String propertyName) {
+
+        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, "P_VALUE");
+
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,2000);
+
+        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+
+
+
+        // return
+        return jsonResultString;
+    }
+
+
+
+
+
     /**
      * returns a json string for the LZ query
      *

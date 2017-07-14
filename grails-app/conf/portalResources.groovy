@@ -30,6 +30,9 @@ modules = {
     portalHome {
         resource url: 'js/lib/dport/portalHome.js'
     }
+    regionInfo {
+        resource url: 'js/lib/dport/regionInfo.js'
+    }
     informational {
         resource url: 'js/lib/dport/informational.js'
     }
