@@ -1,13 +1,17 @@
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
-<table>
+<div class='dataTable'>
+<h5>Variants in the credible set</h5>
+<table class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;">
     <thead>
-        <th></th>
-        <th></th>
-        {{#variants}}
-            <th>
-                {{name}}
-            </th>
-        {{/variants}}
+        <tr>
+            <th></th>
+            <th></th>
+            {{#variants}}
+                <th class="niceHeaders">
+                    {{name}}
+                </th>
+            {{/variants}}
+        </tr>
     </thead>
     <tbody>
     {{#const}}
@@ -16,15 +20,15 @@
             <td></td>
             <td>Coding</td>
         {{#coding}}
-            <td>{{val}}</td>
+            <td class="{{descr}}">{{val}}</td>
         {{/coding}}
         </tr>
 
         <tr>
             <td></td>
-            <td>Splice site</td>
+            <td class="{{descr}}">Splice site</td>
             {{#spliceSite}}
-            <td>{{val}}</td>
+            <td class="{{descr}}">{{val}}</td>
             {{/spliceSite}}
         </tr>
 
@@ -32,15 +36,15 @@
             <td></td>
             <td>UTR</td>
             {{#utr}}
-            <td>{{val}}</td>
+            <td class="{{descr}}">{{val}}</td>
             {{/utr}}
         </tr>
 
         <tr>
             <td></td>
-            <td>Promoter</td>
+            <td class="{{descr}}">Promoter</td>
             {{#promoter}}
-            <td>{{val}}</td>
+            <td class="{{descr}}">{{val}}</td>
             {{/promoter}}
         </tr>
 
@@ -50,14 +54,14 @@
 
         <tr>
             <td></td>
-            <td>{{name}}</td>
+            <td>{{name}} DHS</td>
             {{#DHS}}
             <td>{{val}}</td>
             {{/DHS}}
         </tr>
         <tr>
             <td></td>
-            <td>{{name}} (H3K27AC)</td>
+            <td>{{name}} H3K27AC</td>
             {{#K27}}
             <td>{{val}}</td>
             {{/K27}}
@@ -66,7 +70,7 @@
     {{/cellTypeSpecs}}
     </tbody>
 </table>
-
+</div>
 </script>
 %{--<g:render template="../templates/variantSearchResultsTemplate" />--}%
 <div class="credibleSetTableGoesHere">

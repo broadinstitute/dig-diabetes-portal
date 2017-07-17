@@ -1,7 +1,9 @@
 package org.broadinstitute.mpg
 
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 class RegionInfoController {
     RestServerService restServerService
@@ -28,7 +30,7 @@ class RegionInfoController {
 
 
     def fillCredibleSetTable() {
-        String jsonReturn;
+        JSONObject jsonReturn;
         String chromosome = params.chromosome; // ex "22"
         String startString = params.start; // ex "29737203"
         String endString = params.end; // ex "29937203"
@@ -40,7 +42,9 @@ class RegionInfoController {
 
         int startInteger;
         int endInteger;
-        String errorJson = "{\"data\": {}, \"error\": true}";
+
+        String errorJsonString = "{\"data\": {}, \"error\": true}";
+        def slurper = new JsonSlurper()
 
         // if have all the information, call the widget service
         try {
@@ -56,7 +60,7 @@ class RegionInfoController {
 
                 jsonReturn = widgetService.getCredibleSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
             } else {
-                jsonReturn = errorJson;
+                jsonReturn = slurper.parse(errorJsonString);
             }
 
             // log
@@ -64,15 +68,13 @@ class RegionInfoController {
 
             // log end
             Date endTime = new Date();
-            log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
 
         } catch (NumberFormatException exception) {
             log.error("got incorrect parameters for LZ call: " + params);
-            jsonReturn = errorJson;
+            jsonReturn =  slurper.parse(errorJsonString);
         }
 
-        // return
-        render(status: 200, contentType: "application/json") (jsonReturn)
+        render(status: 200, contentType: "application/json") {jsonReturn}
         return
     }
 

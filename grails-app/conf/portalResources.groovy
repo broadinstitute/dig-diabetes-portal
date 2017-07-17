@@ -32,6 +32,8 @@ modules = {
     }
     regionInfo {
         resource url: 'js/lib/dport/regionInfo.js'
+        resource url: 'css/dport/jqDataTables.css'
+        resource url: 'css/dport/regionInfo.css'
     }
     informational {
         resource url: 'js/lib/dport/informational.js'

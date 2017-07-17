@@ -655,7 +655,7 @@ class WidgetService {
 
 
 
-    public String getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
+    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
                                                    String dataset, String phenotype, String propertyName) {
 
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, "P_VALUE");

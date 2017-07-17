@@ -1,4 +1,4 @@
-<h2>Region information</h2>
+<h2>Credible set information</h2>
 <div class="row clearfix">
     <div class="row clearfix">
         <div class="col-md-3 col-lg-offset-2">
