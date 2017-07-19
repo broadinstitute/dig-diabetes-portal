@@ -961,28 +961,29 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable(data, additionalParameters);
 
         //  set up the gait interface
-
-        mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere', {
-                accordionHeaderClass: 'toned-down-accordion-heading',
-                modifiedTitle: 'Run a custom burden test',
-                modifiedTitleStyling: 'font-size: 18px;text-decoration: underline;padding-left: 20px; float: right; margin-right: 20px;',
-                allowExperimentChoice: false,
-                allowPhenotypeChoice: true,
-                allowStratificationChoice: true,
-                defaultPhenotype: phenotypeName
-            },
-            additionalParameters.geneName,
-            true,
-            '#datasetFilter',
-            additionalParameters.sampleMetadataExperimentAjaxUrl,
-            additionalParameters.sampleMetadataAjaxWithAssumedExperimentUrl,
-            additionalParameters.variantOnlyTypeAheadUrl,
-            additionalParameters.sampleMetadataAjaxUrl,
-            additionalParameters.generateListOfVariantsFromFiltersAjaxUrl,
-            additionalParameters.retrieveSampleSummaryUrl,
-            additionalParameters.variantInfoUrl,
-            additionalParameters.variantAndDsAjaxUrl,
-            additionalParameters.burdenTestVariantSelectionOptionsAjaxUrl);
+        if (!additionalParameters.suppressBurdenTest){
+            mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere', {
+                    accordionHeaderClass: 'toned-down-accordion-heading',
+                    modifiedTitle: 'Run a custom burden test',
+                    modifiedTitleStyling: 'font-size: 18px;text-decoration: underline;padding-left: 20px; float: right; margin-right: 20px;',
+                    allowExperimentChoice: false,
+                    allowPhenotypeChoice: true,
+                    allowStratificationChoice: true,
+                    defaultPhenotype: phenotypeName
+                },
+                additionalParameters.geneName,
+                true,
+                '#datasetFilter',
+                additionalParameters.sampleMetadataExperimentAjaxUrl,
+                additionalParameters.sampleMetadataAjaxWithAssumedExperimentUrl,
+                additionalParameters.variantOnlyTypeAheadUrl,
+                additionalParameters.sampleMetadataAjaxUrl,
+                additionalParameters.generateListOfVariantsFromFiltersAjaxUrl,
+                additionalParameters.retrieveSampleSummaryUrl,
+                additionalParameters.variantInfoUrl,
+                additionalParameters.variantAndDsAjaxUrl,
+                additionalParameters.burdenTestVariantSelectionOptionsAjaxUrl);
+        }
 
 
         $("#aggregateVariantsLocation").empty().append(Mustache.render($('#aggregateVariantsTemplate')[0].innerHTML, renderData));
@@ -1029,7 +1030,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             });
         }
         if (( typeof sampleBasedPhenotypeName !== 'undefined') &&
-            ( sampleBasedPhenotypeName.length > 0)) {
+            ( sampleBasedPhenotypeName.length > 0)&&
+            (!additionalParameters.suppressBurdenTest)) {
                 $('#aggregateVariantsLocation').css('display', 'block');
                 $('#noAggregatedVariantsLocation').css('display', 'none');
                 var arrayOfPromises = [];

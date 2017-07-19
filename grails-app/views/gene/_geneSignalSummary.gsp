@@ -53,7 +53,7 @@
             </div>
 
             <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-Note: traits from the GLGC project and Oxford Biobank are currently missing from this analysis.  We hope to rectify this problem soon.
+Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
             </div>
             <div class="col-xs-2">
 
@@ -175,6 +175,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     geneExtentBegin: ${geneExtentBegin},
                     geneExtentEnd: ${geneExtentEnd},
                     igvIntro:  '${igvIntro}',
+                    defaultPhenotype: '${defaultPhenotype}',
                     firstPropertyName: '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     defaultTissues: ${(defaultTissues as String).encodeAsJSON()},
@@ -183,6 +184,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                     greenLightImage: '<r:img uri="/images/greenlight.png"/>',
+                    suppressBurdenTest: ("<%=burdenDataSet%>".indexOf('GWAS')>-1),
                     variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
                     currentPhenotype: $('.chosenPhenotype').attr('id'),
                     retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
@@ -207,7 +209,7 @@ Note: traits from the GLGC project and Oxford Biobank are currently missing from
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
-                    {favoredPhenotype:'T2D'});
+                    {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
 
             };

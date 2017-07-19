@@ -217,6 +217,7 @@ class GeneController {
                 passDefaultTissues.put("'${tissue}'")
                 passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
             }
+            String defaultPhenotype = metaDataService.getDefaultPhenotype()
             String  geneUpperCase =   geneToStartWith.toUpperCase()
             LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -238,7 +239,8 @@ class GeneController {
                                              locusZoomDataset:locusZoomDataset,
                                              igvIntro: igvIntro,
                                              defaultTissues:passDefaultTissues,
-                                             defaultTissuesDescriptions:passDefaultTissuesDescriptions
+                                             defaultTissuesDescriptions:passDefaultTissuesDescriptions,
+                                             defaultPhenotype: defaultPhenotype
             ] )
         }
     }
