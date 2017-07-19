@@ -175,6 +175,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     geneExtentBegin: ${geneExtentBegin},
                     geneExtentEnd: ${geneExtentEnd},
                     igvIntro:  '${igvIntro}',
+                    defaultPhenotype: '${defaultPhenotype}',
                     firstPropertyName: '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     defaultTissues: ${(defaultTissues as String).encodeAsJSON()},
@@ -183,6 +184,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                     greenLightImage: '<r:img uri="/images/greenlight.png"/>',
+                    suppressBurdenTest: ("<%=burdenDataSet%>".indexOf('GWAS')>-1),
                     variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
                     currentPhenotype: $('.chosenPhenotype').attr('id'),
                     retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',
@@ -207,7 +209,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
-                    {favoredPhenotype:'T2D'});
+                    {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
 
             };
