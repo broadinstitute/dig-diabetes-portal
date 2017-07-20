@@ -14,6 +14,7 @@
                         <option value="t2d" <%=(g.portalTypeString()=='t2d')?"selected":"" %>>T2D</option>
                         <option value="stroke" <%=(g.portalTypeString()=='stroke')?"selected":"" %>>Stroke</option>
                         <option value="mi" <%=(g.portalTypeString()=='mi')?"selected":"" %>>MI</option>
+                        <option value="ibd" <%=(g.portalTypeString()=='ibd')?"selected":"" %>>IBD</option>
                     </select>
                     %{--<g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>--}%
                 </li>

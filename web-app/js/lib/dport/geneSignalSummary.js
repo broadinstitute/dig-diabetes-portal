@@ -889,31 +889,35 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     };
 
-    var buildOutCredibleSetPresentation = function (){
+    var buildOutCredibleSetPresentation = function (data,phenotypeName){
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
-        var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
-            start: signalSummarySectionVariables.geneExtentBegin,
-            end: signalSummarySectionVariables.geneExtentEnd,
-            phenotype: 'T2D',
-            propertyName: 'P_VALUE',
-            dataSet: 'GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27',
-            fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl
-        };
-        mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall);
-        var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
-        var drivingVariables = {};
-        drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
-        drivingVariables["namedGeneArray"] = [];
-        drivingVariables["supressTitle"] = [1];
-        if ((drivingVariables["allGenes"].length>0)&&
-            (drivingVariables["allGenes"][0].length>0)) {
-            drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
-                return {'name': o}
-            });
+        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+            var credibleSetDataSet = data.sampleGroupsWithCredibleSetNames[0];
+            var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
+                start: signalSummarySectionVariables.geneExtentBegin,
+                end: signalSummarySectionVariables.geneExtentEnd,
+                phenotype: phenotypeName,
+                propertyName: 'POSTERIOR_PROBABILITY',
+                dataSet: credibleSetDataSet,
+                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl
+            };
+            mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall);
+            var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
+            var drivingVariables = {};
+            drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
+            drivingVariables["namedGeneArray"] = [];
+            drivingVariables["supressTitle"] = [1];
+            if ((drivingVariables["allGenes"].length>0)&&
+                (drivingVariables["allGenes"][0].length>0)) {
+                drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
+                    return {'name': o}
+                });
+            }
+            $(".matchedGenesGoHere").empty().append(
+                Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
+            );
+
         }
-        $(".matchedGenesGoHere").empty().append(
-            Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
-        );
 
     };
 
@@ -970,12 +974,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (mpgSoftware.locusZoom.plotAlreadyExists()) {
             mpgSoftware.locusZoom.removeAllPanels();
         }
-        $('#collapseExample div.wellPlace').empty();
-        if (commonSectionShouldComeFirst) {
-            $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML, {pName: pName}));
-        } else {
-            $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML, {pName: pName}));
+        var credibleSetTab = [];
+        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+            credibleSetTab.push(1);
         }
+        $('#collapseExample div.wellPlace').empty();
+        // if (commonSectionShouldComeFirst) {
+            $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
+                {pName: pName,credibleSetTab:credibleSetTab}));
+        // } else {
+        //     $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML, {pName: pName}));
+        // }
         if (useIgvNotLz) {
             $('.locusZoomLocation').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
@@ -1015,7 +1024,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         $("#aggregateVariantsLocation").empty().append(Mustache.render($('#aggregateVariantsTemplate')[0].innerHTML, renderData));
 
-        buildOutCredibleSetPresentation();
+        buildOutCredibleSetPresentation(data,phenotypeName);
 
         mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
 

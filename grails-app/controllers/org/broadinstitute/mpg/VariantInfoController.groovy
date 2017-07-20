@@ -34,21 +34,21 @@ class VariantInfoController {
         String variantToStartWith = params.id
         String locusZoomDataset
         List <String> defaultTissues = []
-        String phenotype = "T2D"
+        String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
         switch (portalType){
             case 't2d':
                 igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'T2D'
                 break
             case 'mi':
                 igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'EOMI'
                 break
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'Stroke_all'
+                break
+            case 'ibd':
+                igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
                 break
             default:
                 break

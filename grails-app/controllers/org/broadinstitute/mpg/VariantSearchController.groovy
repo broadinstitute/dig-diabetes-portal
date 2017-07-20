@@ -70,10 +70,6 @@ class VariantSearchController {
         String sampleGroupName = params.sampleGroup
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName)
 
-        if (sampleGroupName == 'GWAS_Stroke_mdv5') {
-            log.debug('foo')
-        }
-
         if (sampleGroup?.sampleGroupList?.size() > 0) {
             sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort {
                 g.message(code: "metadata." + it.systemId, default: it.systemId)
@@ -83,8 +79,6 @@ class VariantSearchController {
         def result = new JSONObject()
         if ((jsonDescr) && (jsonDescr.length() > 0)) {
             result = slurper.parseText(jsonDescr)
-        } else {
-            log.debug('foo')
         }
         render(status: 200, contentType: "application/json") {
             result
@@ -474,6 +468,8 @@ class VariantSearchController {
             }
 
         }
+        List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
+        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets.collect{it.systemId}
 
         JsonSlurper slurper = new JsonSlurper()
 
@@ -481,7 +477,8 @@ class VariantSearchController {
             [variants: dataJsonObject,
              propertiesToInclude:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToInclude))) as JSONArray,
              propertiesToRemove:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray,
-             datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap))
+             datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap)),
+             sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames
             ]
         }
 

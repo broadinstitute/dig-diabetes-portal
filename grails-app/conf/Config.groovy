@@ -532,14 +532,20 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 // placeholder for data version
 diabetes.data.version = "mdv27";
-portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv90", "EBI": "mdv25"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
-portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"], "stroke": ["Adipose"], "mi" : ["Adipose"]]
+portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv90", "ibd": "mdv80"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
+portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
+portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
+                                   "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
+                                   "mi" : ["SkeletalMuscle"],
+                                   "ibd" : ["ColonicMucosa","DuodenumMucosa","RectalMucosa","StomachSmoothMuscle","RectalSmoothMuscle"]]
 portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
-portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27", "stroke": "GWAS_Stroke_mdv70", "mi" : "GWAS_CARDIoGRAM_mdv90", "EBI":"FG"]
+portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27",
+                                                  "stroke": "GWAS_Stroke_mdv70",
+                                                  "mi" : "GWAS_CARDIoGRAM_mdv90",
+                                                  "ibd":"GWAS_IBDGenomics_eu_mdv80"]
 
 

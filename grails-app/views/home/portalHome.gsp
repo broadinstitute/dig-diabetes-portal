@@ -138,6 +138,9 @@
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header.png"))}" />
             </g:elseif>
+            <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader", default:"ibdFrontHeader.png"))}" />
+            </g:elseif>
             <g:else>
                 <img src="${resource(dir: 'images', file: g.message(code: "files.t2dFrontHeader", default: "t2d_front_header6.png"))}" style="width:75%;" />
             </g:else>
@@ -166,6 +169,10 @@
                         <a href='<g:createLink controller="gene" action="geneInfo"
                                                params="[id: 'LPA']"/>'>LPA</a>
                     </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                        <a href='<g:createLink controller="gene" action="geneInfo"
+                                               params="[id: 'IL23R']"/>'>IL23R</a>
+                    </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="gene" action="geneInfo"
                                                params="[id: 'SLC30A8']"/>'>SLC30A8</a>
@@ -174,10 +181,13 @@
                                 body="input.searchTerm.geneExample.help.text"/>,
                     <g:if test="${g.portalTypeString()?.equals('stroke')}">
                         <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs2984613']"/>'>rs2984613</a>
-                        %{--<a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>--}%
+                        <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                         <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
+                    </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                        <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs11209026']"/>'>rs11209026</a>,
                     </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="variantInfo" action="variantInfo"
@@ -195,7 +205,7 @@
                     </g:elseif>
                     <g:else>
                         <a href='<g:createLink controller="region" action="regionInfo"
-                                               params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
+                                               params="[id: 'chr1:67,000,000-68,190,000']"/>'>chr1:67,000,000-68,190,000</a>
                     </g:else>
                     <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
                                 body="input.searchTerm.rangeExample.help.text"/>

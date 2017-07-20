@@ -81,28 +81,27 @@ class GeneController {
         String newVandAColumnPValue
         String newDatasetName
         String newDatasetRowName = ""
-        String phenotype = "T2D"
+        String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
         List <String> defaultTissues = []
         switch (portalType){
             case 't2d':
                 igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'T2D'
                 break
             case 'mi':
                 igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'MI'
                 break
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'Stroke_all'
+                break
+            case 'ibd':
+                igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
                 break
             default:
                 break
         }
-        String locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-        defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
+         defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser
@@ -210,7 +209,7 @@ class GeneController {
 
 
         if (geneToStartWith)  {
-            locusZoomDataset = metaDataService.getDefaultDataset()
+            String locusZoomDataset = metaDataService.getDefaultDataset()
             JSONArray passDefaultTissues = []
             JSONArray passDefaultTissuesDescriptions = []
             for (String tissue in defaultTissues){
@@ -224,6 +223,7 @@ class GeneController {
                      endingExtentSpecified:geneExtent.endExtent])
             String defaultPhenotype = metaDataService.getDefaultPhenotype()
             String  geneUpperCase =   geneToStartWith.toUpperCase()
+            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),

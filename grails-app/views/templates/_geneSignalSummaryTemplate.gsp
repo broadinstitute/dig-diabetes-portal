@@ -234,7 +234,9 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants for {{pName}}</a></li>
                         <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants for {{pName}}</a></li>
+                        {{#credibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser"><a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets for {{pName}}</a></li>
+                        {{/credibleSetTab}}
                     </ul>
                 </div>
             </div>
@@ -269,7 +271,7 @@
                         </div>
                     </div>
                 </div>
-
+                {{#credibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
@@ -306,7 +308,7 @@
                         </div>
                     </div>
                 </div>
-
+                {{/credibleSetTab}}
             </div>
 </script>
 

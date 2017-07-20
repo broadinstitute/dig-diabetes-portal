@@ -510,6 +510,14 @@ class WidgetService {
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
 
+        } else if (metaDataService.portalTypeFromSession=='ibd') {
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="INFLAMMATORY BOWEL"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="INFLAMMATORY BOWEL"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+
         }
 
         return returnValue
