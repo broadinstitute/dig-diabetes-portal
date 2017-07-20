@@ -53,6 +53,8 @@ class RegionInfoController {
 
             if (chromosome != null) {
 
+                if (chromosome.startsWith('chr')) { chromosome = chromosome.substring(3) }
+
                 if (dataType=='static'){ // dynamically get the property name for static datasets
                     Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,'P_VALUE')
                     propertyName = property.name

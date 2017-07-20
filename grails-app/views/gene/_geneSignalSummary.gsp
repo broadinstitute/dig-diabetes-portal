@@ -176,6 +176,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     geneExtentEnd: ${geneExtentEnd},
                     igvIntro:  '${igvIntro}',
                     defaultPhenotype: '${defaultPhenotype}',
+                    identifiedGenes: '${identifiedGenes}',
                     firstPropertyName: '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     defaultTissues: ${(defaultTissues as String).encodeAsJSON()},
@@ -205,12 +206,36 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}'
+                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
+                    fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}'
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
-                mpgSoftware.geneSignalSummaryMethods.tableInitialization();
+                %{--mpgSoftware.geneSignalSummaryMethods.tableInitialization();--}%
+                %{--var setToRecall = {chromosome: "${geneChromosome}",--}%
+                    %{--start: ${geneExtentBegin},--}%
+                    %{--end: ${geneExtentEnd},--}%
+                    %{--phenotype: 'T2D',--}%
+                    %{--propertyName: 'P_VALUE',--}%
+                    %{--dataSet: 'GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27',--}%
+                    %{--fillCredibleSetTableUrl:"${g.createLink(controller: 'RegionInfo', action: 'fillCredibleSetTable')}"--}%
+                %{--};--}%
+                %{--mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall);--}%
+                %{--var identifiedGenes = "${identifiedGenes}";--}%
+                %{--var drivingVariables = {};--}%
+                %{--drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');--}%
+                %{--drivingVariables["namedGeneArray"] = [];--}%
+                %{--drivingVariables["supressTitle"] = [1];--}%
+                %{--if ((drivingVariables["allGenes"].length>0)&&--}%
+                    %{--(drivingVariables["allGenes"][0].length>0)) {--}%
+                    %{--drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {--}%
+                        %{--return {'name': o}--}%
+                    %{--});--}%
+                %{--}--}%
+                %{--$(".matchedGenesGoHere").empty().append(--}%
+                    %{--Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)--}%
+                %{--);--}%
 
             };
 

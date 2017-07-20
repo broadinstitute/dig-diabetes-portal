@@ -107,7 +107,9 @@
 
                 <g:renderNotBetaFeaturesDisplayedValue>
                     <g:render template="../templates/geneSignalSummaryTemplate"/>
+                    <g:render template="../templates/variantSearchResultsTemplate" />
                     <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                    <g:render template="../templates/variantSearchResultsTemplate" />
                 </g:renderNotBetaFeaturesDisplayedValue>
 
 
@@ -214,7 +216,6 @@
                                                                                'allowStratificationChoice': 1    ]"/>
                     </g:renderBetaFeaturesDisplayedValue>
                     </g:if>
-
 
 
                     <div class="separator"></div>

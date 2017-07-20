@@ -2514,7 +2514,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public List<String> retrieveGenesInExtents(LinkedHashMap<String,String> positioningInformation){
         List<String> identifiedGenes = []
         String regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-        List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
+        String chromosomeSpecifier = (positioningInformation.chromosomeSpecified.startsWith('chr'))?
+                positioningInformation.chromosomeSpecified:
+                ("chr" + positioningInformation.chromosomeSpecified)
+        List<Gene> geneList = Gene.findAllByChromosome(chromosomeSpecifier)
         for (Gene gene in geneList) {
             try {
                 int startExtent = positioningInformation.beginningExtentSpecified as Long

@@ -95,7 +95,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer"
+        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'

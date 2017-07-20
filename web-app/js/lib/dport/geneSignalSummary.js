@@ -889,6 +889,33 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     };
 
+    var buildOutCredibleSetPresentation = function (){
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
+            start: signalSummarySectionVariables.geneExtentBegin,
+            end: signalSummarySectionVariables.geneExtentEnd,
+            phenotype: 'T2D',
+            propertyName: 'P_VALUE',
+            dataSet: 'GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27',
+            fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl
+        };
+        mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall);
+        var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
+        var drivingVariables = {};
+        drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
+        drivingVariables["namedGeneArray"] = [];
+        drivingVariables["supressTitle"] = [1];
+        if ((drivingVariables["allGenes"].length>0)&&
+            (drivingVariables["allGenes"][0].length>0)) {
+            drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
+                return {'name': o}
+            });
+        }
+        $(".matchedGenesGoHere").empty().append(
+            Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
+        );
+
+    };
 
     var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
         var rememberCallBack = callBack;
@@ -987,6 +1014,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
         $("#aggregateVariantsLocation").empty().append(Mustache.render($('#aggregateVariantsTemplate')[0].innerHTML, renderData));
+
+        buildOutCredibleSetPresentation();
 
         mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
 

@@ -234,6 +234,7 @@
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants for {{pName}}</a></li>
                         <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants for {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels credibleSetChooser"><a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets for {{pName}}</a></li>
                     </ul>
                 </div>
             </div>
@@ -268,6 +269,44 @@
                         </div>
                     </div>
                 </div>
+
+                <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
+                    <div class="row" style="border: none">
+                        <div class="col-xs-12">
+                                <div class="row clearfix">
+                                    <div class="row clearfix">
+                                        <div class="col-md-3 col-lg-offset-2">
+                                            <h4>Genome coordinates:</h4>
+                                        </div>
+                                        <div class="col-md-7 regionParams">
+                                            <ul class="pull-left list-unstyled">
+                                                <li>Chromosome ${geneChromosome}</li>
+                                                <li>${geneExtentBegin} - ${geneExtentEnd}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-3 col-lg-offset-2">
+                                            <h4>Genes in window:</h4>
+                                        </div>
+                                        <div class="col-md-7 regionParams">
+                                            <div class="matchedGenesGoHere"></div>
+                                        </div>
+                                    </div>
+                                    <div class="row clearfix">
+                                        <div class="col-md-3 col-lg-offset-2">
+                                            <h4>Credible set:</h4>
+                                        </div>
+                                        <div class="col-md-7 regionParams">
+                                            [credible set name]
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="credibleSetTableGoesHere"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 </script>
 
@@ -313,3 +352,79 @@
                 </div>
             </div>
 </script>
+
+<script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
+<div class='dataTable'>
+<h5>Variants in the credible set</h5>
+<table class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            {{#variants}}
+                <th class="niceHeaders">
+                    {{name}}
+                </th>
+            {{/variants}}
+        </tr>
+    </thead>
+    <tbody>
+    {{#const}}
+
+        <tr>
+            <td></td>
+            <td>Coding</td>
+        {{#coding}}
+            <td class="{{descr}}">{{val}}</td>
+        {{/coding}}
+        </tr>
+
+        <tr>
+            <td></td>
+            <td class="{{descr}}">Splice site</td>
+            {{#spliceSite}}
+            <td class="{{descr}}">{{val}}</td>
+            {{/spliceSite}}
+        </tr>
+
+        <tr>
+            <td></td>
+            <td>UTR</td>
+            {{#utr}}
+            <td class="{{descr}}">{{val}}</td>
+            {{/utr}}
+        </tr>
+
+        <tr>
+            <td></td>
+            <td class="{{descr}}">Promoter</td>
+            {{#promoter}}
+            <td class="{{descr}}">{{val}}</td>
+            {{/promoter}}
+        </tr>
+
+    {{/const}}
+
+    {{#cellTypeSpecs}}
+
+        <tr>
+            <td></td>
+            <td>{{name}} DHS</td>
+            {{#DHS}}
+            <td>{{val}}</td>
+            {{/DHS}}
+        </tr>
+        <tr>
+            <td></td>
+            <td>{{name}} H3K27AC</td>
+            {{#K27}}
+            <td>{{val}}</td>
+            {{/K27}}
+        </tr>
+
+    {{/cellTypeSpecs}}
+    </tbody>
+</table>
+</div>
+</script>
+
