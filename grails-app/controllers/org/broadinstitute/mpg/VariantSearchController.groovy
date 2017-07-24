@@ -435,7 +435,8 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1)
+        String passConditionalVersionForNow = (currentVersion!="mdv27")?currentVersion:"";
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,passConditionalVersionForNow)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
@@ -520,7 +521,8 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize)
+        String passConditionalVersionForNow = (currentVersion!="mdv27")?currentVersion:"";
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize,passConditionalVersionForNow)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary

@@ -179,6 +179,44 @@
        </script>
 
 
+<script id="allVariantsTemplate"  type="x-tmpl-mustache">
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="row">
+                            <div class="col-xs-9"></div>
+                            <div class="col-xs-3">
+                                <button class="btn btn-primary btn-xs pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#xpropertiesModal"
+                                onclick="mpgSoftware.geneSignalSummaryMethods.adjustProperties(this)"  tableSpec="allVariants">Add / Subtract Data</button>
+                            </div>
+                    </div>
+
+                    <div class="row" >
+                        <div class="col-sm-7"></div>
+                        <div class="col-sm-5">
+                            <div class="dropdown">
+                                  <div class="dropdown-menu dsFilterallVariants" style="padding: 0 5px 0 5px;">
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                        <table id="allVariantsTemplateHolder" class="compact row-border"></table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+       </script>
+
+
+
+
 
 
 <script id="commonVariantTemplate"  type="x-tmpl-mustache">
@@ -232,10 +270,10 @@
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants for {{pName}}</a></li>
-                        <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants for {{pName}}</a></li>
+                        <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants: {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                         {{#credibleSetTab}}
-                        <li role="presentation" class="variantTableLabels credibleSetChooser"><a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets for {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels credibleSetChooser"><a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>
                         {{/credibleSetTab}}
                     </ul>
                 </div>
@@ -317,8 +355,8 @@
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants  for {{pName}}</a></li>
-                        <li role="presentation" class="active variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants for {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants: {{pName}}</a></li>
+                        <li role="presentation" class="active variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                     </ul>
                 </div>
             </div>

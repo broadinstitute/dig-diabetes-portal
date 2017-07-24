@@ -139,7 +139,7 @@
                 <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header.png"))}" />
             </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader", default:"ibdFrontHeader.png"))}" />
+                <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader2", default:"ibdFrontHeader2.png"))}" />
             </g:elseif>
             <g:else>
                 <img src="${resource(dir: 'images', file: g.message(code: "files.t2dFrontHeader", default: "t2d_front_header6.png"))}" style="width:75%;" />

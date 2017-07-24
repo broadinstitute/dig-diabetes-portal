@@ -32,8 +32,8 @@
 <div id="main">
 
     <div class="container">
-        <g:render template="regionHdr" />
-        <g:render template="regionInfoHeatmap" />
+        %{--<g:render template="regionHdr" />--}%
+        %{--<g:render template="regionInfoHeatmap" />--}%
     </div>
 </div>
 
