@@ -195,7 +195,7 @@
                         <div class="col-sm-7"></div>
                         <div class="col-sm-5">
                             <div class="dropdown">
-                                  <div class="dropdown-menu dsFilterallVariants" style="padding: 0 5px 0 5px;">
+                                  <div class="dropdown-menu dsFilterAllVariants" style="padding: 0 5px 0 5px;">
                                   </div>
                             </div>
                         </div>
@@ -343,6 +343,7 @@
                                     </div>
                                 </div>
                                 <div class="credibleSetTableGoesHere"></div>
+                                <div id="allVariantsLocation"></div>
                         </div>
                     </div>
                 </div>

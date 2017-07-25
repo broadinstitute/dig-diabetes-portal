@@ -435,7 +435,7 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        String passConditionalVersionForNow = (currentVersion!="mdv27")?currentVersion:"";
+        String passConditionalVersionForNow = (currentVersion=="mdv80")?currentVersion:"";
         dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,passConditionalVersionForNow)
 
         if (dataJsonObject == null){
@@ -521,7 +521,7 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        String passConditionalVersionForNow = (currentVersion!="mdv27")?currentVersion:"";
+        String passConditionalVersionForNow = (currentVersion=="mdv80")?currentVersion:"";
         dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize,passConditionalVersionForNow)
 
         if (dataJsonObject == null){

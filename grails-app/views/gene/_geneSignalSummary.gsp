@@ -212,7 +212,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
-                %{--mpgSoftware.geneSignalSummaryMethods.tableInitialization();--}%
+                mpgSoftware.geneSignalSummaryMethods.tableInitialization();
                 %{--var setToRecall = {chromosome: "${geneChromosome}",--}%
                     %{--start: ${geneExtentBegin},--}%
                     %{--end: ${geneExtentEnd},--}%
