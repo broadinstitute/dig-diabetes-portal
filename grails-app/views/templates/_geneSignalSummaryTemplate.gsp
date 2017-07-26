@@ -40,7 +40,7 @@
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '${it.dataType}','#lz-1',{colorBy:1,positionBy:1})">
+                                        '${it.dataType}',('#'+'{{lzDomSpec}}'),{colorBy:1,positionBy:1})">
     ${g.message(code: "metadata." + it.name)}
     </a>
 </li>
@@ -62,7 +62,7 @@
                                         },
                                         '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '${it.dataType}','#lz-1',{colorBy:1,positionBy:1})">
+                                        '${it.dataType}',('#'+'{{lzDomSpec}}'),{colorBy:1,positionBy:1})">
     ${g.message(code: "metadata." + it.name)+"("+g.message(code: "metadata." + it.dataSet)+")"}
     </a>
 </li>
@@ -78,7 +78,7 @@
                         tissueCode: '${it.name}',
                         tissueDescriptiveName: '${it.description}',
                         retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
-                    },'#lz-1',{colorBy:1,positionBy:1});">${it.description}</a>
+                    },('#'+'{{lzDomSpec}}'),{colorBy:1,positionBy:1});">${it.description}</a>
                            </li>
                            </g:each>
                        </ul>
@@ -89,7 +89,7 @@
             </ul>
 
             <div class="accordion-inner">
-                <div id="lz-1" class="lz-container-responsive"></div>
+                <div id="{{lzDomSpec}}" class="lz-container-responsive"></div>
             </div>
 
         </div>
@@ -344,6 +344,7 @@
                                 </div>
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
                         </div>
                     </div>
                 </div>

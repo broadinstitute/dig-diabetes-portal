@@ -181,6 +181,8 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     defaultTissues: ${(defaultTissues as String).encodeAsJSON()},
                     defaultTissuesDescriptions: ${(defaultTissuesDescriptions as String).encodeAsJSON()},
+                    lzCommon: 'lzCommon',
+                    lzCredSet: 'lzCredSet',
                     vrtUrl:  '${createLink(controller: "VariantSearch", action: "gene")}',
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',

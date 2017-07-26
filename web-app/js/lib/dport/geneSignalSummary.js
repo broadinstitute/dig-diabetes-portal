@@ -1106,19 +1106,20 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             credibleSetTab.push(1);
         }
         $('#collapseExample div.wellPlace').empty();
-        // if (commonSectionShouldComeFirst) {
-            $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
-                {pName: pName,credibleSetTab:credibleSetTab}));
-        // } else {
-        //     $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML, {pName: pName}));
-        // }
+
+        $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
+            {pName: pName,credibleSetTab:credibleSetTab}));
+
         if (useIgvNotLz) {
             $('.locusZoomLocation').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
         } else {
             $('.igvGoesHere').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
+            renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCommon;
             $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
+            renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
+            $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         }
 
         mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable(data, additionalParameters);
@@ -1183,7 +1184,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var defaultTissuesDescriptions = additionalParameters.defaultTissuesDescriptions;
 
             mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                "#lz-1", "#collapseExample", phenotypeName, pName,
+                '#lz-'+additionalParameters.lzCommon, "#collapseExample", phenotypeName, pName,
                 additionalParameters.firstPropertyName,
                 datasetName,
                 additionalParameters.getLocusZoomFilledPlotUrl,
@@ -1193,8 +1194,25 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 additionalParameters.retrieveFunctionalDataAjaxUrl,
                 !mpgSoftware.locusZoom.plotAlreadyExists(),
                 {}, defaultTissues, defaultTissuesDescriptions, datasetReadableName);
+
+            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
+                '#lz-'+additionalParameters.lzCredSet, "#collapseExample", phenotypeName, pName,
+                additionalParameters.firstPropertyName,
+                datasetName,
+                additionalParameters.getLocusZoomFilledPlotUrl,
+                additionalParameters.getLocusZoomUrl,
+                additionalParameters.variantInfoUrl,
+                additionalParameters.firstStaticPropertyName,
+                additionalParameters.retrieveFunctionalDataAjaxUrl,
+                !mpgSoftware.locusZoom.plotAlreadyExists(),
+                {}, defaultTissues, defaultTissuesDescriptions, datasetReadableName);
+
+
             $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
-                mpgSoftware.locusZoom.rescaleSVG();
+                mpgSoftware.locusZoom.rescaleSVG('#lz-'+additionalParameters.lzCommon);
+            });
+            $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
+                mpgSoftware.locusZoom.rescaleSVG('#lz-'+additionalParameters.lzCredSet);
             });
         }
         if (( typeof sampleBasedPhenotypeName !== 'undefined') &&

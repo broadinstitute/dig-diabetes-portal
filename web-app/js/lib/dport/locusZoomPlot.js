@@ -858,8 +858,12 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
-    var rescaleSVG = function (){
-        locusZoomPlot[currentLzPlotKey].rescaleSVG();
+    var rescaleSVG = function (plotChooser){
+        var plotToReset = currentLzPlotKey;
+        if (typeof plotChooser !== 'undefined'){
+            plotToReset = plotChooser;
+        }
+        locusZoomPlot[plotToReset].rescaleSVG();
     };
 
     var removePanel = function (panelId){
