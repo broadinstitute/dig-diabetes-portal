@@ -12,11 +12,22 @@ var mpgSoftware = mpgSoftware || {};
         var currentLzPlotKey = 'lz-47';
         var pageVars = {};
 
-        var setPageVars = function (thisPageVars){
-            pageVars = thisPageVars;
+        var setPageVars = function (thisPageVars,pageVarOption){
+            if (typeof pageVarOption !== 'undefined') {
+                pageVars[pageVarOption] = thisPageVars;
+            } else {
+                pageVars = thisPageVars;
+            }
         };
-        var getPageVars = function (){
-            return pageVars;
+        var getPageVars = function (pageVarOption){
+            var returnVar={};
+            if (typeof pageVars[pageVarOption] !== 'undefined'){
+                returnVar = pageVars[pageVarOption];
+            } else {
+                returnVar = pageVars;
+            }
+
+            return returnVar;
         };
 
 
@@ -305,7 +316,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-            colorBy=1;
+            //colorBy=1;
 
 
 
@@ -419,7 +430,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         var retrieveFunctionalData = function(callingData,callback,additionalData){
-            var pageVars = getPageVars();
+            var pageVars = getPageVars(currentLzPlotKey);
             $.ajax({
                 cache: false,
                 type: "post",
@@ -446,7 +457,7 @@ var mpgSoftware = mpgSoftware || {};
                 addLZTissueAnnotations({
                     tissueCode: o.source,
                     tissueDescriptiveName: o.source_trans,
-                    retrieveFunctionalDataAjaxUrl:getPageVars().retrieveFunctionalDataAjaxUrl
+                    retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl
                 },getNewDefaultLzPlot(),additionalData);
             });
         };
@@ -515,12 +526,25 @@ var mpgSoftware = mpgSoftware || {};
             });
             LocusZoom.getToolTipData(myThis).deselect();
             // figure out the tissues we need
-            var callingData = {};
-            callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
-            callingData.CHROM = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
-            retrieveFunctionalData(callingData,processEpigeneticData,callingData);
+            // var callingData = {};
+            // callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
+            // callingData.CHROM = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            // retrieveFunctionalData(callingData,processEpigeneticData,callingData);
+            replaceTissuesWithOverlappingEnhancers( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
+                                                    _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0] );
         }
-
+        var replaceTissuesWithOverlappingEnhancers = function(position, chromosome){
+            var callingData = {};
+            callingData.POS = position;
+            callingData.CHROM = chromosome;
+            retrieveFunctionalData(callingData,processEpigeneticData,callingData)
+        };
+        var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId){
+            var variantParts = varId.split("_");
+            if (variantParts.length == 4){
+                replaceTissuesWithOverlappingEnhancers(variantParts[1], variantParts[0]);
+            }
+        };
 
 
         function conditionOnVariant(variantId, phenotype,datasetName) {
@@ -757,33 +781,24 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
-        var initializeLZPage = function (page, variantId, positionInfo,domId1,collapsingDom,
-                                         phenoTypeName,phenoTypeDescription,
-                                         phenoPropertyName,locusZoomDataset,getLocusZoomFilledPlotUrl,
-                                         geneGetLZ,variantInfoUrl,makeDynamic,
-                                         retrieveFunctionalDataAjaxUrl,
-                                         pageInitialization,functionalTrack, defaultTissues,defaultTissuesDescriptions,datasetReadableName) {
-            var graphicalOptions = {colorBy:1,
-                                    positionBy:1};
-            setPageVars({   retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
-                            colorBy:graphicalOptions.colorBy,
-                            positionBy:graphicalOptions.positionBy});
+        var initializeLZPage = function (inParm) {
+            setPageVars(inParm,inParm.domId1);
             var loading = $('#spinner').show();
             var lzGraphicDomId = "#lz-1";
             var defaultPhenotypeName = "T2D";
-            var dataSetName = locusZoomDataset;
-            if (typeof domId1 !== 'undefined') {
-                lzGraphicDomId = domId1;
+            var dataSetName = inParm.locusZoomDataset;
+            if (typeof inParm.domId1 !== 'undefined') {
+                lzGraphicDomId = inParm.domId1;
             }
             setNewDefaultLzPlot(lzGraphicDomId);
-            if (typeof phenoTypeName !== 'undefined') {
-                defaultPhenotypeName = phenoTypeName;
+            if (typeof inParm.phenoTypeName !== 'undefined') {
+                defaultPhenotypeName = inParm.phenoTypeName;
             }
-            $(domId1).empty();
-            var chromosome = positionInfo.chromosome;
+            $(inParm.domId1).empty();
+            var chromosome = inParm.positionInfo.chromosome;
             // make sure we don't get a negative start point
-            var startPosition = Math.max(0, positionInfo.startPosition);
-            var endPosition = positionInfo.endPosition;
+            var startPosition = Math.max(0, inParm.positionInfo.startPosition);
+            var endPosition = inParm.positionInfo.endPosition;
 
             var locusZoomInput = chromosome + ":" + startPosition + "-" + endPosition;
             $(lzGraphicDomId).attr("data-region", locusZoomInput);
@@ -791,61 +806,61 @@ var mpgSoftware = mpgSoftware || {};
             loading.hide();
 
             var lzVarId = '';
-            // need to process the varId to match the IDs that LZ is getting, so that
-            // the correct reference variant is displayed
-            if ((page == 'variantInfo')&& (typeof variantId !== 'undefined') ) {
-                lzVarId = variantId;
+            if ((inParm.page == 'variantInfo')&& (typeof inParm.variantId !== 'undefined') ) {
+                lzVarId = inParm.variantId;
                 // we have format: 8_118184783_C_T
                 // need to get format like: 8:118184783_C/T
-                var splitVarId = variantId.split('_');
+                var splitVarId = inParm.variantId.split('_');
                 lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
             }
 
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
-                var returned = mpgSoftware.locusZoom.initLocusZoom(lzGraphicDomId, lzVarId,retrieveFunctionalDataAjaxUrl);
+                var returned = mpgSoftware.locusZoom.initLocusZoom( lzGraphicDomId,
+                                                                    lzVarId,
+                                                                    inParm.retrieveFunctionalDataAjaxUrl);
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources = returned.dataSources;
 
                 // default panel
                 addLZPhenotype({
                         phenotype: defaultPhenotypeName,
-                        description: phenoTypeDescription,
-                        propertyName:phenoPropertyName,
-                        dataSet:locusZoomDataset,
-                        datasetReadableName:datasetReadableName,
-                        retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
-                },dataSetName,geneGetLZ,variantInfoUrl,
-                    makeDynamic,lzGraphicDomId,graphicalOptions);
+                        description: inParm.phenoTypeDescription,
+                        propertyName:inParm.phenoPropertyName,
+                        dataSet:inParm.locusZoomDataset,
+                        datasetReadableName:inParm.datasetReadableName,
+                        retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl
+                },dataSetName,inParm.geneGetLZ,inParm.variantInfoUrl,
+                    inParm.makeDynamic,lzGraphicDomId,inParm);
 
-                if (typeof functionalTrack !== 'undefined'){
-                    if ( typeof defaultTissues !== 'undefined'){
-                        _.forEach(defaultTissues,function(o,i){
+                if (typeof inParm.functionalTrack !== 'undefined'){
+                    if ( typeof inParm.defaultTissues !== 'undefined'){
+                        _.forEach(inParm.defaultTissues,function(o,i){
                             addLZTissueAnnotations({
                                 tissueCode: o,
-                                tissueDescriptiveName: defaultTissuesDescriptions[i],
-                                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
-                            },lzGraphicDomId,graphicalOptions);
+                                tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
+                                retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl
+                            },lzGraphicDomId,inParm);
                         });
                     }
 
                 }
 
-                if ((typeof getLocusZoomFilledPlotUrl !== 'undefined') &&
-                    (getLocusZoomFilledPlotUrl !== 'junk')){
-                    addLZTissueChromatinAccessibility({
-                        tissueCode: 'tissue',
-                        tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
-                        getLocusZoomFilledPlotUrl:getLocusZoomFilledPlotUrl,
-                        phenoTypeName:phenoTypeName
-                    },lzGraphicDomId,graphicalOptions);
-                }
+                // if ((typeof inParm.getLocusZoomFilledPlotUrl !== 'undefined') &&
+                //     (inParm.getLocusZoomFilledPlotUrl !== 'junk')){
+                //     addLZTissueChromatinAccessibility({
+                //         tissueCode: 'tissue',
+                //         tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                //         getLocusZoomFilledPlotUrl:inParm.getLocusZoomFilledPlotUrl,
+                //         phenoTypeName:inParm.phenoTypeName
+                //     },lzGraphicDomId,inParm);
+                // }
 
 
-                if ((typeof pageInitialization !== 'undefined')&&
-                    (pageInitialization)){
+                if ((typeof inParm.pageInitialization !== 'undefined')&&
+                    (inParm.pageInitialization)){
 
-                    $(collapsingDom).on("shown.bs.collapse", function () {
+                    $(inParm.collapsingDom).on("shown.bs.collapse", function () {
                         locusZoomPlot[currentLzPlotKey].rescaleSVG();
                     });
 
@@ -900,7 +915,8 @@ var mpgSoftware = mpgSoftware || {};
         removePanel:removePanel,
         removeAllPanels:removeAllPanels,
         plotAlreadyExists: plotAlreadyExists,
-        locusZoomPlot:locusZoomPlot
+        locusZoomPlot:locusZoomPlot,
+        replaceTissuesWithOverlappingEnhancersFromVarId:replaceTissuesWithOverlappingEnhancersFromVarId
        // broadAssociationSource:broadAssociationSource
     }
 

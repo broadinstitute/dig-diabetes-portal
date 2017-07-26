@@ -1182,30 +1182,37 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         } else {
             var defaultTissues = additionalParameters.defaultTissues;
             var defaultTissuesDescriptions = additionalParameters.defaultTissuesDescriptions;
+            var lzParm = {
+                page:'geneInfo',
+                variantId:null,
+                positionInfo:positioningInformation,
+                domId1:'#lz-'+additionalParameters.lzCommon,
+                collapsingDom:"#collapseExample",
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:pName,
+                phenoPropertyName:additionalParameters.firstPropertyName,
+                locusZoomDataset:datasetName,
+                pageInitialization:!mpgSoftware.locusZoom.plotAlreadyExists(),
+                functionalTrack:{},
+                defaultTissues:defaultTissues,
+                defaultTissuesDescriptions:defaultTissuesDescriptions,
+                datasetReadableName:datasetReadableName,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:additionalParameters.getLocusZoomFilledPlotUrl,
+                geneGetLZ:additionalParameters.getLocusZoomUrl,
+                variantInfoUrl:additionalParameters.variantInfoUrl,
+                makeDynamic:additionalParameters.firstStaticPropertyName,
+                retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl
+            };
+            mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
-            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                '#lz-'+additionalParameters.lzCommon, "#collapseExample", phenotypeName, pName,
-                additionalParameters.firstPropertyName,
-                datasetName,
-                additionalParameters.getLocusZoomFilledPlotUrl,
-                additionalParameters.getLocusZoomUrl,
-                additionalParameters.variantInfoUrl,
-                additionalParameters.firstStaticPropertyName,
-                additionalParameters.retrieveFunctionalDataAjaxUrl,
-                !mpgSoftware.locusZoom.plotAlreadyExists(),
-                {}, defaultTissues, defaultTissuesDescriptions, datasetReadableName);
+            lzParm.domId1 = '#lz-'+additionalParameters.lzCredSet;
+            lzParm.colorBy = 2; // category
+            lzParm.positionBy = 2; // posterior p
+            lzParm.defaultTissues = undefined;
 
-            mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                '#lz-'+additionalParameters.lzCredSet, "#collapseExample", phenotypeName, pName,
-                additionalParameters.firstPropertyName,
-                datasetName,
-                additionalParameters.getLocusZoomFilledPlotUrl,
-                additionalParameters.getLocusZoomUrl,
-                additionalParameters.variantInfoUrl,
-                additionalParameters.firstStaticPropertyName,
-                additionalParameters.retrieveFunctionalDataAjaxUrl,
-                !mpgSoftware.locusZoom.plotAlreadyExists(),
-                {}, defaultTissues, defaultTissuesDescriptions, datasetReadableName);
+            mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
 
             $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {

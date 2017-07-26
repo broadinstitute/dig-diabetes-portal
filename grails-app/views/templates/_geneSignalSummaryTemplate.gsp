@@ -404,7 +404,7 @@
             <th></th>
             <th></th>
             {{#variants}}
-                <th class="niceHeaders">
+                <th class="niceHeaders" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId('{{name}}')">
                     {{name}}
                 </th>
             {{/variants}}

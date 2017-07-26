@@ -159,11 +159,30 @@ var mpgSoftware = mpgSoftware || {};
                 startPosition: variantObject.POS - locusZoomRange,
                 endPosition: variantObject.POS + locusZoomRange
             };
-
-            mpgSoftware.locusZoom.initializeLZPage('variantInfo', variantObject.VAR_ID, positioningInformation,
-                lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,'junk',
-                geneLocusZoomUrl,
-                variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,true);
+            var lzParm = {
+                page:'variantInfo',
+                variantId:variantObject.VAR_ID,
+                positionInfo:positioningInformation,
+                domId1:lzDomHolder,
+                collapsingDom:collapseDomHolder,
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:phenotypeDescription,
+                phenoPropertyName:propertyName,
+                locusZoomDataset:locusZoomDataset,
+                pageInitialization:true,
+                functionalTrack:null,
+                defaultTissues:null,
+                defaultTissuesDescriptions:null,
+                datasetReadableName:null,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:'junk',
+                geneGetLZ:geneLocusZoomUrl,
+                variantInfoUrl:variantInfoUrl,
+                makeDynamic:makeDynamic,
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
+            };
+            mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
 
             $('[data-toggle="popover"]').popover();
