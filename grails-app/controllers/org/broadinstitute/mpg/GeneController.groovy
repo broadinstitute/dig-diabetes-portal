@@ -560,7 +560,7 @@ class GeneController {
             if (chromosome != null) {
 
                 if (dataType=='static'){ // dynamically get the property name for static datasets
-                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,'P_VALUE')
+                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,propertyName)
                     propertyName = property.name
                 }
 

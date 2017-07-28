@@ -318,8 +318,10 @@ var mpgSoftware = mpgSoftware || {};
 
             //colorBy=1;
 
-
-
+            var yAxisScale = ":pvalue|neglog10";
+            if (positionBy === 2){
+                yAxisScale = ":pvalue";
+            }
 
             var addendumToName = '';
             if ( typeof lzParameters.datasetReadableName !== 'undefined'){
@@ -331,12 +333,13 @@ var mpgSoftware = mpgSoftware || {};
                 namespace: { assoc: phenotype }
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
+            panel_layout.axes.y1.label = 'posterior probability';
             panel_layout.y_index = -1;
             panel_layout.height = 270;
             panel_layout.data_layers[2].fields = [phenotype + ":id",
                 phenotype + ":position",
                 phenotype + ":pvalue|scinotation",
-                phenotype + ":pvalue|neglog10",
+                phenotype + yAxisScale,
                 phenotype + ":refAllele",
                 phenotype + ":analysis",
                 phenotype + ":scoreTestStat",
@@ -346,7 +349,7 @@ var mpgSoftware = mpgSoftware || {};
             panel_layout.data_layers[2].id_field = phenotype + ":id";
             switch (positionBy){
                 case 1:
-                    panel_layout.data_layers[2].y_axis.field = phenotype + ":pvalue|neglog10";
+                    panel_layout.data_layers[2].y_axis.field = phenotype + yAxisScale;
                     break;
                 case 2:
                     panel_layout.data_layers[2].y_axis.field = phenotype + ":analysis";
@@ -422,7 +425,7 @@ var mpgSoftware = mpgSoftware || {};
         // these get defined when the LZ plot is initialized
         var locusZoomPlot = {};
         var standardLayout = {};
-        var dataSources;
+        var dataSources = {};
 
         function conditioning(myThis) {
             locusZoomPlot[currentLzPlotKey].CovariatesModel.add(LocusZoom.getToolTipData(myThis));
@@ -596,7 +599,7 @@ var mpgSoftware = mpgSoftware || {};
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
 
-        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue){
+        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue,intervalPanelName){
              var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
@@ -609,8 +612,9 @@ var mpgSoftware = mpgSoftware || {};
                     return url;
                 }
             }, "BroadT2D");
-            var tissueAsId = 'intervals-'+rawTissue;
-            dataSources.add(tissueAsId, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
+            //var tissueAsId = 'intervals-'+rawTissue;
+            dataSources.add(intervalPanelName, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
+            //dataSources.add(tissueAsId, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
         };
 
         var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue){
@@ -690,8 +694,8 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId){
-            var intervalPanelName = "intervals-"+tissueId;
+        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId,intervalPanelName){
+           // var intervalPanelName = "intervals-"+tissueId+"-"+locusZoomVar.id;
             // we can't use the standard interval panel, but we can derive our own
             var intervalPanel = customIntervalsPanel(intervalPanelName);
             intervalPanel.dashboard.components.push({
@@ -741,7 +745,7 @@ var mpgSoftware = mpgSoftware || {};
             var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
             setNewDefaultLzPlot(lzGraphicDomId);
 
-            buildAssociationSource(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic);
+            buildAssociationSource(dataSources[currentLzPlotKey],geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic);
             addAssociationTrack(locusZoomPlot[currentLzPlotKey],colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters)
 
 
@@ -751,19 +755,15 @@ var mpgSoftware = mpgSoftware || {};
 
 
         function addLZTissueAnnotations(lzParameters,  lzGraphicDomId, graphicalOptions) {
-            var colorBy = 1;  //colorBy:1=LD,2=MDS
-            var positionBy = 1;  //positionBy:1=pValue,2=posteriorPValue
-            if (typeof graphicalOptions !== 'undefined') {
-                colorBy = graphicalOptions.colorBy;
-                positionBy = graphicalOptions.positionBy;
-            }
             var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
             setNewDefaultLzPlot(lzGraphicDomId);
+            var intervalPanelName = "intervals-"+tissueCode+"-"+lzGraphicDomId.substr(1);
 
-            buildIntervalSource(dataSources,retrieveFunctionalDataAjaxUrl,tissueCode);
-            addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode);
+
+            buildIntervalSource(dataSources[currentLzPlotKey],retrieveFunctionalDataAjaxUrl,tissueCode,intervalPanelName);
+            addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,intervalPanelName);
 
             rescaleSVG();
         };
@@ -774,7 +774,7 @@ var mpgSoftware = mpgSoftware || {};
             var phenotypeName = lzParameters.phenotypeName;
             setNewDefaultLzPlot(lzGraphicDomId);
 
-            buildChromatinAccessibilitySource(dataSources,getLocusZoomFilledPlotUrl,tissueCode,phenotypeName);
+            buildChromatinAccessibilitySource(dataSources[currentLzPlotKey],getLocusZoomFilledPlotUrl,tissueCode,phenotypeName);
             addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,phenotypeName);
 
             rescaleSVG();
@@ -820,7 +820,7 @@ var mpgSoftware = mpgSoftware || {};
                                                                     lzVarId,
                                                                     inParm.retrieveFunctionalDataAjaxUrl);
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
-                dataSources = returned.dataSources;
+                dataSources[currentLzPlotKey] = returned.dataSources;
 
                 // default panel
                 addLZPhenotype({

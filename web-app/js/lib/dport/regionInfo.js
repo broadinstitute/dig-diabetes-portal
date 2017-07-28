@@ -59,7 +59,7 @@ var mpgSoftware = mpgSoftware || {};
             return renderData;
         };
 
-        var fillRegionInfoTable = function(vars) {
+        var fillRegionInfoTable = function(vars,additionalParameters) {
 
             var promise = $.ajax({
                 cache: false,
@@ -74,10 +74,11 @@ var mpgSoftware = mpgSoftware || {};
                     $(".credibleSetTableGoesHere").empty().append(
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
                     );
+                    mpgSoftware.geneSignalSummaryMethods.updateCredibleSetTable(data, additionalParameters);
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {
-                console.log('hi');
+                console.log('error');
             });
 
         }
