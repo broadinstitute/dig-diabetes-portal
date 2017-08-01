@@ -1,5 +1,5 @@
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Open Sans" Arial, sans-serif;
 }
 
 .box {
@@ -69,7 +69,7 @@ body {
     display: none;
 }
 .box .x .label {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Lato" Arial, sans-serif;
     font: 10px sans-serif;
     padding : 20px;
 }
@@ -85,7 +85,7 @@ body {
     font-size: 10pt;
 }
 .boxWhiskerLabel{
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Lato" Arial, sans-serif;
     font: 10px sans-serif;
     padding : 20px;
 }
@@ -101,7 +101,7 @@ body {
     margin-left: 10px;
 }
 .outlierRadiusDiv .outlierRadiusLabel {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: "Lato" Arial, sans-serif;
     font-size: 9pt;
     margin-left:5px;
     padding-top:10px;
@@ -201,14 +201,14 @@ label.checkboxHolder input {
     padding: 5px;
 }
 #correlationPlotControllers .iqmLabel {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: "Lato" Arial, sans-serif;
     font-size: 12px;
     font-weight: bold;
     text-decoration: underline;
 }
 
 #scatterPlotCloser  {
-    font-family: Verdana,Arial,sans-serif;
+    font-family: "Lato" Arial, sans-serif;
     font-size: 1.5em;
     padding: 4px;
     text-decoration: none;
