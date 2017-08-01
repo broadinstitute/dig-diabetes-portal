@@ -6,6 +6,7 @@
         <div id="helpus"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a></div>
     </div>
 </div>
+
 <div id="belowfooter">
     <div class="row">
         <div class="footer">

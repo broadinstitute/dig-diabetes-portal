@@ -5284,6 +5284,16 @@ LocusZoom.TransformationFunctions.add("neglog10", function(x) {
     return -Math.log(x) / Math.LN10;
 });
 
+LocusZoom.TransformationFunctions.add("unchanged", function(x) {
+    if (isNaN(x)){ return null; }
+    return x;
+});
+
+LocusZoom.TransformationFunctions.add("pow10", function(x) {
+    if (isNaN(x)){ return null; }
+    return Math.pow(10,x)-1;
+});
+
 LocusZoom.TransformationFunctions.add("logtoscinotation", function(x) {
     if (isNaN(x)){ return "NaN"; }
     if (x == 0){ return "1"; }

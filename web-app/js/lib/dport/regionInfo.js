@@ -17,9 +17,9 @@ var mpgSoftware = mpgSoftware || {};
                                     CTCFmotif:[]
                                 },
                                 cellTypeSpecs: [
-                                    {name:'Aorta',
-                                    DHS:[],
-                                    K27:[]}
+                                    // {name:'Aorta',
+                                    // DHS:[],
+                                    // K27:[]}
                                 ]};
             if (typeof data !== 'undefined'){
                 var allVariants = _.flatten([{}, data.variants])

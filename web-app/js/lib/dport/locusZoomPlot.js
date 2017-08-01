@@ -318,9 +318,18 @@ var mpgSoftware = mpgSoftware || {};
 
             //colorBy=1;
 
-            var yAxisScale = ":pvalue|neglog10";
+            var yAxisScale1;
+            var yAxisScale2;
+            if (positionBy ===1){
+                yAxisScale1 = phenotype + ":pvalue|scinotation";
+                yAxisScale2 = phenotype + ":pvalue|neglog10";
+            }
             if (positionBy === 2){
-                yAxisScale = ":pvalue";
+                yAxisScale1 = phenotype + ":pvalue|scinotation";
+                yAxisScale2 = phenotype + ":pvalue";
+
+                // yAxisScale1 = phenotype + ":analysis";
+                // yAxisScale2 = phenotype + ":analysis|unchanged";
             }
 
             var addendumToName = '';
@@ -338,8 +347,8 @@ var mpgSoftware = mpgSoftware || {};
             panel_layout.height = 270;
             panel_layout.data_layers[2].fields = [phenotype + ":id",
                 phenotype + ":position",
-                phenotype + ":pvalue|scinotation",
-                phenotype + yAxisScale,
+                yAxisScale1,
+                yAxisScale2,
                 phenotype + ":refAllele",
                 phenotype + ":analysis",
                 phenotype + ":scoreTestStat",
@@ -349,10 +358,10 @@ var mpgSoftware = mpgSoftware || {};
             panel_layout.data_layers[2].id_field = phenotype + ":id";
             switch (positionBy){
                 case 1:
-                    panel_layout.data_layers[2].y_axis.field = phenotype + yAxisScale;
+                    panel_layout.data_layers[2].y_axis.field = yAxisScale2;
                     break;
                 case 2:
-                    panel_layout.data_layers[2].y_axis.field = phenotype + ":analysis";
+                    panel_layout.data_layers[2].y_axis.field = yAxisScale2;
                     panel_layout.data_layers[2].y_axis.min_extent= [0, 1];
                     break;
                 default: break;
@@ -688,6 +697,9 @@ var mpgSoftware = mpgSoftware || {};
         var addAssociationTrack = function (locusZoomVar,colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters){
             var panelLayout = buildPanelLayout(colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoUrl,lzParameters);
             panelLayout.y_index = 0;
+            if ((positionBy==2)&&(panelLayout.data_layers[2].y_axis.field.indexOf('|')>-1)){
+//                panelLayout.data_layers[2].y_axis.field=(panelLayout.data_layers[2].y_axis.field.substr(0,panelLayout.data_layers[2].y_axis.field.indexOf('|'))+'|unchanged');
+            }
             locusZoomVar.addPanel(panelLayout).addBasicLoader();
             reorderPanels(locusZoomVar);
         };
@@ -822,6 +834,12 @@ var mpgSoftware = mpgSoftware || {};
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources[currentLzPlotKey] = returned.dataSources;
 
+                if (inParm.positionBy == 2){ // credset only
+                    inParm.locusZoomDataset = inParm.sampleGroupsWithCredibleSetNames[0];
+                    inParm.datasetReadableName = 'fine mapping';
+                }
+
+
                 // default panel
                 addLZPhenotype({
                         phenotype: defaultPhenotypeName,
@@ -830,7 +848,7 @@ var mpgSoftware = mpgSoftware || {};
                         dataSet:inParm.locusZoomDataset,
                         datasetReadableName:inParm.datasetReadableName,
                         retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl
-                },dataSetName,inParm.geneGetLZ,inParm.variantInfoUrl,
+                },inParm.locusZoomDataset,inParm.geneGetLZ,inParm.variantInfoUrl,
                     inParm.makeDynamic,lzGraphicDomId,inParm);
 
                 if (typeof inParm.functionalTrack !== 'undefined'){

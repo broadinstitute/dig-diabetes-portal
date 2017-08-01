@@ -479,6 +479,7 @@ class VariantSearchController {
              propertiesToInclude:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToInclude))) as JSONArray,
              propertiesToRemove:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray,
              datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap)),
+             lzOptions:phenotypeMap,
              sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames
             ]
         }

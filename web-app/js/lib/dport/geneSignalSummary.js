@@ -659,14 +659,21 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var buildRenderDataFromNonAggregatedData = function (data, mafCutoff) {
         var renderData = {variants: [],
             rvar: [],
-            cvar: []};
+            cvar: [],
+            tissues: [],
+            static:[],
+            dynamic:[],
+            credibleSet:[]};
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') ) {
             _.forEach(data.variants, function (v, index, y) {
                 renderData.variants.push(processNonAggregatedData(v[0]));
             });
         }
-        ;
+        renderData.tissues = _.filter(data.lzOptions, function(o){return o.dataType==='tissue'});
+        renderData.static = _.filter(data.lzOptions, function(o){return o.dataType==='static'});
+        renderData.dynamic = _.filter(data.lzOptions, function(o){return o.dataType==='dynamic'});
+
         return renderData;
     };
 
@@ -1072,7 +1079,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 phenotype: additionalData.phenotype,
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: credibleSetDataSet,
-                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl
+                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
+                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1260,6 +1268,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             lzParm.positionBy = 2; // posterior p
             lzParm.defaultTissues = undefined;
             lzParm.phenoPropertyName='POSTERIOR_PROBABILITY';
+            lzParm.sampleGroupsWithCredibleSetNames=data.sampleGroupsWithCredibleSetNames;
 
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
