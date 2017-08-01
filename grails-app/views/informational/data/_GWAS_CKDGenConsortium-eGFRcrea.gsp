@@ -7,6 +7,12 @@
 
         <h4>Publications</h4>
 
+
+                 <p><div class="paper">
+<g:message code="informational.shared.publications.Li_2017_JAmSocNephrol"></g:message><br>
+<g:message code="informational.shared.publications.Li_2017_JAmSocNephrol.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Li_2017_JAmSocNephrol.citation"></g:message> </div>
+</div></p>
                  <p><div class="paper">
 <g:message code="informational.shared.publications.Pattaro_2016_NatCommun"></g:message><br>
 <g:message code="informational.shared.publications.Pattaro_2016_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>

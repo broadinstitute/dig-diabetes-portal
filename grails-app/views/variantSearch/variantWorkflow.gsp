@@ -254,7 +254,7 @@
 
                                     <div class="form-inline">
                                         <input id="chromosomeInput" type="text" class="form-control" style="width: 90%"
-                                               placeholder="Region chromosome:start-stop (e.g. chr9:21940000-22190000)"
+                                               placeholder="Region chromosome:start-stop (e.g. 9:21940000-22190000)"
                                                data-type="advancedFilterInput"
                                                data-prop="chromosome" data-translatedname="chromosome"
                                                oninput="
@@ -405,7 +405,7 @@
             <div id="searchDetailsHolder" class="dk-variant-submit-search"></div>
 
             <script id="searchDetailsTemplate" type="x-tmpl-mustache">
-                <h6><g:message code="variantSearch.actions.submit_search" default="Submit search request"/></h6>
+                %{--<h6><g:message code="variantSearch.actions.submit_search" default="Submit search request"/></h6>--}%
                 <table class="table table-striped dk-search-collection">
                     <thead>
                     <tr>
