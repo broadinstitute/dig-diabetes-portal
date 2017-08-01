@@ -643,7 +643,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var buildRenderData = function (data, mafCutoff) {
         var renderData = {variants: [],
             rvar: [],
-            cvar: []};
+            cvar: [],
+            tissues: [],
+            static:[],
+            dynamic:[]};
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') &&
             (typeof data.variants.variants !== 'undefined') &&
@@ -652,7 +655,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
             });
         }
-        ;
+        renderData.tissues = _.filter(data.lzOptions, function(o){return o.dataType==='tissue'});
+        renderData['tissueDataExists'] = (renderData.tissues.length > 0) ? [1] : [];
+        renderData.static = _.filter(data.lzOptions, function(o){return o.dataType==='static'});
+        renderData['staticDataExists'] = (renderData.static.length > 0) ? [1] : [];
+        renderData.dynamic = _.filter(data.lzOptions, function(o){return o.dataType==='dynamic'});
+        renderData['dynamicDataExists'] = (renderData.dynamic.length > 0) ? [1] : [];
+
         return renderData;
     };
 
@@ -671,8 +680,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             });
         }
         renderData.tissues = _.filter(data.lzOptions, function(o){return o.dataType==='tissue'});
+        renderData['tissueDataExists'] = (renderData.tissues.length > 0) ? [1] : [];
         renderData.static = _.filter(data.lzOptions, function(o){return o.dataType==='static'});
+        renderData['staticDataExists'] = (renderData.static.length > 0) ? [1] : [];
         renderData.dynamic = _.filter(data.lzOptions, function(o){return o.dataType==='dynamic'});
+        renderData['dynamicDataExists'] = (renderData.dynamic.length > 0) ? [1] : [];
 
         return renderData;
     };
@@ -1171,8 +1183,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('.igvGoesHere').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCommon;
+            // _.forEach(renderData.static,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCommon;});
+            // _.forEach(renderData.dynamic,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCommon;});
+            // _.forEach(renderData.tissues,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCommon;});
             $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
+            // _.forEach(renderData.static,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCredSet;});
+            // _.forEach(renderData.dynamic,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCredSet;});
+            // _.forEach(renderData.tissues,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCredSet;});
             $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         }
 

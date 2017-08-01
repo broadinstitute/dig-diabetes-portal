@@ -26,63 +26,83 @@
         <div style="margin-top: 20px">
 
             <ul class="nav navbar-nav navbar-left" style="display: flex;">
+                {{#dynamicDataExists}}
                 <li class="dropdown" id="tracks-menu-dropdown-dynamic">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamically calculated associations)<b class="caret"></b></a>
                     <ul id="trackList-dynamic" class="dropdown-menu">
-                        <g:each in="${lzOptions?.findAll{it.dataType=='dynamic'}}">
-    <li>
-        <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                    phenotype: '${it.key}',
-                                            dataSet: '${it.dataSet}',
-                                            datasetReadableName: '${g.message(code: "metadata." + it.name)}',
-                                            propertyName: '${it.propertyName}',
-                                            description: '${it.description}'
+                    {{/dynamicDataExists}}
+                    {{#dynamic}}
+                        <li>
+                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                                phenotype: '{{key}}',
+                                                dataSet: '{{dataSet}}',
+                                                datasetReadableName: '{{dataSetReadable}}',
+                                                propertyName: '{{propertyName}}',
+                                                description: '{{description}}'
                                         },
-                                        '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                        '{{dataSet}}',
+                                        '${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '${it.dataType}',('#'+'{{lzDomSpec}}'),{colorBy:1,positionBy:1})">
-    ${g.message(code: "metadata." + it.name)}
-    </a>
-</li>
-</g:each>
+                                        '{{dataType}}',
+                                        ('#'+'{{lzDomSpec}}'),
+                                        {colorBy:1,positionBy:1})">
+                                        {{description}} ({{dataSetReadable}})
+                            </a>
+                        </li>
+                    {{/dynamic}}
+                    {{#dynamicDataExists}}
                     </ul>
                 </li>
-
+                {{/dynamicDataExists}}
+                {{#staticDataExists}}
                 <li class="dropdown" id="tracks-menu-dropdown-static">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (static)<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
                     <ul id="trackList-static" class="dropdown-menu">
-                        <g:each in="${lzOptions?.findAll{it.dataType=='static'}}">
-    <li>
-        <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                    phenotype: '${it.key}',
-                                            dataSet: '${it.dataSet}',
-                                            datasetReadableName: '${g.message(code: "metadata." + it.dataSet)}',
-                                            propertyName: '${it.propertyName}',
-                                            description: '${it.description}'
+                    {{/staticDataExists}}
+                        {{#static}}
+                        <li>
+                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                                phenotype: '{{key}}',
+                                                dataSet: '{{dataSet}}',
+                                                datasetReadableName: '{{dataSetReadable}}',
+                                                propertyName: '{{propertyName}}',
+                                                description: '{{description}}'
                                         },
-                                        '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                        '{{dataSet}}',
+                                        '${createLink(controller:"gene", action:"getLocusZoom")}',
                                         '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '${it.dataType}',('#'+'{{lzDomSpec}}'),{colorBy:1,positionBy:1})">
-    ${g.message(code: "metadata." + it.name)+"("+g.message(code: "metadata." + it.dataSet)+")"}
-    </a>
-</li>
-</g:each>
+                                        '{{dataType}}',
+                                        ('#'+'{{lzDomSpec}}'),
+                                        {colorBy:1,positionBy:1})">
+                                        {{description}} ({{dataSetReadable}})
+                            </a>
+                        </li>
+                        {{/static}}
+                    {{#staticDataExists}}
                     </ul>
                 </li>
+                {{/staticDataExists}}
+                {{#tissueDataExists}}
                 <li class="dropdown" id="tracks-menu-dropdown-functional">
                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
                        <ul id="trackList-tissue" class="dropdown-menu">
-                           <g:each in="${lzOptions?.findAll{it.dataType=='tissue'}}">
-                           <li>
-                              <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                        tissueCode: '${it.name}',
-                        tissueDescriptiveName: '${it.description}',
-                        retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
-                    },('#'+'{{lzDomSpec}}'),{colorBy:1,positionBy:1});">${it.description}</a>
-                           </li>
-                           </g:each>
+                           {{/tissueDataExists}}
+                           {{#tissues}}
+                                <li>
+                                    <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                    tissueCode: '{{name}}',
+                                                    tissueDescriptiveName: '{{description}}',
+                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
+                                                },
+                                            ('#'+'{{lzDomSpec}}'),
+                                            {colorBy:1,positionBy:1})">{{description}}
+                                    </a>
+                                </li>
+                           {{/tissues}}
+                           {{#tissueDataExists}}
                        </ul>
                 </li>
+                {{/tissueDataExists}}
                 <li style="margin: auto;">
                     <b>Region: <span id="lzRegion"></span></b>
                 </li>
