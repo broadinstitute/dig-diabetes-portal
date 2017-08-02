@@ -76,20 +76,18 @@
 
 <div id="main">
     <div class="container">
-        <div class="row">
-
-
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    <div class="row">
                     <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.title" default="about the data"/></p>
+                    </div>
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
+                    <div class="row">
+                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
+                    </div>
                 </g:elseif>
-
-
                 <g:else></g:else>
 
-        </div>
 
         <div class="row" style="margin-top: 10px">
 

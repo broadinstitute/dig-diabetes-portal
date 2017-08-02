@@ -1183,14 +1183,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('.igvGoesHere').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCommon;
-            // _.forEach(renderData.static,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCommon;});
-            // _.forEach(renderData.dynamic,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCommon;});
-            // _.forEach(renderData.tissues,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCommon;});
             $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
-            // _.forEach(renderData.static,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCredSet;});
-            // _.forEach(renderData.dynamic,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCredSet;});
-            // _.forEach(renderData.tissues,function (o){o['lzDomSpec']="lz-"+additionalParameters.lzCredSet;});
             $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         }
 

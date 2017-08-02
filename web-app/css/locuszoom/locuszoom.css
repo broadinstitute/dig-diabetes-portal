@@ -2,7 +2,7 @@
   background-color: #FFFFFF;
   border: none;
   cursor: move;
-  font-family: "Helvetica Neue", Helvetica, Aria, sans-serif;
+  font-family: 'Open Sans', Arial, sans-serif;
   font-size: 10px; }
   .lz-locuszoom .lz-curtain rect {
     fill: rgba(210, 210, 210, 0.85);

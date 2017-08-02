@@ -20,7 +20,7 @@ div.dk-amp-name-wrapper {
 	background-position:right top;
 	background-repeat:no-repeat;
 	height: 70px;
-	padding: 0px;
+	padding: 0;
 }
 
 div.dk-amp-banner-name {
@@ -39,7 +39,6 @@ div.dk-t2d-banner {
 	color: #fff;
 	padding: 10px 10px 5px 10px;
 	background-color:#283096;
-	background-image:url(../images/logo_bg.jpg);
 	background-size: 100% 100%;
 }
 
@@ -325,7 +324,7 @@ ul.dk-news-items {
 }
 
 ul.dk-news-items li {
-	padding-top: 10px;
+	padding-top: 3px;
 }
 
 h2.dk-search-title-homepage {
@@ -396,4 +395,12 @@ h2.dk-search-title-homepage {
 
 .current-box {
 	background-color:#4eadcd !important;
+}
+
+.dk-front-search-wrapper a{
+	color: #aaf7FF !important;
+}
+
+* {
+	font-family: 'Lato', Arial, sans-serif;
 }

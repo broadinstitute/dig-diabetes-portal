@@ -1089,8 +1089,11 @@ class VariantSearchController {
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
             LinkedHashMap<String, String> positioningInformation = getDataQueryHolder.positioningInformation()
-            regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-            identifiedGenes = restServerService.retrieveGenesInExtents(positioningInformation)
+            if (positioningInformation.size()>0){
+                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
+            }
+
+            //identifiedGenes = restServerService.retrieveGenesInExtents(positioningInformation)
 //            if (positioningInformation.size() > 2) {
 //
 //                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"

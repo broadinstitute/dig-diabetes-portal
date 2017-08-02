@@ -30,7 +30,7 @@ text.valueQualifiers  {
     fill: #aaaaaa;
 }
 text.clickableQuestionMark  {
-    font-family: 'Arial';
+    font-family: Arial;
     font-weight: bold;
     font-size: 12pt;
     background: #ff0000;
@@ -38,7 +38,7 @@ text.clickableQuestionMark  {
     fill: #ffffff;
 }
 circle.clickableQuestionMark  {
-    font-family: 'Arial';
+    font-family: Arial;
     font-weight: bold;
     font-size: 14pt;
     stroke: #4682b4;

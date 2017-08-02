@@ -59,6 +59,38 @@ var mpgSoftware = mpgSoftware || {};
             return renderData;
         };
 
+        var oneCallbackForEachVariant = function(variants,additionalData){
+            var promiseArray = [];
+            _.forEach(variants,function (variant){
+                var args = _.flatten([{}, variant]);
+                var variantObject = _.merge.apply(_, args);
+                promiseArray.push(
+                    $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: additionalData.retrieveFunctionalDataAjaxUrl,
+                    data: {
+                        chromosome: variantObject.CHROM,
+                        startPos: ""+variantObject.POS,
+                        endPos: ""+variantObject.POS,
+                        lzFormat:0
+                    },
+                    async: true
+                    }).done(function (data, textStatus, jqXHR) {
+
+                        alert(data);
+
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, errorThrown)
+                    })
+                );
+
+
+            });
+        }
+
         var fillRegionInfoTable = function(vars,additionalParameters) {
 
             var promise = $.ajax({
@@ -75,6 +107,13 @@ var mpgSoftware = mpgSoftware || {};
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
                     );
                     mpgSoftware.geneSignalSummaryMethods.updateCredibleSetTable(data, additionalParameters);
+                    var promises = oneCallbackForEachVariant(data.variants,additionalParameters);
+
+                    $.when.apply($, promises).then(function(schemas) {
+                        console.log("DONE", this, schemas);
+                    }, function(e) {
+                        console.log("My ajax failed");
+                    });
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {

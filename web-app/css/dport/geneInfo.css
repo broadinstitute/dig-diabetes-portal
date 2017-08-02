@@ -239,7 +239,7 @@ div.cohort .bullets .title {
     display: none; }
 .vis-container #tooltip p {
     margin: 0;
-    font-family: sans-serif;
+    font-family: "Lato" Arial, sans-serif;
     font-size: 12px;
     line-height: 20px; }
 .vis-container #tooltip .header {
