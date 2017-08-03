@@ -417,14 +417,14 @@
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <div class='dataTable'>
-<h5>Variants in the credible set</h5>
-<table class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%;">
+
+<table class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 20px">
     <thead>
         <tr>
             <th></th>
             <th></th>
             {{#variants}}
-                <th class="niceHeaders" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId('{{name}}')">
+                <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId('{{name}}')">
                     {{name}}
                 </th>
             {{/variants}}

@@ -1,4 +1,58 @@
 <style>
+td.tissueTable.Active_TSS{
+    background: #0000FF;
+}
+td.tissueTable.Weak_TSS{
+    background: #4682B4;
+}
+td.tissueTable.Genic_enhancer{
+    background: #1E90FF;
+}
+td.tissueTable.Active_enhancer_1{
+    background: #87CEFA;
+}
+td.tissueTable.Active_enhancer_2{
+    background: #B0E0E6;
+}
+td.tissueTable.Weak_enhancer{
+    background: #E6E6FA;
+}
+.credibleSetTableGoesHere th.niceHeaders{
+    background: white;
+    transform-origin: left;
+    -webkit-transform: rotate(-60deg);
+    transform: rotate(-60deg);
+    max-width: 2px;
+}
+.hover {
+    position:relative;
+    top:0px;
+    left:0px;
+    line-height: 100%;
+    display:inline-block;
+
+}
+
+.tooltip {
+    top:-15px;
+    width:100px;
+    position:absolute;
+
+    background-color:#6b9aff;
+    color:white;
+    border-radius:5px;
+    opacity:0;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition:  opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition:  opacity 0.5s;
+    transition:  opacity 0.5s;
+    line-height: 100%;
+}
+
+.hover:hover .tooltip {
+    opacity:1;
+}
 
 </style>
 

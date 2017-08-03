@@ -7,6 +7,14 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.regionInfo = (function () {
 
+        var developingTissueGrid = {};
+        var getDevelopingTissueGrid = function (){
+            return developingTissueGrid;
+        };
+        var setDevelopingTissueGrid = function (myDevelopingTissueGrid){
+            developingTissueGrid = myDevelopingTissueGrid;
+        };
+
         var buildRenderData = function (data){
             var renderData = {  variants: [],
                                 const:{
@@ -22,9 +30,10 @@ var mpgSoftware = mpgSoftware || {};
                                     // K27:[]}
                                 ]};
             if (typeof data !== 'undefined'){
-                var allVariants = _.flatten([{}, data.variants])
-                _.forEach(allVariants, function (oneVariant){
-                    var v = _.merge.apply(_,oneVariant);
+                var allVariants = _.flatten([{}, data.variants]);
+                var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
+                _.forEach(flattendVariants.sort(function (a, b) {return a.POS - b.POS;}), function (v){
+                    //var v = _.merge.apply(_,oneVariant);
                     if (typeof v.VAR_ID !== 'undefined') {
                         renderData.variants.push({name:v.VAR_ID});
                     }
@@ -77,9 +86,21 @@ var mpgSoftware = mpgSoftware || {};
                     },
                     async: true
                     }).done(function (data, textStatus, jqXHR) {
-
-                        alert(data);
-
+                        var tissueGrid = getDevelopingTissueGrid();
+                        if ((typeof data !== 'undefined') &&
+                            (typeof data.variants !== 'undefined') &&
+                            (typeof data.variants.region_start !== 'undefined')&&
+                            (typeof data.variants.variants !== 'undefined')) {
+                            _.forEach(data.variants.variants, function (record){
+                                if(typeof tissueGrid[record.source] === 'undefined') {
+                                    tissueGrid[record.source] = {};
+                                }
+                                var tissueRow = tissueGrid[record.source];
+                                if(typeof tissueRow[''+data.variants.region_start] === 'undefined') {
+                                    tissueRow[''+data.variants.region_start] = record;
+                                }
+                            });
+                        }
 
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         loading.hide();
@@ -89,6 +110,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
             });
+            return promiseArray;
         }
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
@@ -110,10 +132,45 @@ var mpgSoftware = mpgSoftware || {};
                     var promises = oneCallbackForEachVariant(data.variants,additionalParameters);
 
                     $.when.apply($, promises).then(function(schemas) {
-                        console.log("DONE", this, schemas);
+                        console.log("DONE with "+getDevelopingTissueGrid(), this, schemas);
+                        var tissueGrid = getDevelopingTissueGrid();
+                        _.forEach(Object.keys(tissueGrid).sort(),function(tissueKey){
+                            var lineToAdd = "<tr><td></td><td>"+tissueKey+"</td>";
+                            var worthIncluding = false;
+                            _.forEach(Object.keys(tissueGrid[tissueKey]).sort(function (a, b) {return parseInt(a) - parseInt(b);}),function(variantKey){
+                                var record = tissueGrid[tissueKey][variantKey];
+                                var elementName = record.element.substr(record.element.indexOf('_')+1);
+                                lineToAdd += ("<td class='tissueTable "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                                ", position:"+ record.START +", tissue:"+ record.source_trans +", state:"+ record.element_trans +"'></td>");
+                                if ((elementName.indexOf('enhancer')>-1)||(elementName.indexOf('TSS')>-1)){
+                                    worthIncluding = true;
+                                }
+                            });
+                            lineToAdd += '</tr>';
+                            if (worthIncluding){
+                                $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);
+                            }
+                        });
+                        setDevelopingTissueGrid({});
                     }, function(e) {
                         console.log("My ajax failed");
                     });
+
+                    // $('.credibleSetTableGoesHere td.tissueTable').popover({
+                    //     html : true,
+                    //     title: function() {
+                    //         //return $(this).parent().find('.head').html();
+                    //         console.log('title');
+                    //         return "foo";
+                    //     },
+                    //     content: function() {
+                    //         //return $(this).parent().find('.content').html();
+                    //         return "fii";
+                    //     },
+                    //     container: 'body',
+                    //     placement: 'bottom',
+                    //     trigger: 'hover'
+                    // });
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {

@@ -34,7 +34,7 @@
     <div class="dk-menu-wrapper" style="position:relative; z-index: 5000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/stroke', file:'menu_bg_2017_stroke.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:if>
 <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 5000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/mi', file:'menu_bg_2017_5.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
+    <div class="dk-menu-wrapper" style="position:relative; z-index: 5000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images', file:'menu_bg_2017_5.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:elseif>
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
     <div class="dk-menu-wrapper" style="position:relative; z-index: 5000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/mi', file:'menu_band_2017_mi.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
