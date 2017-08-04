@@ -335,9 +335,13 @@
                 <p><g:message code="about.the.stroke.portal.text"/></p>
                 <p><g:message code='portal.stroke.home.funders'/>:</p>
                 <p>
-                    <a href="http://www.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIH3.png')}" style="width: 70px;"></a>&nbsp;&nbsp;&nbsp;
-                    <a href="http://www.ninds.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIND.png')}" style="width: 165px;"></a>
+                    <a href="http://www.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIH3.png')}" style="width: 70px;"></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="http://www.ninds.nih.gov/"><img src="${resource(dir: 'images/organizations', file:'NIND.png')}" style="width: 165px;" ></a>
                 </p>
+                %{--<p><g:message code="portal.stroke.home.amp"/></p>--}%
+                %{--<p>--}%
+                    %{--<a href="https://www.nih.gov/research-training/accelerating-medicines-partnership-amp/type-2-diabetes"><img src="${resource(dir: 'images/stroke', file:'AMP_tag_cloud.png')}" style="width: 65px;" ></a>--}%
+                %{--</p>--}%
             </g:if>
 
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
