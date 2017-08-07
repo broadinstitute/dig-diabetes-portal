@@ -230,6 +230,8 @@
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}"><p class="dk-footnote"><g:message code="trait.search.specifics"/>
                         <g:helpText title="pheno.help.header" placement="right" body="pheno.help.text"/></p></g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p class="dk-footnote"><g:message code="trait.search.specifics"/>
+                        <g:helpText title="pheno.help.header" placement="right" body="stroke.pheno.help.text"/></p></g:elseif>
                     <div class="form-inline" style="padding-top: 10px;">
                         <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#d8e3ec; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                         </select>
