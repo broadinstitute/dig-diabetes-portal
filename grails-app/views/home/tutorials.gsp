@@ -105,6 +105,12 @@
 
         });
 
+        $("#StrokePhenotypeGuidePdf").click(function () {
+            $(".media").attr("href", "${links.StrokePhenotypeGuide}");
+            $(".media").find("iframe").attr("src", "${links.StrokePhenotypeGuide}");
+
+        });
+
         $("#GenePageGuidePdf").click(function () {
             $(".media").attr("href", "${links.GenePageGuide}");
             $(".media").find("iframe").attr("src", "${links.GenePageGuide}");
@@ -128,7 +134,8 @@
 
 
 
-        <ul class="tutorial"><li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
+        <ul class="tutorial">
+            <li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
                 code="portal.introTutorial.title"/></a></li>
             <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
                     code="portal.variantFinderTutorial.title"/></a></li>
@@ -138,8 +145,8 @@
                     %{--code="portal.variantResultsTableGuide.title"/></a></li>--}%
             %{--<li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message--}%
                     %{--code="portal.GeneticsGuide.title"/></a></li>--}%
-            %{--<li><a id="PhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message--}%
-                    %{--code="portal.PhenotypeGuide.title"/></a></li>--}%
+            <li><a id="StrokePhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.PhenotypeGuide.title"/></a></li>
         </ul>
 
         </g:if>
