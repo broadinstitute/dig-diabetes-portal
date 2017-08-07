@@ -1281,8 +1281,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             lzParm.defaultTissues = undefined;
             lzParm.phenoPropertyName='POSTERIOR_PROBABILITY';
             lzParm.sampleGroupsWithCredibleSetNames=data.sampleGroupsWithCredibleSetNames;
-
-            mpgSoftware.locusZoom.initializeLZPage(lzParm);
+            if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
+                mpgSoftware.locusZoom.initializeLZPage(lzParm);
+            }
 
 
             $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
@@ -1323,7 +1324,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 mpgSoftware.locusZoom.rescaleSVG();
             }
         });
-
+        $('#rSpinner').hide()
         mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
         $("#xpropertiesModal").on("shown.bs.modal", function () {
             $("#xpropertiesModal li a").click();

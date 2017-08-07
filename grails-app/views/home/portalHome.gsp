@@ -150,7 +150,7 @@
                     <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.mi.header.tagline" /></p>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                    <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader3", default:"ibdFrontHeader3.png"))}" style="width:700px; margin-top: 50px; margin-left: -100px;" />
+                    <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader4", default:"ibdFrontHeader4.png"))}" style="width:700px; margin-top: 50px; margin-left: -100px;" />
                     <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.ibd.header.tagline" /></p>
                 </g:elseif>
                 <g:else>
@@ -279,7 +279,7 @@
                     <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.mi.about.the.data.text" />
                 </g:elseif>
-                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                     <div class="col-md-12" style="padding-top:40px;">
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>

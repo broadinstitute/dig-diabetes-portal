@@ -33,9 +33,15 @@ var mpgSoftware = mpgSoftware || {};
                 var allVariants = _.flatten([{}, data.variants]);
                 var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                 _.forEach(flattendVariants.sort(function (a, b) {return a.POS - b.POS;}), function (v){
-                    //var v = _.merge.apply(_,oneVariant);
+                    var posteriorProbability = "";
+                    _.forEach(v.POSTERIOR_PROBABILITY, function (ppvalue){
+                        _.forEach(ppvalue,function (phenotype){
+                            posteriorProbability=phenotype;
+                        })
+                    });
+                    v['extractedPOSTERIOR_PROBABILITY'] = posteriorProbability;
                     if (typeof v.VAR_ID !== 'undefined') {
-                        renderData.variants.push({name:v.VAR_ID});
+                        renderData.variants.push({name:v.VAR_ID, details:v});
                     }
                     if (typeof v.MOST_DEL_SCORE !== 'undefined') {
                         if ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)){
@@ -155,22 +161,39 @@ var mpgSoftware = mpgSoftware || {};
                     }, function(e) {
                         console.log("My ajax failed");
                     });
-
-                    // $('.credibleSetTableGoesHere td.tissueTable').popover({
-                    //     html : true,
-                    //     title: function() {
-                    //         //return $(this).parent().find('.head').html();
-                    //         console.log('title');
-                    //         return "foo";
-                    //     },
-                    //     content: function() {
-                    //         //return $(this).parent().find('.content').html();
-                    //         return "fii";
-                    //     },
-                    //     container: 'body',
-                    //     placement: 'bottom',
-                    //     trigger: 'hover'
-                    // });
+                    $('#toggleVarianceTableLink').click();
+                    $('.credibleSetTableGoesHere td.tissueTable').popover({
+                        html : true,
+                        title: function() {
+                            //return $(this).parent().find('.head').html();
+                            console.log('title');
+                            return "foo";
+                        },
+                        content: function() {
+                            //return $(this).parent().find('.content').html();
+                            return "fii";
+                        },
+                        container: 'body',
+                        placement: 'bottom',
+                        trigger: 'hover'
+                    });
+                    $('.credibleSetTableGoesHere th.niceHeaders').popover({
+                        html : true,
+                        title: function() {
+                            var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"/"+$(this).attr('defeffa');
+                            return var_id;
+                        },
+                        content: function() {
+                            return  "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
+                                    "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
+                                    "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
+                                    $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\")' href='#'>"+
+                                    "Tissues with overlapping enhancer regions</a></div>";
+                        },
+                        container: 'body',
+                        placement: 'right',
+                        trigger: 'click'
+                    });
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {

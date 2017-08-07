@@ -363,7 +363,7 @@
                                     </div>
                                 </div>
                                 <div class="credibleSetTableGoesHere"></div>
-                                <div id="allVariantsLocation"></div>
+                                <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
                         </div>
                     </div>
@@ -418,13 +418,15 @@
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <div class='dataTable'>
 
-<table class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 20px">
+<table class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
         <tr>
             <th></th>
             <th></th>
             {{#variants}}
-                <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId('{{name}}')">
+                <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId('{{name}}')"
+                defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}" postprob="{{details.extractedPOSTERIOR_PROBABILITY}}">
+
                     {{name}}
                 </th>
             {{/variants}}
@@ -488,5 +490,7 @@
     </tbody>
 </table>
 </div>
+<a id="toggleVarianceTableLink" href="#allVariantsLocation"  data-toggle="collapse">Toggle variants table</a>
+
 </script>
 

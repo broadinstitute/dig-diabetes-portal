@@ -554,6 +554,15 @@ var mpgSoftware = mpgSoftware || {};
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
+                var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
+                //var tissueTracks = _.filter(lzMyThis.getDataLayer().parent_plot.panels,function(v,k){return (k.indexOf('intervals')===0)});
+                // _.forEach(tissueTracks, function (panel){
+                //     panel.dashboard.hide(true);
+                //     d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
+                //     d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
+                //     return panel.parent.removePanel(panel.id);
+                // });
+                // LocusZoom.getToolTipData(myThis).deselect();
                 replaceTissuesWithOverlappingEnhancers(variantParts[1], variantParts[0]);
             }
         };
