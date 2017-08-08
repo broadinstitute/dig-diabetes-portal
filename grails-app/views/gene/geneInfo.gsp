@@ -102,6 +102,10 @@
                 <div style="text-align: right;">
                     <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
                 </div></g:if>
+                <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                    <div style="text-align: right;">
+                        <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                    </div></g:elseif>
     </div>
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
