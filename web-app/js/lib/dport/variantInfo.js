@@ -129,7 +129,7 @@ var mpgSoftware = mpgSoftware || {};
         };
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
-                                      geneLocusZoomUrl,
+                                      locusZoomReadableDatasetName,geneLocusZoomUrl,
                                       variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
@@ -173,7 +173,7 @@ var mpgSoftware = mpgSoftware || {};
                 functionalTrack:null,
                 defaultTissues:null,
                 defaultTissuesDescriptions:null,
-                datasetReadableName:null,
+                datasetReadableName:locusZoomReadableDatasetName,
                 colorBy:1,
                 positionBy:1,
                 getLocusZoomFilledPlotUrl:'junk',
