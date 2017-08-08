@@ -105,10 +105,10 @@ td.tissueTable.Weak_enhancer{
 
                 </div>
             </div>
-
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
             <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
 Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
-            </div>
+            </div></g:if>
             <div class="col-xs-2">
 
             </div>
