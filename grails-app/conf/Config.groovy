@@ -166,7 +166,7 @@ toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 
 // this will be your default
-defaultRestServer = digAWSKBV2prodServer
+defaultRestServer = digAWS02KBV2prodServer
 
  getRestServerList = [
          digdev01Server,
@@ -544,7 +544,7 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
                                    "mi" : ["SkeletalMuscle"],
                                    "ibd" : ["ColonicMucosa","DuodenumMucosa","RectalMucosa","StomachSmoothMuscle","RectalSmoothMuscle"]]
-portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", or "ibd"
+portal.type.override = "stroke"     // options are "t2d", "stroke", "mi", or "ibd"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
