@@ -144,8 +144,12 @@ modules = {
         resource url: 'images/ajaxLoadingAnimation.gif'
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
-        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
+//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
+//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
+////        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.css'
+//        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.js'
+        resource url: 'css/igv/igv-1.0.5.css'
+        resource url: 'js/igv/igv-1.0.5.js'
 
     }
     bootstrapMultiselect {
@@ -188,8 +192,14 @@ modules = {
     igvNarrow {  // IGV on a page with core
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
 
-        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.7.css'
-        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.7.js'
+        resource url: 'css/igv/igv-1.0.5.css'
+        resource url: 'js/igv/igv-1.0.5.js'
+//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.7.css'
+//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.7.js'
+//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.css'
+//        resource url: 'https://igv.org/web/release/1.0.5/igv-1.0.5.js'
+//        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.css'
+//        resource url: 'https://igv.org/web/release/1.0.9/igv-1.0.9.js'
     }
     sigma {  // sigma site
         resource url: 'css/dport/sigma.css'
