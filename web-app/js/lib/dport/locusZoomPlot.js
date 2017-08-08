@@ -327,16 +327,16 @@ var mpgSoftware = mpgSoftware || {};
 
             var yAxisScale1;
             var yAxisScale2;
+            var yAxisLabel = "";
             if (positionBy ===1){
                 yAxisScale1 = phenotype + ":pvalue|scinotation";
                 yAxisScale2 = phenotype + ":pvalue|neglog10";
+                yAxisLabel = "p-value";
             }
             if (positionBy === 2){
                 yAxisScale1 = phenotype + ":pvalue|scinotation";
                 yAxisScale2 = phenotype + ":pvalue";
-
-                // yAxisScale1 = phenotype + ":analysis";
-                // yAxisScale2 = phenotype + ":analysis|unchanged";
+                yAxisLabel = 'posterior probability';
             }
 
             var addendumToName = '';
@@ -349,7 +349,7 @@ var mpgSoftware = mpgSoftware || {};
                 namespace: { assoc: phenotype }
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
-            panel_layout.axes.y1.label = 'posterior probability';
+            panel_layout.axes.y1.label = yAxisLabel;
             panel_layout.y_index = -1;
             panel_layout.height = 270;
             panel_layout.data_layers[2].fields = [phenotype + ":id",
