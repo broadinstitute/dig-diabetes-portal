@@ -303,6 +303,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var buildPanelLayout = function (colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoLink,lzParameters){
+            var pageVars = getPageVars(currentLzPlotKey);
             var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
                 + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
                 + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
@@ -312,7 +313,13 @@ var mpgSoftware = mpgSoftware || {};
             }
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this);\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.expandedView(this);\" style=\"cursor: pointer;\">Expanded view</a><br>";
-            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
+            if (typeof pageVars.excludeLdIndexVariantReset !== 'undefined'){
+                if (pageVars.excludeLdIndexVariantReset === false){
+                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
+                }
+            } else {
+                toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
+            }
 
 
 

@@ -425,7 +425,8 @@
             <th></th>
             {{#variants}}
                 <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId('{{name}}')"
-                defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}" postprob="{{details.extractedPOSTERIOR_PROBABILITY}}">
+                defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
+                postprob="{{details.extractedPOSTERIOR_PROBABILITY}}"  data-toggle="popover">
 
                     {{name}}
                 </th>

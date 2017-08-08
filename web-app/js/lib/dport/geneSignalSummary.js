@@ -1185,6 +1185,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCommon;
             $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
+            renderData.staticDataExists = false;
+            renderData.static = [];
             $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         }
 
@@ -1267,6 +1269,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 datasetReadableName:datasetReadableName,
                 colorBy:1,
                 positionBy:1,
+                excludeLdIndexVariantReset: false,
+                suppressAlternatePhenotypeChooser: false,
                 getLocusZoomFilledPlotUrl:additionalParameters.getLocusZoomFilledPlotUrl,
                 geneGetLZ:additionalParameters.getLocusZoomUrl,
                 variantInfoUrl:additionalParameters.variantInfoUrl,
@@ -1278,6 +1282,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             lzParm.domId1 = '#lz-'+additionalParameters.lzCredSet;
             lzParm.colorBy = 2; // category
             lzParm.positionBy = 2; // posterior p
+            lzParm.excludeLdIndexVariantReset = true;
+            lzParm.suppressAlternatePhenotypeChooser = true;
             lzParm.defaultTissues = undefined;
             lzParm.phenoPropertyName='POSTERIOR_PROBABILITY';
             lzParm.sampleGroupsWithCredibleSetNames=data.sampleGroupsWithCredibleSetNames;

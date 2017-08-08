@@ -191,8 +191,8 @@ var mpgSoftware = mpgSoftware || {};
                                     "Tissues with overlapping enhancer regions</a></div>";
                         },
                         container: 'body',
-                        placement: 'right',
-                        trigger: 'click'
+                        placement: 'left',
+                        trigger: 'click focus'
                     });
                 }
             );
