@@ -106,6 +106,7 @@
 
             <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
 <g:if test="${g.portalTypeString()?.equals('t2d')}"><p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.tutorial"/></p></g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p style="margin-bottom: 30px;"><g:message code="variantSearch.stroke.workflow.header.tutorial"/></p></g:elseif>
 
             <!-- tabs -->
             <ul class="nav nav-tabs" role="tablist">
