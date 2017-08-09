@@ -64,7 +64,7 @@
 
 
 
-<h4>Accessing METASTROKE 2012 data in the Cerebrovascular Disease Knowledge Portal</h4>
+<h4>Accessing METASTROKE 2016 data in the Cerebrovascular Disease Knowledge Portal</h4>
 
 <p><g:message code="informational.data.accessing.METASTROKE_2012"></g:message></p>
 </div>
