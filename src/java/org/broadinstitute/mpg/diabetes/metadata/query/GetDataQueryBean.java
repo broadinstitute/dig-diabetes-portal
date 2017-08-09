@@ -22,6 +22,7 @@ public class GetDataQueryBean implements GetDataQuery {
     private List<QueryFilter> orderByList = new ArrayList<QueryFilter>();
     String passback = "abc123";
     String entity = "variant";
+    String resultFormat = "\"verbose\"";
     // default pageStart/pageSize to -1, to signify to the KB
     // that there is no setting. If they are set, then the limit is
     // ignored. In practice, the limit is used more than the pageStart/pageSize
@@ -85,6 +86,10 @@ public class GetDataQueryBean implements GetDataQuery {
         this.passback = passback;
     }
 
+    public void setResultFormat(String resultFormat) {
+        this.resultFormat = resultFormat;
+    }
+
     public void setEntity(String entity) {
         this.entity = entity;
     }
@@ -103,6 +108,10 @@ public class GetDataQueryBean implements GetDataQuery {
 
     public String getPassback() {
         return passback;
+    }
+
+    public String getResultFormat() {
+        return resultFormat;
     }
 
     public String getEntity() {
