@@ -116,6 +116,12 @@
             $(".media").find("iframe").attr("src", "${links.GenePageGuide}");
 
         });
+
+        $("#CDKPGenePageGuidePdf").click(function () {
+            $(".media").attr("href", "${links.CDKPGenePageGuide}");
+            $(".media").find("iframe").attr("src", "${links.CDKPGenePageGuide}");
+
+        });
     });
 
     function setPdfViewer() {
@@ -137,6 +143,8 @@
         <ul class="tutorial">
             <li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
                 code="portal.introTutorial.title"/></a></li>
+            <li><a id="CDKPGenePageGuidePdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.GenePageGuide.title"/></a></li>
             <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
                     code="portal.variantFinderTutorial.title"/></a></li>
             %{--<li><a id="GAITPdf" class="btn btn-default btn-sm"><g:message--}%
