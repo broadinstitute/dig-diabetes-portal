@@ -606,7 +606,7 @@ class WidgetService {
         }
 
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "verbose");
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -642,23 +642,103 @@ class WidgetService {
             variantList = knowledgeBaseResultParser.parseResult();
         }
         log.info("Got LZ variant result list size of: " + variantList?.size());
-        // failed attempt to fake a record and to thereby keep LZ from creating a big ugly error message
-//        else {
-//            VariantBean variantBean = new VariantBean()
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME),"1"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE),"A"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE),"1"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION),"1"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE),"T"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID),"ABC"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_root_ExChip_82k_mdv10_82kFGP_VALUE"),"0.1"))
-//            variantList = [variantBean]
-//        }
-
 
         // return
         return variantList;
     }
+
+
+
+
+
+    public String getFlatDataForLocusZoom(   String chromosome,
+                                                                                                            int startPosition,
+                                                                                                            int endPosition,
+                                                                                                            String dataset,
+                                                                                                            String phenotype,
+                                                                                                            String propertyName,
+                                                                                                            String dataType,
+                                                                                                            List<String> covariateVariants ) throws PortalException {
+        // local variables
+        String jsonResultString, jsonGetDataString;
+        LocusZoomJsonBuilder locusZoomJsonBuilder = null;
+        KnowledgeBaseResultParser knowledgeBaseResultParser;
+        List<Covariate> covariateList = null;
+
+        // build the LZ json builder
+        // TODO - DIGKB-135: add way to programmatically determine Hail dataset
+        locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName );
+
+
+        // adding covariates for variant
+        if (covariateVariants?.size() > 0) {
+            covariateList = locusZoomJsonBuilder.parseLzVariants(covariateVariants);
+        }
+
+        //
+        //  Let's impose some limitations to try to get LZ not to fold
+        //
+        int maximumNumberOfPointsToRetrieve = 1000
+        if (metaDataService.portalTypeFromSession=='t2d') {
+            maximumNumberOfPointsToRetrieve = 2000
+        } else if (metaDataService.portalTypeFromSession=='stroke') {
+            maximumNumberOfPointsToRetrieve = 500
+        }
+
+        // get json getData query string
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "flat");
+
+
+            //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
+        log.info("Got LZ static request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
+        jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        JSONObject jsonObject =  new JsonSlurper().parseText(jsonResultString)
+        jsonObject.lastPage = null
+        JSONObject dataJSONObject = jsonObject["data"] as JSONObject
+        List<String> dataFields = dataJSONObject.names() as List
+        int numberOfElements = 0
+        for (String dataField in dataFields){
+            if (dataField == "metadata_rootPOS" ){
+                dataJSONObject.position = dataJSONObject[dataField] as JSONArray
+                numberOfElements = (dataJSONObject[dataField] as List).size()
+                dataJSONObject.remove(dataField);
+            } else if (dataField == "metadata_rootCHROM" ){
+                dataJSONObject.chr = dataJSONObject[dataField] as JSONArray
+                dataJSONObject.remove(dataField);
+            } else if (dataField == "metadata_rootVAR_ID" ){
+                dataJSONObject.id = dataJSONObject[dataField] as JSONArray
+                dataJSONObject.remove(dataField);
+            } else if (dataField == "metadata_rootReference_Allele" ){
+                dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                dataJSONObject.remove(dataField);
+            } else if (dataField == "metadata_rootConsequence" ){
+                dataJSONObject.remove(dataField);
+            } else if (dataField == "metadata_rootEffect_Allele" ){
+                dataJSONObject.remove(dataField);
+            } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
+                dataJSONObject.remove(dataField);
+            } else {
+                dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+                dataJSONObject.remove(dataField);
+            }
+        }
+        JSONArray emptyArrays = new JSONArray()
+        for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
+        dataJSONObject.scoreTestStat = emptyArrays
+        dataJSONObject.analysis = emptyArrays
+        dataJSONObject.refAlleleFreq = emptyArrays
+
+        jsonObject.remove("data")
+        jsonObject.data = dataJSONObject
+
+
+        // return
+        return jsonObject.toString();
+    }
+
+
+
+
 
 
 
@@ -668,7 +748,7 @@ class WidgetService {
 
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
 
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,2000);
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,2000, "verbose");
 
         JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
@@ -713,30 +793,31 @@ class WidgetService {
         // get the query result and translate to a json string
         try {
             // get the variant list
-            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
+            if (dataType=='static') {
+                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
+            } else { // dynamic data are still processed the old way, whereas static data will use the new flat format result
+                variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 
-            // TODO: DIGKB-135: Figure out a way to pull the Hail dataset programmatically, not hard code
-            String locusZoomDataset = metaDataService?.getDynamicLocusZoomDataset();
+                // TODO: DIGKB-135: Figure out a way to pull the Hail dataset programmatically, not hard code
+                String locusZoomDataset = metaDataService?.getDynamicLocusZoomDataset();
 
-            //
-            if (dataType=='static'){
-                knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator( dataset, phenotype, propertyName );
-            } else {
+                //
                 if (metaDataService.portalTypeFromSession=='t2d') {
                     knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(locusZoomDataset, "T2D", "P_FIRTH_FE_IV" );
                 } else if (metaDataService.portalTypeFromSession=='stroke') {
                     knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(locusZoomDataset, phenotype, "P_FIRTH_FE_IV" );
                 }
+
+                jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
+
+                // translate to json string
+                if (jsonResultObject != null) {
+                    jsonResultString = jsonResultObject.toString();
+                } else {
+                    throw PortalException("got null json object for LZ search");
+                }
             }
 
-            jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
-
-            // translate to json string
-            if (jsonResultObject != null) {
-                jsonResultString = jsonResultObject.toString();
-            } else {
-                throw PortalException("got null json object for LZ search");
-            }
 
         } catch (PortalException exception) {
             log.error("Got LZ getData query error: " + exception.getMessage());
