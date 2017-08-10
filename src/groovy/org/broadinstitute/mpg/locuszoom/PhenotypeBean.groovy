@@ -13,6 +13,7 @@ public class PhenotypeBean {
     String dataSet
     String dataSetReadable
     String dataType
+    List listOfMeanings
     Boolean defaultSelected
     Boolean suitableForDefaultDisplay
 }

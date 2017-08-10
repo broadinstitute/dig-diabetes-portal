@@ -2,6 +2,8 @@ package org.broadinstitute.mpg.diabetes.metadata;
 
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 
+import java.util.List;
+
 /**
  * Interface to be implemented by the classes representing the metadata properties
  *
@@ -30,6 +32,12 @@ public interface Property extends DataSet {
      * @return
      */
     public boolean hasMeaning(String meaningValue);
+
+    /***
+     * get all meanings, unordered
+     * @return
+     */
+    public List<String> getMeanings();
 
     /**
      * returns the property query string in json format

@@ -269,30 +269,6 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-                %{--var setToRecall = {chromosome: "${geneChromosome}",--}%
-                    %{--start: ${geneExtentBegin},--}%
-                    %{--end: ${geneExtentEnd},--}%
-                    %{--phenotype: 'T2D',--}%
-                    %{--propertyName: 'P_VALUE',--}%
-                    %{--dataSet: 'GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27',--}%
-                    %{--fillCredibleSetTableUrl:"${g.createLink(controller: 'RegionInfo', action: 'fillCredibleSetTable')}"--}%
-                %{--};--}%
-                %{--mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall);--}%
-                %{--var identifiedGenes = "${identifiedGenes}";--}%
-                %{--var drivingVariables = {};--}%
-                %{--drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');--}%
-                %{--drivingVariables["namedGeneArray"] = [];--}%
-                %{--drivingVariables["supressTitle"] = [1];--}%
-                %{--if ((drivingVariables["allGenes"].length>0)&&--}%
-                    %{--(drivingVariables["allGenes"][0].length>0)) {--}%
-                    %{--drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {--}%
-                        %{--return {'name': o}--}%
-                    %{--});--}%
-                %{--}--}%
-                %{--$(".matchedGenesGoHere").empty().append(--}%
-                    %{--Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)--}%
-                %{--);--}%
-
             };
 
 

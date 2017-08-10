@@ -735,7 +735,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     }
 
 
-    var buildListOfInterestingPhenotypes = function (renderData,unacceptableDatasets) {
+    var buildListOfInterestingPhenotypes = function (renderData,unacceptableDatasets,sampleGroupsWithCredibleSetNames) {
         var listOfInterestingPhenotypes = [];
         _.forEach(renderData.variants, function (v) {
             var vvv=_.findIndex(unacceptableDatasets,function(o){return o===v['dataset']});
@@ -743,18 +743,18 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 var newSignalCategory = assessOneSignalsSignificance(v);
                 if (newSignalCategory > 0) {
                     var existingRecIndex = _.findIndex(listOfInterestingPhenotypes, {'phenotype': v['pheno']});
-                    if (existingRecIndex > -1) {
+                    if ((existingRecIndex > -1)) {
                         var existingRec = listOfInterestingPhenotypes[existingRecIndex];
                         if (existingRec['signalStrength'] < newSignalCategory) {
                             existingRec['signalStrength'] = newSignalCategory;
                         }
-                        if (existingRec['pValue'] > v['P_VALUEV']) {
+                        if ((existingRec['pValue'] > v['P_VALUEV'])&&(_.findIndex(sampleGroupsWithCredibleSetNames,function(o){return o===v['dataset']})===-1)) {
                             existingRec['pValue'] = v['P_VALUEV'];
                             existingRec['ds'] = v['dataset'];
                             existingRec['pname'] = v['pname'];
                             existingRec['dsr'] = v['dsr'];
                         }
-                    } else {
+                    } else if (_.findIndex(sampleGroupsWithCredibleSetNames,function(o){return o===v['dataset']})===-1) {
                         listOfInterestingPhenotypes.push({  'phenotype': v['pheno'],
                             'ds': v['dataset'],
                             'pname': v['pname'],
@@ -816,7 +816,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var acceptableDatasetObjs =_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==='false'});
         var acceptableDatasets = _.uniq(acceptableDatasetObjs.map(function(t){return t.dataset}));
         updateDisplayBasedOnSignificanceLevel(signalLevel,params);
-        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData,acceptableDatasets);
+        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData,acceptableDatasets,data.sampleGroupsWithCredibleSetNames);
         var overrideClickIndex = -1;
         var favoredPhenotype = params.favoredPhenotype;
         if (listOfInterestingPhenotypes.length > 0) {

@@ -460,7 +460,7 @@ class WidgetService {
 
 
 
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
+    private HashMap<String,HashMap> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
         List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
@@ -470,7 +470,7 @@ class WidgetService {
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
             Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
-            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name, meanings: property.meanings]
         }
         return holdingStructure
     }
@@ -794,7 +794,7 @@ class WidgetService {
         String portalType = this.metaDataService?.getPortalTypeFromSession();
 
 
-            HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
+            HashMap<String,HashMap> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
             if (metaDataService.portalTypeFromSession=='t2d') {
                 // KLUDGE ALERT add credible set by hand
@@ -802,14 +802,15 @@ class WidgetService {
                         dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", default: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27"),
                         propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
-                        suitableForDefaultDisplay: false ));
+                        suitableForDefaultDisplay: false,listOfMeanings:["CREDIBLE_SET_ID"] ));
             }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
-                HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
+                HashMap phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
                 beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
                         dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
                         propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime,
+                        suitableForDefaultDisplay: true, listOfMeanings:phenotypeDataSetCombo.meanings))
 
                 firstTime = false
             }
@@ -819,88 +820,88 @@ class WidgetService {
                 beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
                         propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: true, suitableForDefaultDisplay: true));
+                        defaultSelected: true, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
 
             } else if (metaDataService.portalTypeFromSession=='stroke') {
 
                 beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: true, suitableForDefaultDisplay: true));
+                        defaultSelected: true, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
                 beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+                        defaultSelected: false, suitableForDefaultDisplay: true, listOfMeanings:[]));
 
             }
 
 
         // return
-        beanList << new PhenotypeBean(key:"Adipose", name:"Adipose",description:"adipose tissue", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"AnteriorCaudate", name:"AnteriorCaudate",description:"brain anterior caudate", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"CD34-PB", name:"CD34-PB",description:"CD34-PB primary hematopoietic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"CingulateGyrus", name:"CingulateGyrus",description:"brain cingulate gyrus", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucos", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"DuodenumMucosa", name:"DuodenumMucosa",description:"duodenum mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"ES-HUES6", name:"ES-HUES6",description:"ES-HUES6 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"ES-HUES64", name:"ES-HUES64",description:"ES-HUES64 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"GM12878", name:"GM12878",description:"GM12878 lymphoblastoid cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"H1", name:"H1",description:"H1 cell line", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"hASC-t1", name:"hASC-t1",description:"hASC-t1 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"hASC-t2", name:"hASC-t2",description:"hASC-t2 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"hASC-t3", name:"hASC-t3",description:"hASC-t3 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"hASC-t4", name:"hASC-t4",description:"hASC-t4 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"HepG2", name:"HepG2",description:"HepG2 hepatocellular carcinoma cell line", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"HippocampusMiddle", name:"HippocampusMiddle",description:"brain hippocampus middle", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"HMEC", name:"HMEC",description:"HMEC mammary epithelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"HSMM", name:"HSMM",description:"HSMM skeletal muscle myoblast cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"Huvec", name:"Huvec",description:"HUVEC umbilical vein endothelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"InferiorTemporalLobe", name:"InferiorTemporalLobe",description:"brain inferior temporal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"Islets", name:"Islets",description:"pancreatic islets", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"K562", name:"K562",description:"K562 leukemia cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"Liver", name:"Liver",description:"liver", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"MidFrontalLobe", name:"MidFrontalLobe",description:"brain mid-frontal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"NHEK", name:"NHEK",description:"NHEK epidermal keratinocyte primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"NHLF", name:"NHLF",description:"NHLF lung fibroblast primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"RectalMucosa", name:"RectalMucosa",description:"rectal mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"RectalSmoothMuscle", name:"RectalSmoothMuscle",description:"rectal smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Adipose", name:"Adipose",description:"adipose tissue", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"AnteriorCaudate", name:"AnteriorCaudate",description:"brain anterior caudate", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"CD34-PB", name:"CD34-PB",description:"CD34-PB primary hematopoietic stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"CingulateGyrus", name:"CingulateGyrus",description:"brain cingulate gyrus", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucos", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"DuodenumMucosa", name:"DuodenumMucosa",description:"duodenum mucosa", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"ES-HUES6", name:"ES-HUES6",description:"ES-HUES6 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"ES-HUES64", name:"ES-HUES64",description:"ES-HUES64 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"GM12878", name:"GM12878",description:"GM12878 lymphoblastoid cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"H1", name:"H1",description:"H1 cell line", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"hASC-t1", name:"hASC-t1",description:"hASC-t1 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"hASC-t2", name:"hASC-t2",description:"hASC-t2 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"hASC-t3", name:"hASC-t3",description:"hASC-t3 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"hASC-t4", name:"hASC-t4",description:"hASC-t4 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"HepG2", name:"HepG2",description:"HepG2 hepatocellular carcinoma cell line", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"HippocampusMiddle", name:"HippocampusMiddle",description:"brain hippocampus middle", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"HMEC", name:"HMEC",description:"HMEC mammary epithelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"HSMM", name:"HSMM",description:"HSMM skeletal muscle myoblast cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"Huvec", name:"Huvec",description:"HUVEC umbilical vein endothelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"InferiorTemporalLobe", name:"InferiorTemporalLobe",description:"brain inferior temporal lobe", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"Islets", name:"Islets",description:"pancreatic islets", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"K562", name:"K562",description:"K562 leukemia cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"Liver", name:"Liver",description:"liver", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"MidFrontalLobe", name:"MidFrontalLobe",description:"brain mid-frontal lobe", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"NHEK", name:"NHEK",description:"NHEK epidermal keratinocyte primary cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"NHLF", name:"NHLF",description:"NHLF lung fibroblast primary cells", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"RectalMucosa", name:"RectalMucosa",description:"rectal mucosa", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"RectalSmoothMuscle", name:"RectalSmoothMuscle",description:"rectal smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
+        beanList << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true, listOfMeanings:["TISSUE"])
 
         return beanList
     }
