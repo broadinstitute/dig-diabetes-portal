@@ -22,7 +22,7 @@ class NewsFeedService {
             t2d   : '5010306206573083521',
             mi: '7857348124942584918',
             ibd: '7857348124942584918',
-            stroke: '7857348124942584918'
+            stroke: '7961982646849648720'
     ]
     // the last time the posts were successfully retrieved
     private JSONObject postsLastUpdatedAt = [
