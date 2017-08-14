@@ -45,24 +45,27 @@
 
                 switch(theLastPath){
                     case "":
+
+                        var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
+
                         if ($(".portal-front-banner").length){
                             $(".dk-logo-wrapper").css({"display":"none"});
                             setMenuTriangle(".home-btn");
+                            $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"solid 1px #ffffff"});
+                        } else {
+                            $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"none"});
                         }
-                        var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
-                        $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0"});
-
                         break;
 
                     case "portalhome":
                         $(".dk-logo-wrapper").css({"display":"none"});
                         var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
-                        $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0"})
+                        $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"solid 1px #ffffff"})
                         setMenuTriangle(".home-btn")
                         break;
 
                     case "variantsearchwf":
-                        setMenuTriangle(".variant-search-btn")
+                        setMenuTriangle(".variant-search-btn");
                         break;
 
                     case "data":
