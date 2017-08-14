@@ -955,7 +955,7 @@ class WidgetService {
         beanList << new PhenotypeBean(key:"AnteriorCaudate", name:"AnteriorCaudate",description:"brain anterior caudate", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"CD34-PB", name:"CD34-PB",description:"CD34-PB primary hematopoietic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"CingulateGyrus", name:"CingulateGyrus",description:"brain cingulate gyrus", dataType:"tissue", suitableForDefaultDisplay: true)
-        beanList << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucos", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"DuodenumMucosa", name:"DuodenumMucosa",description:"duodenum mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"ES-HUES6", name:"ES-HUES6",description:"ES-HUES6 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"ES-HUES64", name:"ES-HUES64",description:"ES-HUES64 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
