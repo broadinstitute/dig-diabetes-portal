@@ -361,17 +361,18 @@ var UTILS = {
             options.empty();
             var groupList = dataSetJson.dataset;
 
-            if ((typeof includeDefault !== 'undefined') &&
-                (includeDefault)){
-                options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
-            }
+            // if ((typeof includeDefault !== 'undefined') &&
+            //     (includeDefault)){
+            //     options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
+            // }
 
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
+            // to display
             var keys = Object.keys(groupList);
-            if (keys.indexOf("GLYCEMIC")>-1){
-                keys.splice(keys.indexOf("GLYCEMIC"), 1);
-                keys.unshift("GLYCEMIC");
+            if (keys.indexOf("ISCHEMIC STROKE")>-1){
+                keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
+                keys.unshift("ISCHEMIC STROKE");
             }
 
             // if the OTHER key is defined, then move it to the bottom of the list
