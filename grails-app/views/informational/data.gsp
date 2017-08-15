@@ -86,7 +86,12 @@
                         <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
                     </div>
                 </g:elseif>
-                <g:else></g:else>
+                <g:else>
+                    <div class="row">
+                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
+                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.stroke.title2" default="about the data"/></p>
+                    </div>
+                </g:else>
 
 
         <div class="row" style="margin-top: 10px">
