@@ -26,9 +26,23 @@
 
 
         <g:layoutHead/>
-    <g:renderT2dGenesSection>
-        <g:applyLayout name="analyticsT2dGenes"/>
-    </g:renderT2dGenesSection>
+
+
+
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsStrokePortal"/>
+            </g:renderT2dGenesSection>
+        </g:if>
+
+        <g:else>
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsT2dGenes"/>
+            </g:renderT2dGenesSection>
+        </g:else>
+
+
+
         <script>
             $(function () {
                 /*DK: find out if the user is viewing the front page*/
