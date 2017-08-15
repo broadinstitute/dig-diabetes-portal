@@ -149,8 +149,8 @@
                     code="portal.variantFinderTutorial.title"/></a></li>
             %{--<li><a id="GAITPdf" class="btn btn-default btn-sm"><g:message--}%
                     %{--code="portal.GAITguide.title"/></a></li>--}%
-            %{--<li><a id="VariantResultsPdf" class="btn btn-default btn-sm"><g:message--}%
-                    %{--code="portal.variantResultsTableGuide.title"/></a></li>--}%
+            <li><a id="VariantResultsPdf" class="btn btn-default btn-sm"><g:message
+                    code="portal.variantResultsTableGuide.title"/></a></li>
             %{--<li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message--}%
                     %{--code="portal.GeneticsGuide.title"/></a></li>--}%
             <li><a id="StrokePhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message
