@@ -933,7 +933,7 @@ class WidgetService {
                         defaultSelected: false, suitableForDefaultDisplay: true));
 
             } else if (metaDataService.portalTypeFromSession=='stroke') {
-
+/*
                 beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: true, suitableForDefaultDisplay: true));
@@ -946,7 +946,7 @@ class WidgetService {
                 beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-
+*/
             }
 
 
