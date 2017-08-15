@@ -51,7 +51,10 @@
             <tr>
 
                 <th>Dataset</th>
-                <th>Access</th>
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                   <th>Access</th>
+                </g:if>
+
                 <th>Samples</th>
                 <th>Ancestry</th>
                 <th>Data type</th>
