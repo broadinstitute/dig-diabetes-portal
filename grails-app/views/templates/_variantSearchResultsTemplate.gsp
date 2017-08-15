@@ -69,7 +69,7 @@
 </script>
 <script id="topOfVariantResultsPageTemplate" type="x-tmpl-mustache" style="display: none;">
     <div style="text-align: right;">
-        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Variant_results_table_guide" target="_blank">
+        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Variant_results_table_guide.pdf" target="_blank">
             <g:message code="variantSearch.results.helpText" />
         </a>
     </div>
