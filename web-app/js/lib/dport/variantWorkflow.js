@@ -49,8 +49,9 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         // called when page loads
-        var retrievePhenotypes = function () {
+        var retrievePhenotypes = function (portaltype) {
             var loading = $('#spinner').show();
+            var rememberportaltype = portaltype;
             $.ajax({
                 cache: false,
                 type: "post",
@@ -62,7 +63,7 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !== null )) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotype', true);
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotype', true, [], rememberportaltype);
                     }
                     loading.hide();
                 },
@@ -695,7 +696,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#phenotype').val(query.phenotype);
             mpgSoftware.variantWF.retrieveDatasets(query.phenotype, 'dependent', query);
         };
-        var respondToPhenotypeSelection = function () {
+        var respondToPhenotypeSelection = function (portaltype) {
             var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
 
             // phenotype is changed.  Before we get to the asynchronous parts let's wipe out the properties

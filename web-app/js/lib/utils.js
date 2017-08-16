@@ -352,7 +352,7 @@ var UTILS = {
         }
     },
     // phenotypesToOmit is an array of the phenotype keys that should not be included
-    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit) { // help text for each row
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,portaltype) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
@@ -369,11 +369,21 @@ var UTILS = {
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
             // to display
+            //"${g.portalTypeString()?.equals('t2d')}"
             var keys = Object.keys(groupList);
+            if(portaltype == "t2d"){
+                if (keys.indexOf("GLYCEMIC")>-1){
+                    keys.splice(keys.indexOf("GLYCEMIC"), 1);
+                    keys.unshift("GLYCEMIC");
+                }
+            }
+            else if (portaltype == "stroke"){
             if (keys.indexOf("ISCHEMIC STROKE")>-1){
                 keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
                 keys.unshift("ISCHEMIC STROKE");
             }
+        }
+
 
             // if the OTHER key is defined, then move it to the bottom of the list
             // currently, this should only appear on the variant search page, and will be going away soon
