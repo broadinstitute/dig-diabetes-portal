@@ -526,7 +526,13 @@ var mpgSoftware = mpgSoftware || {};
             var tooltipContents = lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML;
             var callingData = {};
             callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
-            callingData.CHROM = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            var chromosome;
+            if (_.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).indexOf(":")>-1) { // old LZ format for variant names
+              chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            } else {
+	      chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split("_")[0];
+            }
+            callingData.CHROM = chromosome;
             lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML  =  tooltipContents +
                 '<div id="chromatinStateDisplay"></div>';
             retrieveFunctionalData(callingData,buildExpandedDisplay,callingData);
@@ -549,8 +555,15 @@ var mpgSoftware = mpgSoftware || {};
             // callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
             // callingData.CHROM = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
             // retrieveFunctionalData(callingData,processEpigeneticData,callingData);
+            var chromosome;
+            if (_.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).indexOf(":")>-1) { // old LZ format for variant names
+              chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            } else {
+	      chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split("_")[0];
+            }
+
             replaceTissuesWithOverlappingEnhancers( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
-                                                    _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0] );
+                                                   chromosome );
         }
         var replaceTissuesWithOverlappingEnhancers = function(position, chromosome){
             var callingData = {};

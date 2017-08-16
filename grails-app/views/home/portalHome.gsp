@@ -266,14 +266,24 @@
             <g:if test="${!g.portalTypeString()?.equals('stroke')}">
             </g:if>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
+
                 <div class="col-md-12" style="padding-top:40px; font-size: 20px;">
                 <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                 <p><span  style="font-size: 20px;"><g:message code="portal.stroke.about.the.data.text" /></span>
-                    <hr /><a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
+                    <hr />
 
-                        <g:message code="portal.stroke.about.AHA.discovery"></g:message>
-                        <span style="display:block; width: 350px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
-                </g:if>
+
+                        <g:message code="portal.stroke.about.downloads"></g:message>
+                        <span style="display:block; width: 275px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.download.link"></g:message></span>
+
+
+                <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
+
+                <g:message code="portal.stroke.about.AHA.discovery"></g:message>
+                <span style="display:block; width: 350px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
+
+
+            </g:if>
 
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <div class="col-md-12" style="padding-top:40px;">
