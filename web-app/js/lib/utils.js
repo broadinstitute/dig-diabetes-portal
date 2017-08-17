@@ -368,25 +368,29 @@ var UTILS = {
 
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
-            // to display
-            //"${g.portalTypeString()?.equals('t2d')}"
             var keys = Object.keys(groupList);
             if(portaltype == "t2d"){
                 if (keys.indexOf("GLYCEMIC")>-1){
                     keys.splice(keys.indexOf("GLYCEMIC"), 1);
                     keys.unshift("GLYCEMIC");
                     $('#datasetDependent').prop( "disabled", false );
+                    var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
+                    mpgSoftware.variantWF.retrieveDatasets(phenotype, 'dependent');
+
                 }
-
-
             }
             else if (portaltype == "stroke"){
             if (keys.indexOf("ISCHEMIC STROKE")>-1){
                 keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
                 keys.unshift("ISCHEMIC STROKE");
+                $('#datasetDependent').prop( "disabled", false );
+                var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
+                mpgSoftware.variantWF.retrieveDatasets(phenotype, 'dependent');
+                // $("#datasetDependent").append($("<option></option>").val("1").html("CADISP 2015"));
+                // $("#datasetDependent").append($("<option></option>").val("2").html("METASTROKE 2016"));
 
             }
-                $('#datasetDependent').prop( "disabled", false );
+
         }
             else if (portaltype == "ibd"){
                 if (keys.indexOf("INFLAMMATORY BOWEL")>-1){
