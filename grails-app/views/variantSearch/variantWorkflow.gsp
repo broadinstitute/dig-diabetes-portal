@@ -136,7 +136,7 @@
 
                                     <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
                                         <select id="phenotype" class="form-control" disabled
-                                                onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')"></select>
+                                                onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')" onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')"></select>
                                     </div>
 
                                     <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">

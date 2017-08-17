@@ -383,9 +383,11 @@ var UTILS = {
             if (keys.indexOf("ISCHEMIC STROKE")>-1){
                 keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
                 keys.unshift("ISCHEMIC STROKE");
-                $('#datasetDependent').prop( "disabled", false );
-                var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
-                mpgSoftware.variantWF.retrieveDatasets(phenotype, 'dependent');
+                //$('#datasetDependent').prop( "disabled", false );
+                //$('#phenotype').click();
+                //var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
+
+                mpgSoftware.variantWF.retrieveDatasets("allstroke", 'dependent');
                 // $("#datasetDependent").append($("<option></option>").val("1").html("CADISP 2015"));
                 // $("#datasetDependent").append($("<option></option>").val("2").html("METASTROKE 2016"));
 
