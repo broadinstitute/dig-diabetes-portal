@@ -375,14 +375,34 @@ var UTILS = {
                 if (keys.indexOf("GLYCEMIC")>-1){
                     keys.splice(keys.indexOf("GLYCEMIC"), 1);
                     keys.unshift("GLYCEMIC");
+                    $('#datasetDependent').prop( "disabled", false );
                 }
+
+
             }
             else if (portaltype == "stroke"){
             if (keys.indexOf("ISCHEMIC STROKE")>-1){
                 keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
                 keys.unshift("ISCHEMIC STROKE");
+
             }
+                $('#datasetDependent').prop( "disabled", false );
         }
+            else if (portaltype == "ibd"){
+                if (keys.indexOf("INFLAMMATORY BOWEL")>-1){
+                    keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
+                    keys.unshift("INFLAMMATORY BOWEL");
+                }
+                $('#datasetDependent').prop( "disabled", false );
+
+            }
+            else if (portaltype == "mi"){
+                if (keys.indexOf("MYOCARDIAL INFARCTION")>-1){
+                    keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
+                    keys.unshift("INFLAMMATORY BOWEL");
+                }
+                $('#datasetDependent').prop( "disabled", false );
+            }
 
 
             // if the OTHER key is defined, then move it to the bottom of the list
