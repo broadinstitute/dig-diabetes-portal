@@ -164,7 +164,7 @@ federatedAwsProdKBV2Server = new ServerBean("Federated Prod Server", "http://ec2
 federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digAWSStrokerest02Server = new ServerBean("digAWSStrokerest02Server", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
+digAWSStrokerest02Server = new ServerBean("digawsdevnew", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
 
 
 // this will be your default
