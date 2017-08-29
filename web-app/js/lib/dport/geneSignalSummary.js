@@ -815,8 +815,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var signalLevel = assessSignalSignificance(renderData);
         var acceptableDatasetObjs =_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==='false'});
         var acceptableDatasets = _.uniq(acceptableDatasetObjs.map(function(t){return t.dataset}));
+        var unacceptableDatasets = data.sampleGroupsWithCredibleSetNames;
         updateDisplayBasedOnSignificanceLevel(signalLevel,params);
-        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData,acceptableDatasets);
+        var listOfInterestingPhenotypes = buildListOfInterestingPhenotypes(renderData,unacceptableDatasets);
         var overrideClickIndex = -1;
         var favoredPhenotype = params.favoredPhenotype;
         if (listOfInterestingPhenotypes.length > 0) {

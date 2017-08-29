@@ -145,11 +145,15 @@ var mpgSoftware = mpgSoftware || {};
                             var worthIncluding = false;
                             _.forEach(Object.keys(tissueGrid[tissueKey]).sort(function (a, b) {return parseInt(a) - parseInt(b);}),function(variantKey){
                                 var record = tissueGrid[tissueKey][variantKey];
-                                var elementName = record.element.substr(record.element.indexOf('_')+1);
-                                lineToAdd += ("<td class='tissueTable "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                                ", position:"+ record.START +", tissue:"+ record.source_trans +", state:"+ record.element_trans +"'></td>");
-                                if ((elementName.indexOf('enhancer')>-1)||(elementName.indexOf('TSS')>-1)){
-                                    worthIncluding = true;
+                                if ((typeof record.element !== 'undefined') && (record.element !== null)){
+                                    var elementName = record.element.substr(record.element.indexOf('_')+1);
+                                    lineToAdd += ("<td class='tissueTable "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                                        ", position:"+ record.START +", tissue:"+ record.source_trans +", state:"+ record.element_trans +"'></td>");
+                                    if ((elementName.indexOf('enhancer')>-1)||(elementName.indexOf('TSS')>-1)){
+                                        worthIncluding = true;
+                                    }
+                                } else {
+                                    console.log ('very strange');
                                 }
                             });
                             lineToAdd += '</tr>';

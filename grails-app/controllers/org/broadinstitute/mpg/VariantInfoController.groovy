@@ -307,7 +307,10 @@ class VariantInfoController {
         elementMapper["17_Weak_repressed_polycomb"] = [name:"Weak repressed polycomb",state_id:12]
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
-         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source )
+        String portalType = g.portalTypeString() as String
+        int assayId =  grailsApplication.config.portal.data.epigenetic.dataset.abbreviation.map[portalType] as int
+
+         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source, assayId )
 
         if (lzFormat){
             JSONObject root = new JSONObject()
@@ -318,23 +321,28 @@ class VariantInfoController {
             rootData["end"]=new JSONArray()
             rootData["id"]=new JSONArray()
             rootData["public_id"]=new JSONArray()
+            rootData["value"]=new JSONArray()
             rootData["state_id"]=new JSONArray()
             rootData["state_name"]=new JSONArray()
             rootData["strand"]=new JSONArray()
             JSONArray sorted = dataJsonObject.variants.sort{it["START"]}
-            for (Map pval in sorted){
-               // for (Map pval in dataJsonObject.variants){
-                String element = pval["element"]
-                LinkedHashMap map = elementMapper[element]
-                String elementTrans = g.message(code: "metadata." + element, default: element)
+            for (Map pval in sorted) {
                 rootData["chromosome"].push(pval["CHROM"])
                 rootData["start"].push(pval["START"])
                 rootData["end"].push(pval["STOP"])
                 rootData["id"].push(16)
+                rootData["value"].push(pval["VALUE"])
                 rootData["public_id"].push(null)
-                rootData["state_id"].push(map.state_id)
-                rootData["state_name"].push(map.name)
                 rootData["strand"].push(null)
+
+                // map the Parker chromatin state information by hand
+                String element = pval["element"]
+                LinkedHashMap map = elementMapper[element]
+                String elementTrans = g.message(code: "metadata." + element, default: element)
+
+                rootData["state_id"].push(map?.state_id ?: 3)
+                rootData["state_name"].push(map?.name ?: "3_Flanking_TSS")
+
             }
             root["data"] = rootData
             dataJsonObject = root

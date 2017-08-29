@@ -2084,7 +2084,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
-    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd, String source) {
+    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd, String source,int assayId) {
         int revisedPageStart = 0;
         int revisedPageEnd = 1000;
         if (pageStart > 0){revisedPageStart = pageStart}
@@ -2099,15 +2099,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (source){
             restApiParameterList << "\"source\": \"${source}\""
         }
+        if ((assayId) && (assayId>-1)){
+            restApiParameterList << "\"assay_id\": ${assayId}"
+        }
         String specifyRequest = "{${restApiParameterList.join(",")}}"
-//
-//        String specifyRequest = """{"passback":"abc123",
-// "page_start": ${revisedPageStart},
-// "page_size": ${revisedPageEnd},
-// "chrom": "${chromosome}",
-// "startPos": ${startPosition},
-// "endPos": ${endPosition}
-//}""".toString()
         return postRestCall(specifyRequest, GET_REGION_URL)
     }
 
