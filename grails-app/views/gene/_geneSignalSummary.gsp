@@ -222,9 +222,10 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
 
             var initializeSignalSummarySection = function(){
                 var drivingVariables = {
-                    geneName: '<%=geneName%>',
-                    sampleDataSet: "<%=sampleDataSet%>",
-                    burdenDataSet: "<%=burdenDataSet%>",
+                    portalTypeString:"${g.portalTypeString()}",
+                    geneName: '${geneName}',
+                    sampleDataSet: "${sampleDataSet}",
+                    burdenDataSet: "${burdenDataSet}",
                     geneChromosome: '${geneChromosome}',
                     geneExtentBegin: ${geneExtentBegin},
                     geneExtentEnd: ${geneExtentEnd},

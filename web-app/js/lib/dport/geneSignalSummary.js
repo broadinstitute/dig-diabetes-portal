@@ -1254,6 +1254,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var defaultTissues = additionalParameters.defaultTissues;
             var defaultTissuesDescriptions = additionalParameters.defaultTissuesDescriptions;
             var lzParm = {
+                portalTypeString:additionalParameters.portalTypeString,
                 page:'geneInfo',
                 variantId:null,
                 positionInfo:positioningInformation,
@@ -1280,16 +1281,46 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             };
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
-            lzParm.domId1 = '#lz-'+additionalParameters.lzCredSet;
-            lzParm.colorBy = 2; // category
-            lzParm.positionBy = 2; // posterior p
-            lzParm.excludeLdIndexVariantReset = true;
-            lzParm.suppressAlternatePhenotypeChooser = true;
-            lzParm.defaultTissues = undefined;
-            lzParm.phenoPropertyName='POSTERIOR_PROBABILITY';
-            lzParm.sampleGroupsWithCredibleSetNames=data.sampleGroupsWithCredibleSetNames;
+            var lzParmCred = {
+                portalTypeString:additionalParameters.portalTypeString,
+                page:'geneInfo',
+                variantId:null,
+                positionInfo:positioningInformation,
+                domId1:'#lz-'+additionalParameters.lzCredSet,
+                collapsingDom:"#collapseExample",
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:pName,
+                phenoPropertyName:'POSTERIOR_PROBABILITY',
+                locusZoomDataset:datasetName,
+                pageInitialization:!mpgSoftware.locusZoom.plotAlreadyExists(),
+                functionalTrack:{},
+                defaultTissues:undefined,
+                defaultTissuesDescriptions:defaultTissuesDescriptions,
+                datasetReadableName:datasetReadableName,
+                colorBy:2,
+                positionBy:2,
+                excludeLdIndexVariantReset: true,
+                suppressAlternatePhenotypeChooser: true,
+                getLocusZoomFilledPlotUrl:additionalParameters.getLocusZoomFilledPlotUrl,
+                geneGetLZ:additionalParameters.getLocusZoomUrl,
+                variantInfoUrl:additionalParameters.variantInfoUrl,
+                makeDynamic:additionalParameters.firstStaticPropertyName,
+                retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
+                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
+            };
+
+
+
+            // lzParm.domId1 = '#lz-'+additionalParameters.lzCredSet;
+            // lzParm.colorBy = 2; // category
+            // lzParm.positionBy = 2; // posterior p
+            // lzParm.excludeLdIndexVariantReset = true;
+            // lzParm.suppressAlternatePhenotypeChooser = true;
+            // lzParm.defaultTissues = undefined;
+            // lzParm.phenoPropertyName='POSTERIOR_PROBABILITY';
+            //lzParm.sampleGroupsWithCredibleSetNames=data.sampleGroupsWithCredibleSetNames;
             if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
-                mpgSoftware.locusZoom.initializeLZPage(lzParm);
+                mpgSoftware.locusZoom.initializeLZPage(lzParmCred);
             }
 
 

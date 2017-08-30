@@ -614,11 +614,14 @@ class GeneController {
         try {
             startInteger = Integer.parseInt(startString);
             endInteger = Integer.parseInt(endString);
-            String callingJson = """{"chr":"${chromosome}", "start":${startString},"stop":${endString},"page_size":5000}""".toString()
+            String callingJson = """{"chr":"chr${chromosome}",
+                                     "start":${startString},
+                                     "end":${endString},
+                                     "bigwigUrl":"http://egg2.wustl.edu/roadmap/data/byFileType/signal/consolidated/macs2signal/foldChange/E003-H3K27ac.fc.signal.bigwig"}""".toString()
 
             if (chromosome != null) {
-                returnJsonVector = epigenomeService.getVectorDataRestCallResults(callingJson);
-                resultLZJson = epigenomeService.tranlsateVector(returnJsonVector);
+                returnJsonVector = epigenomeService.getBigWigDataRestCall(callingJson)
+                resultLZJson= returnJsonVector
 
             } else {
                 jsonReturn = errorJson;
@@ -627,7 +630,7 @@ class GeneController {
             // log
             log.info("got LZ result: " + jsonReturn);
 
-            // log end
+            // log endin
             Date endTime = new Date();
             log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
 

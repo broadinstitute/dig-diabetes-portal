@@ -61,6 +61,7 @@ class RestServerService {
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
     private String GET_REGION_URL = "getRegion"
     private String GET_VECTOR_URL = "getVectorData"
+    private String GET_BIG_WIG_DATA = "getBigWigData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -662,6 +663,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject postVectorDataRestCall(String jsonString) {
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_VECTOR_URL, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postBigWigDataRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_BIG_WIG_DATA, currentRestServer() );
         return tempObject;
     }
 

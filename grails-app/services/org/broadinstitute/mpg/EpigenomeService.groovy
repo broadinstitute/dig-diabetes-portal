@@ -54,5 +54,9 @@ class EpigenomeService {
         JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
         return VectorDataJson;
     }
+    public JSONObject getBigWigDataRestCall(String vectorDataJsonPayloadString) {
+        JSONObject VectorDataJson = this.restServerService.postBigWigDataRestCall(vectorDataJsonPayloadString);
+        return VectorDataJson;
+    }
 
 }

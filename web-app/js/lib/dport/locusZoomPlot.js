@@ -62,6 +62,51 @@ var mpgSoftware = mpgSoftware || {};
             }
         }
 
+// Toggle Split Tracks
+        LocusZoom.Dashboard.Components.add("toggle_detail_tracks", function(layout){
+            LocusZoom.Dashboard.Component.apply(this, arguments);
+            if (!layout.data_layer_id){ layout.data_layer_id = "intervals"; }
+            if (!this.parent_panel.data_layers[layout.data_layer_id]){
+                throw ("Dashboard toggle split tracks component missing valid data layer ID");
+            }
+            this.update = function(){
+                var data_layer = this.parent_panel.data_layers[layout.data_layer_id];
+                var text = data_layer.layout.split_tracks ? "Hide details" : "Show details";
+                if (this.button){
+                    this.button.setText(text);
+                    this.button.show();
+                    this.parent.position();
+                    return this;
+                } else {
+                    this.button = new LocusZoom.Dashboard.Component.Button(this)
+                        .setColor(layout.color).setText(text)
+                        .setTitle("Toggle whether or not tracks are split apart or merged together")
+                        .setOnclick(function(){
+                            //alert('display detailed tracks');
+                            var pageVars = getPageVars('#'+this.parent_plot.id);
+                            if ((typeof pageVars.getLocusZoomFilledPlotUrl !== 'undefined') &&
+                                (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
+                                addLZTissueChromatinAccessibility({
+                                    tissueCode: this.parent_panel.title.text(),
+                                    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                                    getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
+                                    phenoTypeName:pageVars.phenoTypeName
+                                },pageVars.domId1,pageVars);
+                            }
+
+                            // data_layer.toggleSplitTracks();
+                            // if (this.scale_timeout){ clearTimeout(this.scale_timeout); }
+                            // var timeout = data_layer.layout.transition ? +data_layer.layout.transition.duration || 0 : 0;
+                            // this.scale_timeout = setTimeout(function(){
+                            //     this.parent_panel.scaleHeightToData();
+                            //     this.parent_plot.positionPanels();
+                            // }.bind(this), timeout);
+                             this.update();
+                        }.bind(this));
+                    return this.update();
+                }
+            };
+        });
 
 
         var customIntervalsDataLayer = function (layerName){
@@ -171,6 +216,45 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
+
+        var customIbdIntervalsPanel = function (layerName){
+            return {   id: layerName,
+                width: 1000,
+                height: 50,
+                min_width: 500,
+                min_height: 50,
+                margin: { top: 5, right: 150, bottom: 5, left: 50 },
+                dashboard: (function(){
+                    //var l = standardDashBoadWithoutMove();
+                    var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
+                    l.components.push({
+                        type: "toggle_detail_tracks",
+                        data_layer_id: layerName,
+                        position: "right"
+                    });
+                    return l;
+                })(),
+                axes: {},
+                interaction: {
+                    drag_background_to_pan: true,
+                    scroll_to_zoom: true,
+                    x_linked: true
+                },
+                legend: {
+                    hidden: true,
+                    orientation: "horizontal",
+                    origin: { x: 50, y: 0 },
+                    pad_from_bottom: 5
+                },
+                data_layers: [
+                    customIntervalsDataLayer(layerName)
+                ]
+            }
+        };
+
+
+
+
         var customCurveDataLayer = function (layerName){
             var stateIdSpec = layerName+":state_id";
             var developingStructure = {
@@ -196,6 +280,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var customCurvePanel = function (layerName){
+            var accessorName = layerName.split(":")[0];
            return { id: layerName,
             width: 800,
             height: 225,
@@ -238,7 +323,7 @@ var mpgSoftware = mpgSoftware || {};
                 x_linked: true
             },
             data_layers: [
-                customCurveDataLayer('accessibility-tissue')
+                customCurveDataLayer(accessorName)
             ]
         }
         };
@@ -738,14 +823,29 @@ var mpgSoftware = mpgSoftware || {};
         var addIntervalTrack = function(locusZoomVar,tissueName,tissueId,intervalPanelName){
            // var intervalPanelName = "intervals-"+tissueId+"-"+locusZoomVar.id;
             // we can't use the standard interval panel, but we can derive our own
-            var intervalPanel = customIntervalsPanel(intervalPanelName);
-            intervalPanel.dashboard.components.push({
-                type: "menu",
-                color: "yellow",
-                position: "right",
-                button_html: "Track Info",
-                menu_html: "<strong>"+tissueName+" ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
-            });
+            var pageVars = getPageVars(currentLzPlotKey);
+            var intervalPanel;
+            if (pageVars.portalTypeString=== 'ibd'){
+                intervalPanel =  customIbdIntervalsPanel(intervalPanelName);
+                // intervalPanel.dashboard.components.push({
+                //     type: "menu",
+                //     color: "yellow",
+                //     position: "right",
+                //     button_html: "Track Info",
+                //     menu_html: "<strong>"+tissueName+" H3K27AC and DNase data</strong><br>Tissue: "+tissueName+"</div>"
+                // });
+            } else {
+                intervalPanel = customIntervalsPanel(intervalPanelName);
+                intervalPanel.dashboard.components.push({
+                    type: "menu",
+                    color: "yellow",
+                    position: "right",
+                    button_html: "Track Info",
+                    menu_html: "<strong>"+tissueName+" ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
+                });
+            }
+
+
             intervalPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
             if (typeof locusZoomPlot[currentLzPlotKey].panels[intervalPanelName] === 'undefined'){
 
