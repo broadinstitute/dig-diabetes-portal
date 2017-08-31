@@ -17,6 +17,9 @@ td.tissueTable.Active_enhancer_2{
 td.tissueTable.Weak_enhancer{
     background: #E6E6FA;
 }
+td.tissueTable.matchingRegion{
+    background: #1aff1a;
+}
 .credibleSetTableGoesHere th.niceHeaders{
     background: white;
     transform-origin: left;

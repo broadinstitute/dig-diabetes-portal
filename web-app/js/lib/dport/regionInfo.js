@@ -130,6 +130,9 @@ var mpgSoftware = mpgSoftware || {};
             });
             promise.done(
                 function (data) {
+                    // var allVariants = _.flatten([{}, data.variants]);
+                    // var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
+                    // var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
                     var drivingVariables = buildRenderData(data);
                     $(".credibleSetTableGoesHere").empty().append(
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
@@ -140,27 +143,38 @@ var mpgSoftware = mpgSoftware || {};
                     $.when.apply($, promises).then(function(schemas) {
                         console.log("DONE with "+getDevelopingTissueGrid(), this, schemas);
                         var tissueGrid = getDevelopingTissueGrid();
+
+                        var allVariants = _.flatten([{}, data.variants]);
+                        var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
+                        var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
+
                         _.forEach(Object.keys(tissueGrid).sort(),function(tissueKey){
                             var lineToAdd = "<tr><td></td><td>"+tissueKey+"</td>";
-                            var worthIncluding = false;
-                            _.forEach(Object.keys(tissueGrid[tissueKey]).sort(function (a, b) {return parseInt(a) - parseInt(b);}),function(variantKey){
-                                var record = tissueGrid[tissueKey][variantKey];
-                                if ((typeof record.element !== 'undefined') && (record.element !== null)){
-                                    var elementName = record.element.substr(record.element.indexOf('_')+1);
-                                    lineToAdd += ("<td class='tissueTable "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                                        ", position:"+ record.START +", tissue:"+ record.source_trans +", state:"+ record.element_trans +"'></td>");
-                                    if ((elementName.indexOf('enhancer')>-1)||(elementName.indexOf('TSS')>-1)){
-                                        worthIncluding = true;
+                            _.forEach(sortedVariants,function(variantRec){
+                                if (typeof variantRec.POS !== 'undefined'){
+                                    var positionString = ""+variantRec.POS;
+                                    var record = tissueGrid[tissueKey][positionString];
+                                    var worthIncluding = false;
+                                    if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
+                                        var elementName = record.source_trans;
+                                        lineToAdd += ("<td class='tissueTable matchingRegion "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                                            ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
+
+                                    } else {
+                                        lineToAdd += ("<td class='tissueTable "+elementName+"'></td>");
+
                                     }
-                                } else {
-                                    console.log ('very strange');
                                 }
+
                             });
                             lineToAdd += '</tr>';
-                            if (worthIncluding){
-                                $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);
-                            }
+
+                            $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);
+
+
+
                         });
+
                         setDevelopingTissueGrid({});
                     }, function(e) {
                         console.log("My ajax failed");
