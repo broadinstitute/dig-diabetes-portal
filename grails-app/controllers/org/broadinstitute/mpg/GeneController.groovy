@@ -156,37 +156,25 @@ class GeneController {
         List <LinkedHashMap<String,String>> sortedColumnInformation = columnInformation.sort{a,b-> (b.value as Float)<=>(a.value as Float)}
 
         List<PhenotypeBean> lzOptions = this.widgetService?.getHailPhenotypeMap()
-//        lzOptions << new PhenotypeBean(key:"Adipose", name:"Adipose",description:"adipose tissue", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"AnteriorCaudate", name:"AnteriorCaudate",description:"brain anterior caudate", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"CD34-PB", name:"CD34-PB",description:"CD34-PB primary hematopoietic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"CingulateGyrus", name:"CingulateGyrus",description:"brain cingulate gyrus", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucos", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"DuodenumMucosa", name:"DuodenumMucosa",description:"duodenum mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"ES-HUES6", name:"ES-HUES6",description:"ES-HUES6 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"ES-HUES64", name:"ES-HUES64",description:"ES-HUES64 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"GM12878", name:"GM12878",description:"GM12878 lymphoblastoid cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"H1", name:"H1",description:"H1 cell line", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"hASC-t1", name:"hASC-t1",description:"hASC-t1 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"hASC-t2", name:"hASC-t2",description:"hASC-t2 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"hASC-t3", name:"hASC-t3",description:"hASC-t3 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"hASC-t4", name:"hASC-t4",description:"hASC-t4 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"HepG2", name:"HepG2",description:"HepG2 hepatocellular carcinoma cell line", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"HippocampusMiddle", name:"HippocampusMiddle",description:"brain hippocampus middle", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"HMEC", name:"HMEC",description:"HMEC mammary epithelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"HSMM", name:"HSMM",description:"HSMM skeletal muscle myoblast cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"Huvec", name:"Huvec",description:"HUVEC umbilical vein endothelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"InferiorTemporalLobe", name:"InferiorTemporalLobe",description:"brain inferior temporal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"Islets", name:"Islets",description:"pancreatic islets", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"K562", name:"K562",description:"K562 leukemia cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"Liver", name:"Liver",description:"liver", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"MidFrontalLobe", name:"MidFrontalLobe",description:"brain mid-frontal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"NHEK", name:"NHEK",description:"NHEK epidermal keratinocyte primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"NHLF", name:"NHLF",description:"NHLF lung fibroblast primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"RectalMucosa", name:"RectalMucosa",description:"rectal mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"RectalSmoothMuscle", name:"RectalSmoothMuscle",description:"rectal smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-//        lzOptions << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true)
+
+        StringBuilder sb = new StringBuilder("[")
+        if (portalType=='ibd'){
+            LinkedHashMap<String,List<String>> possibleExperiments =  epigenomeService.getThePossibleReadData("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+            List <String> allElements = []
+            for (String key in possibleExperiments.keySet()){
+                StringBuilder isb = new StringBuilder()
+                isb << "{\"expt\":\"${key}\",\"assays\":[\""
+                isb << possibleExperiments[key].join("\",\"")
+                isb << "\"]}"
+                allElements << isb.toString()
+            }
+            sb << allElements.join(",")
+        }
+        sb << "]"
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray experimentAssays = slurper.parseText(sb.toString())
+
+
 
         // DIGKB-217: get the default samples data set from the metadata
         SampleGroup defaultGeneBurdenSampleGroup = this.metaDataService.getDefaultBurdenGeneDataset();
@@ -596,12 +584,23 @@ class GeneController {
         String startString = params.start; // ex "29737203"
         String endString = params.end; // ex "29937203"
         String assay_id = params.assay_id
-        String tissue_id = params.tissue_id
-        JSONObject returnJsonVector = null;
+        String tissue_id = params.source
 
         int startInteger;
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject errorJsonObject = slurper.parseText(errorJson)
+
+        List<String> possibleBigwigAddresses =  epigenomeService.getThePossibleBigwigAddresses("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+        if (tissue_id.split(" ").size()>1){
+            tissue_id = tissue_id.split(" ")[0]
+        }
+        List<String> filteredBigWigUrl = possibleBigwigAddresses.findAll{String t->t.contains(tissue_id)}
+        String chosenBigWigUrl = filteredBigWigUrl[0]
+        if ((filteredBigWigUrl.size()>1) && (assay_id)){
+            chosenBigWigUrl = filteredBigWigUrl.find{String t->t.contains(assay_id)}
+        }
 
         // log
         log.info("got LZ request with params: for filled line plot " + params);
@@ -614,17 +613,20 @@ class GeneController {
         try {
             startInteger = Integer.parseInt(startString);
             endInteger = Integer.parseInt(endString);
+//            String callingJson = """{"chr":"chr${chromosome}",
+//                                     "start":${startString},
+//                                     "end":${endString},
+//                                     "bigwigUrl":"http://egg2.wustl.edu/roadmap/data/byFileType/signal/consolidated/macs2signal/foldChange/E003-H3K27ac.fc.signal.bigwig"}""".toString()
             String callingJson = """{"chr":"chr${chromosome}",
                                      "start":${startString},
                                      "end":${endString},
-                                     "bigwigUrl":"http://egg2.wustl.edu/roadmap/data/byFileType/signal/consolidated/macs2signal/foldChange/E003-H3K27ac.fc.signal.bigwig"}""".toString()
+                                     "bigwigUrl":"${chosenBigWigUrl}"}""".toString()
 
             if (chromosome != null) {
-                returnJsonVector = epigenomeService.getBigWigDataRestCall(callingJson)
-                resultLZJson= returnJsonVector
+                resultLZJson= epigenomeService.getBigWigDataRestCall(callingJson)
 
             } else {
-                jsonReturn = errorJson;
+                resultLZJson = errorJsonObject;
             }
 
             // log
@@ -636,7 +638,7 @@ class GeneController {
 
         } catch (NumberFormatException exception) {
             log.error("got incorrect parameters for LZ call: " + params);
-            jsonReturn = errorJson;
+            resultLZJson = errorJsonObject;
         }
 
         // return

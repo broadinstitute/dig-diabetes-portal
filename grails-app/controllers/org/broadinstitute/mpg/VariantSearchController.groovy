@@ -18,6 +18,7 @@ class VariantSearchController {
     MetaDataService metaDataService
     SearchBuilderService searchBuilderService
     WidgetService widgetService
+    EpigenomeService epigenomeService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -400,6 +401,8 @@ class VariantSearchController {
 
 
     def retrieveTopVariantsAcrossSgs (){
+        String portalType = g.portalTypeString() as String
+
         Closure convertDynamicStructToJson = { incoming ->
             List<String> allOptions = []
             incoming.each { org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean ->
@@ -472,7 +475,22 @@ class VariantSearchController {
         List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
         List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets.collect{it.systemId}
 
+        StringBuilder sb = new StringBuilder("[")
+        if (portalType=='ibd'){
+            LinkedHashMap<String,List<String>> possibleExperiments =  epigenomeService.getThePossibleReadData("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+            List <String> allElements = []
+            for (String key in possibleExperiments.keySet()){
+                StringBuilder isb = new StringBuilder()
+                isb << "{\"expt\":\"${key}\",\"assays\":[\""
+                isb << possibleExperiments[key].join("\",\"")
+                isb << "\"]}"
+                allElements << isb.toString()
+            }
+            sb << allElements.join(",")
+        }
+        sb << "]"
         JsonSlurper slurper = new JsonSlurper()
+        JSONArray experimentAssays = slurper.parseText(sb.toString())
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject,
@@ -480,7 +498,8 @@ class VariantSearchController {
              propertiesToRemove:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray,
              datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap)),
              lzOptions:phenotypeMap,
-             sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames
+             sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+             experimentAssays:experimentAssays
             ]
         }
 
@@ -488,6 +507,7 @@ class VariantSearchController {
 
 
     def retrieveTopVariantsAcrossSgsWithSimulatedMetadata (){
+        String portalType = g.portalTypeString() as String
         String phenotypeName = ''
         String geneName
         String drawReq = '2'

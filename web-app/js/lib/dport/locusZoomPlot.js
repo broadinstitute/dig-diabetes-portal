@@ -71,7 +71,7 @@ var mpgSoftware = mpgSoftware || {};
             }
             this.update = function(){
                 var data_layer = this.parent_panel.data_layers[layout.data_layer_id];
-                var text = data_layer.layout.split_tracks ? "Hide details" : "Show details";
+                var text = data_layer.layout.split_tracks ? "Hide DNase reads" : "Show DNase reads";
                 if (this.button){
                     this.button.setText(text);
                     this.button.show();
@@ -88,9 +88,53 @@ var mpgSoftware = mpgSoftware || {};
                                 (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
                                 addLZTissueChromatinAccessibility({
                                     tissueCode: this.parent_panel.title.text(),
-                                    tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
+                                    tissueDescriptiveName: 'DNase reads in '+this.parent_panel.title.text(),
                                     getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
-                                    phenoTypeName:pageVars.phenoTypeName
+                                    phenoTypeName:pageVars.phenoTypeName,
+                                    domId1:pageVars.domId1,
+                                    assayId:'DNase'
+                                },pageVars.domId1,pageVars);
+                            }
+                            this.update();
+                        }.bind(this));
+                    return this.update();
+                }
+            };
+        });
+
+
+
+
+        LocusZoom.Dashboard.Components.add("toggle_h3kdetail_tracks", function(layout){
+            LocusZoom.Dashboard.Component.apply(this, arguments);
+            if (!layout.data_layer_id){ layout.data_layer_id = "intervals"; }
+            if (!this.parent_panel.data_layers[layout.data_layer_id]){
+                throw ("Dashboard toggle split tracks component missing valid data layer ID");
+            }
+            this.update = function(){
+                var data_layer = this.parent_panel.data_layers[layout.data_layer_id];
+                var text = data_layer.layout.split_tracks ? "Hide H3K27ac reads" : "Show H3K27ac reads";
+                if (this.button){
+                    this.button.setText(text);
+                    this.button.show();
+                    this.parent.position();
+                    return this;
+                } else {
+                    this.button = new LocusZoom.Dashboard.Component.Button(this)
+                        .setColor(layout.color).setText(text)
+                        .setTitle("Toggle whether or not tracks are split apart or merged together")
+                        .setOnclick(function(){
+                            //alert('display detailed tracks');
+                            var pageVars = getPageVars('#'+this.parent_plot.id);
+                            if ((typeof pageVars.getLocusZoomFilledPlotUrl !== 'undefined') &&
+                                (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
+                                addLZTissueChromatinAccessibility({
+                                    tissueCode: this.parent_panel.title.text(),
+                                    tissueDescriptiveName: 'H3K27ac reads in '+this.parent_panel.title.text(),
+                                    getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
+                                    phenoTypeName:pageVars.phenoTypeName,
+                                    domId1:pageVars.domId1,
+                                    assayId:'H3K27ac'
                                 },pageVars.domId1,pageVars);
                             }
 
@@ -101,12 +145,17 @@ var mpgSoftware = mpgSoftware || {};
                             //     this.parent_panel.scaleHeightToData();
                             //     this.parent_plot.positionPanels();
                             // }.bind(this), timeout);
-                             this.update();
+                            this.update();
                         }.bind(this));
                     return this.update();
                 }
             };
         });
+
+
+
+
+
 
 
         var customIntervalsDataLayer = function (layerName){
@@ -217,7 +266,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var customIbdIntervalsPanel = function (layerName){
+        var customIbdIntervalsPanel = function (layerName,assayName){
             return {   id: layerName,
                 width: 1000,
                 height: 50,
@@ -227,11 +276,20 @@ var mpgSoftware = mpgSoftware || {};
                 dashboard: (function(){
                     //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
-                    l.components.push({
-                        type: "toggle_detail_tracks",
-                        data_layer_id: layerName,
-                        position: "right"
-                    });
+                    if (assayName === "DNase") {
+                        l.components.push({
+                            type: "toggle_detail_tracks",
+                            data_layer_id: layerName,
+                            position: "right"
+                        });
+                    }
+                    if (assayName === "H3K27ac") {
+                        l.components.push({
+                            type: "toggle_h3kdetail_tracks",
+                            data_layer_id: layerName,
+                            position: "right"
+                        });
+                    }
                     return l;
                 })(),
                 axes: {},
@@ -722,26 +780,32 @@ var mpgSoftware = mpgSoftware || {};
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
 
-        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue,intervalPanelName){
-             var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue) {
+        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue,intervalPanelName,assayName){
+             var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue,assayName) {
                 this.parseInit(init);
+                var assayId = 3;
+                if (assayName == "DNase" ) {
+                    assayId = 2;
+                } else if (assayName == "H3K27ac" ) {
+                    assayId = 1;
+                }
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
                         "chromosome=" + state.chr + "&" +
                         "startPos=" + state.start + "&" +
                         "endPos=" + state.end + "&" +
                         "source=" + tissue + "&" +
+                        "assayId=" + assayId + "&" +
                         "lzFormat=1";
                     return url;
                 }
             }, "BroadT2D");
             //var tissueAsId = 'intervals-'+rawTissue;
-            dataSources.add(intervalPanelName, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
-            //dataSources.add(tissueAsId, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue));
+            dataSources.add(intervalPanelName, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue,assayName));
         };
 
-        var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue){
-            var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue) {
+        var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
+            var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -749,12 +813,13 @@ var mpgSoftware = mpgSoftware || {};
                         "start=" + state.start + "&" +
                         "end=" + state.end + "&" +
                         "source=" + tissue + "&" +
+                        "assay_id=" + assayId + "&" +
                         "lzFormat=1";
                     return url;
                 }
             }, "BroadT2D");
-            var tissueAsId = 'accessibility-'+rawTissue;
-            dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue));
+            var tissueAsId = 'intervals-'+rawTissue+"-"+dom1+"-"+assayId;
+            dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
         };
 
 
@@ -803,7 +868,7 @@ var mpgSoftware = mpgSoftware || {};
                 newPanelOrdering.push(o);
             }
         });
-        _.forEach(intervalPanels,function(o){newPanelOrdering.push(o)});
+        _.forEach(intervalPanels.sort(),function(o){newPanelOrdering.push(o)});
         _.forEach(genePanel,function(o){newPanelOrdering.push(o)});
         plot.panel_ids_by_y_index = newPanelOrdering;
     }
@@ -820,20 +885,14 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId,intervalPanelName){
+        var addIntervalTrack = function(locusZoomVar,tissueName,tissueId,intervalPanelName,assayName){
            // var intervalPanelName = "intervals-"+tissueId+"-"+locusZoomVar.id;
             // we can't use the standard interval panel, but we can derive our own
             var pageVars = getPageVars(currentLzPlotKey);
             var intervalPanel;
             if (pageVars.portalTypeString=== 'ibd'){
-                intervalPanel =  customIbdIntervalsPanel(intervalPanelName);
-                // intervalPanel.dashboard.components.push({
-                //     type: "menu",
-                //     color: "yellow",
-                //     position: "right",
-                //     button_html: "Track Info",
-                //     menu_html: "<strong>"+tissueName+" H3K27AC and DNase data</strong><br>Tissue: "+tissueName+"</div>"
-                // });
+                intervalPanel =  customIbdIntervalsPanel(intervalPanelName,assayName);
+                intervalPanel.title = { text: tissueName+" "+assayName, style: {}, x: 10, y: 22 };
             } else {
                 intervalPanel = customIntervalsPanel(intervalPanelName);
                 intervalPanel.dashboard.components.push({
@@ -843,10 +902,11 @@ var mpgSoftware = mpgSoftware || {};
                     button_html: "Track Info",
                     menu_html: "<strong>"+tissueName+" ChromHMM calls from Parker 2013</strong><br>Build: 37<br>Assay: ChIP-seq<br>Tissue: "+tissueName+"</div>"
                 });
+                intervalPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
             }
 
 
-            intervalPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
+
             if (typeof locusZoomPlot[currentLzPlotKey].panels[intervalPanelName] === 'undefined'){
 
                 locusZoomVar.addPanel(intervalPanel).addBasicLoader();
@@ -857,8 +917,8 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var addChromatinAccessibilityTrack = function(locusZoomVar,tissueName,tissueId,phenotypeName){
-            var accessibilityPanelName = "accessibility-"+tissueId;
+        var addChromatinAccessibilityTrack = function(locusZoomVar,tissueName,tissueId,phenotypeName,dom1,assayId){
+            var accessibilityPanelName = "intervals-"+tissueId+"-"+dom1+"-"+assayId;
             // we can't use the standard interval panel, but we can derive our own
             var accessibilityPanel = buildAccessibilityLayout(accessibilityPanelName,phenotypeName)
             accessibilityPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
@@ -899,12 +959,16 @@ var mpgSoftware = mpgSoftware || {};
             var retrieveFunctionalDataAjaxUrl = lzParameters.retrieveFunctionalDataAjaxUrl;
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
+            var assayName = lzParameters.assayName;
             setNewDefaultLzPlot(lzGraphicDomId);
             var intervalPanelName = "intervals-"+tissueCode+"-"+lzGraphicDomId.substr(1);
+            if (typeof assayName !== 'undefined') {
+                intervalPanelName += ("-"+assayName);
+            }
 
 
-            buildIntervalSource(dataSources[currentLzPlotKey],retrieveFunctionalDataAjaxUrl,tissueCode,intervalPanelName);
-            addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,intervalPanelName);
+            buildIntervalSource(dataSources[currentLzPlotKey],retrieveFunctionalDataAjaxUrl,tissueCode,intervalPanelName,assayName);
+            addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,intervalPanelName, assayName);
 
             rescaleSVG();
         };
@@ -913,10 +977,13 @@ var mpgSoftware = mpgSoftware || {};
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
             var phenotypeName = lzParameters.phenotypeName;
+            var domId1 = lzParameters.domId1;
+            var assayId = lzParameters.assayId;
             setNewDefaultLzPlot(lzGraphicDomId);
 
-            buildChromatinAccessibilitySource(dataSources[currentLzPlotKey],getLocusZoomFilledPlotUrl,tissueCode,phenotypeName);
-            addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,phenotypeName);
+            if (domId1.substr(0,1)==='#') { domId1=domId1.substr(1)}
+            buildChromatinAccessibilitySource(dataSources[currentLzPlotKey],getLocusZoomFilledPlotUrl,tissueCode,phenotypeName,domId1,assayId);
+            addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,phenotypeName,domId1,assayId);
 
             rescaleSVG();
 
@@ -983,11 +1050,24 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof inParm.functionalTrack !== 'undefined'){
                     if ( typeof inParm.defaultTissues !== 'undefined'){
                         _.forEach(inParm.defaultTissues,function(o,i){
-                            addLZTissueAnnotations({
-                                tissueCode: o,
-                                tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
-                                retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl
-                            },lzGraphicDomId,inParm);
+                            if (typeof inParm.experimentAssays === 'undefined'){
+                                addLZTissueAnnotations({
+                                    tissueCode: o,
+                                    tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
+                                    retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl
+                                },lzGraphicDomId,inParm);
+                            } else {
+                                var experimentOfInterests = _.find(inParm.experimentAssays, function (t){return (t.expt==o)});
+                                _.forEach(experimentOfInterests.assays, function (assay){
+                                    addLZTissueAnnotations({
+                                        tissueCode: o,
+                                        tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
+                                        retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl,
+                                        assayName: assay
+                                    },lzGraphicDomId,inParm);
+                                });
+                            }
+
                         });
                     }
 

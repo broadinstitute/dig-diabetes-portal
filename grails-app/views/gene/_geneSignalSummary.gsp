@@ -264,8 +264,10 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
-                    fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}'
+                    fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
+                    experimentAssays:[]
                 };
+                // ${experimentAssays}
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});

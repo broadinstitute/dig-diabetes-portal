@@ -1136,6 +1136,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             },
             async: true,
             success: function (data) {
+                if (typeof data.experimentAssays !== 'undefined'){
+                    var signalSummarySectionVariables = getSignalSummarySectionVariables();
+                    signalSummarySectionVariables["experimentAssays"] = data.experimentAssays;
+                }
                 rememberCallBack(data, rememberParameter);
             },
             error: function (jqXHR, exception) {
@@ -1269,6 +1273,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 defaultTissues:defaultTissues,
                 defaultTissuesDescriptions:defaultTissuesDescriptions,
                 datasetReadableName:datasetReadableName,
+                experimentAssays:additionalParameters.experimentAssays,
                 colorBy:1,
                 positionBy:1,
                 excludeLdIndexVariantReset: false,
@@ -1297,6 +1302,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 defaultTissues:undefined,
                 defaultTissuesDescriptions:defaultTissuesDescriptions,
                 datasetReadableName:datasetReadableName,
+                experimentAssays:additionalParameters.experimentAssays,
                 colorBy:2,
                 positionBy:2,
                 excludeLdIndexVariantReset: true,

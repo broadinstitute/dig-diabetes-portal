@@ -256,12 +256,14 @@ class VariantInfoController {
 
 
     def retrieveFunctionalDataAjax (){
+        String portalType = g.portalTypeString() as String
         String chromosome = ''
         String source = ''
         int startPos
         int endPos
         int pageStart = 0
         int pageEnd = 500
+        int assayId =  grailsApplication.config.portal.data.epigenetic.dataset.abbreviation.map[portalType] as int
         Boolean lzFormat =  false
         if (params.chromosome) {
             chromosome = params.chromosome
@@ -278,6 +280,10 @@ class VariantInfoController {
         if (params.source) {
             source =  params.source
             log.debug "retrieveFunctionalData params.source = ${params.source}"
+        }
+        if (params.assayId) {
+            assayId =  Integer.parseInt(params.assayId)
+            log.debug "retrieveFunctionalData params.assayId = ${params.assayId}"
         }
 
         if (params.lzFormat) {
@@ -306,9 +312,6 @@ class VariantInfoController {
         elementMapper["16_Repressed_polycomb"] = [name:"Repressed polycomb",state_id:11]
         elementMapper["17_Weak_repressed_polycomb"] = [name:"Weak repressed polycomb",state_id:12]
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
-
-        String portalType = g.portalTypeString() as String
-        int assayId =  grailsApplication.config.portal.data.epigenetic.dataset.abbreviation.map[portalType] as int
 
          dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source, assayId )
 
