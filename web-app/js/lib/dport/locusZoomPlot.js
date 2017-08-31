@@ -623,6 +623,17 @@ var mpgSoftware = mpgSoftware || {};
                 },getNewDefaultLzPlot(),additionalData);
             });
         };
+        var processIbdEpigeneticData = function (data,additionalData){
+            var matchedTissue = data.variants.variants;
+            _.forEach(matchedTissue,function(o,i){
+                addLZTissueAnnotations({
+                    tissueCode: o.source,
+                    tissueDescriptiveName: o.source_trans,
+                    retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
+                    assayName: 'DNase'
+                },getNewDefaultLzPlot(),additionalData);
+            });
+        };
         var buildMultiTrackDisplay  = function(     allUniqueElementNames,
                                                     allUniqueTissueNames,
                                                     dataMatrix,
@@ -714,19 +725,25 @@ var mpgSoftware = mpgSoftware || {};
             callingData.CHROM = chromosome;
             retrieveFunctionalData(callingData,processEpigeneticData,callingData)
         };
+        var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome){
+            var callingData = {};
+            callingData.POS = position;
+            callingData.CHROM = chromosome;
+            retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData)
+        };
+
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
                 var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
-                //var tissueTracks = _.filter(lzMyThis.getDataLayer().parent_plot.panels,function(v,k){return (k.indexOf('intervals')===0)});
-                // _.forEach(tissueTracks, function (panel){
-                //     panel.dashboard.hide(true);
-                //     d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
-                //     d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
-                //     return panel.parent.removePanel(panel.id);
-                // });
-                // LocusZoom.getToolTipData(myThis).deselect();
                 replaceTissuesWithOverlappingEnhancers(variantParts[1], variantParts[0]);
+            }
+        };
+        var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId){
+            var variantParts = varId.split("_");
+            if (variantParts.length == 4){
+                var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
+                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0]);
             }
         };
 
@@ -1143,7 +1160,8 @@ var mpgSoftware = mpgSoftware || {};
         removeAllPanels:removeAllPanels,
         plotAlreadyExists: plotAlreadyExists,
         locusZoomPlot:locusZoomPlot,
-        replaceTissuesWithOverlappingEnhancersFromVarId:replaceTissuesWithOverlappingEnhancersFromVarId
+        replaceTissuesWithOverlappingEnhancersFromVarId:replaceTissuesWithOverlappingEnhancersFromVarId,
+        replaceTissuesWithOverlappingIbdRegionsVarId:replaceTissuesWithOverlappingIbdRegionsVarId
        // broadAssociationSource:broadAssociationSource
     }
 
