@@ -285,12 +285,13 @@ class VariantInfoController {
         if (params.assayId) {
             assayId =  Integer.parseInt(params.assayId)
             log.debug "retrieveFunctionalData params.assayId = ${params.assayId}"
-            switch(assayId){
-                case 1: assayName = 'H3K27ac';  break
-                case 2: assayName = 'DNase';  break
-                case 3: assayName = 'ChromHMM';  break
-                default: break;
-            }
+        }
+
+        switch(assayId){
+            case 1: assayName = 'H3K27ac';  break
+            case 2: assayName = 'DNase';  break
+            case 3: assayName = 'ChromHMM';  break
+            default: break;
         }
 
         if (params.lzFormat) {

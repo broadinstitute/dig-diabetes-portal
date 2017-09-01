@@ -202,11 +202,19 @@ var mpgSoftware = mpgSoftware || {};
                             return var_id;
                         },
                         content: function() {
-                            return  "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
-                                    "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
-                                    "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
-                                    $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\")' href='#'>"+
-                                    "Tissues with overlapping enhancer regions</a></div>";
+                            var retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
+                                "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
+                                "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
+                                $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\")' href='#'>"+
+                                "Tissues with overlapping enhancer regions</a></div>";
+                            if (additionalParameters.portalTypeString==='ibd'){
+                                "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
+                                "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
+                                "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.:replaceTissuesWithOverlappingIbdRegionsVarId(\""+
+                                $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\")' href='#'>"+
+                                "Tissues with overlapping enhancer regions</a></div>";
+                            }
+                            return retString;
                         },
                         container: 'body',
                         placement: 'left',

@@ -625,13 +625,17 @@ var mpgSoftware = mpgSoftware || {};
         };
         var processIbdEpigeneticData = function (data,additionalData){
             var matchedTissue = data.variants.variants;
+            var plotId = getNewDefaultLzPlot();
+            if (typeof additionalData.plotDomId !== 'undefined') {
+                plotId = additionalData.plotDomId;
+            }
             _.forEach(matchedTissue,function(o,i){
                 addLZTissueAnnotations({
                     tissueCode: o.source,
                     tissueDescriptiveName: o.source_trans,
                     retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
-                    assayName: 'DNase'
-                },getNewDefaultLzPlot(),additionalData);
+                    assayName: o.assayName
+                },plotId,additionalData);
             });
         };
         var buildMultiTrackDisplay  = function(     allUniqueElementNames,
@@ -725,10 +729,11 @@ var mpgSoftware = mpgSoftware || {};
             callingData.CHROM = chromosome;
             retrieveFunctionalData(callingData,processEpigeneticData,callingData)
         };
-        var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome){
+        var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome,plotDomId){
             var callingData = {};
             callingData.POS = position;
             callingData.CHROM = chromosome;
+            callingData.plotDomId = plotDomId;
             retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData)
         };
 
@@ -739,11 +744,11 @@ var mpgSoftware = mpgSoftware || {};
                 replaceTissuesWithOverlappingEnhancers(variantParts[1], variantParts[0]);
             }
         };
-        var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId){
+        var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId,plotDomId){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
-                var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
-                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0]);
+                //var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
+                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId);
             }
         };
 
