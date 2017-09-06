@@ -1177,7 +1177,7 @@ var mpgSoftware = mpgSoftware || {};
             if ((typeof data !== 'undefined') &&
                 (typeof data.variants !== 'undefined') &&
                 (!data.variants.is_error)){
-                var rawSortedData = _.sortBy(data.variants.variants,[function(item) {
+                var rawSortedData = _.sortBy(_.filter(data.variants.variants,function(o){return o.element!=null}),[function(item) {
                     return parseInt(item.element.split('_')[0], 10);
                 }, function(item) {
                     return item.source;
