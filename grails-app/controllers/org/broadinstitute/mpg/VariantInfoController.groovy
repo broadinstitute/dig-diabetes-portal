@@ -264,6 +264,7 @@ class VariantInfoController {
         int endPos
         int pageStart = 0
         int pageEnd = 500
+        List<Integer> assayIdList = []
         int assayId =  grailsApplication.config.portal.data.epigenetic.dataset.abbreviation.map[portalType] as int
         Boolean lzFormat =  false
         if (params.chromosome) {
@@ -285,6 +286,11 @@ class VariantInfoController {
         if (params.assayId) {
             assayId =  Integer.parseInt(params.assayId)
             log.debug "retrieveFunctionalData params.assayId = ${params.assayId}"
+        }
+        if (params.assayIdList) {
+            log.debug "retrieveFunctionalData params.assayId = ${params.assayIdList}"
+        } else {
+            log.debug "No assayIdList!!!!!!!!!!!!!!!"
         }
 
         switch(assayId){
@@ -321,7 +327,8 @@ class VariantInfoController {
         elementMapper["17_Weak_repressed_polycomb"] = [name:"Weak repressed polycomb",state_id:12]
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
-         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source, assayId )
+         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
+                 source, assayId, params.assayIdList )
 
         if (lzFormat){
             JSONObject root = new JSONObject()

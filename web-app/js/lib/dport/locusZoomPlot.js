@@ -601,7 +601,8 @@ var mpgSoftware = mpgSoftware || {};
                     chromosome: callingData.CHROM,
                     startPos: ""+callingData.POS,
                     endPos: ""+callingData.POS,
-                    lzFormat:0
+                    lzFormat:0,
+                    assayIdList:[1,2]
                 },
                 async: true
             }).done(function (data, textStatus, jqXHR) {
@@ -619,7 +620,8 @@ var mpgSoftware = mpgSoftware || {};
                 addLZTissueAnnotations({
                     tissueCode: o.source,
                     tissueDescriptiveName: o.source_trans,
-                    retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl
+                    retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
+                    assayIdList:"[3]"
                 },getNewDefaultLzPlot(),additionalData);
             });
         };
@@ -634,7 +636,8 @@ var mpgSoftware = mpgSoftware || {};
                     tissueCode: o.source,
                     tissueDescriptiveName: o.source_trans,
                     retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
-                    assayName: o.assayName
+                    assayName: o.assayName,
+                    assayIdList:"[1,2]"
                 },plotId,additionalData);
             });
         };
@@ -802,7 +805,7 @@ var mpgSoftware = mpgSoftware || {};
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
 
-        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue,intervalPanelName,assayName){
+        var buildIntervalSource = function(dataSources,retrieveFunctionalDataAjaxUrl,rawTissue,intervalPanelName,assayName,assayIdList){
              var broadIntervalsSource = LocusZoom.Data.Source.extend(function (init, tissue,assayName) {
                 this.parseInit(init);
                 var assayId = 3;
@@ -811,6 +814,9 @@ var mpgSoftware = mpgSoftware || {};
                 } else if (assayName == "H3K27ac" ) {
                     assayId = 1;
                 }
+                // if(typeof assayIdList !== 'undefined') {
+                //     assayId = assayIdList;
+                // }
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
                         "chromosome=" + state.chr + "&" +
@@ -818,6 +824,7 @@ var mpgSoftware = mpgSoftware || {};
                         "endPos=" + state.end + "&" +
                         "source=" + tissue + "&" +
                         "assayId=" + assayId + "&" +
+                        "assayIdList=" + assayIdList + "&" +
                         "lzFormat=1";
                     return url;
                 }
@@ -982,6 +989,7 @@ var mpgSoftware = mpgSoftware || {};
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
             var assayName = lzParameters.assayName;
+            var assayIdList = lzParameters.assayIdList;
             setNewDefaultLzPlot(lzGraphicDomId);
             var intervalPanelName = "intervals-"+tissueCode+"-"+lzGraphicDomId.substr(1);
             if (typeof assayName !== 'undefined') {
@@ -989,7 +997,7 @@ var mpgSoftware = mpgSoftware || {};
             }
 
 
-            buildIntervalSource(dataSources[currentLzPlotKey],retrieveFunctionalDataAjaxUrl,tissueCode,intervalPanelName,assayName);
+            buildIntervalSource(dataSources[currentLzPlotKey],retrieveFunctionalDataAjaxUrl,tissueCode,intervalPanelName,assayName,assayIdList);
             addIntervalTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,intervalPanelName, assayName);
 
             rescaleSVG();
@@ -1076,7 +1084,8 @@ var mpgSoftware = mpgSoftware || {};
                                 addLZTissueAnnotations({
                                     tissueCode: o,
                                     tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
-                                    retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl
+                                    retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl,
+                                    assayIdList:"[3]"
                                 },lzGraphicDomId,inParm);
                             } else {
                                 var experimentOfInterests = _.find(inParm.experimentAssays, function (t){return (t.expt==o)});
@@ -1085,7 +1094,8 @@ var mpgSoftware = mpgSoftware || {};
                                         tissueCode: o,
                                         tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
                                         retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl,
-                                        assayName: assay
+                                        assayName: assay,
+                                        assayIdList:"[1,2]"
                                     },lzGraphicDomId,inParm);
                                 });
                             }

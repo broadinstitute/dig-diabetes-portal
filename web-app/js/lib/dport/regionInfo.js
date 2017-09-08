@@ -88,7 +88,8 @@ var mpgSoftware = mpgSoftware || {};
                         chromosome: variantObject.CHROM,
                         startPos: ""+variantObject.POS,
                         endPos: ""+variantObject.POS,
-                        lzFormat:0
+                        lzFormat:0,
+                        assayIdList:""+additionalData.assayIdList
                     },
                     async: true
                     }).done(function (data, textStatus, jqXHR) {
@@ -138,17 +139,47 @@ var mpgSoftware = mpgSoftware || {};
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
                     );
                     mpgSoftware.geneSignalSummaryMethods.updateCredibleSetTable(data, additionalParameters);
+                    additionalParameters.assayIdList = "[1,2]";
                     var promises = oneCallbackForEachVariant(data.variants,additionalParameters);
 
                     $.when.apply($, promises).then(function(schemas) {
                         console.log("DONE with "+getDevelopingTissueGrid(), this, schemas);
                         var tissueGrid = getDevelopingTissueGrid();
+                        // convert to an array for sorting
+                        var sortableTissueArray = [];
+                        _.forEach(Object.keys(tissueGrid),function(tissueKey){
+                            sortableTissueArray.push(tissueGrid[tissueKey]);
+                        });
+                        var everySingleValue = [];
+                        var sortedArrayOfArrays = _.sortBy(sortableTissueArray, function(objArray){
+                            var bestVariantPerTissue = _.sortBy(objArray, function(singleVariant){
+                                var oneValue = singleVariant.VALUE;
+                                everySingleValue.push(oneValue);
+                                return oneValue;
+                            }).reverse()[0];
+                            return bestVariantPerTissue.VALUE
+                        });
+                        var sortedTissues = _.map(sortedArrayOfArrays, function(oneRec){return oneRec[Object.keys(oneRec)[0]].source});
+                        var everySingleValueSorted = everySingleValue.sort(function(a,b){return a-b});
+                        var maximumValue = everySingleValueSorted[everySingleValueSorted.length-1];
+                        var minimumValue = everySingleValueSorted[0];
+                        var quantileArray = [];
+                        var numberOfQuantiles =5;
+                        var widthOfOneQuintile = (maximumValue-minimumValue)/numberOfQuantiles;
+                        for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
+                            quantileArray.push({min:minimumValue+(widthOfOneQuintile*i),max:minimumValue+(widthOfOneQuintile*(i+1))});
+                        }
+                        var determineColorIndex = function (val,quantileArray){
+                            var index = 0;
+                            while (index<quantileArray.length&& val>quantileArray[index].min){index++};
+                            return index;
+                        };
 
                         var allVariants = _.flatten([{}, data.variants]);
                         var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                         var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
 
-                        _.forEach(Object.keys(tissueGrid).sort(),function(tissueKey){
+                        _.forEach(sortedTissues,function(tissueKey){
                             var lineToAdd = "<tr><td></td><td>"+tissueKey+"</td>";
                             _.forEach(sortedVariants,function(variantRec){
                                 if (typeof variantRec.POS !== 'undefined'){
@@ -157,7 +188,7 @@ var mpgSoftware = mpgSoftware || {};
                                     var worthIncluding = false;
                                     if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
                                         var elementName = record.source_trans;
-                                        lineToAdd += ("<td class='tissueTable matchingRegion "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                                        lineToAdd += ("<td class='tissueTable matchingRegion"+determineColorIndex(record.VALUE,quantileArray)+" "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                                             ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
 
                                     } else {

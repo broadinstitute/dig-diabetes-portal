@@ -17,8 +17,23 @@ td.tissueTable.Active_enhancer_2{
 td.tissueTable.Weak_enhancer{
     background: #E6E6FA;
 }
-td.tissueTable.matchingRegion{
-    background: #1aff1a;
+td.tissueTable.matchingRegion0{
+    background: #3333FF;
+}
+td.tissueTable.matchingRegion1{
+     background: #3366FF;
+}
+td.tissueTable.matchingRegion2{
+      background: #3399FF;
+}
+td.tissueTable.matchingRegion3{
+       background: #3399FF;
+}
+td.tissueTable.matchingRegion4{
+        background: #33CCFF;
+}
+td.tissueTable.matchingRegion5{
+         background: #33FFFF;
 }
 .credibleSetTableGoesHere th.niceHeaders{
     background: white;
