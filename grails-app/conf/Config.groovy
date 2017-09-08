@@ -165,7 +165,7 @@ federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://e
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digAWSStrokerest02Server = new ServerBean("digawsdevnew", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
-
+digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
 defaultRestServer = digAWS02KBV2prodServer
@@ -184,6 +184,7 @@ defaultRestServer = digAWS02KBV2prodServer
          federatedAwsStageKBV2Server,
          toddTestServer,
          digdevmarcin,
+         digAWSibddemoec2,
          digAWSStrokerest02Server
  ]
 
@@ -321,6 +322,8 @@ environments {
 
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com" 
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
