@@ -138,13 +138,13 @@ var mpgSoftware = mpgSoftware || {};
                                 },pageVars.domId1,pageVars);
                             }
 
-                            // data_layer.toggleSplitTracks();
-                            // if (this.scale_timeout){ clearTimeout(this.scale_timeout); }
-                            // var timeout = data_layer.layout.transition ? +data_layer.layout.transition.duration || 0 : 0;
-                            // this.scale_timeout = setTimeout(function(){
-                            //     this.parent_panel.scaleHeightToData();
-                            //     this.parent_plot.positionPanels();
-                            // }.bind(this), timeout);
+                            data_layer.toggleSplitTracks();
+                            if (this.scale_timeout){ clearTimeout(this.scale_timeout); }
+                            var timeout = data_layer.layout.transition ? +data_layer.layout.transition.duration || 0 : 0;
+                            this.scale_timeout = setTimeout(function(){
+                                this.parent_panel.scaleHeightToData();
+                                this.parent_plot.positionPanels();
+                            }.bind(this), timeout);
                             this.update();
                         }.bind(this));
                     return this.update();
@@ -157,7 +157,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-
+        // epigenetic tracks built from bed data, Intended for the Parker HMM tracks
         var customIntervalsDataLayer = function (layerName){
             var stateIdSpec = layerName+":state_id";
             var developingStructure =  {
@@ -221,6 +221,70 @@ var mpgSoftware = mpgSoftware || {};
                         { action: "toggle", status: "selected" }
                     ]
                 }
+                 ,
+                 tooltip: customIntervalsToolTip(layerName)
+            };
+            _.forEach(developingStructure.legend,function(o,i){
+                o[stateIdSpec] = (i+1);
+            });
+            return developingStructure;
+        };
+
+
+        var customIBDIntervalsDataLayer = function (layerName){
+            var stateIdSpec = layerName+":state_id";
+            var developingStructure =  {
+                namespace: { "intervals": layerName },
+                id: layerName,
+                type: "intervals",
+                fields: [layerName+":start",layerName+":end",layerName+":state_id",layerName+":state_name"],
+                id_field: layerName+":start",
+                start_field: layerName+":start",
+                end_field: layerName+":end",
+                track_split_field: layerName+":state_id",
+                split_tracks: false,
+                always_hide_legend: true,
+                color: {
+                    field: layerName+":state_id",
+                    scale_function: "categorical_bin",
+                    parameters: {
+                        categories: [1,2,3],
+                        values: ["rgb(0,0,255)",// 1=H3k27AC
+                            "rgb(255,0,0)",//2=DNase
+                            "rgb(0,255,0)"],//3=For the Parker data -- we shouldn't see this result here
+
+                        null_value: "#B8B8B8"
+                    }
+                },
+                legend: [
+                    { shape: "rect", color: "rgb(255,0,0)", width: 9, label: "Active transcription start site" },
+                    { shape: "rect", color: "rgb(255,140,26)", width: 9, label: "Weak transcription start site" },
+                    { shape: "rect", color: "rgb(255,140,26)", width: 9, label: "Flanking transcription start site" },
+                    { shape: "rect", color: "rgb(0,230,0)", width: 9, label: "Strong transcription" },
+                    { shape: "rect", color: "rgb0,100,0)", width: 9, label: "Weak transcription" },
+                    { shape: "rect", color: "rgb(194,225,5)", width: 9, label: "Genic enhancer" },
+                    { shape: "rect", color: "rgb(255,195,77)", width: 9, label: "Active enhancer 1" },
+                    { shape: "rect", color: "rgb(255,195,77)", width: 9, label: "Active enhancer 2" },
+                    { shape: "rect", color: "rgb(255,255,0)", width: 9, label: "Weak enhancer" },
+                    { shape: "rect", color: "rgb(255,255,0)", width: 9, label: "Bivalent poised TSS" },
+                    { shape: "rect", color: "rgb(128,128,128)", width: 9, label: "Repressed polycomb" },
+                    { shape: "rect", color: "rgb(192,192,192)", width: 9, label: "Weak repressed polycomb" },
+                    { shape: "rect", color: "rgb(221,221,221)", width: 9, label: "Quiescent low signal" }
+                ],
+                behaviors: {
+                    onmouseover: [
+                        { action: "set", status: "highlighted" }
+                    ],
+                    onmouseout: [
+                        { action: "unset", status: "highlighted" }
+                    ],
+                    onclick: [
+                        { action: "toggle", status: "selected", exclusive: true }
+                    ],
+                    onshiftclick: [
+                        { action: "toggle", status: "selected" }
+                    ]
+                }
                 // ,
                 // tooltip: customIntervalsToolTip(layerName)
             };
@@ -229,6 +293,9 @@ var mpgSoftware = mpgSoftware || {};
             });
             return developingStructure;
         };
+
+
+
 
         var customIntervalsPanel = function (layerName){
             return {   id: layerName,
@@ -305,7 +372,7 @@ var mpgSoftware = mpgSoftware || {};
                     pad_from_bottom: 5
                 },
                 data_layers: [
-                    customIntervalsDataLayer(layerName)
+                    customIBDIntervalsDataLayer(layerName)
                 ]
             }
         };
@@ -602,7 +669,7 @@ var mpgSoftware = mpgSoftware || {};
                     startPos: ""+callingData.POS,
                     endPos: ""+callingData.POS,
                     lzFormat:0,
-                    assayIdList:[1,2]
+                    assayIdList:callingData.ASSAY_ID_LIST
                 },
                 async: true
             }).done(function (data, textStatus, jqXHR) {
@@ -730,6 +797,7 @@ var mpgSoftware = mpgSoftware || {};
             var callingData = {};
             callingData.POS = position;
             callingData.CHROM = chromosome;
+            callingData.ASSAY_ID_LIST = '[3]';
             retrieveFunctionalData(callingData,processEpigeneticData,callingData)
         };
         var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome,plotDomId){
@@ -737,6 +805,7 @@ var mpgSoftware = mpgSoftware || {};
             callingData.POS = position;
             callingData.CHROM = chromosome;
             callingData.plotDomId = plotDomId;
+            callingData.ASSAY_ID_LIST = '[1,2]';
             retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData)
         };
 

@@ -352,13 +352,15 @@ class VariantInfoController {
                 rootData["value"].push(pval["VALUE"])
                 rootData["public_id"].push(null)
                 rootData["strand"].push(null)
+                String individualAssayIdString = pval["ASSAY_ID"]
+                int individualAssayId = (individualAssayIdString) ? Integer.parseInt(individualAssayIdString) : 3
 
                 // map the Parker chromatin state information by hand
                 String element = pval["element"]
                 LinkedHashMap map = elementMapper[element]
                 String elementTrans = g.message(code: "metadata." + element, default: element)
 
-                rootData["state_id"].push(map?.state_id ?: 3)
+                rootData["state_id"].push(map?.state_id ?: individualAssayId)
                 rootData["state_name"].push(map?.name ?: "3_Flanking_TSS")
 
             }
