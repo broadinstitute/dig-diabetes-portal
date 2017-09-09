@@ -239,17 +239,15 @@ var mpgSoftware = mpgSoftware || {};
                                 $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\")' href='#'>"+
                                 "Tissues with overlapping enhancer regions</a></div>";
                             if (additionalParameters.portalTypeString==='ibd'){
-                                "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
+                                retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
                                 "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
-                                "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.:replaceTissuesWithOverlappingIbdRegionsVarId(\""+
-                                $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\")' href='#'>"+
-                                "Tissues with overlapping enhancer regions</a></div>";
+                                    "<div class='credSetLine'><scan class='credSetPopUpTitle'>Click to see overlapping DNase active regions</scan></div>";
                             }
                             return retString;
                         },
                         container: 'body',
-                        placement: 'left',
-                        trigger: 'click focus'
+                        placement: 'top',
+                        trigger: 'hover'
                     });
                 }
             );
