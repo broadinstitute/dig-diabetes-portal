@@ -168,7 +168,7 @@ digAWSStrokerest02Server = new ServerBean("digawsdevnew", "http://ec2-34-228-247
 digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digAWS02KBV2prodServer
+defaultRestServer = digAWSibddemoec2
 
  getRestServerList = [
          digdev01Server,
