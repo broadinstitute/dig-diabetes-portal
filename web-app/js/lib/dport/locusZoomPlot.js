@@ -688,7 +688,7 @@ var mpgSoftware = mpgSoftware || {};
                     tissueCode: o.source,
                     tissueDescriptiveName: o.source_trans,
                     retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
-                    assayIdList:"[3]"
+                    assayIdList:"["+ o.ASSAY_ID+"]"
                 },getNewDefaultLzPlot(),additionalData);
             });
         };
@@ -699,12 +699,18 @@ var mpgSoftware = mpgSoftware || {};
                 plotId = additionalData.plotDomId;
             }
             _.forEach(matchedTissue,function(o,i){
+                var derivedAssayName = "unspecified";
+                if (o.ASSAY_ID === 1){
+                    derivedAssayName = "H3K27ac";
+                } else if (o.ASSAY_ID === 2){
+                    derivedAssayName = "DNase";
+                }
                 addLZTissueAnnotations({
                     tissueCode: o.source,
                     tissueDescriptiveName: o.source_trans,
                     retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
-                    assayName: o.assayName,
-                    assayIdList:"[1,2]"
+                    assayName: derivedAssayName,
+                    assayIdList:"["+ o.ASSAY_ID+"]"
                 },plotId,additionalData);
             });
         };
@@ -806,6 +812,14 @@ var mpgSoftware = mpgSoftware || {};
             callingData.CHROM = chromosome;
             callingData.plotDomId = plotDomId;
             callingData.ASSAY_ID_LIST = '[1,2]';
+            var lzVar = mpgSoftware.locusZoom.locusZoomPlot[plotDomId];
+            var tissueTracks = _.filter(lzVar.panels,function(v,k){return (k.indexOf('intervals')===0)});
+            _.forEach(tissueTracks, function (panel){
+                panel.dashboard.hide(true);
+                d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
+                d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
+                return panel.parent.removePanel(panel.id);
+            });
             retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData)
         };
 
@@ -819,7 +833,6 @@ var mpgSoftware = mpgSoftware || {};
         var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId,plotDomId){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
-                //var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
                 replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId);
             }
         };
@@ -1159,12 +1172,18 @@ var mpgSoftware = mpgSoftware || {};
                             } else {
                                 var experimentOfInterests = _.find(inParm.experimentAssays, function (t){return (t.expt==o)});
                                 _.forEach(experimentOfInterests.assays, function (assay){
+                                    var assayId = 3;
+                                    if (assay==='H3K27ac'){
+                                        assayId = 1;
+                                    } else if (assay==='DNase'){
+                                        assayId = 2;
+                                    }
                                     addLZTissueAnnotations({
                                         tissueCode: o,
                                         tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
                                         retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl,
                                         assayName: assay,
-                                        assayIdList:"[1,2]"
+                                        assayIdList:"["+assayId+"]"
                                     },lzGraphicDomId,inParm);
                                 });
                             }
