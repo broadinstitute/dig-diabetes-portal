@@ -687,8 +687,12 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var customCurveDataLayer = function (layerName){
+        var customCurveDataLayer = function (layerName,assayId){
             var stateIdSpec = layerName+":state_id";
+            var color = "#0000FF";
+            if (assayId==="DNase"){
+                color = "#FF0000";
+            }
             var developingStructure = {
                 namespace: {layerName: layerName},
                 id: "recombratenew",
@@ -696,7 +700,7 @@ var mpgSoftware = mpgSoftware || {};
                 fields: [layerName+":position", layerName+":pvalue"],
                 z_index: 1,
                 style: {
-                    "stroke": "#0000FF",
+                    "stroke": color,
                     "stroke-width": "1.5px"
                 },
                 x_axis: {
@@ -711,7 +715,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var customCurvePanel = function (layerName){
+        var customCurvePanel = function (layerName,assayId){
             var accessorName = layerName.split(":")[0];
            return { id: layerName,
             width: 800,
@@ -755,7 +759,7 @@ var mpgSoftware = mpgSoftware || {};
                 x_linked: true
             },
             data_layers: [
-                customCurveDataLayer(accessorName)
+                customCurveDataLayer(accessorName,assayId)
             ]
         }
         };
@@ -792,14 +796,14 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var buildAccessibilityLayout = function ( accessibilityPanelName,phenotypeName){
+        var buildAccessibilityLayout = function ( accessibilityPanelName,phenotypeName,assayId){
             var addendumToName = '';
             var mods = {
                 id: accessibilityPanelName,
                 title: { text: "chromatin accessibility in Aorta"},
                 namespace: { assoc: phenotypeName }
             };
-            var panel_layout = customCurvePanel(accessibilityPanelName + ":id");
+            var panel_layout = customCurvePanel(accessibilityPanelName + ":id",assayId);
             //panel_layout.y_index = -1;
             panel_layout.height = 210;
             panel_layout.data_layers[0].id = accessibilityPanelName;
@@ -1338,7 +1342,7 @@ var mpgSoftware = mpgSoftware || {};
         var addChromatinAccessibilityTrack = function(locusZoomVar,tissueName,tissueId,phenotypeName,dom1,assayId){
             var accessibilityPanelName = "intervals-"+tissueId+"-reads-"+dom1+"-"+assayId;
             // we can't use the standard interval panel, but we can derive our own
-            var accessibilityPanel = buildAccessibilityLayout(accessibilityPanelName,phenotypeName)
+            var accessibilityPanel = buildAccessibilityLayout(accessibilityPanelName,phenotypeName,assayId)
             accessibilityPanel.title = { text: tissueName, style: {}, x: 10, y: 22 };
             if (typeof locusZoomPlot[currentLzPlotKey].panels[accessibilityPanel] === 'undefined'){
                 locusZoomVar.addPanel(accessibilityPanel).addBasicLoader();
