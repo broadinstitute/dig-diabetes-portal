@@ -12,12 +12,12 @@
 
     <h4>Dataset phenotypes</h4>
     <ul>
-        <li><g:message code="informational.shared.traits.cardioembolic_stroke"></g:message></li>
-        <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
-        <li><g:message code="informational.shared.traits.large_artery_stroke"></g:message></li>
-        <li><g:message code="informational.shared.traits.small_vessel_disease_stroke"></g:message></li>
-         <li><g:message code="informational.shared.traits.other_determined"></g:message></li>
-          <li><g:message code="informational.shared.traits.other_undetermined"></g:message></li>
+    <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
+         <li><g:message code="informational.shared.traits.toast_Other_determined"></g:message></li>
+          <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
     </ul>
 
 <h4>Dataset subjects</h4>

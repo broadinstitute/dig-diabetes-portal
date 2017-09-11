@@ -24,22 +24,21 @@
 
     <h4>Dataset phenotypes</h4>
     <ul>
-        <li><g:message code="informational.shared.traits.CCS_causative_Cardio-aortic_embolism-major"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_causative_Large_artery_atherosclerosis"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_causative_Small_artery_occlusion"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_causative_Cryptogenic_with_Cardioembolism_minor"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_causative_Incomplete_Unclassified"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_causative_Undetermined"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_phenotype_Cardio-aortic_embolism-major"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_phenotype_Large_artery_atherosclerosis-major"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_phenotype_Small_artery_occlusion-major"></g:message></li>
-        <li><g:message code="informational.shared.traits.CCS_phenotype_Cryptogenic"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_All_stroke"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
-
+    <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_causative_Cardio-aortic_embolism-major"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_causative_Cryptogenic_with_Cardioembolism_minor"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_causative_Incomplete_Unclassified"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_causative_Large_artery_atherosclerosis"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_causative_Small_artery_occlusion"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_causative_Undetermined"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_phenotype_Cardio-aortic_embolism-major"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_phenotype_Cryptogenic"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_phenotype_Large_artery_atherosclerosis-major"></g:message></li>
+    <li><g:message code="informational.shared.traits.CCS_phenotype_Small_artery_occlusion-major"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
     </ul>
 
     <h4>Dataset subjects</h4>
