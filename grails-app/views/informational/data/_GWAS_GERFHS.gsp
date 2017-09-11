@@ -20,7 +20,7 @@
 
     <h4>Dataset phenotypes</h4>
     <ul>
-        <li><g:message code="informational.shared.traits.ICH"></g:message></li>
+        <li><g:message code="informational.shared.traits.All_ICH"></g:message></li>
 
     </ul>
 
