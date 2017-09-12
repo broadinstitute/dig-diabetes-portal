@@ -1,27 +1,22 @@
 <script class="panel-body" id="ExChip_MICAD_script" type="x-tmpl-mustache">
  <div class="panel-body">
 
-<h4>Dataset</h4>
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-    <p>Download URL: <a href="" target="_blank">URL</a><br/>
-        Download date: mm/dd/yyyy<br/>
-        Data set version: version<br/></p>
 
-<h4>Publications</h4>
-
-<p><div class="paper">
-<g:message code="informational.shared.publications.author_year_journal"></g:message><br>
-<g:message code="informational.shared.publications.author_year_journal.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.author_year_journal.citation"></g:message> </div>
+              <p><div class="paper">
+<g:message code="informational.shared.publications.MiGen_2016_NEJM"></g:message><br>
+<g:message code="informational.shared.publications.MiGen_2016_NEJM.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.MiGen_2016_NEJM.citation"></g:message> </div>
 </div></p>
 
 
-    <h4>Dataset phenotypes</h4>
+    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
-        <li><g:message code="informational.shared.traits.trait"></g:message></li>
+        <li><g:message code="informational.shared.traits.MI"></g:message></li>
     </ul>
 
-    <h4>Dataset subjects</h4>
+    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ethnicity</th></tr>
@@ -38,13 +33,12 @@
             </div></td><td>Ancestry</td></tr>
     </table>
 
-    <h4>Project</h4>
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
     <p><g:message code="informational.data.project.project"></g:message></p>
 
 
-<h4>Funding acknowledgments</h4>
-<p><g:message code="informational.data.funding.project"></g:message>
+
 
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.project"></g:message></p>
