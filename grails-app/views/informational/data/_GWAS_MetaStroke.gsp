@@ -17,10 +17,10 @@
 
     <h4>Dataset phenotypes</h4>
     <ul>
-        <li><g:message code="informational.shared.traits.small-vessel_occlusion"></g:message></li>
-        <li><g:message code="informational.shared.traits.cardioembolism"></g:message></li>
-        <li><g:message code="informational.shared.traits.all_ischemic"></g:message></li>
-        <li><g:message code="informational.shared.traits.large-artery_atherosclerosis"></g:message></li>
+    <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
     </ul>
 
     <h4>Project</h4>
