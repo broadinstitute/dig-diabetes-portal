@@ -40,6 +40,14 @@ var mpgSoftware = mpgSoftware || {};
                         })
                     });
                     v['extractedPOSTERIOR_PROBABILITY'] = posteriorProbability;
+                    var credibleSetId = "";
+                    _.forEach(v.CREDIBLE_SET_ID, function (csvalue){
+                        _.forEach(csvalue,function (phenotype){
+                            credibleSetId=phenotype;
+                        })
+                    });
+                    v['extractedCREDIBLE_SET_ID'] = credibleSetId;
+
                     if (typeof v.VAR_ID !== 'undefined') {
                         renderData.variants.push({name:v.VAR_ID, details:v});
                     }

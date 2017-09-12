@@ -105,10 +105,14 @@ public class LocusZoomJsonBuilder {
 
 
         Property posteriorPValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
+        Property credibleSetId =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "CREDIBLE_SET_ID",  this.phenotypeString,  rootDataSetString);
 
         // get the query properties
         if (posteriorPValue != null){
             query.addQueryProperty(posteriorPValue);
+        }
+        if (credibleSetId != null){
+            query.addQueryProperty(credibleSetId);
         }
 
         query.setResultFormat("\""+format+"\"");
