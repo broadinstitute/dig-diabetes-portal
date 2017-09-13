@@ -692,44 +692,98 @@ class WidgetService {
             //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
         log.info("Got LZ static request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
         jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-        JSONObject jsonObject =  new JsonSlurper().parseText(jsonResultString)
-        jsonObject.lastPage = null
-        JSONObject dataJSONObject = jsonObject["data"] as JSONObject
-        List<String> dataFields = dataJSONObject.names() as List
-        int numberOfElements = 0
-        for (String dataField in dataFields){
-            if (dataField == "metadata_rootPOS" ){
-                dataJSONObject.position = dataJSONObject[dataField] as JSONArray
-                numberOfElements = (dataJSONObject[dataField] as List).size()
-                dataJSONObject.remove(dataField);
-            } else if (dataField == "metadata_rootCHROM" ){
-                dataJSONObject.chr = dataJSONObject[dataField] as JSONArray
-                dataJSONObject.remove(dataField);
-            } else if (dataField == "metadata_rootVAR_ID" ){
-                dataJSONObject.id = dataJSONObject[dataField] as JSONArray
-                dataJSONObject.remove(dataField);
-            } else if (dataField == "metadata_rootReference_Allele" ){
-                dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
-                dataJSONObject.remove(dataField);
-            } else if (dataField == "metadata_rootConsequence" ){
-                dataJSONObject.remove(dataField);
-            } else if (dataField == "metadata_rootEffect_Allele" ){
-                dataJSONObject.remove(dataField);
-            } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
-                dataJSONObject.remove(dataField);
-            } else {
-                dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
-                dataJSONObject.remove(dataField);
+        JSONObject jsonObject
+        if (jsonResultString != null){
+            jsonObject =  new JsonSlurper().parseText(jsonResultString)
+            jsonObject.lastPage = null
+            JSONObject dataJSONObject = jsonObject["data"] as JSONObject
+            List<String> dataFields = dataJSONObject.names() as List
+            int numberOfElements = 0
+            for (String dataField in dataFields){
+                if (dataField == "metadata_rootPOS" ){
+                    dataJSONObject.position = dataJSONObject[dataField] as JSONArray
+                    numberOfElements = (dataJSONObject[dataField] as List).size()
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootCHROM" ){
+                    dataJSONObject.chr = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootVAR_ID" ){
+                    dataJSONObject.id = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootReference_Allele" ){
+                    dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootConsequence" ){
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootEffect_Allele" ){
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
+                    dataJSONObject.remove(dataField);
+                } else if (dataField.contains("CREDIBLE_SET_ID") ){
+                    dataJSONObject.remove(dataField);
+                } else {
+                    dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                }
             }
-        }
-        JSONArray emptyArrays = new JSONArray()
-        for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
-        dataJSONObject.scoreTestStat = emptyArrays
-        dataJSONObject.analysis = emptyArrays
-        dataJSONObject.refAlleleFreq = emptyArrays
+            JSONArray emptyArrays = new JSONArray()
+            for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
+            dataJSONObject.scoreTestStat = emptyArrays
+            dataJSONObject.analysis = emptyArrays
+            dataJSONObject.refAlleleFreq = emptyArrays
 
-        jsonObject.remove("data")
-        jsonObject.data = dataJSONObject
+            jsonObject.remove("data")
+            jsonObject.data = dataJSONObject
+
+        } else {
+
+            jsonObject =  new JSONObject()
+            jsonObject.lastPage = null
+            JSONObject dataJSONObject = new JSONObject()
+//            List<String> dataFields = dataJSONObject.names() as List
+            int numberOfElements = 0
+//            for (String dataField in dataFields){
+//                if (dataField == "metadata_rootPOS" ){
+//                    dataJSONObject.position = dataJSONObject[dataField] as JSONArray
+//                    numberOfElements = (dataJSONObject[dataField] as List).size()
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootCHROM" ){
+//                    dataJSONObject.chr = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootVAR_ID" ){
+//                    dataJSONObject.id = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootReference_Allele" ){
+//                    dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootConsequence" ){
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootEffect_Allele" ){
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField.contains("CREDIBLE_SET_ID") ){
+//                    dataJSONObject.remove(dataField);
+//                } else {
+//                    dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                }
+//            }
+            JSONArray emptyArrays = new JSONArray()
+//            for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
+            dataJSONObject.scoreTestStat = emptyArrays
+            dataJSONObject.analysis = emptyArrays
+            dataJSONObject.refAlleleFreq = emptyArrays
+            dataJSONObject.refAllele = emptyArrays
+            dataJSONObject.pvalue = emptyArrays
+            dataJSONObject.id = emptyArrays
+            dataJSONObject.chr = emptyArrays
+            dataJSONObject.position = emptyArrays
+
+            jsonObject.data = dataJSONObject
+
+
+        }
 
 
         // return

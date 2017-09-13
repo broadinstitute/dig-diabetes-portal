@@ -551,7 +551,7 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
                                    "mi" : ["SkeletalMuscle"],
                                    "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", or "ibd"
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
@@ -559,9 +559,9 @@ portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27",
                                                   "stroke": "GWAS_Stroke_mdv70",
                                                   "mi" : "GWAS_CARDIoGRAM_mdv90",
                                                   "ibd":"GWAS_IBDGenomics_eu_mdv80"]
-portal.data.epigenetic.dataset.abbreviation.map = ["t2d": 3,
-                                                  "stroke": 3,
-                                                  "mi" : 3,
-                                                  "ibd": 1]
+portal.data.epigenetic.datasetList.abbreviation.map = ["t2d": "[3]",
+                                                  "stroke": "[3]",
+                                                  "mi" : "[3]",
+                                                  "ibd": "[1,2]"]
 
 

@@ -17,6 +17,27 @@ td.tissueTable.Active_enhancer_2{
 td.tissueTable.Weak_enhancer{
     background: #E6E6FA;
 }
+
+
+td.tissueTable.matchingRegion3_0{
+    background: #0000FF;
+}
+td.tissueTable.matchingRegion3_1{
+    background: #4682B4;
+}
+td.tissueTable.matchingRegion3_2{
+    background: #1E90FF;
+}
+td.tissueTable.matchingRegion3_3{
+    background: #87CEFA;
+}
+td.tissueTable.matchingRegion3_4{
+    background: #B0E0E6;
+}
+td.tissueTable.matchingRegion3_5{
+    background: #E6E6FA;
+}
+
 /*h3k27ac corresponds to assay ID = 1*/
 td.tissueTable.matchingRegion1_0{
     background: #3333FF;
@@ -304,37 +325,12 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
-                    experimentAssays:[]
+                    assayIdList: "${grailsApplication.config.portal.data.epigenetic.datasetList.abbreviation.map[g.portalTypeString()]}"
                 };
-                // ${experimentAssays}
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-                %{--var setToRecall = {chromosome: "${geneChromosome}",--}%
-                    %{--start: ${geneExtentBegin},--}%
-                    %{--end: ${geneExtentEnd},--}%
-                    %{--phenotype: 'T2D',--}%
-                    %{--propertyName: 'P_VALUE',--}%
-                    %{--dataSet: 'GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27',--}%
-                    %{--fillCredibleSetTableUrl:"${g.createLink(controller: 'RegionInfo', action: 'fillCredibleSetTable')}"--}%
-                %{--};--}%
-                %{--mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall);--}%
-                %{--var identifiedGenes = "${identifiedGenes}";--}%
-                %{--var drivingVariables = {};--}%
-                %{--drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');--}%
-                %{--drivingVariables["namedGeneArray"] = [];--}%
-                %{--drivingVariables["supressTitle"] = [1];--}%
-                %{--if ((drivingVariables["allGenes"].length>0)&&--}%
-                    %{--(drivingVariables["allGenes"][0].length>0)) {--}%
-                    %{--drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {--}%
-                        %{--return {'name': o}--}%
-                    %{--});--}%
-                %{--}--}%
-                %{--$(".matchedGenesGoHere").empty().append(--}%
-                    %{--Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)--}%
-                %{--);--}%
-
             };
 
 

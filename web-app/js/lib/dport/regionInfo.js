@@ -82,7 +82,7 @@ var mpgSoftware = mpgSoftware || {};
             return renderData;
         };
 
-        var oneCallbackForEachVariant = function(variants,additionalData){
+        var oneCallbackForEachVariant = function(variants,additionalData,includeRecord){
             var promiseArray = [];
             _.forEach(variants,function (variant){
                 var args = _.flatten([{}, variant]);
@@ -107,12 +107,14 @@ var mpgSoftware = mpgSoftware || {};
                             (typeof data.variants.region_start !== 'undefined')&&
                             (typeof data.variants.variants !== 'undefined')) {
                             _.forEach(data.variants.variants, function (record){
-                                if(typeof tissueGrid[record.source_trans] === 'undefined') {
-                                    tissueGrid[record.source_trans] = {};
-                                }
-                                var tissueRow = tissueGrid[record.source_trans];
-                                if(typeof tissueRow[''+data.variants.region_start] === 'undefined') {
-                                    tissueRow[''+data.variants.region_start] = record;
+                                if (includeRecord(record)){
+                                    if(typeof tissueGrid[record.source_trans] === 'undefined') {
+                                        tissueGrid[record.source_trans] = {};
+                                    }
+                                    var tissueRow = tissueGrid[record.source_trans];
+                                    if(typeof tissueRow[''+data.variants.region_start] === 'undefined') {
+                                        tissueRow[''+data.variants.region_start] = record;
+                                    }
                                 }
                             });
                         }
@@ -147,8 +149,12 @@ var mpgSoftware = mpgSoftware || {};
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
                     );
                     mpgSoftware.geneSignalSummaryMethods.updateCredibleSetTable(data, additionalParameters);
-                    additionalParameters.assayIdList = "[1,2]";
-                    var promises = oneCallbackForEachVariant(data.variants,additionalParameters);
+                    //additionalParameters.assayIdList = "[1,2]";
+                    var includeRecord  = function() {return true;};
+                    if (additionalParameters.assayIdList=='[3]') {
+                        includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1)||(o.element.indexOf('TSS')>-1))};
+                    }
+                    var promises = oneCallbackForEachVariant(data.variants,additionalParameters,includeRecord);
 
                     $.when.apply($, promises).then(function(schemas) {
                         console.log("DONE with "+getDevelopingTissueGrid(), this, schemas);
@@ -182,7 +188,23 @@ var mpgSoftware = mpgSoftware || {};
                             while (index<quantileArray.length&& val>quantileArray[index].min){index++};
                             return index;
                         };
-
+                        var determineCategoricalColorIndex = function (elementName){
+                            var returnVal = 5;
+                            if (typeof elementName !== 'undefined'){
+                                if (elementName.indexOf("Active_enhancer_2")>-1){
+                                    returnVal = 4;
+                                } else if (elementName.indexOf("Active_enhancer_1")>-1){
+                                    returnVal = 3;
+                                } else if (elementName.indexOf("Genic_enhancer")>-1){
+                                    returnVal = 2;
+                                } else if (elementName.indexOf("Weak_TSS")>-1){
+                                    returnVal = 1;
+                                } else if (elementName.indexOf("Active_TSS")>-1){
+                                    returnVal = 0;
+                                }
+                            }
+                            return returnVal;
+                        }
                         var allVariants = _.flatten([{}, data.variants]);
                         var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                         var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
@@ -196,9 +218,15 @@ var mpgSoftware = mpgSoftware || {};
                                     var worthIncluding = false;
                                     if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
                                         var elementName = record.source_trans;
-                                        lineToAdd += ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                                            ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
-
+                                        if (record.ASSAY_ID === 3){
+                                            lineToAdd += ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_"+determineCategoricalColorIndex(record.element)+" "+
+                                                elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                                                ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
+                                        } else {
+                                            lineToAdd += ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
+                                                elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                                                ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
+                                        }
                                     } else {
                                         lineToAdd += ("<td class='tissueTable "+elementName+"'></td>");
 

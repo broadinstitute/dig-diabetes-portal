@@ -62,6 +62,26 @@ var mpgSoftware = mpgSoftware || {};
             }
         }
 
+        LocusZoom.Layouts.add("data_layer", "recomb_rate_filled", {
+            namespace: { "recomb": "recomb" },
+            id: "recombratenew",
+            type: "filledCurve",
+            fields: ["{{namespace[recomb]}}position", "{{namespace[recomb]}}recomb_rate"],
+            z_index: 1,
+            style: {
+                "stroke": "#0000FF",
+                "stroke-width": "1.5px"
+            },
+            x_axis: {
+                field: "{{namespace[recomb]}}position"
+            },
+            y_axis: {
+                axis: 2,
+                field: "{{namespace[recomb]}}recomb_rate",
+                floor: 0,
+                ceiling: 100
+            }
+        });
 
 
         LocusZoom.DataLayers.add("filledCurve", function(layout){
@@ -69,7 +89,7 @@ var mpgSoftware = mpgSoftware || {};
             // Define a default layout for this DataLayer type and merge it with the passed argument
             this.DefaultLayout = {
                 style: {
-                    fill: "transparent",
+                    fill: "#0000ff",
                     "stroke-width": "2px"
                 },
                 interpolate: "linear",
@@ -83,8 +103,7 @@ var mpgSoftware = mpgSoftware || {};
             this.mouse_event = null;
 
             // Var for storing the generated line function itself
-            this.filledCurve = null;
-            this.area = null;
+            this.line = null;
 
             this.tooltip_timeout = null;
 
@@ -233,30 +252,12 @@ var mpgSoftware = mpgSoftware || {};
                     .append("path")
                     .attr("class", "lz-data_layer-line");
 
-
                 //define the area under the line
-                var area = d3.svg.area()
+                this.line = d3.svg.area()
                     .x(function(d) { return parseFloat(panel[x_scale](d[x_field])); })
-                    .y0(1000)
+                    .y0(function(d) {return parseFloat(panel[y_scale](0));})
                     .y1(function(d) { return parseFloat(panel[y_scale](d[y_field])); })
                     .interpolate(this.layout.interpolate);
-
-                //create svg element to add colored area
-                var areap = this.svg.group
-                    .selectAll("path.lz-data_layer-line-area")
-                    .data([this.data]);
-
-                // Generate the line
-                this.filledCurve = d3.svg.line()
-                    .x(function(d) { return parseFloat(panel[x_scale](d[x_field])); })
-                    .y(function(d) { return parseFloat(panel[y_scale](d[y_field])); })
-                    .interpolate(this.layout.interpolate);
-
-                //Generate the colored area under line
-                areap.enter().append("path")
-                    .attr("d", area)
-                    .style("fill", "yellow");
-
 
 
                 // Apply line and style
@@ -265,19 +266,13 @@ var mpgSoftware = mpgSoftware || {};
                         .transition()
                         .duration(this.layout.transition.duration || 0)
                         .ease(this.layout.transition.ease || "cubic-in-out")
-                        .attr("d", this.filledCurve)
+                        .attr("d", this.line)
                         .style(this.layout.style);
-                    areap.transition()
-                        .attr("d", this.filledCurve);
-                    areap.exit.remove();
-
                 } else {
                     selection
-                        .attr("d", this.filledCurve)
+                        .attr("d", this.line)
                         .style(this.layout.style);
-                    areap
-                        .attr("d", this.filledCurve)
-                        .style(this.layout.style);
+
                 }
 
 
@@ -296,8 +291,6 @@ var mpgSoftware = mpgSoftware || {};
                         .x(function(d) { return parseFloat(panel[x_scale](d[x_field])); })
                         .y(function(d) { return parseFloat(panel[y_scale](d[y_field])); })
                         .interpolate(this.layout.interpolate);
-
-
                     hitarea
                         .attr("d", hitarea_line)
                         .on("mouseover", function(){
@@ -324,7 +317,6 @@ var mpgSoftware = mpgSoftware || {};
 
                 // Remove old elements as needed
                 selection.exit().remove();
-
             };
 
             // Redefine setElementStatus family of methods as line data layers will only ever have a single path element
@@ -378,13 +370,13 @@ var mpgSoftware = mpgSoftware || {};
                 var data_layer = this.parent_panel.data_layers[layout.data_layer_id];
                 var text = data_layer.layout.split_tracks ? "Hide DNase reads" : "Show DNase reads";
                 if (this.button){
-                    this.button.setText(text);
+                    this.button.setHtml(text);
                     this.button.show();
                     this.parent.position();
                     return this;
                 } else {
                     this.button = new LocusZoom.Dashboard.Component.Button(this)
-                        .setColor(layout.color).setText(text)
+                        .setColor(layout.color).setHtml(text)
                         .setTitle("Toggle whether or not tracks are split apart or merged together")
                         .setOnclick(function(){
                             //alert('display detailed tracks');
@@ -421,13 +413,13 @@ var mpgSoftware = mpgSoftware || {};
                 var data_layer = this.parent_panel.data_layers[layout.data_layer_id];
                 var text = data_layer.layout.split_tracks ? "Hide H3K27ac reads" : "Show H3K27ac reads";
                 if (this.button){
-                    this.button.setText(text);
+                    this.button.setHtml(text);
                     this.button.show();
                     this.parent.position();
                     return this;
                 } else {
                     this.button = new LocusZoom.Dashboard.Component.Button(this)
-                        .setColor(layout.color).setText(text)
+                        .setColor(layout.color).setHtml(text)
                         .setTitle("Toggle whether or not tracks are split apart or merged together")
                         .setOnclick(function(){
                             //alert('display detailed tracks');
@@ -696,7 +688,8 @@ var mpgSoftware = mpgSoftware || {};
             var developingStructure = {
                 namespace: {layerName: layerName},
                 id: "recombratenew",
-                type: "filledLine",
+                type: "filledCurve",
+                //type: "filledLine",
                 fields: [layerName+":position", layerName+":pvalue"],
                 z_index: 1,
                 style: {
@@ -1473,7 +1466,8 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof inParm.functionalTrack !== 'undefined'){
                     if ( typeof inParm.defaultTissues !== 'undefined'){
                         _.forEach(inParm.defaultTissues,function(o,i){
-                            if (typeof inParm.experimentAssays === 'undefined'){
+                            if ((typeof inParm.experimentAssays === 'undefined')||
+                                (inParm.experimentAssays.length === 0)){
                                 addLZTissueAnnotations({
                                     tissueCode: o,
                                     tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
@@ -1482,22 +1476,24 @@ var mpgSoftware = mpgSoftware || {};
                                 },lzGraphicDomId,inParm);
                             } else {
                                 var experimentOfInterests = _.find(inParm.experimentAssays, function (t){return (t.expt==o)});
-                                _.forEach(experimentOfInterests.assays, function (assay){
-                                    var assayId = 3;
-                                    if (assay==='H3K27ac'){
-                                        assayId = 1;
-                                    } else if (assay==='DNase'){
-                                        assayId = 2;
-                                    }
-                                    addLZTissueAnnotations({
-                                        tissueCode: o,
-                                        tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
-                                        retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl,
-                                        assayName: assay,
-                                        assayIdList:"["+assayId+"]"
-                                    },lzGraphicDomId,inParm);
-                                });
-                            }
+                                if(typeof experimentOfInterests !== 'undefined'){
+                                    _.forEach(experimentOfInterests.assays, function (assay){
+                                        var assayId = 3;
+                                        if (assay==='H3K27ac'){
+                                            assayId = 1;
+                                        } else if (assay==='DNase'){
+                                            assayId = 2;
+                                        }
+                                        addLZTissueAnnotations({
+                                            tissueCode: o,
+                                            tissueDescriptiveName: inParm.defaultTissuesDescriptions[i],
+                                            retrieveFunctionalDataAjaxUrl:inParm.retrieveFunctionalDataAjaxUrl,
+                                            assayName: assay,
+                                            assayIdList:"["+assayId+"]"
+                                        },lzGraphicDomId,inParm);
+                                    });
+                                }
+                             }
 
                         });
                     }

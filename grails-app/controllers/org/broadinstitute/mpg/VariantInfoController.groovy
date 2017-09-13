@@ -259,13 +259,12 @@ class VariantInfoController {
         String portalType = g.portalTypeString() as String
         String chromosome = ''
         String source = ''
-        String assayName = ''
+        String assayName = 'notused'
         int startPos
         int endPos
         int pageStart = 0
         int pageEnd = 500
-        List<Integer> assayIdList = []
-        int assayId =  grailsApplication.config.portal.data.epigenetic.dataset.abbreviation.map[portalType] as int
+        String assayIdList = grailsApplication.config.portal.data.epigenetic.datasetList.abbreviation.map[portalType] as String
         Boolean lzFormat =  false
         if (params.chromosome) {
             chromosome = params.chromosome
@@ -283,22 +282,10 @@ class VariantInfoController {
             source =  params.source
             log.debug "retrieveFunctionalData params.source = ${params.source}"
         }
-        if (params.assayId) {
-            assayId =  Integer.parseInt(params.assayId)
-            log.debug "retrieveFunctionalData params.assayId = ${params.assayId}"
-        }
-        if (params.assayIdList) {
-            log.debug "retrieveFunctionalData params.assayId = ${params.assayIdList}"
-        } else {
-            log.debug "No assayIdList!!!!!!!!!!!!!!!"
-        }
-
-        switch(assayId){
-            case 1: assayName = 'H3K27ac';  break
-            case 2: assayName = 'DNase';  break
-            case 3: assayName = 'ChromHMM';  break
-            default: break;
-        }
+//        if (params.assayIdList) {
+//            log.debug "retrieveFunctionalData params.assayId = ${params.assayIdList}"
+//            assayIdList = params.assayIdList
+//        }
 
         if (params.lzFormat) {
             int formatIndicator =  Integer.parseInt(params.lzFormat)
@@ -328,7 +315,7 @@ class VariantInfoController {
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
          dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
-                 source, assayId, params.assayIdList )
+                 source, 3, params.assayIdList )
 
         if (lzFormat){
             JSONObject root = new JSONObject()
