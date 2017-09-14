@@ -38,7 +38,8 @@
                                                 dataSet: '{{dataSet}}',
                                                 datasetReadableName: '{{dataSetReadable}}',
                                                 propertyName: '{{propertyName}}',
-                                                description: '{{description}}'
+                                                description: '{{description}}',
+                                                assayIdList: '{{assayIdList}}'
                                         },
                                         '{{dataSet}}',
                                         '${createLink(controller:"gene", action:"getLocusZoom")}',
@@ -66,7 +67,8 @@
                                                 dataSet: '{{dataSet}}',
                                                 datasetReadableName: '{{dataSetReadable}}',
                                                 propertyName: '{{propertyName}}',
-                                                description: '{{description}}'
+                                                description: '{{description}}',
+                                                assayIdList: '{{assayIdList}}'
                                         },
                                         '{{dataSet}}',
                                         '${createLink(controller:"gene", action:"getLocusZoom")}',
@@ -92,7 +94,8 @@
                                     <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
                                                     tissueCode: '{{name}}',
                                                     tissueDescriptiveName: '{{description}}',
-                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
+                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                                                    assayIdList: '{{assayIdList}}'
                                                 },
                                             ('#'+'{{lzDomSpec}}'),
                                             {colorBy:1,positionBy:1})">{{description}}

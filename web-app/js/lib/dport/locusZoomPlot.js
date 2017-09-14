@@ -825,8 +825,8 @@ var mpgSoftware = mpgSoftware || {};
                 (makeDynamic==='dynamic')){
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
             }
-            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this);\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
-            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.expandedView(this);\" style=\"cursor: pointer;\">Expanded view</a><br>";
+            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this,'"+lzParameters.domId1+"','"+lzParameters.assayIdList+"');\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
+            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.expandedView(this,'"+lzParameters.domId1+"','"+lzParameters.assayIdList+"');\" style=\"cursor: pointer;\">Expanded view</a><br>";
             if (typeof pageVars.excludeLdIndexVariantReset !== 'undefined'){
                 if (pageVars.excludeLdIndexVariantReset === false){
                     toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
@@ -1082,7 +1082,7 @@ var mpgSoftware = mpgSoftware || {};
             //LocusZoom.getToolTipData(myThis).deselect();
             // figure out the tissues we need
         }
-        function replaceTissues(myThis) {
+        function replaceTissues(myThis,domId,assayIdList) {
             var lzMyThis = LocusZoom.getToolTipData(myThis);
             // remove the old tissue tracks
             var tissueTracks = _.filter(lzMyThis.getDataLayer().parent_plot.panels,function(v,k){return (k.indexOf('intervals')===0)});
@@ -1100,8 +1100,8 @@ var mpgSoftware = mpgSoftware || {};
 	      chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split("_")[0];
             }
 
-            replaceTissuesWithOverlappingEnhancers( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
-                                                   chromosome );
+            replaceTissuesWithOverlappingIbdRegions( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
+                                                   chromosome,domId,assayIdList );
         }
         var replaceTissuesWithOverlappingEnhancers = function(position, chromosome,plotDomId,assayIdList){
             var callingData = {};
@@ -1142,7 +1142,7 @@ var mpgSoftware = mpgSoftware || {};
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
                 //var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
-                replaceTissuesWithOverlappingEnhancers(variantParts[1], variantParts[0],plotDomId,assayIdList);
+                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList);
             }
         };
         var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId,plotDomId,assayIdList){
@@ -1465,6 +1465,8 @@ var mpgSoftware = mpgSoftware || {};
 
                 // default panel
                 addLZPhenotype({
+                        assayIdList: inParm.assayIdList,
+                        domId1: inParm.domId1,
                         phenotype: defaultPhenotypeName,
                         description: inParm.phenoTypeDescription,
                         propertyName:inParm.phenoPropertyName,
