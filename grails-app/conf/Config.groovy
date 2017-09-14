@@ -171,12 +171,6 @@ digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.comput
 defaultRestServer = digAWSibddemoec2
 
  getRestServerList = [
-         digdev01Server,
-         digdev02Server,
-         digqa01Server,
-         digqa02Server,
-         digprod01Server,
-         digprod02Server,
          digdevlocalServer,
          digAWSKBV2prodServer,
          digAWS02KBV2prodServer,
