@@ -22,7 +22,6 @@
         <r:layoutResources/>
 
         <link href="https://fonts.googleapis.com/css?family=Lato|Oswald" rel="stylesheet">
-        <g:external uri="/images/icons/dna-strands.ico"/>
 
 
         <g:layoutHead/>

@@ -1103,19 +1103,19 @@ var mpgSoftware = mpgSoftware || {};
             replaceTissuesWithOverlappingIbdRegions( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
                                                    chromosome,domId,assayIdList );
         }
-        var replaceTissuesWithOverlappingEnhancers = function(position, chromosome,plotDomId,assayIdList){
-            var callingData = {};
-            callingData.POS = position;
-            callingData.CHROM = chromosome;
-            callingData.plotDomId = plotDomId;
-            callingData.ASSAY_ID_LIST = '[3]';
-            var includeRecord  = function() {return true;};
-            if (callingData.ASSAY_ID_LIST=='[3]') {
-                includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1)||(o.element.indexOf('TSS')>-1))};
-            }
-            callingData.includeRecord = includeRecord;
-            retrieveFunctionalData(callingData,processEpigeneticData,callingData)
-        };
+        // var replaceTissuesWithOverlappingEnhancers = function(position, chromosome,plotDomId,assayIdList){
+        //     var callingData = {};
+        //     callingData.POS = position;
+        //     callingData.CHROM = chromosome;
+        //     callingData.plotDomId = plotDomId;
+        //     callingData.ASSAY_ID_LIST = '[3]';
+        //     var includeRecord  = function() {return true;};
+        //     if (callingData.ASSAY_ID_LIST=='[3]') {
+        //         includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1)||(o.element.indexOf('TSS')>-1))};
+        //     }
+        //     callingData.includeRecord = includeRecord;
+        //     retrieveFunctionalData(callingData,processEpigeneticData,callingData)
+        // };
         var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome,plotDomId,assayIdList){
             var callingData = {};
             callingData.POS = position;
