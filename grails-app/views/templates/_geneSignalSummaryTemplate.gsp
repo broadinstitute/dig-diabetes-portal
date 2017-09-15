@@ -38,7 +38,8 @@
                                                 dataSet: '{{dataSet}}',
                                                 datasetReadableName: '{{dataSetReadable}}',
                                                 propertyName: '{{propertyName}}',
-                                                description: '{{description}}'
+                                                description: '{{description}}',
+                                                assayIdList: '{{assayIdList}}'
                                         },
                                         '{{dataSet}}',
                                         '${createLink(controller:"gene", action:"getLocusZoom")}',
@@ -66,7 +67,8 @@
                                                 dataSet: '{{dataSet}}',
                                                 datasetReadableName: '{{dataSetReadable}}',
                                                 propertyName: '{{propertyName}}',
-                                                description: '{{description}}'
+                                                description: '{{description}}',
+                                                assayIdList: '{{assayIdList}}'
                                         },
                                         '{{dataSet}}',
                                         '${createLink(controller:"gene", action:"getLocusZoom")}',
@@ -92,7 +94,8 @@
                                     <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
                                                     tissueCode: '{{name}}',
                                                     tissueDescriptiveName: '{{description}}',
-                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'
+                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                                                    assayIdList: '{{assayIdList}}'
                                                 },
                                             ('#'+'{{lzDomSpec}}'),
                                             {colorBy:1,positionBy:1})">{{description}}
@@ -424,7 +427,7 @@
             <th></th>
             <th></th>
             {{#variants}}
-                <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet')"
+                <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}"  data-toggle="popover">
 

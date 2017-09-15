@@ -640,7 +640,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         return renderData;
     };
 
-    var buildRenderData = function (data, mafCutoff) {
+    var buildRenderData = function (data, mafCutoff,additionalData) {
         var renderData = {variants: [],
             rvar: [],
             cvar: [],
@@ -655,6 +655,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
             });
         }
+        renderData['assayIdList'] = additionalData.assayIdList
         renderData.tissues = _.filter(data.lzOptions, function(o){return o.dataType==='tissue'});
         renderData['tissueDataExists'] = (renderData.tissues.length > 0) ? [1] : [];
         renderData.static = _.filter(data.lzOptions, function(o){return o.dataType==='static'});
@@ -665,7 +666,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         return renderData;
     };
 
-    var buildRenderDataFromNonAggregatedData = function (data, mafCutoff) {
+    var buildRenderDataFromNonAggregatedData = function (data, mafCutoff, additionalData) {
         var renderData = {variants: [],
             rvar: [],
             cvar: [],
@@ -679,6 +680,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 renderData.variants.push(processNonAggregatedData(v[0]));
             });
         }
+        renderData['assayIdList'] = additionalData.assayIdList;
         renderData.tissues = _.filter(data.lzOptions, function(o){return o.dataType==='tissue'});
         renderData['tissueDataExists'] = (renderData.tissues.length > 0) ? [1] : [];
         renderData.static = _.filter(data.lzOptions, function(o){return o.dataType==='static'});
@@ -811,7 +813,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
     };
     var displayInterestingPhenotypes = function (data,params) {
-        var renderData = buildRenderData(data, 0.05);
+        var renderData = buildRenderData(data, 0.05, params);
         var signalLevel = assessSignalSignificance(renderData);
         var acceptableDatasetObjs =_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==='false'});
         var acceptableDatasets = _.uniq(acceptableDatasetObjs.map(function(t){return t.dataset}));
@@ -934,7 +936,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
     var updateCommonTable = function (data,additionalParameters) {
-        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05, additionalParameters);
         renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
         renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
         renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
@@ -945,7 +947,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
     var updateHighImpactTable = function (data,additionalParameters) {
-        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05, additionalParameters);
         renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
         renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
         renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
@@ -957,7 +959,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var updateAllVariantsTable = function (data,additionalParameters) {
-        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05);
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05, additionalParameters);
         renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
         renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
         renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
@@ -968,7 +970,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
     var updateCredibleSetTable = function (data,additionalParameters) {
-        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderDataFromNonAggregatedData (data,0.05);
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderDataFromNonAggregatedData (data,0.05, additionalParameters);
         renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData,1);
         renderData["propertiesToInclude"] = (data.propertiesToInclude==="[]")?[]:data.propertiesToInclude;
         renderData["propertiesToRemove"] = (data.propertiesToRemove==="[]")?[]:data.propertiesToRemove;
@@ -1162,7 +1164,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         // var useIgvNotLz = additionalParameters.preferIgv;
         var useIgvNotLz = ($('input[name=genomeBrowser]:checked').val() === '2');
 
-        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData(data, 0.05);
+        var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData(data, 0.05, additionalParameters);
         var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
         var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
         renderData = mpgSoftware.geneSignalSummaryMethods.refineRenderData(renderData, 1);
@@ -1258,6 +1260,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var defaultTissues = additionalParameters.defaultTissues;
             var defaultTissuesDescriptions = additionalParameters.defaultTissuesDescriptions;
             var lzParm = {
+                assayIdList:additionalParameters.assayIdList,
                 portalTypeString:additionalParameters.portalTypeString,
                 page:'geneInfo',
                 variantId:null,
@@ -1287,6 +1290,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
             var lzParmCred = {
+                assayIdList:additionalParameters.assayIdList,
                 portalTypeString:additionalParameters.portalTypeString,
                 page:'geneInfo',
                 variantId:null,

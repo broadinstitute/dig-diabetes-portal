@@ -15,7 +15,7 @@ var mpgSoftware = mpgSoftware || {};
             developingTissueGrid = myDevelopingTissueGrid;
         };
 
-        var buildRenderData = function (data){
+        var buildRenderData = function (data,additionalParameters){
             var renderData = {  variants: [],
                                 const:{
                                     coding:[],
@@ -49,7 +49,7 @@ var mpgSoftware = mpgSoftware || {};
                     v['extractedCREDIBLE_SET_ID'] = credibleSetId;
 
                     if (typeof v.VAR_ID !== 'undefined') {
-                        renderData.variants.push({name:v.VAR_ID, details:v});
+                        renderData.variants.push({name:v.VAR_ID, details:v, assayIdList: additionalParameters.assayIdList});
                     }
                     if (typeof v.MOST_DEL_SCORE !== 'undefined') {
                         if ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)){
@@ -144,7 +144,7 @@ var mpgSoftware = mpgSoftware || {};
                     // var allVariants = _.flatten([{}, data.variants]);
                     // var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                     // var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
-                    var drivingVariables = buildRenderData(data);
+                    var drivingVariables = buildRenderData(data,additionalParameters);
                     $(".credibleSetTableGoesHere").empty().append(
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
                     );
@@ -272,7 +272,7 @@ var mpgSoftware = mpgSoftware || {};
                             var retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
                                 "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
                                 "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
-                                $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\")' href='#'>"+
+                                $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"dom\",\""+additionalParameters.assayIdList+"\")' href='#'>"+
                                 "Tissues with overlapping enhancer regions</a></div>";
                             if (additionalParameters.portalTypeString==='ibd'){
                                 retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
