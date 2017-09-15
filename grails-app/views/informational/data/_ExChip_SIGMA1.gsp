@@ -1,11 +1,21 @@
 <script class="panel-body" id="ExChip_SIGMA1_script" type="x-tmpl-mustache">
-<h4>Dataset phenotypes</h4>
+
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Mercader_2017_Diabetes"></g:message><br>
+<g:message code="informational.shared.publications.Mercader_2017_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Mercader_2017_Diabetes.citation"></g:message> </div>
+</div></p>
+
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
 
 
-    <h4>Dataset subjects</h4>
+<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
@@ -100,7 +110,7 @@
 
         <tr><td>Total: 3,848</td><td>Total: 4,366</td><td></td><td></td></tr>
     </table>
-    <h4>Project</h4>
+<h4><g:message code="informational.shared.headers.project"></g:message></h4>
     <h5>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a
             href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a>
     </small></h5>
