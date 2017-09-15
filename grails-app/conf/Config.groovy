@@ -538,7 +538,7 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 // placeholder for data version
 diabetes.data.version = "mdv80";
-portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv90", "ibd": "mdv80"];
+portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
 portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
