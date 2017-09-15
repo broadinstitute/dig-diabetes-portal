@@ -38,7 +38,6 @@ td.tissueTable.matchingRegion3_4{
     background: #FFC34D;
 }
 td.tissueTable.matchingRegion3_5{
-    background: #E6E6FA;
 }
 
 /*h3k27ac corresponds to assay ID = 1*/
@@ -80,14 +79,17 @@ td.tissueTable.matchingRegion2_4{
 td.tissueTable.matchingRegion2_5{
          background: #33FFFF;
 }
-
+th.niceHeaders.niceHeadersThatAreLinks{
+    text-decoration: underline;
+    color: blue
+}
 #overlapTable tr {
     height:1.5em;
     min-height:1.5em;
     max-height:1.5em;
 }
 #overlapTable td {
-    padding: 4px 0 0 0;
+    padding: 1px 0 0 0;
 }
 .credibleSetTableGoesHere th.niceHeaders{
     background: white;

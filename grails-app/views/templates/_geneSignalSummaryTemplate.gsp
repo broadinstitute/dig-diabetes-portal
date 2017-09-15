@@ -437,7 +437,7 @@ Choose overlaps:&nbsp;
             <th></th>
             <th></th>
             {{#variants}}
-                <th class="niceHeaders" style="background:#ffffff" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
+                <th class="niceHeaders niceHeadersThatAreLinks" style="background:#ffffff; text-decoration: underline;color: blue" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}"  data-toggle="popover">
 

@@ -217,7 +217,28 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         }
                         return lineToAdd;
-                    }
+                    };
+                    var extractValuesForTissueDisplay = function (tissueGrid){
+                        var sortableTissueArray = [];
+                        _.forEach(Object.keys(tissueGrid),function(tissueKey){
+                            sortableTissueArray.push(tissueGrid[tissueKey]);
+                        });
+                        var everySingleValue = [];
+                        var sortedArrayOfArrays = _.sortBy(sortableTissueArray, function(objArray){
+                            var bestVariantPerTissue = _.sortBy(objArray, function(singleVariant){
+                                var oneValue = singleVariant.VALUE;
+                                everySingleValue.push(oneValue);
+                                return oneValue;
+                            })[0];
+                            return bestVariantPerTissue.VALUE
+                        });
+                        return {
+                            sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){return oneRec[Object.keys(oneRec)[0]].source_trans}),
+                            quantileArray: createQuantilesArray(everySingleValue)
+                        };
+
+
+                    };
 
 
                     //var assayIdList = $("select.variantIntersectionChoiceSelect").find(":selected").val();
@@ -248,30 +269,19 @@ var mpgSoftware = mpgSoftware || {};
                             subsidiaryTissueGrid = filterTissueGrid(tissueGrid,1);
                         }
 
-                        var sortableTissueArray = [];
-                        _.forEach(Object.keys(primaryTissueGrid),function(tissueKey){
-                            sortableTissueArray.push(primaryTissueGrid[tissueKey]);
-                        });
-                        var everySingleValue = [];
-                        var sortedArrayOfArrays = _.sortBy(sortableTissueArray, function(objArray){
-                            var bestVariantPerTissue = _.sortBy(objArray, function(singleVariant){
-                                var oneValue = singleVariant.VALUE;
-                                everySingleValue.push(oneValue);
-                                return oneValue;
-                            })[0];
-                            return bestVariantPerTissue.VALUE
-                        });
-                        var sortedTissues = _.map(sortedArrayOfArrays, function(oneRec){return oneRec[Object.keys(oneRec)[0]].source_trans});
-                        var quantileArray = createQuantilesArray(everySingleValue);
+                        var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
+                        // we only need to consider the subsidiary tissues that match a primary tissue
+                        var subsidiaryTissueObject = extractValuesForTissueDisplay(_.filter(subsidiaryTissueGrid,function(v,k){return typeof primaryTissueGrid[k]!=='undefined' }));
+
 
                         var allVariants = _.flatten([{}, data.variants]);
                         var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                         var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
 
-                        _.forEach(sortedTissues,function(tissueKey){
+                        _.forEach(primaryTissueObject.sortedTissues,function(tissueKey){
                             var lineToAdd = "<tr><td></td><td>"+tissueKey+"</td>";
                             _.forEach(sortedVariants,function(variantRec){
-                                    lineToAdd+=writeOneLineOfTheHeatMap(primaryTissueGrid,tissueKey,quantileArray,variantRec)
+                                    lineToAdd+=writeOneLineOfTheHeatMap(primaryTissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec)
                             });
                             lineToAdd += '</tr>';
                             $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);
@@ -281,7 +291,7 @@ var mpgSoftware = mpgSoftware || {};
                                 if (typeof subsidiaryTissueGrid[tissueKey] !== 'undefined') {
                                     var lineToAdd = "<tr><td></td><td></td>";
                                     _.forEach(sortedVariants,function(variantRec){
-                                        lineToAdd+=writeOneLineOfTheHeatMap(subsidiaryTissueGrid,tissueKey,quantileArray,variantRec)
+                                        lineToAdd+=writeOneLineOfTheHeatMap(subsidiaryTissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,variantRec)
                                     });
                                     lineToAdd += '</tr>';
                                     $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);

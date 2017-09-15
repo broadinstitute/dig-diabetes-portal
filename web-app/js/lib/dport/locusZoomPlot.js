@@ -548,8 +548,8 @@ var mpgSoftware = mpgSoftware || {};
                     scale_function: "categorical_bin",
                     parameters: {
                         categories: [1,2,3],
-                        values: ["rgb(0,0,255)",// 1=H3k27AC
-                            "rgb(255,0,0)",//2=DNase
+                        values: ["rgb(255,0,0)",// 1=H3k27AC
+                            "rgb(0,0,255)",//2=DNase
                             "rgb(0,255,0)"],//3=For the Parker data -- we shouldn't see this result here
 
                         null_value: "#B8B8B8"
@@ -584,8 +584,6 @@ var mpgSoftware = mpgSoftware || {};
                         { action: "toggle", status: "selected" }
                     ]
                 }
-                // ,
-                // tooltip: customIntervalsToolTip(layerName)
             };
             _.forEach(developingStructure.legend,function(o,i){
                 o[stateIdSpec] = (i+1);
@@ -681,9 +679,9 @@ var mpgSoftware = mpgSoftware || {};
 
         var customCurveDataLayer = function (layerName,assayId){
             var stateIdSpec = layerName+":state_id";
-            var color = "#0000FF";
+            var color = "#FF0000";
             if (assayId==="DNase"){
-                color = "#FF0000";
+                color = "#0000FF";
             }
             var developingStructure = {
                 namespace: {layerName: layerName},
@@ -1412,7 +1410,7 @@ var mpgSoftware = mpgSoftware || {};
             buildChromatinAccessibilitySource(dataSources[currentLzPlotKey],getLocusZoomFilledPlotUrl,tissueCode,phenotypeName,domId1,assayId);
             addChromatinAccessibilityTrack(locusZoomPlot[currentLzPlotKey],tissueDescriptiveName,tissueCode,phenotypeName,domId1,assayId);
 
-            rescaleSVG();
+           rescaleSVG();
 
         };
 
@@ -1512,16 +1510,6 @@ var mpgSoftware = mpgSoftware || {};
                     }
 
                 }
-
-                // if ((typeof inParm.getLocusZoomFilledPlotUrl !== 'undefined') &&
-                //     (inParm.getLocusZoomFilledPlotUrl !== 'junk')){
-                //     addLZTissueChromatinAccessibility({
-                //         tissueCode: 'tissue',
-                //         tissueDescriptiveName: 'chromatin accessibility in aortic tissue',
-                //         getLocusZoomFilledPlotUrl:inParm.getLocusZoomFilledPlotUrl,
-                //         phenoTypeName:inParm.phenoTypeName
-                //     },lzGraphicDomId,inParm);
-                // }
 
 
                 if ((typeof inParm.pageInitialization !== 'undefined')&&
