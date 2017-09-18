@@ -95,7 +95,7 @@
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
-                        he EPIC (European Prospective Study into Cancer and Nutrition) study sub-cohorts from the UK were used. Subjects were collected in collaboration with general practitioners, mainly in Cambridgeshire and Norfolk. Cases were individuals who developed fatal or non-fatal CAD during an average follow-up of 11 years ending June 2006. Participants were identified if they had a hospital admission and/or died with CAD as the underlying cause. CAD was defined as cause of death codes ICD-9 410-414 or ICD-10 I20-I25, and hospital discharge codes ICD- 10 I20.0, I21, I22, or I23 according to the International Classification of Diseases, 9th and 10th revisions, respectively.
+                        The EPIC (European Prospective Study into Cancer and Nutrition) study sub-cohorts from the UK were used. Subjects were collected in collaboration with general practitioners, mainly in Cambridgeshire and Norfolk. Cases were individuals who developed fatal or non-fatal CAD during an average follow-up of 11 years ending June 2006. Participants were identified if they had a hospital admission and/or died with CAD as the underlying cause. CAD was defined as cause of death codes ICD-9 410-414 or ICD-10 I20-I25, and hospital discharge codes ICD- 10 I20.0, I21, I22, or I23 according to the International Classification of Diseases, 9th and 10th revisions, respectively.
                         </td>
                         <td valign="top">
                         Controls were study participants who remained free of any cardiovascular disease during follow-up (defined as ICD-9 401- 448 and ICD-10 I10-I79)
@@ -103,7 +103,24 @@
                 </table>
             </div></td><td>European</td></tr>
 
-                               <tr><td>nnn</td><td>nnn</td><td><a
+                               <tr><td>2,473</td><td>2,047</td><td><a
+                onclick="showSection(event)">First-time incidence of myocardial infarction in the AC county 3 (FIA3)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Cases of MI occurring in participants from Vasterbotten Intervention Program (VIP), WHO’s Multinational Monitoring of Trends and Determinants in Cardiovascular Disease (MONICA) study in northern Sweden and the Mammography Screening Project (MSP) in Vasterbotten
+                        </td>
+                        <td valign="top">
+                        Individuals free of MI from VIP and MSP
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+
+                              <tr><td>nnn</td><td>nnn</td><td><a
                 onclick="showSection(event)">name</a>
 
             <div style="display: none;" class="cohortDetail">
@@ -118,7 +135,6 @@
                         </td></tr>
                 </table>
             </div></td><td>European</td></tr>
-
 
 </table>
 ****************
