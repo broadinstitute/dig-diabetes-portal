@@ -133,7 +133,7 @@
     <div class="fluid" style="font-size:16px; background-image:url(${resource(dir: 'images/stroke', file: 'front_bg_2017_stroke.png')});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
 </g:if>
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-    <div class="fluid" style="font-size:16px; background-image:url(${resource(dir: 'images/mi', file: 'front_bg_2017_mi4.png')});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
+    <div class="fluid" style="font-size:16px; background-size:100% 100%; background-image: url(${resource(dir: 'images/mi', file: 'front_bg_2017_mi5.png')}); background-position: center; padding-bottom: 70px; padding-top:0px;">
 </g:elseif>
 <g:else>
     <div class="fluid" style="font-size:16px; background-image:url(${resource(dir: 'images', file: 'front_bg_2017-02.png')});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
@@ -146,7 +146,7 @@
                     <p style="padding-top:10px; padding-bottom:30px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.stroke.header.tagline" /></p>
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header.svg"))}" style="width:400px; margin-top: -30px; margin-left: -48px;" />
+                    <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header1.svg"))}" style="width:450px; margin-top: -30px; margin-left: -48px;" />
                     <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.mi.header.tagline" /></p>
                 </g:elseif>
                 <g:else>
@@ -244,7 +244,7 @@
 </div>
 
 %{--Main search page for application--}%
-<div class="container dk-2td-content"  style="font-size:16px;">
+<div class="container dk-2td-content"  style="font-size:16px; padding-bottom:50px;">
     <div class="row">
         <div class="col-md-6" style="font-size:25px; font-weight:300;">
             <div class="row">
@@ -274,7 +274,11 @@
                     <p><g:message code="about.the.portal.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 Datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">47 traits</span></h1>
 
-                    <span><a style="display:block; text-align:right; font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
+                    <span><a style="text-align:left; font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
+
+                    <h3 style="font-size:20px">More data also available at </h3>
+                    <a href="http://cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'to_stroke_portal.svg')}" style="width: 350px;"></a>
+                    <div></div>
                 </g:else>
             </p>
             </div>
@@ -313,23 +317,21 @@
             </div>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <div style="text-align:right;">
-                    <a class="btn btn-success btn-sm" style="margin-right: 2%; margin-bottom: 10px;"
-                       href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1"
-                       target="_blank">
-                        <g:message code="portal.home.mailsignup" default="Get email updates"/>
+                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                     </a>
                 </div>
 
             </g:if>
             <g:else>
-                <div style=" text-align: right; margin-bottom: 10px;">
-                    <a class="btn btn-primary btn-sm"
-                       href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform"
-                       target="_blank">
-                        <g:message code="portal.home.mailsignup" default="Get email updates"/>
-                    </a>
-                    <a class="btn btn-default btn-sm" style="width:12%; margin-bottom: 0px; background-color:#55bcdf; border:solid 1px #1da1f2;" href="https://twitter.com/T2DKP" target="_blank"><img src="${resource(dir:'images/icons', file:'twitter.png')}" /></a>
-                    <a class="btn btn-default btn-sm" style="width:12%; margin-bottom: 0px; background-color:#00A0DC; border:solid 1px #1da1f2;" href="https://www.linkedin.com/groups/8505761" target="_blank"><img src="${resource(dir:'images/icons', file:'linkedin.png')}" /></a>
+                <div style="position:absolute; top: 25px; right:-40px; ">
+                    <p style="margin-bottom:3px;">
+                        <a href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform" target="_blank">
+                            <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                        </a>
+                    </p>
+                    <p style="margin-bottom:3px;"><a href="https://twitter.com/T2DKP" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
+                    <p><a href="https://www.linkedin.com/groups/8505761" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'linkedin_icn.svg')}" /></a></p>
                 </div>
             </g:else>
             <h3 style="margin-top: 0px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="about.the.portal.header"/></h3>
