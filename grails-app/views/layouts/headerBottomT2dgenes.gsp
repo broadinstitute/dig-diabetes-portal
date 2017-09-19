@@ -2,7 +2,7 @@
     <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/stroke', file:'menu_header_bg_2017_stroke.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
 </g:if>
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/mi', file:'menu_header_bg_2017_mi.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
+    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/mi', file:'menu_header_bg_2017_mi1.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
 </g:elseif>
 <g:else>
     <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
@@ -13,7 +13,7 @@
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
-            <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_header_logo_2017.svg"))}" style=" width: 400px; margin-left: 10px;" />
+            <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_header_logo_2017.svg"))}" style=" width: 450px; margin-left: 10px;" />
         </g:elseif>
         <g:else>
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0; ">
