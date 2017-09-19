@@ -600,7 +600,7 @@ var mpgSoftware = mpgSoftware || {};
                     height: 50,
                     min_width: 500,
                     min_height: 50,
-                    margin: { top: 25, right: 150, bottom: 5, left: 50 },
+                    margin: { top: 25, right: 150, bottom: 5, left: 20 },
                 dashboard: (function(){
                     //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
@@ -636,7 +636,7 @@ var mpgSoftware = mpgSoftware || {};
                 height: 50,
                 min_width: 500,
                 min_height: 50,
-                margin: { top: 5, right: 150, bottom: 5, left: 50 },
+                margin: { top: 5, right: 150, bottom: 5, left: 20 },
                 dashboard: (function(){
                     //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
@@ -714,7 +714,7 @@ var mpgSoftware = mpgSoftware || {};
             min_width:  400,
             min_height: 200,
             proportional_width: 1,
-            margin: { top: 35, right: 50, bottom: 40, left: 50 },
+            margin: { top: 35, right: 50, bottom: 40, left: 20 },
             inner_border: "rgb(210, 210, 210)",
             dashboard: (function(){
                 var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
@@ -1101,19 +1101,6 @@ var mpgSoftware = mpgSoftware || {};
             replaceTissuesWithOverlappingIbdRegions( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
                                                    chromosome,domId,assayIdList );
         }
-        // var replaceTissuesWithOverlappingEnhancers = function(position, chromosome,plotDomId,assayIdList){
-        //     var callingData = {};
-        //     callingData.POS = position;
-        //     callingData.CHROM = chromosome;
-        //     callingData.plotDomId = plotDomId;
-        //     callingData.ASSAY_ID_LIST = '[3]';
-        //     var includeRecord  = function() {return true;};
-        //     if (callingData.ASSAY_ID_LIST=='[3]') {
-        //         includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1)||(o.element.indexOf('TSS')>-1))};
-        //     }
-        //     callingData.includeRecord = includeRecord;
-        //     retrieveFunctionalData(callingData,processEpigeneticData,callingData)
-        // };
         var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome,plotDomId,assayIdList){
             var callingData = {};
             callingData.POS = position;
@@ -1131,7 +1118,7 @@ var mpgSoftware = mpgSoftware || {};
                 panel.dashboard.hide(true);
                 d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
                 d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
-                return panel.parent.removePanel(panel.id);
+                panel.parent.removePanel(panel.id);
             });
             retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData)
         };

@@ -239,12 +239,30 @@ var mpgSoftware = mpgSoftware || {};
 
 
                     };
+                    var extractAllCredibleSetNames = function (drivingVariables){
+                        var returnValues = [];
+                        _.forEach(drivingVariables.variants, function (drivingVariable){
+                            var previouslyEstablishedCredibleSetRecord = _.find(returnValues,function (oneCredibleSetRecord) {
+                                return (oneCredibleSetRecord.credibleSetId===drivingVariable.details.extractedCREDIBLE_SET_ID);
+                            })
+                            if (previouslyEstablishedCredibleSetRecord === undefined){
+                                var newCredibleSetRecord = {  credibleSetId:drivingVariable.details.extractedCREDIBLE_SET_ID,
+                                                                            variantsInCredibleSet: []  };
+                                returnValues.push(newCredibleSetRecord);
+                                previouslyEstablishedCredibleSetRecord = newCredibleSetRecord;
+                            }
+                            previouslyEstablishedCredibleSetRecord.variantsInCredibleSet.push(drivingVariable.details.VAR_ID);
+                        });
+                        return returnValues;
+                    }
 
 
                     //var assayIdList = $("select.variantIntersectionChoiceSelect").find(":selected").val();
                     var assayIdList = additionalParameters.assayIdList;
 
                     var drivingVariables = buildRenderData(data,additionalParameters);
+                    var allCredibleSets = extractAllCredibleSetNames (drivingVariables);
+                    //return;
                     $(".credibleSetTableGoesHere").empty().append(
                         Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
                     );

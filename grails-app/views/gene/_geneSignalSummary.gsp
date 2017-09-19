@@ -106,7 +106,10 @@ th.niceHeaders.niceHeadersThatAreLinks{
     display:inline-block;
 
 }
-
+svg.lz-locuszoom .lz-panel-title {
+    font-size: 14px;
+    font-weight: 600;
+}
 .tooltip {
     top:-15px;
     width:100px;
