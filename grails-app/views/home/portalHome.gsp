@@ -276,7 +276,7 @@
 
                     <span><a style="text-align:left; font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
 
-                    <h3 style="font-size:20px">More data also available at </h3>
+                    <h3 style="font-size:20px"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
                     <a href="http://cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'to_stroke_portal.svg')}" style="width: 350px;"></a>
                     <div></div>
                 </g:else>
