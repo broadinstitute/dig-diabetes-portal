@@ -336,6 +336,7 @@
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
+                            <div class="variantCategoryHolder">This tab shows information about variants belonging to credible sets, which are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
                                 <div class="row clearfix">
                                     <div class="row clearfix">
                                         <div class="col-md-3 col-lg-offset-2">
