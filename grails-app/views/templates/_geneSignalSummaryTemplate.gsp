@@ -336,6 +336,7 @@
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
+                            <div class="variantCategoryHolder">This tab shows information about variants belonging to credible sets, which are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
                                 <div class="row clearfix">
                                     <div class="row clearfix">
                                         <div class="col-md-3 col-lg-offset-2">
@@ -427,18 +428,9 @@
 </script>
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
+<p>&nbsp;</p>
+<p><g:message code="geneSignalSummary.credSets.help"></g:message></p>
 <div class='dataTable'>
-%{--<div class="pull-right variantIntersectionChoice">--}%
-%{--<label for="variantIntersectionChoiceSelect">--}%
-%{--Choose overlaps:&nbsp;--}%
-%{--</label>--}%
-%{--<select name="variantIntersectionChoiceSelect" class="variantIntersectionChoiceSelect">--}%
-  %{--<option value="[1]">H3K27ac</option>--}%
-  %{--<option value="[2]" selected>DNase</option>--}%
-  %{--<option value="[1,2]">H3K27ac+DNase</option>--}%
-  %{--<option value="[3]">Parker 2013</option>--}%
-%{--</select>--}%
-%{--</div>--}%
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
         <tr>
