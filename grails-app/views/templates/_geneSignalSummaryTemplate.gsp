@@ -420,6 +420,8 @@
 </script>
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
+<p>&nbsp;</p>
+<p><g:message code="geneSignalSummary.credSets.help"></g:message></p>
 <div class='dataTable'>
 <div class="pull-right variantIntersectionChoice">
 <label for="variantIntersectionChoiceSelect">
@@ -432,6 +434,7 @@ Choose overlaps:&nbsp;
   <option value="[3]">Parker 2013</option>
 </select>
 </div>
+
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
         <tr>
