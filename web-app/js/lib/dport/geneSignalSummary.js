@@ -1384,7 +1384,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
         });
         $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
-            $('#allVariantsTemplateHolder').dataTable().fnAdjustColumnSizing();
+            //$('#allVariantsTemplateHolder').dataTable().fnAdjustColumnSizing();
         });
 
         if (!commonSectionShouldComeFirst) {

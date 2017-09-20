@@ -132,7 +132,7 @@ svg.lz-locuszoom .lz-panel-title {
 }
 
 </style>
-
+<div id="dataHolderForCredibleSets" style="display: none"></div>
 <div class="row">
     <div class="pull-right" style="display:none">
         <label for="signalPhenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"

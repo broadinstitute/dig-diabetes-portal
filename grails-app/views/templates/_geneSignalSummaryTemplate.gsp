@@ -356,15 +356,8 @@
                                             <div class="matchedGenesGoHere"></div>
                                         </div>
                                     </div>
-                                    <div class="row clearfix">
-                                        <div class="col-md-3 col-lg-offset-2">
-                                            <h4>Credible set:</h4>
-                                        </div>
-                                        <div class="col-md-7 regionParams">
-                                            [credible set name]
-                                        </div>
-                                    </div>
                                 </div>
+                                <div class="credibleSetChooserGoesHere"></div>
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
@@ -374,6 +367,21 @@
                 {{/credibleSetTab}}
             </div>
 </script>
+
+<script id="organizeCredibleSetChooserTemplate"  type="x-tmpl-mustache">
+    <div class="credibleSetNameHolder">
+    <label>Credible sets in this range</label>
+        <ul class="nav nav-pills">
+            {{#allCredibleSets}}
+                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay({{renderVariantsAsArray}})">{{credibleSetId}}</li>
+            {{/allCredibleSets}}
+            {{^allCredibleSets}}
+                    <li class="nav-item redPhenotype phenotypeStrength">No credible sets</li>
+            {{/allCredibleSets}}
+        </ul>
+    </div>
+</script>
+
 
 <script id="organizeSignalSummaryHighImpactFirstTemplate"  type="x-tmpl-mustache">
             <div class="text-center" id="phenotypeLabel">{{pName}}</div>
@@ -420,17 +428,17 @@
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <div class='dataTable'>
-<div class="pull-right variantIntersectionChoice">
-<label for="variantIntersectionChoiceSelect">
-Choose overlaps:&nbsp;
-</label>
-<select name="variantIntersectionChoiceSelect" class="variantIntersectionChoiceSelect">
-  <option value="[1]">H3K27ac</option>
-  <option value="[2]" selected>DNase</option>
-  <option value="[1,2]">H3K27ac+DNase</option>
-  <option value="[3]">Parker 2013</option>
-</select>
-</div>
+%{--<div class="pull-right variantIntersectionChoice">--}%
+%{--<label for="variantIntersectionChoiceSelect">--}%
+%{--Choose overlaps:&nbsp;--}%
+%{--</label>--}%
+%{--<select name="variantIntersectionChoiceSelect" class="variantIntersectionChoiceSelect">--}%
+  %{--<option value="[1]">H3K27ac</option>--}%
+  %{--<option value="[2]" selected>DNase</option>--}%
+  %{--<option value="[1,2]">H3K27ac+DNase</option>--}%
+  %{--<option value="[3]">Parker 2013</option>--}%
+%{--</select>--}%
+%{--</div>--}%
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
         <tr>
