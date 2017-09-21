@@ -45,9 +45,9 @@
 <p>
 <g:message code="informational.data.exptsumm.GIANT"></g:message>
 </p>
-%{--<p>--}%
-%{--<g:message code="informational.data.exptsumm.GIANT2"></g:message>--}%
-%{--</p>--}%
+<p>
+<g:message code="informational.data.exptsumm.GIANT2"></g:message>
+</p>
 <h4>Accessing GIANT GWAS data in the T2D Knowledge Portal</h4>
 <p><g:message code="informational.data.accessing.GIANT"></g:message></p>
 </script>
