@@ -1150,6 +1150,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
 
     };
+    var initialPageSetUp = function (drivingVariables) {
+        $("#tableHeaderHolder").empty().append(
+            Mustache.render($('#genePageHeaderTemplate')[0].innerHTML, drivingVariables));
+    }
     var refreshTopVariantsByPhenotype = function (sel, callBack) {
         var phenotypeName = sel.value;
         var dataSetName = sel.attr('dsr');
@@ -1182,6 +1186,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
             {pName: pName,credibleSetTab:credibleSetTab}));
+        $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
+        $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
 
         if (useIgvNotLz) {
             $('.locusZoomLocation').css('display', 'none');
@@ -1432,7 +1438,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         refreshVariantAggregates:refreshVariantAggregates,
         updateSignificantVariantDisplay:updateSignificantVariantDisplay,
         buildRenderDataFromNonAggregatedData:buildRenderDataFromNonAggregatedData,
-        updateCredibleSetTable:updateCredibleSetTable
+        updateCredibleSetTable:updateCredibleSetTable,
+        initialPageSetUp:initialPageSetUp
     }
 
 }());

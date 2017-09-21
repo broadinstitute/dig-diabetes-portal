@@ -19,6 +19,99 @@
 </div>
 </script>
 
+<script id="genePageHeaderTemplate"  type="x-tmpl-mustache">
+    <div id="dataHolderForCredibleSets" style="display: none"></div>
+    <div class="row">
+        <div class="pull-right" style="display:none">
+            <label for="signalPhenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"
+                                                                default="Change phenotype choice"/></label>
+            &nbsp;
+            <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
+                    onchange="mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummaryMethods.updateSignificantVariantDisplay,
+                        {preferIgv:($('input[name=genomeBrowser]:checked').val()==='2')})">
+            </select>
+        </div>
+    </div>
+    <div >%{--should hold the Choose data set panel--}%
+        <div class="panel-heading">
+            <div class="row">
+                <div class="col-md-2 col-xs-12">
+                    <div id='trafficLightHolder'>
+                        <r:img uri="/images/undeterminedlight.png"/>
+                        <div id="signalLevelHolder" style="display:none"></div>
+                    </div>
+
+                </div>
+
+                <div class="col-md-5 col-xs-12">
+                    <div class="row">
+                        <div class="col-lg-12 trafficExplanations trafficExplanation1">
+                            No evidence for signal
+                        </div>
+
+                        <div class="col-lg-12 trafficExplanations trafficExplanation2">
+                            Suggestive evidence for signal
+                        </div>
+
+                        <div class="col-lg-12 trafficExplanations trafficExplanation3">
+                            Strong evidence for signal
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-5 col-xs-12">
+
+                </div>
+
+            </div>
+            <div class="row interestingPhenotypesHolder">
+                <div class="col-xs-12">
+                    <div id="interestingPhenotypes">
+
+                    </div>
+                </div>
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
+                        Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
+                    </div></g:if>
+                <div class="col-xs-2">
+
+                </div>
+            </div>
+            <div class="row geneWindowDescriptionHolder">
+                <div class="col-sm-3">
+                    <div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="geneWindowDescription">
+                    {{geneName}} is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="collapse in" id="collapseExample">
+        <div class="wellPlace">
+            <div id="noAggregatedVariantsLocation">
+                <div class="row" style="margin-top: 15px;">
+                    <div class="col-lg-offset-1">
+                        <h4>No information about aggregated variants exists for this phenotype</h4>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</script>
 
 
 
@@ -337,24 +430,23 @@
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
                             <div class="variantCategoryHolder">This tab shows information about variants belonging to credible sets, which are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
-                                <div class="row clearfix">
-                                    <div class="row clearfix">
-                                        <div class="col-md-3 col-lg-offset-2">
-                                            <h4>Genome coordinates:</h4>
-                                        </div>
-                                        <div class="col-md-7 regionParams">
-                                            <ul class="pull-left list-unstyled">
-                                                <li>Chromosome ${geneChromosome}</li>
-                                                <li>${geneExtentBegin} - ${geneExtentEnd}</li>
-                                            </ul>
-                                        </div>
+                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                    <div class="col-md-4 credSetWindowSummary">
+                                        Start position
+                                        <input type="text" name="startPosition" class="credSetStartPos">
                                     </div>
-                                    <div class="row clearfix">
-                                        <div class="col-md-3 col-lg-offset-2">
-                                            <h4>Genes in window:</h4>
-                                        </div>
-                                        <div class="col-md-7 regionParams">
-                                            <div class="matchedGenesGoHere"></div>
+                                    <div class="col-md-4 credSetWindowSummary">
+                                        End position
+                                        <input type="text" name="endPosition"  class="credSetEndPos">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row clearfix">
+                                            <div class="col-md-3 credSetWindowSummary">
+                                                Genes in window
+                                            </div>
+                                            <div class="col-md-9 regionParams">
+                                                <div class="matchedGenesGoHere"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -437,7 +529,7 @@
             <th  class="credSetOrgLabel"></th>
             <th class="credSetConstLabel"></th>
             {{#variants}}
-                <th class="niceHeaders niceHeadersThatAreLinks" style="background:#ffffff; text-decoration: underline;color: blue" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
+                <th class="niceHeaders niceHeadersThatAreLinks" style="background:rgba(0,0,0,0); text-decoration: underline;color: blue" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}"  data-toggle="popover">
 
@@ -504,7 +596,6 @@
     </tbody>
 </table>
 </div>
-<a id="toggleVarianceTableLink" href="#allVariantsLocation"  data-toggle="collapse">Toggle variants table</a>
 
 </script>
 
