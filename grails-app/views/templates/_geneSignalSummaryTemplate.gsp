@@ -434,8 +434,8 @@
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
         <tr>
-            <th></th>
-            <th></th>
+            <th  class="credSetOrgLabel"></th>
+            <th class="credSetConstLabel"></th>
             {{#variants}}
                 <th class="niceHeaders niceHeadersThatAreLinks" style="background:#ffffff; text-decoration: underline;color: blue" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
@@ -450,32 +450,32 @@
     {{#const}}
 
         <tr>
-            <td></td>
-            <td>Coding</td>
+            <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">Coding</td>
         {{#coding}}
             <td class="{{descr}}">{{val}}</td>
         {{/coding}}
         </tr>
 
         <tr>
-            <td></td>
-            <td class="{{descr}}">Splice site</td>
+            <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">Splice site</td>
             {{#spliceSite}}
             <td class="{{descr}}">{{val}}</td>
             {{/spliceSite}}
         </tr>
 
         <tr>
-            <td></td>
-            <td>UTR</td>
+            <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">UTR</td>
             {{#utr}}
             <td class="{{descr}}">{{val}}</td>
             {{/utr}}
         </tr>
 
         <tr>
-            <td></td>
-            <td class="{{descr}}">Promoter</td>
+            <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">Promoter</td>
             {{#promoter}}
             <td class="{{descr}}">{{val}}</td>
             {{/promoter}}

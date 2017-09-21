@@ -114,7 +114,12 @@ a.morePhenos:hover {
     border: 1px solid #000000;
     font-size:14px;
 }
-
+td.credSetOrgLabel{
+  width: 2px;
+}
+td.credSetConstLabel{
+    width: 180px;
+}
 .credibleSetChooserButton {
     background-color: #ccffff;
 }
