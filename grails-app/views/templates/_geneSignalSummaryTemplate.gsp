@@ -431,13 +431,18 @@
                         <div class="col-xs-12">
                             <div class="variantCategoryHolder">This tab shows information about variants belonging to credible sets, which are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                    <div class="col-md-4 credSetWindowSummary">
+                                    <div class="col-md-3 credSetWindowSummary">
                                         Start position
                                         <input type="text" name="startPosition" class="credSetStartPos">
                                     </div>
-                                    <div class="col-md-4 credSetWindowSummary">
+                                    <div class="col-md-3 credSetWindowSummary">
                                         End position
                                         <input type="text" name="endPosition"  class="credSetEndPos">
+                                    </div>
+                                    <div class="col-md-2">
+                                          <button class="btn btn-secondary btn-sm" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                          Reset range
+                                          </button>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="row clearfix">

@@ -12,12 +12,25 @@ var mpgSoftware = mpgSoftware || {};
         var numberOfQuantiles =5;
 
         var developingTissueGrid = {};
+        var sampleGroupsWithCredibleSetNames = [];
         var getDevelopingTissueGrid = function (){
             return developingTissueGrid;
         };
         var setDevelopingTissueGrid = function (myDevelopingTissueGrid){
             developingTissueGrid = myDevelopingTissueGrid;
         };
+        var getSampleGroupsWithCredibleSetNames = function (){
+            return sampleGroupsWithCredibleSetNames;
+        };
+        var setSampleGroupsWithCredibleSetNames = function (mySampleGroupsWithCredibleSetNames){
+            sampleGroupsWithCredibleSetNames = mySampleGroupsWithCredibleSetNames;
+        };
+
+
+        var getCurrentSequenceExtents = function (){
+            return {start: parseInt($('input.credSetStartPos').val()),
+                    end:parseInt($('input.credSetEndPos').val())};
+        }
 
         var buildRenderData = function (data,additionalParameters){
             var renderData = {  variants: [],
@@ -329,8 +342,8 @@ var mpgSoftware = mpgSoftware || {};
             });
             return {
                 sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){return oneRec[Object.keys(oneRec)[0]].source_trans}),
-                quantileArray: createStaticQuantileArray(assayId)
-               // quantileArray: createQuantilesArray(everySingleValue)
+               // quantileArray: createStaticQuantileArray(assayId)
+                quantileArray: createQuantilesArray(everySingleValue)
             };
         };
         var buildTheCredibleSetHeatMap = function (drivingVariables){
@@ -455,7 +468,9 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
-
+            var currentSequenceExtents = getCurrentSequenceExtents();
+            vars.start = currentSequenceExtents.start;
+            vars.end = currentSequenceExtents.end;
             var promise = $.ajax({
                 cache: false,
                 type: "post",
@@ -522,8 +537,13 @@ var mpgSoftware = mpgSoftware || {};
 
         }
 
-        return { fillRegionInfoTable: fillRegionInfoTable,
-            specificCredibleSetSpecificDisplay: specificCredibleSetSpecificDisplay }
+        return {
+            fillRegionInfoTable: fillRegionInfoTable,
+            specificCredibleSetSpecificDisplay: specificCredibleSetSpecificDisplay,
+            getCurrentSequenceExtents:getCurrentSequenceExtents,
+            setSampleGroupsWithCredibleSetNames:setSampleGroupsWithCredibleSetNames,
+            getSampleGroupsWithCredibleSetNames:getSampleGroupsWithCredibleSetNames
+        }
 
     })();
 

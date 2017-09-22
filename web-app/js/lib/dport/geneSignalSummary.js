@@ -1083,10 +1083,51 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     };
 
+
+    var buildNewCredibleSetPresentation = function (){
+        var loading = $('#rSpinner');
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        var additionalData = signalSummarySectionVariables;
+        var sampleGroupsWithCredibleSetNames = mpgSoftware.regionInfo.getSampleGroupsWithCredibleSetNames();
+        if ((sampleGroupsWithCredibleSetNames)&&(sampleGroupsWithCredibleSetNames.length>0)){
+            var credibleSetDataSet = sampleGroupsWithCredibleSetNames[0];
+            var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
+                start: signalSummarySectionVariables.geneExtentBegin,
+                end: signalSummarySectionVariables.geneExtentEnd,
+                phenotype: additionalData.phenotype,
+                propertyName: 'POSTERIOR_PROBABILITY',
+                dataSet: credibleSetDataSet,
+                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
+                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames
+            };
+            mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
+            var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
+            var drivingVariables = {};
+            drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
+            drivingVariables["namedGeneArray"] = [];
+            drivingVariables["supressTitle"] = [1];
+            if ((drivingVariables["allGenes"].length>0)&&
+                (drivingVariables["allGenes"][0].length>0)) {
+                drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
+                    return {'name': o}
+                });
+            }
+            $(".matchedGenesGoHere").empty().append(
+                Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
+            );
+
+        }
+        loading.hide();
+    };
+
+
+
+
     var buildOutCredibleSetPresentation = function (data,additionalData){
         var loading = $('#rSpinner');
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+            mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
             var credibleSetDataSet = data.sampleGroupsWithCredibleSetNames[0];
             var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
                 start: signalSummarySectionVariables.geneExtentBegin,
@@ -1439,7 +1480,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         updateSignificantVariantDisplay:updateSignificantVariantDisplay,
         buildRenderDataFromNonAggregatedData:buildRenderDataFromNonAggregatedData,
         updateCredibleSetTable:updateCredibleSetTable,
-        initialPageSetUp:initialPageSetUp
+        initialPageSetUp:initialPageSetUp,
+        buildNewCredibleSetPresentation:buildNewCredibleSetPresentation
     }
 
 }());
