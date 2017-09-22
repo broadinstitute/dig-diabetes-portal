@@ -362,14 +362,12 @@
 
 
 
-<h4>Accessing (dataset name) data in the T2D Knowledge Portal</h4>
+<h4>Accessing MICAD exome chip analysis data in the CVDKP</h4>
 
 <p><g:message code="informational.data.accessing.data"></g:message></p>
 
 
-<h4>External Links to (dataset name) data</h4>
 
-<p><g:message code="informational.data.external.project"></g:message></p>
 </div>
 
 
