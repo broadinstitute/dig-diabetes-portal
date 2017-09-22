@@ -466,11 +466,14 @@
     <label>Credible sets in this range</label>
         <ul class="nav nav-pills">
             {{#allCredibleSets}}
-                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay({{renderVariantsAsArray}})">{{credibleSetId}}</li>
+                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>
             {{/allCredibleSets}}
             {{^allCredibleSets}}
                     <li class="nav-item redPhenotype phenotypeStrength">No credible sets</li>
             {{/allCredibleSets}}
+            {{#atLeastOneCredibleSetExists}}
+                    <li id="allCredibleSetVariants"  class="nav-item credibleSetChooserButton credibleSetChooserStrength active" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,'ALL')">ALL</li>
+            {{/atLeastOneCredibleSetExists}}
         </ul>
     </div>
 </script>
@@ -571,6 +574,22 @@
             {{#promoter}}
             <td class="{{descr}}">{{val}}</td>
             {{/promoter}}
+        </tr>
+
+        <tr>
+            <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">Posterior probability</td>
+            {{#posteriorProbability}}
+            <td class="{{descr}}">{{val}}</td>
+            {{/posteriorProbability}}
+        </tr>
+
+        <tr>
+            <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">P value</td>
+            {{#pValue}}
+            <td class="{{descr}}">{{val}}</td>
+            {{/pValue}}
         </tr>
 
     {{/const}}

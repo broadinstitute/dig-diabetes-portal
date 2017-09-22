@@ -102,7 +102,6 @@ a.morePhenos:hover {
 .credibleSetChooserStrength {
     cursor:pointer;
     margin: 10px;
-    border: 1px solid black;
     padding: 5px;
     background-color: white;
     -webkit-border-radius: 5px;
@@ -114,6 +113,13 @@ a.morePhenos:hover {
     border: 1px solid #000000;
     font-size:14px;
 }
+.credibleSetChooserStrength.active {
+    border: 2px solid black;
+}
+.credibleSetChooserStrength.inactive {
+    border: 1px solid black;
+}
+
 td.credSetOrgLabel{
   width: 2px;
 }

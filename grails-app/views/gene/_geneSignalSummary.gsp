@@ -41,42 +41,42 @@ td.tissueTable.matchingRegion3_5{
 }
 
 /*h3k27ac corresponds to assay ID = 1*/
-td.tissueTable.matchingRegion1_0{
+td.tissueTable.matchingRegion1_5{
     background: #FF0033;
 }
-td.tissueTable.matchingRegion1_1{
+td.tissueTable.matchingRegion1_4{
     background: #FF3333;
 }
-td.tissueTable.matchingRegion1_2{
+td.tissueTable.matchingRegion1_3{
     background: #FF6633;
 }
-td.tissueTable.matchingRegion1_3{
+td.tissueTable.matchingRegion1_2{
     background: #FF9933;
 }
-td.tissueTable.matchingRegion1_4{
+td.tissueTable.matchingRegion1_1{
     background: #FFCC33;
 }
-td.tissueTable.matchingRegion1_5{
+td.tissueTable.matchingRegion1_0{
     background: #FFFF33;
 }
 
 /*DNase corresponds to assay ID = 2*/
-td.tissueTable.matchingRegion2_0{
+td.tissueTable.matchingRegion2_5{
     background: #3333FF;
 }
-td.tissueTable.matchingRegion2_1{
+td.tissueTable.matchingRegion2_4{
      background: #3366FF;
 }
-td.tissueTable.matchingRegion2_2{
+td.tissueTable.matchingRegion2_3{
       background: #3399FF;
 }
-td.tissueTable.matchingRegion2_3{
+td.tissueTable.matchingRegion2_2{
        background: #3399FF;
 }
-td.tissueTable.matchingRegion2_4{
+td.tissueTable.matchingRegion2_1{
         background: #33CCFF;
 }
-td.tissueTable.matchingRegion2_5{
+td.tissueTable.matchingRegion2_0{
          background: #33FFFF;
 }
 th.niceHeaders.niceHeadersThatAreLinks{

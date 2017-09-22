@@ -7,6 +7,10 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.regionInfo = (function () {
 
+        var assayExtremes = {"1":{minimum:127,maximum:9213115},
+            "2":{minimum:83,maximum:854238}};
+        var numberOfQuantiles =5;
+
         var developingTissueGrid = {};
         var getDevelopingTissueGrid = function (){
             return developingTissueGrid;
@@ -22,7 +26,9 @@ var mpgSoftware = mpgSoftware || {};
                                     spliceSite:[],
                                     utr:[],
                                     promoter:[],
-                                    CTCFmotif:[]
+                                    CTCFmotif:[],
+                                    posteriorProbability: [],
+                                    pValue: []
                                 },
                                 cellTypeSpecs: [
                                 ]};
@@ -44,7 +50,23 @@ var mpgSoftware = mpgSoftware || {};
                         })
                     });
                     v['extractedCREDIBLE_SET_ID'] = credibleSetId;
+                    var pValue = "";
+                    _.forEach(v.P_VALUE, function (csvalue){
+                        _.forEach(csvalue,function (phenotype){
+                            pValue=phenotype;
+                        })
+                    });
+                    v['extractedP_VALUE'] = pValue;
 
+                    if ((typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined')&&
+                        ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY))){
+                        renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
+                    }
+                    if ((typeof v.extractedP_VALUE !== 'undefined')&&
+                        ($.isNumeric(v.extractedP_VALUE))) {
+                        renderData.const.pValue.push({val:UTILS.realNumberFormatter(v.extractedP_VALUE)});
+                    }
+                    renderData.const.pValue.push();
                     if (typeof v.VAR_ID !== 'undefined') {
                         renderData.variants.push({name:v.VAR_ID, details:v, assayIdList: additionalParameters.assayIdList});
                     }
@@ -86,16 +108,25 @@ var mpgSoftware = mpgSoftware || {};
                     spliceSite:[],
                     utr:[],
                     promoter:[],
-                    CTCFmotif:[]
+                    CTCFmotif:[],
+                    posteriorProbability: [],
+                    pValue: []
                 },
                 cellTypeSpecs: [
                 ]
             };
-            var extractedVariantIds = _.map(oldRenderData.variants,function(v){return v.name;});
             var arrayOfIndexesToInclude = [];
-            _.forEach(variantsToInclude,function(varId){
-                arrayOfIndexesToInclude.push(extractedVariantIds.indexOf(varId))
-            });
+            if (variantsToInclude === 'ALL'){
+                _.forEach(oldRenderData.variants,function(v,i){
+                    arrayOfIndexesToInclude.push(i)
+                });
+            } else { //
+                var extractedVariantIds = _.map(oldRenderData.variants,function(v){return v.name;});
+                _.forEach(variantsToInclude,function(varId){
+                    arrayOfIndexesToInclude.push(extractedVariantIds.indexOf(varId))
+                });
+            }
+
 
 
             _.forEach(arrayOfIndexesToInclude, function (i){
@@ -107,6 +138,8 @@ var mpgSoftware = mpgSoftware || {};
                 newRenderData.const.utr.push(oldRenderData.const.utr[i]);
                 newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
                 newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
+                newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
+                newRenderData.const.pValue.push(oldRenderData.const.pValue[i]);
 
              });
 
@@ -168,8 +201,12 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        var specificCredibleSetSpecificDisplay = function(variantsToInclude){
+        var specificCredibleSetSpecificDisplay = function(currentButton,variantsToInclude){
 
+            $('.credibleSetChooserButton').removeClass('active');
+            $('.credibleSetChooserButton').addClass('inactive');
+            $(currentButton).removeClass('inactive');
+            $(currentButton).addClass('active');
             var allRenderData = $.data($('#dataHolderForCredibleSets')[0],'allRenderData');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
             var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
@@ -186,7 +223,7 @@ var mpgSoftware = mpgSoftware || {};
         var determineColorIndex = function (val,quantileArray){
             var index = 0;
             while (index<quantileArray.length&& val>quantileArray[index].min){index++};
-            return index;
+            return index-1;
         };
         var determineCategoricalColorIndex = function (elementName){
             var returnVal = 5;
@@ -238,13 +275,26 @@ var mpgSoftware = mpgSoftware || {};
             var maximumValue = everySingleValueSorted[everySingleValueSorted.length-1];
             var minimumValue = everySingleValueSorted[0];
             var quantileArray = [];
-            var numberOfQuantiles =5;
             var widthOfOneQuintile = (maximumValue-minimumValue)/numberOfQuantiles;
             for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
                 quantileArray.push({min:minimumValue+(widthOfOneQuintile*i),max:minimumValue+(widthOfOneQuintile*(i+1))});
             }
             return quantileArray;
         };
+        // this next routine only makes sense if we have already gone through and calculated the maximum and minimum over the entire set of available values
+        var createStaticQuantileArray = function( assayId ){
+            var quantileArray = [];
+            if ((assayId) &&
+                (typeof assayExtremes[""+assayId] !== 'undefined') ){
+                var maximumValue = assayExtremes[""+assayId].maximum;
+                var minimumValue = assayExtremes[""+assayId].minimum;
+                var widthOfOneQuintile = (maximumValue-minimumValue)/numberOfQuantiles;
+                for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
+                    quantileArray.push({min:minimumValue+(widthOfOneQuintile*i),max:minimumValue+(widthOfOneQuintile*(i+1))});
+                }
+            }
+            return quantileArray;
+        }
         var filterTissueGrid = function(incomingTissueGrid,assayId){
             var retVal = {};
             _.forEach(Object.keys(incomingTissueGrid),function(tissueKey){
@@ -267,9 +317,11 @@ var mpgSoftware = mpgSoftware || {};
                 sortableTissueArray.push(tissueGrid[tissueKey]);
             });
             var everySingleValue = [];
+            var assayId = 0; // we require that there be no more than one assay ID and the entire array
             var sortedArrayOfArrays = _.sortBy(sortableTissueArray, function(objArray){
                 var bestVariantPerTissue = _.sortBy(objArray, function(singleVariant){
                     var oneValue = singleVariant.VALUE;
+                    assayId = singleVariant.ASSAY_ID;
                     everySingleValue.push(oneValue);
                     return oneValue;
                 })[0];
@@ -277,7 +329,8 @@ var mpgSoftware = mpgSoftware || {};
             });
             return {
                 sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){return oneRec[Object.keys(oneRec)[0]].source_trans}),
-                quantileArray: createQuantilesArray(everySingleValue)
+                quantileArray: createStaticQuantileArray(assayId)
+               // quantileArray: createQuantilesArray(everySingleValue)
             };
         };
         var buildTheCredibleSetHeatMap = function (drivingVariables){
@@ -445,7 +498,12 @@ var mpgSoftware = mpgSoftware || {};
                     var allCredibleSets = extractAllCredibleSetNames (drivingVariables);
                     if (Object.keys(allCredibleSets).length > 1){
                         $(".credibleSetChooserGoesHere").empty().append(
-                            Mustache.render( $('#organizeCredibleSetChooserTemplate')[0].innerHTML,{allCredibleSets:allCredibleSets})
+                            Mustache.render( $('#organizeCredibleSetChooserTemplate')[0].innerHTML,{allCredibleSets:allCredibleSets,
+                                                                                                    atLeastOneCredibleSetExists: function(){
+                                var credibleSetPresenceIndicator = [];
+                                if (Object.keys(allCredibleSets).length > 1) {credibleSetPresenceIndicator.push(1)}
+                                return credibleSetPresenceIndicator;
+                            }})
                         );
 
                     }
