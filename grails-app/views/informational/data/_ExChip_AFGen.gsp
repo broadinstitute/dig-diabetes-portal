@@ -16,6 +16,19 @@
     </ul>
 
 
+                                                                                                       <tr><td>nnn</td><td>nnn</td><td><a
+                onclick="showSection(event)">name</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top"></td>
+                        <td valign="top"></td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
     <h5><g:message code="informational.data.project.AFGen1"></g:message></h5>

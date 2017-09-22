@@ -192,33 +192,160 @@
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
-
+                        Prevalent and incident nonfatal or fatal MI
                         </td>
                         <td valign="top">
-
+                        Participants free of CHD at baseline and during follow-up
                         </td></tr>
                 </table>
             </div></td><td>European</td></tr>
 
-                                                             <tr><td>nnn</td><td>nnn</td><td><a
-                onclick="showSection(event)">name</a>
+                                                             <tr><td>3,990</td><td>6,585</td><td><a
+                onclick="showSection(event)">Montreal Heart Institute Study (MHI)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
-
+                        Cases were ascertained from the Montreal Heart Institute Biobank. CAD was defined as the presence of MI, percutaneous coronary intervention, or coronary artery bypass grafting.
                         </td>
                         <td valign="top">
-
+                        Controls were individuals from the Montreal Heart Institute Biobank who were free of history of MI, percutaneous coronary intervention, or coronary artery bypass grafting.
                         </td></tr>
                 </table>
             </div></td><td>European</td></tr>
 
+                                                            <tr><td>2,351</td><td>2,348</td><td><a
+                onclick="showSection(event)">Nord-Trøndelag health study (HUNT)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        MI Cases were retrospectively identified as HUNT 2 and HUNT 3 participants diagnosed with acute MI (ICD-10 I21 or ICD-9 410) in the medical departments at the two local hospitals in Nord-Trøndelag County from December 1987 to June 2011.
+                        </td>
+                        <td valign="top">
+                        Controls were selected among HUNT 2 and HUNT 3 participants with available DNA (N = 70,300) after excluding individuals with the following hospital diagnosed or self-reported conditions in themselves or known 1st and/or 2nd degree family members: MI, angina, heart failure, stroke, aortic aneurysm, atherosclerosis, intermittent claudication, and registered percutaneous coronary angioplasty procedures or bypass surgery.
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                       <tr><td>1,024</td><td>2,267</td><td><a
+                onclick="showSection(event)">Ottawa Heart Study (OHS)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Cases had angiographically confirmed coronary artery disease (&gt;1 coronary artery with &gt;50% stenosis) and did not have type 2 diabetes; &le; 50 years old for males and &le; 50 years old for females.
+                        </td>
+                        <td valign="top">
+                        Asymptomatic males &gt; 65, females &gt; 70.
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                                   <tr><td>2,490</td><td>2,220</td><td><a
+                onclick="showSection(event)">Precocious Coronary Artery Disease Study (PROCARDIS)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Symptomatic CAD before age 66. CAD was defined as clinically documented evidence of myocardial infarction, coronary artery bypass grafting, acute coronary syndrome, coronary angioplasty, or stable angina.
+                        </td>
+                        <td valign="top">
+                        No personal or sibling history of CAD before age 66.
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                                              <tr><td>728</td><td>808</td><td><a
+                onclick="showSection(event)">Premature Atherosclerosis Study at Academic Medical Center Amsterdam (PAS-AMC)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Symptomatic CAD before 51 years of age, defined as MI, coronary revascularization, or evidence of at least 70% stenosis in a major epicardial coronary artery.
+                        </td>
+                        <td valign="top">
+                        More than 95% of the controls are from the same region as cases.
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                                                         <tr><td>683</td><td>156</td><td><a
+                onclick="showSection(event)">University of Pennsylvania Catheterization Study (PennCath)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Cases had angiographically confirmed coronary artery disease (&gt;1 coronary artery with 50% stenosis); &le; 55 years old for males and &le; 60 years old for females.
+                        </td>
+                        <td valign="top">
+                        Normal coronary angiography in men &gt; 40 years old and women &gt; 45 years old.
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                                             <tr><td>4,587</td><td>16,556</td><td><a
+                onclick="showSection(event)">Vanderbilt University Medical Center Biorepository (BioVU)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Cases with MI or CAD were ascertained from the Vanderbilt University Medical Center Biorepository by searching the electronic medical record for &ge; 2 instances of ICD-9 codes 410.x – 414.x.
+                        </td>
+                        <td valign="top">
+                        Controls were individuals from the Vanderbilt University Biorepository who did not have any record of ICD-9 codes 410.x – 414.x.
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                                                         <tr><td>176</td><td>164</td><td><a
+                onclick="showSection(event)">Verona Heart Study (VHS)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Documented MI, coronary artery bypass grafting, CAD (by angiography) in males &le; 45 years old and females &le; 50 years old.
+</td>
+                        <td valign="top">
+                        Normal coronary angiography in males &gt; 60 years old or females &gt; 65 years old.
+</td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+                                                                                                       <tr><td>2,860</td><td>14,960</td><td><a
+                onclick="showSection(event)">Women’s Health Initiative (WHI)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        Cases were individuals from the Women’s Health Initiative who had incident MI, coronary revascularization, hospitalized angina or death due to coronary disease.
+</td>
+                        <td valign="top">
+                        Participants free of CHD on follow-up.
+</td></tr>
+                </table>
+            </div></td><td>European</td></tr>
 
 </table>
-****************
+
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
