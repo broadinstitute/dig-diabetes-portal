@@ -143,9 +143,9 @@
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||
-                        g.portalTypeString()?.equals('t2d')||
+                        g.portalTypeString()?.equals('t2d')}">
 
-                        g.portalTypeString()?.equals('mi')}">
+                        %{--g.portalTypeString()?.equals('mi')}">--}%
 
 
 
@@ -155,11 +155,11 @@
                                                                            'allowExperimentChoice': 1,
                                                                            'allowPhenotypeChoice' : 1,
                                                                            'allowStratificationChoice': 1   ]"/>
-
+                    <div class="separator"></div>
                     </g:if>
 
 
-                    <div class="separator"></div>
+
 
                     <g:if test="${true}">
                         <g:render template="/widgets/locusZoomPlot"/>
