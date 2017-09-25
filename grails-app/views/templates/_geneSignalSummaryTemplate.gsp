@@ -429,7 +429,7 @@
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder">This tab shows information about variants belonging to credible sets, which are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
+                            <div class="variantCategoryHolder">Credible sets are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
                                     <div class="col-md-3 credSetWindowSummary">
                                         Start position
@@ -530,7 +530,10 @@
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <p>&nbsp;</p>
-<p><g:message code="geneSignalSummary.credSets.help"></g:message></p>
+<g:if test="${g.portalTypeString()?.equals('ibd')}">
+<p><g:message code="geneSignalSummary.credSetsIBD.help"></g:message></p></g:if>
+    <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
+        <p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>
 <div class='dataTable'>
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
@@ -620,6 +623,8 @@
     {{/cellTypeSpecs}}
     </tbody>
 </table>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 0px;" align="center"></g:if>
 </div>
 
 </script>
