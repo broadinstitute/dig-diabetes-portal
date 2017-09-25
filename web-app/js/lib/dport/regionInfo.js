@@ -235,7 +235,7 @@ var mpgSoftware = mpgSoftware || {};
         };
         var determineColorIndex = function (val,quantileArray){
             var index = 0;
-            while (index<quantileArray.length&& val>quantileArray[index].min){index++};
+            while (index<quantileArray.length&& val>=quantileArray[index].min){index++};
             return index-1;
         };
         var determineCategoricalColorIndex = function (elementName){
@@ -247,10 +247,8 @@ var mpgSoftware = mpgSoftware || {};
                     returnVal = 3;
                 } else if (elementName.indexOf("Genic_enhancer")>-1){
                     returnVal = 2;
-                } else if (elementName.indexOf("Weak_TSS")>-1){
+                } else if (elementName.indexOf("Weak_enhancer")>-1){
                     returnVal = 1;
-                } else if (elementName.indexOf("Active_TSS")>-1){
-                    returnVal = 0;
                 }
             }
             return returnVal;
@@ -527,7 +525,9 @@ var mpgSoftware = mpgSoftware || {};
                     $.data($('#dataHolderForCredibleSets')[0],'additionalParameters',additionalParameters);
                     $.data($('#dataHolderForCredibleSets')[0],'dataVariants',data.variants);
                     buildTheCredibleSetHeatMap(drivingVariables);
-
+                    // if (Object.keys(allCredibleSets).length > 1){
+                    //     $($('.credibleSetChooserButton')[0]).click();
+                    // }
                     $('#toggleVarianceTableLink').click();
                 }
             );

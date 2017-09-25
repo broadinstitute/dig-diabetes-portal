@@ -23,21 +23,22 @@ td.tissueTable.Weak_enhancer{
 
 
 td.tissueTable.matchingRegion3_0{
-    background: #FF0000;
+
 }
 td.tissueTable.matchingRegion3_1{
-    background: #FF8C1A;
+    background: #FFFF00;/*Weak_enhancer*/
 }
 td.tissueTable.matchingRegion3_2{
-    background: #C2E105;
+    background: #C2E105;/*Genic_enhancer*/
 }
 td.tissueTable.matchingRegion3_3{
-    background: #FFC34D;
+    background: #FFC34D;/*Active_enhancer_1*/
 }
 td.tissueTable.matchingRegion3_4{
-    background: #FFC34D;
+    background: #FFC34D;/*Active_enhancer_2*/
 }
 td.tissueTable.matchingRegion3_5{
+    background: #FF0000;/*Active_enhancer_2*/
 }
 
 /*h3k27ac corresponds to assay ID = 1*/

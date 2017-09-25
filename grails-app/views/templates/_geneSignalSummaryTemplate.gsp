@@ -477,7 +477,8 @@
                     <li class="nav-item redPhenotype phenotypeStrength">No credible sets</li>
             {{/allCredibleSets}}
             {{#atLeastOneCredibleSetExists}}
-                    <li id="allCredibleSetVariants"  class="nav-item credibleSetChooserButton credibleSetChooserStrength active" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,'ALL')">ALL</li>
+                    %{--<li id="allCredibleSetVariants"  class="nav-item credibleSetChooserButton credibleSetChooserStrength active" --}%
+                    %{--onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,'ALL')">ALL</li>--}%
             {{/atLeastOneCredibleSetExists}}
         </ul>
     </div>
