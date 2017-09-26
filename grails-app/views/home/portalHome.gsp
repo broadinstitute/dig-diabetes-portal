@@ -325,9 +325,10 @@
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                             <g:message code="portal.mi.use.citation.itself" />
                         </g:elseif>
-                        <g:else>
+                        <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
                             <g:message code="portal.use.citation.itself" />
-                        </g:else>
+                        </g:elseif>
+                        <g:else></g:else>
                     </p>
                 </div>
             </div>
