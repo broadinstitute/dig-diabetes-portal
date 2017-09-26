@@ -1,9 +1,8 @@
 <script class="panel-body" id="GWAS_MICAD_script" type="x-tmpl-mustache">
 
-    <h4>Publications</h4>
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-<p><div class="paper">
-</div></p>
+
 
 <p></p>
 

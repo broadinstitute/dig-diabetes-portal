@@ -440,10 +440,11 @@ class VariantInfoController {
         // TODO - DIGKB-217: store linked variant sample group in dataset sample group meaning field
         Iterator<String> meaningIterator = sampleGroup?.getMeaningSet().iterator();
         String variantDataSet = null;
+        String variantDataSetMeaning = null;
         while (meaningIterator.hasNext()) {
-            variantDataSet = meaningIterator.next();
-            if (variantDataSet.contains("DATASET_")) {
-                variantDataSet = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
+            variantDataSetMeaning = meaningIterator.next();
+            if (variantDataSetMeaning.contains("DATASET_")) {
+                variantDataSet = variantDataSetMeaning.substring(variantDataSet.indexOf("DATASET_") + 8);
                 break;
             }
         }
