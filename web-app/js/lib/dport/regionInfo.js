@@ -354,7 +354,7 @@ var mpgSoftware = mpgSoftware || {};
             var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
             var includeRecord  = function() {return true;};
             if (assayIdList=='[3]') {
-                includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1)||(o.element.indexOf('TSS')>-1))};
+                includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1))};
             }
             setDevelopingTissueGrid({});
             var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,includeRecord);
