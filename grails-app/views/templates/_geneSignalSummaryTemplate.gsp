@@ -72,7 +72,7 @@
                 </div>
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-                        Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
+                        Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
                     </div></g:if>
                 <div class="col-xs-2">
 
@@ -624,7 +624,7 @@
     </tbody>
 </table>
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 0px;" align="center"></g:if>
+<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 600px;" align="center"></g:if>
 </div>
 
 </script>
