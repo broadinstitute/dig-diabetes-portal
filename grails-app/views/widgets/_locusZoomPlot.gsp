@@ -8,9 +8,19 @@
     </div>
 
     <div id="collapseLZ" class="accordion-body collapse">
-        <p><g:message code="variant.locusZoom.text1"/></p>
-        <p><g:message code="variant.locusZoom.text2"/></p>
-        <p><g:message code="variant.locusZoom.text3"/></p>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+        <g:message code="variant.locusZoom.text1"></g:message></p>
+        <p><g:message code="variant.locusZoom.text2"></g:message></p>
+        <p><g:message code="variant.locusZoom.text3"></g:message></p>
+    <p><g:message code="variant.locusZoom.text4"></g:message></p>
+    <p>&nbsp;</p>
+</g:if>
+        <g:else>
+            <p><g:message code="variant.locusZoom.text1"></g:message></p>
+            <p><g:message code="variant.locusZoom.text3"></g:message></p>
+            <p><g:message code="variant.locusZoom.text4"></g:message></p>
+            <p>&nbsp;</p>
+        </g:else>
 
         <div style="display: flex; justify-content: space-around;">
             <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>

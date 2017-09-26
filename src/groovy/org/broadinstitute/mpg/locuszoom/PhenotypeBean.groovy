@@ -11,6 +11,7 @@ public class PhenotypeBean {
     String description
     String propertyName
     String dataSet
+    String dataSetReadable
     String dataType
     Boolean defaultSelected
     Boolean suitableForDefaultDisplay

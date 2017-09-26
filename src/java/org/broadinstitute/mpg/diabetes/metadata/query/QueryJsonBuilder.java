@@ -53,6 +53,8 @@ public class QueryJsonBuilder {
         stringBuilder.append(query.getLimit());
         stringBuilder.append(", \"count\": ");
         stringBuilder.append(query.isCount());
+        stringBuilder.append(", \"result_format\": ");
+        stringBuilder.append(query.getResultFormat());
 
         // add the optional fields
         if (query.getVersion()!=null){

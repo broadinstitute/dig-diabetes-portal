@@ -55,14 +55,15 @@ public class LocusZoomJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,int maximumNumberOfPointsToRetrieve) throws PortalException {
+    public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
+                                          int maximumNumberOfPointsToRetrieve,String format) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         String jsonQueryString;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
@@ -81,7 +82,8 @@ public class LocusZoomJsonBuilder {
      * @return
      * @throws PortalException
      */
-    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,int maximumNumberOfPointsToRetrieve) throws PortalException {
+    public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
+                                              int maximumNumberOfPointsToRetrieve,String format) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
@@ -103,14 +105,26 @@ public class LocusZoomJsonBuilder {
 
 
         Property posteriorPValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
+        Property credibleSetId =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "CREDIBLE_SET_ID",  this.phenotypeString,  rootDataSetString);
+        Property pValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "P_VALUE",  this.phenotypeString,  rootDataSetString);
 
         // get the query properties
         if (posteriorPValue != null){
             query.addQueryProperty(posteriorPValue);
         }
+        if (credibleSetId != null){
+            query.addQueryProperty(credibleSetId);
+        }
+        if (pValue != null){
+            query.addQueryProperty(pValue);
+        }
+
+        query.setResultFormat("\""+format+"\"");
+
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
+        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
         query.addQueryProperty(pValueProperty);
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));

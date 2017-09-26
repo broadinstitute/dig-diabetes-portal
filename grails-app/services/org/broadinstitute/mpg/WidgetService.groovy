@@ -510,6 +510,14 @@ class WidgetService {
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
 
+        } else if (metaDataService.portalTypeFromSession=='ibd') {
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="INFLAMMATORY BOWEL"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="INFLAMMATORY BOWEL"}){
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            }
+
         }
 
         return returnValue
@@ -598,7 +606,7 @@ class WidgetService {
         }
 
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve);
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "verbose");
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -634,23 +642,179 @@ class WidgetService {
             variantList = knowledgeBaseResultParser.parseResult();
         }
         log.info("Got LZ variant result list size of: " + variantList?.size());
-        // failed attempt to fake a record and to thereby keep LZ from creating a big ugly error message
-//        else {
-//            VariantBean variantBean = new VariantBean()
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME),"1"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE),"A"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE),"1"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION),"1"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE),"T"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID),"ABC"))
-//            variantBean.addToPropertyValues(new PropertyValueBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get("metadata_root_ExChip_82k_mdv10_82kFGP_VALUE"),"0.1"))
-//            variantList = [variantBean]
-//        }
-
 
         // return
         return variantList;
     }
+
+
+
+
+
+    public String getFlatDataForLocusZoom(   String chromosome,
+                                                                                                            int startPosition,
+                                                                                                            int endPosition,
+                                                                                                            String dataset,
+                                                                                                            String phenotype,
+                                                                                                            String propertyName,
+                                                                                                            String dataType,
+                                                                                                            List<String> covariateVariants ) throws PortalException {
+        // local variables
+        String jsonResultString, jsonGetDataString;
+        LocusZoomJsonBuilder locusZoomJsonBuilder = null;
+        KnowledgeBaseResultParser knowledgeBaseResultParser;
+        List<Covariate> covariateList = null;
+
+        // build the LZ json builder
+        // TODO - DIGKB-135: add way to programmatically determine Hail dataset
+        locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName );
+
+
+        // adding covariates for variant
+        if (covariateVariants?.size() > 0) {
+            covariateList = locusZoomJsonBuilder.parseLzVariants(covariateVariants);
+        }
+
+        //
+        //  Let's impose some limitations to try to get LZ not to fold
+        //
+        int maximumNumberOfPointsToRetrieve = 1000
+        if (metaDataService.portalTypeFromSession=='t2d') {
+            maximumNumberOfPointsToRetrieve = 2000
+        } else if (metaDataService.portalTypeFromSession=='stroke') {
+            maximumNumberOfPointsToRetrieve = 500
+        }
+
+        // get json getData query string
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "flat");
+
+
+            //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
+        log.info("Got LZ static request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
+        jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        JSONObject jsonObject
+        if (jsonResultString != null){
+            jsonObject =  new JsonSlurper().parseText(jsonResultString)
+            jsonObject.lastPage = null
+            JSONObject dataJSONObject = jsonObject["data"] as JSONObject
+            List<String> dataFields = dataJSONObject.names() as List
+            int numberOfElements = 0
+            for (String dataField in dataFields){
+                if (dataField == "metadata_rootPOS" ){
+                    dataJSONObject.position = dataJSONObject[dataField] as JSONArray
+                    numberOfElements = (dataJSONObject[dataField] as List).size()
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootCHROM" ){
+                    dataJSONObject.chr = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootVAR_ID" ){
+                    dataJSONObject.id = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootReference_Allele" ){
+                    dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootConsequence" ){
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootEffect_Allele" ){
+                    dataJSONObject.remove(dataField);
+                } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
+                    dataJSONObject.remove(dataField);
+                } else if (dataField.contains("CREDIBLE_SET_ID") ){
+                    dataJSONObject.remove(dataField);
+                } else {
+                    dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                }
+            }
+            JSONArray emptyArrays = new JSONArray()
+            for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
+            dataJSONObject.scoreTestStat = emptyArrays
+            dataJSONObject.analysis = emptyArrays
+            dataJSONObject.refAlleleFreq = emptyArrays
+
+            jsonObject.remove("data")
+            jsonObject.data = dataJSONObject
+
+        } else {
+
+            jsonObject =  new JSONObject()
+            jsonObject.lastPage = null
+            JSONObject dataJSONObject = new JSONObject()
+//            List<String> dataFields = dataJSONObject.names() as List
+            int numberOfElements = 0
+//            for (String dataField in dataFields){
+//                if (dataField == "metadata_rootPOS" ){
+//                    dataJSONObject.position = dataJSONObject[dataField] as JSONArray
+//                    numberOfElements = (dataJSONObject[dataField] as List).size()
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootCHROM" ){
+//                    dataJSONObject.chr = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootVAR_ID" ){
+//                    dataJSONObject.id = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootReference_Allele" ){
+//                    dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootConsequence" ){
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootEffect_Allele" ){
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
+//                    dataJSONObject.remove(dataField);
+//                } else if (dataField.contains("CREDIBLE_SET_ID") ){
+//                    dataJSONObject.remove(dataField);
+//                } else {
+//                    dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+//                    dataJSONObject.remove(dataField);
+//                }
+//            }
+            JSONArray emptyArrays = new JSONArray()
+//            for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
+            dataJSONObject.scoreTestStat = emptyArrays
+            dataJSONObject.analysis = emptyArrays
+            dataJSONObject.refAlleleFreq = emptyArrays
+            dataJSONObject.refAllele = emptyArrays
+            dataJSONObject.pvalue = emptyArrays
+            dataJSONObject.id = emptyArrays
+            dataJSONObject.chr = emptyArrays
+            dataJSONObject.position = emptyArrays
+
+            jsonObject.data = dataJSONObject
+
+
+        }
+
+
+        // return
+        return jsonObject.toString();
+    }
+
+
+
+
+
+
+
+
+    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
+                                                   String dataset, String phenotype, String propertyName) {
+
+        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
+
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,2000, "verbose");
+
+        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+
+
+
+        // return
+        return jsonResultString;
+    }
+
+
+
+
 
     /**
      * returns a json string for the LZ query
@@ -683,30 +847,31 @@ class WidgetService {
         // get the query result and translate to a json string
         try {
             // get the variant list
-            variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
+            if (dataType=='static') {
+                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
+            } else { // dynamic data are still processed the old way, whereas static data will use the new flat format result
+                variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 
-            // TODO: DIGKB-135: Figure out a way to pull the Hail dataset programmatically, not hard code
-            String locusZoomDataset = metaDataService?.getDynamicLocusZoomDataset();
+                // TODO: DIGKB-135: Figure out a way to pull the Hail dataset programmatically, not hard code
+                String locusZoomDataset = metaDataService?.getDynamicLocusZoomDataset();
 
-            //
-            if (dataType=='static'){
-                knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator( dataset, phenotype, propertyName );
-            } else {
+                //
                 if (metaDataService.portalTypeFromSession=='t2d') {
                     knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(locusZoomDataset, "T2D", "P_FIRTH_FE_IV" );
                 } else if (metaDataService.portalTypeFromSession=='stroke') {
                     knowledgeBaseFlatSearchTranslator = new KnowledgeBaseFlatSearchTranslator(locusZoomDataset, phenotype, "P_FIRTH_FE_IV" );
                 }
+
+                jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
+
+                // translate to json string
+                if (jsonResultObject != null) {
+                    jsonResultString = jsonResultObject.toString();
+                } else {
+                    throw PortalException("got null json object for LZ search");
+                }
             }
 
-            jsonResultObject = knowledgeBaseFlatSearchTranslator.translate(variantList);
-
-            // translate to json string
-            if (jsonResultObject != null) {
-                jsonResultString = jsonResultObject.toString();
-            } else {
-                throw PortalException("got null json object for LZ search");
-            }
 
         } catch (PortalException exception) {
             log.error("Got LZ getData query error: " + exception.getMessage());
@@ -769,12 +934,16 @@ class WidgetService {
             if (metaDataService.portalTypeFromSession=='t2d') {
                 // KLUDGE ALERT add credible set by hand
                 beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set",
-                        dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
+                        dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27",
+                        dataSetReadable: g.message(code: "metadata." + "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", default: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27"),
+                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
                         suitableForDefaultDisplay: false ));
             }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
-                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet, propertyName:phenotypeDataSetCombo.property,dataType:"static",
+                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
+                        dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
+                        propertyName:phenotypeDataSetCombo.property,dataType:"static",
                         description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
 
                 firstTime = false
@@ -782,44 +951,92 @@ class WidgetService {
 
             // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
             if (metaDataService.portalTypeFromSession=='t2d') {
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
+                        propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: true, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
 
             } else if (metaDataService.portalTypeFromSession=='stroke') {
-
-                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+/*
+                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: true, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",propertyName:"hailProp",dataType:"dynamic",
+                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",propertyName:"hailProp",
+                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",
+                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-
+*/
             }
 
 
         // return
+        beanList << new PhenotypeBean(key:"Adipose", name:"Adipose",description:"adipose tissue", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"AnteriorCaudate", name:"AnteriorCaudate",description:"brain anterior caudate", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"CD34-PB", name:"CD34-PB",description:"CD34-PB primary hematopoietic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"CingulateGyrus", name:"CingulateGyrus",description:"brain cingulate gyrus", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"DuodenumMucosa", name:"DuodenumMucosa",description:"duodenum mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"ES-HUES6", name:"ES-HUES6",description:"ES-HUES6 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"ES-HUES64", name:"ES-HUES64",description:"ES-HUES64 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"GM12878", name:"GM12878",description:"GM12878 lymphoblastoid cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"H1", name:"H1",description:"H1 cell line", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"hASC-t1", name:"hASC-t1",description:"hASC-t1 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"hASC-t2", name:"hASC-t2",description:"hASC-t2 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"hASC-t3", name:"hASC-t3",description:"hASC-t3 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"hASC-t4", name:"hASC-t4",description:"hASC-t4 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"HepG2", name:"HepG2",description:"HepG2 hepatocellular carcinoma cell line", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"HippocampusMiddle", name:"HippocampusMiddle",description:"brain hippocampus middle", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"HMEC", name:"HMEC",description:"HMEC mammary epithelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"HSMM", name:"HSMM",description:"HSMM skeletal muscle myoblast cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Huvec", name:"Huvec",description:"HUVEC umbilical vein endothelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"InferiorTemporalLobe", name:"InferiorTemporalLobe",description:"brain inferior temporal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Islets", name:"Islets",description:"pancreatic islets", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"K562", name:"K562",description:"K562 leukemia cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Liver", name:"Liver",description:"liver", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"MidFrontalLobe", name:"MidFrontalLobe",description:"brain mid-frontal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"NHEK", name:"NHEK",description:"NHEK epidermal keratinocyte primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"NHLF", name:"NHLF",description:"NHLF lung fibroblast primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"RectalMucosa", name:"RectalMucosa",description:"rectal mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"RectalSmoothMuscle", name:"RectalSmoothMuscle",description:"rectal smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true)
+
         return beanList
     }
 

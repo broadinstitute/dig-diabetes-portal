@@ -61,6 +61,8 @@ class RestServerService {
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
     private String GET_REGION_URL = "getRegion"
     private String GET_VECTOR_URL = "getVectorData"
+    private String GET_BIG_WIG_DATA = "getBigWigData"
+    private String GET_EPIGENETIC_POSSIBLE_DATA = "getEpigenomicData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -68,8 +70,6 @@ class RestServerService {
     public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
-    public static int SAMPLE_DATA_VERSION_T2D = 23
-    public static int SAMPLE_DATA_VERSION_STROKE = 70
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -664,6 +664,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject postVectorDataRestCall(String jsonString) {
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_VECTOR_URL, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postBigWigDataRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_BIG_WIG_DATA, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postEpigeneticBigwigFileQueryRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_EPIGENETIC_POSSIBLE_DATA, currentRestServer() );
         return tempObject;
     }
 
@@ -2062,7 +2072,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, int  startHere, int pageSize ) {
+    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName,
+                                                             int  startHere, int pageSize,
+                                                             String version ) {
         List<String> specifyRequestList = []
         //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
         if ((phenotype) && (phenotype.length() > 0)) {
@@ -2077,11 +2089,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if ((geneName) && (geneName.length() > 0)) {
             specifyRequestList << "\"gene\":\"${geneName}\""
         }
+        if ((version) && (version.length() > 0)) {
+            specifyRequestList << "\"version\":\"${version}\""
+        }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
 
 
-    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd, String source) {
+    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd,
+                                               String source,int assayId, String assayIdListInStringForm) {
         int revisedPageStart = 0;
         int revisedPageEnd = 1000;
         if (pageStart > 0){revisedPageStart = pageStart}
@@ -2096,15 +2112,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (source){
             restApiParameterList << "\"source\": \"${source}\""
         }
+        if ((assayIdListInStringForm) ){
+            restApiParameterList << "\"assay_id\": ${assayIdListInStringForm}"
+        } else if ((assayId) && (assayId>-1)){
+            restApiParameterList << "\"assay_id\": [${assayId}]"
+        }
         String specifyRequest = "{${restApiParameterList.join(",")}}"
-//
-//        String specifyRequest = """{"passback":"abc123",
-// "page_start": ${revisedPageStart},
-// "page_size": ${revisedPageEnd},
-// "chrom": "${chromosome}",
-// "startPos": ${startPosition},
-// "endPos": ${endPosition}
-//}""".toString()
         return postRestCall(specifyRequest, GET_REGION_URL)
     }
 
@@ -2509,6 +2522,31 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         return returnValue
     }
+
+
+    public List<String> retrieveGenesInExtents(LinkedHashMap<String,String> positioningInformation){
+        List<String> identifiedGenes = []
+        String regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
+        String chromosomeSpecifier = (positioningInformation.chromosomeSpecified.startsWith('chr'))?
+                positioningInformation.chromosomeSpecified:
+                ("chr" + positioningInformation.chromosomeSpecified)
+        List<Gene> geneList = Gene.findAllByChromosome(chromosomeSpecifier)
+        for (Gene gene in geneList) {
+            try {
+                int startExtent = positioningInformation.beginningExtentSpecified as Long
+                int endExtent = positioningInformation.endingExtentSpecified as Long
+                if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+                        ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
+                    identifiedGenes << gene.name2 as String
+                }
+            } catch (e) {
+                log.error("problem translating extent start=${} to end=${}")
+            }
+
+        }
+        return identifiedGenes
+    }
+
 
 
 }

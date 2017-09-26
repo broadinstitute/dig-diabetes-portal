@@ -54,5 +54,39 @@ class EpigenomeService {
         JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
         return VectorDataJson;
     }
+    public JSONObject getBigWigDataRestCall(String vectorDataJsonPayloadString) {
+        JSONObject VectorDataJson = this.restServerService.postBigWigDataRestCall(vectorDataJsonPayloadString);
+        return VectorDataJson;
+    }
+
+
+    public List<String> getThePossibleBigwigAddresses (String jsonPayloadString){
+        List<String> returnValue = []
+        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
+        if (vectorDataJson){
+           for (JSONObject jsonObject in vectorDataJson.tissue) {
+               returnValue << jsonObject.bigwigpath as String
+           }
+        }
+        return returnValue
+    }
+
+
+    public LinkedHashMap<String,List<String>> getThePossibleReadData (String jsonPayloadString){
+        LinkedHashMap<String,List<String>> returnValue = [:]
+        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
+        if (vectorDataJson){
+            for (JSONObject jsonObject in vectorDataJson.tissue) {
+                String tissue = jsonObject.eid as String
+                if (!returnValue.containsKey(tissue)){
+                    returnValue[tissue] = []
+                }
+                returnValue[tissue] << jsonObject.assayid as String
+            }
+        }
+        return returnValue
+    }
+
+
 
 }

@@ -692,7 +692,7 @@ the individual filters themselves. That work is handled later as part of a loop-
     <div id="collapseBurden" class="accordion-body collapse">
         <div class="accordion-inner">
             <div style="text-align: right;">
-                <a href="https://s3.amazonaws.com/broad-portal-resources/GAIT_guide.pdf" target="_blank">GAIT guide</a>
+                <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
             </div>
             <div class="container">
                 <h5 style="margin-right: 30px">

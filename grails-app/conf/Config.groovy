@@ -87,7 +87,6 @@ if  (Environment.current == Environment.DEVELOPMENT)  {
  * Home directory in Windows is usually: C:\Users\<username>\.grails
  * In Unix, this is usually ~\.grails
  *
- * dataExport-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
  */
 if (appName) {
     grails.config.locations = []
@@ -171,17 +170,18 @@ digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.comput
 // this will be your default
 defaultRestServer = digAWSibddemoec2
 
-getRestServerList = [
-        digdevlocalServer,
-        digAWSKBV2prodServer,
-        digAWS02KBV2prodServer,
-        federatedAwsProdKBV2Server,
-        federatedAwsStageKBV2Server,
-        toddTestServer,
-        digdevmarcin,
-        digAWSibddemoec2,
-        digAWSStrokerest02Server
-]
+ getRestServerList = [
+         digdevlocalServer,
+         digAWSKBV2prodServer,
+         digAWS02KBV2prodServer,
+         federatedAwsProdKBV2Server,
+         federatedAwsStageKBV2Server,
+         toddTestServer,
+         digdevmarcin,
+         digAWSibddemoec2,
+         digAWSStrokerest02Server
+ ]
+
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -308,9 +308,19 @@ environments {
 //      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-//      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
+
+//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
-        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+//        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+
+//        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
+
+//        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+//        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+
+          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://portaldemos.us-east-1.elasticbeanstalk.com"
+
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
@@ -332,6 +342,8 @@ if  (Environment.current == Environment.PRODUCTION)  {
 
 
 appName = grails.util.Metadata.current.'app.name'
+//def baseURL = grails.serverURL ?: "http://GPAD4-DCF.broadinstitute.org:${System.getProperty('server.port', '8080')}/${appName}"
+
 def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
 
 
@@ -418,7 +430,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/springSecurityOAuth/**':          ['permitAll'],
         '/dbconsole/**':      ['ROLE_ADMIN'],
         '/localization/**':   ['ROLE_ADMIN'],
-        '/metadatainfo/**':       ['ROLE_USER']
+        '/metadatainfo/**':       ['ROLE_USER'],
+        '/regionInfo/**':      ['ROLE_USER']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -526,15 +539,27 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 // placeholder for data version
-diabetes.data.version = "mdv27";
-portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "EBI": "mdv25"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
-portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"], "stroke": ["Adipose"], "mi" : ["Adipose"]]
-portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
+
+diabetes.data.version = "mdv80";
+portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
+portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
+portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
+                                   "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
+                                   "mi" : ["SkeletalMuscle"],
+                                   "ibd" : ["E071","E106","E088","E085"]]
+portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", or "ibd"
+
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
-portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27", "stroke": "GWAS_Stroke_mdv70", "mi" : "GWAS_CARDIoGRAM_mdv90", "EBI":"FG"]
+portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27",
+                                                  "stroke": "GWAS_Stroke_mdv70",
+                                                  "mi" : "GWAS_CARDIoGRAM_mdv90",
+                                                  "ibd":"GWAS_IBDGenomics_eu_mdv80"]
+portal.data.epigenetic.datasetList.abbreviation.map = ["t2d": "[3]",
+                                                  "stroke": "[3]",
+                                                  "mi" : "[3]",
+                                                  "ibd": "[1,2]"]
 
 

@@ -22,13 +22,26 @@
         <r:layoutResources/>
 
         <link href="https://fonts.googleapis.com/css?family=Lato|Oswald" rel="stylesheet">
-        <g:external uri="/images/icons/dna-strands.ico"/>
 
 
         <g:layoutHead/>
-    <g:renderT2dGenesSection>
-        <g:applyLayout name="analyticsT2dGenes"/>
-    </g:renderT2dGenesSection>
+
+
+
+        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsStrokePortal"/>
+            </g:renderT2dGenesSection>
+        </g:if>
+
+        <g:else>
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsT2dGenes"/>
+            </g:renderT2dGenesSection>
+        </g:else>
+
+
+
         <script>
             $(function () {
                 /*DK: find out if the user is viewing the front page*/
@@ -41,7 +54,6 @@
                 var pathFullName = location.pathname.toLowerCase();
                 var pathName = location.pathname.toLowerCase().split("/");
                 var theLastPath = pathName.slice(-1)[0];
-
 
                 switch(theLastPath){
                     case "":

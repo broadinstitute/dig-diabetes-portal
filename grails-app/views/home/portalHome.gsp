@@ -149,14 +149,17 @@
                     <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header1.svg"))}" style="width:450px; margin-top: -30px; margin-left: -48px;" />
                     <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.mi.header.tagline" /></p>
                 </g:elseif>
+                <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                    <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader4", default:"ibdFrontHeader4.png"))}" style="width:700px; margin-top: 50px; margin-left: -100px;" />
+                    <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.ibd.header.tagline" /></p>
+                </g:elseif>
                 <g:else>
                     <img src="${resource(dir: 'images', file: g.message(code: "files.t2dFrontHeader", default: "t2d_front_logo.svg"))}" style="margin-top:20px; width:500px;" />
                     <p style="padding-top:10px;">
-
                         <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>' style="color:#ffffff; text-decoration: none;">
 
-                            <g:message code="portal.language.setting.setSpanish" default="En Español" /></a> |
 
+                            <g:message code="portal.language.setting.setSpanish" default="En Español" /></a> |
                         <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>' style="color:#ffffff; text-decoration: none;">
 
                             <g:message code="portal.language.setting.setEnglish" default="In English" /></a>
@@ -178,6 +181,10 @@
                             <a href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id: 'LPA']"/>'>LPA</a>
                         </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                            <a href='<g:createLink controller="gene" action="geneInfo"
+                                                   params="[id: 'IL23R']"/>'>IL23R</a>
+                        </g:elseif>
                         <g:else>
                             <a href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id: 'SLC30A8']"/>'>SLC30A8</a>
@@ -191,6 +198,9 @@
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                             <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
                         </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                            <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs11209026']"/>'>rs11209026</a>,
+                        </g:elseif>
                         <g:else>
                             <a href='<g:createLink controller="variantInfo" action="variantInfo"
                                                    params="[id: 'rs13266634']"/>'>rs13266634</a>
@@ -202,6 +212,10 @@
                                                    params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                            <a href='<g:createLink controller="region" action="regionInfo"
+                                                   params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
+                        </g:elseif>
+                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                             <a href='<g:createLink controller="region" action="regionInfo"
                                                    params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
                         </g:elseif>
@@ -252,20 +266,36 @@
             <g:if test="${!g.portalTypeString()?.equals('stroke')}">
             </g:if>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
+
                 <div class="col-md-12" style="padding-top:40px; font-size: 20px;">
                 <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                 <p><span  style="font-size: 20px;"><g:message code="portal.stroke.about.the.data.text" /></span>
-                    <hr /><a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
+                    <hr />
 
-                        <g:message code="portal.stroke.about.AHA.discovery"></g:message>
-                        <span style="display:block; width: 350px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
-                </g:if>
+
+                        <g:message code="portal.stroke.about.downloads"></g:message>
+                        <span style="display:block; width: 275px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.download.link"></g:message></span>
+
+
+                <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
+
+                <g:message code="portal.stroke.about.AHA.discovery"></g:message>
+                <span style="display:block; width: 350px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
+
+
+            </g:if>
 
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <div class="col-md-12" style="padding-top:40px;">
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                     <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.mi.about.the.data.text" />
+                </g:elseif>
+                <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                    <div class="col-md-12" style="padding-top:40px;">
+                        <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
+                    <p><g:message code="portal.ibd.about.the.data.text" />
                 </g:elseif>
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
@@ -350,7 +380,11 @@
 
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 <p><g:message code="about.the.mi.portal.text"/></p>
-                </g:elseif>
+            </g:elseif>
+
+            <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+                <p><g:message code="about.the.ibd.portal.text"/></p>
+            </g:elseif>
 
             <g:else>
                 <p><g:message code="about.the.portal.text1"/>

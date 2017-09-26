@@ -617,6 +617,29 @@ class MetaDataService {
         return groupList.sort{it.sortOrder};
     }
 
+
+    public List<SampleGroup>  getSampleGroupListForPhenotypeWithMeaning(String phenotypeName,String meaning) {
+        List<SampleGroup> sampleGroupList = getSampleGroupListForPhenotypeAndVersion(phenotypeName, "", MetaDataService.METADATA_VARIANT)
+        List<SampleGroup> groupList = []
+
+        for (SampleGroup sampleGroup in sampleGroupList){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sampleGroup.phenotypes){
+                for (Property property in phenotype.properties){
+                    if (property.hasMeaning(meaning)){
+                        if (!groupList.collect{it.systemId}?.contains(sampleGroup.systemId)){
+                            groupList << sampleGroup
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return groupList
+    }
+
+
+
     /**
      * Get a JSON object listing every phenotype and the top-level datasets containing data for that phenotype
      * @return

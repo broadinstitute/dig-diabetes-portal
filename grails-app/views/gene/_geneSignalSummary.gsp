@@ -1,83 +1,158 @@
 <style>
+div.variantIntersectionChoice{
+    margin: 0 0 100px 0;
+}
+td.tissueTable.Active_TSS{
+    background: #0000FF;
+}
+td.tissueTable.Weak_TSS{
+    background: #4682B4;
+}
+td.tissueTable.Genic_enhancer{
+    background: #1E90FF;
+}
+td.tissueTable.Active_enhancer_1{
+    background: #87CEFA;
+}
+td.tissueTable.Active_enhancer_2{
+    background: #B0E0E6;
+}
+td.tissueTable.Weak_enhancer{
+    background: #E6E6FA;
+}
 
+
+td.tissueTable.matchingRegion3_0{
+    background: #FF0000;
+}
+td.tissueTable.matchingRegion3_1{
+    background: #FF8C1A;
+}
+td.tissueTable.matchingRegion3_2{
+    background: #C2E105;
+}
+td.tissueTable.matchingRegion3_3{
+    background: #FFC34D;
+}
+td.tissueTable.matchingRegion3_4{
+    background: #FFC34D;
+}
+td.tissueTable.matchingRegion3_5{
+}
+
+/*h3k27ac corresponds to assay ID = 1*/
+td.tissueTable.matchingRegion1_5{
+    background: #FF0033;
+}
+td.tissueTable.matchingRegion1_4{
+    background: #FF3333;
+}
+td.tissueTable.matchingRegion1_3{
+    background: #FF6633;
+}
+td.tissueTable.matchingRegion1_2{
+    background: #FF9933;
+}
+td.tissueTable.matchingRegion1_1{
+    background: #FFCC33;
+}
+td.tissueTable.matchingRegion1_0{
+    background: #FFFF33;
+}
+
+/*DNase corresponds to assay ID = 2*/
+td.tissueTable.matchingRegion2_5{
+    background: #3333FF;
+}
+td.tissueTable.matchingRegion2_4{
+     background: #3366FF;
+}
+td.tissueTable.matchingRegion2_3{
+      background: #3399FF;
+}
+td.tissueTable.matchingRegion2_2{
+       background: #3399FF;
+}
+td.tissueTable.matchingRegion2_1{
+        background: #33CCFF;
+}
+td.tissueTable.matchingRegion2_0{
+         background: #33FFFF;
+}
+th.niceHeaders.niceHeadersThatAreLinks{
+    text-decoration: underline;
+    color: blue;
+    text-align: left;
+}
+#overlapTable tr {
+    height:1.5em;
+    min-height:1.5em;
+    max-height:1.5em;
+}
+#overlapTable td {
+    padding: 1px 0 0 0;
+}
+.credibleSetTableGoesHere th.niceHeaders{
+    background: white;
+    transform-origin: left;
+    -webkit-transform: rotate(-60deg);
+    transform: rotate(-60deg);
+    max-width: 2px;
+}
+.hover {
+    position:relative;
+    top:0px;
+    left:0px;
+    line-height: 100%;
+    display:inline-block;
+
+}
+svg.lz-locuszoom .lz-panel-title {
+    font-size: 14px;
+    font-weight: 600;
+}
+.tooltip {
+    top:-15px;
+    width:100px;
+    position:absolute;
+
+    background-color:#6b9aff;
+    color:white;
+    border-radius:5px;
+    opacity:0;
+    -webkit-transition: opacity 0.5s;
+    -moz-transition:  opacity 0.5s;
+    -ms-transition: opacity 0.5s;
+    -o-transition:  opacity 0.5s;
+    transition:  opacity 0.5s;
+    line-height: 100%;
+}
+
+.hover:hover .tooltip {
+    opacity:1;
+}
+div.geneWindowDescriptionHolder {
+    margin: 0 0 15px 0;
+}
+div.geneWindowDescription{
+    font-style: italic;
+}
+div.credSetWindowSummary{
+    font-size: 16px;
+    font-weight: bold;
+}
+div.credibleSetHeader{
+    border: 1px solid #cccccc;
+    padding: 5px 0 0 0;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+div.credibleSetNameHolder{
+    margin-top: 10px;
+}
 </style>
-
-<div class="row">
-    <div class="pull-right" style="display:none">
-        <label for="signalPhenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"
-                                                            default="Change phenotype choice"/></label>
-        &nbsp;
-        <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
-                onchange="mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummaryMethods.updateSignificantVariantDisplay,
-                        {preferIgv:($('input[name=genomeBrowser]:checked').val()==='2')})">
-        </select>
-    </div>
-</div>
-<div >%{--should hold the Choose data set panel--}%
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-md-2 col-xs-12">
-                <div id='trafficLightHolder'>
-                    <r:img uri="/images/undeterminedlight.png"/>
-                    <div id="signalLevelHolder" style="display:none"></div>
-                </div>
-
-            </div>
-
-            <div class="col-md-5 col-xs-12">
-                <div class="row">
-                    <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                        No evidence for signal
-                    </div>
-
-                    <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                        Suggestive evidence for signal
-                    </div>
-
-                    <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                        Strong evidence for signal
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-5 col-xs-12">
-
-            </div>
-
-        </div>
-        <div class="row interestingPhenotypesHolder">
-            <div class="col-xs-12">
-                <div id="interestingPhenotypes">
-
-                </div>
-            </div>
-
-            <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
-            </div>
-            <div class="col-xs-2">
-
-            </div>
-        </div>
-
-
-    </div>
-
-</div>
-
-<div class="collapse in" id="collapseExample">
-    <div class="wellPlace">
-        <div id="noAggregatedVariantsLocation">
-            <div class="row" style="margin-top: 15px;">
-                <div class="col-lg-offset-1">
-                    <h4>No information about aggregated variants exists for this phenotype</h4>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
+<div id="tableHeaderHolder"></div>
 
 
 <div id="BurdenHiddenHere" style="display:none">
@@ -138,6 +213,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                         regionSpecification:'',
                         uniqueRoot:"x"};
                     drivingVariables = mpgSoftware.variantSearchResults.setVarsToRemember(drivingVariables);
+
                     $("#cDataModalGoesHere").empty().append(
                             Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
                     var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','Consequence','Reference_allele','Effect_allele','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
@@ -168,18 +244,22 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
 
             var initializeSignalSummarySection = function(){
                 var drivingVariables = {
-                    geneName: '<%=geneName%>',
-                    sampleDataSet: "<%=sampleDataSet%>",
-                    burdenDataSet: "<%=burdenDataSet%>",
+                    portalTypeString:"${g.portalTypeString()}",
+                    geneName: '${geneName}',
+                    sampleDataSet: "${sampleDataSet}",
+                    burdenDataSet: "${burdenDataSet}",
                     geneChromosome: '${geneChromosome}',
                     geneExtentBegin: ${geneExtentBegin},
                     geneExtentEnd: ${geneExtentEnd},
                     igvIntro:  '${igvIntro}',
                     defaultPhenotype: '${defaultPhenotype}',
+                    identifiedGenes: '${identifiedGenes}',
                     firstPropertyName: '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     defaultTissues: ${(defaultTissues as String).encodeAsJSON()},
                     defaultTissuesDescriptions: ${(defaultTissuesDescriptions as String).encodeAsJSON()},
+                    lzCommon: 'lzCommon',
+                    lzCredSet: 'lzCredSet',
                     vrtUrl:  '${createLink(controller: "VariantSearch", action: "gene")}',
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
@@ -205,13 +285,16 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}'
+                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
+                    fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
+                    assayIdList: "${grailsApplication.config.portal.data.epigenetic.datasetList.abbreviation.map[g.portalTypeString()]}",
+                    geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }}
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
+                mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-
             };
 
 

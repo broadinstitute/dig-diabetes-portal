@@ -1,5 +1,6 @@
 %{--this will go inside grails-app/views/template(new folder created by BenA)--}%
 %{--this will have all the mustache templates--}%
+%{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
 
 <g:render template="./data/ExAC_r03" />
 <g:render template="./data/1kg_phase1" />
@@ -48,6 +49,7 @@
         <table id="datasets" class="table table-condensed" style="margin-left:20px">
             <thead>
             <tr>
+
                 <th>Dataset</th>
                 <th>Access</th>
                 <th>Samples</th>
@@ -71,7 +73,7 @@
                     </div>
             </td>
 
-            <td class="access" style="color:{{accessColor}}">{{access}} </td>
+
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
             <td class="datatype">{{technology}}</td>
