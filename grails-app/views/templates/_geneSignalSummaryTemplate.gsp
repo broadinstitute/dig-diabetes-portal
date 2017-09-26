@@ -477,7 +477,8 @@
                     <li class="nav-item redPhenotype phenotypeStrength">No credible sets</li>
             {{/allCredibleSets}}
             {{#atLeastOneCredibleSetExists}}
-                    <li id="allCredibleSetVariants"  class="nav-item credibleSetChooserButton credibleSetChooserStrength active" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,'ALL')">ALL</li>
+                    %{--<li id="allCredibleSetVariants"  class="nav-item credibleSetChooserButton credibleSetChooserStrength active" --}%
+                    %{--onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,'ALL')">ALL</li>--}%
             {{/atLeastOneCredibleSetExists}}
         </ul>
     </div>
@@ -622,6 +623,8 @@
     {{/cellTypeSpecs}}
     </tbody>
 </table>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 0px;" align="center"></g:if>
 </div>
 
 </script>
