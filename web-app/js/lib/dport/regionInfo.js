@@ -223,7 +223,7 @@ var mpgSoftware = mpgSoftware || {};
             var allRenderData = $.data($('#dataHolderForCredibleSets')[0],'allRenderData');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
             var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
-            buildTheCredibleSetHeatMap(filteredRenderData);
+            buildTheCredibleSetHeatMap(filteredRenderData,false);
 
 
             // var tissueGrid = $.data($('#dataHolderForCredibleSets')[0],'tissueGrid');
@@ -344,7 +344,7 @@ var mpgSoftware = mpgSoftware || {};
                 quantileArray: createQuantilesArray(everySingleValue)
             };
         };
-        var buildTheCredibleSetHeatMap = function (drivingVariables){
+        var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
             $(".credibleSetTableGoesHere").empty().append(
                 Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
             );
@@ -364,7 +364,7 @@ var mpgSoftware = mpgSoftware || {};
                 $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
 
 
-                displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, assayIdList );
+                displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, assayIdList,setDefaultButton );
 
             }, function(e) {
                 console.log("My ajax failed");
@@ -409,7 +409,7 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var displayAParticularCredibleSet = function(tissueGrid, dataVariants, assayIdList ){
+        var displayAParticularCredibleSet = function(tissueGrid, dataVariants, assayIdList, setDefaultButton ){
 
             $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid)
             // In some cases we may have one primary tissue grid that drives the display, and a subsidiary tissue grid that is displayed only if
@@ -460,7 +460,11 @@ var mpgSoftware = mpgSoftware || {};
 
             });
             $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',sortedVariants);
-
+            if (setDefaultButton){
+                if ($('.credibleSetChooserButton').length > 1){
+                    $($('.credibleSetChooserButton')[0]).click();
+                }
+            }
 
 
         };
@@ -524,7 +528,7 @@ var mpgSoftware = mpgSoftware || {};
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
                     $.data($('#dataHolderForCredibleSets')[0],'additionalParameters',additionalParameters);
                     $.data($('#dataHolderForCredibleSets')[0],'dataVariants',data.variants);
-                    buildTheCredibleSetHeatMap(drivingVariables);
+                    buildTheCredibleSetHeatMap(drivingVariables,true);
                     // if (Object.keys(allCredibleSets).length > 1){
                     //     $($('.credibleSetChooserButton')[0]).click();
                     // }

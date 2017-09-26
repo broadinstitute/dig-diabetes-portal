@@ -881,7 +881,7 @@ var mpgSoftware = mpgSoftware || {};
                     break;
                 case 2:
                     panel_layout.data_layers[2].y_axis.field = yAxisScale2;
-                    panel_layout.data_layers[2].y_axis.min_extent= [0, 1];
+                    panel_layout.data_layers[2].y_axis.min_extent= [0, 0.001];
                     break;
                 default: break;
             }
