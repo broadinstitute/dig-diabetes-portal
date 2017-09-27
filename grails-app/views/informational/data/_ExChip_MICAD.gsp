@@ -349,22 +349,20 @@
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
-    <p><g:message code="informational.data.project.project"></g:message></p>
+    <p><g:message code="informational.data.project.MIGen"></g:message></p>
 
 
 
 
-<h4>Experiment summary</h4>
-<p><g:message code="informational.data.exptsumm.project"></g:message></p>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.MICAD"></g:message></p>
 
-<h4>Overview of analysis and results</h4>
-<p><g:message code="informational.data.overview.results"></g:message></p>
 
 
 
 <h4>Accessing MICAD exome chip analysis data in the CVDKP</h4>
 
-<p><g:message code="informational.data.accessing.data"></g:message></p>
+<p><g:message code="informational.data.accessing.MICAD1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.MICAD2"></g:message></p>
 
 
 
