@@ -318,8 +318,11 @@ environments {
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
-          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
-//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+
+        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+        
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
@@ -548,7 +551,7 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
                                    "mi" : ["SkeletalMuscle"],
                                    "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "mi"     // options are "t2d", "stroke", "mi", or "ibd"
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
 
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"

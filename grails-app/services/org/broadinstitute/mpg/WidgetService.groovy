@@ -699,6 +699,7 @@ class WidgetService {
             JSONObject dataJSONObject = jsonObject["data"] as JSONObject
             List<String> dataFields = dataJSONObject.names() as List
             int numberOfElements = 0
+            boolean choseOurPValue = false
             for (String dataField in dataFields){
                 if (dataField == "metadata_rootPOS" ){
                     dataJSONObject.position = dataJSONObject[dataField] as JSONArray
@@ -721,7 +722,11 @@ class WidgetService {
                     dataJSONObject.remove(dataField);
                 } else if (dataField.contains("CREDIBLE_SET_ID") ){
                     dataJSONObject.remove(dataField);
-                } else {
+                } else if (dataField.contains(propertyName)) { // Will capture either posterior probabilities or else P values
+                    dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                    choseOurPValue = true
+                }  else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 }
