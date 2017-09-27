@@ -1110,7 +1110,7 @@ var mpgSoftware = mpgSoftware || {};
             var lzVar = mpgSoftware.locusZoom.locusZoomPlot[plotDomId];
             var includeRecord  = function() {return true;};
             if (assayIdList=='[3]') {
-                includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1)||(o.element.indexOf('TSS')>-1))};
+                includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1))};
             }
             callingData.includeRecord = includeRecord;
             var tissueTracks = _.filter(lzVar.panels,function(v,k){return (k.indexOf('intervals')===0)});
