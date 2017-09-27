@@ -25,7 +25,7 @@
 
 <h4>Accessing AFGen GWAS data in the T2D Knowledge Portal</h4>
 
-<p><g:message code="informational.data.accessing.AFGen_GWAS"></g:message></p>
+<p><g:message code="informational.data.accessing.AFGen_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.AFGen_GWAS2"></g:message></p>
 
 </div>
 
