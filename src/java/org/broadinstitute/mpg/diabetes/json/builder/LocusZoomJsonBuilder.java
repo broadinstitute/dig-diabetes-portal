@@ -109,11 +109,13 @@ public class LocusZoomJsonBuilder {
         Property pValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "P_VALUE",  this.phenotypeString,  rootDataSetString);
 
         // get the query properties
+        float pValueCutOff = (float) 0.90;  // pValues > 0.9 don't interest us, and they slow down the query
         if (posteriorPValue != null){
             query.addQueryProperty(posteriorPValue);
         }
         if (credibleSetId != null){
             query.addQueryProperty(credibleSetId);
+            pValueCutOff = (float) 1; // posterior probabilities near 1 are very interesting, so don't filter them out
         }
         if (pValue != null){
             query.addQueryProperty(pValue);
@@ -133,7 +135,7 @@ public class LocusZoomJsonBuilder {
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
-        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(1.0));
+        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(pValueCutOff));
         QueryFilterBean queryFilterBean = new QueryFilterBean(pValueProperty,"", String.valueOf(0.0));
         query.addOrderByQueryFilter(queryFilterBean);
 
