@@ -1193,6 +1193,7 @@ var mpgSoftware = mpgSoftware || {};
             );
         };
         var displayFunctionalData = function(data,additionalData){
+
                 var renderData = UTILS.processChromatinStateData(data);
                 if (renderData.recordsExist){
                     buildAnnotationTable('#functionalDataTableGoesHere','urlToFillIn',renderData,{});
@@ -1206,6 +1207,7 @@ var mpgSoftware = mpgSoftware || {};
                             regionEnd:renderData.regionEnd,
                             stateColorBy:renderData.uniqueElements,
                             mappingInformation:renderData.dataMatrix});
+
 
                 }
                 $('select.uniqueElements').val('ALL');

@@ -171,42 +171,52 @@
 
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
 
-                <div class="buttonHolder tabbed-about-page">
+                <div class="row">
+                    <div class="col-md-9">
+                    <h4 class="dk-blue-bordered"><g:message code="informational.contact.MI.header1"></g:message></h4>
+                <p><g:message code="informational.contact.MI-1"></g:message></p>
+                        <p><g:message code="informational.contact.MI-2"></g:message></p>
+                <h4 class="dk-blue-bordered"><g:message code="informational.contact.MI.header2"></g:message></h4>
+                        <p><g:message code="informational.contact.MI.consortia"></g:message></p>
 
-                    <ul class="nav nav-pills">
-                        <div class="row">
+                </div></div>
 
-                            <div class="col-md-3 text-center">
-                                <li role="presentation" id="contact_consortium" class="myPills activated">
-                                    <a href="#">
-                                        <g:message code="contact.consortium" default="Consortium"/>
-                                    </a>
-                                </li>
-                            </div>
-                            <div class="col-md-3 text-center">
-                                <li role="presentation" id="contact_cohort" class="myPills">
-                                    <a href="#">
-                                        <g:message code="contact.cohort" default="Studies"/>
-                                    </a>
-                                </li>
-                            </div>
-                            <div class="col-md-3 text-center">
-                                <li role="presentation" id="contact_portal" class="myPills active">
-                                    <a href="#">
-                                        <g:message code="contact.portal" default="Portal"/>
-                                    </a>
-                                </li>
-                            </div>
+                %{--<div class="buttonHolder tabbed-about-page">--}%
+
+                    %{--<ul class="nav nav-pills">--}%
+                        %{--<div class="row">--}%
+
+                            %{--<div class="col-md-3 text-center">--}%
+                                %{--<li role="presentation" id="contact_consortium" class="myPills activated">--}%
+                                    %{--<a href="#">--}%
+                                        %{--<g:message code="contact.consortium" default="Consortium"/>--}%
+                                    %{--</a>--}%
+                                %{--</li>--}%
+                            %{--</div>--}%
+                            %{--<div class="col-md-3 text-center">--}%
+                                %{--<li role="presentation" id="contact_cohort" class="myPills">--}%
+                                    %{--<a href="#">--}%
+                                        %{--<g:message code="contact.cohort" default="Studies"/>--}%
+                                    %{--</a>--}%
+                                %{--</li>--}%
+                            %{--</div>--}%
+                            %{--<div class="col-md-3 text-center">--}%
+                                %{--<li role="presentation" id="contact_portal" class="myPills active">--}%
+                                    %{--<a href="#">--}%
+                                        %{--<g:message code="contact.portal" default="Portal"/>--}%
+                                    %{--</a>--}%
+                                %{--</li>--}%
+                            %{--</div>--}%
 
 
-                            <div class="col-md-3 text-center">
-                            </div>
+                            %{--<div class="col-md-3 text-center">--}%
+                            %{--</div>--}%
 
-                        </div>
+                        %{--</div>--}%
 
-                    </ul>
+                    %{--</ul>--}%
 
-                </div>
+                %{--</div>--}%
 
 
             </g:elseif>

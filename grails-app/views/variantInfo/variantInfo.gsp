@@ -156,11 +156,11 @@
                                                                            'allowExperimentChoice': 1,
                                                                            'allowPhenotypeChoice' : 1,
                                                                            'allowStratificationChoice': 1   ]"/>
-
+                    <div class="separator"></div>
                     </g:if>
 
 
-                    <div class="separator"></div>
+
 
                     <g:if test="${true}">
                         <g:render template="/widgets/locusZoomPlot"/>
