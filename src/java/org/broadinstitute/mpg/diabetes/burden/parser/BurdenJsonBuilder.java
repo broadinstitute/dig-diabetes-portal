@@ -238,8 +238,10 @@ public class BurdenJsonBuilder {
         }
 
         // get the payload string
-        query.setPageSize(1000);
-        query.setLimit(1000);
+        query.setPageSize(100);
+        query.setLimit(100);
+        //query.setPageSize(1000);
+        //query.setLimit(1000);
         jsonString = jsonBuilder.getQueryJsonPayloadString(query);
 
         // return
