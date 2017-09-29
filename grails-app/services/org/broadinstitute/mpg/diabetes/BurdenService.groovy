@@ -330,7 +330,8 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet, Boolean explicitlySelectSamples) {
+    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet,
+                                     Boolean explicitlySelectSamples, String portalTypeString) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -380,7 +381,13 @@ class BurdenService {
             samplesObject.put(PortalConstants.JSON_BURDEN_SAMPLES_KEY, samplesArray)
 
             JSONObject covariatesObject = new JSONObject()
-            JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4","Age","SEX"])
+            JSONArray covariatesArray
+            if (portalTypeString=='mi'){
+                covariatesArray = new JSONArray(["C1","C2","C3","C4","SEX"])
+            } else {
+                covariatesArray = new JSONArray(["C1","C2","C3","C4","Age","SEX"])
+            }
+            JSONArray
             covariatesObject.put(PortalConstants.JSON_BURDEN_COVARIATES_KEY, covariatesArray);
 
             JSONObject filtersObject = new JSONObject()

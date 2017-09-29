@@ -422,6 +422,7 @@ class GeneController {
         // params.mafValue=="0.47" // where value= real number x (where 0 <= x <= 1), and x is the MAF you'll pass into the REST call"
         // params.geneName=="SLC30A8" // string representing gene name
         log.info("got parameters: " + params);
+        String portalType = g.portalTypeString() as String
 
         // cast the parameters
         Boolean explicitlySelectSamples = false
@@ -434,7 +435,8 @@ class GeneController {
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, sampleDataSet, explicitlySelectSamples);
+        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue,
+                dataSet, sampleDataSet, explicitlySelectSamples,portalType);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

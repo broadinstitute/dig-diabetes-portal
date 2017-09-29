@@ -438,28 +438,35 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
 
-    var phenotypeNameForSampleData  = function (untranslatedPhenotype) {
+    var phenotypeNameForSampleData  = function (untranslatedPhenotype,portalTypeString) {
         var convertedName = '';
-        if (untranslatedPhenotype === 'T2D') {
-            convertedName = 't2d';
-        } else if (untranslatedPhenotype === 'FG') {
-            convertedName = 'FAST_GLU_ANAL';
-        } else if (untranslatedPhenotype === 'FI') {
-            convertedName = 'FAST_INS_ANAL';
-        } else if (untranslatedPhenotype === 'BMI') {
-            convertedName = 'BMI';
-        } else if (untranslatedPhenotype === 'CHOL') {
-            convertedName = 'CHOL_ANAL';
-        } else if (untranslatedPhenotype === 'TG') {
-            convertedName = 'TG_ANAL';
-        } else if (untranslatedPhenotype === 'HDL') {
-            convertedName = 'HDL_ANAL';
-        } else if (untranslatedPhenotype === 'LDL') {
-            convertedName = 'LDL_ANAL';
-        } else if (untranslatedPhenotype === 'SBP') {
-            convertedName = 'SBP_ANAL';
-        } else if (untranslatedPhenotype === 'DBP') {
-            convertedName = 'DBP_ANAL';
+        //  We may have different phenotypes string translations depending on which sort of portal we are operating within
+        if (portalTypeString === 'mi'){
+            if (untranslatedPhenotype === 'MI') {
+                convertedName = 'eomi';
+            }
+        } else {
+            if (untranslatedPhenotype === 'T2D') {
+                convertedName = 't2d';
+            } else if (untranslatedPhenotype === 'FG') {
+                convertedName = 'FAST_GLU_ANAL';
+            } else if (untranslatedPhenotype === 'FI') {
+                convertedName = 'FAST_INS_ANAL';
+            } else if (untranslatedPhenotype === 'BMI') {
+                convertedName = 'BMI';
+            } else if (untranslatedPhenotype === 'CHOL') {
+                convertedName = 'CHOL_ANAL';
+            } else if (untranslatedPhenotype === 'TG') {
+                convertedName = 'TG_ANAL';
+            } else if (untranslatedPhenotype === 'HDL') {
+                convertedName = 'HDL_ANAL';
+            } else if (untranslatedPhenotype === 'LDL') {
+                convertedName = 'LDL_ANAL';
+            } else if (untranslatedPhenotype === 'SBP') {
+                convertedName = 'SBP_ANAL';
+            } else if (untranslatedPhenotype === 'DBP') {
+                convertedName = 'DBP_ANAL';
+            }
         }
         return convertedName;
     };
@@ -1284,7 +1291,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
 
         //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
-        var sampleBasedPhenotypeName = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForSampleData(phenotypeName);
+        var sampleBasedPhenotypeName = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForSampleData(phenotypeName,additionalParameters.portalTypeString);
         var hailPhenotypeInfo = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForHailData(phenotypeName);
 
         var positioningInformation = {

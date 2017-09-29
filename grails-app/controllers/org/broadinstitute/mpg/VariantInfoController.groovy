@@ -444,7 +444,7 @@ class VariantInfoController {
         while (meaningIterator.hasNext()) {
             variantDataSetMeaning = meaningIterator.next();
             if (variantDataSetMeaning.contains("DATASET_")) {
-                variantDataSet = variantDataSetMeaning.substring(variantDataSet.indexOf("DATASET_") + 8);
+                variantDataSet = variantDataSetMeaning.substring(variantDataSetMeaning.indexOf("DATASET_") + 8);
                 break;
             }
         }
@@ -479,13 +479,43 @@ class VariantInfoController {
      * @return
      */
     def sampleMetadataAjaxWithAssumedExperiment() {
+        String portalType = g.portalTypeString() as String
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
         JSONObject jsonConversionObject = new JSONObject()
         for (SampleGroup sampleGroup in sampleGroupList) {
-            if (sampleGroup.parent) {
-                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+
+//                if (sampleGroup.parent) {
+//                    if (portalType=='mi'){
+//                        jsonConversionObject[sampleGroup.systemId] = 'ExSeq_EOMI_mdv91'
+//                    } else {
+//                        jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+//                    }
+//                }
+
+
+
+            Iterator<String> meaningIterator = sampleGroup?.getMeaningSet().iterator();
+            String variantDataSet = null;
+            while (meaningIterator.hasNext()) {
+                String variantDataSetMeaning = meaningIterator.next();
+                if (variantDataSetMeaning.contains("DATASET_")) {
+                    variantDataSet = variantDataSetMeaning.substring(variantDataSetMeaning.indexOf("DATASET_") + 8);
+                    break;
+                }
             }
+
+            if (variantDataSet == null) {
+                if (sampleGroup.parent) {
+                    jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+                }
+            } else {
+                jsonConversionObject[sampleGroup.systemId] = variantDataSet
+            }
+
+
+
         }
+
         if (sampleGroupList.size()>0){
             SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
             JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
