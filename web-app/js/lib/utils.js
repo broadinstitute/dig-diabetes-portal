@@ -358,6 +358,7 @@ var UTILS = {
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
+            var portaltype = "mi";
             options.empty();
             var groupList = dataSetJson.dataset;
 
@@ -396,9 +397,9 @@ var UTILS = {
 
             }
             else if (portaltype == "mi"){
-                if (keys.indexOf("MYOCARDIAL INFARCTION")>-1){
-                    keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
-                    keys.unshift("INFLAMMATORY BOWEL");
+                if (keys.indexOf("CARDIOVASCULAR DISEASE")>-1){
+                    keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
+                    keys.unshift("CARDIOVASCULAR DISEASE");
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
