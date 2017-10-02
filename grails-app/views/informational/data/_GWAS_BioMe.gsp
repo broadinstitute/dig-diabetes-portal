@@ -30,7 +30,7 @@
     <p><g:message code="pheno.help.text"></g:message></p>
     <h5><g:message code="informational.shared.headers.phase1"></g:message></h5>
     <ul>
-        <li><g:message code="informational.shared.traits.t2d"></g:message></li>x
+        <li><g:message code="informational.shared.traits.t2d"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_glucose_age-sex"></g:message></li>
         <li><g:message code="informational.shared.traits.HbA1c_age-sex"></g:message></li>
         <li><g:message code="informational.shared.traits.HbA1c_age-sex-BMI"></g:message></li>
@@ -78,7 +78,7 @@
 <p><g:message code="informational.data.exptsumm.BioMe2b"></g:message></p>
 <p><g:message code="informational.data.exptsumm.BioMe3"></g:message></p>
 <p><g:message code="informational.data.exptsumm.BioMe4"></g:message></p>
-%{--<p><g:message code="informational.data.exptsumm.BioMe5"></g:message></p>--}%
+<p><g:message code="informational.data.exptsumm.BioMe5"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
 <p><g:message code="informational.data.overview.BioMe1a"></g:message></p>
