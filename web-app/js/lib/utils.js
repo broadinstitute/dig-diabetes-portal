@@ -418,6 +418,12 @@ var UTILS = {
                 var key = keys[x];
                 if (groupList.hasOwnProperty(key)) {
                     var groupContents = groupList[key];
+                    if(key === "CARDIOVASCULAR DISEASE"){
+                        groupContents.push(["CAD","Coronary Artery Disease"]);
+                    }
+                    if(key === "LIPIDS"){
+                        phenotypesToOmit = ["CAD", "Coronary artery disease"];
+                    }
                     options.append("<optgroup label='"+key+"'>");
                     for (var j = 0; j < groupContents.length; j++) {
                         if(_.includes(phenotypesToOmit, groupContents[j][0])) {
