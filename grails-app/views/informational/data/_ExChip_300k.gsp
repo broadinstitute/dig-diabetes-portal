@@ -45,7 +45,7 @@
 %{--<p><g:message code="informational.data.exptsumm.project"></g:message></p>--}%
 
 
-<h4>Accessing 300K exome chip analysis data in the CVDKP</h4>
+<h4>Accessing 300K exome chip analysis data</h4>
 
 <p><g:message code="informational.data.accessing.300K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.300K2"></g:message></p>
 

@@ -274,7 +274,7 @@
 
     <p><g:message code="informational.project.descr.GoT2D"></g:message></p>
 
-<h4>Accessing GoT2D WGS + replication data in the T2D Knowledge Portal</h4>
+<h4>Accessing GoT2D WGS + replication data</h4>
 <p><g:message code="informational.data.accessing.GoT2DWGS_replic"></g:message></p>
 
 </script>

@@ -154,7 +154,7 @@
 <g:message code="informational.shared.publications.Knowles_2015_JClinInvest"></g:message>).</p>
 
 
-    <h4>Accessing GENESIS data in the T2D Knowledge Portal</h4>
+    <h4>Accessing GENESIS GWAS data</h4>
 
     <p><g:message code="informational.data.accessing.GENESIS"></g:message></p>
 

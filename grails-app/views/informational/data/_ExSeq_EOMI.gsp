@@ -44,7 +44,7 @@
 %{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
 
 
-<h4>Accessing EOMI exome sequence analysis data in the CVDKP</h4>
+<h4>Accessing EOMI exome sequence analysis data</h4>
 
 <p><g:message code="informational.data.accessing.EOMI1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.EOMI2"></g:message></p>
 

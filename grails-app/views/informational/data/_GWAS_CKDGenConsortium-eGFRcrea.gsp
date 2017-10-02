@@ -36,7 +36,7 @@
 <h4>Experiment summary</h4>
     <p><g:message code="informational.data.exptsumm.CKDGen-eGFRcrea"></g:message></p>
 
-<h4>Accessing CKDGen GWAS - stratified serum creatinine associations data in the T2D Knowledge Portal</h4>
+<h4>Accessing CKDGen GWAS - stratified serum creatinine associations data</h4>
 <p><g:message code="informational.data.accessing.CKDGen-eGFRcrea"></g:message></p>
 
 </script>

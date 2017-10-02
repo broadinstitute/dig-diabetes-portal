@@ -54,7 +54,7 @@
 <p><g:message code="informational.data.exptsumm.AFGen_ExChip"></g:message></p>
 
 
-<h4>Accessing AFGen exome chip analysis data in the Cardiovascular Disease Knowledge Portal</h4>
+<h4>Accessing AFGen exome chip analysis data</h4>
 
 <p><g:message code="informational.data.accessing.AFGen_ExChip1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.AFGen_ExChip2"></g:message></p>
 

@@ -85,7 +85,7 @@
     <p><g:message code="aboutTheData.stroke.datasets.CADISP.project"></g:message></p>
 
 
-<h4>Accessing CADISP 2015 data in the Cerebrovascular Disease Knowledge Portal</h4>
+<h4>Accessing CADISP 2015 data</h4>
 
 <p><g:message code="informational.data.accessing.CADISP_2015"></g:message></p>
 </div>

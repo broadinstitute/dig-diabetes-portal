@@ -45,7 +45,7 @@
 
     <p><g:message code="informational.project.descr.1000k"></g:message></p>
 
-<h4>Accessing 1000 Genomes data in the T2D Knowledge Portal</h4>
+<h4>Accessing 1000 Genomes data</h4>
 <p><g:message code="informational.data.accessing.1000g"></g:message></p>
 
 

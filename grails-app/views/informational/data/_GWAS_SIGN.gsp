@@ -101,7 +101,7 @@
 <h5><b><g:message code="aboutTheData.stroke.datasets.SIGN.title"></g:message></b></h5>
     <p><g:message code="aboutTheData.stroke.datasets.SIGN.project"></g:message></p>
 
-<h4>Accessing SiGN 2016 data in the Cerebrovascular Disease Knowledge Portal</h4>
+<h4>Accessing SiGN 2016 data</h4>
 
 <p><g:message code="informational.data.accessing.SiGN_2016"></g:message></p>
 </div>
