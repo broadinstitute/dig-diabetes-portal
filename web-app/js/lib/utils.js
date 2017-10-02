@@ -399,7 +399,16 @@ var UTILS = {
             else if (portaltype == "mi"){
                 if (keys.indexOf("CARDIOVASCULAR DISEASE")>-1){
                     keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
+
+                    keys.splice(keys.indexOf("LIPIDS"), 2);
+
+                    keys.splice(keys.indexOf("ANTHROPOMETRIC"),3);
+                    keys.unshift("GLYCEMIC");
+                    keys.unshift("LIPIDS");
+                    keys.unshift("ANTHROPOMETRIC");
                     keys.unshift("CARDIOVASCULAR DISEASE");
+
+
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
