@@ -348,7 +348,7 @@
             </div>
             <g:if test="${g.portalTypeString()?.equals('stroke')} || ${g.portalTypeString()?.equals('mi')}">
                 <div style="text-align:right;">
-                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                    <a href="mailto:help@cvdgenetics.org">
                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                     </a>
                 </div>
