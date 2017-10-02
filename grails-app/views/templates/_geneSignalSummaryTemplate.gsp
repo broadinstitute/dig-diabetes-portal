@@ -72,7 +72,7 @@
                 </div>
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-                        Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
+                        Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
                     </div></g:if>
                 <div class="col-xs-2">
 
@@ -228,27 +228,27 @@
                                 <div class="col-lg-11">
                                     <div class="boxOfVariants">
                                         <div class="row">
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">All variants&nbsp;<g:helpText title="geneSignalSummary.allVariants.help.header" placement="right" body="geneSignalSummary.allVariants.help.text"/></span>
-                                                <div id="allVariants"></div>
-                                            </div>
+                                            %{--<div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">All variants&nbsp;<g:helpText title="geneSignalSummary.allVariants.help.header" placement="right" body="geneSignalSummary.allVariants.help.text"/></span>--}%
+                                                %{--<div id="allVariants"></div>--}%
+                                            %{--</div>--}%
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">All coding&nbsp;<g:helpText title="geneSignalSummary.allCoding.help.header" placement="right" body="geneSignalSummary.allCoding.help.text"/></span>
-                                                <div id="allCoding"></div>
-                                            </div>
+                                            %{--<div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">All coding&nbsp;<g:helpText title="geneSignalSummary.allCoding.help.header" placement="right" body="geneSignalSummary.allCoding.help.text"/></span>--}%
+                                                %{--<div id="allCoding"></div>--}%
+                                            %{--</div>--}%
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NS 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NS-1.help.header" placement="right" body="geneSignalSummary.PTV-NS-1.help.text"/></span>
+                                            <div class="col-lg-3 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NS 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NS-1.help.header" placement="right" body="geneSignalSummary.PTV-NS-1.help.text"/></span>
                                                 <div id="allMissense"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NSbroad 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NSbroad-1.help.header" placement="right" body="geneSignalSummary.PTV-NSbroad-1.help.text"/></span>
+                                            <div class="col-lg-3 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NSbroad 1%&nbsp;<g:helpText title="geneSignalSummary.PTV-NSbroad-1.help.header" placement="right" body="geneSignalSummary.PTV-NSbroad-1.help.text"/></span>
                                                 <div id="possiblyDamaging"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NSstrict&nbsp;<g:helpText title="geneSignalSummary.PTV-NSstrict.help.header" placement="right" body="geneSignalSummary.PTV-NSstrict.help.text"/></span>
+                                            <div class="col-lg-3 text-center"><span class="aggregatingVariantsColumnHeader">PTV+NSstrict&nbsp;<g:helpText title="geneSignalSummary.PTV-NSstrict.help.header" placement="right" body="geneSignalSummary.PTV-NSstrict.help.text"/></span>
                                                 <div id="probablyDamaging"></div>
                                             </div>
 
-                                            <div class="col-lg-2 text-center"><span class="aggregatingVariantsColumnHeader">PTV&nbsp;<g:helpText title="geneSignalSummary.PTV.help.header" placement="right" body="geneSignalSummary.PTV.help.text"/></span>
+                                            <div class="col-lg-3 text-center"><span class="aggregatingVariantsColumnHeader">PTV&nbsp;<g:helpText title="geneSignalSummary.PTV.help.header" placement="right" body="geneSignalSummary.PTV.help.text"/></span>
                                                 <div id="proteinTruncating"></div>
                                             </div>
 
@@ -624,7 +624,7 @@
     </tbody>
 </table>
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 400px;" align="center"></g:if>
+<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 600px;" align="center"></g:if>
 </div>
 
 </script>

@@ -325,9 +325,10 @@
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                             <g:message code="portal.mi.use.citation.itself" />
                         </g:elseif>
-                        <g:else>
+                        <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
                             <g:message code="portal.use.citation.itself" />
-                        </g:else>
+                        </g:elseif>
+                        <g:else></g:else>
                     </p>
                 </div>
             </div>
@@ -345,7 +346,7 @@
                     <option value="EBI" <%= (g.distributedKBString()=='EBI')? 'selected':'' %> >EBI</option>
                 </select>
             </div>
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+            <g:if test="${g.portalTypeString()?.equals('stroke')} || ${g.portalTypeString()?.equals('mi')}">
                 <div style="text-align:right;">
                     <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />

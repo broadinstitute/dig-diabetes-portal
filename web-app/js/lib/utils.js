@@ -358,6 +358,7 @@ var UTILS = {
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
+            var portaltype = "mi";
             options.empty();
             var groupList = dataSetJson.dataset;
 
@@ -396,9 +397,18 @@ var UTILS = {
 
             }
             else if (portaltype == "mi"){
-                if (keys.indexOf("MYOCARDIAL INFARCTION")>-1){
-                    keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
-                    keys.unshift("INFLAMMATORY BOWEL");
+                if (keys.indexOf("CARDIOVASCULAR DISEASE")>-1){
+                    keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
+
+                    keys.splice(keys.indexOf("LIPIDS"), 2);
+
+                    keys.splice(keys.indexOf("ANTHROPOMETRIC"),3);
+                    keys.unshift("GLYCEMIC");
+                    keys.unshift("LIPIDS");
+                    keys.unshift("ANTHROPOMETRIC");
+                    keys.unshift("CARDIOVASCULAR DISEASE");
+
+
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
@@ -417,6 +427,12 @@ var UTILS = {
                 var key = keys[x];
                 if (groupList.hasOwnProperty(key)) {
                     var groupContents = groupList[key];
+                    if(key === "CARDIOVASCULAR DISEASE"){
+                        groupContents.push(["CAD","Coronary Artery Disease"]);
+                    }
+                    if(key === "LIPIDS"){
+                        phenotypesToOmit = ["CAD", "Coronary artery disease"];
+                    }
                     options.append("<optgroup label='"+key+"'>");
                     for (var j = 0; j < groupContents.length; j++) {
                         if(_.includes(phenotypesToOmit, groupContents[j][0])) {

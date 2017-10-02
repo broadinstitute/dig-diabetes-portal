@@ -18,7 +18,7 @@
 </div></p>
 
 
-<h4>Dataset phenotypes</h4>
+   <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
 <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
 <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>

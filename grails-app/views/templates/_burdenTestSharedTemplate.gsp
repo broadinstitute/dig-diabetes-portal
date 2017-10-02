@@ -575,7 +575,6 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control"
                                             onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
                                             '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
-                                                <option selected value="0"><g:message code="gene.burdenTesting.label.select_filter"/></option>
                                             </select>
                                         </label>
                                     </div>
