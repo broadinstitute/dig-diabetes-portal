@@ -428,7 +428,7 @@ var UTILS = {
                 if (groupList.hasOwnProperty(key)) {
                     var groupContents = groupList[key];
                     if(key === "CARDIOVASCULAR DISEASE"){
-                        groupContents.push(["CAD","Coronary Artery Disease"]);
+                        groupContents.push(["CAD","Coronary artery disease"]);
                     }
                     if(key === "LIPIDS"){
                         phenotypesToOmit = ["CAD", "Coronary artery disease"];
