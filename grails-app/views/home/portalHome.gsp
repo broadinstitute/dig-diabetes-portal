@@ -313,11 +313,11 @@
             </p>
             </div>
             </div>
-            <div class="row" style="font-size:14px; background-color:#000; color:#fff; font-weight: 100; padding:10px 15px 1px 15px; margin-top:40px;">
-                <div class="col-md-2">
-                    <span style="font-family:'Oswald'; font-size: 20px;"><g:message code="portal.use.citation.title" default="Citation" /></span>
+            <div class="row" style="font-size:14px; border-top: solid 2px #4eadcd; border-bottom: solid 1px #fff; background-color:#eee; color:#333; font-weight: 100; padding:10px 15px 1px 15px; margin-top:40px;">
+                <div class="col-md-2" style="color:#4eadcd; padding: 0; ">
+                    <span style="font-family:'Oswald'; font-size: 25px;"><g:message code="portal.use.citation.title" default="Citation" /></span>
                 </div>
-                <div class="col-md-10">
+                <div class="col-md-10" style="">
                     <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/><br />
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
                             <g:message code="portal.stroke.use.citation.itself" />
@@ -346,14 +346,27 @@
                     <option value="EBI" <%= (g.distributedKBString()=='EBI')? 'selected':'' %> >EBI</option>
                 </select>
             </div>
-            <g:if test="${g.portalTypeString()?.equals('stroke')} || ${g.portalTypeString()?.equals('mi')}">
+            <g:if test="${g.portalTypeString()?.equals('mi')}">
                 <div style="text-align:right;">
-                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                    <a href="mailto:help@cvdgenetics.org">
                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                     </a>
+
+
+
                 </div>
 
             </g:if>
+
+            <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                <div style="text-align:right;">
+                    <a class="btn btn-success btn-sm" style="margin-right: 2%; margin-bottom: 10px;" href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                        Get email updates
+                    </a>
+                </div>
+
+            </g:elseif>
+
             <g:else>
                 <div style="position:absolute; top: 25px; right:-40px; ">
                     <p style="margin-bottom:3px;">

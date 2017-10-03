@@ -422,7 +422,7 @@
 
    <p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
 
-   <h4>Accessing GoT2D 82k exome chip analysis data in the T2D Knowledge Portal</h4>
+   <h4>Accessing GoT2D 82k exome chip analysis data</h4>
 <p><g:message code="informational.data.accessing.82k"></g:message></p>
 
 </script>

@@ -42,6 +42,7 @@
 <g:render template="./data/GWAS_AFGen" />
 <g:render template="./data/ExChip_MICAD" />
 <g:render template="./data/ExChip_300k" />
+<g:render template="./data/GWAS_GIANT-PA" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>

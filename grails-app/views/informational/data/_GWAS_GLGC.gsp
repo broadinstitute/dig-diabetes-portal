@@ -37,7 +37,7 @@
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.GLGC"></g:message></p>
 
-<h4>Accessing GLGC GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing GLGC GWAS data</h4>
 <p><g:message code="informational.data.accessing.GLGC"></g:message></p>
 
 </script>

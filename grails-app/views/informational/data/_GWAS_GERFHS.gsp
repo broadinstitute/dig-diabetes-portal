@@ -83,7 +83,7 @@
     <p><g:message code="aboutTheData.stroke.datasets.Cincinnati.project"></g:message></p>
 
 
-<h4>Accessing GERFHS III 2017 data in the Cerebrovascular Disease Knowledge Portal</h4>
+<h4>Accessing GERFHS III 2017 data</h4>
 
 <p><g:message code="informational.data.accessing.GERFHS_III_2017"></g:message></p>
 </div>

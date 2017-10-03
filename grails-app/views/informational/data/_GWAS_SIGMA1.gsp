@@ -126,7 +126,7 @@
 
     <p><g:message code="informational.data.project.SIGMA"></g:message></p>
 
-   <h4>Accessing GWAS SIGMA data in the T2D Knowledge Portal</h4>
+   <h4>Accessing GWAS SIGMA data</h4>
 <p><g:message code="informational.data.accessing.SIGMA"></g:message></p>
 </script>
 

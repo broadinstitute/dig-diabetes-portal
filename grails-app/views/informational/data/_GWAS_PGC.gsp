@@ -29,7 +29,7 @@
 
     <p><g:message code="informational.data.project.PGC"></g:message></p>
 
-    <h4>Accessing PGC GWAS data in the T2D Knowledge Portal</h4>
+    <h4>Accessing PGC GWAS data</h4>
 <p><g:message code="informational.data.accessing.PGC"></g:message></p>
 
 </script>
