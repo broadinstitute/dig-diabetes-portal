@@ -320,8 +320,8 @@ environments {
 
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
-        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
-//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
