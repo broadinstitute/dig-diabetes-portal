@@ -593,16 +593,18 @@ class GeneController {
         String errorJson = "{\"data\": {}, \"error\": true}";
         JsonSlurper slurper = new JsonSlurper()
         JSONObject errorJsonObject = slurper.parseText(errorJson)
-
-        List<String> possibleBigwigAddresses =  epigenomeService.getThePossibleBigwigAddresses("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+        List<LinkedHashMap<String,String>> bigwigResources = epigenomeService.getTheRemoteBigwigInformation("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+        //List<String> possibleBigwigAddresses =  epigenomeService.getThePossibleBigwigAddresses("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
         if (tissue_id.split(" ").size()>1){
             tissue_id = tissue_id.split(" ")[0]
         }
-        List<String> filteredBigWigUrl = possibleBigwigAddresses.findAll{String t->t.contains(tissue_id)}
-        String chosenBigWigUrl = filteredBigWigUrl[0]
-        if ((filteredBigWigUrl.size()>1) && (assay_id)){
-            chosenBigWigUrl = filteredBigWigUrl.find{String t->t.contains(assay_id)}
+       // List<String> filteredBigWigUrl = possibleBigwigAddresses.findAll{String t->t.contains(tissue_id)}
+        Map oneResource = bigwigResources.find{LinkedHashMap t->t.assayid==assay_id&&t.eid==tissue_id}
+        String chosenBigWigUrl
+        if (oneResource){
+            chosenBigWigUrl = oneResource.bigwigpath
         }
+        List<String> filteredBigWigUrl = null //youpossibleBigwigAddresses.findAll{String t->t.toUpperCase().contains(tissue_id.toString().toUpperCase())}
 
         // log
         log.info("got LZ request with params: for filled line plot " + params);
@@ -615,10 +617,6 @@ class GeneController {
         try {
             startInteger = Integer.parseInt(startString);
             endInteger = Integer.parseInt(endString);
-//            String callingJson = """{"chr":"chr${chromosome}",
-//                                     "start":${startString},
-//                                     "end":${endString},
-//                                     "bigwigUrl":"http://egg2.wustl.edu/roadmap/data/byFileType/signal/consolidated/macs2signal/foldChange/E003-H3K27ac.fc.signal.bigwig"}""".toString()
             String callingJson = """{"chr":"chr${chromosome}",
                                      "start":${startString},
                                      "end":${endString},

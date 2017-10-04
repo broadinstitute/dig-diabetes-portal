@@ -199,6 +199,28 @@
                        </ul>
                 </li>
                 {{/tissueDataExists}}
+                {{#atacDataExists}}
+                <li class="dropdown" id="tracks-menu-dropdown-functional">
+                       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
+                       <ul id="trackList-tissue" class="dropdown-menu">
+                           {{/atacDataExists}}
+                           {{#atacData}}
+                                <li>
+                                    <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                    tissueCode: '{{name}}',
+                                                    tissueDescriptiveName: '{{description}}',
+                                                    retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                                                    assayIdList: '{{assayIdList}}'
+                                                },
+                                            ('#'+'{{lzDomSpec}}'),
+                                            {colorBy:1,positionBy:1})">{{description}}
+                                    </a>
+                                </li>
+                           {{/atacData}}
+                           {{#atacDataExists}}
+                       </ul>
+                </li>
+                {{/atacDataExists}}
                 <li style="margin: auto;">
                     <b>Region: <span id="lzRegion"></span></b>
                 </li>

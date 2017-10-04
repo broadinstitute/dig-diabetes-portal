@@ -662,7 +662,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 renderData.variants.push(mpgSoftware.geneSignalSummaryMethods.processAggregatedData(v));
             });
         }
-        renderData['assayIdList'] = additionalData.assayIdList
+        renderData['assayIdList'] = additionalData.assayIdList;
         renderData.tissues = _.filter(data.lzOptions, function(o){return o.dataType==='tissue'});
         renderData['tissueDataExists'] = (renderData.tissues.length > 0) ? [1] : [];
         renderData.static = _.filter(data.lzOptions, function(o){return o.dataType==='static'});

@@ -14,5 +14,6 @@ public class PhenotypeBean {
     String dataSetReadable
     String dataType
     Boolean defaultSelected
+    int assayId=0
     Boolean suitableForDefaultDisplay
 }

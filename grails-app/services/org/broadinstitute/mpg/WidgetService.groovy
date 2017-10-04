@@ -1041,6 +1041,11 @@ class WidgetService {
         beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
         beanList << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Islet1", name:"Islet1",description:"pancreatic islets 1", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Islet2", name:"Islet2",description:"pancreatic islets 2", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"Adipose", name:"Adipose",description:"adipose tissue", dataType:"tissue",  assayId:4, suitableForDefaultDisplay: true)
+        beanList << new PhenotypeBean(key:"gm12878", name:"gm12878",description:"GM12878 lymphoblastoid cells", dataType:"tissue", assayId:4, suitableForDefaultDisplay: true)
 
         return beanList
     }

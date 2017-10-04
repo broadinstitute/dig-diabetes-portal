@@ -451,6 +451,53 @@ var mpgSoftware = mpgSoftware || {};
             };
         });
 
+        LocusZoom.Dashboard.Components.add("toggle_atacData_tracks", function(layout){
+            LocusZoom.Dashboard.Component.apply(this, arguments);
+            if (!layout.data_layer_id){ layout.data_layer_id = "intervals"; }
+            if (!this.parent_panel.data_layers[layout.data_layer_id]){
+                throw ("Dashboard toggle split tracks component missing valid data layer ID");
+            }
+            this.update = function(){
+                var data_layer = this.parent_panel.data_layers[layout.data_layer_id];
+                var text = data_layer.layout.split_tracks ? "Hide ATAC-seq reads" : "Show ATAC-seq reads";
+                if (this.button){
+                    this.button.setHtml(text);
+                    this.button.show();
+                    this.parent.position();
+                    return this;
+                } else {
+                    this.button = new LocusZoom.Dashboard.Component.Button(this)
+                        .setColor(layout.color).setHtml(text)
+                        .setTitle("Toggle whether or not tracks are split apart or merged together")
+                        .setOnclick(function(){
+                            //alert('display detailed tracks');
+                            var pageVars = getPageVars('#'+this.parent_plot.id);
+                            if ((typeof pageVars.getLocusZoomFilledPlotUrl !== 'undefined') &&
+                                (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
+                                var tissueId = this.parent_panel.id.substr("intervals-".length).split('-')[0];
+                                addLZTissueChromatinAccessibility({
+                                    tissueCode: 'E00'+tissueId,
+                                    tissueDescriptiveName: 'Reads in '+this.parent_panel.title.text(),
+                                    getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
+                                    phenoTypeName:pageVars.phenoTypeName,
+                                    domId1:pageVars.domId1,
+                                    assayId:'Varshney17'
+                                },pageVars.domId1,pageVars);
+                            }
+
+                            data_layer.toggleSplitTracks();
+                            if (this.scale_timeout){ clearTimeout(this.scale_timeout); }
+                            var timeout = data_layer.layout.transition ? +data_layer.layout.transition.duration || 0 : 0;
+                            this.scale_timeout = setTimeout(function(){
+                                this.parent_panel.scaleHeightToData();
+                                this.parent_plot.positionPanels();
+                            }.bind(this), timeout);
+                            this.update();
+                        }.bind(this));
+                    return this.update();
+                }
+            };
+        });
 
 
 
@@ -609,6 +656,12 @@ var mpgSoftware = mpgSoftware || {};
                         data_layer_id: layerName,
                         position: "right"
                     });
+                    // l.components.push({
+                    //     type: "toggle_atacData_tracks",
+                    //     data_layer_id: layerName,
+                    //     position: "right"
+                    // });
+
                     return l;
                 })(),
                     axes: {},
@@ -680,14 +733,13 @@ var mpgSoftware = mpgSoftware || {};
         var customCurveDataLayer = function (layerName,assayId){
             var stateIdSpec = layerName+":state_id";
             var color = "#FF0000";
-            if (assayId==="DNase"){
+            if (assayId==="DNase" || assayId==="Varshney17"){
                 color = "#0000FF";
             }
             var developingStructure = {
                 namespace: {layerName: layerName},
                 id: "recombratenew",
                 type: "filledCurve",
-                //type: "filledLine",
                 fields: [layerName+":position", layerName+":pvalue"],
                 z_index: 1,
                 style: {
@@ -984,21 +1036,21 @@ var mpgSoftware = mpgSoftware || {};
                 core.errorReporter(jqXHR, errorThrown)
             });
         };
-        var processEpigeneticData = function (data,additionalData){
-            var plotId = getNewDefaultLzPlot();
-            if (typeof additionalData.plotDomId !== 'undefined') {
-                plotId = additionalData.plotDomId;
-            }
-            var matchedTissue = _.filter(data.variants.variants,function(v,k){console.log(v);return v.element.indexOf('enhancer')!==-1});
-            _.forEach(matchedTissue,function(o,i){
-                addLZTissueAnnotations({
-                    tissueCode: o.source,
-                    tissueDescriptiveName: o.source_trans,
-                    retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
-                    assayIdList:"["+ o.ASSAY_ID+"]"
-                },getNewDefaultLzPlot(),additionalData);
-            });
-        };
+        // var processEpigeneticData = function (data,additionalData){
+        //     var plotId = getNewDefaultLzPlot();
+        //     if (typeof additionalData.plotDomId !== 'undefined') {
+        //         plotId = additionalData.plotDomId;
+        //     }
+        //     var matchedTissue = _.filter(data.variants.variants,function(v,k){console.log(v);return v.element.indexOf('enhancer')!==-1});
+        //     _.forEach(matchedTissue,function(o,i){
+        //         addLZTissueAnnotations({
+        //             tissueCode: o.source,
+        //             tissueDescriptiveName: o.source_trans,
+        //             retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
+        //             assayIdList:"["+ o.ASSAY_ID+"]"
+        //         },getNewDefaultLzPlot(),additionalData);
+        //     });
+        // };
         var processIbdEpigeneticData = function (data,additionalData){
             var matchedTissue = _.filter(data.variants.variants,additionalData.includeRecord);
             var plotId = getNewDefaultLzPlot();
