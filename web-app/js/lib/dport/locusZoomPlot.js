@@ -12,6 +12,22 @@ var mpgSoftware = mpgSoftware || {};
         var currentLzPlotKey = 'lz-47';
         var pageVars = {};
 
+        var weHaveAssociatedAtacSeqInfo = function (label){
+            var retval;
+            if (label.indexOf('Adipose')>-1){
+                return 'Adipose';
+            } else if (label.indexOf('Islet')>-1){
+                return 'Islet1';
+            } else if (label.indexOf('SkeletalMuscle')>-1){
+                return 'Skeleta';
+            } else if (label.indexOf('GM12878')>-1){
+                return 'gm12878';
+            } else if (label.indexOf('Adipose')>-1){
+                return 'Adipose';
+            }
+            return retval;
+        }
+
         var setPageVars = function (thisPageVars,pageVarOption){
             if (typeof pageVarOption !== 'undefined') {
                 pageVars[pageVarOption] = thisPageVars;
@@ -476,7 +492,7 @@ var mpgSoftware = mpgSoftware || {};
                                 (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
                                 var tissueId = this.parent_panel.id.substr("intervals-".length).split('-')[0];
                                 addLZTissueChromatinAccessibility({
-                                    tissueCode: 'E00'+tissueId,
+                                    tissueCode: 'E00'+weHaveAssociatedAtacSeqInfo(tissueId),
                                     tissueDescriptiveName: 'Reads in '+this.parent_panel.title.text(),
                                     getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
                                     phenoTypeName:pageVars.phenoTypeName,
@@ -656,11 +672,14 @@ var mpgSoftware = mpgSoftware || {};
                         data_layer_id: layerName,
                         position: "right"
                     });
-                    // l.components.push({
-                    //     type: "toggle_atacData_tracks",
-                    //     data_layer_id: layerName,
-                    //     position: "right"
-                    // });
+                    if ((typeof weHaveAssociatedAtacSeqInfo(layerName) !== 'undefined')){
+                        l.components.push({
+                            type: "toggle_atacData_tracks",
+                            data_layer_id: layerName,
+                            position: "right"
+                        });
+                    }
+
 
                     return l;
                 })(),
