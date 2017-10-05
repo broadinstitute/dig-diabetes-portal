@@ -130,7 +130,8 @@ var mpgSoftware = mpgSoftware || {};
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       locusZoomReadableDatasetName,geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,
+                                      additionalParameters) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
@@ -159,21 +160,27 @@ var mpgSoftware = mpgSoftware || {};
                 startPosition: variantObject.POS - locusZoomRange,
                 endPosition: variantObject.POS + locusZoomRange
             };
+            var assayIdList = "[3]";
+            if (portalType === 'ibd'){
+                assayIdList = "[1,2]";
+            }
             var lzParm = {
+                assayIdList:assayIdList,
+                portalTypeString:portalType,
                 page:'variantInfo',
                 variantId:variantObject.VAR_ID,
                 positionInfo:positioningInformation,
                 domId1:lzDomHolder,
                 collapsingDom:collapseDomHolder,
-                phenoTypeName:phenotypeName,
+                phenoTypeName:additionalParameters.defaultPhenotype,
                 phenoTypeDescription:phenotypeDescription,
                 phenoPropertyName:propertyName,
-                locusZoomDataset:locusZoomDataset,
+                locusZoomDataset:additionalParameters.locusZoomDataset,
                 pageInitialization:true,
                 functionalTrack:null,
                 defaultTissues:null,
                 defaultTissuesDescriptions:null,
-                datasetReadableName:locusZoomReadableDatasetName,
+                datasetReadableName:additionalParameters.locusZoomDatasetName,
                 colorBy:1,
                 positionBy:1,
                 getLocusZoomFilledPlotUrl:'junk',

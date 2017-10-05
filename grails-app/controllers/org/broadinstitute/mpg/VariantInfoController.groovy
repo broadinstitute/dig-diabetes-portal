@@ -54,7 +54,9 @@ class VariantInfoController {
                 break
         }
 
-        locusZoomDataset = grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
+        locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
+        String locusZoomDatasetName = g.message(code: "metadata." + locusZoomDataset, default: locusZoomDataset)
+        String defaultPhenotype = grailsApplication.config.portal.data.default.phenotype.map[portalType]
         defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
 
 
@@ -80,6 +82,8 @@ class VariantInfoController {
                             restServer: restServerService.currentRestServer(),
                             lzOptions   : lzOptions,
                             locusZoomDataset:locusZoomDataset,
+                            locusZoomDatasetName: locusZoomDatasetName,
+                            defaultPhenotype:defaultPhenotype,
                             phenotype:phenotype,
                             igvIntro: igvIntro
                     ])

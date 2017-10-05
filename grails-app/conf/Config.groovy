@@ -545,7 +545,7 @@ grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.peopl
 
 diabetes.data.version = "mdv80";
 portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "ibd":"IBD"];
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
 portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
                                    "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
@@ -556,10 +556,10 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
-portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27",
+portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "GWAS_DIAGRAM_eu_mdv27",
                                                   "stroke": "GWAS_Stroke_mdv70",
-                                                  "mi" : "GWAS_CARDIoGRAM_mdv90",
-                                                  "ibd":"GWAS_IBDGenomics_eu_mdv80"]
+                                                  "mi" : "ExChip_MICAD_mdv91",
+                                                  "ibd":"GWAS_IBDGenetics_eu_mdv80"]
 portal.data.epigenetic.datasetList.abbreviation.map = ["t2d": "[3]",
                                                   "stroke": "[3]",
                                                   "mi" : "[3]",
