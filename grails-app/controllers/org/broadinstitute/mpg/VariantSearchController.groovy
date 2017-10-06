@@ -438,8 +438,12 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
+       // String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
+        //String
+        //dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,passConditionalVersionForNow)
+
         String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,passConditionalVersionForNow)
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,currentVersion)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
@@ -542,8 +546,11 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
+//        String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
+//        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize,passConditionalVersionForNow)
+
         String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize,passConditionalVersionForNow)
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,currentVersion)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
