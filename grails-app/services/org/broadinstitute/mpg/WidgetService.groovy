@@ -938,11 +938,20 @@ class WidgetService {
             boolean firstTime = true
             if (metaDataService.portalTypeFromSession=='t2d') {
                 // KLUDGE ALERT add credible set by hand
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set",
-                        dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", default: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27"),
+                List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
+
+               beanList.add(new PhenotypeBean(key:sampleGroupsWithCredibleSets.phenotypeList.name, name: "T2D_crd", description: sampleGroupsWithCredibleSets.systemId,
+                        dataSet:sampleGroupsWithCredibleSets.systemId,
+                        dataSetReadable: g.message(code: "metadata." + sampleGroupsWithCredibleSets.systemId,default: sampleGroupsWithCredibleSets.systemId),
                         propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
-                        suitableForDefaultDisplay: false ));
+                        suitableForDefaultDisplay: false));
+
+
+//                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set",
+//                        dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27",
+//                        dataSetReadable: g.message(code: "metadata." + "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", default: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27"),
+//                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
+//                        suitableForDefaultDisplay: false ));
             }
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]

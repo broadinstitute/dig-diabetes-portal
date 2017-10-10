@@ -89,7 +89,8 @@
                             ( typeof data !== 'undefined') &&
                             ( typeof data.datasets !== 'undefined' ) &&
                             (  data.datasets !==  null ) ) {
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input');
+
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input',undefined,undefined,'${g.portalTypeString()}');
                         var availPhenotypes = [];
                         _.forEach( $("select#trait-input option"), function(a){
                             availPhenotypes.push($(a).val());
