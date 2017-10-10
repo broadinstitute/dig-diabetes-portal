@@ -1165,6 +1165,44 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         loading.hide();
     };
 
+
+    var buildOutIncredibleSetPresentation = function (data,additionalData){
+        var loading = $('#rSpinner');
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+        //     mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
+        //     var credibleSetDataSet = data.sampleGroupsWithCredibleSetNames[0];
+        var fakeCredibleSetNames = [];
+        fakeCredibleSetNames.push('data.sampleGroupsWithCredibleSetNames');
+            var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
+                start: signalSummarySectionVariables.geneExtentBegin,
+                end: signalSummarySectionVariables.geneExtentEnd,
+                phenotype: additionalData.phenotype,
+                propertyName: 'POSTERIOR_PROBABILITY',
+                dataSet: '',
+                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
+                sampleGroupsWithCredibleSetNames:fakeCredibleSetNames
+            };
+            mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
+            var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
+            var drivingVariables = {};
+            drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
+            drivingVariables["namedGeneArray"] = [];
+            drivingVariables["supressTitle"] = [1];
+            if ((drivingVariables["allGenes"].length>0)&&
+                (drivingVariables["allGenes"][0].length>0)) {
+                drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
+                    return {'name': o}
+                });
+            }
+            $(".matchedGenesGoHere").empty().append(
+                Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
+            );
+
+       // }
+        loading.hide();
+    };
+
     var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
         var rememberCallBack = callBack;
         var rememberParameter = parameter;
@@ -1208,6 +1246,61 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         refreshTopVariantsDirectlyByPhenotype(phenotypeName,callBack);
     };
 
+
+    var lzOnCredSetTab = function (additionalParameters,credSetSpecific){
+        //additionalParameters
+        //{positioningInformation
+        //phenotypeName
+        //pName
+        //datasetName
+        //defaultTissuesDescriptions
+        //datasetReadableName
+        //sampleGroupsWithCredibleSetNames,
+        //positionBy
+        //phenoPropertyName
+        // }
+        //
+        //
+        var lzParmCred = {
+            assayIdList:additionalParameters.assayIdList,
+            portalTypeString:additionalParameters.portalTypeString,
+            page:'geneInfo',
+            variantId:null,
+            positionInfo:credSetSpecific.positioningInformation,
+            domId1:'#lz-'+additionalParameters.lzCredSet,
+            collapsingDom:"#collapseExample",
+            phenoTypeName:credSetSpecific.phenotypeName,
+            phenoTypeDescription:credSetSpecific.pName,
+            phenoPropertyName:credSetSpecific.phenoPropertyName,//'POSTERIOR_PROBABILITY',
+            locusZoomDataset:credSetSpecific.datasetName,
+            pageInitialization:!mpgSoftware.locusZoom.plotAlreadyExists(),
+            functionalTrack:{},
+            defaultTissues:undefined,
+            defaultTissuesDescriptions:credSetSpecific.defaultTissuesDescriptions,
+            datasetReadableName:credSetSpecific.datasetReadableName,
+            experimentAssays:additionalParameters.experimentAssays,
+            colorBy:credSetSpecific.positionBy,// 2,
+            positionBy:credSetSpecific.positionBy,// 2,
+            excludeLdIndexVariantReset: true,
+            suppressAlternatePhenotypeChooser: true,
+            getLocusZoomFilledPlotUrl:additionalParameters.getLocusZoomFilledPlotUrl,
+            geneGetLZ:additionalParameters.getLocusZoomUrl,
+            variantInfoUrl:additionalParameters.variantInfoUrl,
+            makeDynamic:additionalParameters.firstStaticPropertyName,
+            retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
+            sampleGroupsWithCredibleSetNames:credSetSpecific.sampleGroupsWithCredibleSetNames
+        };
+
+        if ((credSetSpecific.sampleGroupsWithCredibleSetNames)&&(credSetSpecific.sampleGroupsWithCredibleSetNames.length>0)) {
+            mpgSoftware.locusZoom.initializeLZPage(lzParmCred);
+        }
+    }
+
+
+
+
+
+
     var updateSignificantVariantDisplay = function (data, additionalParameters) {
         var phenotypeName = additionalParameters.phenotype;
         var datasetName = additionalParameters.ds;
@@ -1227,13 +1320,16 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             mpgSoftware.locusZoom.removeAllPanels();
         }
         var credibleSetTab = [];
+        var incredibleSetTab = [];
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
             credibleSetTab.push(1);
+        } else {
+            incredibleSetTab.push(1);
         }
         $('#collapseExample div.wellPlace').empty();
 
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
-            {pName: pName,credibleSetTab:credibleSetTab}));
+            {pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab}));
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
 
@@ -1281,11 +1377,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         $("#aggregateVariantsLocation").empty().append(Mustache.render($('#aggregateVariantsTemplate')[0].innerHTML, renderData));
 
+        var alwaysShowTheCredibleSetTab = true;
+
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
-            // buildOutCredibleSetPresentation(data, phenotypeName);
-            // mpgSoftware.geneSignalSummaryMethods.updateAllVariantsTable(data, additionalParameters);
+
             buildOutCredibleSetPresentation(data, additionalParameters);
-            // mpgSoftware.geneSignalSummaryMethods.updateAllVariantsTable(data, additionalParameters);
+
+        } else if (alwaysShowTheCredibleSetTab){
+            buildOutIncredibleSetPresentation(data, additionalParameters);
         }
 
         mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
@@ -1343,49 +1442,55 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             };
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
-            var lzParmCred = {
-                assayIdList:additionalParameters.assayIdList,
-                portalTypeString:additionalParameters.portalTypeString,
-                page:'geneInfo',
-                variantId:null,
-                positionInfo:positioningInformation,
-                domId1:'#lz-'+additionalParameters.lzCredSet,
-                collapsingDom:"#collapseExample",
-                phenoTypeName:phenotypeName,
-                phenoTypeDescription:pName,
-                phenoPropertyName:'POSTERIOR_PROBABILITY',
-                locusZoomDataset:datasetName,
-                pageInitialization:!mpgSoftware.locusZoom.plotAlreadyExists(),
-                functionalTrack:{},
-                defaultTissues:undefined,
-                defaultTissuesDescriptions:defaultTissuesDescriptions,
-                datasetReadableName:datasetReadableName,
-                experimentAssays:additionalParameters.experimentAssays,
-                colorBy:2,
-                positionBy:2,
-                excludeLdIndexVariantReset: true,
-                suppressAlternatePhenotypeChooser: true,
-                getLocusZoomFilledPlotUrl:additionalParameters.getLocusZoomFilledPlotUrl,
-                geneGetLZ:additionalParameters.getLocusZoomUrl,
-                variantInfoUrl:additionalParameters.variantInfoUrl,
-                makeDynamic:additionalParameters.firstStaticPropertyName,
-                retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
-                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
-            };
+            // lzOnCredSetTab(additionalParameters,{
+            //     positioningInformation:{
+            //         chromosome:positioningInformation.chromosome,
+            //         startPosition:positioningInformation.startPosition,
+            //         endPosition:positioningInformation.endPosition
+            //     },
+            //     phenotypeName:phenotypeName,
+            //     pName:pName,
+            //     datasetName:datasetName,
+            //     phenoPropertyName:'POSTERIOR_PROBABILITY',
+            //     defaultTissuesDescriptions:defaultTissuesDescriptions,
+            //     datasetReadableName:datasetReadableName,
+            //     positionBy:2,
+            //     sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
+            // });
 
-
-
-            // lzParm.domId1 = '#lz-'+additionalParameters.lzCredSet;
-            // lzParm.colorBy = 2; // category
-            // lzParm.positionBy = 2; // posterior p
-            // lzParm.excludeLdIndexVariantReset = true;
-            // lzParm.suppressAlternatePhenotypeChooser = true;
-            // lzParm.defaultTissues = undefined;
-            // lzParm.phenoPropertyName='POSTERIOR_PROBABILITY';
-            //lzParm.sampleGroupsWithCredibleSetNames=data.sampleGroupsWithCredibleSetNames;
-            if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
-                mpgSoftware.locusZoom.initializeLZPage(lzParmCred);
-            }
+            // var lzParmCred = {
+            //     assayIdList:additionalParameters.assayIdList,
+            //     portalTypeString:additionalParameters.portalTypeString,
+            //     page:'geneInfo',
+            //     variantId:null,
+            //     positionInfo:positioningInformation,
+            //     domId1:'#lz-'+additionalParameters.lzCredSet,
+            //     collapsingDom:"#collapseExample",
+            //     phenoTypeName:phenotypeName,
+            //     phenoTypeDescription:pName,
+            //     phenoPropertyName:'POSTERIOR_PROBABILITY',
+            //     locusZoomDataset:datasetName,
+            //     pageInitialization:!mpgSoftware.locusZoom.plotAlreadyExists(),
+            //     functionalTrack:{},
+            //     defaultTissues:undefined,
+            //     defaultTissuesDescriptions:defaultTissuesDescriptions,
+            //     datasetReadableName:datasetReadableName,
+            //     experimentAssays:additionalParameters.experimentAssays,
+            //     colorBy:2,
+            //     positionBy:2,
+            //     excludeLdIndexVariantReset: true,
+            //     suppressAlternatePhenotypeChooser: true,
+            //     getLocusZoomFilledPlotUrl:additionalParameters.getLocusZoomFilledPlotUrl,
+            //     geneGetLZ:additionalParameters.getLocusZoomUrl,
+            //     variantInfoUrl:additionalParameters.variantInfoUrl,
+            //     makeDynamic:additionalParameters.firstStaticPropertyName,
+            //     retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
+            //     sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
+            // };
+            //
+            // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
+            //     mpgSoftware.locusZoom.initializeLZPage(lzParmCred);
+            // }
 
 
             $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
@@ -1488,7 +1593,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         buildRenderDataFromNonAggregatedData:buildRenderDataFromNonAggregatedData,
         updateCredibleSetTable:updateCredibleSetTable,
         initialPageSetUp:initialPageSetUp,
-        buildNewCredibleSetPresentation:buildNewCredibleSetPresentation
+        buildNewCredibleSetPresentation:buildNewCredibleSetPresentation,
+        lzOnCredSetTab:lzOnCredSetTab
     }
 
 }());

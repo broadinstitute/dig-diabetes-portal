@@ -819,6 +819,54 @@ class WidgetService {
 
 
 
+    private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
+                                             String phenotype ){
+        String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
+        Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE")
+        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,10, "verbose");
+        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        jsonResultString["dataset"] = dataSetName
+        jsonResultString["phenotype"] = phenotype
+        jsonResultString["propertyName"] = newlyChosenProperty.name
+        return jsonResultString
+    }
+
+
+
+
+    public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
+                                                              String dataset, String phenotype, String propertyName ) {
+        LocusZoomJsonBuilder locusZoomJsonBuilder
+        String jsonGetDataString
+        JSONObject jsonResultString
+        if (dataset != ''){
+             locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
+             jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,1, "verbose");
+             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+            if ((jsonResultString) &&
+                    (!jsonResultString.is_error) &&
+                    (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
+                jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,300, "verbose");
+                jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+                jsonResultString["dataset"] = dataset
+                jsonResultString["phenotype"] = phenotype
+                jsonResultString["propertyName"] = propertyName
+            } else {   // We didn't have any variants in this region.  Search a different data set
+                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+            }
+
+        } else {  // We didn't have any credible set data set for this phenotype. Let's go straight to the alternate data set
+            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+        }
+
+
+        // return
+        return jsonResultString;
+    }
+
+
+
 
 
     /**

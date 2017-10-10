@@ -411,8 +411,13 @@
                         <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants: {{pName}}</a></li>
                         <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                         {{#credibleSetTab}}
-                        <li role="presentation" class="variantTableLabels credibleSetChooser"><a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels credibleSetChooser">
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>
                         {{/credibleSetTab}}
+                        {{#incredibleSetTab}}
+                        <li role="presentation" class="variantTableLabels credibleSetChooser">
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Analyze strongest associations: {{pName}}</a></li>
+                        {{/incredibleSetTab}}
                     </ul>
                 </div>
             </div>
@@ -485,6 +490,45 @@
                     </div>
                 </div>
                 {{/credibleSetTab}}
+                {{#incredibleSetTab}}
+                <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
+                    <div class="row" style="border: none">
+                        <div class="col-xs-12">
+                            <div class="variantCategoryHolder">Credible sets are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
+                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                    <div class="col-md-3 credSetWindowSummary">
+                                        Start position
+                                        <input type="text" name="startPosition" class="credSetStartPos">
+                                    </div>
+                                    <div class="col-md-3 credSetWindowSummary">
+                                        End position
+                                        <input type="text" name="endPosition"  class="credSetEndPos">
+                                    </div>
+                                    <div class="col-md-2">
+                                          <button class="btn btn-secondary btn-sm" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                          Reset range
+                                          </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row clearfix">
+                                            <div class="col-md-3 credSetWindowSummary">
+                                                Genes in window
+                                            </div>
+                                            <div class="col-md-9 regionParams">
+                                                <div class="matchedGenesGoHere"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="credibleSetChooserGoesHere"></div>
+                                <div class="credibleSetTableGoesHere"></div>
+                                <div id="allVariantsLocation" class="in"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
+                        </div>
+                    </div>
+                </div>
+                {{/incredibleSetTab}}
+
             </div>
 </script>
 

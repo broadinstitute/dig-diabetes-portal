@@ -55,12 +55,12 @@ class RegionInfoController {
 
                 if (chromosome.startsWith('chr')) { chromosome = chromosome.substring(3) }
 
-                if (dataType=='static'){ // dynamically get the property name for static datasets
+                if ((dataType=='static')&&(dataSet!='')){ // dynamically get the property name for static datasets
                     Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,propertyName)
                     propertyName = property.name
                 }
-
-                jsonReturn = widgetService.getCredibleSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
+                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
+                //jsonReturn = widgetService.getCredibleSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
             } else {
                 jsonReturn = slurper.parse(errorJsonString);
             }
