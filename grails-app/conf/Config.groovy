@@ -538,15 +538,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-// placeholder for data version
-//<<<<<<< Updated upstream
-diabetes.data.version = "mdv27";
-portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "EBI": "mdv25"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
-portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"], "stroke": ["Adipose"], "mi" : ["Adipose"]]
-portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
-//=======
+
 diabetes.data.version = "mdv80";
 portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
@@ -556,7 +548,7 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "mi" : ["SkeletalMuscle"],
                                    "ibd" : ["E071","E106","E088","E085"]]
 portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
-//>>>>>>> Stashed changes
+
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
