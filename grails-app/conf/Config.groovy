@@ -312,6 +312,10 @@ environments {
 //      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+<<<<<<< HEAD
+=======
+//        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+>>>>>>> 60e54e4920c2700b4aab16bfa3b8adfba1480a84
 
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
 
@@ -320,12 +324,18 @@ environments {
 
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
+<<<<<<< HEAD
         grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
+=======
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+        
+>>>>>>> 60e54e4920c2700b4aab16bfa3b8adfba1480a84
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
+        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -541,17 +551,13 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-// placeholder for data version
 
-diabetes.data.version = "mdv80";
-portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
-portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
-                                   "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
-                                   "mi" : ["SkeletalMuscle"],
-                                   "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
+diabetes.data.version = "mdv27";
+portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "EBI": "mdv25"];
+portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "MI", "EBI":"FG"];
+portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "EBI":"FG"]
+portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"], "stroke": ["Adipose"], "mi" : ["Adipose"]]
+portal.type.override = "t2d"     // options are "t2d" or "stroke" or "mi"
 
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
