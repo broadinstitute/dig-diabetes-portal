@@ -104,6 +104,8 @@
 
 <div id="manhattanPlot1"></div>
 
+<button class="btn btn-primary btn-sm" type="button" style="width: 15%;height: auto;background-color: #d58512;color:#000;border-radius: 5px;"> Clumped Variants</button>
+
 <table id="phenotypeTraits" class="table basictable table-striped">
     <thead>
     <tr>
