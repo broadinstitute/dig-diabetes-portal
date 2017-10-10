@@ -358,7 +358,8 @@ var UTILS = {
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
-            var portaltype = "mi";
+            //var portaltype =
+           // var portalType = g.portalTypeString();
             options.empty();
             var groupList = dataSetJson.dataset;
 
@@ -376,16 +377,28 @@ var UTILS = {
                     keys.unshift("GLYCEMIC");
                     //$('#datasetDependent').prop( "disabled", false );
                     //var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
-                    mpgSoftware.variantWF.retrieveDatasets("T2D", 'dependent');
+                    try{
+                        mpgSoftware.variantWF.retrieveDatasets("T2D", 'dependent');
+                    }catch(e){
+                        console.log("YO",e);
+                    }
+
 
                 }
+               $('#datasetDependent').prop( "disabled", false );
             }
             else if (portaltype == "stroke"){
             if (keys.indexOf("ISCHEMIC STROKE")>-1){
                 keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
                 keys.unshift("ISCHEMIC STROKE");
-                mpgSoftware.variantWF.retrieveDatasets("allstroke", 'dependent');
+                try{
+                    mpgSoftware.variantWF.retrieveDatasets("allstroke", 'dependent');
+                }catch(e){
+                    console.log("retrievedatasets not readable property",e);
+                }
+
             }
+                $('#datasetDependent').prop( "disabled", false );
 
         }
             else if (portaltype == "ibd"){
@@ -394,21 +407,15 @@ var UTILS = {
                     keys.unshift("INFLAMMATORY BOWEL");
                 }
                 $('#datasetDependent').prop( "disabled", false );
-
             }
             else if (portaltype == "mi"){
-                if (keys.indexOf("CARDIOVASCULAR DISEASE")>-1){
+                if (keys.indexOf("CARDIOVASCULAR DISEASE")>=-1){
                     keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
-
                     keys.splice(keys.indexOf("LIPIDS"), 2);
-
-                    keys.splice(keys.indexOf("ANTHROPOMETRIC"),3);
                     keys.unshift("GLYCEMIC");
                     keys.unshift("LIPIDS");
                     keys.unshift("ANTHROPOMETRIC");
                     keys.unshift("CARDIOVASCULAR DISEASE");
-
-
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
@@ -423,16 +430,18 @@ var UTILS = {
                 keys.push('OTHER');
             }
 
+            //String portalType = g.portalTypeString() as String
+
             for (var x = 0; x < keys.length; x++) {
                 var key = keys[x];
                 if (groupList.hasOwnProperty(key)) {
                     var groupContents = groupList[key];
-                    if(key === "CARDIOVASCULAR DISEASE"){
-                        groupContents.push(["CAD","Coronary artery disease"]);
-                    }
-                    if(key === "LIPIDS"){
-                        phenotypesToOmit = ["CAD", "Coronary artery disease"];
-                    }
+                    // if(key === "CARDIOVASCULAR DISEASE"){
+                    //     groupContents.push(["CAD","Coronary artery disease"]);
+                    // }
+                    // if(key === "LIPIDS"){
+                    //     phenotypesToOmit = ["CAD", "Coronary artery disease"];
+                    // }
                     options.append("<optgroup label='"+key+"'>");
                     for (var j = 0; j < groupContents.length; j++) {
                         if(_.includes(phenotypesToOmit, groupContents[j][0])) {
