@@ -118,6 +118,7 @@ class PortalConstants {
     public final static String PROPERTY_KEY_COMMON_LRT_PRED               = "metadata_rootLRT_pred";
     public final static String PROPERTY_KEY_COMMON_POLYPHEN2_HVAR_PRED    = "metadata_rootPolyphen2_HVAR_pred";
     public final static String PROPERTY_KEY_COMMON_POLYPHEN2_HDIV_PRED    = "metadata_rootPolyphen2_HDIV_pred";
+    public final static String PROPERTY_KEY_COMMON_MOTIF_NAME             = "metadata_rootMOTIF_NAME";
 
     public final static String PROPERTY_KEY_SG_MAF_82K                    = "metadata_root_ExChip_82k_mdv2_82kMAF";
     public final static String PROPERTY_KEY_SG_MAF_SIGMA1                 = "metadata_root_ExChip_SIGMA1_mdv2_SIGMA1MAF";

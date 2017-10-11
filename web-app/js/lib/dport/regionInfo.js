@@ -42,6 +42,12 @@ var mpgSoftware = mpgSoftware || {};
                                     promoter:[],
                                     CTCFmotif:[],
                                     posteriorProbability: [],
+                                    tfBindingMotif: [],
+                                    posteriorProbabilityExists: function(){
+                                        var posteriorProbabilityIndicator = [];
+                                        if (Object.keys(this.posteriorProbability).length > 0) {posteriorProbabilityIndicator.push(1)}
+                                        return posteriorProbabilityIndicator;
+                                    },
                                     pValue: []
                                 },
                                 cellTypeSpecs: [
@@ -72,9 +78,10 @@ var mpgSoftware = mpgSoftware || {};
                     });
                     v['extractedP_VALUE'] = pValue;
 
-                    if ((typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined')&&
-                        ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY))){
-                        renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
+                    if (typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined'){
+                        if ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY)) {
+                            renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
+                        }
                     }
                     if ((typeof v.extractedP_VALUE !== 'undefined')&&
                         ($.isNumeric(v.extractedP_VALUE))) {
@@ -90,6 +97,14 @@ var mpgSoftware = mpgSoftware || {};
                         } else {
                             renderData.const.coding.push({val:'',descr:'absent'});
                         }
+                    }
+                    if (typeof v.MOTIF_NAME !== 'undefined') {
+                        if (v.MOTIF_NAME === null) {
+                            renderData.const.tfBindingMotif.push({val:'',descr:'absent'});
+                        } else {
+                            renderData.const.tfBindingMotif.push({val:v.MOTIF_NAME,descr:'present'});
+                        }
+
                     }
                     if (typeof v.Consequence !== 'undefined'){
                         if (v.Consequence.indexOf('splice')>-1){
@@ -123,8 +138,13 @@ var mpgSoftware = mpgSoftware || {};
                     utr:[],
                     promoter:[],
                     CTCFmotif:[],
+                    tfBindingMotif:[],
                     posteriorProbability: [],
-                    pValue: []
+                    posteriorProbabilityExists: function(){
+                        var posteriorProbabilityIndicator = [];
+                        if (Object.keys(this.posteriorProbability).length > 0) {posteriorProbabilityIndicator.push(1)}
+                        return posteriorProbabilityIndicator;
+                    },                    pValue: []
                 },
                 cellTypeSpecs: [
                 ]
@@ -151,6 +171,7 @@ var mpgSoftware = mpgSoftware || {};
                 newRenderData.const.spliceSite.push(oldRenderData.const.spliceSite[i]);
                 newRenderData.const.utr.push(oldRenderData.const.utr[i]);
                 newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
+                newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
                 newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
                 newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
                 newRenderData.const.pValue.push(oldRenderData.const.pValue[i]);

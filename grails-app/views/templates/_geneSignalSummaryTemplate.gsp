@@ -653,11 +653,23 @@
 
         <tr>
             <td class="credSetOrgLabel"></td>
+            <td class="credSetConstLabel">TF binding motif</td>
+            {{#tfBindingMotif}}
+            <td class="{{descr}}">{{val}}</td>
+            {{/tfBindingMotif}}
+        </tr>
+
+        {{#posteriorProbabilityExists}}
+        <tr>
+            <td class="credSetOrgLabel"></td>
             <td class="credSetConstLabel">Posterior probability</td>
+            {{/posteriorProbabilityExists}}
             {{#posteriorProbability}}
             <td class="{{descr}}">{{val}}</td>
             {{/posteriorProbability}}
+       {{#posteriorProbabilityExists}}
         </tr>
+        {{/posteriorProbabilityExists}}
 
         <tr>
             <td class="credSetOrgLabel"></td>
@@ -666,6 +678,9 @@
             <td class="{{descr}}">{{val}}</td>
             {{/pValue}}
         </tr>
+
+
+
 
     {{/const}}
 
