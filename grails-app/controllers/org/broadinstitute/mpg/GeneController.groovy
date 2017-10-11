@@ -523,8 +523,9 @@ class GeneController {
         String dataSet = params.dataset
         String dataType = params.datatype
         String propertyName = params.propertyName
+        String maximumNumberOfResults = params.maximumNumberOfResults
 
-
+        int requestedResults = -1
         int startInteger;
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
@@ -542,6 +543,14 @@ class GeneController {
         // log start
         Date startTime = new Date();
 
+        if (maximumNumberOfResults){
+            try {
+                requestedResults =  Integer.parseInt(maximumNumberOfResults);
+            } catch (e){
+                // an error here is no crisis – we can go with our internally specified default number
+            }
+        }
+
         // if have all the information, call the widget service
         try {
             startInteger = Integer.parseInt(startString);
@@ -554,7 +563,7 @@ class GeneController {
                     propertyName = property.name
                 }
 
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, dataType, conditionVariants);
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, dataType, conditionVariants, requestedResults);
             } else {
                 jsonReturn = errorJson;
             }

@@ -1288,7 +1288,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             variantInfoUrl:additionalParameters.variantInfoUrl,
             makeDynamic:additionalParameters.firstStaticPropertyName,
             retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
-            sampleGroupsWithCredibleSetNames:credSetSpecific.sampleGroupsWithCredibleSetNames
+            sampleGroupsWithCredibleSetNames:credSetSpecific.sampleGroupsWithCredibleSetNames,
+            maximumNumberOfResults:credSetSpecific.maximumNumberOfResults
         };
 
         if ((credSetSpecific.sampleGroupsWithCredibleSetNames)&&(credSetSpecific.sampleGroupsWithCredibleSetNames.length>0)) {
@@ -1494,10 +1495,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
             $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
-                mpgSoftware.locusZoom.rescaleSVG('#lz-'+additionalParameters.lzCommon);
+                mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCommon);
+                mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             });
             $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
-                mpgSoftware.locusZoom.rescaleSVG('#lz-'+additionalParameters.lzCredSet);
+                mpgSoftware.locusZoom.setNewDefaultLzPlot('#lz-'+additionalParameters.lzCredSet);
+                mpgSoftware.locusZoom.rescaleSVG(mpgSoftware.locusZoom.getNewDefaultLzPlot());
             });
         }
         if (( typeof sampleBasedPhenotypeName !== 'undefined') &&

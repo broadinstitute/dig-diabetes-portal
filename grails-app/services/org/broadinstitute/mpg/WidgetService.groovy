@@ -651,14 +651,15 @@ class WidgetService {
 
 
 
-    public String getFlatDataForLocusZoom(   String chromosome,
-                                                                                                            int startPosition,
-                                                                                                            int endPosition,
-                                                                                                            String dataset,
-                                                                                                            String phenotype,
-                                                                                                            String propertyName,
-                                                                                                            String dataType,
-                                                                                                            List<String> covariateVariants ) throws PortalException {
+    public String getFlatDataForLocusZoom(  String chromosome,
+                                            int startPosition,
+                                            int endPosition,
+                                            String dataset,
+                                            String phenotype,
+                                            String propertyName,
+                                            String dataType,
+                                            List<String> covariateVariants,
+                                            int numberOfRequestedResults ) throws PortalException {
         // local variables
         String jsonResultString, jsonGetDataString;
         LocusZoomJsonBuilder locusZoomJsonBuilder = null;
@@ -678,10 +679,10 @@ class WidgetService {
         //
         //  Let's impose some limitations to try to get LZ not to fold
         //
-        int maximumNumberOfPointsToRetrieve = 1000
-        if (metaDataService.portalTypeFromSession=='t2d') {
+        int maximumNumberOfPointsToRetrieve = numberOfRequestedResults
+        if ((metaDataService.portalTypeFromSession=='t2d')&&(numberOfRequestedResults == -1) ) {
             maximumNumberOfPointsToRetrieve = 2000
-        } else if (metaDataService.portalTypeFromSession=='stroke') {
+        } else if ( (metaDataService.portalTypeFromSession=='stroke')&&(numberOfRequestedResults == -1) ) {
             maximumNumberOfPointsToRetrieve = 500
         }
 
@@ -879,8 +880,9 @@ class WidgetService {
      */
     public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition,
                                                    String dataset, String phenotype, String propertyName,
-                                                   String dataType, List<String> covariateVariants) {
+                                                   String dataType, List<String> covariateVariants, int numberOfRequestedResults ) {
         // local variables
+        println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@REQUESTED RESULTS = ${numberOfRequestedResults}")
         List<Variant> variantList = null;
         JSONObject jsonResultObject = null;
         KnowledgeBaseFlatSearchTranslator knowledgeBaseFlatSearchTranslator;
@@ -901,7 +903,7 @@ class WidgetService {
         try {
             // get the variant list
             if (dataType=='static') {
-                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
+                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants, numberOfRequestedResults);
             } else { // dynamic data are still processed the old way, whereas static data will use the new flat format result
                 variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 

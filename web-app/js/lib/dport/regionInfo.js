@@ -10,6 +10,7 @@ var mpgSoftware = mpgSoftware || {};
         var assayExtremes = {"1":{minimum:127,maximum:9213115},
             "2":{minimum:83,maximum:854238}};
         var numberOfQuantiles =5;
+        var DEFAULT_NUMBER_OF_VARIANTS = 10;
 
         var developingTissueGrid = {};
         var sampleGroupsWithCredibleSetNames = [];
@@ -531,11 +532,13 @@ var mpgSoftware = mpgSoftware || {};
                     currentSequenceExtents = getCurrentSequenceExtents();
                     var propertyMeaning = data.propertyName;
                     var positionBy;
+                    var maximumNumberOfResults = -1;
                     if (propertyMeaning === 'POSTERIOR_PROBABILITY'){
                         positionBy = 2;
                     } else {
                         propertyMeaning = 'P_VALUE';
                         positionBy = 1;
+                        maximumNumberOfResults = DEFAULT_NUMBER_OF_VARIANTS;
                     }
                     mpgSoftware.geneSignalSummaryMethods.lzOnCredSetTab(additionalParameters,{
                         positioningInformation:{
@@ -550,7 +553,8 @@ var mpgSoftware = mpgSoftware || {};
                         defaultTissuesDescriptions:[],
                         datasetReadableName:data.dataset,
                         positionBy:positionBy,
-                        sampleGroupsWithCredibleSetNames:[data.dataset]
+                        sampleGroupsWithCredibleSetNames:[data.dataset],
+                        maximumNumberOfResults:maximumNumberOfResults
                     });
 
 
