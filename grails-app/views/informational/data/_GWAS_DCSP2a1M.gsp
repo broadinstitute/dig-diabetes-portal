@@ -14,58 +14,54 @@
 
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
-        <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
-        <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
     </ul>
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
 
-    <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
+    <tr><th>Cases</th><th>Controls</th><th>Cohort<small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
-    <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">cohort</a>
-
-    <div style="display: none;" class="cohortDetail">
-    <table border="1">
-    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-    <tr>
-    <td valign="top">criteria</td>
-    <td valign="top">criteria</td></tr>
-    </table>
-    </div></td><td>Mixed</td></tr>
-
-    <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
-
-    <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">cohort</a>
+    <tr><td>926</td><td>0</td><td><a onclick="showSection(event)">Diabetic Cohort (DC)</a>
 
     <div style="display: none;" class="cohortDetail">
     <table border="1">
     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
     <tr>
-    <td valign="top">criteria</td>
-    <td valign="top">criteria</td></tr>
+    <td valign="top">Physician diagnosis of T2D</td>
+    <td valign="top">n/a</td></tr>
     </table>
-    </div></td><td>Mixed</td></tr>
+    </div></td><td>East Asian</td></tr>
+
+    <tr><td>0</td><td>938</td><td><a onclick="showSection(event)">Singapore Prospective Study Program (SP2)</a>
+
+    <div style="display: none;" class="cohortDetail">
+    <table border="1">
+    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+    <tr>
+    <td valign="top">n/a</td>
+    <td valign="top">No prior history of diabetes, fasting glucose level &le; 6.0 mmol/L</td></tr>
+    </table>
+    </div></td><td>East Asian</td></tr>
 
     </table>
 
 
-    %{--<h4><g:message code="informational.shared.headers.project"></g:message></h4>--}%
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
-    %{--<p><g:message code="informational.data.project.AGEN"></g:message></p>--}%
-    %{----}%
-    %{----}%
+    <p><g:message code="informational.data.project.DC_SP2"></g:message></p>
 
-    %{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.exptsumm.AGEN"></g:message></p>--}%
+<h4><g:message code="informational.shared.headers.ack"></g:message></h4>
+<p><g:message code="informational.data.ack.DC_SP2"></g:message></p>
 
-    %{--<h4><g:message code="informational.shared.headers.overview"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.overview.AGEN"></g:message></p>--}%
+    <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+    <p><g:message code="informational.data.exptsumm.DC_SP2-1"></g:message></p>
+    <p><g:message code="informational.data.exptsumm.DC_SP2-2"></g:message></p>
+    <p><g:message code="informational.data.exptsumm.DC_SP2-3"></g:message></p>
 
 
-    %{--<h4>Accessing AGEN GWAS data</h4>--}%
-    %{--<p><g:message code="informational.data.accessing.AGEN"></g:message></p>--}%
+    <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS data</h4>
+    <p><g:message code="informational.data.accessing.DC_SP2-1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.DC_SP2-2"></g:message></p>
 
 
 </script>
