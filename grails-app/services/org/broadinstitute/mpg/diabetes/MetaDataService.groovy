@@ -118,22 +118,7 @@ class MetaDataService {
         String portalType = this.getPortalTypeFromSession()
         String distributedKb = this.getDistributedKBFromSession()
 
-//        // get the data version based on user session portal type; default to t2d
-//        if (distributedKb == 'EBI')  {
-//            dataVersion = this.grailsApplication.config.portal.data.version.map[distributedKb]
-//        } else if  ("t2d"!= portalType) {
-//            dataVersion = this.grailsApplication.config.portal.data.version.map[portalType]
-//        } else {
-//            //dataVersion = "mdv" + this.sharedToolsService.getDataVersion();
-//            //dataVersion = this.grailsApplication.config.portal.data.version.map[portalType]
-//
-//            //grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]+metaDataService.getDataVersion()
-//
-//        }
-
        dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
-
-       // return getPortalTypeFromSession();
 
         // return
        return dataVersion;
@@ -514,6 +499,33 @@ class MetaDataService {
 
         return toReturn;
     }
+
+
+
+
+    public String getPreferredSampleGroupNameForPhenotype(String phenotypeName) {
+        // local variables
+        String returnValue = ""
+        List<SampleGroup> groupList
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            // sort the group list
+            groupList = groupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+
+            returnValue = groupList?.first()?.systemId
+
+        } catch (PortalException exception) {
+            log.error("Got exception in getPreferredSampleGroupNameForPhenotypeAsJson with phenotype = " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        return returnValue;
+    }
+
+
+
 
     /**
      * For the given phenotype, return a tree of sample groups, with cohorts inside of their

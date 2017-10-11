@@ -651,14 +651,15 @@ class WidgetService {
 
 
 
-    public String getFlatDataForLocusZoom(   String chromosome,
-                                                                                                            int startPosition,
-                                                                                                            int endPosition,
-                                                                                                            String dataset,
-                                                                                                            String phenotype,
-                                                                                                            String propertyName,
-                                                                                                            String dataType,
-                                                                                                            List<String> covariateVariants ) throws PortalException {
+    public String getFlatDataForLocusZoom(  String chromosome,
+                                            int startPosition,
+                                            int endPosition,
+                                            String dataset,
+                                            String phenotype,
+                                            String propertyName,
+                                            String dataType,
+                                            List<String> covariateVariants,
+                                            int numberOfRequestedResults ) throws PortalException {
         // local variables
         String jsonResultString, jsonGetDataString;
         LocusZoomJsonBuilder locusZoomJsonBuilder = null;
@@ -678,10 +679,10 @@ class WidgetService {
         //
         //  Let's impose some limitations to try to get LZ not to fold
         //
-        int maximumNumberOfPointsToRetrieve = 1000
-        if (metaDataService.portalTypeFromSession=='t2d') {
+        int maximumNumberOfPointsToRetrieve = numberOfRequestedResults
+        if ((metaDataService.portalTypeFromSession=='t2d')&&(numberOfRequestedResults == -1) ) {
             maximumNumberOfPointsToRetrieve = 2000
-        } else if (metaDataService.portalTypeFromSession=='stroke') {
+        } else if ( (metaDataService.portalTypeFromSession=='stroke')&&(numberOfRequestedResults == -1) ) {
             maximumNumberOfPointsToRetrieve = 500
         }
 
@@ -819,6 +820,54 @@ class WidgetService {
 
 
 
+    private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
+                                             String phenotype ){
+        String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
+        Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE")
+        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,10, "verbose");
+        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        jsonResultString["dataset"] = dataSetName
+        jsonResultString["phenotype"] = phenotype
+        jsonResultString["propertyName"] = newlyChosenProperty.name
+        return jsonResultString
+    }
+
+
+
+
+    public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
+                                                              String dataset, String phenotype, String propertyName ) {
+        LocusZoomJsonBuilder locusZoomJsonBuilder
+        String jsonGetDataString
+        JSONObject jsonResultString
+        if (dataset != ''){
+             locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
+             jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,1, "verbose");
+             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+            if ((jsonResultString) &&
+                    (!jsonResultString.is_error) &&
+                    (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
+                jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,300, "verbose");
+                jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+                jsonResultString["dataset"] = dataset
+                jsonResultString["phenotype"] = phenotype
+                jsonResultString["propertyName"] = propertyName
+            } else {   // We didn't have any variants in this region.  Search a different data set
+                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+            }
+
+        } else {  // We didn't have any credible set data set for this phenotype. Let's go straight to the alternate data set
+            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+        }
+
+
+        // return
+        return jsonResultString;
+    }
+
+
+
 
 
     /**
@@ -831,8 +880,9 @@ class WidgetService {
      */
     public String getVariantJsonForLocusZoomString(String chromosome, int startPosition, int endPosition,
                                                    String dataset, String phenotype, String propertyName,
-                                                   String dataType, List<String> covariateVariants) {
+                                                   String dataType, List<String> covariateVariants, int numberOfRequestedResults ) {
         // local variables
+        println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@REQUESTED RESULTS = ${numberOfRequestedResults}")
         List<Variant> variantList = null;
         JSONObject jsonResultObject = null;
         KnowledgeBaseFlatSearchTranslator knowledgeBaseFlatSearchTranslator;
@@ -853,7 +903,7 @@ class WidgetService {
         try {
             // get the variant list
             if (dataType=='static') {
-                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
+                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants, numberOfRequestedResults);
             } else { // dynamic data are still processed the old way, whereas static data will use the new flat format result
                 variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 

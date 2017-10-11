@@ -10,6 +10,7 @@ var mpgSoftware = mpgSoftware || {};
         var assayExtremes = {"1":{minimum:127,maximum:9213115},
             "2":{minimum:83,maximum:854238}};
         var numberOfQuantiles =5;
+        var DEFAULT_NUMBER_OF_VARIANTS = 10;
 
         var developingTissueGrid = {};
         var sampleGroupsWithCredibleSetNames = [];
@@ -471,8 +472,8 @@ var mpgSoftware = mpgSoftware || {};
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
             var currentSequenceExtents = getCurrentSequenceExtents();
-            vars.start = currentSequenceExtents.start;
-            vars.end = currentSequenceExtents.end;
+            if (!isNaN(currentSequenceExtents.start)){vars.start=currentSequenceExtents.start}
+            if (!isNaN(currentSequenceExtents.end)){vars.end=currentSequenceExtents.end}
             var promise = $.ajax({
                 cache: false,
                 type: "post",
@@ -528,6 +529,35 @@ var mpgSoftware = mpgSoftware || {};
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
                     $.data($('#dataHolderForCredibleSets')[0],'additionalParameters',additionalParameters);
                     $.data($('#dataHolderForCredibleSets')[0],'dataVariants',data.variants);
+                    currentSequenceExtents = getCurrentSequenceExtents();
+                    var propertyMeaning = data.propertyName;
+                    var positionBy;
+                    var maximumNumberOfResults = -1;
+                    if (propertyMeaning === 'POSTERIOR_PROBABILITY'){
+                        positionBy = 2;
+                    } else {
+                        propertyMeaning = 'P_VALUE';
+                        positionBy = 1;
+                        maximumNumberOfResults = DEFAULT_NUMBER_OF_VARIANTS;
+                    }
+                    mpgSoftware.geneSignalSummaryMethods.lzOnCredSetTab(additionalParameters,{
+                        positioningInformation:{
+                            chromosome:additionalParameters.geneChromosome.substr(3),
+                            startPosition:getCurrentSequenceExtents().start,
+                            endPosition:getCurrentSequenceExtents().end
+                        },
+                        phenotypeName:data.phenotype,
+                        pName:data.phenotype,
+                        datasetName:data.dataset,
+                        phenoPropertyName:propertyMeaning,//data.propertyName,
+                        defaultTissuesDescriptions:[],
+                        datasetReadableName:data.dataset,
+                        positionBy:positionBy,
+                        sampleGroupsWithCredibleSetNames:[data.dataset],
+                        maximumNumberOfResults:maximumNumberOfResults
+                    });
+
+
                     buildTheCredibleSetHeatMap(drivingVariables,true);
                     // if (Object.keys(allCredibleSets).length > 1){
                     //     $($('.credibleSetChooserButton')[0]).click();
