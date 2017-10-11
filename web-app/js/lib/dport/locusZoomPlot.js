@@ -1230,6 +1230,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var buildAssociationSource = function(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic){
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype,dataSetName,propertyName,makeDynamic) {
+                var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -1251,6 +1252,9 @@ var mpgSoftware = mpgSoftware || {};
                             });
                         });
                         url += "&conditionVariantId=" + covariant_ids;
+                    }
+                    if ((typeof pageVars.maximumNumberOfResults !== 'undefined') &&(pageVars.maximumNumberOfResults>0)){
+                        url += "&maximumNumberOfResults=" + pageVars.maximumNumberOfResults;
                     }
                     return url;
                 }
@@ -1614,6 +1618,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
     return {
+        getNewDefaultLzPlot: getNewDefaultLzPlot,
         setNewDefaultLzPlot: setNewDefaultLzPlot,
         conditioning:conditioning,
         replaceTissues:replaceTissues,
