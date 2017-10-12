@@ -29,10 +29,10 @@ td.tissueTable.matchingRegion3_1{
     background: #FF0000;/*Active_TSS*/
 }
 td.tissueTable.matchingRegion3_2{
-    background: #FF8D1A;/*Weak_TSS*/
+    background: #FF8C1A;/*Weak_TSS*/
 }
 td.tissueTable.matchingRegion3_3{
-    background: #FF8D1A;/*Flanking_TSS*/
+    background: #FF8C1A;/*Flanking_TSS*/
 }
 td.tissueTable.matchingRegion3_5{
     background: #00E600;/*Strong_transcription*/
@@ -53,7 +53,7 @@ td.tissueTable.matchingRegion3_11{
     background: #FFFF00;/*Weak_enhancer*/
 }
 td.tissueTable.matchingRegion3_14{
-    background: #FFFF00;/*Bivalent/poised_TSS*/
+    background: #994D00;/*Bivalent/poised_TSS*/
 }
 td.tissueTable.matchingRegion3_16{
     background: #808080;/*Repressed_polycomb*/

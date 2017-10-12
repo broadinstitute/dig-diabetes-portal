@@ -773,17 +773,6 @@
     <ul class="nav nav-pills">
     {{#chosenStatesForTissueDisplay}}
         <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">&nbsp;{{descr}}</li>
-    %{--<li style="border-left:solid  12px #ff0000;">Active transcription start site</li>--}%
-    %{--<li style="border-left:solid  12px #ff8c1a;">Weak/flanking transcription start site</li>--}%
-    %{--<li style="border-left:solid  12px #994d00;">Bivalent/poised transcription start site</li>--}%
-    %{--<li style="border-left:solid  12px #ffc34d;">Active enhancer 1/2</li>--}%
-    %{--<li style="border-left:solid  12px #ffff00;">Weak enhancer</li>--}%
-    %{--<li style="border-left:solid  12px #c2e105;">Genic enhancer</li>--}%
-    %{--<li style="border-left:solid  12px #00e600;">Strong transcription</li>--}%
-    %{--<li style="border-left:solid  12px #006400;">Weak transcription</li>--}%
-    %{--<li style="border-left:solid  12px #808080;">Repressed polycomb</li>--}%
-    %{--<li style="border-left:solid  12px #c0c0c0;">Weak repressed polycomb</li>--}%
-    %{--<li style="border-left:solid  12px #dddddd;">Quiescent/low signal</li>--}%
     {{/chosenStatesForTissueDisplay}}
     </ul>
 </div>
