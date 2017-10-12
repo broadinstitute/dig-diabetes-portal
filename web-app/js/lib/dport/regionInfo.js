@@ -173,7 +173,9 @@ var mpgSoftware = mpgSoftware || {};
                 newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
                 newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
                 newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
-                newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
+                if (typeof oldRenderData.const.posteriorProbability[i]!=='undefined'){// sometimes we don't have these
+                    newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
+                }
                 newRenderData.const.pValue.push(oldRenderData.const.pValue[i]);
 
              });
@@ -235,6 +237,23 @@ var mpgSoftware = mpgSoftware || {};
             return promiseArray;
         }
 
+        var redisplayTheCredibleSetHeatMap = function(){
+            var variantsToInclude =[];
+            var headers = $('#overlapTable th');
+            _.forEach(headers,function(o){
+                var varid = $(o).attr('varid');
+                if (typeof varid  !== 'undefined'){
+                    variantsToInclude.push(varid);
+                }
+            })
+            var allRenderData = $.data($('#dataHolderForCredibleSets')[0],'allRenderData');
+            var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
+            var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
+            buildTheCredibleSetHeatMap(filteredRenderData,false);
+        }
+
+
+
 
         var specificCredibleSetSpecificDisplay = function(currentButton,variantsToInclude){
 
@@ -246,14 +265,6 @@ var mpgSoftware = mpgSoftware || {};
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
             var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
             buildTheCredibleSetHeatMap(filteredRenderData,false);
-
-
-            // var tissueGrid = $.data($('#dataHolderForCredibleSets')[0],'tissueGrid');
-            // var dataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants');
-            // var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
-            // var filteredDataVariants = _.filter(dataVariants,function(v){return ($.inArray(v[0].VAR_ID,variants)>-1)})
-            // displayAParticularCredibleSet(tissueGrid, filteredDataVariants, assayIdList );
-
         };
         var determineColorIndex = function (val,quantileArray){
             var index = 0;
@@ -263,14 +274,30 @@ var mpgSoftware = mpgSoftware || {};
         var determineCategoricalColorIndex = function (elementName){
             var returnVal = 5;
             if (typeof elementName !== 'undefined'){
-                if (elementName.indexOf("Active_enhancer_2")>-1){
-                    returnVal = 4;
-                } else if (elementName.indexOf("Active_enhancer_1")>-1){
-                    returnVal = 3;
-                } else if (elementName.indexOf("Genic_enhancer")>-1){
-                    returnVal = 2;
-                } else if (elementName.indexOf("Weak_enhancer")>-1){
+                if (elementName.indexOf("Active_TSS")>-1){
                     returnVal = 1;
+                } else if (elementName.indexOf("Weak_TSS")>-1){
+                    returnVal = 2;
+                } else if (elementName.indexOf("Flanking_TSS")>-1){
+                    returnVal = 3;
+                } else if (elementName.indexOf("Strong_transcription")>-1){
+                    returnVal = 5;
+                } else if (elementName.indexOf("Weak_transcription")>-1){
+                    returnVal = 6;
+                } else if (elementName.indexOf("Genic_enhancer")>-1){
+                    returnVal = 8;
+                }else if (elementName.indexOf("Active_enhancer")>-1){
+                    returnVal = 9;
+                } else if (elementName.indexOf("Weak_enhancer")>-1){
+                    returnVal = 11;
+                }else if (elementName.indexOf("Bivalent/poised_TSS")>-1){
+                    returnVal = 14;
+                } else if (elementName.indexOf("Repressed_polycomb")>-1){
+                    returnVal = 16;
+                }else if (elementName.indexOf("Weak_repressed_polycomb")>-1){
+                    returnVal = 17;
+                } else if (elementName.indexOf("Quiescent/low_signal")>-1){
+                    returnVal = 18;
                 }
             }
             return returnVal;
@@ -366,7 +393,55 @@ var mpgSoftware = mpgSoftware || {};
                 quantileArray: createQuantilesArray(everySingleValue)
             };
         };
+        var includeRecordBasedOnUserChoice = function(o) {
+            var selectedElements = $('#credSetSelectorChoice option:selected');
+            var chosenElementTypes = [];
+            _.forEach(selectedElements,function(oe){
+                chosenElementTypes.push($(oe).val());
+            });
+            return ((chosenElementTypes.indexOf(o.element)>-1))
+        };
+        var colorMapper = function(elementName){
+            var colorSpecification = '#ffffff';
+            if (elementName==="1_Active_TSS"){
+                colorSpecification = '#ff0000';
+            } else if (elementName==="2_Weak_TSS"){
+                colorSpecification = '#ff8c1a';
+            } else if (elementName==="3_Flanking_TSS"){
+                colorSpecification = '#ff8c1a';
+            } else if (elementName==="5_Strong_transcription"){
+                colorSpecification = '#00e600';
+            } else if (elementName==="6_Weak_transcription"){
+                colorSpecification = '#006400';
+            } else if (elementName==="8_Genic_enhancer"){
+                colorSpecification = '#c2e105';
+            } else if (elementName==="9_Active_enhancer_1"){
+                colorSpecification = '#ffc34d';
+            } else if (elementName==="10_Active_enhancer_2"){
+                colorSpecification = '#ffc34d';
+            } else if (elementName==="11_Weak_enhancer"){
+                colorSpecification = '#ffff00';
+            } else if (elementName==="14_Bivalent/poised_TSS"){
+                colorSpecification = '#994d00';
+            } else if (elementName==="16_Repressed_polycomb"){
+                colorSpecification = '#808080';
+            } else if (elementName==="17_Weak_repressed_polycomb"){
+                colorSpecification = '#c0c0c0';
+            } else if (elementName==="18_Quiescent/low_signal"){
+                colorSpecification = '#dddddd';
+            }
+            return colorSpecification;
+        }
+        var appendLegendInfo = function() {
+            var selectedElements = $('#credSetSelectorChoice option:selected');
+            var chosenElementTypes = [];
+            _.forEach(selectedElements,function(oe){
+                chosenElementTypes.push({name:$(oe).val(),descr:$(oe).text(),colorCode:colorMapper ($(oe).val())});
+            });
+            return chosenElementTypes;
+        };
         var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
+            drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
             $(".credibleSetTableGoesHere").empty().append(
                 Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
             );
@@ -376,7 +451,7 @@ var mpgSoftware = mpgSoftware || {};
             var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
             var includeRecord  = function() {return true;};
             if (assayIdList=='[3]') {
-                includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1))};
+                includeRecord = includeRecordBasedOnUserChoice;
             }
             setDevelopingTissueGrid({});
             var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,includeRecord);
@@ -583,6 +658,16 @@ var mpgSoftware = mpgSoftware || {};
                     // if (Object.keys(allCredibleSets).length > 1){
                     //     $($('.credibleSetChooserButton')[0]).click();
                     // }
+                    $('#credSetSelectorChoice').multiselect({includeSelectAllOption: true,
+                        allSelectedText: 'All Selected',
+                        buttonWidth: '60%',onChange: function() {
+                            console.log($('#credSetSelectorChoice').val());
+                        }});
+                    $('#credSetSelectorChoice').val(['8_Genic_enhancer','9_Active_enhancer_1','10_Active_enhancer_2','11_Weak_enhancer']);
+                    $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
+                        allSelectedText: 'All Selected',
+                        buttonWidth: '60%'});
+                    $('#credSetDisplayChoice').multiselect('selectAll', false);
                     $('#toggleVarianceTableLink').click();
                 }
             );
@@ -597,7 +682,9 @@ var mpgSoftware = mpgSoftware || {};
             specificCredibleSetSpecificDisplay: specificCredibleSetSpecificDisplay,
             getCurrentSequenceExtents:getCurrentSequenceExtents,
             setSampleGroupsWithCredibleSetNames:setSampleGroupsWithCredibleSetNames,
-            getSampleGroupsWithCredibleSetNames:getSampleGroupsWithCredibleSetNames
+            getSampleGroupsWithCredibleSetNames:getSampleGroupsWithCredibleSetNames,
+            redisplayTheCredibleSetHeatMap:redisplayTheCredibleSetHeatMap,
+            includeRecordBasedOnUserChoice:includeRecordBasedOnUserChoice
         }
 
     })();

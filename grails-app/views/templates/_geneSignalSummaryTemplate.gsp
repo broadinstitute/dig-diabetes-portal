@@ -467,7 +467,7 @@
                                         <input type="text" name="endPosition"  class="credSetEndPos">
                                     </div>
                                     <div class="col-md-2">
-                                          <button class="btn btn-secondary btn-sm" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
                                           Reset range
                                           </button>
                                     </div>
@@ -483,6 +483,43 @@
                                     </div>
                                 </div>
                                 <div class="credibleSetChooserGoesHere"></div>
+                                <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
+
+                                    <div class="row clearfix">
+                                         <div class="col-sm-2"></div>
+                                         <div class="col-sm-4">
+                                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                                <label for="credSetSelectorChoice">tissue matcher:</label>
+                                                 <select id="credSetSelectorChoice" multiple="multiple">
+                                                    <option value="1_Active_TSS">Active transcription start site
+                                                    <option value="2_Weak_TSS">Weak transcription start site</option>
+                                                    <option value="3_Flanking_TSS">Flanking transcription start site</option>
+                                                    <option value="5_Strong_transcription">Strong transcription</option>
+                                                    <option value="6_Weak_transcription">Weak transcription</option>
+                                                    <option selected value="8_Genic_enhancer">Genic enhancer</option>
+                                                    <option selected value="9_Active_enhancer_1">Active enhancer 1</option>
+                                                    <option selected value="10_Active_enhancer_2">Active enhancer 2</option>
+                                                    <option selected value="11_Weak_enhancer">Weak enhancer</option>
+                                                    <option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>
+                                                    <option value="16_Repressed_polycomb">Repressed polycomb</option>
+                                                    <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
+                                                    <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
+                                                </select>
+                                             </span>
+                                         </div>
+                                         <div class="col-sm-4">
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Referesh tissue match</button>
+                                             %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
+                                                %{--<label for="credSetDisplayChoice">data display:</label>--}%
+                                                 %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
+                                                    %{--<option value="cheese">ATAC-seq</option>--}%
+                                                    %{--<option value="tomatoes">Enhancers</option>--}%
+                                                %{--</select>--}%
+                                            %{--</span>--}%
+                                         </div>
+                                         <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
@@ -521,6 +558,37 @@
                                     </div>
                                 </div>
                                 <div class="credibleSetChooserGoesHere"></div>
+                                                               <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
+
+                                    <div class="row clearfix">
+                                         <div class="col-sm-2"></div>
+                                         <div class="col-sm-4">
+                                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                                <label for="credSetSelectorChoice">tissue matcher:</label>
+                                                 <select id="credSetSelectorChoice" multiple="multiple">
+                                                    <option value="1_Active_TSS">Active transcription start site
+                                                    <option value="2_Weak_TSS">Weak transcription start site</option>
+                                                    <option value="3_Flanking_TSS">Flanking transcription start site</option>
+                                                    <option value="5_Strong_transcription">Strong transcription</option>
+                                                    <option value="6_Weak_transcription">Weak transcription</option>
+                                                    <option selected value="8_Genic_enhancer">Genic enhancer</option>
+                                                    <option selected value="9_Active_enhancer_1">Active enhancer 1</option>
+                                                    <option selected value="10_Active_enhancer_2">Active enhancer 2</option>
+                                                    <option selected value="11_Weak_enhancer">Weak enhancer</option>
+                                                    <option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>
+                                                    <option value="16_Repressed_polycomb">Repressed polycomb</option>
+                                                    <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
+                                                    <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
+                                                </select>
+                                             </span>
+                                         </div>
+                                         <div class="col-sm-4">
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Referesh tissue match</button>
+                                         </div>
+                                         <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
+
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
@@ -609,10 +677,7 @@
             {{#variants}}
                 <th class="niceHeaders niceHeadersThatAreLinks" style="background:rgba(0,0,0,0); text-decoration: underline;color: blue" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
-                postprob="{{details.extractedPOSTERIOR_PROBABILITY}}"  data-toggle="popover">
-
-                    {{name}}
-                </th>
+                postprob="{{details.extractedPOSTERIOR_PROBABILITY}}" varid='{{name}}' data-toggle="popover">{{name}}</th>
             {{/variants}}
         </tr>
     </thead>
@@ -704,8 +769,25 @@
     {{/cellTypeSpecs}}
     </tbody>
 </table>
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-<img src="${resource(dir:'images', file:'3-color_epigenomic_key.png')}" style="width: 600px;" align="center"></g:if>
+<div class="heatmaplegend">
+    <ul class="nav nav-pills">
+    {{#chosenStatesForTissueDisplay}}
+        <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">&nbsp;{{descr}}</li>
+    %{--<li style="border-left:solid  12px #ff0000;">Active transcription start site</li>--}%
+    %{--<li style="border-left:solid  12px #ff8c1a;">Weak/flanking transcription start site</li>--}%
+    %{--<li style="border-left:solid  12px #994d00;">Bivalent/poised transcription start site</li>--}%
+    %{--<li style="border-left:solid  12px #ffc34d;">Active enhancer 1/2</li>--}%
+    %{--<li style="border-left:solid  12px #ffff00;">Weak enhancer</li>--}%
+    %{--<li style="border-left:solid  12px #c2e105;">Genic enhancer</li>--}%
+    %{--<li style="border-left:solid  12px #00e600;">Strong transcription</li>--}%
+    %{--<li style="border-left:solid  12px #006400;">Weak transcription</li>--}%
+    %{--<li style="border-left:solid  12px #808080;">Repressed polycomb</li>--}%
+    %{--<li style="border-left:solid  12px #c0c0c0;">Weak repressed polycomb</li>--}%
+    %{--<li style="border-left:solid  12px #dddddd;">Quiescent/low signal</li>--}%
+    {{/chosenStatesForTissueDisplay}}
+    </ul>
+</div>
+
 </div>
 
 </script>
