@@ -26,6 +26,45 @@ td.tissueTable.matchingRegion3_0{
 
 }
 td.tissueTable.matchingRegion3_1{
+    background: #FF0000;/*Active_TSS*/
+}
+td.tissueTable.matchingRegion3_2{
+    background: #FF8D1A;/*Weak_TSS*/
+}
+td.tissueTable.matchingRegion3_3{
+    background: #FF8D1A;/*Flanking_TSS*/
+}
+td.tissueTable.matchingRegion3_5{
+    background: #00E600;/*Strong_transcription*/
+}
+td.tissueTable.matchingRegion3_6{
+    background: #006400;/*Weak_transcription*/
+}
+td.tissueTable.matchingRegion3_8{
+    background: #C2E105;/*Genic_enhancer*/
+}
+td.tissueTable.matchingRegion3_9{
+    background: #FFC34D;/*Active_enhancer_1*/
+}
+td.tissueTable.matchingRegion3_10{
+    background: #FFC34D;/*Active_enhancer_2*/
+}
+td.tissueTable.matchingRegion3_11{
+    background: #FFFF00;/*Weak_enhancer*/
+}
+td.tissueTable.matchingRegion3_14{
+    background: #FFFF00;/*Bivalent/poised_TSS*/
+}
+td.tissueTable.matchingRegion3_16{
+    background: #808080;/*Repressed_polycomb*/
+}
+td.tissueTable.matchingRegion3_17{
+    background: #C0C0C0;/*Weak_repressed_polycomb*/
+}
+td.tissueTable.matchingRegion3_18{
+    background: #DDDDDD;/*Active_enhancer_2*/
+}
+td.tissueTable.matchingRegion3_1{
     background: #FFFF00;/*Weak_enhancer*/
 }
 td.tissueTable.matchingRegion3_2{
