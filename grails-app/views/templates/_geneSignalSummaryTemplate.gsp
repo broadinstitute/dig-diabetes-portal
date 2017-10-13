@@ -508,7 +508,7 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Referesh tissue match</button>
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissue match</button>
                                              %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
                                                 %{--<label for="credSetDisplayChoice">data display:</label>--}%
                                                  %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
@@ -583,7 +583,7 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Referesh tissue match</button>
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissue match</button>
                                          </div>
                                          <div class="col-sm-2"></div>
                                     </div>
