@@ -416,7 +416,7 @@
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Analyze strongest associations: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>
                         {{/incredibleSetTab}}
                     </ul>
                 </div>
@@ -457,6 +457,86 @@
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
                             <div class="variantCategoryHolder">Credible sets are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
+                                <p>&nbsp;</p>
+                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                    <div class="col-md-3 credSetWindowSummary">
+                                        Start position
+                                        <input type="text" name="startPosition" class="credSetStartPos">
+                                    </div>
+                                    <div class="col-md-3 credSetWindowSummary">
+                                        End position
+                                        <input type="text" name="endPosition"  class="credSetEndPos">
+                                    </div>
+                                    <div class="col-md-2">
+                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                          Reset range
+                                          </button>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="row clearfix">
+                                            <div class="col-md-3 credSetWindowSummary">
+                                                Genes in window
+                                            </div>
+                                            <div class="col-md-9 regionParams">
+                                                <div class="matchedGenesGoHere"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p>&nbsp;</p>
+                                <div><p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></div>
+                                <p>&nbsp;</p>
+                                <div class="credibleSetChooserGoesHere"></div>
+                                <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
+
+                                    <div class="row clearfix">
+                                         <div class="col-sm-2"></div>
+                                         <div class="col-sm-4">
+                                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                                <label for="credSetSelectorChoice">Tissue selector:&nbsp;</label>
+                                                 <select id="credSetSelectorChoice" multiple="multiple">
+                                                    <option value="1_Active_TSS">Active transcription start site
+                                                    <option value="2_Weak_TSS">Weak transcription start site</option>
+                                                    <option value="3_Flanking_TSS">Flanking transcription start site</option>
+                                                    <option value="5_Strong_transcription">Strong transcription</option>
+                                                    <option value="6_Weak_transcription">Weak transcription</option>
+                                                    <option selected value="8_Genic_enhancer">Genic enhancer</option>
+                                                    <option selected value="9_Active_enhancer_1">Active enhancer 1</option>
+                                                    <option selected value="10_Active_enhancer_2">Active enhancer 2</option>
+                                                    <option selected value="11_Weak_enhancer">Weak enhancer</option>
+                                                    <option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>
+                                                    <option value="16_Repressed_polycomb">Repressed polycomb</option>
+                                                    <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
+                                                    <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
+                                                </select>&nbsp;<g:helpText title="tissue.selection.help.header" placement="right" body="tissue.selection.help.text"/>
+                                             </span>
+
+                                         </div>
+                                         <div class="col-sm-4">
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissues</button>
+                                             %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
+                                                %{--<label for="credSetDisplayChoice">data display:</label>--}%
+                                                 %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
+                                                    %{--<option value="cheese">ATAC-seq</option>--}%
+                                                    %{--<option value="tomatoes">Enhancers</option>--}%
+                                                %{--</select>--}%
+                                            %{--</span>--}%
+                                         </div>
+                                         <div class="col-sm-2"></div>
+                                    </div>
+                                </div>
+                                <div class="credibleSetTableGoesHere"></div>
+                                <div id="allVariantsLocation" class="in"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
+                        </div>
+                    </div>
+                </div>
+                {{/credibleSetTab}}
+                {{#incredibleSetTab}}
+                <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
+                    <div class="row" style="border: none">
+                        <div class="col-xs-12">
+                            <div class="variantCategoryHolder">In the absence of credible sets for a region and phenotype, this tab shows the 10 variants most significantly associated with the selected phenotype.
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
                                     <div class="col-md-3 credSetWindowSummary">
                                         Start position
@@ -483,88 +563,13 @@
                                     </div>
                                 </div>
                                 <div class="credibleSetChooserGoesHere"></div>
-                                <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
-
-                                    <div class="row clearfix">
-                                         <div class="col-sm-2"></div>
-                                         <div class="col-sm-4">
-                                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">tissue matcher:</label>
-                                                 <select id="credSetSelectorChoice" multiple="multiple">
-                                                    <option value="1_Active_TSS">Active transcription start site
-                                                    <option value="2_Weak_TSS">Weak transcription start site</option>
-                                                    <option value="3_Flanking_TSS">Flanking transcription start site</option>
-                                                    <option value="5_Strong_transcription">Strong transcription</option>
-                                                    <option value="6_Weak_transcription">Weak transcription</option>
-                                                    <option selected value="8_Genic_enhancer">Genic enhancer</option>
-                                                    <option selected value="9_Active_enhancer_1">Active enhancer 1</option>
-                                                    <option selected value="10_Active_enhancer_2">Active enhancer 2</option>
-                                                    <option selected value="11_Weak_enhancer">Weak enhancer</option>
-                                                    <option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>
-                                                    <option value="16_Repressed_polycomb">Repressed polycomb</option>
-                                                    <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
-                                                    <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
-                                                </select>
-                                             </span>
-                                         </div>
-                                         <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Referesh tissue match</button>
-                                             %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
-                                                %{--<label for="credSetDisplayChoice">data display:</label>--}%
-                                                 %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
-                                                    %{--<option value="cheese">ATAC-seq</option>--}%
-                                                    %{--<option value="tomatoes">Enhancers</option>--}%
-                                                %{--</select>--}%
-                                            %{--</span>--}%
-                                         </div>
-                                         <div class="col-sm-2"></div>
-                                    </div>
-                                </div>
-                                <div class="credibleSetTableGoesHere"></div>
-                                <div id="allVariantsLocation" class="in"></div>
-                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
-                        </div>
-                    </div>
-                </div>
-                {{/credibleSetTab}}
-                {{#incredibleSetTab}}
-                <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
-                    <div class="row" style="border: none">
-                        <div class="col-xs-12">
-                            <div class="variantCategoryHolder">Credible sets are calculated sets of variants that are highly likely to include the causal variant for association with the selected phenotype.
-                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                    <div class="col-md-3 credSetWindowSummary">
-                                        Start position
-                                        <input type="text" name="startPosition" class="credSetStartPos">
-                                    </div>
-                                    <div class="col-md-3 credSetWindowSummary">
-                                        End position
-                                        <input type="text" name="endPosition"  class="credSetEndPos">
-                                    </div>
-                                    <div class="col-md-2">
-                                          <button class="btn btn-secondary btn-sm" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
-                                          Reset range
-                                          </button>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="row clearfix">
-                                            <div class="col-md-3 credSetWindowSummary">
-                                                Genes in window
-                                            </div>
-                                            <div class="col-md-9 regionParams">
-                                                <div class="matchedGenesGoHere"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="credibleSetChooserGoesHere"></div>
                                                                <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
                                          <div class="col-sm-2"></div>
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">tissue matcher:</label>
+                                                <label for="credSetSelectorChoice">Tissue selection:</label>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     <option value="1_Active_TSS">Active transcription start site
                                                     <option value="2_Weak_TSS">Weak transcription start site</option>
@@ -583,7 +588,7 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Referesh tissue match</button>
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissue match</button>
                                          </div>
                                          <div class="col-sm-2"></div>
                                     </div>
@@ -666,8 +671,8 @@
 <p>&nbsp;</p>
 <g:if test="${g.portalTypeString()?.equals('ibd')}">
 <p><g:message code="geneSignalSummary.credSetsIBD.help"></g:message></p></g:if>
-    <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
-        <p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>
+    %{--<g:elseif test="${g.portalTypeString()?.equals('t2d')}">--}%
+        %{--<p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>--}%
 <div class='dataTable'>
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>

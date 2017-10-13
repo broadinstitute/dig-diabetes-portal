@@ -5,3 +5,9 @@
     background-color: #ffffff;
     border-bottom: solid 1px black !important;
 }
+span.fakelink {
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+    color: #588fd3;
+}
