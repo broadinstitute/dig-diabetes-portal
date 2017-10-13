@@ -221,9 +221,7 @@
                        </ul>
                 </li>
                 {{/atacDataExists}}
-                <li style="margin: auto;">
-                    <b>Region: <span id="lzRegion"></span></b>
-                </li>
+
             </ul>
 
             <div class="accordion-inner">
@@ -490,7 +488,6 @@
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
-                                         <div class="col-sm-2"></div>
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
                                                 <label for="credSetSelectorChoice">Tissue selector:&nbsp;</label>
@@ -512,7 +509,7 @@
                                              </span>
 
                                          </div>
-                                         <div class="col-sm-4">
+                                         <div class="col-sm-6">
                                              <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissues</button>
                                              %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
                                                 %{--<label for="credSetDisplayChoice">data display:</label>--}%

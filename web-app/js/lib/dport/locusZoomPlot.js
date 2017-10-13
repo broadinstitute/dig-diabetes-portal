@@ -583,8 +583,8 @@ var mpgSoftware = mpgSoftware || {};
                         { action: "toggle", status: "selected" }
                     ]
                 }
-                 ,
-                 tooltip: customIntervalsToolTip(layerName)
+                 // ,
+                 // tooltip: customIntervalsToolTip(layerName)
             };
             _.forEach(developingStructure.legend,function(o,i){
                 o[stateIdSpec] = (i+1);
