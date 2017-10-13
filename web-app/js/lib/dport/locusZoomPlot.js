@@ -1243,6 +1243,8 @@ var mpgSoftware = mpgSoftware || {};
                         "propertyName=" + propertyName + "&" +
                         "datatype="+ makeDynamic;
 
+                    //console.log("position marker?  start=" + state.start  +"end=" + state.end + "&")
+
                     if ((typeof state.model !== 'undefined')&&(state.model.covariates.length)){
                         var covariant_ids = "";
                         state.model.covariates.forEach(function(covariant){
