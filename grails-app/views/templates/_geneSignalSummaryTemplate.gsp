@@ -548,7 +548,7 @@
                                         <input type="text" name="endPosition"  class="credSetEndPos">&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.incredibleSets.help.text"/>
                                     </div>
                                     <div class="col-md-2">
-                                          <button class="btn btn-secondary btn-sm" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
                                           Reset range
                                           </button>
                                     </div>
@@ -684,7 +684,7 @@
             <th  class="credSetOrgLabel"></th>
             <th class="credSetConstLabel"></th>
             {{#variants}}
-                <th class="niceHeaders niceHeadersThatAreLinks" style="background:rgba(0,0,0,0); text-decoration: underline;color: blue" onclick="mpgSoftware.locusZoom.replaceTissuesWithOverlappingIbdRegionsVarId('{{name}}','#lz-lzCredSet','{{assayIdList}}')"
+                <th class="niceHeaders niceHeadersThatAreLinks" style="background:rgba(0,0,0,0); text-decoration: underline;color: blue"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}" varid='{{name}}' data-toggle="popover">{{name}}</th>
             {{/variants}}
@@ -694,48 +694,48 @@
     {{#const}}
 
         <tr>
-            <td class="credSetOrgLabel"></td>
+            <td class="credcellpval credSetOrgLabel" rowspan=5>annotation</td>
             <td class="credSetConstLabel">Coding</td>
         {{#coding}}
-            <td class="{{descr}}">{{val}}</td>
+            <td class="credcell {{descr}}">{{val}}</td>
         {{/coding}}
         </tr>
 
         <tr>
-            <td class="credSetOrgLabel"></td>
+            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credSetConstLabel">Splice site</td>
             {{#spliceSite}}
-            <td class="{{descr}}">{{val}}</td>
+            <td class="credcell {{descr}}">{{val}}</td>
             {{/spliceSite}}
         </tr>
 
         <tr>
-            <td class="credSetOrgLabel"></td>
+            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credSetConstLabel">UTR</td>
             {{#utr}}
-            <td class="{{descr}}">{{val}}</td>
+            <td class="credcell {{descr}}">{{val}}</td>
             {{/utr}}
         </tr>
 
         <tr>
-            <td class="credSetOrgLabel"></td>
+            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credSetConstLabel">Promoter</td>
             {{#promoter}}
-            <td class="{{descr}}">{{val}}</td>
+            <td class="credcell {{descr}}">{{val}}</td>
             {{/promoter}}
         </tr>
 
         <tr>
-            <td class="credSetOrgLabel"></td>
-            <td class="credSetConstLabel">TF binding motif</td>
+            %{--<td class="credSetOrgLabel"></td>--}%
+            <td class="credcellpval credSetConstLabel">TF binding motif</td>
             {{#tfBindingMotif}}
-            <td class="{{descr}}">{{val}}</td>
+            <td class="credcell {{descr}}">{{val}}</td>
             {{/tfBindingMotif}}
         </tr>
 
         {{#posteriorProbabilityExists}}
         <tr>
-            <td class="credSetOrgLabel"></td>
+            <td class="credcellpval credSetOrgLabel" rowspan=2>association</td>
             <td class="credSetConstLabel">Posterior probability</td>
             {{/posteriorProbabilityExists}}
             {{#posteriorProbability}}
@@ -746,10 +746,12 @@
         {{/posteriorProbabilityExists}}
 
         <tr>
-            <td class="credSetOrgLabel"></td>
-            <td class="credSetConstLabel">P value</td>
+            {{^posteriorProbabilityExists}}
+            <td class="credcellpval credSetOrgLabel">association</td>
+            {{/posteriorProbabilityExists}}
+            <td class="credcellpval credSetConstLabel">P value</td>
             {{#pValue}}
-            <td class="{{descr}}">{{val}}</td>
+            <td class="credcellpval {{descr}}">{{val}}</td>
             {{/pValue}}
         </tr>
 
