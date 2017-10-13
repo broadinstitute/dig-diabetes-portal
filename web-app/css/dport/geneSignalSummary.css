@@ -121,7 +121,8 @@ a.morePhenos:hover {
 }
 
 td.credSetOrgLabel{
-  width: 2px;
+    width: 2px;
+    background: #eee;
 }
 td.credSetConstLabel{
     width: 180px;

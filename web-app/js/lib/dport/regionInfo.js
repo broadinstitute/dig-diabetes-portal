@@ -491,7 +491,7 @@ var mpgSoftware = mpgSoftware || {};
                     var retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
                         "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
                         "<div class='credSetLine'><a onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
-                        $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"dom\",\""+assayIdList+"\")' href='#'>"+
+                        $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\",\""+assayIdList+"\")' href='#'>"+
                         "Tissues with overlapping enhancer regions</a></div>";
                     if (additionalParameters.portalTypeString==='ibd'){
                         retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
@@ -502,7 +502,7 @@ var mpgSoftware = mpgSoftware || {};
                 },
                 container: 'body',
                 placement: 'top',
-                trigger: 'hover'
+                trigger: 'focus click'
             });
         };
 
@@ -529,8 +529,13 @@ var mpgSoftware = mpgSoftware || {};
             // var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
             // var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
             var sortedVariants = dataVariants;
-            _.forEach(primaryTissueObject.sortedTissues,function(tissueKey){
-                var lineToAdd = "<tr><td></td><td>"+tissueKey+"</td>";
+            var countOfTissues = primaryTissueObject.sortedTissues.length;
+            _.forEach(primaryTissueObject.sortedTissues,function(tissueKey, index){
+                var lineToAdd = "<tr>";
+                if ( index === 0){
+                    lineToAdd += "<td class='credSetOrgLabel' style='vertical-align: middle' rowspan="+countOfTissues+">tissue</td>"
+                }
+                lineToAdd += "<td>"+tissueKey+"</td>";
                 _.forEach(sortedVariants,function(variantRec){
                     lineToAdd+=writeOneLineOfTheHeatMap(primaryTissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec)
                 });

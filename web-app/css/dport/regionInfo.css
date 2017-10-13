@@ -1,6 +1,7 @@
 .present {
-    background-color: #888888;
+    background-color: #555555;
 }
 .absent {
-    background-color: #eeeeee;
+    background-color: #ffffff;
+    border-bottom: solid 1px black !important;
 }
