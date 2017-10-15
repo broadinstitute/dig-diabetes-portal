@@ -165,13 +165,12 @@ federatedAwsProdKBV2Server = new ServerBean("Federated Prod Server", "http://ec2
 federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digAWSStrokerest02Server = new ServerBean("digawsdevnew", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
-digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
-digAwsQaKbVmOnTheAws = new ServerBean("QA KB VM on AWS", "http://ec2-34-237-63-26.compute-1.amazonaws.com/:8090/dccservices/")
-
+digawsdevnewKB = new ServerBean("digawsdevnewKB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
+digawsqanewKB = new ServerBean("digawsqanewKB", "http://ec2-34-237-63-26.compute-1.amazonaws.com/:8090/dccservices/")
+digawsibddemoKB = new ServerBean("digawsibddemoKB", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digAWSibddemoec2
+defaultRestServer = digawsdevnewKB
 
  getRestServerList = [
          digdevlocalServer,
@@ -181,9 +180,9 @@ defaultRestServer = digAWSibddemoec2
          federatedAwsStageKBV2Server,
          toddTestServer,
          digdevmarcin,
-         digAWSibddemoec2,
-         digAWSStrokerest02Server,
-         digAwsQaKbVmOnTheAws
+         digawsdevnewKB,
+         digawsqanewKB,
+         digawsibddemoKB
  ]
 
 
@@ -546,7 +545,6 @@ grails.resources.adhoc.includes = [
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitute.mpg.people.User'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
-
 
 
 diabetes.data.version = "mdv27";
