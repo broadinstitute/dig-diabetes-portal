@@ -526,7 +526,7 @@
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
-                                <p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>
+                                %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
@@ -601,7 +601,7 @@
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
-                                <p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>
+                                %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
 
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
@@ -683,10 +683,17 @@
     %{--<g:elseif test="${g.portalTypeString()?.equals('t2d')}">--}%
         %{--<p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>--}%
 <div class='dataTable'>
-<table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
+                <div id="ddd" style="width:100%; height: 80px">
+                    <div style="float:left; width: 240px">
+                        Click on a variant ID to see more information, and to access a link for tissue selection.
+                         <div class='glyphicon glyphicon glyphicon-arrow-right'></div>
+                    </div>
+                </div>
+<table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 10px; margin-bottom: 30px">
     <thead>
         <tr>
-            <th  class="credSetOrgLabel" colspan=2></th>
+            <th  class="credSetOrgLabel" colspan=2>
+            </th>
             {{#variants}}
                 <th class="niceHeadersThatAreLinks headersWithVarIds" style="background:rgba(0,0,0,0)"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
