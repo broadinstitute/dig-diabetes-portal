@@ -894,11 +894,14 @@ var mpgSoftware = mpgSoftware || {};
                 (makeDynamic==='dynamic')){
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
             }
-            toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this,'"+lzParameters.domId1+"','"+lzParameters.assayIdList+"');\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
             toolTipText += "<a onClick=\"mpgSoftware.locusZoom.expandedView(this,'"+lzParameters.domId1+"','"+lzParameters.assayIdList+"');\" style=\"cursor: pointer;\">Expanded view</a><br>";
+
             if (typeof pageVars.excludeLdIndexVariantReset !== 'undefined'){
                 if (pageVars.excludeLdIndexVariantReset === false){
+                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this,'"+lzParameters.domId1+"','"+lzParameters.assayIdList+"');\" style=\"cursor: pointer;\">Tissues with overlapping enhancer regions</a><br>";
                     toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
+                } else {
+                    toolTipText += "<a onClick=\"mpgSoftware.locusZoom.replaceTissues(this,'"+lzParameters.domId1+"','"+lzParameters.assayIdList+"');\" style=\"cursor: pointer;\">Display tissues with overlapping regions</a><br>";
                 }
             } else {
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.changeLDReference('{{" + phenotype + ":id}}', '" + phenotype + "', '" + dataSetName + "');\" style=\"cursor: pointer;\">Make LD Reference</a>";
@@ -1163,16 +1166,17 @@ var mpgSoftware = mpgSoftware || {};
             });
             LocusZoom.getToolTipData(myThis).deselect();
             var chromosome;
-            if (_.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).indexOf(":")>-1) { // old LZ format for variant names
-              chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
+            var varId = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)});
+            if (varId.indexOf(":")>-1) { // old LZ format for variant names
+              chromosome =varId.split(":")[0];
             } else {
-	      chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split("_")[0];
+	            chromosome = varId.split("_")[0];
             }
 
             replaceTissuesWithOverlappingIbdRegions( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
-                                                   chromosome,domId,assayIdList );
+                                                   chromosome,domId,assayIdList, varId );
         }
-        var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome,plotDomId,assayIdList){
+        var replaceTissuesWithOverlappingIbdRegions = function(position, chromosome,plotDomId,assayIdList,varId){
             var callingData = {};
             callingData.POS = position;
             callingData.CHROM = chromosome;
@@ -1192,21 +1196,26 @@ var mpgSoftware = mpgSoftware || {};
                 d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
                 panel.parent.removePanel(panel.id);
             });
-            retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData)
+            retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData);
+            if (( typeof varId !== 'undefined')&&
+                (varId.length>0)){
+                mpgSoftware.regionInfo.markHeaderAsCurrentlyDisplayed(varId);
+                mpgSoftware.locusZoom.changeCurrentReference(varId);
+            }
         };
 
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId,plotDomId,assayIdList){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
-                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList);
+                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList,varId);
             }
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
-            mpgSoftware.regionInfo.markHeaderAsCurrentlyDisplayed(varId);
+
         };
         var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId,plotDomId,assayIdList){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
-                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList);
+                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList,varId);
             }
         };
 
@@ -1221,13 +1230,19 @@ var mpgSoftware = mpgSoftware || {};
             locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
         }
 
-        function changeLDReference(variantId, phenotype,datasetName) {
-            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
-            // locusZoomPlot[currentLzPlotKey].panels[phenotype+datasetName].data_layers.positions.destroyAllTooltips();
+
+        function changeCurrentReference(variantId) {
             var newStateObject = {
                 ldrefvar: variantId
             };
             locusZoomPlot[currentLzPlotKey].applyState(newStateObject);
+        }
+
+
+
+        function changeLDReference(variantId, phenotype,datasetName) {
+            locusZoomPlot[currentLzPlotKey].curtain.show('Loading...', {'text-align': 'center'});
+            changeCurrentReference(variantId);
         }
 
         var buildAssociationSource = function(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic){
@@ -1639,7 +1654,8 @@ var mpgSoftware = mpgSoftware || {};
         plotAlreadyExists: plotAlreadyExists,
         locusZoomPlot:locusZoomPlot,
         replaceTissuesWithOverlappingEnhancersFromVarId:replaceTissuesWithOverlappingEnhancersFromVarId,
-        replaceTissuesWithOverlappingIbdRegionsVarId:replaceTissuesWithOverlappingIbdRegionsVarId
+        replaceTissuesWithOverlappingIbdRegionsVarId:replaceTissuesWithOverlappingIbdRegionsVarId,
+        changeCurrentReference:changeCurrentReference
        // broadAssociationSource:broadAssociationSource
     }
 
