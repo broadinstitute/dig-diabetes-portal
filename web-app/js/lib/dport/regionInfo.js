@@ -462,6 +462,12 @@ var mpgSoftware = mpgSoftware || {};
 
             });
         };
+        var removeAllCredSetHeaderPopUpsUnconditionally  =  function () {
+            $('[data-toggle="popover"]').each(function() {
+                    $(this).popover('hide');
+            });
+        };
+
         var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
             drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
             $(".credibleSetTableGoesHere").empty().append(
@@ -506,7 +512,14 @@ var mpgSoftware = mpgSoftware || {};
             $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
                 html : true,
                 title: function() {
-                    var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"/"+$(this).attr('defeffa');
+                    var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+
+                    '<div onclick="mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps()" class="close">&times;</div>';
+                        //'<div  class="close">&times;</div>'+
+                        //'<a href="#" class="close" data-dismiss="alert">&times;</a>'+
+                        //'<button type="button" id="close" class="close" onclick="function(){alert(6);'+
+                        //'$(".credibleSetTableGoesHere th.niceHeadersThatAreLinks").popover("hide");)' +
+                        //'">&times;</button>';
+
                     return var_id;
                 },
                 content: function() {
@@ -529,7 +542,10 @@ var mpgSoftware = mpgSoftware || {};
                 container: 'body',
                 placement: 'bottom',
                 trigger: 'focus click'
-            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
+            }).on('show.bs.popover', removeAllCredSetHeaderPopUps )
+            //.on("click", function(){
+            //    $(this).parents(".popover").popover('hide');
+            //});
         };
 
         var displayAParticularCredibleSet = function(tissueGrid, dataVariants, assayIdList, setDefaultButton ){

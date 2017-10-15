@@ -1536,7 +1536,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 mpgSoftware.locusZoom.rescaleSVG();
             }
         });
-        $('#rSpinner').hide()
+        $('#rSpinner').hide();
         mpgSoftware.geneSignalSummary.displayVariantResultsTable(phenotypeName);
         $("#xpropertiesModal").on("shown.bs.modal", function () {
             $("#xpropertiesModal li a").click();

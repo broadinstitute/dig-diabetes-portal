@@ -720,6 +720,7 @@ class WidgetService {
                 } else if (dataField == "metadata_rootEffect_Allele" ){
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
+                    dataJSONObject.scoreTestStat = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else if (dataField.contains("CREDIBLE_SET_ID") ){
                     dataJSONObject.remove(dataField);
@@ -734,7 +735,7 @@ class WidgetService {
             }
             JSONArray emptyArrays = new JSONArray()
             for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
-            dataJSONObject.scoreTestStat = emptyArrays
+//            dataJSONObject.scoreTestStat = emptyArrays
             dataJSONObject.analysis = emptyArrays
             dataJSONObject.refAlleleFreq = emptyArrays
 
