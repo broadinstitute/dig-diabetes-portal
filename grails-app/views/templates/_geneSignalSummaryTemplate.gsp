@@ -683,7 +683,7 @@
     %{--<g:elseif test="${g.portalTypeString()?.equals('t2d')}">--}%
         %{--<p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>--}%
 <div class='dataTable'>
-                <div id="ddd" style="width:100%; height: 80px">
+                <div id="ddd" style="width:100%; height: 60px">
                     <div style="float:left; width: 240px">
                         Click on a variant ID to see more information, and to access a link for tissue selection.
                          <div class='glyphicon glyphicon glyphicon-arrow-right'></div>

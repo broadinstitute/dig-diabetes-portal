@@ -978,6 +978,14 @@ var mpgSoftware = mpgSoftware || {};
                                         values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"]
                                     }
                                 },
+                                {
+                                    scale_function: "categorical_bin",
+                                    field: phenotype + ":scoreTestStat",
+                                    parameters: {
+                                        categories: ["1","2","3","4","5"],
+                                        values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
+                                    }
+                                },
                     "#c8c8c8"]
                     break;
                 case 2:
@@ -988,6 +996,14 @@ var mpgSoftware = mpgSoftware || {};
                             parameters: {
                                 categories: ["1","2","3","4","5"],
                                 values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
+                            }
+                        },
+                        {
+                            scale_function: "if",
+                            field: "ld:isrefvar",
+                            parameters: {
+                                field_value: 1,
+                                then: "#9632b8"
                             }
                         },
                         "#B8B8B8"

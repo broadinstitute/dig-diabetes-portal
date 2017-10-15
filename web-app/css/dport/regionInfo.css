@@ -162,6 +162,7 @@ th.niceHeadersThatAreLinks{
 }
 .credibleSetTableGoesHere th.niceHeadersThatAreLinks.active{
     font-weight: bold;
+    color: #9632b8;
 }
 
 
