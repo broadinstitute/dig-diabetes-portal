@@ -1543,21 +1543,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
         $('a[href="#highImpactVariantTabHolder"]').on('shown.bs.tab', function (e) {
             $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
-            $('[data-toggle="popover"]').each(function() {
-                $(this).popover('hide');
-            });
+            mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
         });
         $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
             $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
-            $('[data-toggle="popover"]').each(function() {
-                $(this).popover('hide');
-            });
+            mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
         });
         $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
-            $('[data-toggle="popover"]').each(function() {
-                $(this).popover('hide');
-            });
-        });
+            mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
+         });
 
         if (!commonSectionShouldComeFirst) {
             $('.commonVariantChooser').removeClass('active');

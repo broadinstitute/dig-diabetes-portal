@@ -1198,9 +1198,10 @@ var mpgSoftware = mpgSoftware || {};
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId,plotDomId,assayIdList){
             var variantParts = varId.split("_");
             if (variantParts.length == 4){
-                //var lzPlot = mpgSoftware.locusZoom.locusZoomPlot[getNewDefaultLzPlot()];
                 replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList);
             }
+            mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
+            mpgSoftware.regionInfo.markHeaderAsCurrentlyDisplayed(varId);
         };
         var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId,plotDomId,assayIdList){
             var variantParts = varId.split("_");

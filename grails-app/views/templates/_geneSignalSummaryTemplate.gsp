@@ -678,10 +678,9 @@
 <table id="overlapTable" class="table table-striped dk-search-result dataTable no-footer" style="border-collapse: collapse; width: 100%; margin-top: 100px; margin-bottom: 30px">
     <thead>
         <tr>
-            <th  class="credSetOrgLabel"></th>
-            <th class="credSetConstLabel"></th>
+            <th  class="credSetOrgLabel" colspan=2></th>
             {{#variants}}
-                <th class="niceHeaders niceHeadersThatAreLinks" style="background:rgba(0,0,0,0); text-decoration: underline;color: blue"
+                <th class="niceHeadersThatAreLinks headersWithVarIds" style="background:rgba(0,0,0,0)"
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}" varid='{{name}}' data-toggle="popover">{{name}}</th>
             {{/variants}}
