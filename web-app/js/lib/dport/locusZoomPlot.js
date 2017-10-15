@@ -1212,6 +1212,11 @@ var mpgSoftware = mpgSoftware || {};
                 d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
                 panel.parent.removePanel(panel.id);
             });
+            $('#spinner').show();
+            setTimeout(
+                function() {
+                    $('#spinner').hide();
+                }, 2000);
             retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData);
             if (( typeof varId !== 'undefined')&&
                 (varId.length>0)){
