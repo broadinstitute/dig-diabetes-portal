@@ -440,6 +440,28 @@ var mpgSoftware = mpgSoftware || {};
             });
             return chosenElementTypes;
         };
+        var markHeaderAsCurrentlyDisplayed = function(varId){
+            $('#overlapTable th.headersWithVarIds').removeClass('active');
+            if (( typeof varId !== 'undefined') &&
+                (varId.length>1)){
+                var allHeaders = $('#overlapTable th.headersWithVarIds');
+                _.forEach(allHeaders,function(o){
+                    if ($(o).attr('varid')===varId){
+                        $(o).addClass('active');
+                    }
+                });
+            }
+
+        };
+        var removeAllCredSetHeaderPopUps  =  function () {
+            var immedHeader = this;
+            $('[data-toggle="popover"]').each(function() {
+                if (this!==immedHeader){
+                    $(this).popover('hide');
+                }
+
+            });
+        };
         var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
             drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
             $(".credibleSetTableGoesHere").empty().append(
@@ -481,7 +503,7 @@ var mpgSoftware = mpgSoftware || {};
                 placement: 'bottom',
                 trigger: 'hover'
             });
-            $('.credibleSetTableGoesHere th.niceHeaders').popover({
+            $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
                 html : true,
                 title: function() {
                     var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"/"+$(this).attr('defeffa');
@@ -507,15 +529,7 @@ var mpgSoftware = mpgSoftware || {};
                 container: 'body',
                 placement: 'bottom',
                 trigger: 'focus click'
-            }).on('show.bs.popover', function () {
-                var that = this;
-                $('[data-toggle="popover"]').each(function() {
-                    if (this!==that){
-                        $(this).popover('hide');
-                    }
-
-                });
-            });
+            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
         };
 
         var displayAParticularCredibleSet = function(tissueGrid, dataVariants, assayIdList, setDefaultButton ){
@@ -701,7 +715,9 @@ var mpgSoftware = mpgSoftware || {};
             setSampleGroupsWithCredibleSetNames:setSampleGroupsWithCredibleSetNames,
             getSampleGroupsWithCredibleSetNames:getSampleGroupsWithCredibleSetNames,
             redisplayTheCredibleSetHeatMap:redisplayTheCredibleSetHeatMap,
-            includeRecordBasedOnUserChoice:includeRecordBasedOnUserChoice
+            includeRecordBasedOnUserChoice:includeRecordBasedOnUserChoice,
+            removeAllCredSetHeaderPopUps:removeAllCredSetHeaderPopUps,
+            markHeaderAsCurrentlyDisplayed:markHeaderAsCurrentlyDisplayed
         }
 
     })();
