@@ -453,13 +453,13 @@
                 {{#credibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
-                        <div class="col-xs-12">
+                        <div class="col-sm-12">
                             <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
                                 <p>&nbsp;</p>
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                <div class="col-sm-2 credSetWindowSummary" align="right">
-                                Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
-                                </div>
+                                    <div class="col-sm-2 credSetWindowSummary" align="right">
+                                    Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
+                                    </div>
                                     <div class="col-sm-2 credSetWindowSummary">
                                         Start position
                                         <input type="text" name="startPosition" class="credSetStartPos">
