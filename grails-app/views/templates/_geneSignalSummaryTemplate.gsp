@@ -453,13 +453,13 @@
                 {{#credibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
-                        <div class="col-xs-12">
+                        <div class="col-sm-12">
                             <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
                                 <p>&nbsp;</p>
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                <div class="col-sm-2 credSetWindowSummary" align="right">
-                                Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
-                                </div>
+                                    <div class="col-sm-2 credSetWindowSummary" align="right">
+                                    Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
+                                    </div>
                                     <div class="col-sm-2 credSetWindowSummary">
                                         Start position
                                         <input type="text" name="startPosition" class="credSetStartPos">
@@ -468,17 +468,17 @@
                                         End position
                                         <input type="text" name="endPosition"  class="credSetEndPos">
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-sm-2">
                                           <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
                                           Go
                                           </button>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-sm-4">
                                         <div class="row clearfix">
-                                            <div class="col-md-3 credSetWindowSummary">
+                                            <div class="col-sm-2 credSetWindowSummary">
                                                 Genes in window
                                             </div>
-                                            <div class="col-md-9 regionParams">
+                                            <div class="col-sm-10 regionParams">
                                                 <div class="matchedGenesGoHere"></div>
                                             </div>
                                         </div>
@@ -542,25 +542,25 @@
                                 <p>&nbsp;</p>
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
                                 <div class="col-sm-2 credSetWindowSummary" align="right"> Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/> </div> 
-                                    <div class="col-md-3 credSetWindowSummary">
+                                    <div class="col-sm-2 credSetWindowSummary">
                                         Start position
                                         <input type="text" name="startPosition" class="credSetStartPos">
                                     </div>
-                                    <div class="col-sm-3 credSetWindowSummary">
+                                    <div class="col-sm-2 credSetWindowSummary">
                                         End position
                                         <input type="text" name="endPosition"  class="credSetEndPos">
                                     </div>
-                                    <div class="col-md-2">
+                                    <div class="col-sm-2">
                                           <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
-                                          Reset range
+                                          Go
                                           </button>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-sm-4">
                                         <div class="row clearfix">
-                                            <div class="col-md-3 credSetWindowSummary">
+                                            <div class="col-sm-2 credSetWindowSummary">
                                                 Genes in window
                                             </div>
-                                            <div class="col-md-9 regionParams">
+                                            <div class="col-sm-10 regionParams">
                                                 <div class="matchedGenesGoHere"></div>
                                             </div>
                                         </div>
