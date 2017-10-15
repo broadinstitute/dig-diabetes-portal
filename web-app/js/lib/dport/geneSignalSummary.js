@@ -1344,6 +1344,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
             renderData.staticDataExists = false;
+            renderData.dynamicDataExists = [];
+            renderData.dynamic = [];
             renderData.static = [];
             $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         }
@@ -1541,12 +1543,20 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
         $('a[href="#highImpactVariantTabHolder"]').on('shown.bs.tab', function (e) {
             $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
+            $('[data-toggle="popover"]').each(function() {
+                $(this).popover('hide');
+            });
         });
         $('a[href="#commonVariantTabHolder"]').on('shown.bs.tab', function (e) {
             $('#commonVariantsLocationHolder').dataTable().fnAdjustColumnSizing();
+            $('[data-toggle="popover"]').each(function() {
+                $(this).popover('hide');
+            });
         });
         $('a[href="#credibleSetTabHolder"]').on('shown.bs.tab', function (e) {
-            //$('#allVariantsTemplateHolder').dataTable().fnAdjustColumnSizing();
+            $('[data-toggle="popover"]').each(function() {
+                $(this).popover('hide');
+            });
         });
 
         if (!commonSectionShouldComeFirst) {

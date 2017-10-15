@@ -221,9 +221,7 @@
                        </ul>
                 </li>
                 {{/atacDataExists}}
-                <li style="margin: auto;">
-                    <b>Region: <span id="lzRegion"></span></b>
-                </li>
+
             </ul>
 
             <div class="accordion-inner">
@@ -459,18 +457,17 @@
                             <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
                                 <p>&nbsp;</p>
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                <div class="col-sm-2 credSetWindowSummary" align="right">Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/></div>
-                                    <div class="col-sm-2 credSetWindowSummary">
+                                    <div class="col-md-3 credSetWindowSummary">
                                         Start position
                                         <input type="text" name="startPosition" class="credSetStartPos">
                                     </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
+                                    <div class="col-md-3 credSetWindowSummary">
                                         End position
-                                        <input type="text" name="endPosition"  class="credSetEndPos">
+                                        <input type="text" name="endPosition"  class="credSetEndPos">&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
                                     </div>
                                     <div class="col-md-2">
                                           <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
-                                          Go
+                                          Reset range
                                           </button>
                                     </div>
                                     <div class="col-md-4">
@@ -491,10 +488,9 @@
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
-                                         <div class="col-sm-2"></div>
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">Select tissues:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                                <label for="credSetSelectorChoice">Tissue selector:&nbsp;</label>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     <option value="1_Active_TSS">Active transcription start site
                                                     <option value="2_Weak_TSS">Weak transcription start site</option>
@@ -509,12 +505,12 @@
                                                     <option value="16_Repressed_polycomb">Repressed polycomb</option>
                                                     <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
                                                     <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
-                                                </select>
+                                                </select>&nbsp;<g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                              </span>
 
                                          </div>
-                                         <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                         <div class="col-sm-6">
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissues</button>
                                              %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
                                                 %{--<label for="credSetDisplayChoice">data display:</label>--}%
                                                  %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
@@ -526,8 +522,6 @@
                                          <div class="col-sm-2"></div>
                                     </div>
                                 </div>
-                                <p>&nbsp;</p>
-                                <div><p><g:message code="geneSignalSummary.variantLink.help"></g:message></p></div>
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
@@ -539,7 +533,7 @@
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message>
+                            <div class="variantCategoryHolder">This tab shows the 10 variants most significantly associated with the selected phenotype.
                                 <p>&nbsp;</p>
                                 <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
                                     <div class="col-md-3 credSetWindowSummary">
@@ -552,7 +546,7 @@
                                     </div>
                                     <div class="col-md-2">
                                           <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
-                                          Go
+                                          Reset range
                                           </button>
                                     </div>
                                     <div class="col-md-4">
@@ -576,7 +570,7 @@
                                          <div class="col-sm-2"></div>
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">Select tissues:&nbsp;</label>
+                                                <label for="credSetSelectorChoice">Tissue selection:</label>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     <option value="1_Active_TSS">Active transcription start site
                                                     <option value="2_Weak_TSS">Weak transcription start site</option>
@@ -595,14 +589,11 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Refresh tissues</button>
                                          </div>
                                          <div class="col-sm-2"></div>
                                     </div>
                                 </div>
-
-                                <p>&nbsp;</p>
-                                <div><p><g:message code="geneSignalSummary.variantLink.help"></g:message></p></div>
 
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>

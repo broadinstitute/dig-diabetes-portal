@@ -167,6 +167,8 @@ toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digAWSStrokerest02Server = new ServerBean("digawsdevnew", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
 digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
+digAwsQaKbVmOnTheAws = new ServerBean("QA KB VM on AWS", "http://ec2-34-237-63-26.compute-1.amazonaws.com/:8090/dccservices/")
+
 
 // this will be your default
 defaultRestServer = digAWSibddemoec2
@@ -180,7 +182,8 @@ defaultRestServer = digAWSibddemoec2
          toddTestServer,
          digdevmarcin,
          digAWSibddemoec2,
-         digAWSStrokerest02Server
+         digAWSStrokerest02Server,
+         digAwsQaKbVmOnTheAws
  ]
 
 

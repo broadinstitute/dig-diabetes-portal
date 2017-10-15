@@ -507,6 +507,14 @@ var mpgSoftware = mpgSoftware || {};
                 container: 'body',
                 placement: 'bottom',
                 trigger: 'focus click'
+            }).on('show.bs.popover', function () {
+                var that = this;
+                $('[data-toggle="popover"]').each(function() {
+                    if (this!==that){
+                        $(this).popover('hide');
+                    }
+
+                });
             });
         };
 
