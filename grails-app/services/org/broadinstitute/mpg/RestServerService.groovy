@@ -381,6 +381,7 @@ class RestServerService {
             this.burdenServerList.add(grailsApplication.config.burdenRestServerPassThrough);
             this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheKb);
             this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb);
+            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb_fed);
         }
 
         return this.burdenServerList;

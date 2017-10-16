@@ -151,6 +151,7 @@ burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "h
 burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenStraightFromTheKb =  new ServerBean("Burden straight from KB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
+burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 
 digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
 digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
@@ -166,7 +167,9 @@ federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://e
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("digawsdevnewKB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
+digawsdevnewKB_fed = new ServerBean("digawsdevnewKB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("digawsqanewKB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+digawsqanewKB_fed = new ServerBean("digawsqanewKB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsibddemoKB = new ServerBean("digawsibddemoKB", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
@@ -181,7 +184,9 @@ defaultRestServer = digawsdevnewKB
          toddTestServer,
          digdevmarcin,
          digawsdevnewKB,
+         digawsdevnewKB_fed,
          digawsqanewKB,
+         digawsqanewKB_fed,
          digawsibddemoKB
  ]
 
