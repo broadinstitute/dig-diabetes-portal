@@ -166,7 +166,7 @@ federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://e
 toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("digawsdevnewKB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
-digawsqanewKB = new ServerBean("digawsqanewKB", "http://ec2-34-237-63-26.compute-1.amazonaws.com/:8090/dccservices/")
+digawsqanewKB = new ServerBean("digawsqanewKB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsibddemoKB = new ServerBean("digawsibddemoKB", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
