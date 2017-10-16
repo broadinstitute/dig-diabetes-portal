@@ -77,7 +77,7 @@
                     </div>
             </td>
 
-
+            <td class="access" style="color:{{accessColor}}">{{access}} </td>
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
             <td class="datatype">{{technology}}</td>
