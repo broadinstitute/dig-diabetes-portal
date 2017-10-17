@@ -304,7 +304,7 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://www.type2diabetesgenetics.org"
+      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
@@ -314,7 +314,9 @@ environments {
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
+
+//        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
+
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
@@ -331,7 +333,7 @@ environments {
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
-        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
@@ -573,7 +575,7 @@ portal.data.epigenetic.datasetList.abbreviation.map = ["t2d": "[3]",
                                                        "stroke": "[3]",
                                                        "mi" : "[3]",
                                                        "ibd": "[1,2]"]
-portal.data.credibleSet.datasetList.abbreviation.map = ["t2d": "GWAS_DIAGRAM_mdv27",
+portal.data.credibleSet.datasetList.abbreviation.map = ["t2d": "GWAS_DIAGRAM_mdv28",
                                                        "stroke": "GWAS_DIAGRAM_mdv70",
                                                        "mi" : "GWAS_AFGen_mdv91",
                                                        "ibd": "GWAS_DIAGRAM_mdv80"]
