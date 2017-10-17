@@ -142,7 +142,7 @@ burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207
 burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
 burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
@@ -304,7 +304,7 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-      grails.serverURL = "http://www.type2diabetesgenetics.org"
+//      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
@@ -333,7 +333,7 @@ environments {
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
-//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
