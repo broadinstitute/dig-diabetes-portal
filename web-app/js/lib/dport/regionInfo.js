@@ -171,7 +171,9 @@ var mpgSoftware = mpgSoftware || {};
                 newRenderData.const.spliceSite.push(oldRenderData.const.spliceSite[i]);
                 newRenderData.const.utr.push(oldRenderData.const.utr[i]);
                 newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
-                newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
+                if (typeof oldRenderData.const.tfBindingMotif[i]!=='undefined') {// sometimes we don't have these
+                    newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
+                }
                 newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
                 if (typeof oldRenderData.const.posteriorProbability[i]!=='undefined'){// sometimes we don't have these
                     newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
