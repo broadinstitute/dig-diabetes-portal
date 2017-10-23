@@ -153,7 +153,7 @@
 <p><g:message code="informational.data.exptsumm.70KforT2D"></g:message></p>
 
 
-<h4>Accessing 70KforT2D GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing 70KforT2D GWAS data</h4>
 
 <p><g:message code="informational.data.accessing.70KforT2D"></g:message></p>
 

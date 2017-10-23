@@ -352,27 +352,74 @@ var UTILS = {
         }
     },
     // phenotypesToOmit is an array of the phenotype keys that should not be included
-    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit) { // help text for each row
+    fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,portaltype) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
+            //var portaltype =
+           // var portalType = g.portalTypeString();
             options.empty();
             var groupList = dataSetJson.dataset;
 
-            if ((typeof includeDefault !== 'undefined') &&
-                (includeDefault)){
-                options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
-            }
+            // if ((typeof includeDefault !== 'undefined') &&
+            //     (includeDefault)){
+            //     options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
+            // }
 
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
             var keys = Object.keys(groupList);
-            if (keys.indexOf("GLYCEMIC")>-1){
-                keys.splice(keys.indexOf("GLYCEMIC"), 1);
-                keys.unshift("GLYCEMIC");
+            if(portaltype == "t2d"){
+                if (keys.indexOf("GLYCEMIC")>-1){
+                    keys.splice(keys.indexOf("GLYCEMIC"), 1);
+                    keys.unshift("GLYCEMIC");
+                    //$('#datasetDependent').prop( "disabled", false );
+                    //var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
+                    try{
+                        mpgSoftware.variantWF.retrieveDatasets("T2D", 'dependent');
+                    }catch(e){
+                        console.log("YO",e);
+                    }
+
+
+                }
+               $('#datasetDependent').prop( "disabled", false );
             }
+            else if (portaltype == "stroke"){
+            if (keys.indexOf("ISCHEMIC STROKE")>-1){
+                keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
+                keys.unshift("ISCHEMIC STROKE");
+                try{
+                    mpgSoftware.variantWF.retrieveDatasets("allstroke", 'dependent');
+                }catch(e){
+                    console.log("retrievedatasets not readable property",e);
+                }
+
+            }
+                $('#datasetDependent').prop( "disabled", false );
+
+        }
+            else if (portaltype == "ibd"){
+                if (keys.indexOf("INFLAMMATORY BOWEL")>-1){
+                    keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
+                    keys.unshift("INFLAMMATORY BOWEL");
+                }
+                $('#datasetDependent').prop( "disabled", false );
+            }
+            else if (portaltype == "mi"){
+                if (keys.indexOf("CARDIOVASCULAR DISEASE")>=-1){
+                    keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
+                    keys.splice(keys.indexOf("LIPIDS"), 2);
+                    keys.unshift("GLYCEMIC");
+                    keys.unshift("LIPIDS");
+                    keys.unshift("ANTHROPOMETRIC");
+                    keys.unshift("CARDIOVASCULAR DISEASE");
+                }
+                $('#datasetDependent').prop( "disabled", false );
+            }
+
 
             // if the OTHER key is defined, then move it to the bottom of the list
             // currently, this should only appear on the variant search page, and will be going away soon
@@ -383,10 +430,18 @@ var UTILS = {
                 keys.push('OTHER');
             }
 
+            //String portalType = g.portalTypeString() as String
+
             for (var x = 0; x < keys.length; x++) {
                 var key = keys[x];
                 if (groupList.hasOwnProperty(key)) {
                     var groupContents = groupList[key];
+                    // if(key === "CARDIOVASCULAR DISEASE"){
+                    //     groupContents.push(["CAD","Coronary artery disease"]);
+                    // }
+                    // if(key === "LIPIDS"){
+                    //     phenotypesToOmit = ["CAD", "Coronary artery disease"];
+                    // }
                     options.append("<optgroup label='"+key+"'>");
                     for (var j = 0; j < groupContents.length; j++) {
                         if(_.includes(phenotypesToOmit, groupContents[j][0])) {
@@ -905,7 +960,73 @@ var UTILS = {
             }
         });
         return toReturn;
+    },
+
+    processChromatinStateData: function(data){
+        var renderData = {'recordsExist': false};
+        if ((typeof data !== 'undefined') &&
+            (typeof data.variants !== 'undefined') &&
+            (!data.variants.is_error)){
+            var rawSortedData = _.sortBy(data.variants.variants,[function(item) {
+                return parseInt(item.element.split('_')[0], 10);
+            }, function(item) {
+                return item.source;
+            }]);
+            var sortedData = [];
+            _.forEach(rawSortedData,function(o){
+                sortedData.push({'CHROM':o.CHROM,
+                    'START':o.START,
+                    'STOP':o.STOP,
+                    'source':o.source_trans,
+                    'element':o.element_trans
+                })
+            })
+            var uniqueElements = _.uniqBy(sortedData,function(item) {
+                return item.element;
+            });
+            var uniqueTissues = _.uniqBy(sortedData,function(item) {
+                return item.source;
+            });
+            var dataMatrix = [];
+            for (var i = 0 ; i < uniqueTissues.length ; i++ ) {
+                var currentRow = [];
+                for (var j = 0 ; j < uniqueElements.length ; j++){
+
+                    if (_.find(sortedData, {source:uniqueTissues[i].source,element:uniqueElements[j].element})){
+                        currentRow.push(1);
+                    } else {
+                        currentRow.push(0);
+                    }
+                }
+                dataMatrix.push(currentRow);
+            }
+            var arrayOfArraysGroupedByTissue = [];
+            for (var j = 0 ; j < uniqueTissues.length ; j++){
+
+                var arrayGroupedByTissue = _.filter(sortedData, {source:uniqueTissues[j].source});
+                arrayOfArraysGroupedByTissue.push(arrayGroupedByTissue);
+            }
+            var allUniqueElementNames = _.map(uniqueElements,'element');
+            var allUniqueTissueNames = _.map(uniqueTissues,'source');
+            uniqueElements.push({element:'ALL'});
+            uniqueTissues.push({source:'ALL'});
+
+            renderData = {  'recordsExist': (sortedData.length>1),
+                'indivRecords':sortedData,
+                'uniqueElements':allUniqueElementNames,
+                'uniqueElementsPlusAll':uniqueElements,
+                'uniqueTissues':allUniqueTissueNames,
+                'uniqueTissuesPlusAll':uniqueTissues,
+                'dataMatrix':dataMatrix,
+                'arrayOfArraysGroupedByTissue':arrayOfArraysGroupedByTissue,
+                'regionStart':data.variants.region_start,
+                'regionEnd':data.variants.region_end
+            };
+
+        }
+        return renderData;
     }
+
 
 
 };

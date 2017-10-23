@@ -42,7 +42,7 @@
 <p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_CAMP_Phase1_2017_0207.pdf">download PDF</a>)</p>
 <p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_T2DKP_CAMP_QC_Results.pdf">download PDF</a>)</p>
 
-<h4>Accessing CAMP data in the T2D Knowledge Portal</h4>
+<h4>Accessing CAMP GWAS data</h4>
 <p><g:message code="informational.data.accessing.CAMP"></g:message></p>
 
 </script>

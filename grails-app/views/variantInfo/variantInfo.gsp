@@ -73,6 +73,7 @@
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
+                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSetReadable}',
                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
@@ -143,9 +144,9 @@
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||
-                        g.portalTypeString()?.equals('t2d')}">
+                        g.portalTypeString()?.equals('t2d')||
 
-                        %{--g.portalTypeString()?.equals('mi')}">--}%
+                        g.portalTypeString()?.equals('mi')}">
 
 
 

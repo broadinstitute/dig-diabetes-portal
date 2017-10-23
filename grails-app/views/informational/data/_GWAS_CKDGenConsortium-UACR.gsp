@@ -30,7 +30,7 @@
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.CKDGen-UACR"></g:message></p>
 
-<h4>Accessing CKDGen GWAS - stratified UACR associations data in the T2D Knowledge Portal</h4>
+<h4>Accessing CKDGen GWAS - stratified UACR associations data</h4>
 <p><g:message code="informational.data.accessing.CKDGen-UACR"></g:message></p>
 
 </script>

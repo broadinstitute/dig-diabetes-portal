@@ -31,7 +31,7 @@
 
 <p><g:message code="informational.project.descr.CKDGen"></g:message></p>
 
-<h4>Accessing CKDGen GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing CKDGen GWAS data</h4>
 <p><g:message code="informational.data.accessing.CKDGen"></g:message></p>
 
 

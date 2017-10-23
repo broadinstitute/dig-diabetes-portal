@@ -2,7 +2,7 @@ svg.lz-locuszoom {
   background-color: #FFFFFF;
   border: none;
   cursor: crosshair;
-  font-family: "Lato", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 10px; }
   svg.lz-locuszoom rect.lz-clickarea {
     fill: black;
@@ -69,10 +69,6 @@ svg.lz-locuszoom {
     stroke: rgb(24, 24, 24);
     stroke-opacity: 1;
     stroke-width: 1px; }
-  svg.lz-data_layer-line-area {
-        fill: yellow;
-        stroke-width:0px;
-        }
   svg.lz-locuszoom path.lz-data_layer-line {
     stroke: rgb(24, 24, 24);
     stroke-opacity: 1;
@@ -163,7 +159,7 @@ svg.lz-locuszoom {
 
 /* ! LocusZoom HTML Styles */
 div.lz-data_layer-tooltip {
-  font-family: "Lato", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Aria, sans-serif;
   font-size: 12px;
   position: absolute;
   padding: 6px;
@@ -301,7 +297,7 @@ div.lz-data_layer-tooltip-arrow_bottom_right {
 
 .lz-curtain {
   position: absolute;
-  font-family: "Lato", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 16px;
   font-weight: 600;
   background: rgba(216, 216, 216, 0.8); }
@@ -333,7 +329,7 @@ div.lz-data_layer-tooltip-arrow_bottom_right {
 
 .lz-loader {
   position: absolute;
-  font-family: "Lato", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Aria, sans-serif;
   font-size: 12px;
   padding: 6px;
   background: #f0ebe4;
@@ -470,7 +466,7 @@ div.lz-data_layer-tooltip-arrow_bottom_right {
   margin-left: 0px; }
 
 .lz-dashboard {
-  font-family: "Lato", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Aria, sans-serif;
   font-size: 80%; }
   .lz-dashboard .lz-dashboard-title {
     margin-bottom: 0.3em; }
@@ -483,7 +479,7 @@ div.lz-data_layer-tooltip-arrow_bottom_right {
       font-weight: normal; }
 
 div.lz-dashboard-menu {
-  font-family: "Lato", Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Aria, sans-serif;
   font-size: 12px;
   position: absolute;
   padding: 6px;

@@ -18,7 +18,7 @@
 </div></p>
 
 
-<h4>Dataset phenotypes</h4>
+   <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
 <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
 <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
@@ -37,7 +37,7 @@
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.GLGC"></g:message></p>
 
-<h4>Accessing GLGC GWAS data in the T2D Knowledge Portal</h4>
+<h4>Accessing GLGC GWAS data</h4>
 <p><g:message code="informational.data.accessing.GLGC"></g:message></p>
 
 </script>

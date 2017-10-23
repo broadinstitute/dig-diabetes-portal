@@ -466,7 +466,7 @@
 <h4>Overview of analysis</h4>
 <p><g:message code="informational.data.overview.17K"></g:message></p>
 <p>&nbsp;</p>
-<h4>Accessing 17K exome sequence analysis data in the T2D Knowledge Portal</h4>
+<h4>Accessing 17K exome sequence analysis data</h4>
 <p><g:message code="informational.data.accessing.17K"></g:message></p>
 
 </script>

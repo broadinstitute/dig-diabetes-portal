@@ -13,11 +13,11 @@
     <h4>Dataset phenotypes</h4>
     <ul>
     <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
-        <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
-         <li><g:message code="informational.shared.traits.toast_Other_determined"></g:message></li>
-          <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Other_determined"></g:message></li>
+    <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
     </ul>
 
 <h4>Dataset subjects</h4>
@@ -85,7 +85,7 @@
     <p><g:message code="aboutTheData.stroke.datasets.CADISP.project"></g:message></p>
 
 
-<h4>Accessing CADISP 2015 data in the Cerebrovascular Disease Knowledge Portal</h4>
+<h4>Accessing CADISP 2015 data</h4>
 
 <p><g:message code="informational.data.accessing.CADISP_2015"></g:message></p>
 </div>

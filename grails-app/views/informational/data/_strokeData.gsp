@@ -558,7 +558,10 @@ p.dataset-name {
             <thead>
             <tr>
                 <th>Dataset</th>
-                <th>Access</th>
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                 <th>Access</th>
+                 </g:if>
+
                 <th>Samples</th>
                 <th>Ancestry</th>
                 <th>Data type</th>
@@ -585,7 +588,10 @@ p.dataset-name {
                     </div>
             </td>
             </div>
-            <td class="access" style="color:{{accessColor}}">{{access}} </td>
+            <g:if test="${g.portalTypeString()?.equals('t2d')}">
+    <td class="access" style="color:{{accessColor}}">{{access}} </td>
+</g:if>
+
             <td class="samples">{{size}}</td>
             <td class="ethnicity">{{ancestry}}</td>
             <td class="datatype">{{technology}}</td>

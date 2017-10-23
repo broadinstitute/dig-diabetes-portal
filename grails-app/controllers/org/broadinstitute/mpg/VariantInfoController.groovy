@@ -34,21 +34,21 @@ class VariantInfoController {
         String variantToStartWith = params.id
         String locusZoomDataset
         List <String> defaultTissues = []
-        String phenotype = "T2D"
+        String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
         switch (portalType){
             case 't2d':
                 igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'T2D'
                 break
             case 'mi':
                 igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'EOMI'
                 break
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'Stroke_all'
+                break
+            case 'ibd':
+                igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
                 break
             default:
                 break
@@ -256,12 +256,15 @@ class VariantInfoController {
 
 
     def retrieveFunctionalDataAjax (){
+        String portalType = g.portalTypeString() as String
         String chromosome = ''
         String source = ''
+        String assayName = 'notused'
         int startPos
         int endPos
         int pageStart = 0
         int pageEnd = 500
+        String assayIdList = grailsApplication.config.portal.data.epigenetic.datasetList.abbreviation.map[portalType] as String
         Boolean lzFormat =  false
         if (params.chromosome) {
             chromosome = params.chromosome
@@ -279,6 +282,10 @@ class VariantInfoController {
             source =  params.source
             log.debug "retrieveFunctionalData params.source = ${params.source}"
         }
+//        if (params.assayIdList) {
+//            log.debug "retrieveFunctionalData params.assayId = ${params.assayIdList}"
+//            assayIdList = params.assayIdList
+//        }
 
         if (params.lzFormat) {
             int formatIndicator =  Integer.parseInt(params.lzFormat)
@@ -307,7 +314,8 @@ class VariantInfoController {
         elementMapper["17_Weak_repressed_polycomb"] = [name:"Weak repressed polycomb",state_id:12]
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
-         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd, source )
+         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
+                 source, 3, params.assayIdList )
 
         if (lzFormat){
             JSONObject root = new JSONObject()
@@ -318,23 +326,30 @@ class VariantInfoController {
             rootData["end"]=new JSONArray()
             rootData["id"]=new JSONArray()
             rootData["public_id"]=new JSONArray()
+            rootData["value"]=new JSONArray()
             rootData["state_id"]=new JSONArray()
             rootData["state_name"]=new JSONArray()
             rootData["strand"]=new JSONArray()
             JSONArray sorted = dataJsonObject.variants.sort{it["START"]}
-            for (Map pval in sorted){
-               // for (Map pval in dataJsonObject.variants){
-                String element = pval["element"]
-                LinkedHashMap map = elementMapper[element]
-                String elementTrans = g.message(code: "metadata." + element, default: element)
+            for (Map pval in sorted) {
                 rootData["chromosome"].push(pval["CHROM"])
                 rootData["start"].push(pval["START"])
                 rootData["end"].push(pval["STOP"])
                 rootData["id"].push(16)
+                rootData["value"].push(pval["VALUE"])
                 rootData["public_id"].push(null)
-                rootData["state_id"].push(map.state_id)
-                rootData["state_name"].push(map.name)
                 rootData["strand"].push(null)
+                String individualAssayIdString = pval["ASSAY_ID"]
+                int individualAssayId = (individualAssayIdString) ? Integer.parseInt(individualAssayIdString) : 3
+
+                // map the Parker chromatin state information by hand
+                String element = pval["element"]
+                LinkedHashMap map = elementMapper[element]
+                String elementTrans = g.message(code: "metadata." + element, default: element)
+
+                rootData["state_id"].push(map?.state_id ?: individualAssayId)
+                rootData["state_name"].push(map?.name ?: "3_Flanking_TSS")
+
             }
             root["data"] = rootData
             dataJsonObject = root
@@ -350,6 +365,7 @@ class VariantInfoController {
                     if (pval.containsKey("source")){
                         pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
                     }
+                    pval["assayName"] = assayName
 
                 }
 
@@ -428,7 +444,7 @@ class VariantInfoController {
         while (meaningIterator.hasNext()) {
             variantDataSetMeaning = meaningIterator.next();
             if (variantDataSetMeaning.contains("DATASET_")) {
-                variantDataSet = variantDataSetMeaning.substring(variantDataSet.indexOf("DATASET_") + 8);
+                variantDataSet = variantDataSetMeaning.substring(variantDataSetMeaning.indexOf("DATASET_") + 8);
                 break;
             }
         }
@@ -463,13 +479,43 @@ class VariantInfoController {
      * @return
      */
     def sampleMetadataAjaxWithAssumedExperiment() {
+        String portalType = g.portalTypeString() as String
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
         JSONObject jsonConversionObject = new JSONObject()
         for (SampleGroup sampleGroup in sampleGroupList) {
-            if (sampleGroup.parent) {
-                jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+
+//                if (sampleGroup.parent) {
+//                    if (portalType=='mi'){
+//                        jsonConversionObject[sampleGroup.systemId] = 'ExSeq_EOMI_mdv91'
+//                    } else {
+//                        jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+//                    }
+//                }
+
+
+
+            Iterator<String> meaningIterator = sampleGroup?.getMeaningSet().iterator();
+            String variantDataSet = null;
+            while (meaningIterator.hasNext()) {
+                String variantDataSetMeaning = meaningIterator.next();
+                if (variantDataSetMeaning.contains("DATASET_")) {
+                    variantDataSet = variantDataSetMeaning.substring(variantDataSetMeaning.indexOf("DATASET_") + 8);
+                    break;
+                }
             }
+
+            if (variantDataSet == null) {
+                if (sampleGroup.parent) {
+                    jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
+                }
+            } else {
+                jsonConversionObject[sampleGroup.systemId] = variantDataSet
+            }
+
+
+
         }
+
         if (sampleGroupList.size()>0){
             SampleGroup sampleGroup = metaDataService.getSampleGroupByFromSamplesName(sampleGroupList.first().systemId)
             JSONObject jsonObject = burdenService.convertSampleGroupPropertyListToJson (sampleGroup)
