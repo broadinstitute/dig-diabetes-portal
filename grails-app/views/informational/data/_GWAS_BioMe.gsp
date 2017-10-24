@@ -38,7 +38,6 @@
     <h5><g:message code="informational.shared.headers.phase2"></g:message></h5>
     <ul>
 <li><g:message code="informational.shared.traits.creatinine"></g:message></li>
-<li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
 <li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
 <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
 <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
