@@ -1,4 +1,5 @@
 <style>
+    /*
 .dk-static-content {
     padding-top: 30px;
 }
@@ -65,19 +66,17 @@
 .dk-team-list td > p {
     padding-left: 15px;
 }
+*/
 </style>
-<div id="main">
     <div class="container dk-static-content">
         <div class="row">
             <div class="col-md-12">
-
-                <h1 align="center"><g:message code="informational.about_stroke.header"/></h1>
-                <h5 class="dk-under-header">&nbsp;</h5>
-                <h5 class="dk-under-header"><g:message code="informational.about_stroke.section_1"/></h5>
-                <h5 class="dk-under-header">&nbsp;</h5>
+                <h1><g:message code="informational.about_stroke.header"/></h1>
                 </div></div>
         <div class="row">
             <div class="col-md-9">
+                <h5 class="dk-under-header"><g:message code="informational.about_stroke.section_1"/></h5>
+
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_ISGC.header"/></h3>
 <p style="text-align:justify"><g:message code="informational.about_ISGC.section_1"/></p>
 <p style="text-align:justify"><g:message code="informational.about_ISGC.section_2"/></p>
@@ -106,4 +105,4 @@
 
             </div>
 
-        </div></div></div>
+        </div></div>

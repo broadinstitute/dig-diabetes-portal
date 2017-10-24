@@ -35,7 +35,8 @@ body {
 }
 
 a {
-    color: #052090;
+    /*color: #052090;*/
+    color: #4eadcd;
 }
 
 a.variantlink {
@@ -48,7 +49,7 @@ a.genelink {
 }
 
 h1 {
-    font-size: 44px;
+    font-size: 38px;
     font-weight: 300;
     margin-top: 0.4em;
     margin-bottom: 0.2em;
@@ -594,8 +595,12 @@ span.dotlabel {
     text-transform: capitalize;
 }
 
-#usernameDisplay {
+#usernameDisplay, #userNotificationDisplay {
     text-transform: none;
+}
+
+#userNotificationDisplay a, #userNotificationDisplay a:visited {
+    color: #4eadcd;
 }
 
 body {
@@ -805,15 +810,16 @@ div.rowTitle {
 
 .accordion-heading .accordion-toggle:before {
     font-family: 'Glyphicons Halflings'; /* essential for enabling glyphicon */
-    margin-left: -30px;
-    content: "\e114"; /* adjust as needed, taken from bootstrap.css */
+    margin-left: -5px;
+    margin-right: 10px;
+    content: "\e259"; /* e114 adjust as needed, taken from bootstrap.css */
     float: left; /* adjust as needed */
     color: grey; /* adjust as needed */
 }
 
 .accordion-heading .accordion-toggle.collapsed:before {
     /* symbol for "collapsed" panels */
-    content: "\e080"; /* adjust as needed, taken from bootstrap.css */
+    content: "\e258"; /* \e080 adjust as needed, taken from bootstrap.css */
 }
 
 .accordion div.separator {

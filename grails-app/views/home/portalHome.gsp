@@ -179,7 +179,7 @@
                                                    params="[id: 'LPA']"/>'>LPA</a>
                         </g:elseif>
                         <g:else>
-                            <a href='<g:createLink controller="gene" action="geneInfo"
+                            <a class="dk-t2d-example" href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id: 'SLC30A8']"/>'>SLC30A8</a>
                         </g:else>
                         <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
@@ -192,7 +192,7 @@
                             <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
                         </g:elseif>
                         <g:else>
-                            <a href='<g:createLink controller="variantInfo" action="variantInfo"
+                            <a class="dk-t2d-example" href='<g:createLink controller="variantInfo" action="variantInfo"
                                                    params="[id: 'rs13266634']"/>'>rs13266634</a>
                         </g:else>
                         <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
@@ -206,7 +206,7 @@
                                                    params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
                         </g:elseif>
                         <g:else>
-                            <a href='<g:createLink controller="region" action="regionInfo"
+                            <a class="dk-t2d-example" href='<g:createLink controller="region" action="regionInfo"
                                                    params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
                         </g:else>
                         <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
@@ -283,8 +283,19 @@
             </p>
             </div>
             </div>
-            <div class="row" style="font-size:14px; border-top: solid 2px #4eadcd; border-bottom: solid 1px #fff; background-color:#eee; color:#333; font-weight: 100; padding:10px 15px 1px 15px; margin-top:40px;">
-                <div class="col-md-2" style="color:#4eadcd; padding: 0; ">
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <div class="row" style="font-size:14px; border-top: solid 2px #5FC36A; border-bottom: solid 1px #fff; background-color:#eee; color:#333; font-weight: 100; padding:10px 15px 1px 15px; margin-top:40px;">
+                        <div class="col-md-2" style="color:#5FC36A; padding: 0; ">
+                </g:if>
+                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <div class="row" style="font-size:14px; border-top: solid 2px #FAA61A; border-bottom: solid 1px #fff; background-color:#eee; color:#333; font-weight: 100; padding:10px 15px 1px 15px; margin-top:40px;">
+                        <div class="col-md-2" style="color:#FAA61A; padding: 0; ">
+                </g:elseif>
+                <g:else>
+                    <div class="row" style="font-size:14px; border-top: solid 2px #4eadcd; border-bottom: solid 1px #fff; background-color:#eee; color:#333; font-weight: 100; padding:10px 15px 1px 15px; margin-top:40px;">
+                        <div class="col-md-2" style="color:#4eadcd; padding: 0; ">
+                </g:else>
+
                     <span style="font-family:'Oswald'; font-size: 25px;"><g:message code="portal.use.citation.title" default="Citation" /></span>
                 </div>
                 <div class="col-md-10" style="">
@@ -317,9 +328,11 @@
             </div>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <div style="text-align:right;">
-                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
-                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
-                    </a>
+                    <p style="margin-bottom:3px;">
+                        <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                            <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                        </a>
+                    </p>
                 </div>
 
             </g:if>

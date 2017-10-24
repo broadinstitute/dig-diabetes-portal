@@ -8,73 +8,6 @@
 
     <style>
 
-        .dk-static-content {
-            padding-top: 30px;
-        }
-
-        .dk-under-header {
-            font-weight: 300; line-height: 20px; font-size: 16px;
-        }
-
-        .dk-notice {
-            padding: 10px 20px 10px 20px;
-            margin: 10px 0 10px 0;
-            background-color: #7aa1fc;
-            color: #fff;
-            background-image:url(../images/logo_bg2.jpg);
-            background-repeat:no-repeat;
-            background-size:100% 100%;
-
-        }
-
-        .dk-notice a {
-            color:#def;
-            font-weight: 200;
-            font-size: 18px;
-        }
-
-        .dk-notice p {
-            margin-bottom: 0;
-        }
-
-        .dk-notice-header {
-            font-size: 26px;
-            font-weight: 100;
-        }
-
-        .dk-blue-bordered {
-            display:block;
-            border-top: solid 1px #39F;
-            border-bottom: solid 1px #39F;
-            color: #39f;
-            padding: 5px 0;
-            text-align:left;
-            line-height:22px;
-        }
-        .dk-team-list {
-            width: 100%;
-            font-size: 14px;
-            line-height: 22px;
-        }
-
-        .dk-team-list td:last-child {
-            width: 50%;
-        }
-
-        .dk-team-list td {
-            padding-right: 25px;
-            padding-bottom: 15px;
-            vertical-align:top;
-        }
-
-        .dk-team-list strong {
-            float: right;
-        }
-
-        .dk-team-list td > p {
-            padding-left: 15px;
-        }
-
     </style>
 </head>
 
@@ -96,22 +29,28 @@
 
 
                 <div class="col-md-12">
-                    <h1><g:message code="contact.header" /></h1>
-
-                    <h5 class="dk-under-header"><g:message code="contact.summary" /></h5>
-
-                    <h5 class="dk-under-header"><g:message code="contact.getInTouch" />
-                        <ul>
-                            <li><g:message code="contact.option.contactTeam" /></li>
-                            <li><g:message code="contact.option.forum" /></li>
-                            <li><g:message code="contact.option.emailList" /></li>
-                            <li><g:message code="contact.option.contribute" /></li>
-                        </ul><h5>
-                    </div></div>
-
-                <div class="row">
+                    <h1 class="dk-page-title"><g:message code="contact.header" /></h1>
+                    </div>
                     <div class="col-md-9">
-                    <h4 class="dk-blue-bordered"><g:message code="contact.amp.t2dkp.team.title"></g:message></h4>
+                        <h5 class="dk-under-header"><g:message code="contact.summary" /></h5>
+
+                        <h5 class="dk-under-header"><g:message code="contact.getInTouch" />
+                            <ul>
+                                <li><g:message code="contact.option.contactTeam" /></li>
+                                <li><g:message code="contact.option.forum" /></li>
+                                <li><g:message code="contact.option.emailList" /></li>
+                                <li><g:message code="contact.option.contribute" /></li>
+                            </ul>
+                        </h5>
+                    </div>
+                <div class="col-md-3" id="t2dImageHolder" style="padding-top: 15px;">
+                    <div class="dk-t2d-blue dk-contact-button dk-right-column-buttons"><a href="mailto:help@type2diabetesgenetics.org" target="_blank">Contact the team for help</a></div>
+                    <div class="dk-t2d-blue dk-forum-button dk-right-column-buttons"><a href="http://www.type2diabetesgenetics.org/informational/forum" target="_blank">Join the discussion in our forum</a></div>
+                    <div class="dk-t2d-blue dk-email-button dk-right-column-buttons"><g:message code="contact.option.emailList" /></div>
+                    <div class="dk-t2d-green dk-reference-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/sendingData.pdf" target="_blank">Guide to data submission</a></div>
+                </div>
+                    <div class="col-md-9">
+                    <h3 class="dk-blue-bordered"><g:message code="contact.amp.t2dkp.team.title"></g:message></h3>
 
                 <table class="dk-team-list"><g:message code="contact.amp.t2dkp.team.list"></g:message></table>
 
@@ -125,12 +64,11 @@
 
                 <table class="dk-team-list"><g:message code="contact.methods.team_edp"></g:message></table>
 
-                <h4><g:message code="contact.methods.team.subtitle3"></g:message></h4>
+                <h3><g:message code="contact.methods.team.subtitle3"></g:message></h3>
 
                 <table class="dk-team-list"><g:message code="contact.methods.team_federated"></g:message></table>
                 </div>
-
-                     <div class="col-md-3 text-center" id="t2dImageHolder">
+                     <div class="col-md-3 text-center" id="t2dImageHolder" style="padding-top: 10px;">
                         <p style="margin-top: 10px;"><a href="https://broadinstitute.org" target="_blank">
 
                             <img style="width:180px;" src="${resource(dir: 'images', file:'BroadInstLogoforDigitalRGB.png')}" />

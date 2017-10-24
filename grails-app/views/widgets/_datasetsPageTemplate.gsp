@@ -122,9 +122,9 @@
     </div>
 </script>
 
-<div class="datasetsHolder">
-    <div style="display: inline-block; width: 100%;">
-        <div>
+<div class="container datasetsHolder">
+    <div class="row" style="display: inline-block; width: 100%;">
+        <div class="col-md-12">
             <div class="datasets-filter">
                 <h3>Filter Dataset Table<small> (Click one to start)</small></h3>
                 <div id="datatypeFilterDisplay" class="form-inline"></div>

@@ -34,9 +34,18 @@
                 /*DK: find out if the user is viewing the front page*/
 
                 if ($(".dk-user-name").length) {
-                    var userName = $(".dk-user-name").find("a").text();
-                    $(".dk-user-name").find("a").text(userName.charAt(0).toUpperCase()).attr("title",userName).css({"display":"block","text-align":"center","font-size":"12px","width":"22px","padding":"2px 0","border-radius":"15px","background-color":"#57a7ba"});
+                    var userName = $(".dk-user-name").find(".user-name-initial").text();
+                    $(".dk-user-name").find(".user-name-initial").html(userName.charAt(0).toUpperCase()).attr("title",userName).css({"display":"block","color":"#fffff", "text-shadow":"none", "text-align":"center","font-size":"12px","width":"22px","padding":"2px 0","border-radius":"5px 0 0 5px"});
                 }
+
+                /* set the visibility of the user notification blob */
+
+                ($("#userNotificationDisplay").text() == "none")? $("#userNotificationDisplay").css("display","none") : $("#userNotificationDisplay").css("display","inline-block");
+
+                /* display notification as the mouse pointer rolls over the notification blob */
+                $("#userNotificationDisplay").hover(function(){
+                    $(this).append("<div class='user-notification-full' style='position:absolute; right: 15px; top: 35px; padding-top: 10px; width:200px;'><span style='display:block; font-size: 14px; background-color:#fff; box-shadow: 0 2px 3px rgba(0, 0, 0, .5); text-align:left; width: 200px !important; border-radius: 3px; padding: 5px 10px 5px 10px; color:#333;'>"+$(this).attr("message")+"</span></div>");
+                }, function() {$( this ).find('.user-notification-full').remove();});
 
                 var pathFullName = location.pathname.toLowerCase();
                 var pathName = location.pathname.toLowerCase().split("/");
@@ -153,16 +162,23 @@
 </div>
 
 <g:layoutBody/>
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+    <div class="container-fluid dk-stroke-footer"><div class="container">
+</g:if>
+<g:elseif test="${g.portalTypeString()?.equals('mi')}">
+    <div class="container-fluid dk-mi-footer"><div class="container">
+</g:elseif>
+<g:else>
+    <div class="container-fluid dk-t2d-footer"><div class="container">
+</g:else>
 
-<div>
-    <div class="row column-center">
-        <div class="text-center" style="padding-top:10px;"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
+    <div class="row">
+        <div class="col-md-12" style="text-align: center;">
+            <div style="padding-top:10px;"><span class="glyphicon glyphicon-comment" style="color:#fff"></span> <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
+            <div style="font-size: 10px;"><g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.  <g:message code='buildInfo.shared.version'/>=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
+        </div>
     </div>
-
-    <div class="row column-center"  style="padding-top:5px;">
-        <div style="font-size: 10px;"><g:message code="buildInfo.shared.build_message" args="${[BuildInfo?.buildHost, BuildInfo?.buildTime]}"/>.  <g:message code='buildInfo.shared.version'/>=${BuildInfo?.appVersion}.${BuildInfo?.buildNumber}</div>
-    </div>
-</div>
+        </div></div>
 
 <g:applyLayout name="activatePopups"/>
 

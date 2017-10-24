@@ -76,21 +76,20 @@
 
 <div id="main">
     <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="dk-page-title">Data</h1>
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="row">
-                    <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.title" default="about the data"/></p>
-                    </div>
+                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.title" default="about the data"/></p>
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <div class="row">
-                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
-                    </div>
+                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
                 </g:elseif>
                 <g:else></g:else>
+            </div>
+    </div>
 
-
-        <div class="row" style="margin-top: 10px">
-
+        <div class="row">
             <g:renderBetaFeaturesDisplayedValue>
                 <div style="margin-top: 5px">
                     <div class="col-xs-2"></div>
@@ -276,8 +275,6 @@
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                 <g:render template="data/strokeData" />
-
-
 
 
             </g:elseif>

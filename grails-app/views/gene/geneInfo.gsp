@@ -95,7 +95,7 @@
         <div class="gene-info-container">
             <div class="gene-info-view">
 
-                <h1>
+                <h1 class="dk-page-title">
                     <em><%=geneName%></em>
                 </h1>
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
