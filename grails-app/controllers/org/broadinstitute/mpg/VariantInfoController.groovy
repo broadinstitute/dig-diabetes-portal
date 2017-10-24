@@ -613,18 +613,6 @@ def retrieveSampleSummary (){
         JSONArray variantNameJsonList = slurper.parseText(params.variantList) as JSONArray
 
         String dataset = params.dataset
-        /***
-         * Superkludge:  currently the burden server can only take preset data versions.  We are going to convert whatever data set we get
-         * to a predefined MDV number until we can find a more general solution
-         */
-        grailsApplication.config.portal.data.version.map[portalType]
-//        dataset = dataset?.replaceAll(~/mdv\d+/,"${grailsApplication.config.portal.data.version.map[portalType]}")
-//        if (portalType == 't2d'){
-//            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_T2D}")
-//        } else if (portalType == 'stroke'){
-//            dataset = dataset?.replaceAll(~/mdv\d+/,"mdv${restServerService.SAMPLE_DATA_VERSION_STROKE}")
-//        }
-
 
         // cast the parameters
         String variantName = params.variantName

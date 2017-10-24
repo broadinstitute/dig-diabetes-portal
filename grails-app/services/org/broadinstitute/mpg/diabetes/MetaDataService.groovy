@@ -138,8 +138,8 @@ class MetaDataService {
         String dataVersion;
         String portalType = this.getPortalTypeFromSession()
         String distributedKb = this.getDistributedKBFromSession()
-
-       dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
+        dataVersion = restServerService.retrieveMdvForPortalType(portalType)
+     //  dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
 
         // return
        return dataVersion;

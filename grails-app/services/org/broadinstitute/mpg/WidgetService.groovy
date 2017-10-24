@@ -711,6 +711,7 @@ class WidgetService {
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootVAR_ID" ){
                     dataJSONObject.id = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.id = dataJSONObject.id.collect{String it->List f=it.split("_");if (f.size()==4){return "${f[0]}:${f[1]}_${f[2]}/${f[3]}".toString()}else {return it}} as JSONArray
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootReference_Allele" ){
                     dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray

@@ -12,6 +12,46 @@ var mpgSoftware = mpgSoftware || {};
         var currentLzPlotKey = 'lz-47';
         var pageVars = {};
 
+        var convertVarIdToUmichFavoredForm =  function (varId){
+            // broad form example: 8_118183491_C_T
+            // UM form example: 8:118183491_C/T
+            var returnValue = varId;
+            if (( typeof varId !== 'undefined')&&(varId.length>0)){
+                var varIdSplit = varId.split("_");
+                if (varIdSplit.length==4){
+                    returnValue = varIdSplit[0]+":"+varIdSplit[1]+"_"+varIdSplit[2]+"/"+varIdSplit[3];
+                }
+            }
+            return returnValue;
+        };
+
+        var extractParts =  function (varId){
+            // broad form example: 8_118183491_C_T
+            // UM form example: 8:118183491_C/T
+            var returnValue = {};
+            if (( typeof varId !== 'undefined')&&(varId.length>0)){
+                var broadIdSplit = varId.split("_");
+                if (broadIdSplit.length==4){
+                    returnValue = {"chromosome":broadIdSplit[0],
+                                    "position":broadIdSplit[1],
+                                    "reference":broadIdSplit[2],
+                                    "alternate":broadIdSplit[3]};
+                } else {
+                    var umIdSplit1 = varId.split("_");
+                    if (umIdSplit1.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                    var umIdSplit2 = umIdSplit1[0].split(":");
+                    if (umIdSplit2.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                    var umIdSplit3 = umIdSplit1[1].split("/");
+                    if (umIdSplit3.length!=2){console.log("Unexpected var ID format: "+varId+".")}
+                    returnValue = {"chromosome":umIdSplit2[0],
+                        "position":umIdSplit2[1],
+                        "reference":umIdSplit3[0],
+                        "alternate":umIdSplit3[1]};
+                }
+            }
+            return returnValue;
+        };
+
         var weHaveAssociatedAtacSeqInfo = function (label){
             var retval;
             if (label.indexOf('Adipose')>-1){
@@ -1157,14 +1197,8 @@ var mpgSoftware = mpgSoftware || {};
             var tooltipContents = lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML;
             var callingData = {};
             callingData.POS = _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)});
-            var chromosome;
-            if (_.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).indexOf(":")>-1) { // old LZ format for variant names
-              chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split(":")[0];
-            } else {
-	      chromosome = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)}).split("_")[0];
-            }
-            callingData.CHROM = chromosome;
-            lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML  =  tooltipContents +
+            callingData.CHROM = extractParts(_.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)})).chromosome;
+             lzMyThis.getDataLayer().parent_plot.container.lastChild.innerHTML  =  tooltipContents +
                 '<div id="chromatinStateDisplay"></div>';
             retrieveFunctionalData(callingData,buildExpandedDisplay,callingData);
             //LocusZoom.getToolTipData(myThis).deselect();
@@ -1183,12 +1217,7 @@ var mpgSoftware = mpgSoftware || {};
             LocusZoom.getToolTipData(myThis).deselect();
             var chromosome;
             var varId = _.find(lzMyThis,function(v,k){return (k.indexOf('id')!==-1)});
-            if (varId.indexOf(":")>-1) { // old LZ format for variant names
-              chromosome =varId.split(":")[0];
-            } else {
-	            chromosome = varId.split("_")[0];
-            }
-
+            chromosome = extractParts(varId).chromosome;
             replaceTissuesWithOverlappingIbdRegions( _.find(lzMyThis,function(v,k){return (k.indexOf('position')!==-1)}),
                                                    chromosome,domId,assayIdList, varId );
         }
@@ -1226,18 +1255,17 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId,plotDomId,assayIdList){
-            var variantParts = varId.split("_");
-            if (variantParts.length == 4){
-                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList,varId);
-            }
+            var convertedVarId=convertVarIdToUmichFavoredForm(varId); // convert if necessary
+            var variantParts = extractParts(varId);
+            replaceTissuesWithOverlappingIbdRegions(variantParts.position, variantParts.chromosome,plotDomId,assayIdList,convertedVarId);
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
 
         };
         var replaceTissuesWithOverlappingIbdRegionsVarId = function(varId,plotDomId,assayIdList){
-            var variantParts = varId.split("_");
-            if (variantParts.length == 4){
-                replaceTissuesWithOverlappingIbdRegions(variantParts[1], variantParts[0],plotDomId,assayIdList,varId);
-            }
+            var convertedVarId=convertVarIdToUmichFavoredForm(varId); // convert if necessary
+            var variantParts = extractParts(varId);
+            replaceTissuesWithOverlappingIbdRegions(variantParts.position, variantParts.chromosome,plotDomId,assayIdList,varId);
+
         };
 
 
@@ -1545,8 +1573,7 @@ var mpgSoftware = mpgSoftware || {};
                 lzVarId = inParm.variantId;
                 // we have format: 8_118184783_C_T
                 // need to get format like: 8:118184783_C/T
-                var splitVarId = inParm.variantId.split('_');
-                lzVarId = splitVarId[0] + ':' + splitVarId[1] + '_' + splitVarId[2] + '/' + splitVarId[3];
+                lzVarId = convertVarIdToUmichFavoredForm(inParm.variantId);
             }
 
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
