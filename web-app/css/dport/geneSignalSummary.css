@@ -129,6 +129,7 @@ td.credSetConstLabel{
 }
 .credibleSetChooserButton {
     background-color: #ccffff;
+    z-index: 100;
 }
 tr.redline {
     /*   background-color: #ffb3b3;*/

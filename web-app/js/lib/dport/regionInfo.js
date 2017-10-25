@@ -11,7 +11,15 @@ var mpgSoftware = mpgSoftware || {};
             "2":{minimum:83,maximum:854238}};
         var numberOfQuantiles =5;
         var DEFAULT_NUMBER_OF_VARIANTS = 10;
-
+        /***
+         *  Choose from among all the tissues we get back from a regions search based on the user's display criteria
+         * @param o
+         * @returns {boolean}
+         */
+        var includeRecordBasedOnUserChoice = function(o) {
+            console.log("not properly initialized");
+            return true;
+        };
         var developingTissueGrid = {};
         var sampleGroupsWithCredibleSetNames = [];
         var getDevelopingTissueGrid = function (){
@@ -211,6 +219,7 @@ var mpgSoftware = mpgSoftware || {};
                     async: true
                     }).done(function (data, textStatus, jqXHR) {
                         var tissueGrid = getDevelopingTissueGrid();
+                        //setIncludeRecordBasedOnUserChoice(additionalData.assayIdList);
                         if ((typeof data !== 'undefined') &&
                             (typeof data.variants !== 'undefined') &&
                             (typeof data.variants.region_start !== 'undefined')&&
@@ -395,14 +404,15 @@ var mpgSoftware = mpgSoftware || {};
                 quantileArray: createQuantilesArray(everySingleValue)
             };
         };
-        var includeRecordBasedOnUserChoice = function(o) {
-            var selectedElements = $('#credSetSelectorChoice option:selected');
-            var chosenElementTypes = [];
-            _.forEach(selectedElements,function(oe){
-                chosenElementTypes.push($(oe).val());
-            });
-            return ((chosenElementTypes.indexOf(o.element)>-1))
-        };
+
+        // var includeRecordBasedOnUserChoice = function(o) {
+        //     var selectedElements = $('#credSetSelectorChoice option:selected');
+        //     var chosenElementTypes = [];
+        //     _.forEach(selectedElements,function(oe){
+        //         chosenElementTypes.push($(oe).val());
+        //     });
+        //     return ((chosenElementTypes.indexOf(o.element)>-1))
+        // };
         var colorMapper = function(elementName){
             var colorSpecification = '#ffffff';
             if (elementName==="1_Active_TSS"){
@@ -479,12 +489,11 @@ var mpgSoftware = mpgSoftware || {};
             var additionalParameters = $.data($('#dataHolderForCredibleSets')[0],'additionalParameters');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
             var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
-            var includeRecord  = function() {return true;};
-            if (assayIdList=='[3]') {
-                includeRecord = includeRecordBasedOnUserChoice;
-            }
+            // var includeRecord  = function() {console.log(' seriously uninitialized');return true;};
+            // setIncludeRecordBasedOnUserChoice(additionalData.assayIdList);
+            // includeRecord = includeRecordBasedOnUserChoice;
             setDevelopingTissueGrid({});
-            var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,includeRecord);
+            var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList));
 
             $.when.apply($, promises).then(function(schemas) {
                 var tissueGrid = getDevelopingTissueGrid();
@@ -534,11 +543,11 @@ var mpgSoftware = mpgSoftware || {};
                         "<div class='credSetLine'><span class='fakelink' onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
                         $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\",\""+assayIdList+"\")' href='#'>"+
                         "Click to display tissues with overlapping regions below the LocusZoom plot</span></div>";
-                    if (additionalParameters.portalTypeString==='ibd'){
-                        retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
-                            "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
-                            "<div class='credSetLine'><scan class='credSetPopUpTitle'>Click to see overlapping DNase active regions</scan></div>";
-                    }
+                    // if (additionalParameters.portalTypeString==='ibd'){
+                    //     retString = "<div class='credSetLine'><scan class='credSetPopUpTitle'>Posterior probability:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('postprob')+"</scan></div>"+
+                    //         "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan></div>"+
+                    //         "<div class='credSetLine'><scan class='credSetPopUpTitle'>Click to see overlapping DNase active regions</scan></div>";
+                    // }
                     return retString;
                 },
                 container: 'body',
@@ -614,8 +623,32 @@ var mpgSoftware = mpgSoftware || {};
 
 
         };
+        var setIncludeRecordBasedOnUserChoice = function(assayIdList){
+            if (assayIdList === '[1,2]') {
+                mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
+                    console.log("[1,2] choice function");
+                    var retval = false;
+                    if (o.ASSAY_ID===2){
+                        retval = true;
+                    }
+                    return retval;
+                };
+            } else if (assayIdList === '[3]') {
+                mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
+                    console.log("[3] choice function");
+                    var selectedElements = $('#credSetSelectorChoice option:selected');
+                    var chosenElementTypes = [];
+                    _.forEach(selectedElements,function(oe){
+                        chosenElementTypes.push($(oe).val());
+                    });
+                    return ((chosenElementTypes.indexOf(o.element)>-1))
+                };
+            }
+            return mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
+        };
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
+            setIncludeRecordBasedOnUserChoice(additionalParameters.assayIdList);
             var currentSequenceExtents = getCurrentSequenceExtents();
             if (!isNaN(currentSequenceExtents.start)){vars.start=currentSequenceExtents.start}
             if (!isNaN(currentSequenceExtents.end)){vars.end=currentSequenceExtents.end}
@@ -735,7 +768,8 @@ var mpgSoftware = mpgSoftware || {};
             redisplayTheCredibleSetHeatMap:redisplayTheCredibleSetHeatMap,
             includeRecordBasedOnUserChoice:includeRecordBasedOnUserChoice,
             removeAllCredSetHeaderPopUps:removeAllCredSetHeaderPopUps,
-            markHeaderAsCurrentlyDisplayed:markHeaderAsCurrentlyDisplayed
+            markHeaderAsCurrentlyDisplayed:markHeaderAsCurrentlyDisplayed,
+            setIncludeRecordBasedOnUserChoice:setIncludeRecordBasedOnUserChoice
         }
 
     })();

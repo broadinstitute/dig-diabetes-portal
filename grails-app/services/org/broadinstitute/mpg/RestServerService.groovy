@@ -2497,18 +2497,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public List<String> retrieveGenesInExtents(LinkedHashMap<String,String> positioningInformation){
         List<String> identifiedGenes = []
-        String regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-        String chromosomeSpecifier = (positioningInformation.chromosomeSpecified.startsWith('chr'))?
-                positioningInformation.chromosomeSpecified:
-                ("chr" + positioningInformation.chromosomeSpecified)
+        String regionSpecifier = "chr${positioningInformation?.chromosomeSpecified}:${positioningInformation?.beginningExtentSpecified}-${positioningInformation?.endingExtentSpecified}"
+        String chromosomeSpecifier = (positioningInformation?.chromosomeSpecified?.startsWith('chr'))?
+                positioningInformation?.chromosomeSpecified:
+                ("chr" + positioningInformation?.chromosomeSpecified)
         List<Gene> geneList = Gene.findAllByChromosome(chromosomeSpecifier)
         for (Gene gene in geneList) {
             try {
-                int startExtent = positioningInformation.beginningExtentSpecified as Long
-                int endExtent = positioningInformation.endingExtentSpecified as Long
-                if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-                        ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-                    identifiedGenes << gene.name2 as String
+                int startExtent = positioningInformation?.beginningExtentSpecified as Long
+                int endExtent = positioningInformation?.endingExtentSpecified as Long
+                if (((gene?.addrStart > startExtent) && (gene?.addrStart < endExtent)) ||
+                        ((gene?.addrEnd > startExtent) && (gene?.addrEnd < endExtent))) {
+                    identifiedGenes << gene?.name2 as String
                 }
             } catch (e) {
                 log.error("problem translating extent start=${} to end=${}")
