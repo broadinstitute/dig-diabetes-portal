@@ -360,7 +360,7 @@
 
 
 
-<h4>Accessing MICAD exome chip analysis data</h4>
+<h4>Accessing CAD exome chip analysis data</h4>
 
 <p><g:message code="informational.data.accessing.MICAD1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.MICAD2"></g:message></p>
 
