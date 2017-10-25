@@ -55,10 +55,17 @@
             <tr>
 
                 <th>Dataset</th>
+                <g:if test="${g.portalTypeString()?.equals('mi')}">
+                <th>Samples</th>
+                <th>Ancestry</th>
+                <th>Data type</th>
+                </g:if>
+                <g:else>
                 <th>Access</th>
                 <th>Samples</th>
                 <th>Ancestry</th>
                 <th>Data type</th>
+                </g:else>
             </tr>
             </thead>
         <tbody>
@@ -77,10 +84,19 @@
                     </div>
             </td>
 
-            <td class="access" style="color:{{accessColor}}">{{access}} </td>
-            <td class="samples">{{size}}</td>
-            <td class="ethnicity">{{ancestry}}</td>
-            <td class="datatype">{{technology}}</td>
+            <g:if test="${g.portalTypeString()?.equals('mi')}">
+                <td class="samples">{{size}}</td>
+                <td class="ethnicity">{{ancestry}}</td>
+                <td class="datatype">{{technology}}</td>
+            </g:if>
+            <g:else>
+                <td class="access" style="color:{{accessColor}}">{{access}} </td>
+                <td class="samples">{{size}}</td>
+                <td class="ethnicity">{{ancestry}}</td>
+                <td class="datatype">{{technology}}</td>
+            </g:else>
+
+
         </tr>
         <tr>
         <td colspan="5" style="border: none; padding:0; margin: 0;"> <div id="{{name}}_myTarget" class="accordion-body collapse dataset-description" >
