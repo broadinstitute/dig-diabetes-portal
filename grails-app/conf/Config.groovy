@@ -156,24 +156,25 @@ burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fe
 burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 
-digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
-digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
-digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
-digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
-digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
-digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
-digdevlocalServer = new ServerBean("digdevlocalServer", "http://localhost:8090/dccservices/")
-digAWSKBV2prodServer = new ServerBean("digAWSKBV2prodServer", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
-digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
-federatedAwsProdKBV2Server = new ServerBean("Federated Prod Server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
-federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
-toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
-digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digawsdevnewKB = new ServerBean("digawsdevnewKB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
-digawsdevnewKB_fed = new ServerBean("digawsdevnewKB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsqanewKB = new ServerBean("digawsqanewKB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
-digawsqanewKB_fed = new ServerBean("digawsqanewKB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsibddemoKB = new ServerBean("digawsibddemoKB", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
+//digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
+//digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
+//digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
+//digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
+//digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
+//digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
+
+digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
+digAWSKBV2prodServer = new ServerBean("KB-prod-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
+federatedAwsProdKBV2Server = new ServerBean("KB-prod-fed-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
+toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
+digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
+digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
+digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsibddemoKB = new ServerBean("KB-ibddemo-2017-aws", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
 defaultRestServer = digawsdevnewKB
