@@ -11,6 +11,11 @@ var mpgSoftware = mpgSoftware || {};
             "2":{minimum:83,maximum:854238}};
         var numberOfQuantiles =5;
         var DEFAULT_NUMBER_OF_VARIANTS = 10;
+        var defaultTissueRegionOverlapMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'stroke':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'mi':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'ibd':["DNase"]};
+
         /***
          *  Choose from among all the tissues we get back from a regions search based on the user's display criteria
          * @param o
@@ -22,6 +27,9 @@ var mpgSoftware = mpgSoftware || {};
         };
         var developingTissueGrid = {};
         var sampleGroupsWithCredibleSetNames = [];
+        var getDefaultTissueRegionOverlapMatcher = function (portalType){
+            return defaultTissueRegionOverlapMatcher[portalType];
+        };
         var getDevelopingTissueGrid = function (){
             return developingTissueGrid;
         };
@@ -259,6 +267,8 @@ var mpgSoftware = mpgSoftware || {};
             })
             var allRenderData = $.data($('#dataHolderForCredibleSets')[0],'allRenderData');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
+            if (assayIdList==='[1,2]') { assayIdList = '[1,2,3]' }
+            $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
             var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
             buildTheCredibleSetHeatMap(filteredRenderData,false);
         }
@@ -624,26 +634,43 @@ var mpgSoftware = mpgSoftware || {};
 
         };
         var setIncludeRecordBasedOnUserChoice = function(assayIdList){
-            if (assayIdList === '[1,2]') {
+            //if (assayIdList === '[1,2]') {
+            if (true) {
                 mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
-                    console.log("[1,2] choice function");
-                    var retval = false;
-                    if (o.ASSAY_ID===2){
-                        retval = true;
-                    }
-                    return retval;
-                };
-            } else if (assayIdList === '[3]') {
-                mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
-                    console.log("[3] choice function");
+                    // console.log("[1,2] choice function");
                     var selectedElements = $('#credSetSelectorChoice option:selected');
                     var chosenElementTypes = [];
+                    var retval = false;
                     _.forEach(selectedElements,function(oe){
-                        chosenElementTypes.push($(oe).val());
+                        if (($(oe).val()==="DNase")&&
+                            (o.ASSAY_ID===2)){
+                            retval = true;
+                        } else if (($(oe).val()==="H3K27ac")&&
+                            (o.ASSAY_ID===1)){
+                            retval = true;
+                        } else {
+                            chosenElementTypes.push($(oe).val());
+                        }
                     });
-                    return ((chosenElementTypes.indexOf(o.element)>-1))
+                    if (retval) {
+                        return true;
+                    } else {
+                        return ((chosenElementTypes.indexOf(o.element)>-1));
+                    }
+
                 };
             }
+            // else if (assayIdList === '[3]') {
+            //     mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
+            //         console.log("[3] choice function");
+            //         var selectedElements = $('#credSetSelectorChoice option:selected');
+            //         var chosenElementTypes = [];
+            //         _.forEach(selectedElements,function(oe){
+            //             chosenElementTypes.push($(oe).val());
+            //         });
+            //         return ((chosenElementTypes.indexOf(o.element)>-1))
+            //     };
+            // }
             return mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
         };
 
@@ -745,7 +772,8 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%',onChange: function() {
                             console.log($('#credSetSelectorChoice').val());
                         }});
-                    $('#credSetSelectorChoice').val(['8_Genic_enhancer','9_Active_enhancer_1','10_Active_enhancer_2','11_Weak_enhancer']);
+                    // $('#credSetSelectorChoice').val(['8_Genic_enhancer','9_Active_enhancer_1','10_Active_enhancer_2','11_Weak_enhancer']);
+                    $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
                     $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
                         allSelectedText: 'All Selected',
                         buttonWidth: '60%'});
@@ -769,7 +797,8 @@ var mpgSoftware = mpgSoftware || {};
             includeRecordBasedOnUserChoice:includeRecordBasedOnUserChoice,
             removeAllCredSetHeaderPopUps:removeAllCredSetHeaderPopUps,
             markHeaderAsCurrentlyDisplayed:markHeaderAsCurrentlyDisplayed,
-            setIncludeRecordBasedOnUserChoice:setIncludeRecordBasedOnUserChoice
+            setIncludeRecordBasedOnUserChoice:setIncludeRecordBasedOnUserChoice,
+            getDefaultTissueRegionOverlapMatcher:getDefaultTissueRegionOverlapMatcher
         }
 
     })();
