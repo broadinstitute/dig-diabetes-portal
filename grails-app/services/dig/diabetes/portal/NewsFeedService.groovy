@@ -20,7 +20,7 @@ class NewsFeedService {
 
     private JSONObject blogIds = [
             t2d   : '5010306206573083521',
-            mi: '7857348124942584918',
+            mi: '3944203828206499294',
             ibd: '7857348124942584918',
             stroke: '7961982646849648720'
     ]
