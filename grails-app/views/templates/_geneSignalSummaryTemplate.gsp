@@ -46,15 +46,15 @@
                 <div class="col-md-5 col-xs-12">
                     <div class="row">
                         <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                            No evidence for signal
+                            No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
                         </div>
 
                         <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                            Suggestive evidence for signal
+                            Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
                         </div>
 
                         <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                            Strong evidence for signal
+                            Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                         </div>
                     </div>
                 </div>
