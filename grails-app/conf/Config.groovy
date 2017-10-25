@@ -308,7 +308,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
@@ -335,7 +335,7 @@ environments {
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
-        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
@@ -562,7 +562,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d", "T2D","mdv28"),
                                   new PortalVersionBean("stroke", "Stroke","mdv70"),
                                   new PortalVersionBean("mi", "Myocardial Infarction","mdv91"),
                                   new PortalVersionBean("ibd", "Inflammatory Bowel Disease","mdv80")]
-portal.data.version.map = ["t2d": "mdv28", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
+//portal.data.version.map = ["t2d": "mdv28", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
 portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],

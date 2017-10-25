@@ -159,6 +159,7 @@ th.niceHeadersThatAreLinks{
     transform: rotate(-60deg);
     max-width: 2px;
     font-weight: normal;
+    text-align: left;
 }
 .credibleSetTableGoesHere th.niceHeadersThatAreLinks.active{
     font-weight: bold;
