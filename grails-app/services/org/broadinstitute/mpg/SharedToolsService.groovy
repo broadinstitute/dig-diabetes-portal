@@ -5,6 +5,7 @@ import grails.transaction.Transactional
 import groovy.json.StringEscapeUtils
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
@@ -92,7 +93,8 @@ class SharedToolsService {
         String portalType = this.grailsApplication.config.portal.type.override;
 
         // get the data version based on user session portal type; default to t2d
-        dataVersion = (this.grailsApplication.config.portal.data.version.map[portalType]-"mdv") as Integer;
+        PortalVersionBean currentPortalVersionBean = grailsApplication.config.portal.data.versionDesignator.find{it.portalType==portalType}
+        dataVersion = (currentPortalVersionBean.mdvName-"mdv") as Integer;
     }
 
     public String retrieveCurrentGeneChromosome() {

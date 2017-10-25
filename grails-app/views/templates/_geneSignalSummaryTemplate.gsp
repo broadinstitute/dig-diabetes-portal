@@ -46,15 +46,15 @@
                 <div class="col-md-5 col-xs-12">
                     <div class="row">
                         <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                            No evidence for signal
+                            No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
                         </div>
 
                         <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                            Suggestive evidence for signal
+                            Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
                         </div>
 
                         <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                            Strong evidence for signal
+                            Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                         </div>
                     </div>
                 </div>
@@ -495,32 +495,28 @@
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
                                                 <label for="credSetSelectorChoice">Select tissues:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
-                                                    <option value="1_Active_TSS">Active transcription start site
-                                                    <option value="2_Weak_TSS">Weak transcription start site</option>
-                                                    <option value="3_Flanking_TSS">Flanking transcription start site</option>
-                                                    <option value="5_Strong_transcription">Strong transcription</option>
-                                                    <option value="6_Weak_transcription">Weak transcription</option>
-                                                    <option selected value="8_Genic_enhancer">Genic enhancer</option>
-                                                    <option selected value="9_Active_enhancer_1">Active enhancer 1</option>
-                                                    <option selected value="10_Active_enhancer_2">Active enhancer 2</option>
-                                                    <option selected value="11_Weak_enhancer">Weak enhancer</option>
-                                                    <option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>
-                                                    <option value="16_Repressed_polycomb">Repressed polycomb</option>
-                                                    <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
-                                                    <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
+                                                    {{#selectorInfo}}
+                                                    <option {{selected}} value="{{value}}">{{name}}</option>
+                                                    {{/selectorInfo}}
+                                                    %{--<option value="1_Active_TSS">Active transcription start site--}%
+                                                    %{--<option value="2_Weak_TSS">Weak transcription start site</option>--}%
+                                                    %{--<option value="3_Flanking_TSS">Flanking transcription start site</option>--}%
+                                                    %{--<option value="5_Strong_transcription">Strong transcription</option>--}%
+                                                    %{--<option value="6_Weak_transcription">Weak transcription</option>--}%
+                                                    %{--<option selected value="8_Genic_enhancer">Genic enhancer</option>--}%
+                                                    %{--<option selected value="9_Active_enhancer_1">Active enhancer 1</option>--}%
+                                                    %{--<option selected value="10_Active_enhancer_2">Active enhancer 2</option>--}%
+                                                    %{--<option selected value="11_Weak_enhancer">Weak enhancer</option>--}%
+                                                    %{--<option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>--}%
+                                                    %{--<option value="16_Repressed_polycomb">Repressed polycomb</option>--}%
+                                                    %{--<option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>--}%
+                                                    %{--<option value="18_Quiescent/low_signal">Quiescent/low signal</option>--}%
                                                 </select>
                                              </span>
 
                                          </div>
                                          <div class="col-sm-6">
                                              <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
-                                             %{--<span style="display: inline-block; float: none; vertical-align: middle; width: 100%">--}%
-                                                %{--<label for="credSetDisplayChoice">data display:</label>--}%
-                                                 %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
-                                                    %{--<option value="cheese">ATAC-seq</option>--}%
-                                                    %{--<option value="tomatoes">Enhancers</option>--}%
-                                                %{--</select>--}%
-                                            %{--</span>--}%
                                          </div>
                                          <div class="col-sm-2"></div>
                                     </div>
@@ -570,7 +566,7 @@
                                 <div><p><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p></div>
                                 <p>&nbsp;</p>
                                 <div class="credibleSetChooserGoesHere"></div>
-                                                               <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
+                                <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
                                          %{--<div class="col-sm-2"></div>--}%
@@ -578,19 +574,22 @@
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
                                                 <label for="credSetSelectorChoice">Select tissues:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
-                                                    <option value="1_Active_TSS">Active transcription start site
-                                                    <option value="2_Weak_TSS">Weak transcription start site</option>
-                                                    <option value="3_Flanking_TSS">Flanking transcription start site</option>
-                                                    <option value="5_Strong_transcription">Strong transcription</option>
-                                                    <option value="6_Weak_transcription">Weak transcription</option>
-                                                    <option selected value="8_Genic_enhancer">Genic enhancer</option>
-                                                    <option selected value="9_Active_enhancer_1">Active enhancer 1</option>
-                                                    <option selected value="10_Active_enhancer_2">Active enhancer 2</option>
-                                                    <option selected value="11_Weak_enhancer">Weak enhancer</option>
-                                                    <option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>
-                                                    <option value="16_Repressed_polycomb">Repressed polycomb</option>
-                                                    <option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>
-                                                    <option value="18_Quiescent/low_signal">Quiescent/low signal</option>
+                                                    {{#selectorInfo}}
+                                                    <option {{selected}} value="{{value}}">{{name}}</option>
+                                                    {{/selectorInfo}}
+                                                    %{--<option value="1_Active_TSS">Active transcription start site--}%
+                                                    %{--<option value="2_Weak_TSS">Weak transcription start site</option>--}%
+                                                    %{--<option value="3_Flanking_TSS">Flanking transcription start site</option>--}%
+                                                    %{--<option value="5_Strong_transcription">Strong transcription</option>--}%
+                                                    %{--<option value="6_Weak_transcription">Weak transcription</option>--}%
+                                                    %{--<option selected value="8_Genic_enhancer">Genic enhancer</option>--}%
+                                                    %{--<option selected value="9_Active_enhancer_1">Active enhancer 1</option>--}%
+                                                    %{--<option selected value="10_Active_enhancer_2">Active enhancer 2</option>--}%
+                                                    %{--<option selected value="11_Weak_enhancer">Weak enhancer</option>--}%
+                                                    %{--<option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>--}%
+                                                    %{--<option value="16_Repressed_polycomb">Repressed polycomb</option>--}%
+                                                    %{--<option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>--}%
+                                                    %{--<option value="18_Quiescent/low_signal">Quiescent/low signal</option>--}%
                                                 </select>
                                              </span>
                                          </div>

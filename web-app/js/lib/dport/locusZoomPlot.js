@@ -1228,12 +1228,13 @@ var mpgSoftware = mpgSoftware || {};
             callingData.plotDomId = plotDomId;
             callingData.ASSAY_ID_LIST = assayIdList;
             var lzVar = mpgSoftware.locusZoom.locusZoomPlot[plotDomId];
-            var includeRecord  = function() {return true;};
-            if (assayIdList=='[3]') {
-                //includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1))};
-                includeRecord = mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
-            }
-            callingData.includeRecord = includeRecord;
+            // var includeRecord  = function() {return true;};
+            // if (assayIdList=='[3]') {
+            //     //includeRecord = function(o) {return ((o.element.indexOf('nhancer')>-1))};
+            //     includeRecord = mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
+            // }
+            callingData.includeRecord = mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
+            // erase any old tissue tracks
             var tissueTracks = _.filter(lzVar.panels,function(v,k){return (k.indexOf('intervals')===0)});
             _.forEach(tissueTracks, function (panel){
                 panel.dashboard.hide(true);
@@ -1246,6 +1247,7 @@ var mpgSoftware = mpgSoftware || {};
                 function() {
                     $('#spinner').hide();
                 }, 2000);
+
             retrieveFunctionalData(callingData,processIbdEpigeneticData,callingData);
             if (( typeof varId !== 'undefined')&&
                 (varId.length>0)){
@@ -1257,6 +1259,7 @@ var mpgSoftware = mpgSoftware || {};
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId,plotDomId,assayIdList){
             var convertedVarId=convertVarIdToUmichFavoredForm(varId); // convert if necessary
             var variantParts = extractParts(varId);
+            mpgSoftware.regionInfo.setIncludeRecordBasedOnUserChoice(assayIdList);
             replaceTissuesWithOverlappingIbdRegions(variantParts.position, variantParts.chromosome,plotDomId,assayIdList,convertedVarId);
             mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps();
 
