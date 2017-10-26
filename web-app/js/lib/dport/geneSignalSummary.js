@@ -1357,9 +1357,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             mpgSoftware.locusZoom.removeAllPanels();
         }
         var selectorInfo = [];
+        var displayInfo = [];
         if (additionalParameters.portalTypeString==='ibd'){
             selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
             selectorInfo = getParkerData(selectorInfo,[]);
+            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
+            displayInfo = getParkerData(displayInfo,[]);
         } else {
             selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
         }
@@ -1367,10 +1370,21 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         var credibleSetTab = [];
         var incredibleSetTab = [];
-        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
-            credibleSetTab.push({selectorInfo:selectorInfo});
+        var dropDownRenderInfo = {};
+        if (selectorInfo.length==0){
+            dropDownRenderInfo['selectorInfoExists'] = [];
         } else {
-            incredibleSetTab.push({selectorInfo:selectorInfo});
+            dropDownRenderInfo['selectorInfoExists'] = [{selectorInfo:selectorInfo}];
+        }
+        if (displayInfo.length==0){
+            dropDownRenderInfo['displayInfoExists'] = [];
+        } else {
+            dropDownRenderInfo['displayInfoExists'] = [{displayInfo:displayInfo}];
+        }
+        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+            credibleSetTab.push(dropDownRenderInfo);
+        } else {
+            incredibleSetTab.push(dropDownRenderInfo);
         }
 
         $('#collapseExample div.wellPlace').empty();

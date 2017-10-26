@@ -491,6 +491,7 @@
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
+                                        {{#selectorInfoExists}}
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
                                                 <label for="credSetSelectorChoice">Select tissues:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
@@ -498,26 +499,35 @@
                                                     {{#selectorInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>
                                                     {{/selectorInfo}}
-                                                    %{--<option value="1_Active_TSS">Active transcription start site--}%
-                                                    %{--<option value="2_Weak_TSS">Weak transcription start site</option>--}%
-                                                    %{--<option value="3_Flanking_TSS">Flanking transcription start site</option>--}%
-                                                    %{--<option value="5_Strong_transcription">Strong transcription</option>--}%
-                                                    %{--<option value="6_Weak_transcription">Weak transcription</option>--}%
-                                                    %{--<option selected value="8_Genic_enhancer">Genic enhancer</option>--}%
-                                                    %{--<option selected value="9_Active_enhancer_1">Active enhancer 1</option>--}%
-                                                    %{--<option selected value="10_Active_enhancer_2">Active enhancer 2</option>--}%
-                                                    %{--<option selected value="11_Weak_enhancer">Weak enhancer</option>--}%
-                                                    %{--<option value="14_Bivalent/poised_TSS">Bivalent/poised transcription start site</option>--}%
-                                                    %{--<option value="16_Repressed_polycomb">Repressed polycomb</option>--}%
-                                                    %{--<option value="17_Weak_repressed_polycomb">Weak repressed polycomb</option>--}%
-                                                    %{--<option value="18_Quiescent/low_signal">Quiescent/low signal</option>--}%
                                                 </select>
                                              </span>
 
                                          </div>
+                                         {{/selectorInfoExists}}
+                                         {{^selectorInfoExists}}
+                                         <div class="col-sm-4"></div>
+                                         {{/selectorInfoExists}}
+
+                                         {{#displayInfoExists}}
+                                         <div class="col-sm-4">
+                                             <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
+                                                <label for="credSetDisplayChoice">Display tissues:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.header"/>
+                                                 <select id="credSetDisplayChoice" multiple="multiple">
+                                                    {{#displayInfo}}
+                                                    <option {{selected}} value="{{value}}">{{name}}</option>
+                                                    {{/displayInfo}}
+                                                </select>
+                                             </span>
+                                         </div>
+                                         <div class="col-sm-2">
+                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                         </div>
+                                         {{/displayInfoExists}}
+                                         {{^displayInfoExists}}
                                          <div class="col-sm-6">
                                              <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
+                                         {{/displayInfoExists}}
                                          <div class="col-sm-2"></div>
                                     </div>
                                 </div>
@@ -793,7 +803,15 @@
 <div class="heatmaplegend">
     <ul class="nav nav-pills">
     {{#chosenStatesForTissueDisplay}}
-        <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">&nbsp;{{descr}}</li>
+        <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">
+            {{#dnase}}
+            <r:img class="currentlanguage" uri="/images/spanish_black_it.png" alt="Spanish"/>
+            {{/dnase}}
+            {{#h3k27ac}}
+            <r:img class="currentlanguage" uri="/images/english_black_it.png" alt="English"/>
+            {{/h3k27ac}}
+            &nbsp;{{descr}}
+        </li>
     {{/chosenStatesForTissueDisplay}}
     </ul>
 </div>
