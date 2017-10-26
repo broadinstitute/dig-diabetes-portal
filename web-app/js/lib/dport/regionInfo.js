@@ -489,7 +489,7 @@ var mpgSoftware = mpgSoftware || {};
             var chosenElementTypes = [];
             _.forEach(selectedElements,function(oe){
                 if (oe.name==='DNase') {
-                    chosenElementTypes.push({name:oe.name,descr:oe.text+"!",colorCode:colorMapper (oe.name),dnase:1});
+                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),dnase:1});
                 } else if (oe.name==='H3K27ac') {
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),h3k27ac:1});
                 } else {

@@ -805,10 +805,10 @@
     {{#chosenStatesForTissueDisplay}}
         <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">
             {{#dnase}}
-            <r:img class="currentlanguage" uri="/images/spanish_black_it.png" alt="Spanish"/>
+            <r:img class="currentlanguage" uri="/images/dnase_scale.jpg" alt="Spanish"/>
             {{/dnase}}
             {{#h3k27ac}}
-            <r:img class="currentlanguage" uri="/images/english_black_it.png" alt="English"/>
+            <r:img class="currentlanguage" uri="/images/h3k27ac_scale.jpg" alt="English"/>
             {{/h3k27ac}}
             &nbsp;{{descr}}
         </li>
