@@ -27,6 +27,43 @@ var mpgSoftware = mpgSoftware || {};
         };
         var developingTissueGrid = {};
         var sampleGroupsWithCredibleSetNames = [];
+        var getSelectedValuesAndText = function() {
+            var selectedElements = $('#credSetSelectorChoice option:selected');
+            var selectedValuesAndText = [];
+            _.forEach(selectedElements,function(oe){
+                selectedValuesAndText.push({name:$(oe).val(),text:$(oe).text()});
+            });
+            return selectedValuesAndText;
+        };
+        var getDisplayValuesAndText = function() {
+            var selectedElements = $('#credSetDisplayChoice option:selected');
+            var selectedValuesAndText = [];
+            _.forEach(selectedElements,function(oe){
+                selectedValuesAndText.push({name:$(oe).val(),text:$(oe).text()});
+            });
+            return selectedValuesAndText;
+        };
+        var convertUserChoicesIntoAssayIds = function(selectedValuesAndText) {;
+            var assayIds = [];
+            _.forEach(selectedValuesAndText,function(oe){
+                if (oe.name==='H3K27ac'){
+                    assayIds.push(1);
+                } else if (oe.name==='DNase'){
+                    assayIds.push(2);
+                } else {
+                    if (!assayIds.includes(3)){
+                        assayIds.push(3);
+                    }
+                }
+            });
+            return assayIds;
+        };
+        var getSelectorAssayIds = function() {
+            return convertUserChoicesIntoAssayIds(getSelectedValuesAndText());
+        };
+        var getDisplayAssayIds = function() {
+            return convertUserChoicesIntoAssayIds(getDisplayValuesAndText());
+        };
         var getDefaultTissueRegionOverlapMatcher = function (portalType){
             return defaultTissueRegionOverlapMatcher[portalType];
         };
@@ -227,7 +264,6 @@ var mpgSoftware = mpgSoftware || {};
                     async: true
                     }).done(function (data, textStatus, jqXHR) {
                         var tissueGrid = getDevelopingTissueGrid();
-                        //setIncludeRecordBasedOnUserChoice(additionalData.assayIdList);
                         if ((typeof data !== 'undefined') &&
                             (typeof data.variants !== 'undefined') &&
                             (typeof data.variants.region_start !== 'undefined')&&
@@ -267,7 +303,7 @@ var mpgSoftware = mpgSoftware || {};
             })
             var allRenderData = $.data($('#dataHolderForCredibleSets')[0],'allRenderData');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
-            if (assayIdList==='[1,2]') { assayIdList = '[1,2,3]' }
+            //if (assayIdList==='[1,2]') { assayIdList = '[1,2,3]' }
             $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
             var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
             buildTheCredibleSetHeatMap(filteredRenderData,false);
@@ -376,13 +412,15 @@ var mpgSoftware = mpgSoftware || {};
             }
             return quantileArray;
         }
-        var filterTissueGrid = function(incomingTissueGrid,assayId){
+        var filterTissueGrid = function(incomingTissueGrid,assayIdArray){
             var retVal = {};
+            // convert assay id into a real array
             _.forEach(Object.keys(incomingTissueGrid),function(tissueKey){
                 var variantsToKeep = {};
                 _.forEach(Object.keys(incomingTissueGrid[tissueKey]),function(variantPos){
                     var variantRecord = incomingTissueGrid[tissueKey][variantPos];
-                    if (variantRecord.ASSAY_ID===assayId){
+                    if (assayIdArray.includes(variantRecord.ASSAY_ID)){
+                    // if (variantRecord.ASSAY_ID===assayId){
                         variantsToKeep[variantPos]=variantRecord;
                     }
                 });
@@ -415,14 +453,6 @@ var mpgSoftware = mpgSoftware || {};
             };
         };
 
-        // var includeRecordBasedOnUserChoice = function(o) {
-        //     var selectedElements = $('#credSetSelectorChoice option:selected');
-        //     var chosenElementTypes = [];
-        //     _.forEach(selectedElements,function(oe){
-        //         chosenElementTypes.push($(oe).val());
-        //     });
-        //     return ((chosenElementTypes.indexOf(o.element)>-1))
-        // };
         var colorMapper = function(elementName){
             var colorSpecification = '#ffffff';
             if (elementName==="1_Active_TSS"){
@@ -455,10 +485,16 @@ var mpgSoftware = mpgSoftware || {};
             return colorSpecification;
         }
         var appendLegendInfo = function() {
-            var selectedElements = $('#credSetSelectorChoice option:selected');
+            var selectedElements = getSelectedValuesAndText();
             var chosenElementTypes = [];
             _.forEach(selectedElements,function(oe){
-                chosenElementTypes.push({name:$(oe).val(),descr:$(oe).text(),colorCode:colorMapper ($(oe).val())});
+                if (oe.name==='DNase') {
+                    chosenElementTypes.push({name:oe.name,descr:oe.text+"!",colorCode:colorMapper (oe.name),dnase:1});
+                } else if (oe.name==='H3K27ac') {
+                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),h3k27ac:1});
+                } else {
+                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)});
+                }
             });
             return chosenElementTypes;
         };
@@ -579,8 +615,10 @@ var mpgSoftware = mpgSoftware || {};
             if (assayIdList==='[3]'){
                 primaryTissueGrid = tissueGrid;
             } else {
-                primaryTissueGrid = filterTissueGrid(tissueGrid,2); // DNase drives
-                subsidiaryTissueGrid = filterTissueGrid(tissueGrid,1);
+                // The logic ultimately employed is this: primaryTissueGrid tells us which tissues to display.  subsidiaryTissueGrid holds any additional tissues that we will display,
+                //  which assumes that that tissue is already a primary tissue.  If
+                primaryTissueGrid = filterTissueGrid(tissueGrid,getSelectorAssayIds()); // DNase drives
+                subsidiaryTissueGrid = filterTissueGrid(tissueGrid,_.difference(getDisplayAssayIds(),getSelectorAssayIds()));
             }
 
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
@@ -593,10 +631,11 @@ var mpgSoftware = mpgSoftware || {};
             // var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
             var sortedVariants = dataVariants;
             var countOfTissues = primaryTissueObject.sortedTissues.length;
+            var countOfSubsidiaryTissues = subsidiaryTissueObject.sortedTissues.length;
             _.forEach(primaryTissueObject.sortedTissues,function(tissueKey, index){
                 var lineToAdd = "<tr>";
                 if ( index === 0){
-                    lineToAdd += "<td class='credSetOrgLabel' style='vertical-align: middle' rowspan="+countOfTissues+">tissue</td>"
+                    lineToAdd += "<td class='credSetOrgLabel' style='vertical-align: middle' rowspan="+(countOfTissues+countOfSubsidiaryTissues)+">tissue</td>"
                 }
                 lineToAdd += "<td>"+tissueKey+"</td>";
                 _.forEach(sortedVariants,function(variantRec){
@@ -637,20 +676,26 @@ var mpgSoftware = mpgSoftware || {};
             //if (assayIdList === '[1,2]') {
             if (true) {
                 mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
-                    // console.log("[1,2] choice function");
-                    var selectedElements = $('#credSetSelectorChoice option:selected');
+                    var selectedElements = getSelectedValuesAndText();
                     var chosenElementTypes = [];
                     var retval = false;
                     _.forEach(selectedElements,function(oe){
-                        if (($(oe).val()==="DNase")&&
-                            (o.ASSAY_ID===2)){
-                            retval = true;
-                        } else if (($(oe).val()==="H3K27ac")&&
-                            (o.ASSAY_ID===1)){
+
+                        if ((o.ASSAY_ID===1)||(o.ASSAY_ID===2)){
                             retval = true;
                         } else {
-                            chosenElementTypes.push($(oe).val());
+                            chosenElementTypes.push(oe.name);
                         }
+
+                        // if ((oe.name==="DNase")&&
+                        //     (o.ASSAY_ID===2)){
+                        //     retval = true;
+                        // } else if ((oe.name==="H3K27ac")&&
+                        //     (o.ASSAY_ID===1)){
+                        //     retval = true;
+                        // } else {
+                        //     chosenElementTypes.push(oe.name);
+                        // }
                     });
                     if (retval) {
                         return true;
@@ -772,12 +817,13 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%',onChange: function() {
                             console.log($('#credSetSelectorChoice').val());
                         }});
-                    // $('#credSetSelectorChoice').val(['8_Genic_enhancer','9_Active_enhancer_1','10_Active_enhancer_2','11_Weak_enhancer']);
+        //            $('#credSetSelectorChoice').multiselect('selectAllOption', false);
                     $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
                     $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
-                        allSelectedText: 'All Selected',
+                        // allSelectedText: 'All Selected',
                         buttonWidth: '60%'});
-                    $('#credSetDisplayChoice').multiselect('selectAll', false);
+               //     $('#credSetDisplayChoice').multiselect('selectAllOption', false);
+                    $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
                     $('#toggleVarianceTableLink').click();
                 }
             );
