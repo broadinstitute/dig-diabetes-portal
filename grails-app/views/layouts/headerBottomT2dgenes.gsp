@@ -1,6 +1,9 @@
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
     <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/stroke', file:'menu_header_bg_2017_stroke.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
 </g:if>
+<g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
+</g:elseif>
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
     <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/mi', file:'menu_header_bg_2017_mi1.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
 </g:elseif>
@@ -15,6 +18,10 @@
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
             <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_header_logo_2017.svg"))}" style=" width: 450px; margin-left: 10px;" />
         </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+            <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
+            <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibd.front.logo", default:"files.ibd.front.logo"))}" style=" width: 400px; margin-left: 10px;" />
+        </g:elseif>
         <g:else>
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0; ">
             <a href="${createLink(controller:'home',action:'portalHome')}">
@@ -26,12 +33,16 @@
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
     <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/stroke', file:'menu_bg_2017_stroke.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:if>
+<g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images', file:'menu_bg_2017_5.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
+</g:elseif>
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
     <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/mi', file:'menu_band_2017_mi.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:elseif>
 <g:else>
     <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images', file:'menu_bg_2017_5.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:else>
+
     <g:renderT2dGenesSection>
         <ul class="dk-general-menu" style="list-style: none; float:right; margin:0; padding:10px 0 0 15px; text-align: right;  ">
             <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>
@@ -42,10 +53,15 @@
             <li class="tutorials-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller: 'home', action: 'tutorials')}"><g:message code="portal.header.nav.tutorials"/></a></li>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
-                <li class="downloads-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'downloads')}"><g:message code="portal.header.nav.downloads"/></a></li>
-                <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://cerebrovascular-disease-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
+                %{--<li class="downloads-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'downloads')}"><g:message code="portal.header.nav.downloads"/></a></li>--}%
+                <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://CV-disease-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
+
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
+                <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://cvdgenetics.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
+            </g:elseif>
+            <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                 <li class="contact-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'contact')}"><g:message code="portal.header.nav.contact_plural"/></a></li>
             </g:elseif>
             <g:else>
@@ -67,6 +83,7 @@
                             <option value="t2d" <%=(g.portalTypeString()=='t2d')?"selected":"" %>>T2D</option>
                             <option value="stroke" <%=(g.portalTypeString()=='stroke')?"selected":"" %>>Stroke</option>
                             <option value="mi" <%=(g.portalTypeString()=='mi')?"selected":"" %>>MI</option>
+                            <option value="ibd" <%=(g.portalTypeString()=='ibd')?"selected":"" %>>IBD</option>
                         </select>
                         %{--<g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>--}%
                     </li>

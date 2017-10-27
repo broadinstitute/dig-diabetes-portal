@@ -14,18 +14,21 @@ class NewsFeedService {
     private JSONObject currentPosts = [
             stroke: [],
             mi: [],
+            ibd   : [],
             t2d   : []
     ]
 
     private JSONObject blogIds = [
             t2d   : '5010306206573083521',
-            mi: '7857348124942584918',
-            stroke: '7857348124942584918'
+            mi: '3944203828206499294',
+            ibd: '7857348124942584918',
+            stroke: '7961982646849648720'
     ]
     // the last time the posts were successfully retrieved
     private JSONObject postsLastUpdatedAt = [
         stroke: new Date(0),
         mi: new Date(0),
+        ibd: new Date(0),
         t2d: new Date(0)
     ]
     // how often to refresh the cache, in milliseconds

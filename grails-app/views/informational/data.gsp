@@ -85,9 +85,12 @@
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
                 </g:elseif>
-                <g:else></g:else>
-            </div>
-    </div>
+                <g:else>
+                    <div class="row">
+                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
+                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.stroke.title2" default="about the data"/></p>
+                    </div>
+                </g:else>
 
         <div class="row">
             <g:renderBetaFeaturesDisplayedValue>

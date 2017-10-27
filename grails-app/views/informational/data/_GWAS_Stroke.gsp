@@ -57,7 +57,7 @@
  <p><b><g:message code="aboutTheData.stroke.datasets.vhh_ich.title"></g:message></b><br>
 <g:message code="aboutTheData.stroke.datasets.vhh_ich.pi"></g:message></p>
 
-<h4>Accessing ICH GWAS 2014 data in the Cerebrovascular Disease Knowledge Portal</h4>
+<h4>Accessing ICH GWAS 2014 data</h4>
 
 <p><g:message code="informational.data.accessing.ICH_GWAS_2014"></g:message></p>
 </div>

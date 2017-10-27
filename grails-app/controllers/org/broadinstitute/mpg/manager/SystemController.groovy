@@ -1,10 +1,12 @@
 package org.broadinstitute.mpg.manager
 
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import temporary.BuildInfo
 
@@ -43,6 +45,16 @@ class SystemController {
         recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly(),
         betaFeaturesDisplayed:sharedToolsService.getBetaFeaturesDisplayed()])
     }
+
+
+    def getPortalVersionList = {
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray portalVersionListJsonArray = slurper.parseText(restServerService?.getPortalVersionBeanListAsJson())
+        render(status:200, contentType:"application/json") {
+            [portalVersionList:portalVersionListJsonArray]
+        }
+    }
+
 
     def determineVersion = {
         JSONObject jsonVersion = [
@@ -216,16 +228,21 @@ class SystemController {
 
 
     def changeDataVersion()  {
-        String requestedDataVersion = params.datatype
-        int currentDataVersion = sharedToolsService.getDataVersion ()
-        if (requestedDataVersion!=null) {
-            if (requestedDataVersion != currentDataVersion) {
-                sharedToolsService.setDataVersion(requestedDataVersion)
-                flash.message = "You have changed the data version to ${sharedToolsService.getDataVersion ()}"
-            } else {
-                flash.message = "But the data version was already ${currentDataVersion}"
-            }
+        List<String> allDataTypes = params.dataType as List
+        LinkedHashMap<String,String> typeToVersionMap = [:]
+        for (String dataType in allDataTypes){
+            String mdvParm="mdvName_${dataType}"
+            restServerService.modifyPortalVersion(dataType, params[mdvParm])
         }
+ //        int currentDataVersion = sharedToolsService.getDataVersion ()
+//        if (requestedDataVersion!=null) {
+//            if (requestedDataVersion != currentDataVersion) {
+//                sharedToolsService.setDataVersion(requestedDataVersion)
+//                flash.message = "You have changed the data version to ${sharedToolsService.getDataVersion ()}"
+//            } else {
+//                flash.message = "But the data version was already ${currentDataVersion}"
+//            }
+//        }
         forward(action: "systemManager")
 
     }

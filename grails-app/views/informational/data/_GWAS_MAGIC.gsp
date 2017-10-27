@@ -79,7 +79,7 @@
 <p><g:message code="informational.data.exptsumm.MAGIC5a"> </g:message><g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet.author"></g:message><g:message code="informational.shared.publications.etal"> </g:message><g:message code="informational.data.exptsumm.MAGIC4b"></g:message>
 <g:message code="informational.data.exptsumm.MAGIC5b"></g:message></p>
 
-   <h4>Accessing MAGIC GWAS data in the T2D Knowledge Portal</h4>
+   <h4>Accessing MAGIC GWAS data</h4>
 <p><g:message code="informational.data.accessing.MAGIC"></g:message></p>
 
 

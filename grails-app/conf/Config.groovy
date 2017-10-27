@@ -1,6 +1,8 @@
 
 import grails.util.Environment
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
+
 // locations to search for config files that get merged into the main config;
 // config files can be ConfigSlurper scripts, Java properties files, or classes
 // in the classpath in ConfigSlurper format
@@ -87,7 +89,6 @@ if  (Environment.current == Environment.DEVELOPMENT)  {
  * Home directory in Windows is usually: C:\Users\<username>\.grails
  * In Unix, this is usually ~\.grails
  *
- * dataExport-commons-config.groovy is used to holed generic, non envrironment-specific configurations such as external api credentials, etc.
  */
 if (appName) {
     grails.config.locations = []
@@ -143,45 +144,56 @@ burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207
 burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
 burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
 burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8888/dig-genome-store/gs/burden");
+burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/burden");
 burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
 burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
 burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
+burdenStraightFromTheDEVKb =  new ServerBean("Burden straight from Dev KB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/burden");
+burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
+burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 
+//digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
+//digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
+//digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
+//digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
+//digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
+//digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
 
-digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
-digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
-digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
-digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
-digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
-digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
-digdevlocalServer = new ServerBean("digdevlocalServer", "http://localhost:8090/dccservices/")
-digAWSKBV2prodServer = new ServerBean("digAWSKBV2prodServer", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
-digAWS02KBV2prodServer = new ServerBean("digAWS02KBV2prodServer", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
-federatedAwsProdKBV2Server = new ServerBean("Federated Prod Server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
-federatedAwsStageKBV2Server = new ServerBean("Federaded Stage Server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
-toddTestServer = new ServerBean("toddTestServer","http://dig-prod.broadinstitute.org:8087/todd/gs/")
-digdevmarcin = new ServerBean("digdevmarcin", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digAWSStrokerest02Server = new ServerBean("digawsdevnew", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
-digAWSibddemoec2 = new ServerBean("digawsibdqa", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
+digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
+digAWSKBV2prodServer = new ServerBean("KB-prod-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
+federatedAwsProdKBV2Server = new ServerBean("KB-prod-fed-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
+toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
+digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
+digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
+digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsibddemoKB = new ServerBean("KB-ibddemo-2017-aws", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digAWSibddemoec2
+defaultRestServer = digawsdevnewKB
 
-getRestServerList = [
-        digdevlocalServer,
-        digAWSKBV2prodServer,
-        digAWS02KBV2prodServer,
-        federatedAwsProdKBV2Server,
-        federatedAwsStageKBV2Server,
-        toddTestServer,
-        digdevmarcin,
-        digAWSibddemoec2,
-        digAWSStrokerest02Server
-]
+ getRestServerList = [
+         digdevlocalServer,
+         digAWSKBV2prodServer,
+         digAWS02KBV2prodServer,
+         federatedAwsProdKBV2Server,
+         federatedAwsStageKBV2Server,
+         toddTestServer,
+         digdevmarcin,
+         digawsdevnewKB,
+         digawsdevnewKB_fed,
+         digawsqanewKB,
+         digawsqanewKB_fed,
+         digawsibddemoKB
+ ]
+
 
 println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
 
@@ -297,7 +309,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
@@ -305,13 +317,16 @@ environments {
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
+
+//        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
+
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-//      grails.serverURL = "http://default-environment-igfrae3vpi.elasticbeanstalk.com"             // stroke portal dev for now
+
+//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
-//        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+
 
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
 
@@ -320,12 +335,13 @@ environments {
 
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
+
 //        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
-        
+
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
-        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
+//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -345,6 +361,8 @@ if  (Environment.current == Environment.PRODUCTION)  {
 
 
 appName = grails.util.Metadata.current.'app.name'
+//def baseURL = grails.serverURL ?: "http://GPAD4-DCF.broadinstitute.org:${System.getProperty('server.port', '8080')}/${appName}"
+
 def baseURL = grails.serverURL ?: "http://127.0.0.1:${System.getProperty('server.port', '8080')}/${appName}"
 
 
@@ -431,7 +449,8 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/springSecurityOAuth/**':          ['permitAll'],
         '/dbconsole/**':      ['ROLE_ADMIN'],
         '/localization/**':   ['ROLE_ADMIN'],
-        '/metadatainfo/**':       ['ROLE_USER']
+        '/metadatainfo/**':       ['ROLE_USER'],
+        '/regionInfo/**':      ['ROLE_USER']
 ]
 grails.plugin.auth.loginFormUrl='/Security/auth2'
 grails.plugin.springsecurity.logout.postOnly = false
@@ -539,8 +558,12 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-diabetes.data.version = "mdv80";
-portal.data.version.map = ["t2d": "mdv27", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
+diabetes.data.version = "mdv28";
+portal.data.versionDesignator = [ new PortalVersionBean("t2d", "T2D","mdv28"),
+                                  new PortalVersionBean("stroke", "Stroke","mdv70"),
+                                  new PortalVersionBean("mi", "Myocardial Infarction","mdv91"),
+                                  new PortalVersionBean("ibd", "Inflammatory Bowel Disease","mdv80")]
+//portal.data.version.map = ["t2d": "mdv28", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
 portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
 portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
 portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
@@ -549,9 +572,19 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "ibd" : ["E071","E106","E088","E085"]]
 portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
 
-
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
-portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv27", "stroke": "GWAS_Stroke_mdv70", "mi" : "GWAS_CARDIoGRAM_mdv90", "EBI":"FG"]
+portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv28",
+                                                  "stroke": "GWAS_Stroke_mdv70",
+                                                  "mi" : "GWAS_CARDIoGRAM_mdv90",
+                                                  "ibd":"GWAS_IBDGenomics_eu_mdv80"]
+portal.data.epigenetic.datasetList.abbreviation.map = ["t2d": "[3]",
+                                                       "stroke": "[3]",
+                                                       "mi" : "[3]",
+                                                       "ibd": "[1,2]"]
+portal.data.credibleSet.datasetList.abbreviation.map = ["t2d": "GWAS_DIAGRAM_mdv28",
+                                                       "stroke": "GWAS_DIAGRAM_mdv70",
+                                                       "mi" : "GWAS_AFGen_mdv91",
+                                                       "ibd": "GWAS_DIAGRAM_mdv80"]
 
 

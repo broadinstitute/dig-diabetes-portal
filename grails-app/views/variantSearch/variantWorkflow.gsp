@@ -40,7 +40,7 @@
 <script>
     $(document).ready(function () {
         // load the phenotypes in the phenotype-dependent tab
-        mpgSoftware.variantWF.retrievePhenotypes();
+        mpgSoftware.variantWF.retrievePhenotypes('${g.portalTypeString()}');
         // load the datasets in the phenotype-independent tab
         mpgSoftware.variantWF.retrievePhenotypeIndependentDatasets();
         $('#geneInput').typeahead({
@@ -146,7 +146,7 @@
 
                                     <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
                                         <select id="phenotype" class="form-control" disabled
-                                                onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection()"></select>
+                                                onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')" onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')"></select>
                                     </div>
 
                                     <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">

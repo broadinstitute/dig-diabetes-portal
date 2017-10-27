@@ -29,6 +29,8 @@ public interface GetDataQuery {
 
     public void setPassback(String passback);
 
+    public void setResultFormat(String resultFormat);
+
     public void setEntity(String entity);
 
     public void setPageStart(int pageStart);
@@ -38,6 +40,8 @@ public interface GetDataQuery {
     public void setLimit(int limit);
 
     public String getPassback();
+
+    public String getResultFormat();
 
     public String getEntity();
 

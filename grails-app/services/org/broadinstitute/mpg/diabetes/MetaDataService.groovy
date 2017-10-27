@@ -71,8 +71,29 @@ class MetaDataService {
         return portalType;
     }
 
+    /***
+     * return the portal version string from the user session, or else from the default string
+     *
+     * @return
+     */
+    public String getPortalVersionFromSession() {
+        // if portal type defined in config -- start there
+        String portalVersionDefault = this.grailsApplication.config.diabetes.data.version;
 
+        String portalVersion = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalVersion');
 
+        if (portalVersion == null) {
+            portalVersion = portalVersionDefault;
+
+            if (!portalVersion){
+                log.fatal("We need to have a mdv version or we can't continue")
+                throw new Exception("missing mdv -- we cannot continue")
+            }
+
+        }
+
+        return portalVersion;
+    }
 
 
 
@@ -117,18 +138,11 @@ class MetaDataService {
         String dataVersion;
         String portalType = this.getPortalTypeFromSession()
         String distributedKb = this.getDistributedKBFromSession()
-
-        // get the data version based on user session portal type; default to t2d
-        if (distributedKb == 'EBI')  {
-            dataVersion = this.grailsApplication.config.portal.data.version.map[distributedKb]
-        } else if  ("t2d"!= portalType) {
-            dataVersion = this.grailsApplication.config.portal.data.version.map[portalType]
-        } else {
-            dataVersion = "mdv" + this.sharedToolsService.getDataVersion()
-        }
+        dataVersion = restServerService.retrieveMdvForPortalType(portalType)
+     //  dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
 
         // return
-        return dataVersion;
+       return dataVersion;
     }
 
     /**
@@ -507,6 +521,33 @@ class MetaDataService {
         return toReturn;
     }
 
+
+
+
+    public String getPreferredSampleGroupNameForPhenotype(String phenotypeName) {
+        // local variables
+        String returnValue = ""
+        List<SampleGroup> groupList
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            // sort the group list
+            groupList = groupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+
+            returnValue = groupList?.first()?.systemId
+
+        } catch (PortalException exception) {
+            log.error("Got exception in getPreferredSampleGroupNameForPhenotypeAsJson with phenotype = " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        return returnValue;
+    }
+
+
+
+
     /**
      * For the given phenotype, return a tree of sample groups, with cohorts inside of their
      * parent sample groups
@@ -616,6 +657,29 @@ class MetaDataService {
         // return
         return groupList.sort{it.sortOrder};
     }
+
+
+    public List<SampleGroup>  getSampleGroupListForPhenotypeWithMeaning(String phenotypeName,String meaning) {
+        List<SampleGroup> sampleGroupList = getSampleGroupListForPhenotypeAndVersion(phenotypeName, "", MetaDataService.METADATA_VARIANT)
+        List<SampleGroup> groupList = []
+
+        for (SampleGroup sampleGroup in sampleGroupList){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sampleGroup.phenotypes){
+                for (Property property in phenotype.properties){
+                    if (property.hasMeaning(meaning)){
+                        if (!groupList.collect{it.systemId}?.contains(sampleGroup.systemId)){
+                            groupList << sampleGroup
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return groupList
+    }
+
+
 
     /**
      * Get a JSON object listing every phenotype and the top-level datasets containing data for that phenotype

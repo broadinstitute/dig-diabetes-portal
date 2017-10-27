@@ -184,6 +184,16 @@ table.dk-search-result td {
 	border:solid 1px #fff !important;
 	font-size: 12px;
 }
+table.dk-search-result td.credcell  {
+	border-bottom:solid 1px #000 !important;
+	border-left:solid 1px #000 !important;
+	border-right:solid 1px #000 !important;
+}
+table.dk-search-result td.credcellpval  {
+	text-align: center;
+	vertical-align: middle;
+	border-bottom:double 1px #000 !important;
+}
 
 table.dk-search-result th.dk-common {
 	background-color: #ddd;

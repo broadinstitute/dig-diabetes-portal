@@ -7,6 +7,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
@@ -61,6 +62,8 @@ class RestServerService {
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
     private String GET_REGION_URL = "getRegion"
     private String GET_VECTOR_URL = "getVectorData"
+    private String GET_BIG_WIG_DATA = "getBigWigData"
+    private String GET_EPIGENETIC_POSSIBLE_DATA = "getEpigenomicData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -68,8 +71,6 @@ class RestServerService {
     public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
-    public static int SAMPLE_DATA_VERSION_T2D = 23
-    public static int SAMPLE_DATA_VERSION_STROKE = 70
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -82,6 +83,7 @@ class RestServerService {
     private String OBSERVED_AFFECTED = "OBSA"
     private String OBSERVED_UNAFFECTED = "OBSU"
     private Integer MAXIMUM_NUMBER_DB_JOINS = 60
+    private List<PortalVersionBean> PORTAL_VERSION_BEAN_LIST = []
 
 
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
@@ -142,44 +144,6 @@ class RestServerService {
     public void initialize() {
         //current
 
-        // load balancer with rest server(s) behind it
-//        PROD_LOAD_BALANCED_SERVER = grailsApplication.config.t2dProdLoadBalancedServer.base + grailsApplication.config.t2dProdLoadBalancedServer.name + grailsApplication.config.t2dProdLoadBalancedServer.path
-
-//        // load balancer with rest server(s) behind it
-//        PROD_LOAD_BALANCED_BROAD_SERVER = grailsApplication.config.t2dProdRestServer.base + grailsApplication.config.t2dProdRestServer.name + grailsApplication.config.t2dProdRestServer.path
-//
-//        // local server for development
-//        LOCAL_SERVER = grailsApplication.config.localServer.base + grailsApplication.config.localServer.name + grailsApplication.config.localServer.path
-//
-//        // qa load balancer with rest server(s) behind it
-//        QA_LOAD_BALANCED_SERVER = grailsApplication.config.t2dQaLoadBalancedServer.base + grailsApplication.config.t2dQaLoadBalancedServer.name + grailsApplication.config.t2dQaLoadBalancedServer.path
-//
-//        // test load balancer with rest server(s) behind it
-//        DEV_LOAD_BALANCED_SERVER = grailsApplication.config.t2dDevLoadBalancedServer.base + grailsApplication.config.t2dDevLoadBalancedServer.name + grailsApplication.config.t2dDevLoadBalancedServer.path
-//
-//        DEV_01_SERVER = grailsApplication.config.t2dDev01BehindLoadBalancer.base + grailsApplication.config.t2dDev01BehindLoadBalancer.name + grailsApplication.config.t2dDev01BehindLoadBalancer.path
-//        DEV_02_SERVER = grailsApplication.config.t2dDev02BehindLoadBalancer.base + grailsApplication.config.t2dDev02BehindLoadBalancer.name + grailsApplication.config.t2dDev02BehindLoadBalancer.path
-//
-//        PROD_01_SERVER = grailsApplication.config.t2dProd01BehindLoadBalancer.base + grailsApplication.config.t2dProd01BehindLoadBalancer.name + grailsApplication.config.t2dProd01BehindLoadBalancer.path
-//        PROD_02_SERVER = grailsApplication.config.t2dProd02BehindLoadBalancer.base + grailsApplication.config.t2dProd02BehindLoadBalancer.name + grailsApplication.config.t2dProd02BehindLoadBalancer.path
-//
-//        // dev rest server, not load balanced
-//        DEV_REST_SERVER = grailsApplication.config.t2dDevRestServer.base + grailsApplication.config.t2dDevRestServer.name + grailsApplication.config.t2dDevRestServer.path
-//
-//        // 'aws01'
-//        AWS01_REST_SERVER = grailsApplication.config.t2dAws01RestServer.base + grailsApplication.config.t2dAws01RestServer.name + grailsApplication.config.t2dAws01RestServer.path
-//
-//        // 'stage kbv2'
-//        AWS02_NEW_CODE_REST_SERVER = grailsApplication.config.stageKb2NewCodeServer.base + grailsApplication.config.stageKb2NewCodeServer.name + grailsApplication.config.stageKb2NewCodeServer.path
-//
-//        // 'prod kbv2'
-//        AWS01_NEW_CODE_REST_SERVER = grailsApplication.config.prodKb2NewCodeServer.base + grailsApplication.config.prodKb2NewCodeServer.name + grailsApplication.config.prodKb2NewCodeServer.path
-//
-//        // 'stage aws01'
-//        AWS02_REST_SERVER = grailsApplication.config.t2dAwsStage01RestServer.base + grailsApplication.config.t2dAwsStage01RestServer.name + grailsApplication.config.t2dAwsStage01RestServer.path
-//
-//        TODD_SERVER = grailsApplication.config.toddServer.base + grailsApplication.config.toddServer.name + grailsApplication.config.toddServer.path
-
         BASE_URL = grailsApplication.config.server.URL
         REMEMBER_BASE_URL = BASE_URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
@@ -189,64 +153,15 @@ class RestServerService {
 
         //default rest server
         this.REST_SERVER = grailsApplication.config.defaultRestServer;
+        this.PORTAL_VERSION_BEAN_LIST = grailsApplication.config.portal.data.versionDesignator
     }
 
     // current below
-
-    public String getDev01() {
-        return DEV_01_SERVER ;
-    }
-
-    public String getDev02() {
-        return DEV_02_SERVER;
-    }
-
-    public String getProd01() {
-        return PROD_01_SERVER ;
-    }
-
-    public String getProd02() {
-        return PROD_02_SERVER ;
-    }
-
-    public String getDevLoadBalanced() {
-        return DEV_LOAD_BALANCED_SERVER;
-    }
-
-    public String getAws01RestServer() {
-        return AWS01_REST_SERVER;
-    }
-
-    public String getAws02RestServer() {
-        return AWS02_REST_SERVER;
-    }
-
-    public String getAws02NewCodeRestServer() {
-        return AWS02_NEW_CODE_REST_SERVER;
-    }
-    public String getAws01NewCodeRestServer() {
-        return AWS01_NEW_CODE_REST_SERVER;
-    }
-
-    public String getProdLoadBalanced() {
-        return PROD_LOAD_BALANCED_SERVER;
-    }
-
-    public String getProdLoadBalancedBroad() {
-        return PROD_LOAD_BALANCED_BROAD_SERVER;
-    }
 
     public String getLocal() {
         return LOCAL_SERVER;
     }
 
-    public String getToddServer() {
-        return TODD_SERVER;
-    }
-
-    public String getQaLoadBalanced() {
-        return QA_LOAD_BALANCED_SERVER;
-    }
 
     private List<String> getGeneColumns() {
         return GENE_COLUMNS + EXSEQ_GENE_COLUMNS + EXCHP_GENE_COLUMNS + GWAS_GENE_COLUMNS
@@ -379,23 +294,16 @@ class RestServerService {
             this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated01);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated02);
             this.burdenServerList.add(grailsApplication.config.burdenRestServerPassThrough);
+            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb);
+            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb_fed);
+            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb);
+            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb_fed);
         }
 
         return this.burdenServerList;
     }
 
-//    public List<ServerBean> getRestServerList() {
-//        if (this.restServerList == null) {
-//            this.restServerList = new ArrayList<ServerBean>();
-//            this.restServerList.add(grailsApplication.config.digdev01Server);
-//            this.restServerList.add(grailsApplication.config.digdev02Server);
-//            this.restServerList.add(grailsApplication.config.digqa01Server);
-//            this.restServerList.add(grailsApplication.config.digqa02Server);
-//            this.restServerList.add(grailsApplication.config.digprod01Server);
-//            this.restServerList.add(grailsApplication.config.digprod02Server);
-//        }
-//        return this.restServerList;
-//    }
+
 
     public void changeBurdenServer(String serverName) {
         for (ServerBean serverBean : this.burdenServerList) {
@@ -416,6 +324,69 @@ class RestServerService {
             }
         }
     }
+
+
+    public void removePortalVersion(String portalType){
+        PORTAL_VERSION_BEAN_LIST.removeAll{it.portalType==portalType}
+        log.info("removed")
+    }
+
+
+    /***
+     * Update the current list of portal versions.  If this record has the same name as an existing record then update
+     * that existing record, otherwise add a new record
+     *
+     * @param portalType
+     * @param portalDescription
+     * @param mdvName
+     * @return
+     */
+    public PortalVersionBean modifyPortalVersionDescr(String portalType, String portalDescription, String mdvName){
+        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
+        PortalVersionBean newPortalVersionBean = new PortalVersionBean( portalType,  portalDescription,  mdvName)
+        if (existingPortalVersionBean){
+            removePortalVersion(portalType)
+        }
+        PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
+        return newPortalVersionBean
+    }
+
+    public PortalVersionBean modifyPortalVersion(String portalType, String mdvName){
+        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
+        PortalVersionBean newPortalVersionBean
+        if (existingPortalVersionBean){
+            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),  mdvName)
+            removePortalVersion(portalType)
+        } else {
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName)
+        }
+        PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
+        return newPortalVersionBean
+    }
+    /***
+     * Retrieve the MDV version for a portal type
+     *
+     * @param portalType
+     * @return
+     */
+    public String retrieveMdvForPortalType(String portalType){
+        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
+        String returnValue
+        if (existingPortalVersionBean){
+            returnValue = existingPortalVersionBean.mdvName
+        } else {
+            log.error("ERROR: code requested portal ${portalType}, but we don't have anything by that name")
+        }
+        return returnValue
+    }
+
+
+    public String getPortalVersionBeanListAsJson(){
+        List<PortalVersionBean> listPortalVersionBean = PORTAL_VERSION_BEAN_LIST
+        return "[${listPortalVersionBean.collect{it.toJsonString()}.join(",")}]"
+    }
+
+
 
     /**
      * get the current burden rest server
@@ -664,6 +635,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject postVectorDataRestCall(String jsonString) {
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_VECTOR_URL, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postBigWigDataRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_BIG_WIG_DATA, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postEpigeneticBigwigFileQueryRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_EPIGENETIC_POSSIBLE_DATA, currentRestServer() );
         return tempObject;
     }
 
@@ -2062,7 +2043,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName, int  startHere, int pageSize ) {
+    public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName,
+                                                             int  startHere, int pageSize,
+                                                             String version ) {
         List<String> specifyRequestList = []
         //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
         if ((phenotype) && (phenotype.length() > 0)) {
@@ -2077,11 +2060,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if ((geneName) && (geneName.length() > 0)) {
             specifyRequestList << "\"gene\":\"${geneName}\""
         }
+        if ((version) && (version.length() > 0)) {
+            specifyRequestList << "\"version\":\"${version}\""
+        }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
 
 
-    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd, String source) {
+    public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd,
+                                               String source,int assayId, String assayIdListInStringForm) {
         int revisedPageStart = 0;
         int revisedPageEnd = 1000;
         if (pageStart > 0){revisedPageStart = pageStart}
@@ -2096,15 +2083,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (source){
             restApiParameterList << "\"source\": \"${source}\""
         }
+        if ((assayIdListInStringForm) ){
+            restApiParameterList << "\"assay_id\": ${assayIdListInStringForm}"
+        } else if ((assayId) && (assayId>-1)){
+            restApiParameterList << "\"assay_id\": [${assayId}]"
+        }
         String specifyRequest = "{${restApiParameterList.join(",")}}"
-//
-//        String specifyRequest = """{"passback":"abc123",
-// "page_start": ${revisedPageStart},
-// "page_size": ${revisedPageEnd},
-// "chrom": "${chromosome}",
-// "startPos": ${startPosition},
-// "endPos": ${endPosition}
-//}""".toString()
         return postRestCall(specifyRequest, GET_REGION_URL)
     }
 
@@ -2509,6 +2493,31 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         return returnValue
     }
+
+
+    public List<String> retrieveGenesInExtents(LinkedHashMap<String,String> positioningInformation){
+        List<String> identifiedGenes = []
+        String regionSpecifier = "chr${positioningInformation?.chromosomeSpecified}:${positioningInformation?.beginningExtentSpecified}-${positioningInformation?.endingExtentSpecified}"
+        String chromosomeSpecifier = (positioningInformation?.chromosomeSpecified?.startsWith('chr'))?
+                positioningInformation?.chromosomeSpecified:
+                ("chr" + positioningInformation?.chromosomeSpecified)
+        List<Gene> geneList = Gene.findAllByChromosome(chromosomeSpecifier)
+        for (Gene gene in geneList) {
+            try {
+                int startExtent = positioningInformation?.beginningExtentSpecified as Long
+                int endExtent = positioningInformation?.endingExtentSpecified as Long
+                if (((gene?.addrStart > startExtent) && (gene?.addrStart < endExtent)) ||
+                        ((gene?.addrEnd > startExtent) && (gene?.addrEnd < endExtent))) {
+                    identifiedGenes << gene?.name2 as String
+                }
+            } catch (e) {
+                log.error("problem translating extent start=${} to end=${}")
+            }
+
+        }
+        return identifiedGenes
+    }
+
 
 
 }

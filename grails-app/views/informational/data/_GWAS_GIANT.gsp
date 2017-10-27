@@ -5,11 +5,7 @@
 
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-               %{--<p><div class="paper">--}%
-%{--<g:message code="informational.shared.publications.Graff_2017_PLoSGenet"></g:message><br>--}%
-%{--<g:message code="informational.shared.publications.Graff_2017_PLoSGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<div class="citation"><g:message code="informational.shared.publications.Graff_2017_PLoSGenet.citation"></g:message> </div>--}%
-%{--</div></p>--}%
+
 
                <p><div class="paper">
 <g:message code="informational.shared.publications.Yang_2012_Nature"></g:message><br>
@@ -27,10 +23,7 @@
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
-<li><g:message code="informational.shared.traits.BMI"></g:message></li>
 <li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
-<li><g:message code="informational.shared.traits.waist_circumference"></g:message></li>
-<li><g:message code="informational.shared.traits.hip_circumference"></g:message></li>
 <li><g:message code="informational.shared.traits.height"></g:message></li>
 </ul>
 
@@ -45,9 +38,7 @@
 <p>
 <g:message code="informational.data.exptsumm.GIANT"></g:message>
 </p>
-<p>
-<g:message code="informational.data.exptsumm.GIANT2"></g:message>
-</p>
-<h4>Accessing GIANT GWAS data in the T2D Knowledge Portal</h4>
+
+<h4>Accessing GIANT GWAS data</h4>
 <p><g:message code="informational.data.accessing.GIANT"></g:message></p>
 </script>
