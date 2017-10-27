@@ -217,7 +217,8 @@ var mpgSoftware = mpgSoftware || {};
             } else { //
                 var extractedVariantIds = _.map(oldRenderData.variants,function(v){return v.name;});
                 _.forEach(variantsToInclude,function(varId){
-                    arrayOfIndexesToInclude.push(extractedVariantIds.indexOf(varId))
+                    var convertedVarId = mpgSoftware.locusZoom.convertVarIdToBroadFavoredForm(varId);
+                    arrayOfIndexesToInclude.push(extractedVariantIds.indexOf(convertedVarId))
                 });
             }
 
@@ -266,7 +267,7 @@ var mpgSoftware = mpgSoftware || {};
                         startPos: ""+variantObject.POS,
                         endPos: ""+variantObject.POS,
                         lzFormat:0,
-                        assayIdList:""+additionalData.assayIdList
+                        assayIdList:""+assayIdList
                     },
                     async: true
                     }).done(function (data, textStatus, jqXHR) {
@@ -317,7 +318,10 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-
+        var specificHeaderToBeActiveByVarId = function(varId){
+            $('th.headersWithVarIds').removeClass('active');
+            $("th.headersWithVarIds:contains('"+varId+"')").addClass('active')
+        };
 
         var specificCredibleSetSpecificDisplay = function(currentButton,variantsToInclude){
 
@@ -521,7 +525,7 @@ var mpgSoftware = mpgSoftware || {};
             return colorSpecification;
         }
         var appendLegendInfo = function() {
-            var selectedElements = getSelectedValuesAndText();
+            var selectedElements = _.unionBy(getSelectedValuesAndText(),getDisplayValuesAndText(), 'name');
             var chosenElementTypes = [];
             _.forEach(selectedElements,function(oe){
                 if (oe.name==='DNase') {
@@ -575,7 +579,9 @@ var mpgSoftware = mpgSoftware || {};
             // setIncludeRecordBasedOnUserChoice(additionalData.assayIdList);
             // includeRecord = includeRecordBasedOnUserChoice;
             setDevelopingTissueGrid({});
-            var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList));
+            var assayIdArrays = _.union(getSelectorAssayIds(),getDisplayAssayIds()) ;
+            var assayIdArrayAsString = "["+assayIdArrays.join(",")+"]";
+            var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
 
             $.when.apply($, promises).then(function(schemas) {
                 var tissueGrid = getDevelopingTissueGrid();
@@ -654,19 +660,13 @@ var mpgSoftware = mpgSoftware || {};
                 // The logic ultimately employed is this: primaryTissueGrid tells us which tissues to display.  subsidiaryTissueGrid holds any additional tissues that we will display,
                 //  which assumes that that tissue is already a primary tissue.  If
                 primaryTissueGrid = filterTissueGrid(tissueGrid,getSelectorAssayIds()); // DNase drives
-               // subsidiaryTissueGrid = filterTissueGrid(tissueGrid,_.difference(getDisplayAssayIds(),getSelectorAssayIds()));
                 subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,getDisplayAssayIds(),primaryTissueGrid);
             }
 
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
-            // we only need to consider the subsidiary tissues that match a primary tissue
-            //var subsidiaryTissueObject = extractValuesForTissueDisplay(_.filter(subsidiaryTissueGrid,function(v,k){return typeof primaryTissueGrid[k]!=='undefined' }));
             var subsidiaryTissueObject = extractValuesForTissueDisplay(subsidiaryTissueGrid);
 
 
-            // var allVariants = _.flatten([{}, dataVariants]);
-            // var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
-            // var sortedVariants = flattendVariants.sort(function (a, b) {return a.POS - b.POS;});
             var sortedVariants = dataVariants;
             var countOfTissues = primaryTissueObject.sortedTissues.length;
             var countOfSubsidiaryTissues = subsidiaryTissueObject.sortedTissues.length;
@@ -882,7 +882,9 @@ var mpgSoftware = mpgSoftware || {};
             removeAllCredSetHeaderPopUps:removeAllCredSetHeaderPopUps,
             markHeaderAsCurrentlyDisplayed:markHeaderAsCurrentlyDisplayed,
             setIncludeRecordBasedOnUserChoice:setIncludeRecordBasedOnUserChoice,
-            getDefaultTissueRegionOverlapMatcher:getDefaultTissueRegionOverlapMatcher
+            getDefaultTissueRegionOverlapMatcher:getDefaultTissueRegionOverlapMatcher,
+            getSelectorAssayIds:getSelectorAssayIds,
+            specificHeaderToBeActiveByVarId:specificHeaderToBeActiveByVarId
         }
 
     })();
