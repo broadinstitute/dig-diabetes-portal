@@ -392,7 +392,7 @@
                     <a href="https://www.nih.gov/research-training/accelerating-medicines-partnership-amp/type-2-diabetes"><img src="${resource(dir: 'images/stroke', file:'AMP_banner_small.png')}" style="width: 350px;" ></a>
                 </p>
                 <h3 style="font-size:20px"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
-                <a href="${createLink(controller:'home',action:'portalHome')}"><img src="${resource(dir: 'images', file: 't2dkp_h.png')}" style="width: 350px;"></a>
+                <a href="http://www.type2diabetesgenetics.org"><img src="${resource(dir: 'images', file: 't2dkp_h.png')}" style="width: 350px;"></a>
             </g:if>
 
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
