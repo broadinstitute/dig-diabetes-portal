@@ -9,7 +9,14 @@ var mpgSoftware = mpgSoftware || {};
 
         var assayExtremes = {"1":{minimum:127,maximum:9213115},
             "2":{minimum:83,maximum:854238}};
-        var numberOfQuantiles =5;
+        var numberOfQuantiles =4;
+        var precalculatedQuantileBoundaries = {
+            "0":[0,0,0,0,0], // provide a default in case no tissues are chosen
+            "1":[0,167.9,888.4,2649.9,9213115], // h3ks2ac
+            "2":[0,207.8,389.6,1248.1,854238], // dnase
+            "3":[0,0,0,0,0], // parker -- not sorted by value
+            "4":[0,0,0,0,0]  // varshney -- not sorted by value
+        }
         var DEFAULT_NUMBER_OF_VARIANTS = 10;
         var defaultTissueRegionOverlapMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
             'stroke':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -369,6 +376,7 @@ var mpgSoftware = mpgSoftware || {};
                 var record = tissueGrid[tissueKey][positionString];
                 var worthIncluding = false;
                 if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
+                    quantileArray = createQuantilesArray(record.ASSAY_ID);
                     var elementName = record.source_trans;
                     if (record.ASSAY_ID === 3){
                         lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_"+determineCategoricalColorIndex(record.element)+" "+
@@ -377,7 +385,7 @@ var mpgSoftware = mpgSoftware || {};
                     } else {
                         lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                            ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
+                            ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
                     }
                 } else {
                     lineToAdd = ("<td class='tissueTable "+elementName+"'></td>");
@@ -387,14 +395,11 @@ var mpgSoftware = mpgSoftware || {};
             return lineToAdd;
         };
 
-        var createQuantilesArray = function(everySingleValue){
-            var everySingleValueSorted = everySingleValue.sort(function(a,b){return a-b});
-            var maximumValue = everySingleValueSorted[everySingleValueSorted.length-1];
-            var minimumValue = everySingleValueSorted[0];
+        var createQuantilesArray = function(assayId){
+            var boundariesForThisAssay = precalculatedQuantileBoundaries[assayId];
             var quantileArray = [];
-            var widthOfOneQuintile = (maximumValue-minimumValue)/numberOfQuantiles;
             for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
-                quantileArray.push({min:minimumValue+(widthOfOneQuintile*i),max:minimumValue+(widthOfOneQuintile*(i+1))});
+                quantileArray.push({min:boundariesForThisAssay[i],max:boundariesForThisAssay[i+1]});
             }
             return quantileArray;
         };
@@ -420,7 +425,6 @@ var mpgSoftware = mpgSoftware || {};
                 _.forEach(Object.keys(incomingTissueGrid[tissueKey]),function(variantPos){
                     var variantRecord = incomingTissueGrid[tissueKey][variantPos];
                     if (assayIdArray.includes(variantRecord.ASSAY_ID)){
-                    // if (variantRecord.ASSAY_ID===assayId){
                         variantsToKeep[variantPos]=variantRecord;
                     }
                 });
@@ -430,6 +434,30 @@ var mpgSoftware = mpgSoftware || {};
             });
             return retVal;
         };
+        var filterSecondaryTissueGrid = function(incomingTissueGrid,assayIdArray,primaryTissueObject){
+            var retVal = {};
+            // convert assay id into a real array
+            _.forEach(Object.keys(primaryTissueObject),function(primaryTissueKey){
+                // to be in the primary grid you must have at least one matching variant.  Take the first one to find it's assay id
+                var primaryAssayId = primaryTissueObject[primaryTissueKey][Object.keys(primaryTissueObject[primaryTissueKey])[0]].ASSAY_ID
+                var weHaveDataForThatTissue = incomingTissueGrid[primaryTissueKey];
+                if (typeof weHaveDataForThatTissue !== 'undefined'){
+                    var variantsToKeep = {};
+                    _.forEach(Object.keys(weHaveDataForThatTissue),function(variantPos){
+                        var variantRecord = weHaveDataForThatTissue[variantPos];
+                        if ((assayIdArray.includes(variantRecord.ASSAY_ID))&&
+                            (variantRecord.ASSAY_ID!==primaryAssayId)){ // we only want s subsidiary records, which must come from a different assay
+                            variantsToKeep[variantPos]=variantRecord;
+                        }
+                    });
+                    if (Object.keys(variantsToKeep).length>0){
+                        retVal[primaryTissueKey] = variantsToKeep;
+                    }
+                }
+            });
+            return retVal;
+        };
+
         var extractValuesForTissueDisplay = function (tissueGrid){
             var sortableTissueArray = [];
             _.forEach(Object.keys(tissueGrid),function(tissueKey){
@@ -444,12 +472,20 @@ var mpgSoftware = mpgSoftware || {};
                     everySingleValue.push(oneValue);
                     return oneValue;
                 })[0];
-                return bestVariantPerTissue.VALUE
+                return  (typeof bestVariantPerTissue !== 'undefined') ? bestVariantPerTissue.VALUE : 0;
             });
+
             return {
-                sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){return oneRec[Object.keys(oneRec)[0]].source_trans}),
+                sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){
+                    var assString = ""
+                    var rec = oneRec[Object.keys(oneRec)[0]];
+                    if (typeof rec !== 'undefined') {
+                        assString = rec.source_trans;
+                    }
+                    return assString;
+                }),
                // quantileArray: createStaticQuantileArray(assayId)
-                quantileArray: createQuantilesArray(everySingleValue)
+                quantileArray: createQuantilesArray(assayId)
             };
         };
 
@@ -618,12 +654,14 @@ var mpgSoftware = mpgSoftware || {};
                 // The logic ultimately employed is this: primaryTissueGrid tells us which tissues to display.  subsidiaryTissueGrid holds any additional tissues that we will display,
                 //  which assumes that that tissue is already a primary tissue.  If
                 primaryTissueGrid = filterTissueGrid(tissueGrid,getSelectorAssayIds()); // DNase drives
-                subsidiaryTissueGrid = filterTissueGrid(tissueGrid,_.difference(getDisplayAssayIds(),getSelectorAssayIds()));
+               // subsidiaryTissueGrid = filterTissueGrid(tissueGrid,_.difference(getDisplayAssayIds(),getSelectorAssayIds()));
+                subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,getDisplayAssayIds(),primaryTissueGrid);
             }
 
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
             // we only need to consider the subsidiary tissues that match a primary tissue
-            var subsidiaryTissueObject = extractValuesForTissueDisplay(_.filter(subsidiaryTissueGrid,function(v,k){return typeof primaryTissueGrid[k]!=='undefined' }));
+            //var subsidiaryTissueObject = extractValuesForTissueDisplay(_.filter(subsidiaryTissueGrid,function(v,k){return typeof primaryTissueGrid[k]!=='undefined' }));
+            var subsidiaryTissueObject = extractValuesForTissueDisplay(subsidiaryTissueGrid);
 
 
             // var allVariants = _.flatten([{}, dataVariants]);
@@ -652,7 +690,7 @@ var mpgSoftware = mpgSoftware || {};
                 // do we want to add a follow up lines?
                 if (drivingTissueRecordExists&&(Object.keys(subsidiaryTissueGrid).length>0)){
                     if (typeof subsidiaryTissueGrid[tissueKey] !== 'undefined') {
-                        var lineToAdd = "<tr><td></td><td></td>";
+                        var lineToAdd = "<tr><td><span  class='subsidiaryClass'>("+tissueKey+")</span></td>";
                         _.forEach(sortedVariants,function(variantRec){
                             lineToAdd+=writeOneLineOfTheHeatMap(subsidiaryTissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,variantRec)
                         });

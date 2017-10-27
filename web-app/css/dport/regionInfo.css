@@ -119,14 +119,12 @@ td.tissueTable.matchingRegion1_0{
 }
 
 /*DNase corresponds to assay ID = 2*/
-td.tissueTable.matchingRegion2_5{
+
+td.tissueTable.matchingRegion2_4{
     background: #3333FF;
 }
-td.tissueTable.matchingRegion2_4{
-    background: #3366FF;
-}
 td.tissueTable.matchingRegion2_3{
-    background: #3399FF;
+    background: #3366FF;
 }
 td.tissueTable.matchingRegion2_2{
     background: #3399FF;
@@ -165,7 +163,9 @@ th.niceHeadersThatAreLinks{
     font-weight: bold;
     color: #9632b8;
 }
-
+span.subsidiaryClass{
+    color:#888888;
+}
 
 .hover {
     position:relative;
