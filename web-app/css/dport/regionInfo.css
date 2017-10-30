@@ -205,3 +205,7 @@ div.credibleSetHeader{
 div.credibleSetNameHolder{
     margin-top: 10px;
 }
+svg.lz-locuszoom .lz-panel-title {
+    font-size: 16px;
+    font-weight: 500;
+}

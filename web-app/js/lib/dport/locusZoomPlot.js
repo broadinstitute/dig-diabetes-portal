@@ -705,7 +705,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-
+        // Chromatin state data, currently Parker 2013
         var customIntervalsPanel = function (layerName){
             return {   id: layerName,
                     width: 1000,
@@ -757,7 +757,7 @@ var mpgSoftware = mpgSoftware || {};
                 height: 50,
                 min_width: 500,
                 min_height: 50,
-                margin: { top: 5, right: 150, bottom: 5, left: 20 },
+                margin: { top: 25, right: 150, bottom: 5, left: 20 },
                 dashboard: (function(){
                     //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
@@ -1445,7 +1445,7 @@ var mpgSoftware = mpgSoftware || {};
             var intervalPanel;
             if (pageVars.portalTypeString=== 'ibd'){
                 intervalPanel =  customIbdIntervalsPanel(intervalPanelName,assayName);
-                intervalPanel.title = { text: tissueName+" "+assayName, style: {}, x: 10, y: 22 };
+                intervalPanel.title = { text: tissueName+" "+assayName, style: {}, x: 0, y: 22 };
             } else {
                 intervalPanel = customIntervalsPanel(intervalPanelName);
                 intervalPanel.dashboard.components.push({

@@ -218,7 +218,10 @@ var mpgSoftware = mpgSoftware || {};
                 var extractedVariantIds = _.map(oldRenderData.variants,function(v){return v.name;});
                 _.forEach(variantsToInclude,function(varId){
                     var convertedVarId = mpgSoftware.locusZoom.convertVarIdToBroadFavoredForm(varId);
-                    arrayOfIndexesToInclude.push(extractedVariantIds.indexOf(convertedVarId))
+                    var indexToPick = extractedVariantIds.indexOf(convertedVarId);
+                    if (indexToPick>-1){
+                        arrayOfIndexesToInclude.push(extractedVariantIds.indexOf(convertedVarId));
+                    }
                 });
             }
 
