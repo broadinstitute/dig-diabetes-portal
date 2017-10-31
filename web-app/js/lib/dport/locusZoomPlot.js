@@ -24,6 +24,15 @@ var mpgSoftware = mpgSoftware || {};
             }
             return returnValue;
         };
+        var convertVarIdToBroadFavoredForm =  function (varId){
+            // broad form example: 8_118183491_C_T
+            // UM form example: 8:118183491_C/T
+            var extractedParts = extractParts(varId);
+
+            var returnValue = extractedParts.chromosome+"_"+extractedParts.position+"_"+extractedParts.reference+"_"+extractedParts.alternate;
+
+            return returnValue;
+        };
 
         var extractParts =  function (varId){
             // broad form example: 8_118183491_C_T
@@ -696,7 +705,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-
+        // Chromatin state data, currently Parker 2013
         var customIntervalsPanel = function (layerName){
             return {   id: layerName,
                     width: 1000,
@@ -748,7 +757,7 @@ var mpgSoftware = mpgSoftware || {};
                 height: 50,
                 min_width: 500,
                 min_height: 50,
-                margin: { top: 5, right: 150, bottom: 5, left: 20 },
+                margin: { top: 25, right: 150, bottom: 5, left: 20 },
                 dashboard: (function(){
                     //var l = standardDashBoadWithoutMove();
                     var l = LocusZoom.Layouts.get("dashboard", "standard_panel", { unnamespaced: true });
@@ -1114,21 +1123,7 @@ var mpgSoftware = mpgSoftware || {};
                 core.errorReporter(jqXHR, errorThrown)
             });
         };
-        // var processEpigeneticData = function (data,additionalData){
-        //     var plotId = getNewDefaultLzPlot();
-        //     if (typeof additionalData.plotDomId !== 'undefined') {
-        //         plotId = additionalData.plotDomId;
-        //     }
-        //     var matchedTissue = _.filter(data.variants.variants,function(v,k){console.log(v);return v.element.indexOf('enhancer')!==-1});
-        //     _.forEach(matchedTissue,function(o,i){
-        //         addLZTissueAnnotations({
-        //             tissueCode: o.source,
-        //             tissueDescriptiveName: o.source_trans,
-        //             retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
-        //             assayIdList:"["+ o.ASSAY_ID+"]"
-        //         },getNewDefaultLzPlot(),additionalData);
-        //     });
-        // };
+
         var processIbdEpigeneticData = function (data,additionalData){
             var matchedTissue = _.filter(data.variants.variants,additionalData.includeRecord);
             var plotId = getNewDefaultLzPlot();
@@ -1226,7 +1221,7 @@ var mpgSoftware = mpgSoftware || {};
             callingData.POS = position;
             callingData.CHROM = chromosome;
             callingData.plotDomId = plotDomId;
-            callingData.ASSAY_ID_LIST = assayIdList;
+            callingData.ASSAY_ID_LIST = "["+mpgSoftware.regionInfo.getSelectorAssayIds().join(",")+"]";
             var lzVar = mpgSoftware.locusZoom.locusZoomPlot[plotDomId];
             // var includeRecord  = function() {return true;};
             // if (assayIdList=='[3]') {
@@ -1258,6 +1253,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var replaceTissuesWithOverlappingEnhancersFromVarId = function(varId,plotDomId,assayIdList){
             var convertedVarId=convertVarIdToUmichFavoredForm(varId); // convert if necessary
+            mpgSoftware.regionInfo.specificHeaderToBeActiveByVarId(convertedVarId);
             var variantParts = extractParts(varId);
             mpgSoftware.regionInfo.setIncludeRecordBasedOnUserChoice(assayIdList);
             replaceTissuesWithOverlappingIbdRegions(variantParts.position, variantParts.chromosome,plotDomId,assayIdList,convertedVarId);
@@ -1449,7 +1445,7 @@ var mpgSoftware = mpgSoftware || {};
             var intervalPanel;
             if (pageVars.portalTypeString=== 'ibd'){
                 intervalPanel =  customIbdIntervalsPanel(intervalPanelName,assayName);
-                intervalPanel.title = { text: tissueName+" "+assayName, style: {}, x: 10, y: 22 };
+                intervalPanel.title = { text: tissueName+" "+assayName, style: {}, x: 0, y: 22 };
             } else {
                 intervalPanel = customIntervalsPanel(intervalPanelName);
                 intervalPanel.dashboard.components.push({
@@ -1706,8 +1702,8 @@ var mpgSoftware = mpgSoftware || {};
         locusZoomPlot:locusZoomPlot,
         replaceTissuesWithOverlappingEnhancersFromVarId:replaceTissuesWithOverlappingEnhancersFromVarId,
         replaceTissuesWithOverlappingIbdRegionsVarId:replaceTissuesWithOverlappingIbdRegionsVarId,
-        changeCurrentReference:changeCurrentReference
-       // broadAssociationSource:broadAssociationSource
+        changeCurrentReference:changeCurrentReference,
+        convertVarIdToBroadFavoredForm:convertVarIdToBroadFavoredForm
     }
 
 }());

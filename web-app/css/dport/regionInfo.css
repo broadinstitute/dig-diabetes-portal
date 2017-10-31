@@ -82,21 +82,7 @@ td.tissueTable.matchingRegion3_17{
 td.tissueTable.matchingRegion3_18{
     background: #DDDDDD;/*Active_enhancer_2*/
 }
-td.tissueTable.matchingRegion3_1{
-    background: #FFFF00;/*Weak_enhancer*/
-}
-td.tissueTable.matchingRegion3_2{
-    background: #C2E105;/*Genic_enhancer*/
-}
-td.tissueTable.matchingRegion3_3{
-    background: #FFC34D;/*Active_enhancer_1*/
-}
-td.tissueTable.matchingRegion3_4{
-    background: #FFC34D;/*Active_enhancer_2*/
-}
-td.tissueTable.matchingRegion3_5{
-    background: #FF0000;/*Active_enhancer_2*/
-}
+
 
 /*h3k27ac corresponds to assay ID = 1*/
 td.tissueTable.matchingRegion1_5{
@@ -119,14 +105,12 @@ td.tissueTable.matchingRegion1_0{
 }
 
 /*DNase corresponds to assay ID = 2*/
-td.tissueTable.matchingRegion2_5{
+
+td.tissueTable.matchingRegion2_4{
     background: #3333FF;
 }
-td.tissueTable.matchingRegion2_4{
-    background: #3366FF;
-}
 td.tissueTable.matchingRegion2_3{
-    background: #3399FF;
+    background: #3366FF;
 }
 td.tissueTable.matchingRegion2_2{
     background: #3399FF;
@@ -165,7 +149,9 @@ th.niceHeadersThatAreLinks{
     font-weight: bold;
     color: #9632b8;
 }
-
+span.subsidiaryClass{
+    color:#888888;
+}
 
 .hover {
     position:relative;
@@ -218,4 +204,8 @@ div.credibleSetHeader{
 }
 div.credibleSetNameHolder{
     margin-top: 10px;
+}
+svg.lz-locuszoom .lz-panel-title {
+    font-size: 16px;
+    font-weight: 500;
 }
