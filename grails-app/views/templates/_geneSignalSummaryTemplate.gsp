@@ -492,7 +492,7 @@
 
                                     <div class="row clearfix">
                                         {{#selectorInfoExists}}
-                                         <div class="col-sm-4">
+                                         <div class="col-sm-6">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
                                                 <label for="credSetSelectorChoice">Add/remove chromatin states:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
@@ -505,7 +505,7 @@
                                          </div>
                                          {{/selectorInfoExists}}
                                          {{^selectorInfoExists}}
-                                         <div class="col-sm-4"></div>
+                                         <div class="col-sm-2"></div>
                                          {{/selectorInfoExists}}
 
                                          {{#displayInfoExists}}
@@ -524,11 +524,11 @@
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
-                                         <div class="col-sm-6">
+                                         <div class="col-sm-2">
                                              <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
-                                         <div class="col-sm-2"></div>
+                                         %{--<div class="col-sm-2"></div>--}%
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
@@ -580,7 +580,7 @@
 
                                     <div class="row clearfix">
                                         {{#selectorInfoExists}}
-                                         <div class="col-sm-4">
+                                         <div class="col-sm-6">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
                                                 <label for="credSetSelectorChoice">Add/remove chromatin states:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
@@ -593,7 +593,7 @@
                                          </div>
                                          {{/selectorInfoExists}}
                                          {{^selectorInfoExists}}
-                                         <div class="col-sm-4"></div>
+                                         <div class="col-sm-2"></div>
                                          {{/selectorInfoExists}}
 
                                          {{#displayInfoExists}}
@@ -612,11 +612,11 @@
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
-                                         <div class="col-sm-6">
+                                         <div class="col-sm-4">
                                              <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
-                                         <div class="col-sm-2"></div>
+                                         %{--<div class="col-sm-2"></div>--}%
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
