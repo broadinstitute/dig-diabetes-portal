@@ -50,7 +50,7 @@
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
         <h3>Datasets</h3>
-        <table id="datasets" class="table table-condensed" style="margin-left:20px">
+        <table id="datasets" class="table table-condensed" style="">
             <thead>
             <tr>
 
@@ -144,17 +144,16 @@
     </div>
 </script>
 
-<div class="container datasetsHolder">
-    <div class="row" style="display: inline-block; width: 100%;">
-        <div class="col-md-12">
-            <div class="datasets-filter">
-                <h3>Filter Dataset Table<small> (Click one to start)</small></h3>
-                <div id="datatypeFilterDisplay" class="form-inline"></div>
-                <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
-                <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
-            </div>
-            <div  id ="metaDataDisplay" class="form-inline" style="width: 100%"></div>
+<div class="row datasetsHolder">
+    <div class="col-md-12">
+        <div class="datasets-filter" style="display: inline-block; width: 100%;">
+            <h3>Filter Dataset Table<small> (Click one to start)</small></h3>
+            <div id="datatypeFilterDisplay" class="form-inline"></div>
+            <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
+            <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
         </div>
+        <div  id ="metaDataDisplay" class="form-inline" style="width: 100%"></div>
     </div>
 </div>
+
 

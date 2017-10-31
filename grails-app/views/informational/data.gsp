@@ -79,20 +79,31 @@
         <div class="row">
             <div class="col-md-12">
                 <h1 class="dk-page-title">Data</h1>
+            </div>
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.title" default="about the data"/></p>
+                    <div class="col-md-12">
+                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.title" default="about the data"/></p>
+                    </div>
+
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <div class="col-md-12">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
+                    </div>
                 </g:elseif>
                 <g:else>
-                    <div class="row">
-                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
-                        <p style="font-weight: 300; font-size: 25px;"><g:message code="aboutTheData.stroke.title2" default="about the data"/></p>
+                    <div class="col-md-9">
+                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
+                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title2" default="about the data"/></p>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="dk-go-button dk-t2d-yellow dk-right-column-buttons"><a target="_blank" href="http://cerebrovascularportal.org/informational/downloads">Visit download page</a></div>
                     </div>
                 </g:else>
-
-        <div class="row">
+            </div>
+        </div>
+    </div>
+        <div class="container">
             <g:renderBetaFeaturesDisplayedValue>
                 <div style="margin-top: 5px">
                     <div class="col-xs-2"></div>

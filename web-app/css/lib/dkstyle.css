@@ -604,6 +604,10 @@ h1.dk-page-title{
     background-image: url(../../images/icons/go_icon.svg);
 }
 
+.dk-video-button {
+    background-image: url(../../images/icons/video_icon.svg);
+}
+
 .dk-right-column-buttons, .dk-right-column-buttons-compact {
     border-radius: 5px;
     padding: 0;
@@ -697,11 +701,11 @@ div.variantResultsFilterHolder > ul > li {
 }
 
 .dk-stroke-footer {
-
+    background-color: #a2db8d;
 }
 
 .dk-mi-footer {
-
+    background-color: #ffdd44;
 }
 
 #main {

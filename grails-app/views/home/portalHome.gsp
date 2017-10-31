@@ -175,7 +175,7 @@
                     <div style="font-size: 14px;">
                         <span><g:message code="site.shared.phrases.examples" />: </span>
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                            <a href='<g:createLink controller="gene" action="geneInfo"
+                            <a style="color:#cce6c3;" href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id: 'HDAC9']"/>'>HDAC9</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
@@ -193,8 +193,8 @@
                         <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                     body="input.searchTerm.geneExample.help.text"/>,
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                            <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs2984613']"/>'>rs2984613</a>,
-                            <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>
+                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs2984613']"/>'>rs2984613</a>,
+                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                             <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
@@ -209,7 +209,7 @@
                         <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                     body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                            <a href='<g:createLink controller="region" action="regionInfo"
+                            <a style="color:#cce6c3;" href='<g:createLink controller="region" action="regionInfo"
                                                    params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
@@ -229,8 +229,8 @@
 
                     </div>
                     <div class="form-inline" style="padding-top: 10px;">
-                        <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#d8e3ec; border:none; border-radius: 5px; margin:0; font-size: 16px;">
-                        <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#d8e3ec; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
+                        <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                     </div>
 
                 </div>
@@ -238,7 +238,7 @@
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="variant.search.header"/></h2>
                     <p class="dk-footnote" style="width:83%;"><g:message code="variant.search.specifics"/></p>
                     <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">
-                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#d8e3ec; color: #000; border:none; border-radius: 5px;  margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; margin-right:1%; margin-top: -45px; float:right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px;  margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; margin-right:1%; margin-top: -45px; float:right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                     </a>
                 </div>
                 <div>
@@ -248,9 +248,9 @@
                     <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p class="dk-footnote"><g:message code="trait.search.specifics"/>
                         <g:helpText title="pheno.help.header" placement="right" body="stroke.pheno.help.text"/></p></g:elseif>
                     <div class="form-inline" style="padding-top: 10px;">
-                        <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#d8e3ec; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                        <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                         </select>
-                        <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#d8e3ec; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                     </div>
                 </div>
             </div>
@@ -264,8 +264,6 @@
         <div class="col-md-6" style="font-size:25px; font-weight:300;">
             <div class="row">
 
-            <g:if test="${!g.portalTypeString()?.equals('stroke')}">
-            </g:if>
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
 
                 <div class="col-md-12" style="padding-top:40px; font-size: 20px;">
@@ -275,13 +273,13 @@
 
 
                         <g:message code="portal.stroke.about.downloads"></g:message>
-                        <span style="display:block; width: 275px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.download.link"></g:message></span>
+                        <span style="display:block; width: 100%; text-align: right; margin-top: 0px; padding:10px 40px 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.download.link"></g:message></span>
 
 
                 <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
 
                 <g:message code="portal.stroke.about.AHA.discovery"></g:message>
-                <span style="display:block; width: 350px;margin-top: 10px; padding:10px 0 10px 0;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
+                <span style="display:block; width: 100%; text-align: right; margin-top: 0px; padding:10px 40px 10px 0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
 
 
             </g:if>
@@ -305,12 +303,84 @@
                     <p><g:message code="about.the.portal.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 Datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">47 traits</span></h1>
 
-                    <span><a style="text-align:left; font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
-
-                    <h3 style="font-size:20px"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
-                    <a href="http://cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'to_stroke_portal.svg')}" style="width: 350px;"></a>
-                    <div></div>
+                    <span style="display:block; width: 100%;text-align:right;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
                 </g:else>
+
+                <div>
+                    <div style="min-width: 500px; margin-top:30px;">
+                        <h3><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 120px;" align="left"><span style="display: inline-block; font-weight:400; font-size:35px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></h3>
+                        <p style="font-size: 16px;"><g:message code="portal.home.about.KNP"></g:message></p>
+                    </div>
+
+                    <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <div style="margin-top: 25px;">
+                            <img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; margin-top: -10px; float: left; margin-right: 15px;">
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                        </div>
+
+                        <div style="margin-top: 25px;">
+                            <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                        </div>
+
+
+                    </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                        <div style="margin-top: 15px;">
+                            <img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-20px; margin-left:-10px; margin-right: 5px;">
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                        </div>
+
+                        <div style="margin-top: 25px;">
+                            <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                        </div>
+                    </g:elseif>
+                    <g:else>
+                        <div style="margin-top: 25px;">
+                            <img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-13px; margin-left:-3px; margin-right: 13px;">
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                        </div>
+                        <div style="margin-top: 25px;">
+                            <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                        </div>
+
+                    </g:else>
+                </div>
+
+
+                    <div></div>
+
             </p>
             </div>
             </div>
@@ -359,22 +429,23 @@
                 </select>
             </div>
             <g:if test="${g.portalTypeString()?.equals('mi')}">
-                <div style="text-align:right;">
-                    <a href="mailto:help@cvdgenetics.org">
-                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
-                    </a>
-
-
-
-                </div>
+                <div style="position:absolute; top: 25px; right:-40px; ">
+                    <p style="margin-bottom:3px;">
+                        <a href="mailto:help@cvdgenetics.org">
+                            <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                        </a>
+                     </p>
+               </div>
 
             </g:if>
 
             <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                <div style="text-align:right;">
-                    <a class="btn btn-success btn-sm" style="margin-right: 2%; margin-bottom: 10px;" href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
-                        Get email updates
-                    </a>
+                <div style="position:absolute; top: 25px; right:-40px; ">
+                    <p style="margin-bottom:3px;">
+                        <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
+                            <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                        </a>
+                    </p>
                 </div>
 
             </g:elseif>
@@ -402,8 +473,9 @@
                 <p>
                     <a href="https://www.nih.gov/research-training/accelerating-medicines-partnership-amp/type-2-diabetes"><img src="${resource(dir: 'images/stroke', file:'AMP_banner_small.png')}" style="width: 350px;" ></a>
                 </p>
-                <h3 style="font-size:20px"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                <!--<h3 style="font-size:20px"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
                 <a href="http://www.type2diabetesgenetics.org"><img src="${resource(dir: 'images', file: 't2dkp_h.png')}" style="width: 350px;"></a>
+                -->
             </g:if>
 
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
@@ -435,6 +507,73 @@
                 </div>
 
             </g:else>
+<!--
+            <div>
+                        <div style="min-width: 380px; margin-top: 30px;">
+                        <h3><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 90px;" align="left"><span style="display: inline-block; font-weight:400; font-size:25px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></h3>
+                        <p style="font-size: 14px;"><g:message code="portal.home.about.KNP"></g:message></p>
+                    </div>
+
+                <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 50px; float: left; margin-top:-2px; margin-right: 7px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.type2diabetesgenetics.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Type 2 Diabetes</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 60px; float: left; margin-top:-10px; margin-left:-7px; margin-right: 4px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.broadcvdi.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Cardiovascular Disease</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 46px; float: left; margin-top:-3px; margin-right: 10px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.cerebrovascularportal.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Cerebrovascular Disease</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+                    </div>
+                </g:if>
+                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 50px; float: left; margin-top:-2px; margin-right: 7px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.type2diabetesgenetics.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Type 2 Diabetes</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 60px; float: left; margin-top:-10px; margin-left:-7px; margin-right: 4px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.broadcvdi.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Cardiovascular Disease</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 46px; float: left; margin-top:-3px; margin-right: 10px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.cerebrovascularportal.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Cerebrovascular Disease</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+                    </div>
+                </g:elseif>
+                 <g:else>
+                     <div style="margin-top: 15px;">
+                        <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 50px; float: left; margin-top:-2px; margin-right: 7px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.type2diabetesgenetics.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Type 2 Diabetes</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+
+                    </div>
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 60px; float: left; margin-top:-10px; margin-left:-7px; margin-right: 4px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.broadcvdi.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Cardiovascular Disease</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+                    </div>
+
+                    <div style="margin-top: 15px;">
+                        <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 46px; float: left; margin-top:-3px; margin-right: 10px;"></a>
+                        <h3 style="font-size:14px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                        <h3 style="font-size:18px; margin:5px 0 0 0;"><a href="http://www.cerebrovascularportal.org/"><span style="font-family:'Oswald'; font-weight: 700; color: #333;">Cerebrovascular Disease</span> <span style="font-family:'Oswald'; font-weight: 300; color: #333;">Knowledge Portal</span><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></h3>
+                    </div>
+
+                 </g:else>
+                 -->
+            </div>
         </div>
     </div>
 </div>

@@ -7,17 +7,16 @@
     <r:layoutResources/>
 
 </head>
-
 <body>
 <div id="main">
+<div class="container dk-static-content">
+<div class="row">
+<div class="col-md-12">
+    <h1 class="dk-page-title"><g:message code="policies.title"></g:message></h1>
+</div>
 
     <g:if test="${g.portalTypeString()?.equals('t2d')}">
 
-        <div class="container dk-static-content">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="dk-page-title"><g:message code="policies.title"></g:message></h1>
-                </div>
 
                 <div class="col-md-9">
 
@@ -150,7 +149,7 @@
 
 
                     </div>
-                <div class="col-md-3" style="padding-top: 15px;">
+                <div class="col-md-3" style="padding-top: 20px;">
                     <h5 style="position:fixed; bottom:30px; margin-left:100px; z-index:50;"><a href="#"><span class="glyphicon glyphicon-arrow-up"></span> <g:message code="policies.tothetop"></g:message></a></h5>
 
                     <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></div>
@@ -159,21 +158,10 @@
                     <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></div>
 
                 </div>
-            </div></div>
+
                 </g:if>
 
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-            <div class="container dk-static-content">
-        <div class="row">
-            <h5 style="position:fixed; bottom:20px;"><a href="#"><g:message code="policies.tothetop"></g:message></a></h5>
-            <div class="col-md-3">
-                <h1><g:message code="policies.title"></g:message></h1>
-                <h4 class="dk-notice"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></h4>
-                <h4 class="dk-notice"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></h4>
-                %{--<h4 class="dk-notice"><a href="#reusing_text"><g:message code="policies.reusing"></g:message></a></h4>--}%
-                %{--<h4 class="dk-notice"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></h4>--}%
-
-            </div>
             <div class="col-md-9">
 
                 <h2 id="data_use" class="dk-blue-bordered"><g:message code="policies.dataUse"></g:message></h2>
@@ -220,16 +208,19 @@
                 <p><g:message code="portal.mi.use.citation.itself"></g:message></p>
 
 
-            </div></div></div></div>
+            </div>
+            <div class="col-md-3" style="padding-top: 15px;">
+                <h5 style="position:fixed; bottom:20px;"><a href="#"><g:message code="policies.tothetop"></g:message></a></h5>
+                <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></div>
+                <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></div>
+                %{--<h4 class="dk-notice"><a href="#reusing_text"><g:message code="policies.reusing"></g:message></a></h4>--}%
+                %{--<h4 class="dk-notice"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></h4>--}%
+
+            </div>
 
         </g:elseif>
 
 <g:else>
-    <div class="container dk-static-content">
-        <div class="row">
-
-            <div class="col-md-12"><h1><g:message code="policies.title"></g:message></h1></div>
-
 
             <div class="col-md-9">
 
@@ -278,20 +269,20 @@
 
 
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3" style="padding-top: 10px;">
                 <h5 style="position:fixed; bottom:30px; margin-left:100px; z-index:50;"><a href="#"><span class="glyphicon glyphicon-arrow-up"></span> <g:message code="policies.tothetop"></g:message></a></h5>
 
-                <h4 class="dk-notice"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></h4>
-                <h4 class="dk-notice"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></h4>
+                <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></div>
+                <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></div>
                 %{--<h4 class="dk-notice"><a href="#reusing_text"><g:message code="policies.reusing"></g:message></a></h4>--}%
                 %{--<h4 class="dk-notice"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></h4>--}%
 
-            </div></div></div>
+            </div>
 
     </g:else>
 
-
-
+</div>
+</div>
 </div>
 
 </body>

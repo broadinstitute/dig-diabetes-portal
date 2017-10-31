@@ -71,7 +71,7 @@
     <div class="container dk-static-content">
         <div class="row">
             <div class="col-md-12">
-                <h1><g:message code="informational.about_stroke.header"/></h1>
+                <h1 class="dk-page-title"><g:message code="informational.about_stroke.header"/></h1>
                 </div></div>
         <div class="row">
             <div class="col-md-9">
