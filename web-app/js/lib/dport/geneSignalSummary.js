@@ -880,25 +880,31 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') &&
             (!data.variants.is_error ) &&
-            (typeof data.variants.variants !== 'undefined') &&
-            (data.variants.variants.length > 0)) {
-            var renderData = buildRenderData(data, 0.05, params);
-            if ((renderData)&&
-                (renderData.variants.length>0)&&
-                (assessOneSignalsSignificance(renderData.variants[0])===3)){
+            (typeof data.variants.variants !== 'undefined')){
+            if (data.variants.variants.length > 0) { // we have at least one variant to compare for the default phenotype
+                var renderData = buildRenderData(data, 0.05, params);
+                if ((renderData)&&
+                    (renderData.variants.length>0)&&
+                    (assessOneSignalsSignificance(renderData.variants[0])===3)){
                     var variant = data.variants.variants[0];
                     var phenocode = variant.phenotype;
                     var ds = variant.dataset;
                     var dsr = variant.dsr;
                     var phenoName = variant.pname;
                     var favoredPhenotype = params.favoredPhenotype;
-                    launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr);
+                    launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr); // the default phenotype is sufficiently interesting to be our initial pick
                 } else {
-                     mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
+                    // the default phenotype is not sufficiently interesting -- let's take another card from the deck
+                    mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
                         {favoredPhenotype:params.favoredPhenotype,limit:1});
                 }
+            } else {
+                // there were no variants for the default phenotype at all in this gene. Let's look across all phenotypes
+                mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
+                    {favoredPhenotype:params.favoredPhenotype,limit:1});
+            }
         }
-    };
+     };
     var getSingleBestNonFavoredPhenotypeAndLaunchInterface = function (data,params) {
         if ((typeof data !== 'undefined') &&
             (typeof data.variants !== 'undefined') &&

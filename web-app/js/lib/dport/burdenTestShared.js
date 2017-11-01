@@ -1799,8 +1799,12 @@ var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifie
                         ((categorical==='1')?('<span class="be metaAnalysis">Odds ratio='+oddsRatio+'</span>'):('<span class="be metaAnalysis">Beta='+beta+'</span>'))+
                         '<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
                         '</div><div id="chart"></div>');
+                    var textForBarLabels = 'T2D';
+                    if (typeof $('#phenotypeFilter').text() !== 'undefined') {
+                        textForBarLabels = $('#phenotypeFilter').text();
+                    }
                     if ((typeof numCases !== 'undefined')  &&(numCases!=='')){
-                        mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
+                        mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, textForBarLabels );
 
                         // launch
                         mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
