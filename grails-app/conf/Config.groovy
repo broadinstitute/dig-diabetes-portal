@@ -570,7 +570,7 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
                                    "mi" : ["SkeletalMuscle"],
                                    "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "stroke"     // options are "t2d", "stroke", "mi", or "ibd"
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
