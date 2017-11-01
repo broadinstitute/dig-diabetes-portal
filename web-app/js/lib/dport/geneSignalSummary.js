@@ -510,11 +510,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 (key === 'P_FIRTH')
             ) {
                 obj['property'] = key;
-                obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 1);
-                obj['P_VALUEV'] = (val) ? val : 1;
+                obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 0);
+                obj['P_VALUEV'] = (val) ? val : 0;
             } else if (key === 'BETA') {
-                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 1));
-                obj['BETAV'] = Math.exp((val) ? val : 1);
+                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
+                obj['BETAV'] = Math.exp((val) ? val : 0);
             }
             else {
                 obj[key] = (val) ? val : '';
@@ -853,12 +853,67 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         $('.phenotypeStrength').on("click",updateSignalSummaryBasedOnPhenotype);
         if (overrideClickIndex !== -1){
-            $($('.phenotypeStrength')[overrideClickIndex]).click();
+            $($('.phenotypeStrength')[overrideClickIndex]).addClass('chosenPhenotype');
         } else {
-            $('.phenotypeStrength').first().click();
+            $('.phenotypeStrength').first().addClass('chosenPhenotype');
         }
 
     };
+
+
+    // var getSingleBestPhenotypeAndLaunchInterface = function (data,params) {
+    //     if ((typeof data !== 'undefined') &&
+    //         (typeof data.variants !== 'undefined') &&
+    //         (!data.variants.is_error ) &&
+    //         (typeof data.variants.variants !== 'undefined') &&
+    //         (data.variants.variants.length > 0)) {
+    //         var variant = data.variants.variants[0];
+    //         var phenocode = variant.phenotype;
+    //         var ds = variant.dataset;
+    //         var dsr = variant.dsr;
+    //         var phenoName = variant.pname;
+    //         var favoredPhenotype = params.favoredPhenotype;
+    //         launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr);
+    //     }
+    // };
+    var getSingleBestPhenotypeAndLaunchInterface = function (data,params) {
+        if ((typeof data !== 'undefined') &&
+            (typeof data.variants !== 'undefined') &&
+            (!data.variants.is_error ) &&
+            (typeof data.variants.variants !== 'undefined') &&
+            (data.variants.variants.length > 0)) {
+            var renderData = buildRenderData(data, 0.05, params);
+            if ((renderData)&&
+                (renderData.variants.length>0)&&
+                (assessOneSignalsSignificance(renderData.variants[0])===3)){
+                    var variant = data.variants.variants[0];
+                    var phenocode = variant.phenotype;
+                    var ds = variant.dataset;
+                    var dsr = variant.dsr;
+                    var phenoName = variant.pname;
+                    var favoredPhenotype = params.favoredPhenotype;
+                    launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr);
+                } else {
+                     mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestNonFavoredPhenotypeAndLaunchInterface,
+                        {favoredPhenotype:params.favoredPhenotype,limit:1});
+                }
+        }
+    };
+    var getSingleBestNonFavoredPhenotypeAndLaunchInterface = function (data,params) {
+        if ((typeof data !== 'undefined') &&
+            (typeof data.variants !== 'undefined') &&
+            (!data.variants.is_error ) &&
+            (typeof data.variants.variants !== 'undefined') &&
+            (data.variants.variants.length > 0)) {
+            var variant = data.variants.variants[0];
+            var phenocode = variant.phenotype;
+            var ds = variant.dataset;
+            var dsr = variant.dsr;
+            var phenoName = variant.pname;
+            var favoredPhenotype = params.favoredPhenotype;
+            launchUpdateSignalSummaryBasedOnPhenotype(phenocode, ds, phenoName, dsr);
+        }
+    }
 
     var assessOneSignalsSignificance = function (v,signalCategory) {
         var signalCategory = 1;
@@ -926,6 +981,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (typeof params.currentPhenotype !== 'undefined') {
             callingObj["phenotype"] = params.currentPhenotype;
         };
+        if (typeof params.limit !== 'undefined') {
+            callingObj["limit"] = params.limit;
+        };
+
+
         $.ajax({
             cache: false,
             type: "post",
@@ -1211,17 +1271,20 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var propertiesToRemoveQuoted = [];
         _.each(parameter.propertiesToInclude, function(o){propertiesToIncludeQuoted.push(o)});
         _.each(parameter.propertiesToRemove, function(o){propertiesToRemoveQuoted.push(o)});
-
+        var callingObj = {
+            phenotype: phenotypeName,
+            geneToSummarize:coreVariables.geneName,
+            propertiesToInclude: propertiesToIncludeQuoted.join(","),
+            propertiesToRemove: propertiesToRemoveQuoted.join(",")
+        };
+        if (typeof parameter.limit !== 'undefined') {
+            callingObj["limit"] = parameter.limit;
+        };
         $.ajax({
             cache: false,
             type: "post",
             url: coreVariables.retrieveTopVariantsAcrossSgsUrl,
-            data: {
-                phenotype: phenotypeName,
-                geneToSummarize:coreVariables.geneName,
-                propertiesToInclude: propertiesToIncludeQuoted.join(","),
-                propertiesToRemove: propertiesToRemoveQuoted.join(",")
-            },
+            data: callingObj,
             async: true,
             success: function (data) {
                 if (typeof data.experimentAssays !== 'undefined'){
@@ -1612,7 +1675,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         updateCredibleSetTable:updateCredibleSetTable,
         initialPageSetUp:initialPageSetUp,
         buildNewCredibleSetPresentation:buildNewCredibleSetPresentation,
-        lzOnCredSetTab:lzOnCredSetTab
+        lzOnCredSetTab:lzOnCredSetTab,
+        getSingleBestPhenotypeAndLaunchInterface:getSingleBestPhenotypeAndLaunchInterface,
+        getSingleBestNonFavoredPhenotypeAndLaunchInterface:getSingleBestNonFavoredPhenotypeAndLaunchInterface,
+        refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype
     }
 
 }());
