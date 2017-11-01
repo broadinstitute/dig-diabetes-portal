@@ -80,7 +80,7 @@
                                     '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                                     '${it.dataType}','#lz-47')">
-                                ${g.message(code: "metadata." + it.dataSet)+"("+g.message(code: "metadata." + it.dataSet)+")"}
+                                ${g.message(code: "metadata." + it.name)+"("+g.message(code: "metadata." + it.dataSet)+")"}
                             </a>
                         </li>
                     </g:each>
