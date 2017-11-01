@@ -142,7 +142,7 @@
 
                 <h3><g:message code="variantTable.searchResults.searchCriteriaHeader" default="Search criteria"/></h3>
                 <div style="height: 35px; margin-top: -35px;">
-                    <div class="dk-t2d-blue dk-search-button dk-right-column-buttons-compact" style="float:right; ">{{{linkBackToSearchDefinitionPage}}}Edit/Start new search criteria</a></div>
+                    <div class="dk-t2d-blue dk-search-button dk-right-column-buttons-compact" style="float:right; ">{{{linkBackToSearchDefinitionPage}}}Edit criteria/Start new search</a></div>
                 </div>
                 <div class="variantResultsFilterHolder"></div>
 
