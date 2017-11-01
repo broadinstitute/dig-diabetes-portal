@@ -778,7 +778,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     retValue['variants'][0] << newEntry
                                 } else { // must merge
                                     Map everythingToAdd = result[key] as Map
-                                    List keysToAdd = everythingToAdd.keySet() as List
+                                    List keysToAdd = everythingToAdd?.keySet() as List
                                     for (def keyToAdd in keysToAdd) {
                                         if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
                                             List keysToAppend = result[key][keyToAdd].keySet() as List

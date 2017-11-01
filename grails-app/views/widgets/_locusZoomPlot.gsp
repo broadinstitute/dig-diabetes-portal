@@ -41,8 +41,7 @@
         </div>
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
             <g:renderIfWeHaveDynamicDataValue>
-                <g:if test="${g.portalTypeString()?.equals('t2d')||
-                        g.portalTypeString()?.equals('mi')}">
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <li class="dropdown" id="tracks-menu-dropdown-dynamic">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
                         <ul id="trackList-dynamic" class="dropdown-menu">
@@ -81,7 +80,7 @@
                                     '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
                                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                                     '${it.dataType}','#lz-47')">
-                                ${g.message(code: "metadata." + it.name)+"("+g.message(code: "metadata." + it.dataSet)+")"}
+                                ${g.message(code: "metadata." + it.dataSet)+"("+g.message(code: "metadata." + it.dataSet)+")"}
                             </a>
                         </li>
                     </g:each>
