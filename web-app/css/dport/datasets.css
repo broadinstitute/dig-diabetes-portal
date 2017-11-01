@@ -9,46 +9,37 @@ div.phenotype-level2-row{
 }
 
 div.row{
-    padding-top:30px;
+    padding-top:0px;
     width: 100%
 }
 
-div.phenotype-level2-option{
+div.phenotype-level2-option, div.phenotype-option, div.datatype-option, div.datatype-option-showall, div.phenotype-option-showall {
     cursor: pointer;
     width:auto;
     float: left;
     text-align: center;
-    background-color:#cef;
-    padding: 3px 30px;
-    border: solid 1px #9cf;
-    margin-right: 3px;
-    margin-bottom: 3px;
+    font-size: 13px;
+    padding: 2px 20px;
+    margin: 0 3px 3px 0;
     border-radius: 3px;
+}
+
+div.phenotype-level2-option{
+    background-color:#cef;
+    border: solid 1px #4EAFD4;
 }
 
 div.phenotype-option{
-    cursor: pointer;
-    float: left;
-    text-align: center;
     background-color:#cef;
-    padding: 3px 30px;
-    border: solid 1px #9cf;
-    margin: 0 3px 3px 0;
-    border-radius: 3px;
+    border: solid 1px #4EAFD4;
 }
 
-div.datatype-option{
-    cursor: pointer;
-    float: left;
-    text-align: center;
-    background-color:#ffc;
-    padding: 3px 30px;
+div.datatype-option {
+    background-color: #ffc;
     border: solid 1px #fc4;
-    margin: 0 3px 3px 0;
-    border-radius: 3px;
 }
-div.datasets-filter {
 
+div.datasets-filter {
     width:100%;
 }
 
@@ -59,26 +50,14 @@ div.dataset-description{
 }
 
 div.datatype-option-showall{
-    cursor: pointer;
-    float: left;
-    text-align: center;
-    background-color:#f94;
-    padding: 3px 30px;
+    background-color:#f68920;
     border: solid 1px #fc4;
-    margin: 0 3px 3px 0;
-    border-radius: 3px;
     color:#fff;
 }
 
 div.phenotype-option-showall{
-    cursor: pointer;
-    float: left;
-    text-align: center;
-    background-color:#39f;
-    padding: 3px 30px;
-    border: solid 1px #9cf;
-    margin: 0 3px 3px 0;
-    border-radius: 3px;
+    background-color:#3487AF;
+    border: solid 1px #4EAFD4;
     color:#fff;
 }
 

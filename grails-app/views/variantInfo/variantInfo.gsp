@@ -100,8 +100,8 @@
         <div class="variant-info-container">
             <div class="variant-info-view">
 
-                <h1>
-                    <strong><span id="variantTitle" class="parentsFont"></span> summary</strong>
+                <h1 class="dk-page-title">
+                    <span id="variantTitle" class="parentsFont"></span> summary
                 </h1>
 
                 <g:render template="variantPageHeader"/>

@@ -65,7 +65,7 @@
 <div id="rowTemplate" type="x-tmpl-mustache" style="display: none;">
     {{ #row }}
     <div class="row">
-        <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+        <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
             {{ translatedName }}
         </div>
 
@@ -87,7 +87,7 @@
             </div>
         </div>
 
-        <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+        <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">
             {{ helpText }}
         </div>
     </div>
@@ -100,15 +100,26 @@
     <div class="container">
 
         <div class="variantWF-container">
-<g:if test="${g.portalTypeString()?.equals('t2d')}"><p style="text-align: right; padding:0"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a> </p></g:if>
-            <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p style="text-align: right; padding:0"><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf" target="_blank">Variant Finder tutorial</a> </p></g:elseif>
-            <h1><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
+            <div class="row">
+                <div class="col-md-12">
+                    <h1 class="dk-page-title"><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
+                </div>
+            <div class="col-md-9">
+                <h5 class="dk-under-header"><g:message code="variantSearch.workflow.header.find_variants"/></h5>
 
-            <p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.find_variants"/></p>
-<g:if test="${g.portalTypeString()?.equals('t2d')}"><p style="margin-bottom: 30px;"><g:message code="variantSearch.workflow.header.tutorial"/></p></g:if>
-            <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p style="margin-bottom: 30px;"><g:message code="variantSearch.stroke.workflow.header.tutorial"/></p></g:elseif>
+                <g:if test="${g.portalTypeString()?.equals('t2d')}"><h5 class="dk-under-header"><g:message code="variantSearch.workflow.header.tutorial"/></h5></g:if>
+            </div>
+                <div class="col-md-3" style="padding-top:15px;">
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}"><div class="dk-t2d-green dk-tutorial-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a></div>
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Phenotype_reference_guide.pdf" target="_blank">Phenotype Reference Guide</a></div></g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><div class="dk-stroke-green dk-tutorial-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf" target="_blank">Variant Finder tutorial</a></div></g:elseif>
+                    <g:else><div class="dk-stroke-green dk-tutorial-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial(?)</a></div></g:else>
+                </div>
+            </div>
 
             <!-- tabs -->
+            <div class="row" style="padding-top:20px;">
+            <div class="col-md-12">
             <ul class="nav nav-tabs" role="tablist">
                 <li role="presentation" class="active"><a href="#dependent" aria-controls="dependent" role="tab"
                                                           id="dependentTab"
@@ -119,7 +130,7 @@
                                            data-toggle="tab"><g:message
                             code="variantSearch.workflow.tab.phenotypeIndependent.title"/></a></li>
             </ul>
-
+        </div></div>
             <!-- content -->
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="dependent">
@@ -129,7 +140,7 @@
                                 <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></h5>
 
                                 <div class="row">
-                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
                                         <g:message code="searchBuilder.traitOrDisease.prompt"
                                                    default="Trait or disease of interest"/>
                                     </div>
@@ -139,14 +150,14 @@
                                                 onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')" onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')"></select>
                                     </div>
 
-                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">
                                         <g:message code="variantSearch.wfRequest.phenotype.help.text"
                                                    default="Choose a phenotype to act as the basis of a search"/>
                                     </div>
                                 </div>
 
                                 <div id="datasetChooserDependent" class="row">
-                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
                                         <g:message code="searchBuilder.dataset.prompt" default="Data set"/>
                                     </div>
 
@@ -155,14 +166,14 @@
                                                 onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetDependent')"></select>
                                     </div>
 
-                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">
                                         <g:message code="variantSearch.wfRequest.dataSet.help.text"
                                                    default="Choose a data set from which variants may be found"/>
                                     </div>
                                 </div>
 
                                 <div id="datasetChooserCohortDependent" class="row" style="display: none;">
-                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
                                         <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>
                                     </div>
 
@@ -171,7 +182,7 @@
                                                 onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetCohortDependent')"></select>
                                     </div>
 
-                                    <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                    <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">
                                         <g:message code="variantSearch.wfRequest.dataSetCohort.help.text"
                                                    default="Optional"/>
                                     </div>
@@ -210,7 +221,7 @@
                             </div>
 
                             <div id="datasetChooserCohortIndependent" class="row" style="display: none;">
-                                <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-title">
+                                <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
                                     <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>
                                 </div>
 
@@ -219,7 +230,7 @@
                                             onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetCohortIndependent')"></select>
                                 </div>
 
-                                <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-description">
+                                <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">
                                     <g:message code="variantSearch.wfRequest.dataSetCohort.help.text"
                                                default="Optional"/>
                                 </div>

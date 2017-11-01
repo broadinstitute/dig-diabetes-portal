@@ -1,10 +1,12 @@
 /* sorting_asc/desc/1 are classes applied by datatables to the column that is being sorted on  */
 th.sorting_asc, th.sorting_desc {
-    background-color: #84e171;
+    /*background-color: #84e171;*/
+    background-color: #7fc343;
     color: black;
 }
 td.sorting_1 {
     background-color: #ddf7d7 !important;
+    background-color: #cce7b4 !important;
 }
 
 /* override the default styling of the buttons div */

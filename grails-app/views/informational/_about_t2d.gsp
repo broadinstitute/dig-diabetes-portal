@@ -1,85 +1,19 @@
-<style>
-.dk-static-content {
-    padding-top: 30px;
-}
-
-.dk-under-header {
-    font-weight: 300; line-height: 20px; font-size: 16px;
-}
-
-.dk-notice {
-    padding: 10px 20px 10px 20px;
-    margin: 10px 0 10px 0;
-    background-color: #7aa1fc;
-    color: #fff;
-    background-image:url(../images/logo_bg2.jpg);
-    background-repeat:no-repeat;
-    background-size:100% 100%;
-
-}
-
-.dk-notice a {
-    color:#def;
-    font-weight: 200;
-    font-size: 18px;
-}
-
-.dk-notice p {
-    margin-bottom: 0;
-}
-
-.dk-notice-header {
-    font-size: 26px;
-    font-weight: 100;
-}
-
-.dk-blue-bordered {
-    display:block;
-    border-top: solid 1px #39F;
-    border-bottom: solid 1px #39F;
-    color: #39f;
-    padding: 5px 0;
-    text-align:left;
-    line-height:22px;
-}
-.dk-team-list {
-    width: 100%;
-    font-size: 14px;
-    line-height: 22px;
-}
-
-.dk-team-list td:last-child {
-    width: 50%;
-}
-
-.dk-team-list td {
-    padding-right: 25px;
-    padding-bottom: 15px;
-    vertical-align:top;
-}
-
-.dk-team-list strong {
-    float: right;
-}
-
-.dk-team-list td > p {
-    padding-left: 15px;
-}
-</style>
-
 
 <body>
 
-<div id="main">
+
     <div class="container dk-static-content">
         <div class="row">
             <div class="col-md-12">
-                <h1><g:message code="informational.about_t2d.title"></g:message></h1>
-                <h5 class="dk-under-header"><g:message code="informational.about_t2D.under_title"></g:message></h5>
-                <h5 class="dk-under-header">&nbsp;</h5>
+                <h1 class="dk-page-title">About the project</h1>
+
+
             </div></div>
         <div class="row">
             <div class="col-md-9">
+                <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.title"></g:message></h3>
+                <p class="dk-under-header" style="text-align:justify"><g:message code="informational.about_t2D.under_title"></g:message></p>
+
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.ampt2d.header"></g:message></h3>
 
                 <p style="text-align:justify"><g:message code="informational.about_t2d.ampt2d_sec1"></g:message></p>
@@ -153,7 +87,6 @@
         </div>
     </div>
 
-</div>
 
 <!-- Le javascript
 ================================================== -->

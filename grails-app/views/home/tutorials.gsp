@@ -134,62 +134,64 @@
 %{--Main search page for application--}%
 <div id="main">
     <div class="container content-wrapper">
-        <h1 class="page-header">Resources</h1>
+        <h1 class="dk-page-title">Resources</h1>
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <a href="https://www.youtube.com/watch?v=jsgUxsd7Z4w" target="_blank">Video walkthrough</a>
 
 
-
-        <ul class="tutorial">
-            <li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
-                code="portal.introTutorial.title"/></a></li>
-            <li><a id="CDKPGenePageGuidePdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.GenePageGuide.title"/></a></li>
-            <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.variantFinderTutorial.title"/></a></li>
-            <li><a id="GAITPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.GAITguide.title"/></a></li>
-            <li><a id="VariantResultsPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.variantResultsTableGuide.title"/></a></li>
-            <li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.GeneticsGuide.title"/></a></li>
-            <li><a id="StrokePhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.PhenotypeGuide.title"/></a></li>
-        </ul>
+            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                <div class="btn dk-t2d-blue dk-video-button dk-right-column-buttons-compact "><a href="https://www.youtube.com/watch?v=jsgUxsd7Z4w" target="_blank">Video walkthrough</a></div>
+            <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
+                code="portal.introTutorial.title"/></a></div>
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="CDKPGenePageGuidePdf"><g:message
+                    code="portal.GenePageGuide.title"/></a></div>
+            <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="variantPdf"><g:message
+                    code="portal.variantFinderTutorial.title"/></a></div>
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
+                    code="portal.GAITguide.title"/></a></div>
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="VariantResultsPdf"><g:message
+                    code="portal.variantResultsTableGuide.title"/></a></div>
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GeneticsGuidePdf"><g:message
+                    code="portal.GeneticsGuide.title"/></a></div>
+            <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="StrokePhenotypeGuidePdf"><g:message
+                    code="portal.PhenotypeGuide.title"/></a></div>
+        </div>
 
         </g:if>
 
         <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
 
 
-            <ul class="tutorial"><li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.introTutorial.title"/></a></li>
-                <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
-                        code="portal.variantFinderTutorial.title"/></a></li>
-                <li><a id="GAITPdf" class="btn btn-default btn-sm"><g:message
-                        code="portal.GAITguide.title"/></a></li>
-                <li><a id="VariantResultsPdf" class="btn btn-default btn-sm"><g:message
-                        code="portal.variantResultsTableGuide.title"/></a></li>
-                <li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message
-                        code="portal.GeneticsGuide.title"/></a></li>
-                <li><a id="PhenotypeGuidePdf" class="btn btn-default btn-sm"><g:message
-                code="portal.PhenotypeGuide.title"/></a></li>
-                <li><a id="GenePageGuidePdf" class="btn btn-default btn-sm"><g:message
-                        code="portal.GenePageGuide.title"/></a></li>
-            </ul>
+            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
+                    code="portal.introTutorial.title"/></a></div>
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact"><a id="variantPdf"><g:message
+                        code="portal.variantFinderTutorial.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GAITPdf"><g:message
+                        code="portal.GAITguide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="VariantResultsPdf"><g:message
+                        code="portal.variantResultsTableGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact"><a id="GeneticsGuidePdf"><g:message
+                        code="portal.GeneticsGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="PhenotypeGuidePdf"><g:message
+                code="portal.PhenotypeGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GenePageGuidePdf"><g:message
+                        code="portal.GenePageGuide.title"/></a></div>
+            </div>
 
         </g:elseif>
         <g:else>
-        <ul class="tutorial"><li><a id="portalPdf" class="btn btn-default btn-sm"><g:message
-                code="portal.introTutorial.title"/></a></li>
-            <li><a id="variantPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.variantFinderTutorial.title"/></a></li>
-            <li><a id="GAITPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.GAITguide.title"/></a></li>
-            <li><a id="VariantResultsPdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.variantResultsTableGuide.title"/></a></li>
-            <li><a id="GeneticsGuidePdf" class="btn btn-default btn-sm"><g:message
-                    code="portal.GeneticsGuide.title"/></a></li>
+            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
+                    code="portal.introTutorial.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="variantPdf"><g:message
+                        code="portal.variantFinderTutorial.title"/></a></div>
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
+                        code="portal.GAITguide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="VariantResultsPdf"><g:message
+                        code="portal.variantResultsTableGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GeneticsGuidePdf"><g:message
+                        code="portal.GeneticsGuide.title"/></a></div>
+            </div>
         </g:else>
 
         <g:if test="${g.portalTypeString()?.equals('t2d')}">

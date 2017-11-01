@@ -607,9 +607,9 @@ p.dataset-name {
     <h5>Data type</h5>
     <div class='' style='display:table-row' >
             {{#datatype}}
-            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; '>{{.}}</div>
+            <div class='datatype-option'  onclick='onClickdatatype("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#ffc; padding: 2px 20px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; '>{{.}}</div>
             {{/datatype}}
-            <div class='datatype-option' onclick='onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 30px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
+            <div class='datatype-option' onclick='onClickdatatype("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#f94; padding: 3px 20px; border: solid 1px #fc4; margin: 0 3px 3px 0; border-radius: 3px; color:#fff'>Show all</div>
     </div>
 </script>
 
@@ -617,9 +617,9 @@ p.dataset-name {
   <h5>Phenotype</h5>
   <div class='' style='display:table-row'>
     {{#groups}}
-    <div class='phenotype-option' onclick='onClickPhenotypeGroup("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
+    <div class='phenotype-option' onclick='onClickPhenotypeGroup("{{.}}")' style='cursor: pointer; float: left; text-align: center; background-color:#cef; padding: 2px 20px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;'>{{.}}</div>
     {{/groups}}
-    <div class='phenotype-option' onclick='onClickPhenotypeGroup("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#39f; padding: 3px 30px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
+    <div class='phenotype-option' onclick='onClickPhenotypeGroup("Show all")' style='cursor: pointer; float: left; text-align: center; background-color:#39f; padding: 2px 20px; border: solid 1px #9cf; margin: 0 3px 3px 0; border-radius: 3px;color:#fff' >Show all</div>
   </div>
 </script>
 
@@ -629,15 +629,14 @@ p.dataset-name {
 
     <div class="phenotype-level2-row" style='margin-top:10px' cursor: pointer>
     {{#phenotype}}
-    <div class='phenotype-level2-option' style='cursor: pointer; width:auto; float: left; text-align: center; background-color:#cef; padding: 3px 30px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' onclick='onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
+    <div class='phenotype-level2-option' style='cursor: pointer; width:auto; float: left; text-align: center; background-color:#cef; padding: 2px 20px; border: solid 1px #9cf; margin-right: 3px; margin-bottom: 3px; border-radius: 3px;' onclick='onClickPhenotypelevel2("{{.}}")'>{{.}}</div>
     {{/phenotype}}
     </div>
     </div>
 </script>
 
-<div class="row" style="padding-top: 50px; display: inline-block;margin-bottom:70px">
-    <div>
-        <div class="datasets-filter row">
+<div class="container" >
+        <div class="datasets-filter row" style="display: inline-block;">
             <h4>Filter Dataset Table<small> (Click one to start)</small></h4>
 
             <div id="datatypeFilterDisplay" class="form-inline"></div>
@@ -645,5 +644,4 @@ p.dataset-name {
             <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
         </div>
         <div  id ="metaDataDisplay" class="form-inline" style="width: 80em"></div>
-    </div>
 </div>

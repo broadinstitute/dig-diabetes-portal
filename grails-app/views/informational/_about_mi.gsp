@@ -69,15 +69,16 @@
 <div id="main">
     <div class="container dk-static-content">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-10 col-md-offset-1">
 
-                <h1 align="center"><g:message code="informational.about_MI.header"/></h1>
+                <h1 class="dk-page-title"><g:message code="informational.about_MI.header"/></h1>
                 %{--<h5 class="dk-under-header">&nbsp;</h5>--}%
                 %{--<h5 class="dk-under-header"><g:message code="informational.about_stroke.section_1"/></h5>--}%
                 %{--<h5 class="dk-under-header">&nbsp;</h5>--}%
-            </div></div>
+            </div>
+        </div>
         <div class="row">
-            <div class="col-md-9">
+            <div class="col-md-10 col-md-offset-1">
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_MIdata.header"/></h3>
                 <p><g:message code="informational.about_MI.section1"/></p>
                 <p><g:message code="informational.about_MI.section2"/></p>
@@ -89,4 +90,7 @@
                 <p><g:message code="informational.about_MI.section7"/></p>
 
 
-            </div></div></div></div>
+            </div>
+        </div>
+    </div>
+</div>
