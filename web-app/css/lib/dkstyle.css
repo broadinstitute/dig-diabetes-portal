@@ -532,15 +532,7 @@ h1.dk-page-title{
     color: #fff;
 }
 
-.dk-blue-bordered {
-    display:block;
-    border-top: solid 1px #57A7BA;
-    border-bottom: solid 1px #57A7BA;
-    color: #57A7BA;
-    padding: 5px 0;
-    text-align:left;
-    line-height:26px;
-}
+
 .dk-team-list {
     width: 100%;
     font-size: 14px;
@@ -642,26 +634,6 @@ h1.dk-page-title{
     color:#000;
     text-decoration: none;
     background-color: rgba(255,255,255,0.4);
-}
-
-.dk-t2d-yellow {
-    background-color: #D2BC2C;
-}
-
-.dk-t2d-orange {
-    background-color: #F68920;
-}
-
-.dk-t2d-green {
-    background-color: #7fc343;
-}
-
-.dk-t2d-blue {
-    background-color: #62B4C5;
-}
-
-.dk-stroke-green {
-    background-color: #71CD73;
 }
 
 /* override select optgroup on phenotype list */

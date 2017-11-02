@@ -1,4 +1,5 @@
 <style>
+    /*
 .dk-static-content {
     padding-top: 30px;
 }
@@ -64,7 +65,7 @@
 
 .dk-team-list td > p {
     padding-left: 15px;
-}
+}*/
 </style>
 <div id="main">
     <div class="container dk-static-content">

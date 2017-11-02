@@ -44,14 +44,53 @@
             <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 a {color:#5cbc6d;}
                 a:hover, a:active {color:#43957e; text-decoration: none;}
+                .dk-t2d-yellow {  background-color: #d5cc29;  }
+                .dk-t2d-orange {  background-color: #F68920;  }
+                .dk-t2d-green {  background-color: #71CD73;  }
+                .dk-t2d-blue {  background-color: #62B4C5;  }
+                .dk-blue-bordered {
+                    display:block;
+                    border-top: solid 1px #5cbc6d;
+                    border-bottom: solid 1px #5cbc6d;
+                    color: #5cbc6d;
+                    padding: 5px 0;
+                    text-align:left;
+                    line-height:26px;
+                }
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                a {color:#dd9727;}
+                a {color:#de8800;}
                 a:hover, a:active {color:#ad6700; text-decoration: none;}
+                .dk-t2d-green {  background-color: #e6af00;  }
+                .dk-t2d-orange {  background-color: #F68920;  }
+                .dk-t2d-blue {  background-color: #7ece93;  }
+                .dk-t2d-yellow {  background-color: #62B4C5;  }
+                .dk-blue-bordered {
+                    display:block;
+                    border-top: solid 1px #de8800;
+                    border-bottom: solid 1px #de8800;
+                    color: #de8800;
+                    padding: 5px 0;
+                    text-align:left;
+                    line-height:26px;
+                }
             </g:elseif>
             <g:else>
                 a {color:#50AABB;}
                 a:hover, a:active {color:#2779a7; text-decoration: none;}
+                .dk-t2d-yellow {  background-color: #D2BC2C;  }
+                .dk-t2d-orange {  background-color: #F68920;  }
+                .dk-t2d-green {  background-color: #7fc343;  }
+                .dk-t2d-blue {  background-color: #62B4C5;  }
+                .dk-blue-bordered {
+                    display:block;
+                    border-top: solid 1px #57A7BA;
+                    border-bottom: solid 1px #57A7BA;
+                    color: #57A7BA;
+                    padding: 5px 0;
+                    text-align:left;
+                    line-height:26px;
+                }
             </g:else>
         </style>
 
