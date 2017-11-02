@@ -309,7 +309,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
@@ -323,7 +323,7 @@ environments {
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
-      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
+//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
@@ -571,7 +571,7 @@ portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Ad
                                    "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
                                    "mi" : ["SkeletalMuscle"],
                                    "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "stroke"     // options are "t2d", "stroke", "mi", or "ibd"
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
 
 distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
@@ -588,5 +588,3 @@ portal.data.credibleSet.datasetList.abbreviation.map = ["t2d": "GWAS_DIAGRAM_mdv
                                                        "mi" : "GWAS_AFGen_mdv91",
                                                        "ibd": "GWAS_DIAGRAM_mdv80"]
 
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
