@@ -46,6 +46,9 @@
 <g:render template="./data/GWAS_AGEN" />
 <g:render template="./data/GWAS_DCSP2a610" />
 <g:render template="./data/GWAS_DCSP2a1M" />
+<g:render template="./data/GWAS_PWI" />
+<g:render template="./data/GWAS_GEI" />
+<g:render template="./data/ExSeq_RSNG" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
