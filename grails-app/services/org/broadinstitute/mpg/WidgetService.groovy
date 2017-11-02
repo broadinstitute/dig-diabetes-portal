@@ -475,6 +475,23 @@ class WidgetService {
         return holdingStructure
     }
 
+    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
+        if (sampleGroup.findAll{it.parent.technology=='GWAS'}.size()>0) {
+            sampleGroup = sampleGroup.findAll { it.parent.technology == 'GWAS' }
+            // if there are data sets that are GWAS then work only with those.  Otherwise take what you can get
+        }
+        List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+        // KLUDGE alert
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        if (sortedSampleGroup.size()>0){
+            SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
+            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+        }
+        return holdingStructure
+    }
 
 
     public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
@@ -503,8 +520,9 @@ class WidgetService {
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
         } else if (metaDataService.portalTypeFromSession=='mi') {
+            // for now we will favor GWAS.  Usually we filter on sample size but we have a special request
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="CARDIOVASCULAR DISEASE"}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+                buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
             }
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="CARDIOVASCULAR DISEASE"}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
