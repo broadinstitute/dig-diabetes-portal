@@ -1,4 +1,4 @@
-<h1><%=phenotypeName%></h1>
+<h1 class="dk-page-title"><%=phenotypeName%></h1>
 
 
 
@@ -102,7 +102,12 @@
 
 </p>
 
-<div id="manhattanPlot1"></div>
+<style>
+.mychart {width:100% !important; height:740px !important;}
+</style>
+</p>
+<div style="text-align: right;">Scroll to zoom. Rollover dots for variant information.</div>
+<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
 <table id="phenotypeTraits" class="table basictable table-striped">
     <thead>

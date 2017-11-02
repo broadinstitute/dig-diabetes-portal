@@ -70,7 +70,7 @@
                 <li style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="https://t2d-genetics-portal.blogspot.com/" target="_blank"><g:message code="portal.header.nav.blog" default="blog" /></a></li>
             </g:else>
             <sec:ifLoggedIn>
-            <sec:ifAllGranted roles="ROLE_ADMIN">
+            %{--<sec:ifAllGranted roles="ROLE_ADMIN">--}%
                 <li style="display:inline-block; margin-right:15px; padding: 5px 0 5px 0; text-shadow: #333 0 1px 2px"><g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link></li>
                 <li style="display:inline-block; margin-right:15px; padding: 5px 0 5px 0; text-shadow: #333 0 1px 2px">
                     <script>
@@ -87,7 +87,7 @@
                     </select>
                     %{--<g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>--}%
                     </li>
-            </sec:ifAllGranted>
+            %{--</sec:ifAllGranted>--}%
             <sec:ifAllGranted roles="ROLE_SYSTEM">
                 <li><g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link></li>
             </sec:ifAllGranted>

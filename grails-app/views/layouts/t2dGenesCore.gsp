@@ -40,7 +40,20 @@
             </g:renderT2dGenesSection>
         </g:else>
 
-
+        <style>
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                a {color:#5cbc6d;}
+                a:hover, a:active {color:#43957e; text-decoration: none;}
+            </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                a {color:#dd9727;}
+                a:hover, a:active {color:#ad6700; text-decoration: none;}
+            </g:elseif>
+            <g:else>
+                a {color:#50AABB;}
+                a:hover, a:active {color:#2779a7; text-decoration: none;}
+            </g:else>
+        </style>
 
         <script>
             $(function () {
