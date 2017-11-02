@@ -1096,7 +1096,9 @@ class VariantSearchController {
                      "common-common-Protein_change",
                      "common-common-Consequence",
                      "common-common-CHROM",
-                     "common-common-POS"].join(":")
+                     "common-common-POS",
+                     "common-common-Reference_Allele",
+                     "common-common-Effect_Allele"].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
