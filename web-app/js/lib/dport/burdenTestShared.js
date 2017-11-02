@@ -149,6 +149,8 @@ mpgSoftware.burdenTestShared = (function () {
             convertedName = 'Race_readable';
         }else if (untranslatedPhenotype === 'Statins'){
             convertedName = 'Statins_readable';
+        } else if (untranslatedPhenotype === 'eomi'){
+            convertedName = 'eomi_readable';
         }
         return convertedName;
     };
