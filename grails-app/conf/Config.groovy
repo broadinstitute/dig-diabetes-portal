@@ -587,4 +587,3 @@ portal.data.credibleSet.datasetList.abbreviation.map = ["t2d": "GWAS_DIAGRAM_mdv
                                                        "mi" : "GWAS_AFGen_mdv91",
                                                        "ibd": "GWAS_DIAGRAM_mdv80"]
 
-
