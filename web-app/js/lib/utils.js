@@ -414,7 +414,6 @@ var UTILS = {
                     keys.splice(keys.indexOf("LIPIDS"), 2);
                     keys.unshift("GLYCEMIC");
                     keys.unshift("LIPIDS");
-                    keys.unshift("ANTHROPOMETRIC");
                     keys.unshift("CARDIOVASCULAR DISEASE");
                 }
                 $('#datasetDependent').prop( "disabled", false );
