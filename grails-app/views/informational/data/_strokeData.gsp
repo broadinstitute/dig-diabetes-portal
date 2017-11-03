@@ -38,6 +38,9 @@
 <g:render template="./data/WGS_WgnomAD" />
 <g:render template="./data/GWAS_MetaStroke" />
 <g:render template="./data/GWAS_GIANT-PA" />
+<g:render template="./data/GWAS_PWI" />
+<g:render template="./data/GWAS_GEI" />
+<g:render template="./data/ExSeq_RSNG" />
 
 <style type="text/css" class="init">
 
