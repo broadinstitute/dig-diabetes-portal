@@ -4,9 +4,9 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Weng_2017_SciRep"></g:message><br>
-<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Weng_2017_SciRep.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Christophersen_2017_CircCardiovascGenet"></g:message><br>
+<g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Christophersen_2017_CircCardiovascGenet.citation"></g:message> </div>
 </div></p>
 
 
