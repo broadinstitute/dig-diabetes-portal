@@ -341,24 +341,15 @@ class RestServerService {
      * @param mdvName
      * @return
      */
-    public PortalVersionBean modifyPortalVersionDescr(String portalType, String portalDescription, String mdvName){
-        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
-        PortalVersionBean newPortalVersionBean = new PortalVersionBean( portalType,  portalDescription,  mdvName)
-        if (existingPortalVersionBean){
-            removePortalVersion(portalType)
-        }
-        PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
-        return newPortalVersionBean
-    }
-
     public PortalVersionBean modifyPortalVersion(String portalType, String mdvName){
         PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
         PortalVersionBean newPortalVersionBean
         if (existingPortalVersionBean){
-            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),  mdvName)
+            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),
+                    mdvName, existingPortalVersionBean.getPhenotype() )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName)
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "")
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -369,16 +360,25 @@ class RestServerService {
      * @param portalType
      * @return
      */
-    public String retrieveMdvForPortalType(String portalType){
+    public PortalVersionBean retrieveBeanForPortalType(String portalType){
         PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
-        String returnValue
+        PortalVersionBean returnValue
         if (existingPortalVersionBean){
-            returnValue = existingPortalVersionBean.mdvName
+            returnValue = existingPortalVersionBean
         } else {
             log.error("ERROR: code requested portal ${portalType}, but we don't have anything by that name")
         }
         return returnValue
     }
+
+
+    public String retrieveMdvForPortalType(String portalType){
+        String returnValue
+        PortalVersionBean existingPortalVersionBean = retrieveBeanForPortalType(portalType)
+        returnValue = existingPortalVersionBean.getMdvName()
+        return returnValue
+    }
+
 
 
     public String getPortalVersionBeanListAsJson(){

@@ -9,11 +9,16 @@ class PortalVersionBean {
     private String portalType
     private String portalDescription
     private String mdvName
+    private String phenotype
 
-    public PortalVersionBean(String portalType, String portalDescription, String mdvName) {
+    public PortalVersionBean(String portalType,
+                             String portalDescription,
+                             String mdvName,
+                             String phenotype) {
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
+        this.phenotype = phenotype;
     }
 
     public String getPortalType() {
@@ -28,7 +33,12 @@ class PortalVersionBean {
         return mdvName
     }
 
+    public String getPhenotype() {
+        return phenotype
+    }
+
+
     public String toJsonString(){
-        return """{"portalType":"${portalType}","portalDescription":"${portalDescription}","mdvName":"${mdvName}"}"""
+        return """{"portalType":"${portalType}","portalDescription":"${portalDescription}","mdvName":"${mdvName}","phenotype":"${phenotype}"}"""
     }
 }

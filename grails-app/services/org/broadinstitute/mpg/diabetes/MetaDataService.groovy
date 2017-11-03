@@ -6,6 +6,7 @@ import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -151,20 +152,9 @@ class MetaDataService {
      * @return
      */
     public String getDefaultPhenotype() {
-        // DIGP-291: adding different metadata versions by portal
-        String phenotype;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
-
-        if (distributedKb == 'EBI')  {
-            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[distributedKb]
-        } else {
-            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType]
-        }
-
-
-        // return
-        return phenotype;
+        PortalVersionBean portalVersionBean =  restServerService.retrieveBeanForPortalType(portalType)
+        return portalVersionBean.phenotype
     }
 
     public String getDefaultDataset() {
