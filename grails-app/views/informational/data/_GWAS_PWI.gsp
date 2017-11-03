@@ -12,7 +12,8 @@
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
-        <li><g:message code="informational.shared.traits.AF"></g:message></li>
+        <li><g:message code="informational.shared.traits.Ptforce"></g:message></li>
+        <li><g:message code="informational.shared.traits.Pwave_duration"></g:message></li>
     </ul>
 
    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
@@ -20,22 +21,18 @@
     <table class="table table-condensed table-responsive table-striped">
 
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
-       <tr><td>448</td><td>438</td><td>AFNET/KORA</td><td>European</td></tr>
-       <tr><td>399</td><td>5,278</td><td>AGES</td><td>European</td></tr>
-       <tr><td>799</td><td>8,254</td><td>ARIC</td><td>European</td></tr>
-       <tr><td>120</td><td>3,670</td><td>BioVU 660</td><td>European</td></tr>
-       <tr><td>238</td><td>4,528</td><td>BioVU o1</td><td>European</td></tr>
-       <tr><td>807</td><td>1,854</td><td>CCAF</td><td>European</td></tr>
-       <tr><td>763</td><td>2,422</td><td>CHS</td><td>European</td></tr>
-       <tr><td>559</td><td>7,867</td><td>FHS</td><td>European</td></tr>
-       <tr><td>361</td><td>2,598</td><td>LURIC</td><td>European</td></tr>
-       <tr><td>155</td><td>2,371</td><td>MESA</td><td>European</td></tr>
-       <tr><td>366</td><td>911</td><td>MGH/MIGEN</td><td>European</td></tr>
-       <tr><td>113</td><td>3,407</td><td>PREVEND</td><td>European</td></tr>
-       <tr><td>505</td><td>4,739</td><td>PROSPER</td><td>European</td></tr>
-       <tr><td>900</td><td>10,739</td><td>RS</td><td>European</td></tr>
-       <tr><td>107</td><td>1,816</td><td>SHIP</td><td>European</td></tr>
-       <tr><td>648</td><td>20,194</td><td>WGHS</td><td>European</td></tr>
+       <tr><td>n/a</td><td>2,799</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
+       <tr><td>n/a</td><td>8,151</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>2,415</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>1,651</td><td>Erasmus Rucphen Family Study (ERF)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>5,878</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>1,519</td><td>Cooperative Health Research in the Augsburg Region (KORA)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>964</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>African American</td></tr>
+       <tr><td>n/a</td><td>1,907</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>2,204</td><td>GHS I</td><td>European</td></tr>
+
+
+
 </table>
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>

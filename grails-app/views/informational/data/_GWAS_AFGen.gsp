@@ -24,8 +24,8 @@
        <tr><td>448</td><td>438</td><td>AFLMU/KORA</td><td>European</td></tr>
        <tr><td>785</td><td>2,108</td><td>AGES</td><td>European</td></tr>
        <tr><td>226</td><td>553</td><td>ANGES</td><td>European</td></tr>
-       <tr><td>278</td><td>2,490</td><td>ARIC</td><td>African American</td></tr>
-       <tr><td>1,420</td><td>7,460</td><td>ARIC</td><td>European</td></tr>
+       <tr><td>278</td><td>2,490</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
+       <tr><td>1,420</td><td>7,460</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
        <tr><td>1,520</td><td>1,520</td><td>BEAT-AF</td><td>European</td></tr>
        <tr><td>837</td><td>3,293</td><td>Biobank Japan</td><td>East Asian</td></tr>
        <tr><td>174</td><td>2,132</td><td>BioMe</td><td>African American</td></tr>
@@ -33,10 +33,10 @@
        <tr><td>277</td><td>3,081</td><td>BioMe</td><td>Hispanic</td></tr>
        <tr><td>428</td><td>9,757</td><td>BioVU</td><td>European</td></tr>
        <tr><td>606</td><td>2,930</td><td>CCAF</td><td>European</td></tr>
-       <tr><td>189</td><td>612</td><td>CHS</td><td>African American</td></tr>
-       <tr><td>1,011</td><td>2,190</td><td>CHS</td><td>European</td></tr>
+       <tr><td>189</td><td>612</td><td>Cardiovascular Health Study (CHS)</td><td>African American</td></tr>
+       <tr><td>1,011</td><td>2,190</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
        <tr><td>248</td><td>1,978</td><td>COROGENE</td><td>European</td></tr>
-       <tr><td>880</td><td>3,524</td><td>FHS</td><td>European</td></tr>
+       <tr><td>880</td><td>3,524</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
        <tr><td>971</td><td>1,908</td><td>FINCAVAS</td><td>European</td></tr>
        <tr><td>203</td><td>6,651</td><td>GS_SFHS</td><td>European</td></tr>
        <tr><td>368</td><td>2,666</td><td>LURIC</td><td>European</td></tr>
