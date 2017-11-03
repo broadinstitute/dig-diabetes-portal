@@ -41,16 +41,16 @@
        <tr><td>203</td><td>6,651</td><td>GS_SFHS</td><td>European</td></tr>
        <tr><td>368</td><td>2,666</td><td>LURIC</td><td>European</td></tr>
        <tr><td>1,232</td><td>4,645</td><td>MDCS</td><td>European</td></tr>
-       <tr><td>155</td><td>2,372</td><td>MESA</td><td>European</td></tr>
+       <tr><td>155</td><td>2,372</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
        <tr><td>366</td><td>911</td><td>MGH AF study</td><td>European</td></tr>
        <tr><td>665</td><td>2,128</td><td>MGH CAMP</td><td>European</td></tr>
        <tr><td>154</td><td>795</td><td>PIVUS</td><td>European</td></tr>
        <tr><td>113</td><td>3,407</td><td>PREVEND</td><td>European</td></tr>
        <tr><td>505</td><td>4,739</td><td>PROSPER</td><td>European</td></tr>
-       <tr><td>1,025</td><td>4,922</td><td>RS1</td><td>European</td></tr>
-       <tr><td>146</td><td>1,660</td><td>RS2</td><td>European</td></tr>
-       <tr><td>121</td><td>2,909</td><td>RS3</td><td>European</td></tr>
-       <tr><td>106</td><td>1,815</td><td>SHIP</td><td>European</td></tr>
+       <tr><td>1,025</td><td>4,922</td><td>Rotterdam Study I (RS I)</td><td>European</td></tr>
+       <tr><td>146</td><td>1,660</td><td>Rotterdam Study II (RS II)</td><td>European</td></tr>
+       <tr><td>121</td><td>2,909</td><td>Rotterdam Study III (RS III)</td><td>European</td></tr>
+       <tr><td>106</td><td>1,815</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
        <tr><td>197</td><td>758</td><td>SPHFC</td><td>Brazilian</td></tr>
        <tr><td>403</td><td>6,410</td><td>TWINGENE</td><td>European</td></tr>
        <tr><td>294</td><td>826</td><td>ULSAM</td><td>European</td></tr>

@@ -29,25 +29,30 @@
        <tr><td>n/a</td><td>1,519</td><td>Cooperative Health Research in the Augsburg Region (KORA)</td><td>European</td></tr>
        <tr><td>n/a</td><td>964</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>African American</td></tr>
        <tr><td>n/a</td><td>1,907</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
-       <tr><td>n/a</td><td>2,204</td><td>GHS I</td><td>European</td></tr>
-
-
+       <tr><td>n/a</td><td>2,204</td><td>Gutenberg Health Study I (GHS I)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>4,552</td><td>Rotterdam Study I (RS I)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>1,453</td><td>Rotterdam Study II (RS II)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>2,532</td><td>Rotterdam Study III (RS III)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>2,680</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>1,617</td><td>Women’s Health Initiative Clinical Trials cohort, Genomics and Randomized Trials Network (WHI CT GARNET)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>1,119</td><td>Women’s Health Initiative Clinical Trials cohort,  Modification of PM-Mediated Arrhythmogenesis in Populations (WHI CT MOPMAP)</td><td>European</td></tr>
+       <tr><td>n/a</td><td>3,015</td><td>Women’s Health Initiative Clinical Trials cohort,  SNP Health Association Resource (WHI CT SHARe)</td><td>African American</td></tr>
 
 </table>
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
-    <h5><g:message code="informational.data.project.AFGen1"></g:message></h5>
-    <p><g:message code="informational.data.project.AFGen2"></g:message></p>
+    <h5><g:message code="informational.data.project.PWI1"></g:message></h5>
+    <p><g:message code="informational.data.project.PWI2"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.AFGen_GEI_GWAS"></g:message></p>
+<p><g:message code="informational.data.exptsumm.PWI_GWAS"></g:message></p>
 
-<h4>Accessing AFGen GEI GWAS data</h4>
+<h4>Accessing PWI GWAS data</h4>
 
-<p><g:message code="informational.data.accessing.AFGen_GEI_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSe\
+<p><g:message code="informational.data.accessing.PWI_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSe\
 archWF')}">Variant\
- Finder</a> <g:message code="informational.data.accessing.AFGen_GEI_GWAS2"></g:message></p>
+ Finder</a> <g:message code="informational.data.accessing.PWI_GWAS2"></g:message></p>
 
 </div>
 
