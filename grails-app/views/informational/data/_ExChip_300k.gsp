@@ -1,13 +1,13 @@
 <script class="panel-body" id="ExChip_300k_script" type="x-tmpl-mustache">
    <div class="panel-body">
 
- %{--<h4><g:message code="informational.shared.headers.publications"></g:message></h4>--}%
+ <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-%{--<p><div class="paper">--}%
-%{--<g:message code="informational.shared.publications.author_year_journal"></g:message><br>--}%
-%{--<g:message code="informational.shared.publications.author_year_journal.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<div class="citation"><g:message code="informational.shared.publications.author_year_journal.citation"></g:message> </div>--}%
-%{--</div></p>--}%
+<p><div class="paper">
+<g:message code="informational.shared.publications.Liu_2017_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Liu_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Liu_2017_NatGenet.citation"></g:message> </div>
+</div></p>
 
 
    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>

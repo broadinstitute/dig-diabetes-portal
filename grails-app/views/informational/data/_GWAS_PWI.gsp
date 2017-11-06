@@ -40,18 +40,13 @@
 
 </table>
 
-    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-
-    <h5><g:message code="informational.data.project.PWI1"></g:message></h5>
-    <p><g:message code="informational.data.project.PWI2"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.PWI_GWAS"></g:message></p>
 
 <h4>Accessing PWI GWAS data</h4>
 
-<p><g:message code="informational.data.accessing.PWI_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSe\
-archWF')}">Variant\
+<p><g:message code="informational.data.accessing.PWI_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant
  Finder</a> <g:message code="informational.data.accessing.PWI_GWAS2"></g:message></p>
 
 </div>
