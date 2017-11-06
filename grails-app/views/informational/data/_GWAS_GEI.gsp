@@ -22,19 +22,19 @@
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
        <tr><td>448</td><td>438</td><td>AFNET/KORA</td><td>European</td></tr>
        <tr><td>399</td><td>5,278</td><td>AGES</td><td>European</td></tr>
-       <tr><td>799</td><td>8,254</td><td>ARIC</td><td>European</td></tr>
+       <tr><td>799</td><td>8,254</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
        <tr><td>120</td><td>3,670</td><td>BioVU 660</td><td>European</td></tr>
        <tr><td>238</td><td>4,528</td><td>BioVU o1</td><td>European</td></tr>
        <tr><td>807</td><td>1,854</td><td>CCAF</td><td>European</td></tr>
-       <tr><td>763</td><td>2,422</td><td>CHS</td><td>European</td></tr>
-       <tr><td>559</td><td>7,867</td><td>FHS</td><td>European</td></tr>
+       <tr><td>763</td><td>2,422</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
+       <tr><td>559</td><td>7,867</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
        <tr><td>361</td><td>2,598</td><td>LURIC</td><td>European</td></tr>
-       <tr><td>155</td><td>2,371</td><td>MESA</td><td>European</td></tr>
+       <tr><td>155</td><td>2,371</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
        <tr><td>366</td><td>911</td><td>MGH/MIGEN</td><td>European</td></tr>
        <tr><td>113</td><td>3,407</td><td>PREVEND</td><td>European</td></tr>
        <tr><td>505</td><td>4,739</td><td>PROSPER</td><td>European</td></tr>
-       <tr><td>900</td><td>10,739</td><td>RS</td><td>European</td></tr>
-       <tr><td>107</td><td>1,816</td><td>SHIP</td><td>European</td></tr>
+       <tr><td>900</td><td>10,739</td><td>Rotterdam Study (RS)</td><td>European</td></tr>
+       <tr><td>107</td><td>1,816</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
        <tr><td>648</td><td>20,194</td><td>WGHS</td><td>European</td></tr>
 </table>
 

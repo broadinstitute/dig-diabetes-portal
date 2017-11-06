@@ -20,12 +20,12 @@
     <table class="table table-condensed table-responsive table-striped">
 
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
-       <tr><td>246</td><td>1,000</td><td>ARIC</td><td>African American</td></tr>
-       <tr><td>730</td><td>4,000</td><td>ARIC</td><td>European</td></tr>
-       <tr><td>251</td><td>500</td><td>CHS</td><td>European</td></tr>
+       <tr><td>246</td><td>1,000</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
+       <tr><td>730</td><td>4,000</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
+       <tr><td>251</td><td>500</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
        <tr><td>100</td><td>1,155</td><td>ESP</td><td>African American</td></tr>
        <tr><td>233</td><td>1,686</td><td>ESP</td><td>European</td></tr>
-       <tr><td>174</td><td>1,082</td><td>FHS</td><td>European</td></tr>
+       <tr><td>174</td><td>1,082</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
 </table>
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>

@@ -1,7 +1,8 @@
 %{--this will go inside grails-app/views/template(new folder created by BenA)--}%
 %{--this will have all the mustache templates--}%
 %{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
-
+$(document).ready(function () {
+                   "use strict";
 <g:render template="./data/ExAC_r03" />
 <g:render template="./data/1kg_phase1" />
 <g:render template="./data/ExChip_82k"/>
@@ -31,6 +32,7 @@
 <g:render template="./data/GWAS_MICAD"/>
 <g:render template="./data/GWAS_OxBB"/>
 <g:render template="./data/GWAS_PGC"/>
+<g:render template="./data/GWAS_PWI" />
 <g:render template="./data/GWAS_SIGMA1"/>
 <g:render template="./data/GWAS_SIGN"/>
 <g:render template="./data/GWAS_Stroke"/>
@@ -40,16 +42,16 @@
 <g:render template="./data/WGS_WgnomAD" />
 <g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_AFGen" />
+<g:render template="./data/GWAS_GEI" />
 <g:render template="./data/ExChip_MICAD" />
 <g:render template="./data/ExChip_300k" />
 <g:render template="./data/GWAS_GIANT-PA" />
 <g:render template="./data/GWAS_AGEN" />
 <g:render template="./data/GWAS_DCSP2a610" />
 <g:render template="./data/GWAS_DCSP2a1M" />
-<g:render template="./data/GWAS_PWI" />
-<g:render template="./data/GWAS_GEI" />
 <g:render template="./data/ExSeq_RSNG" />
 
+}
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
         <h3>Datasets</h3>

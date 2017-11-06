@@ -24,8 +24,8 @@
        <tr><td>448</td><td>438</td><td>AFLMU/KORA</td><td>European</td></tr>
        <tr><td>785</td><td>2,108</td><td>AGES</td><td>European</td></tr>
        <tr><td>226</td><td>553</td><td>ANGES</td><td>European</td></tr>
-       <tr><td>278</td><td>2,490</td><td>ARIC</td><td>African American</td></tr>
-       <tr><td>1,420</td><td>7,460</td><td>ARIC</td><td>European</td></tr>
+       <tr><td>278</td><td>2,490</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
+       <tr><td>1,420</td><td>7,460</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
        <tr><td>1,520</td><td>1,520</td><td>BEAT-AF</td><td>European</td></tr>
        <tr><td>837</td><td>3,293</td><td>Biobank Japan</td><td>East Asian</td></tr>
        <tr><td>174</td><td>2,132</td><td>BioMe</td><td>African American</td></tr>
@@ -33,24 +33,24 @@
        <tr><td>277</td><td>3,081</td><td>BioMe</td><td>Hispanic</td></tr>
        <tr><td>428</td><td>9,757</td><td>BioVU</td><td>European</td></tr>
        <tr><td>606</td><td>2,930</td><td>CCAF</td><td>European</td></tr>
-       <tr><td>189</td><td>612</td><td>CHS</td><td>African American</td></tr>
-       <tr><td>1,011</td><td>2,190</td><td>CHS</td><td>European</td></tr>
+       <tr><td>189</td><td>612</td><td>Cardiovascular Health Study (CHS)</td><td>African American</td></tr>
+       <tr><td>1,011</td><td>2,190</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
        <tr><td>248</td><td>1,978</td><td>COROGENE</td><td>European</td></tr>
-       <tr><td>880</td><td>3,524</td><td>FHS</td><td>European</td></tr>
+       <tr><td>880</td><td>3,524</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
        <tr><td>971</td><td>1,908</td><td>FINCAVAS</td><td>European</td></tr>
        <tr><td>203</td><td>6,651</td><td>GS_SFHS</td><td>European</td></tr>
        <tr><td>368</td><td>2,666</td><td>LURIC</td><td>European</td></tr>
        <tr><td>1,232</td><td>4,645</td><td>MDCS</td><td>European</td></tr>
-       <tr><td>155</td><td>2,372</td><td>MESA</td><td>European</td></tr>
+       <tr><td>155</td><td>2,372</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
        <tr><td>366</td><td>911</td><td>MGH AF study</td><td>European</td></tr>
        <tr><td>665</td><td>2,128</td><td>MGH CAMP</td><td>European</td></tr>
        <tr><td>154</td><td>795</td><td>PIVUS</td><td>European</td></tr>
        <tr><td>113</td><td>3,407</td><td>PREVEND</td><td>European</td></tr>
        <tr><td>505</td><td>4,739</td><td>PROSPER</td><td>European</td></tr>
-       <tr><td>1,025</td><td>4,922</td><td>RS1</td><td>European</td></tr>
-       <tr><td>146</td><td>1,660</td><td>RS2</td><td>European</td></tr>
-       <tr><td>121</td><td>2,909</td><td>RS3</td><td>European</td></tr>
-       <tr><td>106</td><td>1,815</td><td>SHIP</td><td>European</td></tr>
+       <tr><td>1,025</td><td>4,922</td><td>Rotterdam Study I (RS I)</td><td>European</td></tr>
+       <tr><td>146</td><td>1,660</td><td>Rotterdam Study II (RS II)</td><td>European</td></tr>
+       <tr><td>121</td><td>2,909</td><td>Rotterdam Study III (RS III)</td><td>European</td></tr>
+       <tr><td>106</td><td>1,815</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
        <tr><td>197</td><td>758</td><td>SPHFC</td><td>Brazilian</td></tr>
        <tr><td>403</td><td>6,410</td><td>TWINGENE</td><td>European</td></tr>
        <tr><td>294</td><td>826</td><td>ULSAM</td><td>European</td></tr>

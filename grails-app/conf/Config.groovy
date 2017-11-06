@@ -599,11 +599,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",
                                                           "GWAS_DIAGRAM_mdv80")
 ]
 
-//portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
-//portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
-//                                   "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
-//                                   "mi" : ["SkeletalMuscle"],
-//                                   "ibd" : ["E071","E106","E088","E085"]]
 
 portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv28",
                                                   "stroke": "GWAS_Stroke_mdv70",
