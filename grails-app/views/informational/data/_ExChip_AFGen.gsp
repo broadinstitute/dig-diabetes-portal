@@ -25,8 +25,8 @@
 <tr><td>634</td><td>2,341</td><td>AGES</td><td>European</td></tr>
 <tr><td>1,452</td><td>9,215</td><td>ARIC</td><td>European</td></tr>
 <tr><td>1,532</td><td>1,532</td><td>BEAT-AF</td><td>European</td></tr>
-<tr><td>371</td><td>1,178</td><td>BioMe</td><td>European</td></tr>
-<tr><td>991</td><td>21,309</td><td>BioVU</td><td>European</td></tr>
+<tr><td>371</td><td>1,178</td><td>Mount Sinai BioMe Biobank</td><td>European</td></tr>
+<tr><td>991</td><td>21,309</td><td>Vanderbilt University Medical Center BioVU Biorepository</td><td>European</td></tr>
 <tr><td>1,501</td><td>2,631</td><td>CHS</td><td>European</td></tr>
 <tr><td>537</td><td>1,767</td><td>FHS</td><td>European</td></tr>
 <tr><td>203</td><td>6,651</td><td>GS_SFHS</td><td>European</td></tr>

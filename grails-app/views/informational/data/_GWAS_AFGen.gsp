@@ -21,28 +21,28 @@
 
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
-       <tr><td>448</td><td>438</td><td>AFLMU/KORA</td><td>European</td></tr>
-       <tr><td>785</td><td>2,108</td><td>AGES</td><td>European</td></tr>
-       <tr><td>226</td><td>553</td><td>ANGES</td><td>European</td></tr>
+       <tr><td>448</td><td>438</td><td> Atrial Fibrillation Biobank LMU/Cooperative Health Research in the Region of Augsburg (AFLMU/KORA)</td><td>European</td></tr>
+       <tr><td>785</td><td>2,108</td><td>Age, Gene/Environment Susceptibility Study (AGES) Reykjavik study</td><td>European</td></tr>
+       <tr><td>226</td><td>553</td><td>Angiography and Genes Study (ANGES)</td><td>European</td></tr>
        <tr><td>278</td><td>2,490</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
        <tr><td>1,420</td><td>7,460</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
-       <tr><td>1,520</td><td>1,520</td><td>BEAT-AF</td><td>European</td></tr>
+       <tr><td>1,520</td><td>1,520</td><td>Basel Atrial Fibrillation Cohort Study (BEAT-AF)</td><td>European</td></tr>
        <tr><td>837</td><td>3,293</td><td>Biobank Japan</td><td>East Asian</td></tr>
-       <tr><td>174</td><td>2,132</td><td>BioMe</td><td>African American</td></tr>
-       <tr><td>291</td><td>860</td><td>BioMe</td><td>European</td></tr>
-       <tr><td>277</td><td>3,081</td><td>BioMe</td><td>Hispanic</td></tr>
-       <tr><td>428</td><td>9,757</td><td>BioVU</td><td>European</td></tr>
-       <tr><td>606</td><td>2,930</td><td>CCAF</td><td>European</td></tr>
+       <tr><td>174</td><td>2,132</td><td>Mount Sinai BioMe Biobank</td><td>African American</td></tr>
+       <tr><td>291</td><td>860</td><td>Mount Sinai BioMe Biobank</td><td>European</td></tr>
+       <tr><td>277</td><td>3,081</td><td>Mount Sinai BioMe Biobank</td><td>Hispanic</td></tr>
+       <tr><td>428</td><td>9,757</td><td>Vanderbilt University Medical Center BioVU Biorepository</td><td>European</td></tr>
+       <tr><td>606</td><td>2,930</td><td>Cleveland Clinic Lone Atrial Fibrillation GeneBank Study (CCAF)</td><td>European</td></tr>
        <tr><td>189</td><td>612</td><td>Cardiovascular Health Study (CHS)</td><td>African American</td></tr>
        <tr><td>1,011</td><td>2,190</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
        <tr><td>248</td><td>1,978</td><td>COROGENE</td><td>European</td></tr>
        <tr><td>880</td><td>3,524</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
-       <tr><td>971</td><td>1,908</td><td>FINCAVAS</td><td>European</td></tr>
-       <tr><td>203</td><td>6,651</td><td>GS_SFHS</td><td>European</td></tr>
-       <tr><td>368</td><td>2,666</td><td>LURIC</td><td>European</td></tr>
-       <tr><td>1,232</td><td>4,645</td><td>MDCS</td><td>European</td></tr>
+       <tr><td>971</td><td>1,908</td><td>Finnish Cardiovascular Study (FINCAVAS)</td><td>European</td></tr>
+       <tr><td>203</td><td>6,651</td><td> Generation Scotland: Scottish Family Health Study (GS:SFHS)</td><td>European</td></tr>
+       <tr><td>368</td><td>2,666</td><td>Ludwigshafen Risk and Cardiovascular Health (LURIC)</td><td>European</td></tr>
+       <tr><td>1,232</td><td>4,645</td><td>Malmö Diet and Cancer study (MDCS)</td><td>European</td></tr>
        <tr><td>155</td><td>2,372</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
-       <tr><td>366</td><td>911</td><td>MGH AF study</td><td>European</td></tr>
+       <tr><td>366</td><td>911</td><td>Massachusetts General Hospital Atrial Fibrillation study (MGH AF)</td><td>European</td></tr>
        <tr><td>665</td><td>2,128</td><td>MGH CAMP</td><td>European</td></tr>
        <tr><td>154</td><td>795</td><td>PIVUS</td><td>European</td></tr>
        <tr><td>113</td><td>3,407</td><td>PREVEND</td><td>European</td></tr>
