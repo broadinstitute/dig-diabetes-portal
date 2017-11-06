@@ -160,30 +160,19 @@ class MetaDataService {
     public String getDefaultDataset() {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
 
-        if (distributedKb == 'EBI')  {
-            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[distributedKb]
-        } else {
-            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]
-        }
-
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(portalType)
+        dataset = portalVersionBean.getDataSet()
 
         // return
-        return dataset+getDataVersion();
+        return dataset;
     }
 
     public String getDynamicLocusZoomDataset() {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
 
-        if (distributedKb == 'EBI')  {
-            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[distributedKb]
-        } else {
-            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-        }
-
+        dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
 
         // return
         return dataset;
