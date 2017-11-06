@@ -402,7 +402,7 @@
                     <span style="font-family:'Oswald'; font-size: 25px;"><g:message code="portal.use.citation.title" default="Citation" /></span>
                 </div>
                 <div class="col-md-10" style="">
-                    <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/><br />
+                    <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/>
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
                             <g:message code="portal.stroke.use.citation.itself" />
                         </g:if>
