@@ -412,7 +412,14 @@ var UTILS = {
                 if (keys.indexOf("CARDIOVASCULAR DISEASE")>=-1){
                     keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
                     keys.splice(keys.indexOf("LIPIDS"), 2);
+                    keys.splice(keys.indexOf("EKG Traits"), 3);
+                    keys.splice(keys.indexOf("ANTHROPOMETRIC"), 4);
+                    keys.splice(keys.indexOf("GLYCEMIC"), 5);
+                    keys.unshift("PSYCHIATRIC");
+                    keys.unshift("RENAL");
                     keys.unshift("GLYCEMIC");
+                    keys.unshift("ANTHROPOMETRIC");
+                    keys.unshift("EKG Traits");
                     keys.unshift("LIPIDS");
                     keys.unshift("CARDIOVASCULAR DISEASE");
                 }
