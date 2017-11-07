@@ -101,7 +101,8 @@ class GeneController {
             default:
                 break
         }
-         defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
+        defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
+        //        defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser

@@ -558,34 +558,47 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
+distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 diabetes.data.version = "mdv28";
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",
                                                         "T2D",
                                                         "mdv28",
-                                                        "T2D" ),
+                                                        "T2D",
+                                                        "ExSeq_19k_mdv28",
+                                                        ["Islets","Liver","SkeletalMuscle","Adipose"],
+                                                        "[3]",
+                                                        "ExSeq_19k_mdv28",
+                                                        "GWAS_DIAGRAM_mdv28"),
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv70",
-                                                          "Stroke_all"),
+                                                          "Stroke_all",
+                                                          "GWAS_Stroke_mdv70",
+                                                          ["InferiorTemporalLobe","AnteriorCaudate"],
+                                                          "[3]",
+                                                          "GWAS_Stroke_mdv70",
+                                                          "GWAS_DIAGRAM_mdv70"),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv91",
-                                                          "EOMI"),
+                                                          "EOMI",
+                                                          "GWAS_CARDIoGRAM_mdv91",
+                                                          ["SkeletalMuscle"],
+                                                          "[3]",
+                                                          "GWAS_CARDIoGRAM_mdv91",
+                                                          "GWAS_AFGen_mdv91"),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
                                                           "mdv80",
-                                                          "IBD")
+                                                          "IBD",
+                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                                          ["E071","E106","E088","E085"],
+                                                          "[1,2]",
+                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                                          "GWAS_DIAGRAM_mdv80")
 ]
 
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
-portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
-                                   "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
-                                   "mi" : ["SkeletalMuscle"],
-                                   "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
-
-distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
 portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv28",
                                                   "stroke": "GWAS_Stroke_mdv70",
