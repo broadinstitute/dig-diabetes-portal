@@ -41,8 +41,8 @@
     %{--<p><g:message code="informational.data.project.project"></g:message></p>--}%
 
 
-%{--<h4>Experiment summary</h4>--}%
-%{--<p><g:message code="informational.data.exptsumm.project"></g:message></p>--}%
+<h4>Experiment summary</h4>
+<p><g:message code="informational.data.exptsumm.300k"></g:message></p>
 
 
 <h4>Accessing 300K exome chip analysis data</h4>
