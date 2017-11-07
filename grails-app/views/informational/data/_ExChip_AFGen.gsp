@@ -21,26 +21,27 @@
 
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
-       <tr><td>2,347</td><td>2,844</td><td>AFLMU/KORA/MGH</td><td>European</td></tr>
-<tr><td>634</td><td>2,341</td><td>AGES</td><td>European</td></tr>
-<tr><td>1,452</td><td>9,215</td><td>ARIC</td><td>European</td></tr>
-<tr><td>1,532</td><td>1,532</td><td>BEAT-AF</td><td>European</td></tr>
-<tr><td>371</td><td>1,178</td><td>BioMe</td><td>European</td></tr>
-<tr><td>991</td><td>21,309</td><td>BioVU</td><td>European</td></tr>
-<tr><td>1,501</td><td>2,631</td><td>CHS</td><td>European</td></tr>
-<tr><td>537</td><td>1,767</td><td>FHS</td><td>European</td></tr>
-<tr><td>203</td><td>6,651</td><td>GS_SFHS</td><td>European</td></tr>
-<tr><td>136</td><td>2,362</td><td>MESA</td><td>European</td></tr>
-<tr><td>668</td><td>2,138</td><td>MGH CAMP</td><td>European</td></tr>
-<tr><td>514</td><td>2,370</td><td>RS I</td><td>European</td></tr>
-<tr><td>148</td><td>5,134</td><td>SHIP</td><td>European</td></tr>
-<tr><td>959</td><td>19,307</td><td>WGHS</td><td>European</td></tr>
-<tr><td>1,373</td><td>4,804</td><td>WHI_OS</td><td>European</td></tr>
-<tr><td>119</td><td>10,601</td><td>WHI_CT</td><td>European</td></tr>
-<tr><td>330</td><td>3,373</td><td>ARIC</td><td>African American</td></tr>
-<tr><td>253</td><td>2,713</td><td>BioMe</td><td>African American</td></tr>
-<tr><td>98</td><td>1,204</td><td>WHI_OS</td><td>African American</td></tr>
+       <tr><td>2,347</td><td>2,844</td><td>Atrial Fibrillation Biobank LMU/Cooperative Health Research in the Region of Augsburg/Massachusetts General Hospital (AFLMU/KORA/MGH)</td><td>European</td></tr>
+<tr><td>634</td><td>2,341</td><td>Age, Gene/Environment Susceptibility Study (AGES) Reykjavik study</td><td>European</td></tr>
+<tr><td>330</td><td>3,373</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
+<tr><td>1,452</td><td>9,215</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
+<tr><td>1,532</td><td>1,532</td><td>Basel Atrial Fibrillation Cohort Study (BEAT-AF)</td><td>European</td></tr>
 <tr><td>8,180</td><td>28,612</td><td>Biobank Japan</td><td>East Asian</td></tr>
+<tr><td>1,501</td><td>2,631</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
+<tr><td>537</td><td>1,767</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
+<tr><td>203</td><td>6,651</td><td>Generation Scotland: Scottish Family Health Study (GS:SFHS)</td><td>European</td></tr>
+<tr><td>668</td><td>2,138</td><td>Massachusetts General Hospital Cardiology and Metabolic Patient (MGH CAMP)</td><td>European</td></tr>
+<tr><td>253</td><td>2,713</td><td>Mount Sinai BioMe Biobank</td><td>African American</td></tr>
+<tr><td>371</td><td>1,178</td><td>Mount Sinai BioMe Biobank</td><td>European</td></tr>
+<tr><td>136</td><td>2,362</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
+
+<tr><td>514</td><td>2,370</td><td>Rotterdam Study I (RS I)</td><td>European</td></tr>
+<tr><td>148</td><td>5,134</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
+<tr><td>991</td><td>21,309</td><td>Vanderbilt University Medical Center BioVU Biorepository</td><td>European</td></tr>
+<tr><td>959</td><td>19,307</td><td>Women’s Genome Health Study (WGHS)</td><td>European</td></tr>
+<tr><td>98</td><td>1,204</td><td>Women's Health Initiative Observational Study (WHI-OS)</td><td>African American</td></tr>
+<tr><td>1,373</td><td>4,804</td><td>Women's Health Initiative Observational Study (WHI-OS)</td><td>European</td></tr>
+<tr><td>119</td><td>10,601</td><td>Women's Health Initiative Clinical Trial (WHI-CT)</td><td>European</td></tr>
 
 </table>
 

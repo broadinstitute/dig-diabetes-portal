@@ -1,8 +1,7 @@
 %{--this will go inside grails-app/views/template(new folder created by BenA)--}%
 %{--this will have all the mustache templates--}%
 %{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
-$(document).ready(function () {
-                   "use strict";
+
 <g:render template="./data/ExAC_r03" />
 <g:render template="./data/1kg_phase1" />
 <g:render template="./data/ExChip_82k"/>
@@ -51,7 +50,6 @@ $(document).ready(function () {
 <g:render template="./data/GWAS_DCSP2a1M" />
 <g:render template="./data/ExSeq_RSNG" />
 
-}
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
         <h3>Datasets</h3>
