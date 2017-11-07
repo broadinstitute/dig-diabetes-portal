@@ -409,19 +409,22 @@ var UTILS = {
                 $('#datasetDependent').prop( "disabled", false );
             }
             else if (portaltype == "mi"){
-                if (keys.indexOf("CARDIOVASCULAR DISEASE")>=-1){
-                    keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
-                    keys.splice(keys.indexOf("LIPIDS"), 2);
-                    keys.splice(keys.indexOf("EKG Traits"), 3);
-                    keys.splice(keys.indexOf("ANTHROPOMETRIC"), 4);
-                    keys.splice(keys.indexOf("GLYCEMIC"), 5);
+                if (keys.indexOf("CORONARY ARTERY DISEASE")>=-1){
+                    keys.splice(keys.indexOf("CORONARY ARTERY DISEASE"), 1);
+                    keys.splice(keys.indexOf("ATRIAL FIBRILLATION"), 2);
+                    keys.splice(keys.indexOf("LIPIDS"), 3);
+                    keys.splice(keys.indexOf("ECG TRAITS"), 4);
+                    keys.splice(keys.indexOf("ANTHROPOMETRIC"), 5);
+                    keys.splice(keys.indexOf("GLYCEMIC"), 6);
+
                     keys.unshift("PSYCHIATRIC");
                     keys.unshift("RENAL");
                     keys.unshift("GLYCEMIC");
                     keys.unshift("ANTHROPOMETRIC");
-                    keys.unshift("EKG Traits");
+                    keys.unshift("ECG TRAITS");
                     keys.unshift("LIPIDS");
-                    keys.unshift("CARDIOVASCULAR DISEASE");
+                    keys.unshift("ATRIAL FIBRILLATION");
+                    keys.unshift("CORONARY ARTERY DISEASE");
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
