@@ -135,7 +135,7 @@
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
-                    assayIdList: "${grailsApplication.config.portal.data.epigenetic.datasetList.abbreviation.map[g.portalTypeString()]}",
+                    assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }}
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);

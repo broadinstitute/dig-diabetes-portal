@@ -496,7 +496,6 @@ class WidgetService {
 
     public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
-        String distributedKB = metaDataService?.getDistributedKBFromSession()
 
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
