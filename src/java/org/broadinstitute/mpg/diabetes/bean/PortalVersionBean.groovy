@@ -14,7 +14,6 @@ class PortalVersionBean {
     private List<String> tissues
     private String epigeneticAssays
     private String lzDataset
-    private String credibleSet
 
     public PortalVersionBean(String portalType,
                              String portalDescription,
@@ -23,8 +22,7 @@ class PortalVersionBean {
                              String dataSet,
                              List<String> tissues,
                              String epigeneticAssays,
-                             String lzDataset,
-                             String credibleSet ) {
+                             String lzDataset ) {
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -33,7 +31,6 @@ class PortalVersionBean {
         this.tissues = tissues
         this.epigeneticAssays = epigeneticAssays
         this.lzDataset = lzDataset
-        this.credibleSet = credibleSet
     }
 
     public String getPortalType() {
@@ -68,9 +65,6 @@ class PortalVersionBean {
         return lzDataset
     }
 
-    public String getCredibleSet() {
-        return credibleSet
-    }
 
 
 
@@ -82,7 +76,6 @@ class PortalVersionBean {
 "dataSet":"${getDataSet()}",
 "tissues":"${getTissues().toString()}",
 "epigeneticAssays":"${getEpigeneticAssays()}",
-"lzDataset":"${getLzDataset()}",
-"credibleSet":"${getCredibleSet()}"}""".toString()
+"lzDataset":"${getLzDataset()}"}""".toString()
     }
 }
