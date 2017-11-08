@@ -88,7 +88,7 @@ class HomeController {
             variantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf",
             strokeIntroTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_disease_KP_tutorial.pdf",
             strokeVariantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf",
-            miIntroTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_disease_KP_tutorial.pdf",
+            miIntroTutorial: "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_tutorial.pdf",
             miVariantFinderTutorial: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf",
                 GAITguide: "https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf",
                 VariantResultsTableGuide: "https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_variant_results_guide.pdf",
