@@ -1,6 +1,16 @@
 <script class="panel-body" id="ExChip_AFGen_script" type="x-tmpl-mustache">
   <div class="panel-body">
 
+   <table>
+                <tr>
+                    <td><g:message code="portal.stroke.about.AHA.discovery.datasets"></g:message></td>
+                    <td><a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a> </td>
+                </tr>
+                <tr><td><h4><g:message code="portal.stroke.AHA_discovery.link"></g:message></h4></td><td></td></tr>
+
+                </table>
+                <hr />
+
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
