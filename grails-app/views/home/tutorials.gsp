@@ -190,7 +190,7 @@
                         code="portal.GenePageGuide.title"/></a></div>
                 <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
                         code="portal.GAITguide.title"/></a></div>
-                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="variantPdf"><g:message
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf"><g:message
                         code="portal.variantFinderTutorial.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="VariantResultsPdf"><g:message
                         code="portal.variantResultsTableGuide.title"/></a></div>
