@@ -122,7 +122,8 @@ class MetaDataService {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
 
-        dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
+        //dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
+        dataset =  restServerService.retrieveBeanForPortalType(portalType).lzDataset
 
         // return
         return dataset;
