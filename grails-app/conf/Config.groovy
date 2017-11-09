@@ -558,17 +558,16 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd"
-distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
-diabetes.data.version = "mdv28";
-portal.data.versionDesignator = [ new PortalVersionBean("t2d",
-                                                        "T2D",
-                                                        "mdv28",
-                                                        "T2D",
-                                                        "ExSeq_19k_mdv28",
-                                                        ["Islets","Liver","SkeletalMuscle","Adipose"],
-                                                        "[3]",
-                                                        "ExSeq_19k_mdv28"),
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+
+portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
+                                                        "T2D",  // displayable label for this portal type
+                                                        "mdv28",    // the MDV number for this portal
+                                                        "T2D",      // the default phenotype for this portal
+                                                        "ExSeq_19k_mdv28",  // default data set.  Used rarely.
+                                                        ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
+                                                        "[3]",  // the assays we should search
+                                                        "ExSeq_19k_mdv28"), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv70",

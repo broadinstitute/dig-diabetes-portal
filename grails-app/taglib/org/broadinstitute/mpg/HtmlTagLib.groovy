@@ -44,15 +44,6 @@ class HtmlTagLib {
         out << portalType;
     }
 
-    def portalVersionString = {attrs, body ->
-        String portalType = this.metaDataService?.getPortalVersionFromSession()
-        out << portalType;
-    }
-
-    def distributedKBString = {attrs, body ->
-        String distributedKB = this.metaDataService?.getDistributedKBFromSession()
-        out << distributedKB;
-    }
 
 
     def renderGeneSummary = { attrs ->

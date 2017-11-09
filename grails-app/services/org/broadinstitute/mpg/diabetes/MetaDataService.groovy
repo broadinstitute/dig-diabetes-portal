@@ -72,53 +72,6 @@ class MetaDataService {
         return portalType;
     }
 
-    /***
-     * return the portal version string from the user session, or else from the default string
-     *
-     * @return
-     */
-    public String getPortalVersionFromSession() {
-        // if portal type defined in config -- start there
-        String portalVersionDefault = this.grailsApplication.config.diabetes.data.version;
-
-        String portalVersion = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalVersion');
-
-        if (portalVersion == null) {
-            portalVersion = portalVersionDefault;
-
-            if (!portalVersion){
-                log.fatal("We need to have a mdv version or we can't continue")
-                throw new Exception("missing mdv -- we cannot continue")
-            }
-
-        }
-
-        return portalVersion;
-    }
-
-
-
-    public String getDistributedKBFromSession() {
-        // if portal type defined in config, use that
-        String distributedKBOverride = this.grailsApplication.config.distributed.kb.override;
-        String distributedKB = null;
-
-        distributedKB = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('distributedKB');
-
-        // DIGP-291: adding different metadata versions by portal
-        // get the data version based on user session portal type; default to portal override if no session preference set
-        if (distributedKB == null) {
-            distributedKB = distributedKBOverride;
-
-            // if not portal override set in config, set to t2d as last resort
-            if (distributedKB == null) {
-                distributedKB = "Broad";
-            }
-        }
-
-        // return
-        return distributedKB;
-    }
 
 
 
@@ -138,10 +91,7 @@ class MetaDataService {
         // DIGP-291: adding different metadata versions by portal
         String dataVersion;
         String portalType = this.getPortalTypeFromSession()
-        String distributedKb = this.getDistributedKBFromSession()
         dataVersion = restServerService.retrieveMdvForPortalType(portalType)
-     //  dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
-
         // return
        return dataVersion;
     }
