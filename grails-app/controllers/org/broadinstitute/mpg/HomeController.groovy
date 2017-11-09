@@ -96,7 +96,8 @@ class HomeController {
                 PhenotypeGuide: "https://s3.amazonaws.com/broad-portal-resources/tutorials/Phenotype_reference_guide.pdf",
                 GenePageGuide: "https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf",
                 StrokePhenotypeGuide: "https://s3.amazonaws.com/broad-portal-resources/stroke/CDKP_phenotype_reference_guide.pdf",
-            CDKPGenePageGuide: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf"
+            CDKPGenePageGuide: "https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf",
+            CVDKPGenePageGuide: "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf"
 
         ]
         render(controller: 'home', view: 'tutorials', model: [links: links])
