@@ -423,15 +423,6 @@
         <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
             <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
-            <div style="margin: 0 10px 10px 10px; display: none">
-                <label style="display: inline; padding-right: 15px"> View data at
-                </label>
-                <select name="chooseDistributedKB" id="chooseDistributedKB" class="form-control input-sm"
-                        style="display: inline; width:100px">
-                    <option value="Broad DCC" <%= (g.distributedKBString()=='Broad')? 'selected':'' %> >Broad DCC</option>
-                    <option value="EBI" <%= (g.distributedKBString()=='EBI')? 'selected':'' %> >EBI</option>
-                </select>
-            </div>
             <g:if test="${g.portalTypeString()?.equals('mi')}">
                 <div style="position:absolute; top: 25px; right:-40px; ">
                     <p style="margin-bottom:3px;">
