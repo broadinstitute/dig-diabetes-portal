@@ -14,17 +14,16 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Weng_2017_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Weng_2017_submitted.citation"></g:message><br><i><g:message code="informational.data.download.LTRfile"></g:message></i></div>
-</div></p>
-
-<p><div class="paper">
 <g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message><br>
 <g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Christophersen_2017_NatGenet.citation"></g:message> </div>
 </div></p>
 
+%{--<p><div class="paper">--}%
+%{--<g:message code="informational.shared.publications.Weng_2017_submitted"></g:message><br>--}%
+%{--<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
+%{--<div class="citation"><g:message code="informational.shared.publications.Weng_2017_submitted.citation"></g:message><br><i><g:message code="informational.data.download.LTRfile"></g:message></i></div>--}%
+%{--</div></p>--}%
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
@@ -44,10 +43,6 @@
        <tr><td>1,420</td><td>7,460</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
        <tr><td>1,520</td><td>1,520</td><td>Basel Atrial Fibrillation Cohort Study (BEAT-AF)</td><td>European</td></tr>
        <tr><td>837</td><td>3,293</td><td>Biobank Japan</td><td>East Asian</td></tr>
-       <tr><td>174</td><td>2,132</td><td>Mount Sinai BioMe Biobank</td><td>African American</td></tr>
-       <tr><td>291</td><td>860</td><td>Mount Sinai BioMe Biobank</td><td>European</td></tr>
-       <tr><td>277</td><td>3,081</td><td>Mount Sinai BioMe Biobank</td><td>Hispanic</td></tr>
-       <tr><td>428</td><td>9,757</td><td>Vanderbilt University Medical Center BioVU Biorepository</td><td>European</td></tr>
        <tr><td>606</td><td>2,930</td><td>Cleveland Clinic Lone Atrial Fibrillation GeneBank Study (CCAF)</td><td>European</td></tr>
        <tr><td>189</td><td>612</td><td>Cardiovascular Health Study (CHS)</td><td>African American</td></tr>
        <tr><td>1,011</td><td>2,190</td><td>Cardiovascular Health Study (CHS)</td><td>European</td></tr>
@@ -57,6 +52,9 @@
        <tr><td>203</td><td>6,651</td><td>Generation Scotland: Scottish Family Health Study (GS:SFHS)</td><td>European</td></tr>
        <tr><td>368</td><td>2,666</td><td>Ludwigshafen Risk and Cardiovascular Health (LURIC)</td><td>European</td></tr>
        <tr><td>1,232</td><td>4,645</td><td>Malmö Diet and Cancer study (MDCS)</td><td>European</td></tr>
+       <tr><td>174</td><td>2,132</td><td>Mount Sinai BioMe Biobank</td><td>African American</td></tr>
+       <tr><td>291</td><td>860</td><td>Mount Sinai BioMe Biobank</td><td>European</td></tr>
+       <tr><td>277</td><td>3,081</td><td>Mount Sinai BioMe Biobank</td><td>Hispanic</td></tr>
        <tr><td>155</td><td>2,372</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
        <tr><td>366</td><td>911</td><td>Massachusetts General Hospital Atrial Fibrillation study (MGH AF)</td><td>European</td></tr>
        <tr><td>665</td><td>2,128</td><td>Massachusetts General Hospital Cardiology and Metabolic Patient (MGH CAMP)</td><td>European</td></tr>
@@ -70,6 +68,7 @@
        <tr><td>197</td><td>758</td><td>Sao Paolo Heart Failure Cohort (SPHFC)</td><td>Brazilian</td></tr>
        <tr><td>403</td><td>6,410</td><td>Swedish Twin Registry (TWINGENE)</td><td>European</td></tr>
        <tr><td>294</td><td>826</td><td>Uppsala Longitudinal Study of Adult Men (ULSAM)</td><td>European</td></tr>
+       <tr><td>428</td><td>9,757</td><td>Vanderbilt University Medical Center BioVU Biorepository</td><td>European</td></tr>
        <tr><td>330</td><td>797</td><td>Wellcome Trust Case Control Consortium 2 Munich (WTCCC2-Munich)</td><td>European</td></tr>
        <tr><td>959</td><td>19,897</td><td>Women’s Genome Health Study (WGHS)</td><td>European</td></tr>
 </table>
