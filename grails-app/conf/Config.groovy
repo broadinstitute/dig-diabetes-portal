@@ -175,7 +175,7 @@ digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-24
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsibddemoKB = new ServerBean("KB-ibddemo-2017-aws", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
-
+digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
 // this will be your default
 defaultRestServer = digawsdevnewKB
 
@@ -191,7 +191,8 @@ defaultRestServer = digawsdevnewKB
          digawsdevnewKB_fed,
          digawsqanewKB,
          digawsqanewKB_fed,
-         digawsibddemoKB
+         digawsibddemoKB,
+         digawsprodmiKB
  ]
 
 
