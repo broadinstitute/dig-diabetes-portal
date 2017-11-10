@@ -579,7 +579,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv91",
-                                                          "EOMI",
+                                                          "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["SkeletalMuscle"],
                                                           "[3]",

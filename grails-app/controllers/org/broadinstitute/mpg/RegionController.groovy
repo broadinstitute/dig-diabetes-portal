@@ -27,11 +27,15 @@ class RegionController {
                 encounteredErrors = true
             }
             List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(metaDataService?.getDefaultPhenotype(),
-                    'GWAS',metaDataService.getDataVersion(),'')
+                    'GWAS',metaDataService.getDataVersion(),'') // try to get a GWAS result
+            if (sampleGroupList.size()==0){
+                sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(metaDataService?.getDefaultPhenotype(),
+                        '',metaDataService.getDataVersion(),'') // if no GWAS then take whatever we can get
+            }
             List<SampleGroup> orderedSampleGroupList = sampleGroupList.sort{ it.subjectsNumber }
-            SampleGroup preferredSampleGroup = orderedSampleGroupList.last()
+            SampleGroup preferredSampleGroup = orderedSampleGroupList?.last()
 
-            if (!encounteredErrors){
+            if ((!encounteredErrors)&&(sampleGroupList.size()>0)){
                 // Grails/Groovy does not seem to play nicely with JSON
                 ArrayList<String> query = [
                     ([
