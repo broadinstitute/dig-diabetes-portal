@@ -358,15 +358,9 @@ var UTILS = {
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
-            //var portaltype =
-           // var portalType = g.portalTypeString();
+
             options.empty();
             var groupList = dataSetJson.dataset;
-
-            // if ((typeof includeDefault !== 'undefined') &&
-            //     (includeDefault)){
-            //     options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
-            // }
 
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
@@ -405,6 +399,11 @@ var UTILS = {
                 if (keys.indexOf("INFLAMMATORY BOWEL")>-1){
                     keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
                     keys.unshift("INFLAMMATORY BOWEL");
+                    try{
+                        mpgSoftware.variantWF.retrieveDatasets("IBD", 'dependent');
+                    }catch(e){
+                        console.log("retrievedatasets not readable property",e);
+                    }
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
@@ -425,8 +424,15 @@ var UTILS = {
                     keys.unshift("LIPIDS");
                     keys.unshift("ATRIAL FIBRILLATION");
                     keys.unshift("CORONARY ARTERY DISEASE");
+                    try{
+                        mpgSoftware.variantWF.retrieveDatasets("MI", 'dependent');
+                    }catch(e){
+                        console.log("retrievedatasets not readable property",e);
+                    }
+
                 }
                 $('#datasetDependent').prop( "disabled", false );
+
             }
 
 
