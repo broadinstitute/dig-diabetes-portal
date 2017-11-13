@@ -155,6 +155,8 @@ burdenStraightFromTheDEVKb =  new ServerBean("Burden straight from Dev KB", "htt
 burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
 burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
 burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+burdenStraightFromTheMI_PRODKB =  new ServerBean("Burden straight from MI Prod KB", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/burden");
+
 
 //digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
 //digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
@@ -310,7 +312,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
@@ -343,7 +345,7 @@ environments {
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
-//        grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -559,7 +561,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+portal.type.override = "mi"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
