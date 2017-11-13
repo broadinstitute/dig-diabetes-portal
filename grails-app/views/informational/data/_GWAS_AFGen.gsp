@@ -19,11 +19,11 @@
 <div class="citation"><g:message code="informational.shared.publications.Christophersen_2017_NatGenet.citation"></g:message> </div>
 </div></p>
 
-%{--<p><div class="paper">--}%
-%{--<g:message code="informational.shared.publications.Weng_2017_submitted"></g:message><br>--}%
-%{--<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<div class="citation"><g:message code="informational.shared.publications.Weng_2017_submitted.citation"></g:message><br><i><g:message code="informational.data.download.LTRfile"></g:message></i></div>--}%
-%{--</div></p>--}%
+<p><div class="paper">
+<g:message code="informational.shared.publications.Weng_2017_submitted"></g:message><br>
+<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Weng_2017_submitted.citation"></g:message><br><i><g:message code="informational.data.download.LTRfile"></g:message></i></div>
+</div></p>
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
