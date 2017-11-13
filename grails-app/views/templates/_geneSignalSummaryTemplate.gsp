@@ -33,50 +33,45 @@
         </div>
     </div>
     <div >%{--should hold the Choose data set panel--}%
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-2 col-xs-12">
+        <!--<div class="panel-heading">
+            <div class="row">-->
+                <div class="" style="float:left; padding-right: 20px;">
                     <div id='trafficLightHolder'>
                         <r:img uri="/images/undeterminedlight.png"/>
                         <div id="signalLevelHolder" style="display:none"></div>
                     </div>
-
-                </div>
-
-                <div class="col-md-5 col-xs-12">
-                    <div class="row">
-                        <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                            No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
-                        </div>
-
-                        <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                            Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
-                        </div>
-
-                        <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                            Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
-                        </div>
+                <!--</div>
+                <div class="">-->
+                    <div class="trafficExplanations trafficExplanation1">
+                        No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation2">
+                        Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation3">
+                        Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                     </div>
                 </div>
+                    </div>
 
-                <div class="col-md-5 col-xs-12">
 
-                </div>
+                <!--<div class="col-md-5 col-xs-12">
+
+                </div>-->
 
             </div>
             <div class="row interestingPhenotypesHolder">
-                <div class="col-xs-12">
+                <div class="col-md-12">
                     <div id="interestingPhenotypes">
 
                     </div>
                 </div>
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
+                    <div class="col-md-12" style="font-size:12px">
                         Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
-                    </div></g:if>
-                <div class="col-xs-2">
+                    </div>
+                </g:if>
 
-                </div>
             </div>
             <div class="row geneWindowDescriptionHolder">
                 <div class="col-sm-3">
@@ -366,7 +361,7 @@
                             <div class="col-xs-9"></div>
                             <div class="col-xs-3">
                                 <button class="btn btn-primary btn-xs pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#xpropertiesModal"
-                                onclick="mpgSoftware.geneSignalSummaryMethods.adjustProperties(this)" tableSpec="common">Add / Subtract Data</button>
+                                onclick="mpgSoftware.geneSignalSummaryMethods.adjustProperties(this)" tableSpec="common">Add / Subtract Columns</button>
                             </div>
                     </div>
 

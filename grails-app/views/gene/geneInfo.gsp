@@ -92,22 +92,34 @@
 
     <div class="container">
 
-        <div class="gene-info-container">
+        <div class="gene-info-container row">
             <div class="gene-info-view">
+                <div class="col-md-12">
+                    <h1 class="dk-page-title" style="vertical-align: bottom;">
+                        <em><%=geneName%></em>
+                    </h1>
+                </div>
+                <div class="col-md-9">
+                    <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-inline dk-t2d-blue dk-search-button dk-right-column-buttons">
+                        <input id="generalized-input" value="Look for another gene" type="text" class="form-control input-default">
+                        <button id="generalized-go" class="-compact" type="button"><a href="javascript:;">GO</a></a></button>
+                    </div>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:elseif>
+                </div>
 
-                <h1 class="dk-page-title">
-                    <em><%=geneName%></em>
-                </h1>
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-                <div style="text-align: right;">
-                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                </div></g:if>
-                <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                    <div style="text-align: right;">
-                        <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                    </div></g:elseif>
     </div>
-                <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 <g:renderNotBetaFeaturesDisplayedValue>
                     <g:render template="../templates/geneSignalSummaryTemplate"/>

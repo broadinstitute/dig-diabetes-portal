@@ -6,7 +6,7 @@
                                       "WSF1"]}"/>
 
 <g:if test="${annotatedGenes.contains(geneToSummarize)}">
-    <div class="gene-summary">
+    <div class="gene-summary" style="border:none; margin:0; padding:0;">
         <div class="title"><g:message code="gene.header.geneSummary" default="Curated summary"/>
         <g:helpText title="gene.header.geneSummary.help.header" placement="right"
                     body="gene.header.geneSummary.help.text"/>

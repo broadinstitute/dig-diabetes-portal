@@ -325,6 +325,8 @@ p.dataset-name {
     var regexStr = "";
 
 
+
+
     function renderFilteredData(selectedLevel2Phenotype){
         var sortedStoredJsonArray = [];
         if(typeof selectedLevel2Phenotype !== 'undefined'){
@@ -600,7 +602,7 @@ p.dataset-name {
         {{/parents}}
         </tbody>
     </table>
-</div>
+    </div>
 </script>
 
 <script id="datatypeFilter" type="x-tmpl-mustache">
