@@ -298,6 +298,7 @@ class RestServerService {
             this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb_fed);
             this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb);
             this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb_fed);
+            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheMI_PRODKB);
         }
 
         return this.burdenServerList;
