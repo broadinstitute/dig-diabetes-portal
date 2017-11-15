@@ -94,32 +94,52 @@
 
         <div class="gene-info-container row">
             <div class="gene-info-view">
-                <div class="col-md-12">
-                    <h1 class="dk-page-title" style="vertical-align: bottom;">
-                        <em><%=geneName%></em>
-                    </h1>
-                </div>
-                <div class="col-md-9">
-                    <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-inline dk-t2d-blue dk-search-button dk-right-column-buttons">
-                        <input id="generalized-input" value="Look for another gene" type="text" class="form-control input-default">
-                        <button id="generalized-go" class="-compact" type="button"><a href="javascript:;">GO</a></a></button>
-                    </div>
+                <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
+                    <em><%=geneName%></em>
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank" style="border-radius: 2px; ">Gene Page guide</a>
                         </div>
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank" style="border-radius: 2px; >Gene Page guide</a>
                         </div>
                     </g:elseif>
+                </h1>
+                <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
+                    <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -20px;">
+                        <r:img uri="/images/undeterminedlight2.png"/>
+                        <div id="signalLevelHolder" style="display:none"></div>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation1" style="font-size:16px; text-align: left;">
+                        No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation2" style="font-size:18px; text-align: left;">
+                        Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation3" style="font-size:18px; text-align: left;">
+                        Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
+                    </div>
+                </div>
+                <div class="form-inline col-md-6" style="height: 40px; padding:0; border-bottom: solid 1px #ccc; ">
+
+                    <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">GO</button>
+                    <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
+                    <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene</div>
+
                 </div>
 
-    </div>
+
+
+
+
+                <div class="col-md-12" style="padding-top: 30px;">
+                    <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+                </div>
+
+
+
 
                 <g:renderNotBetaFeaturesDisplayedValue>
                     <g:render template="../templates/geneSignalSummaryTemplate"/>

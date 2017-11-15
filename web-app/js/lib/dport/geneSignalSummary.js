@@ -896,13 +896,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
         significanceLevelDom.removeClass('unemphasize');
         significanceLevelDom.addClass('emphasize');
-        if (significanceLevel == 1){
+        /*if (significanceLevel == 1){
             $('#trafficLightHolder').append(params.redLightImage);
         } else if (significanceLevel == 2){
             $('#trafficLightHolder').append(params.yellowLightImage);
         } else if (significanceLevel == 3){
             $('#trafficLightHolder').append(params.greenLightImage);
+        }*/
+
+        if (significanceLevel == 1){
+            $('#trafficLightHolder').append("<div class='red-signal'>&nbsp;</div>");
+        } else if (significanceLevel == 2){
+            $('#trafficLightHolder').append("<div class='yellow-signal'>&nbsp;</div>");
+        } else if (significanceLevel == 3){
+            $('#trafficLightHolder').append("<div class='green-signal'>&nbsp;</div>");
         }
+
         $('#signalLevelHolder').text(significanceLevel);
     };
 

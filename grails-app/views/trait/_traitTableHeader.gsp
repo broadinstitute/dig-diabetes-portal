@@ -109,7 +109,7 @@
 <div style="text-align: right;">Scroll to zoom. Rollover dots for variant information.</div>
 <div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
-<table id="phenotypeTraits" class="table basictable table-striped">
+<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
         <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>

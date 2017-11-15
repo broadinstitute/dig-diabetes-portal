@@ -1,7 +1,10 @@
+
+
+
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
 <div class="row">
     <div class="col-xs-offset-7 col-xs-5">
-        <div class="row" style="margin: 10px 10px 0px 0; background-color: #eeeeee">
+        <div class="row" style="margin: 10px 10px 0px 0; padding: 5px; background-color: #eeeeee">
             <div class="col-xs-5">
                 <label class="radio-inline" style="font-weight: bold">Genome browser</label>
             </div>
@@ -32,27 +35,40 @@
             </select>
         </div>
     </div>
-    <div >%{--should hold the Choose data set panel--}%
-        <!--<div class="panel-heading">
-            <div class="row">-->
-                <div class="" style="float:left; padding-right: 20px;">
+    <!--<div >%{--should hold the Choose data set panel--}%
+        <div class="panel-heading">-->
+            <!--<div class="row">
+                <div class="col-md-3"">
                     <div id='trafficLightHolder'>
-                        <r:img uri="/images/undeterminedlight.png"/>
+                        <r:img uri="/images/undeterminedlight2.png"/>
                         <div id="signalLevelHolder" style="display:none"></div>
                     </div>
-                <!--</div>
-                <div class="">-->
-                    <div class="trafficExplanations trafficExplanation1">
+                    <div class="trafficExplanations trafficExplanation1" style="font-size:16px; text-align: center;">
                         No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
                     </div>
-                    <div class="trafficExplanations trafficExplanation2">
+                    <div class="trafficExplanations trafficExplanation2" style="font-size:18px; text-align: center;">
                         Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
                     </div>
-                    <div class="trafficExplanations trafficExplanation3">
+                    <div class="trafficExplanations trafficExplanation3" style="font-size:18px; text-align: center;">
                         Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                     </div>
-                </div>
+<!--
+                    <div class="form-inline" style="padding:10px 0;">
+                        <input id="generalized-input" value="Look for another gene" type="text" class="form-control input-default" style="height: 40px; margin:0; width:75%;">
+                        <button id="generalized-go" class="btn btn-primary" type="button" style="height: 40px; margin:0; width:23%;">GO</button>
                     </div>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:elseif>
+                </div>-->
+             </div>
 
 
                 <!--<div class="col-md-5 col-xs-12">
@@ -67,26 +83,21 @@
                     </div>
                 </div>
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="col-md-12" style="font-size:12px">
+                    <div class="col-md-12" style="font-size:13px">
                         Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
                     </div>
                 </g:if>
 
             </div>
             <div class="row geneWindowDescriptionHolder">
-                <div class="col-sm-3">
-                    <div>
-                    </div>
-                </div>
-                <div class="col-sm-6">
-                    <div class="geneWindowDescription">
+
+                <div class="col-md-12">
+                <label style="font-size: 20px; font-weight: 900">VARIANTS ON <em>{{geneName}}</em></label>
+                    <div class="geneWindowDescription" style="font-size: 16px;">
                     {{geneName}} is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
                     </div>
                 </div>
-                <div class="col-sm-3">
-                    <div>
-                    </div>
-                </div>
+
             </div>
 
         </div>
@@ -300,7 +311,7 @@
                     <div class="row">
                         <div class="col-lg-12">
 
-                        <table id="highImpactTemplateHolder" class="compact row-border"></table>
+                        <table id="highImpactTemplateHolder" class="compact row-border dk-t2d-general-table"></table>
 
                         </div>
                     </div>
@@ -361,7 +372,7 @@
                             <div class="col-xs-9"></div>
                             <div class="col-xs-3">
                                 <button class="btn btn-primary btn-xs pull-right" style="margin-bottom: 5px;" data-toggle="modal" data-target="#xpropertiesModal"
-                                onclick="mpgSoftware.geneSignalSummaryMethods.adjustProperties(this)" tableSpec="common">Add / Subtract Columns</button>
+                                onclick="mpgSoftware.geneSignalSummaryMethods.adjustProperties(this)" tableSpec="common">Add / Subtract Data</button>
                             </div>
                     </div>
 
@@ -384,7 +395,7 @@
                     <div class="row">
                         <div class="col-sm-12">
 
-                        <table id="commonVariantsLocationHolder" class="compact row-border"></table>
+                        <table id="commonVariantsLocationHolder" class="compact row-border dk-t2d-general-table"></table>
 
                         </div>
                     </div>
@@ -424,7 +435,7 @@
 
                                 <div id="commonVariantsLocation"></div>
                                 <div class="browserChooserGoesHere"></div>
-                                <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                                 <div class="igvGoesHere"></div>
                             </div>
                         </div>
@@ -530,7 +541,7 @@
                                 %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
-                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
                     </div>
                 </div>
@@ -619,7 +630,7 @@
 
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
-                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
                     </div>
                 </div>
@@ -681,7 +692,7 @@
                             <div class="variantCategoryHolder">
                                 <div id="commonVariantsLocation"></div>
                                 <div class="browserChooserGoesHere"></div>
-                                <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                                 <div class="igvGoesHere"></div>
                             </div>
                         </div>

@@ -12,7 +12,7 @@
                     body="gene.header.geneSummary.help.text"/>
         </div>
 
-        <div id="geneHolderTop" class="top">
+        <div id="geneHolderTop" class="top" style="font-size:18px;">
             <script>
                 var contents = '<g:renderGeneSummary geneFile="${geneName}-top" locale="${locale}"></g:renderGeneSummary>';
                 $('#geneHolderTop').html(contents);
@@ -45,6 +45,6 @@
     <p>
         <g:helpText title="gene.header.uniprotSummary.help.header" placement="right"
                     body="gene.header.uniprotSummary.help.text"/>
-        <span id="uniprotSummaryGoesHere"></span>
+        <span id="uniprotSummaryGoesHere" style="font-size:18px;"></span>
     </p>
 </g:else>

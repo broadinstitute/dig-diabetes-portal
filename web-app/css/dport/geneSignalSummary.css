@@ -6,8 +6,8 @@
     font-weight: 100;
 }
 .interestingPhenotypesHolder{
-    margin: 30px 0px 30px 0;
-    padding: 15px 0px 15px 0;
+    margin: 20px 0px 20px 0;
+    padding: 20px 0px 20px 0;
     /*border: 1px solid gray;*/
     border-top: solid 1px #ccc;
     border-bottom: solid 1px #ccc;
@@ -49,6 +49,7 @@ a.dataset-item{
 }
 .trafficExplanations.unemphasize {
     font-weight: normal;
+    display: none;
 }
 .morePhenos{
     margin: 0;
