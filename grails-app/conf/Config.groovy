@@ -178,8 +178,11 @@ digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.comput
 digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsibddemoKB = new ServerBean("KB-ibddemo-2017-aws", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
+digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
+
+
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsprodstrokeKB
 
  getRestServerList = [
          digdevlocalServer,
@@ -194,7 +197,8 @@ defaultRestServer = digawsdevnewKB
          digawsqanewKB,
          digawsqanewKB_fed,
          digawsibddemoKB,
-         digawsprodmiKB
+         digawsprodmiKB,
+         digawsprodstrokeKB
  ]
 
 
@@ -597,5 +601,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "GWAS_IBDGenomics_eu_mdv80")
 ]
 
+
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
