@@ -94,8 +94,6 @@ class RestServerService {
     private List<ServerBean> burdenServerList;
     private List<ServerBean> restServerList;
 
-    private ServerBean BURDEN_REST_SERVER = null;
-
     private ServerBean REST_SERVER = null;
 
     // okay
@@ -148,8 +146,6 @@ class RestServerService {
         REMEMBER_BASE_URL = BASE_URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
-
-        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
         //default rest server
         this.REST_SERVER = grailsApplication.config.defaultRestServer;
@@ -277,44 +273,6 @@ class RestServerService {
         return this.REST_SERVER.url;
     }
 
-    public List<ServerBean> getBurdenServerList() {
-        if (this.burdenServerList == null) {
-            // add in all known servers
-            // could do this in config.groovy
-            this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws01);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws02);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerQa);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2NewCode);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2PassThrough);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated01);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated02);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerPassThrough);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb_fed);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb_fed);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheMI_PRODKB);
-        }
-
-        return this.burdenServerList;
-    }
-
-
-
-    public void changeBurdenServer(String serverName) {
-        for (ServerBean serverBean : this.burdenServerList) {
-            if (serverBean.getName().equals(serverName)) {
-                log.info("changing burden rest server from: " + this.BURDEN_REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
-                this.BURDEN_REST_SERVER = serverBean;
-                break;
-            }
-        }
-    }
 
     public void changeRestServer(String serverName) {
         for (ServerBean serverBean : grailsApplication.config.getRestServerList) {
@@ -396,7 +354,9 @@ class RestServerService {
      * @return
      */
     public ServerBean getCurrentBurdenServer() {
-        return this.BURDEN_REST_SERVER
+        // the IAT always runs through the current KB (originally it was possible to set it separately)
+        ServerBean currentKb = getCurrentRestServer()
+        return new ServerBean(currentKb.url,"${currentKb.url}burden")
     }
 
     public ServerBean getCurrentRestServer() {

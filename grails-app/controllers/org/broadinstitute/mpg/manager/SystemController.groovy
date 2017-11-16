@@ -30,7 +30,6 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService?.getCurrentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
-                                          burdenRestServerList: this.restServerService?.getBurdenServerList(),
                                           restServerList: grailsApplication.config.getRestServerList,
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
@@ -234,37 +233,10 @@ class SystemController {
             String mdvParm="mdvName_${dataType}"
             restServerService.modifyPortalVersion(dataType, params[mdvParm])
         }
- //        int currentDataVersion = sharedToolsService.getDataVersion ()
-//        if (requestedDataVersion!=null) {
-//            if (requestedDataVersion != currentDataVersion) {
-//                sharedToolsService.setDataVersion(requestedDataVersion)
-//                flash.message = "You have changed the data version to ${sharedToolsService.getDataVersion ()}"
-//            } else {
-//                flash.message = "But the data version was already ${currentDataVersion}"
-//            }
-//        }
         forward(action: "systemManager")
 
     }
 
-    /**
-     * method to update the burden rest server
-     *
-     * @return
-     */
-    def updateBurdenRestServer() {
-        String restServer = params.datatype
-        String currentServer =  restServerService?.getCurrentBurdenServer()?.getName()
-
-        if  (!(restServer == currentServer)) {
-            restServerService.changeBurdenServer(restServer)
-            flash.message = "You are now using the ${restServer} server!"
-        } else {
-            flash.message = "But you were already using the ${currentServer} server!"
-        }
-
-        forward(action: "systemManager")
-    }
 
     def updateBackEndRestServer() {
         String restServer = params.datatype
