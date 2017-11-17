@@ -41,6 +41,7 @@
        <tr><td>900</td><td>10,739</td><td>Rotterdam Study (RS)</td><td>European</td></tr>
        <tr><td>107</td><td>1,816</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
        <tr><td>648</td><td>20,194</td><td>Women’s Genome Health Study (WGHS)</td><td>European</td></tr>
+       <tr><td>Total:</td><td colspan="2">7,288 cases |  81,086 controls</td><td>&nbsp;</td></tr>
 </table>
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
