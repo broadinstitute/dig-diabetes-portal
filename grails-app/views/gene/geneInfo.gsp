@@ -24,10 +24,58 @@
 
     <style>
 
-</style>
+    </style>
+
+    <script>
+
+        $(function () {
+            "use strict";
+
+            function goToSelectedItem(item) {
+                window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
+            }
+
+            /***
+             * type ahead recognizing genes
+             */
+            $('#generalized-input').typeahead({
+                source: function (query, process) {
+                    $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
+                        process(data);
+                    })
+                },
+                afterSelect: function(selection) {
+                    goToSelectedItem(selection);
+                }
+            });
+
+            /***
+             * respond to end-of-search-line button
+             */
+            $('#generalized-go').on('click', function () {
+                var somethingSymbol = $('#generalized-input').val();
+                alert(somethingSymbol);
+                if (somethingSymbol) {
+                    goToSelectedItem(somethingSymbol)
+                }
+            });
+
+            /***
+             * capture enter key, make it equivalent to clicking on end-of-search-line button
+             */
+            $("input").keypress(function (e) { // capture enter keypress
+                var k = e.keyCode || e.which;
+                if (k == 13) {
+                    $('#generalized-go').click();
+                }
+            });
+        });
+
+    </script>
 </head>
 
 <body>
+
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>

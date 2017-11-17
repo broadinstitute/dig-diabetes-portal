@@ -735,13 +735,13 @@ div.variantResultsFilterHolder > ul > li {
 }
 
 .green-signal {
-	background-image: url("../../images/greenlight3.png");
+	background-image: url("../../images/greenlight4.png");
 }
 
 .yellow-signal {
-	background-image: url("../../images/yellowlight3.png");
+	background-image: url("../../images/yellowlight4.png");
 }
 
 .red-signal {
-	background-image: url("../../images/redlight3.png");
+	background-image: url("../../images/redlight4.png");
 }

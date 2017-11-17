@@ -3,17 +3,17 @@
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
 <div class="row">
-    <div class="col-xs-offset-7 col-xs-5">
-        <div class="row" style="margin: 10px 10px 0px 0; padding: 5px; background-color: #eeeeee">
-            <div class="col-xs-5">
-                <label class="radio-inline" style="font-weight: bold">Genome browser</label>
+    <div class="col-md-offset-6 col-md-6">
+        <div class="row" style="margin: 30px 0 -5px 0; padding: 5px; background-color: #eeeeee">
+            <div class="col-md-6">
+                <label class="radio-inline" style="font-weight: bold">Select genome browser</label>
             </div>
-            <div class="col-xs-4">
+            <div class="col-md-3">
                 <label class="radio-inline"><input type="radio"  checked name="genomeBrowser" value=1
                                                    onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()"
                                                    checked>LocusZoom</label>
             </div>
-            <div class="col-xs-3">
+            <div class="col-md-3">
                 <label class="radio-inline"><input {{igvChecked}} type="radio"  name="genomeBrowser" value=2
                                                    onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">IGV</label>
             </div>
