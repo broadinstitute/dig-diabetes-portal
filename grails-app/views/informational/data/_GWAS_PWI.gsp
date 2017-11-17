@@ -40,6 +40,13 @@
 
 </table>
 
+<h4>Dataset subjects by ancestry</h4>
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Samples</th><th>Ancestry</th></tr>
+<tr><td>6,778</td><td>African American</td></tr>
+<tr><td>37,678</td><td>European</td></tr>
+<tr><td>44,456</td><td>All</td></tr>
+</table>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.PWI_GWAS"></g:message></p>
