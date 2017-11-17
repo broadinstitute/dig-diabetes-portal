@@ -344,6 +344,8 @@
                 </table>
             </div></td><td>European</td></tr>
 
+<tr><td>Total:</td><td colspan="2">42,335 cases | 78,240 controls</td><td>&nbsp;</td></tr>
+
 </table>
 
 
