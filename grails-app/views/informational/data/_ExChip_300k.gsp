@@ -30,13 +30,13 @@
 <tr><td>2,238</td><td>ADDITION</td><td>European</td></tr>
 <tr><td>2,983</td><td>AGES</td><td>European</td></tr>
 <tr><td>739</td><td>AMCPAS</td><td>European</td></tr>
-<tr><td>2,975</td><td>ARIC-AA</td><td>African</td></tr>
+<tr><td>2,975</td><td>ARIC-AA</td><td>African American</td></tr>
 <tr><td>10,634</td><td>ARIC-EA</td><td>European</td></tr>
 <tr><td>2,486</td><td>ASCOT-SC</td><td>European</td></tr>
 <tr><td>3,243</td><td>ASCOT-UK</td><td>European</td></tr>
 <tr><td>1,316</td><td>ATVB-Cases</td><td>European</td></tr>
 <tr><td>984</td><td>ATVB-Controls</td><td>European</td></tr>
-<tr><td>978</td><td>BioImage-African</td><td>African</td></tr>
+<tr><td>978</td><td>BioImage-African</td><td>African American</td></tr>
 <tr><td>136</td><td>BioImage-Asian</td><td>East Asian</td></tr>
 <tr><td>4,888</td><td>BioImage-European</td><td>European</td></tr>
 <tr><td>395</td><td>BioImage-Hispanic</td><td>Hispanic</td></tr>
@@ -44,11 +44,11 @@
 <tr><td>2,971</td><td>BRAVE-Cases</td><td>South Asian</td></tr>
 <tr><td>2,784</td><td>BRAVE-Controls</td><td>South Asian</td></tr>
 <tr><td>984</td><td>BRIGHT</td><td>European</td></tr>
-<tr><td>1,888</td><td>CARDIA (black)</td><td>African</td></tr>
+<tr><td>1,888</td><td>CARDIA (black)</td><td>African American</td></tr>
 <tr><td>2,143</td><td>CARDIA (white)</td><td>European</td></tr>
 <tr><td>8,107</td><td>CCHS</td><td>European</td></tr>
 <tr><td>11,821</td><td>CGPS</td><td>European</td></tr>
-<tr><td>796</td><td>CHS-AA</td><td>African-American</td></tr>
+<tr><td>796</td><td>CHS-AA</td><td>African American</td></tr>
 <tr><td>4,132</td><td>CHS-EA</td><td>European</td></tr>
 <tr><td>6,625</td><td>CIHDS</td><td>European</td></tr>
 <tr><td>855</td><td>CROATIA-Korcula</td><td>European</td></tr>
@@ -56,8 +56,8 @@
 <tr><td>1,158</td><td>DIREVA</td><td>European</td></tr>
 <tr><td>421</td><td>DPS</td><td>European</td></tr>
 <tr><td>740</td><td>DR's EXTRA</td><td>European</td></tr>
-<tr><td>536</td><td>Duke AA Cases</td><td>African</td></tr>
-<tr><td>492</td><td>Duke AA Controls</td><td>African</td></tr>
+<tr><td>536</td><td>Duke AA Cases</td><td>African American</td></tr>
+<tr><td>492</td><td>Duke AA Controls</td><td>African American</td></tr>
 <tr><td>472</td><td>Duke EA Cases</td><td>European</td></tr>
 <tr><td>284</td><td>Duke EA Controls</td><td>European</td></tr>
 <tr><td>1,538</td><td>EFSOCH</td><td>European</td></tr>
@@ -84,18 +84,18 @@
 <tr><td>2,662</td><td>HUNT-Case</td><td>European</td></tr>
 <tr><td>2,778</td><td>HUNT-Control</td><td>European</td></tr>
 <tr><td>5,827</td><td>Inter99</td><td>European</td></tr>
-<tr><td>2,021</td><td>IPM BioMe-African</td><td>African</td></tr>
+<tr><td>2,021</td><td>IPM BioMe-African</td><td>African American</td></tr>
 <tr><td>1,109</td><td>IPM BioMe-European</td><td>European</td></tr>
 <tr><td>2,608</td><td>IPM BioMe-Hispanic</td><td>Hispanic</td></tr>
-<tr><td>2,154</td><td>JHS</td><td>African</td></tr>
+<tr><td>2,154</td><td>JHS</td><td>African American</td></tr>
 <tr><td>2,723</td><td>KORA</td><td>European</td></tr>
 <tr><td>482</td><td>LBC 1921</td><td>European</td></tr>
 <tr><td>992</td><td>LBC1936</td><td>European</td></tr>
 <tr><td>1,664</td><td>LOLIPOP-ExomeChip</td><td>South Asian</td></tr>
 <tr><td>977</td><td>LOLIPOP-OmniExpressExome</td><td>South Asian</td></tr>
 <tr><td>4,793</td><td>MDC</td><td>European</td></tr>
-<tr><td>2,496</td><td>MESA-African American</td><td>African</td></tr>
-<tr><td>701</td><td>MESA-Chinese</td><td>Chinese</td></tr>
+<tr><td>2,496</td><td>MESA-African American</td><td>African American</td></tr>
+<tr><td>701</td><td>MESA-Chinese</td><td>East Asian</td></tr>
 <tr><td>2,081</td><td>MESA-Hispanic</td><td>Hispanic</td></tr>
 <tr><td>2,490</td><td>MESA-White</td><td>European</td></tr>
 <tr><td>8,377</td><td>METSIM</td><td>European</td></tr>
@@ -121,12 +121,22 @@
 <tr><td>1,879</td><td>VejleCases</td><td>European</td></tr>
 <tr><td>424</td><td>VejleCtrl</td><td>European</td></tr>
 <tr><td>22,516</td><td>WGHS</td><td>European</td></tr>
-<tr><td>2,673</td><td>WHI-AA</td><td>African</td></tr>
+<tr><td>2,673</td><td>WHI-AA</td><td>African American</td></tr>
 <tr><td>12,904</td><td>WHI-EA</td><td>European</td></tr>
 <tr><td>1,346</td><td>WOSCOPS</td><td>European</td></tr>
 
 </table>
 
+<h4>Dataset subjects by ancestry</h4>
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Samples</th><th>Ancestry</th></tr>
+<tr><td>17,009</td><td>African American</td></tr>
+<tr><td>8,287</td><td>East Asian</td></tr>
+<tr><td>270,520</td><td>European</td></tr>
+<tr><td>5,084</td><td>Hispanic</td></tr>
+<tr><td>30,468</td><td>South Asian</td></tr>
+<tr><td>319,677</td><td>All</td></tr>
+</table>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.300k"></g:message></p>
