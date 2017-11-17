@@ -73,6 +73,20 @@
        <tr><td>959</td><td>19,897</td><td>Women’s Genome Health Study (WGHS)</td><td>European</td></tr>
 </table>
 
+<h4>Dataset subjects by ancestry</h4>
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
+
+<tr><td>641</td><td>5,234</td><td>African American</td></tr>
+<tr><td>197</td><td>758</td><td>Brazilian</td></tr>
+<tr><td>837</td><td>3,293</td><td>East Asian</td></tr>
+<tr><td>15,979</td><td>102,776</td><td>European</td></tr>
+<tr><td>277</td><td>3,081</td><td>Hispanic</td></tr>
+<tr><td>17,931</td><td>115,142</td><td>All</td></tr>
+</table>
+
+
+
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
     <h5><g:message code="informational.data.project.AFGen1"></g:message></h5>
