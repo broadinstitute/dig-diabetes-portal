@@ -55,6 +55,15 @@
 
 </table>
 
+<h4>Dataset subjects by ancestry</h4>
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
+<tr><td>681</td><td>7,290</td><td>African American</td></tr>
+<tr><td>8,180</td><td>28,612</td><td>East Asian</td></tr>
+<tr><td>13,485</td><td>10,601</td><td>European</td></tr>
+<tr><td>22,346</td><td>132,086</td><td>All</td></tr>
+</table>
+
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
     <h5><g:message code="informational.data.project.AFGen1"></g:message></h5>
