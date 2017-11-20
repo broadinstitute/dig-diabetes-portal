@@ -5,6 +5,7 @@ package org.broadinstitute.mpg
 
 import grails.test.spock.IntegrationSpec
 import org.broadinstitute.mpg.RegionController
+import org.broadinstitute.mpg.diabetes.MetaDataService
 
 /**
  *
@@ -12,10 +13,12 @@ import org.broadinstitute.mpg.RegionController
 class RegionControllerIntegrationSpec extends IntegrationSpec {
 
     RegionController controller
+    MetaDataService metaDataService = new MetaDataService()
 
 
     def setup() {
         controller = new  RegionController()
+        metaDataService.getCommonPropertiesAsJson(false)
     }
 
     def cleanup() {

@@ -95,19 +95,29 @@
         <div class="gene-info-container">
             <div class="gene-info-view">
 
-                <h1>
+                <h1 class="dk-page-title">
                     <em><%=geneName%></em>
                 </h1>
 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                 <div style="text-align: right;">
                     <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
                 </div></g:if>
+                <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                    <div style="text-align: right;">
+                        <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                    </div></g:elseif>
+                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                    <div style="text-align: right;">
+                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                    </div></g:elseif>
     </div>
                 <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
 
                 <g:renderNotBetaFeaturesDisplayedValue>
                     <g:render template="../templates/geneSignalSummaryTemplate"/>
+                    <g:render template="../templates/variantSearchResultsTemplate" />
                     <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                    <g:render template="../templates/variantSearchResultsTemplate" />
                 </g:renderNotBetaFeaturesDisplayedValue>
 
 
@@ -214,7 +224,6 @@
                                                                                'allowStratificationChoice': 1    ]"/>
                     </g:renderBetaFeaturesDisplayedValue>
                     </g:if>
-
 
 
                     <div class="separator"></div>

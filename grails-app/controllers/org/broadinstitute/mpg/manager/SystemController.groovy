@@ -1,10 +1,12 @@
 package org.broadinstitute.mpg.manager
 
+import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import temporary.BuildInfo
 
@@ -28,7 +30,6 @@ class SystemController {
         render(view: 'systemMgr', model: [warningText:sharedToolsService.getWarningText(),
                                           currentRestServer:restServerService?.getCurrentRestServer(),
                                           burdenCurrentRestServer: restServerService?.getCurrentBurdenServer(),
-                                          burdenRestServerList: this.restServerService?.getBurdenServerList(),
                                           restServerList: grailsApplication.config.getRestServerList,
         currentApplicationIsSigma:sharedToolsService.applicationName(),
         helpTextLevel:sharedToolsService.getHelpTextSetting(),
@@ -43,6 +44,16 @@ class SystemController {
         recognizedStringsOnly:sharedToolsService.getRecognizedStringsOnly(),
         betaFeaturesDisplayed:sharedToolsService.getBetaFeaturesDisplayed()])
     }
+
+
+    def getPortalVersionList = {
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray portalVersionListJsonArray = slurper.parseText(restServerService?.getPortalVersionBeanListAsJson())
+        render(status:200, contentType:"application/json") {
+            [portalVersionList:portalVersionListJsonArray]
+        }
+    }
+
 
     def determineVersion = {
         JSONObject jsonVersion = [
@@ -216,38 +227,16 @@ class SystemController {
 
 
     def changeDataVersion()  {
-        String requestedDataVersion = params.datatype
-        int currentDataVersion = sharedToolsService.getDataVersion ()
-        if (requestedDataVersion!=null) {
-            if (requestedDataVersion != currentDataVersion) {
-                sharedToolsService.setDataVersion(requestedDataVersion)
-                flash.message = "You have changed the data version to ${sharedToolsService.getDataVersion ()}"
-            } else {
-                flash.message = "But the data version was already ${currentDataVersion}"
-            }
+        List<String> allDataTypes = params.dataType as List
+        LinkedHashMap<String,String> typeToVersionMap = [:]
+        for (String dataType in allDataTypes){
+            String mdvParm="mdvName_${dataType}"
+            restServerService.modifyPortalVersion(dataType, params[mdvParm])
         }
         forward(action: "systemManager")
 
     }
 
-    /**
-     * method to update the burden rest server
-     *
-     * @return
-     */
-    def updateBurdenRestServer() {
-        String restServer = params.datatype
-        String currentServer =  restServerService?.getCurrentBurdenServer()?.getName()
-
-        if  (!(restServer == currentServer)) {
-            restServerService.changeBurdenServer(restServer)
-            flash.message = "You are now using the ${restServer} server!"
-        } else {
-            flash.message = "But you were already using the ${currentServer} server!"
-        }
-
-        forward(action: "systemManager")
-    }
 
     def updateBackEndRestServer() {
         String restServer = params.datatype

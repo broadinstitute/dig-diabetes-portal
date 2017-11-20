@@ -6,6 +6,7 @@
 --%>
 <%@ page import="temporary.BuildInfo" %>
 <%@ page import="org.broadinstitute.mpg.RestServerService" %>
+<r:require module="mustache"/>
 %{--Use RestServerService--}%
 <!DOCTYPE html>
 <html>
@@ -27,7 +28,7 @@
             error: function (jqXHR, exception) {
                 // core.errorReporter(jqXHR, exception);
             }
-        });
+        });are
     } ;
     var refreshVariantsForChromosome = function ()  {
         $.ajax({
@@ -44,7 +45,34 @@
             }
         });
     } ;
-    </script>
+    $(document).ready(function () {
+        $.ajax({
+            cache: false,
+            type: "get",
+            url: "${createLink(controller:"system", action:"getPortalVersionList")}",
+            async: true,
+            success: function (data) {
+                $("#versionAdjusterGoesHere").empty().append(Mustache.render( $('#versionTemplate')[0].innerHTML,data));
+                console.log('done with getPortalVersionList')
+            },
+            error: function (jqXHR, exception) {
+                 core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    });
+</script>
+<style>
+    span.headerForVersionTable {
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    span.elementForVersionTable {
+        font-size: 14px;
+        font-weight: bold;
+    }
+</style>
 </head>
 
 <body>
@@ -112,51 +140,6 @@
                     </div>
                 </g:form>
 
-            <g:form action='updateBurdenRestServer' method='POST' id='updateBurdenRestServer' class='form form-horizontal cssform' autocomplete='off'>
-                <h4><g:message code="system.header.rest_server.burden_test" /> (<em><g:message code="system.shared.messages.current_server" /> = <a href="${burdenCurrentRestServer?.url}">${burdenCurrentRestServer?.name}</a></em>)</h4>
-                <div class="row clearfix">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-7">
-                        <div id="datatypes-forma">
-                            <g:each var="server" in="${burdenRestServerList}">
-                                <div class="radio">
-                                    <label>
-                                        <input id="burdenRestServer" type="radio" name="datatype" value="${server?.name}"
-                                            <%=burdenCurrentRestServer==server?" checked ":"" %> />
-                                        ${server?.name} (${server.url})
-                                    </label>
-                                </div>
-                            </g:each>
-                        </div>
-                    </div>
-                    <div class="col-md-3"></div>
-                </div>
-                <div class="row clearfix">
-                    <div class="col-md-6"></div>
-                    <div class="col-md-6">
-                        <div >
-                            <div style="text-align:center; padding-top: 20px;">
-                                <input class="btn btn-primary btn-lg" type='submit' id="submitBurden"
-                                       value='Commit'/>
-                            </div>
-
-                        </div>
-                    </div>
-
-                </div>
-                <div class="row clearfix">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <div >
-                            <g:if test='${flash.message}'>
-                                <div class="alert alert-danger">${flash.message}</div>
-                            </g:if>
-                        </div>
-                    </div>
-                    <div class="col-md-2"></div>
-
-                </div>
-            </g:form>
 
 
 
@@ -484,36 +467,37 @@
 
             <div class="separator"></div>
 
+            <g:render template="../templates/systemTemplate"/>
+            <div id="versionAdjusterGoesHere"></div>
+            %{--<g:form action='changeDataVersion' method='POST' class='form form-horizontal cssform' autocomplete='off'>--}%
+                %{--<h4><g:message code="system.header.data_version" /></h4>--}%
+                %{--<input type="text" name="datatype" Value="${dataVersion}"><br>--}%
+                %{--<div class="row clearfix">--}%
+                    %{--<div class="col-md-6"></div>--}%
+                    %{--<div class="col-md-6">--}%
+                        %{--<div >--}%
+                            %{--<div style="text-align:center; padding-top: 20px;">--}%
+                                %{--<input class="btn btn-primary btn-lg" type='submit' id="submitDataVersionText"--}%
+                                       %{--value='Commit'/>--}%
+                            %{--</div>--}%
 
-            <g:form action='changeDataVersion' method='POST' class='form form-horizontal cssform' autocomplete='off'>
-                <h4><g:message code="system.header.data_version" /></h4>
-                <input type="text" name="datatype" Value="${dataVersion}"><br>
-                <div class="row clearfix">
-                    <div class="col-md-6"></div>
-                    <div class="col-md-6">
-                        <div >
-                            <div style="text-align:center; padding-top: 20px;">
-                                <input class="btn btn-primary btn-lg" type='submit' id="submitDataVersionText"
-                                       value='Commit'/>
-                            </div>
+                        %{--</div>--}%
+                    %{--</div>--}%
 
-                        </div>
-                    </div>
+                %{--</div>--}%
+                %{--<div class="row clearfix">--}%
+                    %{--<div class="col-md-2"></div>--}%
+                    %{--<div class="col-md-8">--}%
+                        %{--<div >--}%
+                            %{--<g:if test='${flash.message}'>--}%
+                                %{--<div class="alert alert-danger">${flash.message}</div>--}%
+                            %{--</g:if>--}%
+                        %{--</div>--}%
+                    %{--</div>--}%
+                    %{--<div class="col-md-2"></div>--}%
 
-                </div>
-                <div class="row clearfix">
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <div >
-                            <g:if test='${flash.message}'>
-                                <div class="alert alert-danger">${flash.message}</div>
-                            </g:if>
-                        </div>
-                    </div>
-                    <div class="col-md-2"></div>
-
-                </div>
-          </g:form>
+                %{--</div>--}%
+          %{--</g:form>--}%
 
 
 

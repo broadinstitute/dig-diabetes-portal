@@ -1,5 +1,6 @@
 %{--this will go inside grails-app/views/template(new folder created by BenA)--}%
 %{--this will have all the mustache templates--}%
+%{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
 
 <g:render template="./data/ExAC_r03" />
 <g:render template="./data/1kg_phase1" />
@@ -30,6 +31,7 @@
 <g:render template="./data/GWAS_MICAD"/>
 <g:render template="./data/GWAS_OxBB"/>
 <g:render template="./data/GWAS_PGC"/>
+<g:render template="./data/GWAS_PWI" />
 <g:render template="./data/GWAS_SIGMA1"/>
 <g:render template="./data/GWAS_SIGN"/>
 <g:render template="./data/GWAS_Stroke"/>
@@ -39,20 +41,34 @@
 <g:render template="./data/WGS_WgnomAD" />
 <g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_AFGen" />
+<g:render template="./data/GWAS_GEI" />
 <g:render template="./data/ExChip_MICAD" />
 <g:render template="./data/ExChip_300k" />
+<g:render template="./data/GWAS_GIANT-PA" />
+<g:render template="./data/GWAS_AGEN" />
+<g:render template="./data/GWAS_DCSP2a610" />
+<g:render template="./data/GWAS_DCSP2a1M" />
+<g:render template="./data/ExSeq_RSNG" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
         <h3>Datasets</h3>
-        <table id="datasets" class="table table-condensed" style="margin-left:20px">
+        <table id="datasets" class="table table-condensed" style="">
             <thead>
             <tr>
+
                 <th>Dataset</th>
+                <g:if test="${g.portalTypeString()?.equals('mi')}">
+                <th>Samples</th>
+                <th>Ancestry</th>
+                <th>Data type</th>
+                </g:if>
+                <g:else>
                 <th>Access</th>
                 <th>Samples</th>
                 <th>Ancestry</th>
                 <th>Data type</th>
+                </g:else>
             </tr>
             </thead>
         <tbody>
@@ -71,10 +87,19 @@
                     </div>
             </td>
 
-            <td class="access" style="color:{{accessColor}}">{{access}} </td>
-            <td class="samples">{{size}}</td>
-            <td class="ethnicity">{{ancestry}}</td>
-            <td class="datatype">{{technology}}</td>
+            <g:if test="${g.portalTypeString()?.equals('mi')}">
+                <td class="samples">{{size}}</td>
+                <td class="ethnicity">{{ancestry}}</td>
+                <td class="datatype">{{technology}}</td>
+            </g:if>
+            <g:else>
+                <td class="access" style="color:{{accessColor}}">{{access}} </td>
+                <td class="samples">{{size}}</td>
+                <td class="ethnicity">{{ancestry}}</td>
+                <td class="datatype">{{technology}}</td>
+            </g:else>
+
+
         </tr>
         <tr>
         <td colspan="5" style="border: none; padding:0; margin: 0;"> <div id="{{name}}_myTarget" class="accordion-body collapse dataset-description" >
@@ -122,17 +147,16 @@
     </div>
 </script>
 
-<div class="datasetsHolder">
-    <div style="display: inline-block; width: 100%;">
-        <div>
-            <div class="datasets-filter">
-                <h3>Filter Dataset Table<small> (Click one to start)</small></h3>
-                <div id="datatypeFilterDisplay" class="form-inline"></div>
-                <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
-                <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
-            </div>
-            <div  id ="metaDataDisplay" class="form-inline" style="width: 100%"></div>
+<div class="row datasetsHolder">
+    <div class="col-md-12">
+        <div class="datasets-filter" style="display: inline-block; width: 100%;">
+            <h3>Filter Dataset Table<small> (Click one to start)</small></h3>
+            <div id="datatypeFilterDisplay" class="form-inline"></div>
+            <div id="phenotypeFilterLevel1Display" class="form-inline"></div>
+            <div id="phenotypeFilterLevel2Display" class="form-inline"></div>
         </div>
+        <div  id ="metaDataDisplay" class="form-inline" style="width: 100%"></div>
     </div>
 </div>
+
 

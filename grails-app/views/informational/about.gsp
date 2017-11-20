@@ -8,7 +8,6 @@
 
     <style>
     #main > div {
-        width: 90%;
         margin: auto;
     }
     </style>

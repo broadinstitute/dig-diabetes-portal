@@ -102,16 +102,6 @@ class BurdenService {
                 mostDelScore = 5;
                 break;
         }
-//        if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING) {
-//            mostDelScore = 1;
-//            operand = PortalConstants.OPERATOR_EQUALS;
-//        } else  if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING) {
-//            mostDelScore = 3;
-//        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
-//            mostDelScore = 5;
-//        } else if (variantSelectionOptionId == PortalConstants.BURDEN_VARIANT_OPTION_ALL) {
-//            mostDelScore = 5;
-//        }
 
         Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC")
         List<Property> additionalProperties = []
@@ -330,7 +320,8 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet, Boolean explicitlySelectSamples) {
+    public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet,
+                                     Boolean explicitlySelectSamples, String portalTypeString) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -380,7 +371,13 @@ class BurdenService {
             samplesObject.put(PortalConstants.JSON_BURDEN_SAMPLES_KEY, samplesArray)
 
             JSONObject covariatesObject = new JSONObject()
-            JSONArray covariatesArray = new JSONArray(["C1","C2","C3","C4","Age","SEX"])
+            JSONArray covariatesArray
+            if (portalTypeString=='mi'){
+                covariatesArray = new JSONArray(["C1","C2","C3","C4","SEX"])
+            } else {
+                covariatesArray = new JSONArray(["C1","C2","C3","C4","Age","SEX"])
+            }
+            JSONArray
             covariatesObject.put(PortalConstants.JSON_BURDEN_COVARIATES_KEY, covariatesArray);
 
             JSONObject filtersObject = new JSONObject()
@@ -719,7 +716,6 @@ class BurdenService {
                 (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY))&&
                 (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY))&&
                 (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_LRT_PRED_KEY))){
-            allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING, "All coding variants", false)
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "Protein-truncating + missense with MAF<1%", false)
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "Protein-truncating + possibly deleterious missense with MAF<1%", false)
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "Protein-truncating + probably deleterious missense", false)

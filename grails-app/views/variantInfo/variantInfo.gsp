@@ -73,6 +73,7 @@
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
+                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSetReadable}',
                     '${createLink(controller:"gene", action:"getLocusZoom")}',
                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
@@ -99,8 +100,8 @@
         <div class="variant-info-container">
             <div class="variant-info-view">
 
-                <h1>
-                    <strong><span id="variantTitle" class="parentsFont"></span> summary</strong>
+                <h1 class="dk-page-title">
+                    <span id="variantTitle" class="parentsFont"></span> summary
                 </h1>
 
                 <g:render template="variantPageHeader"/>
@@ -143,9 +144,9 @@
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||
-                        g.portalTypeString()?.equals('t2d')}">
+                        g.portalTypeString()?.equals('t2d')||
 
-                        %{--g.portalTypeString()?.equals('mi')}">--}%
+                        g.portalTypeString()?.equals('mi')}">
 
 
 

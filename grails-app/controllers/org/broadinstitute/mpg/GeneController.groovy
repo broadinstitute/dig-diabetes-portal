@@ -81,28 +81,27 @@ class GeneController {
         String newVandAColumnPValue
         String newDatasetName
         String newDatasetRowName = ""
-        String phenotype = "T2D"
+        String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
         List <String> defaultTissues = []
         switch (portalType){
             case 't2d':
                 igvIntro = g.message(code: "gene.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'T2D'
                 break
             case 'mi':
                 igvIntro = g.message(code: "gene.mi.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'MI'
                 break
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
-                phenotype = 'Stroke_all'
+                break
+            case 'ibd':
+                igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
                 break
             default:
                 break
         }
-        String locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-        defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
+        defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser
@@ -157,42 +156,31 @@ class GeneController {
         List <LinkedHashMap<String,String>> sortedColumnInformation = columnInformation.sort{a,b-> (b.value as Float)<=>(a.value as Float)}
 
         List<PhenotypeBean> lzOptions = this.widgetService?.getHailPhenotypeMap()
-        lzOptions << new PhenotypeBean(key:"Adipose", name:"Adipose",description:"adipose tissue", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"AnteriorCaudate", name:"AnteriorCaudate",description:"brain anterior caudate", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"CD34-PB", name:"CD34-PB",description:"CD34-PB primary hematopoietic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"CingulateGyrus", name:"CingulateGyrus",description:"brain cingulate gyrus", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"ColonicMucosa", name:"ColonicMucosa",description:"colonic mucos", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"DuodenumMucosa", name:"DuodenumMucosa",description:"duodenum mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"ES-HUES6", name:"ES-HUES6",description:"ES-HUES6 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"ES-HUES64", name:"ES-HUES64",description:"ES-HUES64 embryonic stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"GM12878", name:"GM12878",description:"GM12878 lymphoblastoid cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"H1", name:"H1",description:"H1 cell line", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"hASC-t1", name:"hASC-t1",description:"hASC-t1 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"hASC-t2", name:"hASC-t2",description:"hASC-t2 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"hASC-t3", name:"hASC-t3",description:"hASC-t3 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"hASC-t4", name:"hASC-t4",description:"hASC-t4 adipose stem cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"HepG2", name:"HepG2",description:"HepG2 hepatocellular carcinoma cell line", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"HippocampusMiddle", name:"HippocampusMiddle",description:"brain hippocampus middle", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"HMEC", name:"HMEC",description:"HMEC mammary epithelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"HSMM", name:"HSMM",description:"HSMM skeletal muscle myoblast cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"Huvec", name:"Huvec",description:"HUVEC umbilical vein endothelial primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"InferiorTemporalLobe", name:"InferiorTemporalLobe",description:"brain inferior temporal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"Islets", name:"Islets",description:"pancreatic islets", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"K562", name:"K562",description:"K562 leukemia cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"Liver", name:"Liver",description:"liver", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"MidFrontalLobe", name:"MidFrontalLobe",description:"brain mid-frontal lobe", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"NHEK", name:"NHEK",description:"NHEK epidermal keratinocyte primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"NHLF", name:"NHLF",description:"NHLF lung fibroblast primary cells", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"RectalMucosa", name:"RectalMucosa",description:"rectal mucosa", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"RectalSmoothMuscle", name:"RectalSmoothMuscle",description:"rectal smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"SkeletalMuscle", name:"SkeletalMuscle",description:"skeletal muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"StomachSmoothMuscle", name:"StomachSmoothMuscle",description:"stomach smooth muscle", dataType:"tissue", suitableForDefaultDisplay: true)
-        lzOptions << new PhenotypeBean(key:"SubstantiaNigra", name:"SubstantiaNigra",description:"brain substantia nigra", dataType:"tissue", suitableForDefaultDisplay: true)
+
+        StringBuilder sb = new StringBuilder("[")
+        if (portalType=='ibd'){
+            LinkedHashMap<String,List<String>> possibleExperiments =  epigenomeService.getThePossibleReadData("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+            List <String> allElements = []
+            for (String key in possibleExperiments.keySet()){
+                StringBuilder isb = new StringBuilder()
+                isb << "{\"expt\":\"${key}\",\"assays\":[\""
+                isb << possibleExperiments[key].join("\",\"")
+                isb << "\"]}"
+                allElements << isb.toString()
+            }
+            sb << allElements.join(",")
+        }
+        sb << "]"
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray experimentAssays = slurper.parseText(sb.toString())
+
+        String assayId = restServerService.retrieveBeanForPortalType(portalType)?.getEpigeneticAssays()
 
         // DIGKB-217: get the default samples data set from the metadata
         SampleGroup defaultGeneBurdenSampleGroup = this.metaDataService.getDefaultBurdenGeneDataset();
         String defaultGeneBurdenSamplesDataSetName = defaultGeneBurdenSampleGroup?.getSystemId();
-        String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
+        String defaultGeneBurdenDataSetName = restServerService.retrieveBeanForPortalType(portalType)?.getLzDataset()
+       // String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
         if (defaultGeneBurdenSampleGroup == null) {
             defaultGeneBurdenSamplesDataSetName = "samples_19k_"+metaDataService.getDataVersion();
 
@@ -210,16 +198,21 @@ class GeneController {
 
 
         if (geneToStartWith)  {
-            locusZoomDataset = metaDataService.getDefaultDataset()
+            String locusZoomDataset = metaDataService.getDefaultDataset()
             JSONArray passDefaultTissues = []
             JSONArray passDefaultTissuesDescriptions = []
             for (String tissue in defaultTissues){
                 passDefaultTissues.put("'${tissue}'")
                 passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
             }
+            LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
+            List<String> identifiedGenes = restServerService.retrieveGenesInExtents(
+                    [chromosomeSpecified:geneExtent.chrom,
+                     beginningExtentSpecified:geneExtent.startExtent,
+                     endingExtentSpecified:geneExtent.endExtent])
             String defaultPhenotype = metaDataService.getDefaultPhenotype()
             String  geneUpperCase =   geneToStartWith.toUpperCase()
-            LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
+            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
@@ -240,7 +233,9 @@ class GeneController {
                                              igvIntro: igvIntro,
                                              defaultTissues:passDefaultTissues,
                                              defaultTissuesDescriptions:passDefaultTissuesDescriptions,
-                                             defaultPhenotype: defaultPhenotype
+                                             defaultPhenotype: defaultPhenotype,
+                                             identifiedGenes:identifiedGenes,
+                                             assayId: assayId
             ] )
         }
     }
@@ -429,6 +424,7 @@ class GeneController {
         // params.mafValue=="0.47" // where value= real number x (where 0 <= x <= 1), and x is the MAF you'll pass into the REST call"
         // params.geneName=="SLC30A8" // string representing gene name
         log.info("got parameters: " + params);
+        String portalType = g.portalTypeString() as String
 
         // cast the parameters
         Boolean explicitlySelectSamples = false
@@ -441,7 +437,8 @@ class GeneController {
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, sampleDataSet, explicitlySelectSamples);
+        JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue,
+                dataSet, sampleDataSet, explicitlySelectSamples,portalType);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
@@ -528,8 +525,9 @@ class GeneController {
         String dataSet = params.dataset
         String dataType = params.datatype
         String propertyName = params.propertyName
+        String maximumNumberOfResults = params.maximumNumberOfResults
 
-
+        int requestedResults = -1
         int startInteger;
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
@@ -547,6 +545,14 @@ class GeneController {
         // log start
         Date startTime = new Date();
 
+        if (maximumNumberOfResults){
+            try {
+                requestedResults =  Integer.parseInt(maximumNumberOfResults);
+            } catch (e){
+                // an error here is no crisis – we can go with our internally specified default number
+            }
+        }
+
         // if have all the information, call the widget service
         try {
             startInteger = Integer.parseInt(startString);
@@ -555,11 +561,11 @@ class GeneController {
             if (chromosome != null) {
 
                 if (dataType=='static'){ // dynamically get the property name for static datasets
-                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,'P_VALUE')
+                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,propertyName)
                     propertyName = property.name
                 }
 
-                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, dataType, conditionVariants);
+                jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, dataType, conditionVariants, requestedResults);
             } else {
                 jsonReturn = errorJson;
             }
@@ -591,12 +597,25 @@ class GeneController {
         String startString = params.start; // ex "29737203"
         String endString = params.end; // ex "29937203"
         String assay_id = params.assay_id
-        String tissue_id = params.tissue_id
-        JSONObject returnJsonVector = null;
+        String tissue_id = params.source
 
         int startInteger;
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject errorJsonObject = slurper.parseText(errorJson)
+        List<LinkedHashMap<String,String>> bigwigResources = epigenomeService.getTheRemoteBigwigInformation("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+        //List<String> possibleBigwigAddresses =  epigenomeService.getThePossibleBigwigAddresses("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+        if (tissue_id.split(" ").size()>1){
+            tissue_id = tissue_id.split(" ")[0]
+        }
+       // List<String> filteredBigWigUrl = possibleBigwigAddresses.findAll{String t->t.contains(tissue_id)}
+        Map oneResource = bigwigResources.find{LinkedHashMap t->t.assayid==assay_id&&t.eid==tissue_id}
+        String chosenBigWigUrl
+        if (oneResource){
+            chosenBigWigUrl = oneResource.bigwigpath
+        }
+        List<String> filteredBigWigUrl = null //youpossibleBigwigAddresses.findAll{String t->t.toUpperCase().contains(tissue_id.toString().toUpperCase())}
 
         // log
         log.info("got LZ request with params: for filled line plot " + params);
@@ -609,26 +628,28 @@ class GeneController {
         try {
             startInteger = Integer.parseInt(startString);
             endInteger = Integer.parseInt(endString);
-            String callingJson = """{"chr":"${chromosome}", "start":${startString},"stop":${endString},"page_size":5000}""".toString()
+            String callingJson = """{"chr":"chr${chromosome}",
+                                     "start":${startString},
+                                     "end":${endString},
+                                     "bigwigUrl":"${chosenBigWigUrl}"}""".toString()
 
             if (chromosome != null) {
-                returnJsonVector = epigenomeService.getVectorDataRestCallResults(callingJson);
-                resultLZJson = epigenomeService.tranlsateVector(returnJsonVector);
+                resultLZJson= epigenomeService.getBigWigDataRestCall(callingJson)
 
             } else {
-                jsonReturn = errorJson;
+                resultLZJson = errorJsonObject;
             }
 
             // log
             log.info("got LZ result: " + jsonReturn);
 
-            // log end
+            // log endin
             Date endTime = new Date();
             log.info("LZ call returned in: " + (endTime?.getTime() - startTime?.getTime()) + " milliseconds");
 
         } catch (NumberFormatException exception) {
             log.error("got incorrect parameters for LZ call: " + params);
-            jsonReturn = errorJson;
+            resultLZJson = errorJsonObject;
         }
 
         // return

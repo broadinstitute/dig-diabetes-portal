@@ -1,83 +1,6 @@
 <style>
-
 </style>
-
-<div class="row">
-    <div class="pull-right" style="display:none">
-        <label for="signalPhenotypeTableChooser"><g:message code="gene.variantassociations.change.phenotype"
-                                                            default="Change phenotype choice"/></label>
-        &nbsp;
-        <select id="signalPhenotypeTableChooser" name="phenotypeTableChooser"
-                onchange="mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsByPhenotype(this,mpgSoftware.geneSignalSummaryMethods.updateSignificantVariantDisplay,
-                        {preferIgv:($('input[name=genomeBrowser]:checked').val()==='2')})">
-        </select>
-    </div>
-</div>
-<div >%{--should hold the Choose data set panel--}%
-    <div class="panel-heading">
-        <div class="row">
-            <div class="col-md-2 col-xs-12">
-                <div id='trafficLightHolder'>
-                    <r:img uri="/images/undeterminedlight.png"/>
-                    <div id="signalLevelHolder" style="display:none"></div>
-                </div>
-
-            </div>
-
-            <div class="col-md-5 col-xs-12">
-                <div class="row">
-                    <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                        No evidence for signal
-                    </div>
-
-                    <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                        Suggestive evidence for signal
-                    </div>
-
-                    <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                        Strong evidence for signal
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-5 col-xs-12">
-
-            </div>
-
-        </div>
-        <div class="row interestingPhenotypesHolder">
-            <div class="col-xs-12">
-                <div id="interestingPhenotypes">
-
-                </div>
-            </div>
-
-            <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-Note: traits from the Oxford Biobank exome chip dataset are currently missing from this analysis.  We hope to rectify this problem soon.
-            </div>
-            <div class="col-xs-2">
-
-            </div>
-        </div>
-
-
-    </div>
-
-</div>
-
-<div class="collapse in" id="collapseExample">
-    <div class="wellPlace">
-        <div id="noAggregatedVariantsLocation">
-            <div class="row" style="margin-top: 15px;">
-                <div class="col-lg-offset-1">
-                    <h4>No information about aggregated variants exists for this phenotype</h4>
-                </div>
-            </div>
-        </div>
-
-
-    </div>
-</div>
+<div id="tableHeaderHolder"></div>
 
 
 <div id="BurdenHiddenHere" style="display:none">
@@ -138,6 +61,7 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                         regionSpecification:'',
                         uniqueRoot:"x"};
                     drivingVariables = mpgSoftware.variantSearchResults.setVarsToRemember(drivingVariables);
+
                     $("#cDataModalGoesHere").empty().append(
                             Mustache.render( $('#dataModalTemplate')[0].innerHTML,drivingVariables));
                     var fakeData = {cProperties:{dataset:['VAR_ID','DBSNP_ID','Consequence','Reference_allele','Effect_allele','PVALUE','EFFECT','GENE','MOST_DEL_SCORE','Protein_change','dataset'],
@@ -168,18 +92,22 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
 
             var initializeSignalSummarySection = function(){
                 var drivingVariables = {
-                    geneName: '<%=geneName%>',
-                    sampleDataSet: "<%=sampleDataSet%>",
-                    burdenDataSet: "<%=burdenDataSet%>",
+                    portalTypeString:"${g.portalTypeString()}",
+                    geneName: '${geneName}',
+                    sampleDataSet: "${sampleDataSet}",
+                    burdenDataSet: "${burdenDataSet}",
                     geneChromosome: '${geneChromosome}',
                     geneExtentBegin: ${geneExtentBegin},
                     geneExtentEnd: ${geneExtentEnd},
                     igvIntro:  '${igvIntro}',
                     defaultPhenotype: '${defaultPhenotype}',
+                    identifiedGenes: '${identifiedGenes}',
                     firstPropertyName: '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
                     firstStaticPropertyName:'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     defaultTissues: ${(defaultTissues as String).encodeAsJSON()},
                     defaultTissuesDescriptions: ${(defaultTissuesDescriptions as String).encodeAsJSON()},
+                    lzCommon: 'lzCommon',
+                    lzCredSet: 'lzCredSet',
                     vrtUrl:  '${createLink(controller: "VariantSearch", action: "gene")}',
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
@@ -205,13 +133,20 @@ Note: traits from the Oxford Biobank exome chip dataset are currently missing fr
                     traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}'
+                    getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
+                    fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
+                    assayIdList: "${assayIdList}",
+                    geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }}
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
+                mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
+                mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsDirectlyByPhenotype(drivingVariables.defaultPhenotype,
+                    mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
+//                mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,
+//                    {favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
-
             };
 
 

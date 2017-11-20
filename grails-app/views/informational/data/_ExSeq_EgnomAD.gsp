@@ -21,7 +21,7 @@
 
 <p><g:message code="informational.data.exptsumm.gnomAD"></g:message></p>
 
-<h4>Accessing gnomAD exome sequence data in the T2D Knowledge Portal</h4>
+<h4>Accessing gnomAD exome sequence data</h4>
 <p><g:message code="informational.data.accessing.ExAC"></g:message></p>
 
 </script>

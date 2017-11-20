@@ -18,7 +18,7 @@
 
 <p>ExAC is a coalition of investigators seeking to aggregate and harmonize exome sequencing data from a wide variety of large-scale sequencing projects, and to make summary data available for the wider scientific community.</p>
 
-<h4>Accessing ExAC data in the T2D Knowledge Portal</h4>
+<h4>Accessing ExAC data</h4>
 <p><g:message code="informational.data.accessing.ExAC"></g:message></p>
 
 </script>

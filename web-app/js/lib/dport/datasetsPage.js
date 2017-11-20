@@ -111,7 +111,8 @@ var mpgSoftware = mpgSoftware || {};
                 $(k).css("background-color", "rgb(255, 255, 204)");
                 $(k).css("color", "rgb(0, 0, 0)");
                 if($(k).text() == selectedtech){
-                    $(k).css("background-color", "rgb(255, 153, 68)");
+                    //$(k).css("background-color", "rgb(255, 153, 68)");
+                    $(k).css("background-color", "rgb(246, 137, 32)");
                     $(k).css("color", "rgb(255, 255, 255)");
                     $('div.phenotype-level2-row').empty();
                     displaySelectedTechnology(selectedtech, true,displaySelectedTechnologyURL);
@@ -131,7 +132,8 @@ var mpgSoftware = mpgSoftware || {};
                 $(k).css("background-color", "rgb(204, 238, 255)");
                 $(k).css("color", "rgb(0, 0, 0)");
                 if($(k).text() == selectedPhenotypegroup){
-                    $(k).css("background-color", "rgb(51, 153, 255)");
+                    //$(k).css("background-color", "rgb(51, 153, 255)");
+                    $(k).css("background-color", "rgb(52, 135, 175)");
                     $(k).css("color", "rgb(255, 255, 255)");
                 }
                 phenotypeLevel2holder= {"phenotype": phenotypeGroupUniqueNameMap[selectedPhenotypegroup]};
@@ -152,7 +154,8 @@ var mpgSoftware = mpgSoftware || {};
                 $(k).css("background-color", "rgb(204, 238, 255)");
                 $(k).css("color", "rgb(0, 0, 0)");
                 if($(k).text() == selectedLevel2Phenotype){
-                    $(k).css("background-color", "rgb(51, 153, 255)");
+                    //$(k).css("background-color", "rgb(51, 153, 255)");
+                    $(k).css("background-color", "rgb(52, 135, 175)");
                     $(k).css("color", "rgb(255, 255, 255)");
                     renderFilteredData(selectedLevel2Phenotype,true);
                 }

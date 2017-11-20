@@ -8,9 +8,19 @@
     </div>
 
     <div id="collapseLZ" class="accordion-body collapse">
-        <p><g:message code="variant.locusZoom.text1"/></p>
-        <p><g:message code="variant.locusZoom.text2"/></p>
-        <p><g:message code="variant.locusZoom.text3"/></p>
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+        <g:message code="variant.locusZoom.text1"></g:message></p>
+        <p><g:message code="variant.locusZoom.text2"></g:message></p>
+        <p><g:message code="variant.locusZoom.text3"></g:message></p>
+    <p><g:message code="variant.locusZoom.text4"></g:message></p>
+    <p>&nbsp;</p>
+</g:if>
+        <g:else>
+            <p><g:message code="variant.locusZoom.text1"></g:message></p>
+            <p><g:message code="variant.locusZoom.text3"></g:message></p>
+            <p><g:message code="variant.locusZoom.text4"></g:message></p>
+            <p>&nbsp;</p>
+        </g:else>
 
         <div style="display: flex; justify-content: space-around;">
             <p>Linkage disequilibrium (r<sup>2</sup>) with the reference variant:</p>
@@ -30,9 +40,7 @@
             <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
         </div>
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
-            <g:renderIfWeHaveDynamicDataValue>
-                <g:if test="${g.portalTypeString()?.equals('t2d')||
-                        g.portalTypeString()?.equals('mi')}">
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <li class="dropdown" id="tracks-menu-dropdown-dynamic">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
                         <ul id="trackList-dynamic" class="dropdown-menu">
@@ -55,7 +63,6 @@
                         </ul>
                     </li>
                 </g:if>
-            </g:renderIfWeHaveDynamicDataValue>
             <li class="dropdown" id="tracks-menu-dropdown-static">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (static)<b class="caret"></b></a>
                 <ul id="trackList-static" class="dropdown-menu">

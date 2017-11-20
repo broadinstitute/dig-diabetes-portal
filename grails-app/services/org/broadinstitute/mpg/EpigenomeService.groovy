@@ -54,5 +54,57 @@ class EpigenomeService {
         JSONObject VectorDataJson = this.restServerService.postVectorDataRestCall(vectorDataJsonPayloadString);
         return VectorDataJson;
     }
+    public JSONObject getBigWigDataRestCall(String vectorDataJsonPayloadString) {
+        JSONObject VectorDataJson = this.restServerService.postBigWigDataRestCall(vectorDataJsonPayloadString);
+        return VectorDataJson;
+    }
+
+
+    public List<String> getThePossibleBigwigAddresses (String jsonPayloadString){
+        List<String> returnValue = []
+        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
+        if (vectorDataJson){
+           for (JSONObject jsonObject in vectorDataJson.tissue) {
+               returnValue << jsonObject.bigwigpath as String
+           }
+        }
+        return returnValue
+    }
+
+
+    public List<LinkedHashMap<String,String>> getTheRemoteBigwigInformation (String jsonPayloadString){
+        List<LinkedHashMap<String,String>> returnValue = []
+        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
+        if (vectorDataJson){
+
+            for (JSONObject jsonObject in vectorDataJson.tissue) {
+                LinkedHashMap<String,String> oneBigWigDataPackage = [:]
+                oneBigWigDataPackage["tissue"] = jsonObject.tissue as String
+                oneBigWigDataPackage["assayid"] = jsonObject.assayid as String
+                oneBigWigDataPackage["eid"] = jsonObject.eid as String
+                oneBigWigDataPackage["bigwigpath"] = jsonObject.bigwigpath as String
+                returnValue << oneBigWigDataPackage
+            }
+        }
+        return returnValue
+    }
+
+
+    public LinkedHashMap<String,List<String>> getThePossibleReadData (String jsonPayloadString){
+        LinkedHashMap<String,List<String>> returnValue = [:]
+        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
+        if (vectorDataJson){
+            for (JSONObject jsonObject in vectorDataJson.tissue) {
+                String tissue = jsonObject.eid as String
+                if (!returnValue.containsKey(tissue)){
+                    returnValue[tissue] = []
+                }
+                returnValue[tissue] << jsonObject.assayid as String
+            }
+        }
+        return returnValue
+    }
+
+
 
 }

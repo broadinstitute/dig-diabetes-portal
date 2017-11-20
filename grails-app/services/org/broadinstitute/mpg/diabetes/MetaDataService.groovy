@@ -6,6 +6,7 @@ import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -76,32 +77,6 @@ class MetaDataService {
 
 
 
-    public String getDistributedKBFromSession() {
-        // if portal type defined in config, use that
-        String distributedKBOverride = this.grailsApplication.config.distributed.kb.override;
-        String distributedKB = null;
-
-        distributedKB = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('distributedKB');
-
-        // DIGP-291: adding different metadata versions by portal
-        // get the data version based on user session portal type; default to portal override if no session preference set
-        if (distributedKB == null) {
-            distributedKB = distributedKBOverride;
-
-            // if not portal override set in config, set to t2d as last resort
-            if (distributedKB == null) {
-                distributedKB = "Broad";
-            }
-        }
-
-        // return
-        return distributedKB;
-    }
-
-
-
-
-
 
     /**
      * returns the data version to use based on the portal type setting in the user session
@@ -116,19 +91,9 @@ class MetaDataService {
         // DIGP-291: adding different metadata versions by portal
         String dataVersion;
         String portalType = this.getPortalTypeFromSession()
-        String distributedKb = this.getDistributedKBFromSession()
-
-        // get the data version based on user session portal type; default to t2d
-        if (distributedKb == 'EBI')  {
-            dataVersion = this.grailsApplication.config.portal.data.version.map[distributedKb]
-        } else if  ("t2d"!= portalType) {
-            dataVersion = this.grailsApplication.config.portal.data.version.map[portalType]
-        } else {
-            dataVersion = "mdv" + this.sharedToolsService.getDataVersion()
-        }
-
+        dataVersion = restServerService.retrieveMdvForPortalType(portalType)
         // return
-        return dataVersion;
+       return dataVersion;
     }
 
     /**
@@ -137,49 +102,28 @@ class MetaDataService {
      * @return
      */
     public String getDefaultPhenotype() {
-        // DIGP-291: adding different metadata versions by portal
-        String phenotype;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
-
-        if (distributedKb == 'EBI')  {
-            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[distributedKb]
-        } else {
-            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType]
-        }
-
-
-        // return
-        return phenotype;
+        PortalVersionBean portalVersionBean =  restServerService.retrieveBeanForPortalType(portalType)
+        return portalVersionBean.phenotype
     }
 
     public String getDefaultDataset() {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
 
-        if (distributedKb == 'EBI')  {
-            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[distributedKb]
-        } else {
-            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]
-        }
-
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(portalType)
+        dataset = portalVersionBean.getDataSet()
 
         // return
-        return dataset+getDataVersion();
+        return dataset;
     }
 
     public String getDynamicLocusZoomDataset() {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
 
-        if (distributedKb == 'EBI')  {
-            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[distributedKb]
-        } else {
-            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-        }
-
+        //dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
+        dataset =  restServerService.retrieveBeanForPortalType(portalType).lzDataset
 
         // return
         return dataset;
@@ -507,6 +451,33 @@ class MetaDataService {
         return toReturn;
     }
 
+
+
+
+    public String getPreferredSampleGroupNameForPhenotype(String phenotypeName) {
+        // local variables
+        String returnValue = ""
+        List<SampleGroup> groupList
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            // sort the group list
+            groupList = groupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+
+            returnValue = groupList?.first()?.systemId
+
+        } catch (PortalException exception) {
+            log.error("Got exception in getPreferredSampleGroupNameForPhenotypeAsJson with phenotype = " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        return returnValue;
+    }
+
+
+
+
     /**
      * For the given phenotype, return a tree of sample groups, with cohorts inside of their
      * parent sample groups
@@ -616,6 +587,29 @@ class MetaDataService {
         // return
         return groupList.sort{it.sortOrder};
     }
+
+
+    public List<SampleGroup>  getSampleGroupListForPhenotypeWithMeaning(String phenotypeName,String meaning) {
+        List<SampleGroup> sampleGroupList = getSampleGroupListForPhenotypeAndVersion(phenotypeName, "", MetaDataService.METADATA_VARIANT)
+        List<SampleGroup> groupList = []
+
+        for (SampleGroup sampleGroup in sampleGroupList){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sampleGroup.phenotypes){
+                for (Property property in phenotype.properties){
+                    if (property.hasMeaning(meaning)){
+                        if (!groupList.collect{it.systemId}?.contains(sampleGroup.systemId)){
+                            groupList << sampleGroup
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return groupList
+    }
+
+
 
     /**
      * Get a JSON object listing every phenotype and the top-level datasets containing data for that phenotype

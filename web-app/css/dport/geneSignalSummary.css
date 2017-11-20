@@ -99,6 +99,38 @@ a.morePhenos:hover {
 .greenPhenotype {
     background-color: #ccffcc;
 }
+.credibleSetChooserStrength {
+    cursor:pointer;
+    margin: 10px;
+    padding: 5px;
+    background-color: white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 4px;
+    -webkit-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4);
+    border: 1px solid #000000;
+    font-size:14px;
+}
+.credibleSetChooserStrength.active {
+    border: 2px solid black;
+}
+.credibleSetChooserStrength.inactive {
+    border: 1px solid black;
+}
+
+td.credSetOrgLabel{
+    width: 2px;
+    background: #eee;
+}
+td.credSetConstLabel{
+    width: 180px;
+}
+.credibleSetChooserButton {
+    background-color: #ccffff;
+    z-index: 100;
+}
 tr.redline {
     /*   background-color: #ffb3b3;*/
 }

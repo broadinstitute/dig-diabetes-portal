@@ -1,5 +1,6 @@
 <script id="variantSearchResultsTemplate"  type="x-tmpl-mustache">
-    <table id="{{variantTableResults}}" class="table table-striped dk-search-result" style="border-collapse: collapse; width: 100%;">
+    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+        <table id="{{variantTableResults}}" class="table table-striped dk-search-result dk-t2d-table" style="border-collapse: collapse; width: 100%;">
         <thead>
         <tr id="{{variantTableHeaderRow}}">
             <th colspan=5 class="datatype-header dk-common"/>
@@ -13,6 +14,24 @@
         <tbody id="{{variantTableBody}}" role="alert" aria-live="polite" aria-relevant="all">
         </tbody>
     </table>
+
+    </g:if>
+    <g:else>
+        <table id="{{variantTableResults}}" class="table table-striped dk-search-result" style="border-collapse: collapse; width: 100%;">
+        <thead>
+        <tr id="{{variantTableHeaderRow}}">
+            <th colspan=5 class="datatype-header dk-common"/>
+        </tr>
+        <tr id="{{variantTableHeaderRow2}}">
+            <th colspan=5 class="datatype-header dk-common"><g:message code="variantTable.columnHeaders.commonProperties"/></th>
+        </tr>
+        <tr id="{{variantTableHeaderRow3}}">
+        </tr>
+        </thead>
+        <tbody id="{{variantTableBody}}" role="alert" aria-live="polite" aria-relevant="all">
+        </tbody>
+    </table>
+    </g:else>
 </script>
 <script id="propertiesInputsTemplate" type="x-tmpl-mustache" style="display: none;">
     <div role="tabpanel" class="tab-pane {{ active }}" id="{{ phenotype }}PropertiesSelection">
@@ -69,21 +88,22 @@
 </script>
 <script id="topOfVariantResultsPageTemplate" type="x-tmpl-mustache" style="display: none;">
     <div style="text-align: right;">
-        <a href="https://s3.amazonaws.com/broad-portal-resources/Variant_results_table_guide_09-15-2016.pdf" target="_blank">
+        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_variant_results_guide.pdf" target="_blank">
             <g:message code="variantSearch.results.helpText" />
         </a>
-    </div>
+    </div>-->
+    <!--
     <div>
         {{{linkBackToSearchDefinitionPage}}}
             <button class="btn btn-primary btn-xs">
             &laquo; <g:message code="variantTable.searchResults.backToSearchPage" />
             </button></a>
         <g:message code="variantTable.searchResults.editCriteria" />
-    </div>
-    <div style="margin-top: 5px;">
+    </div>-->
+    <!--<div style="margin-top: 5px;">
         <a href="#" onclick="mpgSoftware.variantSearchResults.saveLink(undefined,'{{uniqueRoot}}')">Click here to copy the current search URL to the clipboard</a>
         <input type="text" id="{{linkToSave}}" style="display: none; margin-left: 5px; width: 500px;" />
-    </div>
+    </div>-->
 </script>
 
 %{--I do not yet understand why the following template fails, but the following one works.  Very strange.  What's wrong with using a table?--}%
@@ -109,32 +129,43 @@
 
 <script id="variantResultsMainStructuralTemplate" type="x-tmpl-mustache" style="display: none;">
 
-    <div class="container dk-t2d-back-to-search"></div>
+    <!-- <div class="container dk-t2d-back-to-search"></div> -->
 
     {{#variantResultsTableHeader}}
-    <div class="container dk-t2d-content">
 
-        <h1><g:message code="variantTable.searchResults.title" default="Variant search results"/></h1>
+    <div class="container dk-t2d-content" style="padding-top: 40px;">
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="dk-page-title"><g:message code="variantTable.searchResults.title" default="Variant search results"/></h1>
+            </div>
+            <div class="col-md-9">
 
-        <h3><g:message code="variantTable.searchResults.searchCriteriaHeader" default="Search criteria"/></h3>
+                <h3><g:message code="variantTable.searchResults.searchCriteriaHeader" default="Search criteria"/></h3>
+                <div style="height: 35px; margin-top: -35px;">
+                    <div class="dk-t2d-blue dk-search-button dk-right-column-buttons-compact" style="float:right; ">{{{linkBackToSearchDefinitionPage}}}Edit criteria/Start new search</a></div>
+                </div>
+                <div class="variantResultsFilterHolder"></div>
 
-        <div class="variantResultsFilterHolder"></div>
+                <div class="regionDescr"></div>
 
-        <div class="regionDescr"></div>
-
-        <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
-        <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
-
+                <p><em><g:message code="variantTable.searchResults.oddsRatiosUnreliable" default="odds ratios unreliable" /></em></p>
+                <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
+            </div>
+            <div class="col-md-3" style="padding-top:15px;">
+                <div class="dk-t2d-blue dk-copy-button dk-right-column-buttons"><a href="javascript:;" onclick="mpgSoftware.variantSearchResults.saveLink(undefined,'{{uniqueRoot}}')">Copy URL to share the search result</a></div>
+                <div class="dk-t2d-green dk-reference-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_variant_results_guide.pdf"><g:message code="variantSearch.results.helpText" /></a></div>
+            </div>
+        </div>
     </div>
 
 
-    <div class="container dk-variant-table-header">
+     <!--<div class="container dk-variant-table-header">
         <div class="row">
             <div class="text-right">
                 <button class="btn btn-primary btn-xs" style="margin-bottom: 5px;" data-toggle="modal" data-target="#{{dataModal}}">Add / Subtract Data</button>
             </div>
         </div>
-    </div>
+    </div>-->
     <hr />
     {{/variantResultsTableHeader}}
     {{^variantResultsTableHeader}}
@@ -143,9 +174,8 @@
         </div>
     {{/variantResultsTableHeader}}
 
-
+    <div class="dk-t2d-blue dk-edit-button dk-right-column-buttons-compact" style="float: right; margin-right: 20px;"><a href="javascript:;" data-toggle="modal" data-target="#{{dataModal}}">Add / Subtract Data to the table</a></div>
     <div id="{{holderForVariantSearchResults}}" class="container-fluid" ></div>
-
     <div id="{{dataModalGoesHere}}"></div>
 
 </script>
@@ -314,9 +344,13 @@
     </div>
 </script>
 <script id="dataRegionTemplate"  type="x-tmpl-mustache">
+    {{#supressTitle}}
+    {{/supressTitle}}
+    {{^supressTitle}}
     <g:message code="variantTable.regionSummary.regionContains" default="This region contains the following genes:"/>
+    {{/supressTitle}}
 <div class="row clearfix" style="margin:5px 0 5px 0">
-    <div class="col-md-6" style="text-align: left; max-height: 200px; overflow-y: auto">
+    <div class="col-md-6" style="text-align: left; max-height: 200px; overflow-y: auto; padding-left:0">
         <ul id="geneNames">
             {{#namedGeneArray}}
                 <li><a class="genelink" href="<g:createLink controller='gene'
@@ -326,7 +360,7 @@
         </ul>
     </div>
 
-    <div class="col-md-6" style="text-align: right; vertical-align: middle">
+    <div class="col-md-6" style="text-align: right; vertical-align: middle; display:none">
         <a class="boldlink pull-right"
            href="<g:createLink controller="trait" action="regionInfo"/>/{{regionSpecification}}">
             <g:message code="variantTable.regionSummary.clickForGwasSummary" default="Click here"/></a>

@@ -18,6 +18,7 @@ class VariantSearchController {
     MetaDataService metaDataService
     SearchBuilderService searchBuilderService
     WidgetService widgetService
+    EpigenomeService epigenomeService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -70,10 +71,6 @@ class VariantSearchController {
         String sampleGroupName = params.sampleGroup
         SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName)
 
-        if (sampleGroupName == 'GWAS_Stroke_mdv5') {
-            log.debug('foo')
-        }
-
         if (sampleGroup?.sampleGroupList?.size() > 0) {
             sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort {
                 g.message(code: "metadata." + it.systemId, default: it.systemId)
@@ -83,8 +80,6 @@ class VariantSearchController {
         def result = new JSONObject()
         if ((jsonDescr) && (jsonDescr.length() > 0)) {
             result = slurper.parseText(jsonDescr)
-        } else {
-            log.debug('foo')
         }
         render(status: 200, contentType: "application/json") {
             result
@@ -406,6 +401,8 @@ class VariantSearchController {
 
 
     def retrieveTopVariantsAcrossSgs (){
+        String portalType = g.portalTypeString() as String
+
         Closure convertDynamicStructToJson = { incoming ->
             List<String> allOptions = []
             incoming.each { org.broadinstitute.mpg.locuszoom.PhenotypeBean phenotypeBean ->
@@ -422,6 +419,12 @@ class VariantSearchController {
 
         String phenotypeName = ''
         String geneName
+        int limit = -1 // how many records to pull back.  -1 = no limit
+        if (params.limit) {
+            log.debug "variantSearch params.limit = ${params.limit}"
+            limit = Integer.parseInt(params.limit)
+        }
+
         if (params.phenotype) {
             phenotypeName = params.phenotype
             log.debug "variantSearch params.phenotype = ${params.phenotype}"
@@ -439,16 +442,11 @@ class VariantSearchController {
         List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
 
         JSONObject dataJsonObject
-        //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1)
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
 
-        if (dataJsonObject == null){
-            // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
-            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
-        }
-//        for (JSONObject jsonObject in dataJsonObject['variants'].findAll{((String)it.dataset).startsWith('GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet')}){
-//            jsonObject.dataset = "GWAS_DIAGRAM_mdv27"//+ sharedToolsService.getCurrentDataVersion()
+//        if (dataJsonObject == null){
+//            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 //        }
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
@@ -474,14 +472,34 @@ class VariantSearchController {
             }
 
         }
+        List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
+        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets.collect{it.systemId}
 
+        StringBuilder sb = new StringBuilder("[")
+        if (portalType=='ibd'){
+            LinkedHashMap<String,List<String>> possibleExperiments =  epigenomeService.getThePossibleReadData("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+            List <String> allElements = []
+            for (String key in possibleExperiments.keySet()){
+                StringBuilder isb = new StringBuilder()
+                isb << "{\"expt\":\"${key}\",\"assays\":[\""
+                isb << possibleExperiments[key].join("\",\"")
+                isb << "\"]}"
+                allElements << isb.toString()
+            }
+            sb << allElements.join(",")
+        }
+        sb << "]"
         JsonSlurper slurper = new JsonSlurper()
+        JSONArray experimentAssays = slurper.parseText(sb.toString())
 
         render(status: 200, contentType: "application/json") {
             [variants: dataJsonObject,
              propertiesToInclude:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToInclude))) as JSONArray,
              propertiesToRemove:(slurper.parseText(groovy.json.JsonOutput.toJson(propertiesToRemove))) as JSONArray,
-             datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap))
+             datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap)),
+             lzOptions:phenotypeMap,
+             sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+             experimentAssays:experimentAssays
             ]
         }
 
@@ -489,6 +507,7 @@ class VariantSearchController {
 
 
     def retrieveTopVariantsAcrossSgsWithSimulatedMetadata (){
+        String portalType = g.portalTypeString() as String
         String phenotypeName = ''
         String geneName
         String drawReq = '2'
@@ -523,7 +542,11 @@ class VariantSearchController {
         JSONObject dataJsonObject
         //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize)
+//        String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
+//        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,pageStart,pageSize,passConditionalVersionForNow)
+
+        String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,currentVersion)
 
         if (dataJsonObject == null){
             // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
@@ -1073,7 +1096,9 @@ class VariantSearchController {
                      "common-common-Protein_change",
                      "common-common-Consequence",
                      "common-common-CHROM",
-                     "common-common-POS"].join(":")
+                     "common-common-POS",
+                     "common-common-Reference_Allele",
+                     "common-common-Effect_Allele"].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
@@ -1089,32 +1114,35 @@ class VariantSearchController {
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()
             String regionSpecifier = ""
             LinkedHashMap<String, String> positioningInformation = getDataQueryHolder.positioningInformation()
-            def slurper = new JsonSlurper()
-            if (positioningInformation.size() > 2) {
-
+            if (positioningInformation.size()>0){
                 regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
-                for (Gene gene in geneList) {
-                    try {
-                        int startExtent = positioningInformation.beginningExtentSpecified as Long
-                        int endExtent = positioningInformation.endingExtentSpecified as Long
-                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-                            identifiedGenes << gene.name2 as String
-                        }
-                    } catch (e) {
-                        redirect(controller: 'home', action: 'portalHome')
-                    }
-
-                }
             }
+
+            //identifiedGenes = restServerService.retrieveGenesInExtents(positioningInformation)
+//            if (positioningInformation.size() > 2) {
+//
+//                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
+//                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
+//                for (Gene gene in geneList) {
+//                    try {
+//                        int startExtent = positioningInformation.beginningExtentSpecified as Long
+//                        int endExtent = positioningInformation.endingExtentSpecified as Long
+//                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
+//                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
+//                            identifiedGenes << gene.name2 as String
+//                        }
+//                    } catch (e) {
+//                        redirect(controller: 'home', action: 'portalHome')
+//                    }
+//
+//                }
+//            }
 
             List tempList = identifiedGenes.collect{return "\"$it\""};
             JSONArray JsonGeneHolder = new JSONArray();
             for (String text in tempList) {
                 JsonGeneHolder.add(text);
             }
-//            JSONArray JsonGeneHolder = slurper.parseText("${identifiedGenes.collect{return "\"$it\""}}")
 
             // get locale to provide to table-building plugin
             String locale = RequestContextUtils.getLocale(request)

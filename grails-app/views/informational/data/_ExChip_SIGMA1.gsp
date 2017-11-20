@@ -117,7 +117,7 @@
 
     <p><g:message code="informational.data.project.SIGMA"></g:message></p>
 
-   <h4>Accessing SIGMA exome chip analysis data in the T2D Knowledge Portal</h4>
+   <h4>Accessing SIGMA exome chip analysis data</h4>
 <p><g:message code="informational.data.accessing.ExChip_SIGMA"></g:message></p>
 
 </div>

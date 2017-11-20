@@ -149,6 +149,8 @@ mpgSoftware.burdenTestShared = (function () {
             convertedName = 'Race_readable';
         }else if (untranslatedPhenotype === 'Statins'){
             convertedName = 'Statins_readable';
+        } else if (untranslatedPhenotype === 'eomi'){
+            convertedName = 'eomi_readable';
         }
         return convertedName;
     };
@@ -230,8 +232,10 @@ mpgSoftware.burdenTestShared = (function () {
                             } else {
                                 var optionList = data.options;
                                 var dropDownHolder = $(burdenProteinEffectFilter);
+                                var chooseThisOption = "";
                                 for (var i = 0; i < optionList.length; i++) {
-                                    dropDownHolder.append('<option value="' + optionList[i].id + '">' + optionList[i].name + '</option>')
+                                    chooseThisOption = (i === 0)?' selected ':'';
+                                    dropDownHolder.append('<option '+chooseThisOption+' value="' + optionList[i].id + '">' + optionList[i].name + '</option>')
                                 }
                             }
                         }
@@ -1542,7 +1546,7 @@ var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDich
 var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,trailerFunc){
 
     var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
-        selectedFilterValueId = parseInt(selectedFilterValue),
+        selectedFilterValueId = 8,
         selectedMafOption = $('input[name=mafOption]:checked').val(),
         selectedMafOptionId =  parseInt(selectedMafOption),
         specifiedMafValue = $('#mafInput').val(),
@@ -1551,19 +1555,13 @@ var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFilt
         datasetFilter = $('#datasetFilter').val(),
         rTrailerFunc = trailerFunc;
     var dataSet;
-    //kludge alert!!!
+    if (typeof selectedFilterValue !== 'undefined') {
+        selectedFilterValueId =  parseInt(selectedFilterValue);
+    }
     if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
         var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
         dataSet = metadata.conversion[datasetFilter];
-        //if (datasetFilter.substring(0, 'samples_19k_'.length) === 'samples_19k_') {
-        //    dataSet = 'ExSeq' + datasetFilter.substring('samples'.length);
-        //} else if (datasetFilter.substring(0, 'samples_stroke_'.length) === 'samples_stroke_') {
-        //    dataSet = 'GWAS' + datasetFilter.substring('samples'.length);
-        //    //dataSet = 'GWAS_Stroke_mdv70';
-        //} else {
-        //    dataSet = 'ExChip' + datasetFilter.substring('samples'.length);
-        //    // dataSet = 'ExChip_CAMP_mdv23';
-        //}
+
 
         $('#rSpinner').show();
         var promise = $.ajax({
@@ -1803,8 +1801,12 @@ var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifie
                         ((categorical==='1')?('<span class="be metaAnalysis">Odds ratio='+oddsRatio+'</span>'):('<span class="be metaAnalysis">Beta='+beta+'</span>'))+
                         '<span class="st metaAnalysis">Std error='+stdErr+'</span>'+
                         '</div><div id="chart"></div>');
+                    var textForBarLabels = 'T2D';
+                    if (typeof $('#phenotypeFilter').text() !== 'undefined') {
+                        textForBarLabels = $('#phenotypeFilter').text();
+                    }
                     if ((typeof numCases !== 'undefined')  &&(numCases!=='')){
-                        mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, 'T2D');
+                        mpgSoftware.burdenInfo.fillBurdenBiologicalHypothesisTesting(numCaseCarriers, numCases, numControlCarriers, numControls, textForBarLabels );
 
                         // launch
                         mpgSoftware.burdenInfo.retrieveDelayedBurdenBiologicalHypothesisOneDataPresenter().launch();
