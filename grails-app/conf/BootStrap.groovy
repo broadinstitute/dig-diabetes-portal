@@ -24,11 +24,6 @@ class BootStrap {
         //
         def samples  = [:]  // put users here as a temporary holding location
 
-        //********************** TODO: find a better way!!!
-//        log.info( "Crazy plan.  Delete all users. Current number= ${User.count()}")
-//        User.executeUpdate("delete User")
-//        log.info( "Done.  number of users= ${User.count()}")
-
         // read in users from file
         if (User.count()) {
             log.info( "Users already loaded. Total operational number = ${User.count()}")
@@ -99,7 +94,6 @@ class BootStrap {
                         UserRole.create user, userRole
                         if ((username == 'ben') ||
                                 (username == 'balexand@broadinstitute.org') ||
-                                (username == 'kyuksel@broadinstitute.org') ||
                                 (username == 'flannick@broadinstitute.org') ||
                                 (username == 'andrew@broadinstitute.org') ||
                                 (username == 'mduby@broadinstitute.org') ||
@@ -108,6 +102,7 @@ class BootStrap {
                                 (username == 'mvg@broadinstitute.org') ||
                                 (username == 'ryank@broadinstitute.org') ||
                                 (username == 'mariacos@broadinstitute.org') ||
+                                (username == 'dkjang@broadinstitute.org') ||
                                 (username == 'psingh@broadinstitute.org')) {
                             UserRole.create user, adminRole
                             UserRole.create user, systemRole
