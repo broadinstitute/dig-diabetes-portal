@@ -49,6 +49,7 @@
 <g:render template="./data/GWAS_DCSP2a610" />
 <g:render template="./data/GWAS_DCSP2a1M" />
 <g:render template="./data/ExSeq_RSNG" />
+<g:render template="./data/GWAS_METSIM" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
