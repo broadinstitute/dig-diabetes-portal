@@ -563,7 +563,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-portal.type.override = "mi"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
@@ -600,8 +600,5 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ]
 
 
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 
