@@ -6,6 +6,7 @@ import org.broadinstitute.mpg.FilterManagementService
 import org.broadinstitute.mpg.MetadataUtilityService
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -71,53 +72,6 @@ class MetaDataService {
         return portalType;
     }
 
-    /***
-     * return the portal version string from the user session, or else from the default string
-     *
-     * @return
-     */
-    public String getPortalVersionFromSession() {
-        // if portal type defined in config -- start there
-        String portalVersionDefault = this.grailsApplication.config.diabetes.data.version;
-
-        String portalVersion = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('portalVersion');
-
-        if (portalVersion == null) {
-            portalVersion = portalVersionDefault;
-
-            if (!portalVersion){
-                log.fatal("We need to have a mdv version or we can't continue")
-                throw new Exception("missing mdv -- we cannot continue")
-            }
-
-        }
-
-        return portalVersion;
-    }
-
-
-
-    public String getDistributedKBFromSession() {
-        // if portal type defined in config, use that
-        String distributedKBOverride = this.grailsApplication.config.distributed.kb.override;
-        String distributedKB = null;
-
-        distributedKB = WebUtils.retrieveGrailsWebRequest()?.getSession()?.getAttribute('distributedKB');
-
-        // DIGP-291: adding different metadata versions by portal
-        // get the data version based on user session portal type; default to portal override if no session preference set
-        if (distributedKB == null) {
-            distributedKB = distributedKBOverride;
-
-            // if not portal override set in config, set to t2d as last resort
-            if (distributedKB == null) {
-                distributedKB = "Broad";
-            }
-        }
-
-        // return
-        return distributedKB;
-    }
 
 
 
@@ -137,10 +91,7 @@ class MetaDataService {
         // DIGP-291: adding different metadata versions by portal
         String dataVersion;
         String portalType = this.getPortalTypeFromSession()
-        String distributedKb = this.getDistributedKBFromSession()
         dataVersion = restServerService.retrieveMdvForPortalType(portalType)
-     //  dataVersion = this.grailsApplication.config.portal.data.version.map[portalType];
-
         // return
        return dataVersion;
     }
@@ -151,49 +102,28 @@ class MetaDataService {
      * @return
      */
     public String getDefaultPhenotype() {
-        // DIGP-291: adding different metadata versions by portal
-        String phenotype;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
-
-        if (distributedKb == 'EBI')  {
-            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[distributedKb]
-        } else {
-            phenotype = this.grailsApplication.config.portal.data.default.phenotype.map[portalType]
-        }
-
-
-        // return
-        return phenotype;
+        PortalVersionBean portalVersionBean =  restServerService.retrieveBeanForPortalType(portalType)
+        return portalVersionBean.phenotype
     }
 
     public String getDefaultDataset() {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
 
-        if (distributedKb == 'EBI')  {
-            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[distributedKb]
-        } else {
-            dataset = this.grailsApplication.config.portal.data.default.dataset.abbreviation.map[portalType]
-        }
-
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(portalType)
+        dataset = portalVersionBean.getDataSet()
 
         // return
-        return dataset+getDataVersion();
+        return dataset;
     }
 
     public String getDynamicLocusZoomDataset() {
         String dataset;
         String portalType = this.getPortalTypeFromSession();
-        String distributedKb = this.getDistributedKBFromSession()
 
-        if (distributedKb == 'EBI')  {
-            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[distributedKb]
-        } else {
-            dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-        }
-
+        //dataset = this.grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
+        dataset =  restServerService.retrieveBeanForPortalType(portalType).lzDataset
 
         // return
         return dataset;

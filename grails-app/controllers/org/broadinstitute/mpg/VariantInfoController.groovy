@@ -33,7 +33,7 @@ class VariantInfoController {
         JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         String variantToStartWith = params.id
         String locusZoomDataset
-        List <String> defaultTissues = []
+        //List <String> defaultTissues = []   -- no need for tissues when looking at a particular variant
         String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
@@ -54,10 +54,8 @@ class VariantInfoController {
                 break
         }
 
-        locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-        defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
-
-
+        locusZoomDataset = restServerService.retrieveBeanForPortalType(portalType)?.getLzDataset()
+       // locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
 
        // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
@@ -264,7 +262,6 @@ class VariantInfoController {
         int endPos
         int pageStart = 0
         int pageEnd = 500
-        String assayIdList = grailsApplication.config.portal.data.epigenetic.datasetList.abbreviation.map[portalType] as String
         Boolean lzFormat =  false
         if (params.chromosome) {
             chromosome = params.chromosome
@@ -282,10 +279,7 @@ class VariantInfoController {
             source =  params.source
             log.debug "retrieveFunctionalData params.source = ${params.source}"
         }
-//        if (params.assayIdList) {
-//            log.debug "retrieveFunctionalData params.assayId = ${params.assayIdList}"
-//            assayIdList = params.assayIdList
-//        }
+
 
         if (params.lzFormat) {
             int formatIndicator =  Integer.parseInt(params.lzFormat)

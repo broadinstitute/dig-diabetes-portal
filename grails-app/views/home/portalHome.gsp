@@ -289,6 +289,10 @@
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                     <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.mi.about.the.data.text" />
+                    <hr/> <a href="http://institute.heart.org" target="_blank"><img src="${resource(dir: 'images/organizations', file: 'AHA_precision.jpg')}" style="width: 330px; margin-right: 10px;" align="right" ></a>
+
+                    <g:message code="portal.stroke.about.AHA.discovery"></g:message>
+                    <span style="display:block; width: 100%; text-align: right; margin-top: 0px; padding:10px 40px 10px 0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="portal.stroke.AHA_discovery.link"></g:message></span>
                 </g:elseif>
                 <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                     <div class="col-md-12" style="padding-top:40px;">
@@ -303,13 +307,13 @@
                     <p><g:message code="about.the.portal.data.text" />
                     <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">22 Datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">47 traits</span></h1>
 
-                    <span style="display:block; width: 100%;text-align:right;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
+                    <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
                 </g:else>
 
                 <div>
                     <div style="min-width: 500px; margin-top:30px;">
                         <h3><img src="${resource(dir: 'images', file: 'kpn_logo.svg')}" style="width: 120px;" align="left"><span style="display: inline-block; font-weight:400; font-size:35px; font-family:'Oswald'; margin: 2px 0 0 10px; padding: 0px 5px 2px 5px; border: solid 1px #00b1f0; border-right: none; border-left: none;">Knowledge Portal Network</span></h3>
-                        <p style="font-size: 16px;"><g:message code="portal.home.about.KNP"></g:message></p>
+                        <p style="font-size: 16px;"><g:message code="portal.home.about.KPN"></g:message></p>
                     </div>
 
                     <g:if test="${g.portalTypeString()?.equals('stroke')}">
@@ -400,7 +404,7 @@
                     <span style="font-family:'Oswald'; font-size: 25px;"><g:message code="portal.use.citation.title" default="Citation" /></span>
                 </div>
                 <div class="col-md-10" style="">
-                    <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/><br />
+                    <p><g:message code="portal.use.citation.request" default="Please use the following citation when referring to data accessed via this portal:"/>
                         <g:if test="${g.portalTypeString()?.equals('stroke')}">
                             <g:message code="portal.stroke.use.citation.itself" />
                         </g:if>
@@ -419,15 +423,6 @@
         <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
             <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
             <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
-            <div style="margin: 0 10px 10px 10px; display: none">
-                <label style="display: inline; padding-right: 15px"> View data at
-                </label>
-                <select name="chooseDistributedKB" id="chooseDistributedKB" class="form-control input-sm"
-                        style="display: inline; width:100px">
-                    <option value="Broad DCC" <%= (g.distributedKBString()=='Broad')? 'selected':'' %> >Broad DCC</option>
-                    <option value="EBI" <%= (g.distributedKBString()=='EBI')? 'selected':'' %> >EBI</option>
-                </select>
-            </div>
             <g:if test="${g.portalTypeString()?.equals('mi')}">
                 <div style="position:absolute; top: 25px; right:-40px; ">
                     <p style="margin-bottom:3px;">

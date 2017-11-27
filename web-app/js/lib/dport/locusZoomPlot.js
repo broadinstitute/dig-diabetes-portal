@@ -1026,16 +1026,23 @@ var mpgSoftware = mpgSoftware || {};
                                         breaks: [0, 0.2, 0.4, 0.6, 0.8],
                                         values: ["#357ebd","#46b8da","#5cb85c","#eea236","#d43f3a"]
                                     }
-                                },
-                                {
-                                    scale_function: "categorical_bin",
-                                    field: phenotype + ":scoreTestStat",
-                                    parameters: {
-                                        categories: ["1","2","3","4","5"],
-                                        values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
-                                    }
-                                },
-                    "#c8c8c8"]
+                                }
+                                ,
+                                // {
+                                //     scale_function: "categorical_bin",
+                                //     field: phenotype + ":scoreTestStat",
+                                //     parameters: {
+                                //         categories: ["1","2","3","4","5"],
+                                //         values: ["#ff0000", "#00ff00", "#0000ff", "#ffcc00", "#111111"]
+                                //     }
+                                // },
+                    "#c8c8c8"];
+                    if (lzParameters.domId1!=='#lz-47') { // KLUDGE ALERT!   we have to give a different legend in the case of the variant info page.
+                        panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
+                            { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
+                            { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
+                            { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
+                    }
                     break;
                 case 2:
                     panel_layout.data_layers[2].color = [
@@ -1057,7 +1064,7 @@ var mpgSoftware = mpgSoftware || {};
                         },
                         "#B8B8B8"
                     ];
-                    panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTS", class: "lz-data_layer-scatter" },
+                    panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
                         { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
                         { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
                         { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];

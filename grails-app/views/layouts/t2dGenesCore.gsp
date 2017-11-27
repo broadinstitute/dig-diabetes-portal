@@ -33,6 +33,11 @@
                 <g:applyLayout name="analyticsStrokePortal"/>
             </g:renderT2dGenesSection>
         </g:if>
+        <g:if test="${g.portalTypeString()?.equals('mi')}">
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsMiPortal"/>
+            </g:renderT2dGenesSection>
+        </g:if>
 
         <g:else>
             <g:renderT2dGenesSection>

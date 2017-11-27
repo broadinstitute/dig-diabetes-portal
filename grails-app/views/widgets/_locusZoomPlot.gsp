@@ -40,9 +40,7 @@
             <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
         </div>
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
-            <g:renderIfWeHaveDynamicDataValue>
-                <g:if test="${g.portalTypeString()?.equals('t2d')||
-                        g.portalTypeString()?.equals('mi')}">
+                <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <li class="dropdown" id="tracks-menu-dropdown-dynamic">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (dynamic)<b class="caret"></b></a>
                         <ul id="trackList-dynamic" class="dropdown-menu">
@@ -65,7 +63,6 @@
                         </ul>
                     </li>
                 </g:if>
-            </g:renderIfWeHaveDynamicDataValue>
             <li class="dropdown" id="tracks-menu-dropdown-static">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes (static)<b class="caret"></b></a>
                 <ul id="trackList-static" class="dropdown-menu">

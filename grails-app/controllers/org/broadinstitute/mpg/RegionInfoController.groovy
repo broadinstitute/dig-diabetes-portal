@@ -75,7 +75,8 @@ class RegionInfoController {
             log.error("got incorrect parameters for LZ call: " + params);
             jsonReturn =  slurper.parse(errorJsonString);
         }
-
+        jsonReturn.datasetReadable = g.message(code: "metadata." + jsonReturn.dataset, default: jsonReturn.dataset)
+        jsonReturn.phenotypeReadable = g.message(code: "metadata." + jsonReturn.phenotype, default: jsonReturn.phenotype)
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
     }

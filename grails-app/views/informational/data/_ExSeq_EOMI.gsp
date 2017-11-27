@@ -3,14 +3,14 @@
 <div class="panel-body">
 
 
-    %{--<h4><g:message code="informational.shared.headers.publications"></g:message></h4>--}%
-%{--Not sure if this paper applies to this dataset--}%
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-              %{--<p><div class="paper">--}%
-%{--<g:message code="informational.shared.publications.MiGen_2016_NEJM"></g:message><br>--}%
-%{--<g:message code="informational.shared.publications.MiGen_2016_NEJM.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<div class="citation"><g:message code="informational.shared.publications.MiGen_2016_NEJM.citation"></g:message> </div>--}%
-%{--</div></p>--}%
+
+              <p><div class="paper">
+<g:message code="informational.shared.publications.Do_2015_Nature"></g:message><br>
+<g:message code="informational.shared.publications.Do_2015_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Do_2015_Nature.citation"></g:message> </div>
+</div></p>
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
@@ -37,9 +37,9 @@
 
 
 
-   <h4><g:message code="informational.shared.headers.project"></g:message></h4>
+   %{--<h4><g:message code="informational.shared.headers.project"></g:message></h4>--}%
 
-    <p><g:message code="informational.data.project.MIGen"></g:message></p>
+    %{--<p><g:message code="informational.data.project.MIGen"></g:message></p>--}%
 
 %{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
 

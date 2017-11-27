@@ -94,8 +94,6 @@ class RestServerService {
     private List<ServerBean> burdenServerList;
     private List<ServerBean> restServerList;
 
-    private ServerBean BURDEN_REST_SERVER = null;
-
     private ServerBean REST_SERVER = null;
 
     // okay
@@ -148,8 +146,6 @@ class RestServerService {
         REMEMBER_BASE_URL = BASE_URL
         DBT_URL = grailsApplication.config.dbtRestServer.URL
         EXPERIMENTAL_URL = grailsApplication.config.experimentalRestServer.URLburdenRestServer
-
-        this.BURDEN_REST_SERVER = grailsApplication.config.burdenRestServerDev;
 
         //default rest server
         this.REST_SERVER = grailsApplication.config.defaultRestServer;
@@ -277,43 +273,6 @@ class RestServerService {
         return this.REST_SERVER.url;
     }
 
-    public List<ServerBean> getBurdenServerList() {
-        if (this.burdenServerList == null) {
-            // add in all known servers
-            // could do this in config.groovy
-            this.burdenServerList = new ArrayList<ServerBean>();
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws01);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerAws02);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerDev);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerQa);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerStaging);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerLocalhost);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerProd);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2NewCode);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerKb2PassThrough);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated01);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerFederated02);
-            this.burdenServerList.add(grailsApplication.config.burdenRestServerPassThrough);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheDEVKb_fed);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb);
-            this.burdenServerList.add(grailsApplication.config.burdenStraightFromTheQAKb_fed);
-        }
-
-        return this.burdenServerList;
-    }
-
-
-
-    public void changeBurdenServer(String serverName) {
-        for (ServerBean serverBean : this.burdenServerList) {
-            if (serverBean.getName().equals(serverName)) {
-                log.info("changing burden rest server from: " + this.BURDEN_REST_SERVER.getUrl() + " to: " + serverBean.getUrl());
-                this.BURDEN_REST_SERVER = serverBean;
-                break;
-            }
-        }
-    }
 
     public void changeRestServer(String serverName) {
         for (ServerBean serverBean : grailsApplication.config.getRestServerList) {
@@ -341,24 +300,16 @@ class RestServerService {
      * @param mdvName
      * @return
      */
-    public PortalVersionBean modifyPortalVersionDescr(String portalType, String portalDescription, String mdvName){
-        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
-        PortalVersionBean newPortalVersionBean = new PortalVersionBean( portalType,  portalDescription,  mdvName)
-        if (existingPortalVersionBean){
-            removePortalVersion(portalType)
-        }
-        PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
-        return newPortalVersionBean
-    }
-
     public PortalVersionBean modifyPortalVersion(String portalType, String mdvName){
         PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
         PortalVersionBean newPortalVersionBean
         if (existingPortalVersionBean){
-            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),  mdvName)
+            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),
+                    mdvName, existingPortalVersionBean.getPhenotype(), existingPortalVersionBean.getDataSet(),
+                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset() )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName)
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [], "", "" )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -369,16 +320,25 @@ class RestServerService {
      * @param portalType
      * @return
      */
-    public String retrieveMdvForPortalType(String portalType){
+    public PortalVersionBean retrieveBeanForPortalType(String portalType){
         PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
-        String returnValue
+        PortalVersionBean returnValue
         if (existingPortalVersionBean){
-            returnValue = existingPortalVersionBean.mdvName
+            returnValue = existingPortalVersionBean
         } else {
             log.error("ERROR: code requested portal ${portalType}, but we don't have anything by that name")
         }
         return returnValue
     }
+
+
+    public String retrieveMdvForPortalType(String portalType){
+        String returnValue
+        PortalVersionBean existingPortalVersionBean = retrieveBeanForPortalType(portalType)
+        returnValue = existingPortalVersionBean.getMdvName()
+        return returnValue
+    }
+
 
 
     public String getPortalVersionBeanListAsJson(){
@@ -394,7 +354,9 @@ class RestServerService {
      * @return
      */
     public ServerBean getCurrentBurdenServer() {
-        return this.BURDEN_REST_SERVER
+        // the IAT always runs through the current KB (originally it was possible to set it separately)
+        ServerBean currentKb = getCurrentRestServer()
+        return new ServerBean(currentKb.url,"${currentKb.url}burden")
     }
 
     public ServerBean getCurrentRestServer() {
@@ -778,7 +740,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     retValue['variants'][0] << newEntry
                                 } else { // must merge
                                     Map everythingToAdd = result[key] as Map
-                                    List keysToAdd = everythingToAdd.keySet() as List
+                                    List keysToAdd = everythingToAdd?.keySet() as List
                                     for (def keyToAdd in keysToAdd) {
                                         if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
                                             List keysToAppend = result[key][keyToAdd].keySet() as List

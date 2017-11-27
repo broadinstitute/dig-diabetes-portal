@@ -13,7 +13,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 class RegionControllerIntegrationSpec extends IntegrationSpec {
 
     RegionController controller
-    MetaDataService metaDataService
+    MetaDataService metaDataService = new MetaDataService()
 
 
     def setup() {

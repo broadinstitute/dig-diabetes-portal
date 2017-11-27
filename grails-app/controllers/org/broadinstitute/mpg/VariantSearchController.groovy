@@ -419,6 +419,12 @@ class VariantSearchController {
 
         String phenotypeName = ''
         String geneName
+        int limit = -1 // how many records to pull back.  -1 = no limit
+        if (params.limit) {
+            log.debug "variantSearch params.limit = ${params.limit}"
+            limit = Integer.parseInt(params.limit)
+        }
+
         if (params.phenotype) {
             phenotypeName = params.phenotype
             log.debug "variantSearch params.phenotype = ${params.phenotype}"
@@ -436,21 +442,11 @@ class VariantSearchController {
         List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenotypeName, "", allTechnologies)
 
         JSONObject dataJsonObject
-        //JSONObject dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 
-       // String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
-        //String
-        //dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,passConditionalVersionForNow)
+        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
 
-        String passConditionalVersionForNow = (currentVersion=="mdv91"||currentVersion=="mdv80"||currentVersion=="mdv70")?currentVersion:"";
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,-1,currentVersion)
-
-        if (dataJsonObject == null){
-            // fallback call, just in case we have an old KB.  Remove this branch when no longer necessary
-            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
-        }
-//        for (JSONObject jsonObject in dataJsonObject['variants'].findAll{((String)it.dataset).startsWith('GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet')}){
-//            jsonObject.dataset = "GWAS_DIAGRAM_mdv27"//+ sharedToolsService.getCurrentDataVersion()
+//        if (dataJsonObject == null){
+//            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
 //        }
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
@@ -1100,7 +1096,9 @@ class VariantSearchController {
                      "common-common-Protein_change",
                      "common-common-Consequence",
                      "common-common-CHROM",
-                     "common-common-POS"].join(":")
+                     "common-common-POS",
+                     "common-common-Reference_Allele",
+                     "common-common-Effect_Allele"].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)

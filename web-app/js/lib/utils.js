@@ -358,15 +358,9 @@ var UTILS = {
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
-            //var portaltype =
-           // var portalType = g.portalTypeString();
+
             options.empty();
             var groupList = dataSetJson.dataset;
-
-            // if ((typeof includeDefault !== 'undefined') &&
-            //     (includeDefault)){
-            //     options.append("<option selected hidden value=default>-- &nbsp;&nbsp;select a phenotype&nbsp;&nbsp; --</option>");
-            // }
 
             // move GLYCEMIC to the front of the list, so it's the first section
             // to display
@@ -405,19 +399,40 @@ var UTILS = {
                 if (keys.indexOf("INFLAMMATORY BOWEL")>-1){
                     keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
                     keys.unshift("INFLAMMATORY BOWEL");
+                    try{
+                        mpgSoftware.variantWF.retrieveDatasets("IBD", 'dependent');
+                    }catch(e){
+                        console.log("retrievedatasets not readable property",e);
+                    }
                 }
                 $('#datasetDependent').prop( "disabled", false );
             }
             else if (portaltype == "mi"){
-                if (keys.indexOf("CARDIOVASCULAR DISEASE")>=-1){
-                    keys.splice(keys.indexOf("CARDIOVASCULAR DISEASE"), 1);
-                    keys.splice(keys.indexOf("LIPIDS"), 2);
+                if (keys.indexOf("CORONARY ARTERY DISEASE")>=-1){
+                    keys.splice(keys.indexOf("CORONARY ARTERY DISEASE"), 1);
+                    keys.splice(keys.indexOf("ATRIAL FIBRILLATION"), 2);
+                    keys.splice(keys.indexOf("LIPIDS"), 3);
+                    keys.splice(keys.indexOf("ECG TRAITS"), 4);
+                    keys.splice(keys.indexOf("ANTHROPOMETRIC"), 5);
+                    keys.splice(keys.indexOf("GLYCEMIC"), 6);
+
+                    keys.unshift("PSYCHIATRIC");
+                    keys.unshift("RENAL");
                     keys.unshift("GLYCEMIC");
-                    keys.unshift("LIPIDS");
                     keys.unshift("ANTHROPOMETRIC");
-                    keys.unshift("CARDIOVASCULAR DISEASE");
+                    keys.unshift("ECG TRAITS");
+                    keys.unshift("LIPIDS");
+                    keys.unshift("ATRIAL FIBRILLATION");
+                    keys.unshift("CORONARY ARTERY DISEASE");
+                    try{
+                        mpgSoftware.variantWF.retrieveDatasets("MI", 'dependent');
+                    }catch(e){
+                        console.log("retrievedatasets not readable property",e);
+                    }
+
                 }
                 $('#datasetDependent').prop( "disabled", false );
+
             }
 
 

@@ -144,14 +144,20 @@
             <div class="gene-info-view">
                 <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
                     <em><%=geneName%></em>
+
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank" style="border-radius: 2px; ">Gene Page guide</a>
+                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
                         </div>
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank" style="border-radius: 2px; >Gene Page guide</a>
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
                         </div>
                     </g:elseif>
                 </h1>
@@ -180,12 +186,9 @@
 
 
 
-
-
                 <div class="col-md-12" style="padding-top: 30px;">
                     <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
                 </div>
-
 
 
 

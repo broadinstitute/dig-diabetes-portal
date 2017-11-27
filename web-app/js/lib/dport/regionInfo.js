@@ -838,11 +838,11 @@ var mpgSoftware = mpgSoftware || {};
                             endPosition:getCurrentSequenceExtents().end
                         },
                         phenotypeName:data.phenotype,
-                        pName:data.phenotype,
+                        pName:data.phenotypeReadable,
                         datasetName:data.dataset,
                         phenoPropertyName:propertyMeaning,//data.propertyName,
                         defaultTissuesDescriptions:[],
-                        datasetReadableName:data.dataset,
+                        datasetReadableName:data.datasetReadable,
                         positionBy:positionBy,
                         sampleGroupsWithCredibleSetNames:[data.dataset],
                         maximumNumberOfResults:maximumNumberOfResults

@@ -12,11 +12,15 @@
 </g:else>
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left;  width:350px; padding:12px 0 14px 0; ">
+            <a href="${createLink(controller:'home',action:'portalHome')}">
             <img src="${resource(dir: 'images/stroke', file:g.message(code:"files.stroke.header.logo", default:"stroke_header_logo.svg"))}" style=" width: 400px; margin-left: 10px;" />
+            </a>
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
+            <a href="${createLink(controller:'home',action:'portalHome')}">
             <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_header_logo_2017.svg"))}" style=" width: 450px; margin-left: 10px;" />
+            </a>
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
             <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">

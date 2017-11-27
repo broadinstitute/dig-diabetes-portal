@@ -474,7 +474,6 @@ class TraitController {
                                                                                                                                 phenotypeBean.key=='CE')} )
 
         String portalType = g.portalTypeString() as String
-        String distributedKb = g.distributedKBString() as String
         List dataSources = []
         List defaultDataSources = []
 

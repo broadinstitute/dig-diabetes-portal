@@ -475,11 +475,27 @@ class WidgetService {
         return holdingStructure
     }
 
+    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
+        if (sampleGroup.findAll{it.parent.technology=='GWAS'}.size()>0) {
+            sampleGroup = sampleGroup.findAll { it.parent.technology == 'GWAS' }
+            // if there are data sets that are GWAS then work only with those.  Otherwise take what you can get
+        }
+        List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+        // KLUDGE alert
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        if (sortedSampleGroup.size()>0){
+            SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
+            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+        }
+        return holdingStructure
+    }
 
 
     public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
-        String distributedKB = metaDataService?.getDistributedKBFromSession()
 
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
@@ -503,8 +519,9 @@ class WidgetService {
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
         } else if (metaDataService.portalTypeFromSession=='mi') {
+            // for now we will favor GWAS.  Usually we filter on sample size but we have a special request
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="CARDIOVASCULAR DISEASE"}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+                buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
             }
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="CARDIOVASCULAR DISEASE"}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
@@ -988,23 +1005,20 @@ class WidgetService {
 
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
-            if (metaDataService.portalTypeFromSession=='t2d') {
-                // KLUDGE ALERT add credible set by hand
-                List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
 
-               beanList.add(new PhenotypeBean(key:sampleGroupsWithCredibleSets.phenotypeList.name, name: "T2D_crd", description: sampleGroupsWithCredibleSets.systemId,
-                        dataSet:sampleGroupsWithCredibleSets.systemId,
-                        dataSetReadable: g.message(code: "metadata." + sampleGroupsWithCredibleSets.systemId,default: sampleGroupsWithCredibleSets.systemId),
+            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
+
+            for (SampleGroup sampleGroupWithCredibleSets in sampleGroupsWithCredibleSets){
+                beanList.add(new PhenotypeBean(key:sampleGroupWithCredibleSets.phenotypes?.first()?.name, name: "T2D_crd",
+                        description: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId, default: sampleGroupWithCredibleSets.systemId),
+                        dataSet:sampleGroupWithCredibleSets.systemId,
+                        dataSetReadable: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId,default: sampleGroupWithCredibleSets.systemId),
                         propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
                         suitableForDefaultDisplay: false));
-
-
-//                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D_crd", description: "T2D Credible set",
-//                        dataSet: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27",
-//                        dataSetReadable: g.message(code: "metadata." + "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27", default: "GWAS_DIAGRAM_eu_onlyMetaboChip_CrdSet_mdv27"),
-//                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
-//                        suitableForDefaultDisplay: false ));
             }
+
+
+
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
                 beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,

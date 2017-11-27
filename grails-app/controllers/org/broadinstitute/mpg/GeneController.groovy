@@ -101,7 +101,7 @@ class GeneController {
             default:
                 break
         }
-         defaultTissues = grailsApplication.config.portal.data.default.tissues.map[portalType]
+        defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
 
         if (params.phenotypeChooser){
             phenotype = params.phenotypeChooser
@@ -174,12 +174,13 @@ class GeneController {
         JsonSlurper slurper = new JsonSlurper()
         JSONArray experimentAssays = slurper.parseText(sb.toString())
 
-
+        String assayId = restServerService.retrieveBeanForPortalType(portalType)?.getEpigeneticAssays()
 
         // DIGKB-217: get the default samples data set from the metadata
         SampleGroup defaultGeneBurdenSampleGroup = this.metaDataService.getDefaultBurdenGeneDataset();
         String defaultGeneBurdenSamplesDataSetName = defaultGeneBurdenSampleGroup?.getSystemId();
-        String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
+        String defaultGeneBurdenDataSetName = restServerService.retrieveBeanForPortalType(portalType)?.getLzDataset()
+       // String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
         if (defaultGeneBurdenSampleGroup == null) {
             defaultGeneBurdenSamplesDataSetName = "samples_19k_"+metaDataService.getDataVersion();
 
@@ -233,7 +234,8 @@ class GeneController {
                                              defaultTissues:passDefaultTissues,
                                              defaultTissuesDescriptions:passDefaultTissuesDescriptions,
                                              defaultPhenotype: defaultPhenotype,
-                                             identifiedGenes:identifiedGenes
+                                             identifiedGenes:identifiedGenes,
+                                             assayId: assayId
             ] )
         }
     }

@@ -132,29 +132,29 @@ if (grails.config.locations.isEmpty()){
 server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
 restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
 
-// load balancers with multiple servers behind them
-server.URL = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
 //default  BackEndRestServer
 restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
 dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
 experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
 
-burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
-burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
-burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/burden");
-burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
-burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenStraightFromTheDEVKb =  new ServerBean("Burden straight from Dev KB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
-burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+//burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+//burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
+//burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
+//burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
+//burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
+//burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/burden");
+//burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
+//burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
+//burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
+//burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+//burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+//burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
+//burdenStraightFromTheDEVKb =  new ServerBean("Burden straight from Dev KB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/burden");
+//burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+//burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
+//burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
+//burdenStraightFromTheMI_PRODKB =  new ServerBean("Burden straight from MI Prod KB", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/burden");
+
 
 //digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
 //digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
@@ -175,9 +175,12 @@ digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-24
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsibddemoKB = new ServerBean("KB-ibddemo-2017-aws", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
+digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
+digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
+
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsprodstrokeKB
 
  getRestServerList = [
          digdevlocalServer,
@@ -191,7 +194,9 @@ defaultRestServer = digawsdevnewKB
          digawsdevnewKB_fed,
          digawsqanewKB,
          digawsqanewKB_fed,
-         digawsibddemoKB
+         digawsibddemoKB,
+         digawsprodmiKB,
+         digawsprodstrokeKB
  ]
 
 
@@ -309,7 +314,7 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
@@ -342,6 +347,7 @@ environments {
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
+         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -557,34 +563,42 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
 
-diabetes.data.version = "mdv28";
-portal.data.versionDesignator = [ new PortalVersionBean("t2d", "T2D","mdv28"),
-                                  new PortalVersionBean("stroke", "Stroke","mdv70"),
-                                  new PortalVersionBean("mi", "Myocardial Infarction","mdv91"),
-                                  new PortalVersionBean("ibd", "Inflammatory Bowel Disease","mdv80")]
-//portal.data.version.map = ["t2d": "mdv28", "stroke": "mdv70", "mi" : "mdv91", "ibd": "mdv80"];
-portal.data.default.phenotype.map = ["t2d": "T2D", "stroke": "Stroke_all", "mi" : "EOMI", "ibd":"IBD"];
-portal.data.default.dataset.abbreviation.map = ["t2d": "ExSeq_19k_", "stroke": "GWAS_Stroke_", "mi" : "GWAS_CARDIoGRAM_", "ibd":"GWAS_IBDGenomics_eu_"]
-portal.data.default.tissues.map = ["t2d": ["Islets","Liver","SkeletalMuscle","Adipose"],
-                                   "stroke": ["InferiorTemporalLobe","AnteriorCaudate"],
-                                   "mi" : ["SkeletalMuscle"],
-                                   "ibd" : ["E071","E106","E088","E085"]]
-portal.type.override = "stroke"     // options are "t2d", "stroke", "mi", or "ibd"
+portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
+                                                        "T2D",  // displayable label for this portal type
+                                                        "mdv28",    // the MDV number for this portal
+                                                        "T2D",      // the default phenotype for this portal
+                                                        "ExSeq_19k_mdv28",  // default data set.  Used rarely.
+                                                        ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
+                                                        "[3]",  // the assays we should search
+                                                        "ExSeq_19k_mdv28"), // default data set used for a LocusZoom plot
+                                  new PortalVersionBean("stroke",
+                                                          "Stroke",
+                                                          "mdv70",
+                                                          "Stroke_all",
+                                                          "GWAS_Stroke_mdv70",
+                                                          ["InferiorTemporalLobe","AnteriorCaudate"],
+                                                          "[3]",
+                                                          "GWAS_Stroke_mdv70"),
+                                  new PortalVersionBean("mi",
+                                                          "Myocardial Infarction",
+                                                          "mdv91",
+                                                          "MI",
+                                                          "GWAS_CARDIoGRAM_mdv91",
+                                                          ["SkeletalMuscle"],
+                                                          "[3]",
+                                                          "GWAS_CARDIoGRAM_mdv91"),
+                                  new PortalVersionBean("ibd",
+                                                          "Inflammatory Bowel Disease",
+                                                          "mdv80",
+                                                          "IBD",
+                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                                          ["E071","E106","E088","E085"],
+                                                          "[1,2]",
+                                                          "GWAS_IBDGenomics_eu_mdv80")
+]
 
-distributed.kb.override = "Broad"     // options are "Broad" or "EBI"
 
-portal.data.locuszoom.dataset.abbreviation.map = ["t2d": "ExSeq_19k_mdv28",
-                                                  "stroke": "GWAS_Stroke_mdv70",
-                                                  "mi" : "GWAS_CARDIoGRAM_mdv90",
-                                                  "ibd":"GWAS_IBDGenomics_eu_mdv80"]
-portal.data.epigenetic.datasetList.abbreviation.map = ["t2d": "[3]",
-                                                       "stroke": "[3]",
-                                                       "mi" : "[3]",
-                                                       "ibd": "[1,2]"]
-portal.data.credibleSet.datasetList.abbreviation.map = ["t2d": "GWAS_DIAGRAM_mdv28",
-                                                       "stroke": "GWAS_DIAGRAM_mdv70",
-                                                       "mi" : "GWAS_AFGen_mdv91",
-                                                       "ibd": "GWAS_DIAGRAM_mdv80"]
 
 
