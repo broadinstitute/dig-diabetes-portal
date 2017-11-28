@@ -186,7 +186,7 @@ mpgSoftware.burdenTestShared = (function () {
                         displayParameters);
                     mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
                     mpgSoftware.burdenTestShared.setPortalTypeWithAncestry(allowStratificationByAncestry);
-                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,sampleMetadataExperimentAjaxUrl );
+                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,sampleMetadataExperimentAjaxUrl, geneName );
                     mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(sampleMetadataAjaxWithAssumedExperimentUrl,
                         variantOnlyTypeAheadUrl,
                         sampleMetadataAjaxUrl,
@@ -270,13 +270,13 @@ mpgSoftware.burdenTestShared = (function () {
      * Retrieve sample metadata only to get the experiment list and insert it in a drop-down.  Seems wasteful...
      * @param dropDownSelector
      */
-    var retrieveExperimentMetadata = function (dropDownSelector,sampleMetadataExperimentAjax) {
+    var retrieveExperimentMetadata = function (dropDownSelector,sampleMetadataExperimentAjax, geneName) {
         var loading = $('#spinner').show();
         $.ajax({
             cache: false,
             type: "post",
             url: sampleMetadataExperimentAjax,
-            data: {},
+            data: {isGeneBurden:(geneName.length>0)},
             async: true,
             success: function (data) {
                 var experimentDropdown = $(dropDownSelector);
