@@ -1,7 +1,7 @@
 <h2><%=variantIdentifier%>: association statistics across 25 traits</h2>
 
 <div class="gwas-table-container">
-    <table id="traitsPerVariantTable" class="table table-striped basictable gwas-table">
+    <table id="traitsPerVariantTable" class="table table-striped basictable gwas-table dk-t2d-general-table">
         <thead>
         <tr>
             <th><g:message code="informational.shared.header.trait" /></th>

@@ -143,26 +143,26 @@
         <div class="gene-info-container row">
             <div class="gene-info-view">
                 <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
-                    <em><%=geneName%></em>
+                    <em style="font-weight: 900;"><%=geneName%></em>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
                         </div>
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
                         </div>
                     </g:elseif>
                     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
                         </div>
                     </g:elseif>
                 </h1>
                 <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
-                    <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -20px;">
+                    <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -12px;">
                         <r:img uri="/images/undeterminedlight2.png"/>
                         <div id="signalLevelHolder" style="display:none"></div>
                     </div>
@@ -178,7 +178,7 @@
                 </div>
                 <div class="form-inline col-md-6" style="height: 40px; padding:0; border-bottom: solid 1px #ccc; ">
 
-                    <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">GO</button>
+                    <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
                     <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
                     <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene</div>
 

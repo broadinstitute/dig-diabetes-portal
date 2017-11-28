@@ -336,6 +336,7 @@ table.dk-t2d-general-table.dataTable th {
 	font-size: 12px;
 	border-right: solid 1px #fff !important;
 	border-bottom: solid 1px #fff !important;
+	color: #333 !important;
 }
 
 table.dk-t2d-general-table.dataTable th.sorting {
@@ -744,4 +745,34 @@ div.variantResultsFilterHolder > ul > li {
 
 .red-signal {
 	background-image: url("../../images/redlight4.png");
+}
+
+.matchedGenesGoHere ul {
+	list-style: none;
+	padding: 0 0 0 0;
+}
+
+.matchedGenesGoHere ul > li {
+	display:inline-block;
+	padding: 2px 7px;
+	margin-right: 3px;
+	border-radius: 2px;
+	border: solid 1px #ddd;
+	background-color: #eee;
+}
+
+table.dk-t2d-general-table.dataTable tr.collapse.in  td:first-child{
+	padding-left: 30px !important;
+}
+
+table.dk-t2d-general-table.dataTable  td.sorting_1.nominallySignificant {
+    background-color: #9ED54C !important;
+}
+
+table.dk-t2d-general-table.dataTable  td.sorting_1.locusWideSignificant {
+    background-color: #7AB317 !important;
+}
+
+table.dk-t2d-general-table.dataTable  td.sorting_1.genomeWideSignificant {
+    background-color: #006633 !important;
 }

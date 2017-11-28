@@ -109,8 +109,9 @@
                 }
 
                 /* set the visibility of the user notification blob */
-
-                ($("#userNotificationDisplay").text() == "none")? $("#userNotificationDisplay").css("display","none") : $("#userNotificationDisplay").css("display","inline-block");
+                var warningMessage = "Warning Message ";
+                $("#userNotificationDisplay").text(warningMessage).attr("message",warningMessage);
+                ($("#userNotificationDisplay").text() == "")? $("#userNotificationDisplay").css("display","none") : $("#userNotificationDisplay").css("display","inline-block");
 
                 /* display notification as the mouse pointer rolls over the notification blob */
                 $("#userNotificationDisplay").hover(function(){

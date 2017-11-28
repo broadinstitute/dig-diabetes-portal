@@ -18,7 +18,9 @@
 
         <g:applyCodec encodeAs="none">
             var newsItems = ${newsItems};
+            //var warningMessage = ${warningText};
         </g:applyCodec>
+        //alert(warningMessage);
         mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
         mpgSoftware.homePage.setSlideWindows();
 

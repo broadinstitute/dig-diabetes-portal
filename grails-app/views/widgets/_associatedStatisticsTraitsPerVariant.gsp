@@ -295,7 +295,7 @@ button.expandoButton:visited {
 
 
     <div class="gwas-table-container">
-        <table id="traitsPerVariantTable" class="table basictable gwas-table">
+        <table id="traitsPerVariantTable" class="table basictable gwas-table dk-t2d-general-table">
 
             <thead>
             <tr>

@@ -92,9 +92,9 @@
             <div class="row geneWindowDescriptionHolder">
 
                 <div class="col-md-12">
-                <label style="font-size: 20px; font-weight: 900">VARIANTS ON <em>{{geneName}}</em></label>
-                    <div class="geneWindowDescription" style="font-size: 16px;">
-                    {{geneName}} is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
+                <!-- <label style="font-size: 20px; font-weight: 900">VARIANTS ON <em>{{geneName}}</em></label> -->
+                    <div class="geneWindowDescription" style="font-size: 20px; font-weight: 900; font-style:normal;">
+                    <em style="font-weight: 900; ">{{geneName}}</em> is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
                     </div>
                 </div>
 
@@ -462,32 +462,34 @@
                         <div class="col-sm-12">
                             <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
                                 <p>&nbsp;</p>
-                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                    <div class="col-sm-2 credSetWindowSummary" align="right">
-                                    Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
+                                <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2 credSetWindowSummary">
+                                        Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
+                                        </div>
+                                        <div class="col-md-3 credSetWindowSummary">
+                                            Start position
+                                            <input type="text" name="startPosition" class="credSetStartPos form-control">
+                                        </div>
+                                        <div class="col-md-3 credSetWindowSummary">
+                                            End position
+                                            <input type="text" name="endPosition"  class="credSetEndPos form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 22px">
+                                              Go
+                                              </button>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
-                                        Start position
-                                        <input type="text" name="startPosition" class="credSetStartPos">
-                                    </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
-                                        End position
-                                        <input type="text" name="endPosition"  class="credSetEndPos">
-                                    </div>
-                                    <div class="col-sm-2">
-                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
-                                          Go
-                                          </button>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="row clearfix">
-                                            <div class="col-sm-2 credSetWindowSummary">
+                                    <div class="col-md-12 clearfix" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+
+                                            <div class="col-md-2 credSetWindowSummary" style="line-height: 16px;">
                                                 Genes in window
                                             </div>
-                                            <div class="col-sm-10 regionParams">
+                                            <div class="col-md-10 regionParams">
                                                 <div class="matchedGenesGoHere"></div>
                                             </div>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
@@ -526,12 +528,12 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-2">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
                                          <div class="col-sm-2">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          %{--<div class="col-sm-2"></div>--}%
@@ -563,7 +565,7 @@
                                         <input type="text" name="endPosition"  class="credSetEndPos">
                                     </div>
                                     <div class="col-sm-2">
-                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                          <button class="btn btn-secondary btn-default" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
                                           Go
                                           </button>
                                     </div>
@@ -614,12 +616,12 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-2">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
                                          <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          %{--<div class="col-sm-2"></div>--}%
