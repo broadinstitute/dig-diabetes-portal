@@ -28,7 +28,7 @@
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
-        <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">METSIM (METabolic Syndrome In Men)</a>
+        <tr><td>1,185</td><td>7,357</td><td><a onclick="showSection(event)">METSIM (METabolic Syndrome In Men)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
@@ -51,10 +51,10 @@
                 </table>
             </div></td><td>European</td></tr>
     </table>
-    %{--<h4><g:message code="informational.shared.headers.project"></g:message></h4>--}%
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
-    %{--<p><g:message code="informational.data.project.BioMe1"></g:message></p>--}%
-%{--<p><g:message code="informational.data.project.BioMe2"></g:message></p>--}%
+    <p><g:message code="informational.data.project.METSIM"></g:message></p>
+<p><g:message code="informational.data.project.BioMe2"></g:message></p>
 
 %{--<h4><g:message code="informational.shared.headers.ack"></g:message></h4>--}%
 %{--<p><g:message code="informational.data.funding.BioMe"></g:message>--}%
