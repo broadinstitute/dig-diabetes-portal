@@ -54,65 +54,35 @@
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
     <p><g:message code="informational.data.project.METSIM"></g:message></p>
-<p><g:message code="informational.data.project.BioMe2"></g:message></p>
-
-%{--<h4><g:message code="informational.shared.headers.ack"></g:message></h4>--}%
-%{--<p><g:message code="informational.data.funding.BioMe"></g:message>--}%
-
-%{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
-%{--<p><g:message code="informational.data.exptsumm.BioMe1"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.BioMe2"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.BioMe2b"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.BioMe3"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.BioMe4"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.BioMe5"></g:message></p>--}%
-
-%{--<h4><g:message code="informational.shared.headers.overview"></g:message></h4>--}%
-%{--<p><g:message code="informational.data.overview.BioMe1a"></g:message></p>--}%
-%{--<p><g:message code="informational.data.overview.BioMe1b"></g:message>--}%
-    %{--(<g:message code="informational.shared.publications.Morris_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<g:message code="informational.shared.publications.Morris_2012_NatGenet"></g:message>)--}%
-%{--</p>--}%
-%{--<p><g:message code="informational.data.overview.BioMe2"></g:message>--}%
-%{--(<g:message code="informational.shared.publications.Dupuis_2010_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<g:message code="informational.shared.publications.Dupuis_2010_NatGenet"></g:message>;--}%
-
-%{--<g:message code="informational.shared.publications.Scott_2012_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<g:message code="informational.shared.publications.Scott_2012_NatGenet"></g:message>).--}%
-
-%{--<p><g:message code="informational.data.overview.BioMe3"></g:message><g:message code="informational.shared.publications.Soranzo_2010_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-%{--<g:message code="informational.shared.publications.Soranzo_2010_Diabetes"></g:message><g:message code="informational.data.overview.BioMe4"></g:message></p>--}%
-
-%{--<p><g:message code="informational.data.overview.BioMe5"></g:message></p>--}%
-%{--<p><g:message code="informational.data.overview.BioMe6a"></g:message><g:message code="informational.shared.publications.ICBP_2011_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>,--}%
-%{--&nbsp;<g:message code="informational.shared.publications.ICBP_2011_Nature"></g:message><g:message code="informational.data.overview.BioMe6b"></g:message></p>--}%
 
 
-%{--<p><g:message code="informational.data.overview.BioMe7a"></g:message><g:message code="informational.shared.publications.Willer_2013_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>,--}%
-%{--<g:message code="informational.shared.publications.Willer_2013_NatGenet"></g:message><g:message code="informational.data.overview.BioMe7b"></g:message></p>--}%
+<h4><g:message code="informational.shared.headers.ack"></g:message></h4>
+<p><g:message code="informational.data.funding.METSIM"></g:message>
 
-%{--<p><g:message code="informational.data.overview.BioMe8"></g:message></p>--}%
-%{--<p><g:message code="informational.data.overview.BioMe9"></g:message></p>--}%
-
-%{--<h4><g:message code="informational.shared.headers.reports"></g:message></h4>--}%
-
-%{--<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf" target="_blank">download PDF</a>)</p>--}%
-
-%{--<h5><g:message code="informational.shared.headers.phase1"></g:message></h5>--}%
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.METSIM1"></g:message></p>
+<p><g:message code="informational.data.exptsumm.METSIM2"></g:message></p>
 
 
-%{--<p>BioMe Phase 1 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase1_2017_0101.pdf" target="_blank">download PDF</a>)</p>--}%
+<h4><g:message code="informational.shared.headers.overview"></g:message></h4>
+<p><g:message code="informational.data.overview.METSIM1"></g:message></p>
+<p><g:message code="informational.data.overview.METSIM2"></g:message>
+<p><g:message code="informational.data.overview.METSIM3"></g:message>
 
 
-%{--<h5><g:message code="informational.shared.headers.phase2"></g:message></h5>--}%
+<h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-%{--<p>BioMe Phase 2 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase2.pdf" target="_blank">download PDF</a>)</p>--}%
-
-%{--<h4>Accessing BioMe AMP T2D GWAS data</h4>--}%
-%{--<p><g:message code="informational.data.accessing.BioMe"></g:message></p>--}%
+<p>Genotype Data Quality Control Report (<a href="" target="_blank">download PDF</a>)</p>
 
 
-%{--<h4>External Links to BioMe AMP T2D GWAS data</h4>--}%
-%{--<p><g:message code="informational.data.external.BioMe"></g:message></p>--}%
+<p>BioMe Phase 1 AMP-DCC Data Analysis Report (<a href="" target="_blank">download PDF</a>)</p>
+
+
+<h4>Accessing METSIM GWAS data</h4>
+<p><g:message code="informational.data.accessing.METSIM_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.METSIM_GWAS2"></g:message></p>
+
+
+
+
 
 </script>
