@@ -10,46 +10,41 @@
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    %{--<p><g:message code="pheno.help.text"></g:message></p>--}%
+    <p><g:message code="pheno.help.text"></g:message></p>
 
-    %{--<ul>--}%
-    %{--<li><g:message code="informational.shared.traits.t2d"></g:message></li>--}%
-    %{--<li><g:message code="informational.shared.traits.t2dadjbmi"></g:message></li>--}%
-    %{--</ul>--}%
-
-    %{--<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>--}%
-
-    %{--<table class="table table-condensed table-responsive table-striped">--}%
-    %{--<tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>--}%
-
-    %{--<tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">cohort</a>--}%
-
-    %{--<div style="display: none;" class="cohortDetail">--}%
-    %{--<table border="1">--}%
-    %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
-    %{--<tr>--}%
-    %{--<td valign="top">criteria</td>--}%
-    %{--<td valign="top">criteria</td></tr>--}%
-    %{--</table>--}%
-    %{--</div></td><td>Mixed</td></tr>--}%
-    %{--</table>--}%
+    <ul>
+    <li><g:message code="informational.shared.traits.t2d"></g:message></li>
+    <li><g:message code="informational.shared.traits.alt"></g:message></li>
+    <li><g:message code="informational.shared.traits.alk-phos"></g:message></li>
+    <li><g:message code="informational.shared.traits.fat_percent"></g:message></li>
+    <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
+    <li><g:message code="informational.shared.traits.potassium"></g:message></li>
+    <li><g:message code="informational.shared.traits.sodium"></g:message></li>
+    <li><g:message code="informational.shared.traits.urea"></g:message></li>
+    <li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
+    <li><g:message code="informational.shared.traits.weight"></g:message></li>
+    </ul>
 
 
-    %{--<h4><g:message code="informational.shared.headers.project"></g:message></h4>--}%
+    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
-    %{--<p><g:message code="informational.data.project.AGEN"></g:message></p>--}%
-    %{----}%
-    %{----}%
+    <table class="table table-condensed table-responsive table-striped">
+    <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
-    %{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.exptsumm.AGEN"></g:message></p>--}%
-
-    %{--<h4><g:message code="informational.shared.headers.overview"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.overview.AGEN"></g:message></p>--}%
+    <tr><td>1,395</td><td>5,764</td><td>EXTEND</td><td>European</td></tr>
+    </table>
 
 
-    %{--<h4>Accessing AGEN GWAS data</h4>--}%
-    %{--<p><g:message code="informational.data.accessing.AGEN"></g:message></p>--}%
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
+
+    <p><g:message code="informational.data.project.EXTEND"></g:message></p>
+
+    <h4><g:message code="informational.shared.headers.ack"></g:message></h4>
+   <p><g:message code="informational.data.funding.EXTEND"></g:message></p>
+
+
+    <h4>Accessing EXTEND GWAS data</h4>
+    <p><g:message code="informational.data.accessing.EXTEND"></g:message></p>
 
 
 </script>
