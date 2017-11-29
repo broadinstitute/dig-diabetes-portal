@@ -22,7 +22,7 @@ div.graphicsDisplay {
             <div class="row">
                 <div class="xs-col-12">
                     <div id="functionalDateGoesHere"></div>
-                        <table id="functionalDataTableGoesHere"></table>
+                        <table id="functionalDataTableGoesHere" class="dk-t2d-general-table"></table>
                 </div>
             </div>
 

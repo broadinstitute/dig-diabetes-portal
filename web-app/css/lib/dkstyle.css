@@ -776,3 +776,7 @@ table.dk-t2d-general-table.dataTable  td.sorting_1.locusWideSignificant {
 table.dk-t2d-general-table.dataTable  td.sorting_1.genomeWideSignificant {
     background-color: #006633 !important;
 }
+
+div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
+    background-color: #d5f2f2 !important;
+}
