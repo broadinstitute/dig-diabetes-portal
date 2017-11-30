@@ -25,7 +25,6 @@
     <li><g:message code="informational.shared.traits.weight"></g:message></li>
     </ul>
 
-
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
@@ -36,7 +35,9 @@
 
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-
+<p><img src="${resource(dir: 'images/organizations', file: 'EXTEND_LOGO.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+</p>
     <p><g:message code="informational.data.project.EXTEND"></g:message></p>
 
     <h4><g:message code="informational.shared.headers.ack"></g:message></h4>
@@ -44,7 +45,8 @@
 
 
     <h4>Accessing EXTEND GWAS data</h4>
-    <p><g:message code="informational.data.accessing.EXTEND"></g:message></p>
+    <p><g:message code="informational.data.accessing.EXTEND1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.EXTEND2"></g:message></p>
+
 
 
 </script>
