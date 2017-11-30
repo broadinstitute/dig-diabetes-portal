@@ -46,6 +46,8 @@
     <h4><g:message code="informational.shared.headers.ack"></g:message></h4>
    <p><g:message code="informational.data.funding.EXTEND"></g:message></p>
 
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.EXTEND"></g:message></p>
 
     <h4>Accessing EXTEND GWAS data</h4>
     <p><g:message code="informational.data.accessing.EXTEND1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.EXTEND2"></g:message></p>

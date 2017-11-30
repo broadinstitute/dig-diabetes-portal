@@ -45,6 +45,8 @@
 </p>
     <p><g:message code="informational.data.project.GoDARTS"></g:message></p>
 
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.GoDARTS"></g:message></p>
 
     <h4>Accessing GoDARTS GWAS data</h4>
     <p><g:message code="informational.data.accessing.GoDARTS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GoDARTS2"></g:message></p>

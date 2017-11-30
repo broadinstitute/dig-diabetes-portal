@@ -10,46 +10,49 @@
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    %{--<p><g:message code="pheno.help.text"></g:message></p>--}%
+    <p><g:message code="pheno.help.text"></g:message></p>
 
-    %{--<ul>--}%
-        %{--<li><g:message code="informational.shared.traits.t2d"></g:message></li>--}%
-        %{--<li><g:message code="informational.shared.traits.t2dadjbmi"></g:message></li>--}%
-    %{--</ul>--}%
+    <ul>
+    <li><g:message code="informational.shared.traits.BMI"></g:message></li>
+    <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
+    <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
+    <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
+    <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
+    </ul>
 
-    %{--<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>--}%
+    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
-    %{--<table class="table table-condensed table-responsive table-striped">--}%
-    %{--<tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>--}%
+       <table class="table table-condensed table-responsive table-striped">
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
-    %{--<tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">cohort</a>--}%
+        <tr><td>0</td><td>7,193</td><td><a onclick="showSection(event)">Oxford BioBank</a>
 
-    %{--<div style="display: none;" class="cohortDetail">--}%
-    %{--<table border="1">--}%
-    %{--<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>--}%
-    %{--<tr>--}%
-    %{--<td valign="top">criteria</td>--}%
-    %{--<td valign="top">criteria</td></tr>--}%
-    %{--</table>--}%
-    %{--</div></td><td>Mixed</td></tr>--}%
-    %{--</table>--}%
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">Healthy Caucasians between the ages of 30 to 50 recruited from the Oxfordshire area.</td></tr>
+                </table>
+            </div>
 
+            </td><td><g:message code="metadata.European"></g:message></td></tr>
+    </table>
 
-    %{--<h4><g:message code="informational.shared.headers.project"></g:message></h4>--}%
-
-    %{--<p><g:message code="informational.data.project.AGEN"></g:message></p>--}%
-    %{----}%
-    %{----}%
-
-    %{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.exptsumm.AGEN"></g:message></p>--}%
-
-    %{--<h4><g:message code="informational.shared.headers.overview"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.overview.AGEN"></g:message></p>--}%
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
+    <p><img src="${resource(dir: 'images/organizations', file: 'Oxford_BioBank_logo_Web.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+    <p><g:message code="informational.data.project.OxfordBB"></g:message></p>
 
 
-    %{--<h4>Accessing AGEN GWAS data</h4>--}%
-    %{--<p><g:message code="informational.data.accessing.AGEN"></g:message></p>--}%
+
+    <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+    <p><g:message code="informational.data.exptsumm.OxBB_Axiom"></g:message></p>
+
+
+
+    <h4>Accessing Oxford BioBank Axiom GWAS GWAS data</h4>
+    <p><g:message code="informational.data.accessing.OxBB_Axiom1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.OxBB_Axiom2"></g:message></p>
+
 
 
 </script>
