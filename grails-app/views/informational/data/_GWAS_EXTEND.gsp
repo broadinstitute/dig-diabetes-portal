@@ -16,10 +16,13 @@
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
     <li><g:message code="informational.shared.traits.alt"></g:message></li>
     <li><g:message code="informational.shared.traits.alk-phos"></g:message></li>
+    <li><g:message code="informational.shared.traits.bilirubin"></g:message></li>
+    <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
     <li><g:message code="informational.shared.traits.fat_percent"></g:message></li>
     <li><g:message code="informational.shared.traits.HbA1c"></g:message></li>
     <li><g:message code="informational.shared.traits.potassium"></g:message></li>
     <li><g:message code="informational.shared.traits.sodium"></g:message></li>
+    <li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
     <li><g:message code="informational.shared.traits.urea"></g:message></li>
     <li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
     <li><g:message code="informational.shared.traits.weight"></g:message></li>

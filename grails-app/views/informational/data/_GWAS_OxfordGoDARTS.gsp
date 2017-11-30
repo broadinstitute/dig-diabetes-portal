@@ -10,12 +10,15 @@
 
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
-    %{--<p><g:message code="pheno.help.text"></g:message></p>--}%
+    <p><g:message code="pheno.help.text"></g:message></p>
 
-    %{--<ul>--}%
-    %{--<li><g:message code="informational.shared.traits.t2d"></g:message></li>--}%
-    %{--<li><g:message code="informational.shared.traits.t2dadjbmi"></g:message></li>--}%
-    %{--</ul>--}%
+    <ul>
+    <li><g:message code="informational.shared.traits.BMI"></g:message></li>
+    <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
+    <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
+    <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
+    <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
+    </ul>
 
     %{--<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>--}%
 
@@ -35,21 +38,17 @@
     %{--</table>--}%
 
 
-    %{--<h4><g:message code="informational.shared.headers.project"></g:message></h4>--}%
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
-    %{--<p><g:message code="informational.data.project.AGEN"></g:message></p>--}%
-    %{----}%
-    %{----}%
-
-    %{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.exptsumm.AGEN"></g:message></p>--}%
-
-    %{--<h4><g:message code="informational.shared.headers.overview"></g:message></h4>--}%
-    %{--<p><g:message code="informational.data.overview.AGEN"></g:message></p>--}%
+<p><img src="${resource(dir: 'images/organizations', file: 'GoDARTS_logo-300x35.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+</p>
+    <p><g:message code="informational.data.project.GoDARTS"></g:message></p>
 
 
-    %{--<h4>Accessing AGEN GWAS data</h4>--}%
-    %{--<p><g:message code="informational.data.accessing.AGEN"></g:message></p>--}%
+    <h4>Accessing GoDARTS GWAS data</h4>
+    <p><g:message code="informational.data.accessing.GoDARTS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GoDARTS2"></g:message></p>
+
 
 
 </script>
