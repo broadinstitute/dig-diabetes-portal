@@ -1,13 +1,14 @@
 <script class="panel-body" id="AMPLOAD_10_script" type="x-tmpl-mustache">
 
-    %{--<h4><g:message code="informational.shared.headers.publications"></g:message></h4>--}%
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-    %{--<p><div class="paper">--}%
-    %{--<g:message code="informational.shared.publications.author_year_journal"></g:message><br>--}%
-    %{--<g:message code="informational.shared.publications.author_year_journal.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>--}%
-    %{--<div class="citation"><g:message code="informational.shared.publications.author_year_journal.citation"></g:message> </div>--}%
-    %{--</div></p>--}%
+    <p><div class="paper">
+    <g:message code="informational.shared.publications.Karpe_2017_IntJEpidemiol"></g:message><br>
+    <g:message code="informational.shared.publications.Karpe_2017_IntJEpidemiol.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+    <div class="citation"><g:message code="informational.shared.publications.Karpe_2017_IntJEpidemiol.citation"></g:message> </div>
+    </div></p>
 
+<p><g:message code="informational.shared.projectpublications.Oxford"></g:message></p>
 
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <p><g:message code="pheno.help.text"></g:message></p>
