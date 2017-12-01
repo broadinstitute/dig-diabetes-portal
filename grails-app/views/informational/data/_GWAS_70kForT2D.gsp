@@ -17,7 +17,7 @@
 <div class="citation"><g:message code="informational.shared.publications.Bonas-Guarch_2017_NatGenet.citation"></g:message> </div>
 </div></p>
 
-<h4>Dataset phenotypes</h4>
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
@@ -142,7 +142,7 @@
         </div></td><td>European</td></tr>
 </table>
 
-<h4>Project</h4>
+<h4><g:message code="informational.shared.headers.project"></g:message></h4>
 <p><img src="${resource(dir: 'images/organizations', file: 'Logo_70K_mayus_forT2D_lines-3.png')}" style="width: 200px; margin-right: 15px"
         align="left">
 </p>

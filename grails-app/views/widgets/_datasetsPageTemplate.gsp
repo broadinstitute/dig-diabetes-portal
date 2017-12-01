@@ -2,53 +2,59 @@
 %{--this will have all the mustache templates--}%
 %{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
 
-<g:render template="./data/ExAC_r03" />
-<g:render template="./data/1kg_phase1" />
-<g:render template="./data/ExChip_82k"/>
+<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
+<g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
+<g:render template="./data/GWAS_GIANT"/>
+<g:render template="./data/GWAS_VATGen"/>
+<g:render template="./data/GWAS_BioMe"/>
+<g:render template="./data/GWAS_GIANT-PA" />
+<g:render template="./data/GWAS_PGC"/>
+<g:render template="./data/GWAS_CARDIoGRAM"/>
+<g:render template="./data/GWAS_AGEN" />
+<g:render template="./data/GWAS_SIGMA1"/>
+<g:render template="./data/GWAS_METSIM" />
+<g:render template="./data/AMPLOAD_10" />
+<g:render template="./data/GWAS_DIAGRAM"/>
+<g:render template="./data/GWAS_MAGIC"/>
+<g:render template="./data/GWAS_GLGC"/>
+<g:render template="./data/GWAS_OxfordGoDARTS" />
 <g:render template="./data/ExChip_CAMP"/>
 <g:render template="./data/GWAS_CAMP"/>
+<g:render template="./data/GWAS_CKDGenConsortium"/>
+<g:render template="./data/GWAS_EXTEND" />
+<g:render template="./data/GWAS_GENESIS_eu"/>
+<g:render template="./data/GWAS_70kForT2D"/>
+<g:render template="./data/GWAS_OxBB"/>
 <g:render template="./data/ExChip_SIGMA1"/>
 <g:render template="./data/ExChip_T2DGO"/>
+<g:render template="./data/WGS_GoT2Dimputed"/>
+<g:render template="./data/WGS_WgnomAD" />
+<g:render template="./data/WGS_GoT2D" />
 <g:render template="./data/ExSeq_13k"/>
 <g:render template="./data/ExSeq_17k"/>
 <g:render template="./data/ExSeq_19k"/>
 <g:render template="./data/ExSeq_EgnomAD"/>
+<g:render template="./data/ExAC_r03" />
+<g:render template="./data/1kg_phase1" />
+<g:render template="./data/ExChip_82k"/>
 <g:render template="./data/ExSeq_EOMI"/>
-<g:render template="./data/GWAS_70kForT2D"/>
-<g:render template="./data/GWAS_BioMe"/>
 <g:render template="./data/GWAS_CADISP"/>
-<g:render template="./data/GWAS_CARDIoGRAM"/>
-<g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
-<g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
-<g:render template="./data/GWAS_CKDGenConsortium"/>
-<g:render template="./data/GWAS_DIAGRAM"/>
-<g:render template="./data/GWAS_GENESIS_eu"/>
 <g:render template="./data/GWAS_GERFHS"/>
-<g:render template="./data/GWAS_GIANT"/>
-<g:render template="./data/GWAS_GLGC"/>
-<g:render template="./data/GWAS_MAGIC"/>
 <g:render template="./data/GWAS_MEGASTROKE"/>
 <g:render template="./data/GWAS_MICAD"/>
-<g:render template="./data/GWAS_OxBB"/>
-<g:render template="./data/GWAS_PGC"/>
 <g:render template="./data/GWAS_PWI" />
-<g:render template="./data/GWAS_SIGMA1"/>
 <g:render template="./data/GWAS_SIGN"/>
 <g:render template="./data/GWAS_Stroke"/>
-<g:render template="./data/GWAS_VATGen"/>
-<g:render template="./data/WGS_GoT2D" />
-<g:render template="./data/WGS_GoT2Dimputed"/>
-<g:render template="./data/WGS_WgnomAD" />
 <g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_AFGen" />
 <g:render template="./data/GWAS_GEI" />
 <g:render template="./data/ExChip_MICAD" />
 <g:render template="./data/ExChip_300k" />
-<g:render template="./data/GWAS_GIANT-PA" />
-<g:render template="./data/GWAS_AGEN" />
 <g:render template="./data/GWAS_DCSP2a610" />
 <g:render template="./data/GWAS_DCSP2a1M" />
 <g:render template="./data/ExSeq_RSNG" />
+
+
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
