@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import com.google.gson.JsonObject
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -63,6 +64,7 @@ class RestServerService {
     private String GET_REGION_URL = "getRegion"
     private String GET_VECTOR_URL = "getVectorData"
     private String GET_BIG_WIG_DATA = "getBigWigData"
+    private String GET_CLUMP_DATA = "getClumpData"
     private String GET_EPIGENETIC_POSSIBLE_DATA = "getEpigenomicData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
@@ -602,6 +604,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public JSONObject postBigWigDataRestCall(String jsonString) {
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_BIG_WIG_DATA, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postClumpDataRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_CLUMP_DATA, currentRestServer() );
         return tempObject;
     }
 
@@ -1892,6 +1899,23 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+    /***
+     * Gather up the data that is used in the Manhattan plot
+     *
+     * @param phenotype
+     * @param dataSetName
+
+     */
+    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName) {
+        JSONObject returnValue
+
+        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
+
+       // String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"" )
+        //def slurper = new JsonSlurper()
+        //returnValue = slurper.parseText(apiResults)
+        return apiResults
+    }
 
 
 
@@ -2368,6 +2392,20 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     }
+
+    public JSONObject getClumpDataRestCall(String phenotype, String datasetName) {
+        //JsonSlurper jsonSlurper = new JsonSlurper()
+        //JsonObject clumpDataJsonPayloadString =  jsonSlurper.parseText('{"phenotype":"${chromosomeName}","dataset":"ExChip_CAMP_dv1__T2D"}')
+
+       // String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
+
+        String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
+
+
+        JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
+        return VectorDataJson;
+    }
+
 
     /***
      * Note: this call is not used interactively, but used instead to fill the grails domain object that holds
