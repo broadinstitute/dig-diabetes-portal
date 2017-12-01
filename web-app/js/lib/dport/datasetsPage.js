@@ -4,14 +4,6 @@
 
 var mpgSoftware = mpgSoftware || {};
 
-//var callbackURL= "${createLink(controller:'informational',action: 'aboutTheDataAjax')}"; //need to be set
-//var setCallbackURL = (function () {
-//    setCallbackURL = callbackURL;
-//})
-//var getCallbackURL = (function () {
-//        return callbackURL;
-//})
-
 
 (function () {
     "use strict";
