@@ -65,6 +65,7 @@ modules = {
 
         resource url: 'js/lib/dport/manhattan.js'
         resource url: 'css/dport/manhattan.css'
+        resource url: 'js/lib/dport/manhattanplotTableHeader.js'
     }
     matrix {
         dependsOn "d3tooltip"
