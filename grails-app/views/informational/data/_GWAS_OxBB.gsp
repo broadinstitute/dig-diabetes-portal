@@ -1,6 +1,6 @@
 <script class="panel-body" id="GWAS_OxBB_script" type="x-tmpl-mustache">
 
-    <h4>Publications</h4>
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.Tan_2006_Diabetologia"></g:message><br>
@@ -10,7 +10,7 @@
 
 <p><g:message code="informational.shared.projectpublications.Oxford"></g:message></p>
 
-    <h4>Dataset phenotypes</h4>
+    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
 <ul>
     <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
@@ -28,7 +28,7 @@
     <li><g:message code="informational.shared.traits.pulse_pressure"></g:message></li>
 </ul>
 
-    <h4>Dataset subjects</h4>
+    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
@@ -45,10 +45,13 @@
 
             </td><td><g:message code="metadata.European"></g:message></td></tr>
     </table>
-    <h4>Project</h4>
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
+    <p><img src="${resource(dir: 'images/organizations', file: 'Oxford_BioBank_logo_Web.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+
 <p><g:message code="informational.data.project.OxfordBB"></g:message></p>
 
-<h4>Experiment summary</h4>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.OxfordBB"></g:message></p>
 
 <h4>Accessing Oxford BioBank exome chip analysis data</h4>
