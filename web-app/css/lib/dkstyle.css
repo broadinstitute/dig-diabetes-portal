@@ -777,6 +777,96 @@ table.dk-t2d-general-table.dataTable  td.sorting_1.genomeWideSignificant {
     background-color: #006633 !important;
 }
 
+table.dk-t2d-general-table.dataTable  i.jstree-icon.jstree-themeicon {
+    display: none !important;
+}
+
 div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
     background-color: #d5f2f2 !important;
+}
+
+/*
+#modeledPhenotypeTabs {
+
+    background-color: #ddd;
+    display: inline-block !important;
+    font-size: 14px;
+    border: solid 1px #bbb;
+    padding: 2px;
+    border-radius: 25px;
+    display: inline-block !important;
+}
+
+#modeledPhenotypeTabs li {
+    margin-right: -3px;
+}
+
+#modeledPhenotypeTabs li > a {
+    border:solid 1px #ccc;
+    border-radius:0;
+}
+
+#modeledPhenotypeTabs li:last-child > a {
+    border-top-right-radius:23px;
+    border-bottom-right-radius:23px;
+    padding-right: 18px;
+    border-left: none;
+}
+
+#modeledPhenotypeTabs li:first-child > a {
+    border-top-left-radius:23px;
+    border-bottom-left-radius:23px;
+    padding-left: 18px;
+}
+
+#modeledPhenotypeTabs li.active > a {
+    background-color: #50AABB;
+    border:solid 1px #50AABB;
+    box-shadow: inset 0 0 2px #555;
+}
+
+*/
+
+#modeledPhenotypeTabs li > a {
+    background-color: #eee;
+    border-bottom: solid 1px #ccc;
+    color: #333;
+}
+
+#modeledPhenotypeTabs li.active > a {
+    background-color: #fff !important;
+    border-bottom: solid 1px #fff !important;
+    color: #333;
+}
+
+#stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs {
+    display: inline-block !important;
+    font-size: 14px;
+    padding-top: 20px;
+}
+
+#stratsCovTabs li, #CONTROL_stratsTabs li, #CASE_stratsTabs li, #strata1_stratsTabs li{
+
+}
+
+#stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
+    border:solid 1px #ccc;
+    border-radius:3px;
+    padding: 5px 10px;
+}
+
+#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {
+
+}
+
+#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {
+}
+
+#stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
+    background-color: #50AABB;
+    border:solid 1px #50AABB;
+}
+
+div.boxWhiskerPlot svg.box g.boxHolder {
+    border: solid 2px #f00;
 }

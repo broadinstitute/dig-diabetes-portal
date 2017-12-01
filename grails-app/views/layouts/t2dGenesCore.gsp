@@ -109,7 +109,7 @@
                 }
 
                 /* set the visibility of the user notification blob */
-                var warningMessage = "Warning Message ";
+                var warningMessage = "warning";
                 $("#userNotificationDisplay").text(warningMessage).attr("message",warningMessage);
                 ($("#userNotificationDisplay").text() == "")? $("#userNotificationDisplay").css("display","none") : $("#userNotificationDisplay").css("display","inline-block");
 

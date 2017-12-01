@@ -52,7 +52,7 @@ button.expandoButton:visited {
 </div>
 
 
-<div id="collapseVariantTraitAssociation" class="accordion-body collapse">
+<div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
     <div class="accordion-inner" id="traitAssociationInner">
 
     <r:require modules="core"/>
