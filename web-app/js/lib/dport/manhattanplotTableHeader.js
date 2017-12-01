@@ -95,8 +95,10 @@ var mpgSoftware = mpgSoftware || {};
             loading.hide();
 
 
-            return{ refreshManhattanplotTableView:refreshManhattanplotTableView}
+
         })
+
+        return{ refreshManhattanplotTableView:refreshManhattanplotTableView}
 
 
     }());
