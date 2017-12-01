@@ -78,30 +78,38 @@
                 </table>
             </div></td><td>East Asian</td></tr>
 
-              <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Shanghai Diabetes Genetic Study (SDGS)</a>
+              <tr><td>1,019</td><td>1,710</td><td><a onclick="showSection(event)">Shanghai Diabetes Genetic Study (SDGS)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
+                        Diabetes cases included 886 incident T2D cases identified in the Shanghai Women’s Health Study (SWHS) and 133 prevalent T2D cases identified from female controls of the Shanghai Breast Cancer Study (SBCS).< /br>
+                        The 886 SWHS cases met the following criteria:
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>age &le; 65 with a self-reported diabetes diagnosed after study enrollment</li>
+                        <li>used diabetes medication</li>
+                        <li>had fasting glucose level 7gr; 7 mmol/L at least twice</li>
+                        <li>donated a blood sample</li>
+                        </ul>
+                        The 133 diabetes SBCS cases met the following criteria:
+                        <ul>
+                        <li>women who were diagnosed with T2D and were on diabetes medication</li>
+                        <li>women who had a blood glucose level &gt; 7 mmol/L (measured by study)</li>
                         </ul>
                         </td>
                         <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>no self-reported history of diabetes</li>
+                        <li>women with blood glucose level between 5.5 and 7 mmol/L and had HbA1C &gt; 6.1% were excluded</li>
+                        <li>women with no HbA1C data were excluded</li>
                         </ul>
                         </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
-                     <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study (SDCS)</a>
+                     <tr><td>2,010</td><td>0</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study (SDCS)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
