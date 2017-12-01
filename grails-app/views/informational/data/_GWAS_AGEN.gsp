@@ -22,47 +22,82 @@
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
-        <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Cebu Longitudinal Health and Nutritional Survey (CLHNS)</a>
+        <tr><td>159</td><td>1,624</td><td><a onclick="showSection(event)">Cebu Longitudinal Health and Nutritional Survey (CLHNS)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">Overnight fasting plasma glucose level &ge; 7.0 mmol/L or current use of anti-diabetic medication</td>
+                        <td valign="top">Overnight fasting plasma glucose level &lt; 7.0 mmol/L and treatment naive</td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
-   <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Japan Cardiometabolic Genome Epidemiology Network (CAGE)</a>
+   <tr><td>1,042</td><td>2,943</td><td><a onclick="showSection(event)">Korea Association Resource Study (KARE)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li>T2D treatment</li>
+                        <li>fasting plasma glucose &ge; 7 mmol/L or plasma glucose 2-h after ingestion of 75gm oral glucose load &ge; 11.1 mmol/L</li>
+                        <li>age of disease onset &ge; 40 years</li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li>no history of diabetes</li>
+                        <li>fasting plasma glucose &lt; 5.6 mmol/L and plasma glucose 2-h after ingestion of 75gm oral glucose load &lt; 7.8 mmol/L at both baseline and follow up studies</li>
+                        </ul>
+                        </td>
+</td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
-   <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Shanghai Diabetes Genetic Study (SDGS)</a>
+   <tr><td>931</td><td>1,404</td><td><a onclick="showSection(event)">National Center for Global Health and Medicine (NCGM), Japan</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li>1999 WHO criteria for T2D</li>
+                        <li>Individuals with diabetes due to liver dysfunction, monogenic disorder known to cause diabetes, or positive anti- GAD antibody were excluded</li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li>no past history of urinary glucose or glucose intolerance</li>
+                        <li>HbA1c &lt; 5.6% or a normal glucose (75g) tolerance test</li>
+                        <li>age at examination &ge; 55 years</li>
+                        </ul>
+                        </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
-              <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Korea Association Resource Study (KARE)</a>
+              <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Shanghai Diabetes Genetic Study (SDGS)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
@@ -72,8 +107,20 @@
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
@@ -83,8 +130,20 @@
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
@@ -94,8 +153,20 @@
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
@@ -105,8 +176,20 @@
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</td></tr>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td>
+                        <td valign="top">
+                        <ul>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        </ul>
+                        </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
     </table>
