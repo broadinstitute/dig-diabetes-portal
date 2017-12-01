@@ -411,45 +411,45 @@ class MetaDataService {
         return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
     }
 
-    public JSONObject getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
-        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-
-        // local variables
-        JSONObject toReturn = []
-        List<SampleGroup> groupList;
-        List<JSONObject> nameList = new ArrayList<String>();
-
-        // get the sample group list for the phenotype
-        try {
-            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
-
-            // sort the group list
-            Collections.sort(groupList);
-
-            // add all the names to the name list
-            for (SampleGroup group : groupList) {
-                StringBuilder depthBuilder = new StringBuilder();
-                for (int i = 0; i < group.getNestedLevel(); i++) {
-                    depthBuilder.append("-");
-                }
-                String sysId = group.getSystemId()
-                JSONObject currentGroup = [
-                    name: sysId,
-                    displayName: depthBuilder.toString() + g.message(code: "metadata." + sysId, default: sysId)
-                ]
-                nameList.add(currentGroup);
-            }
-
-        } catch (PortalException exception) {
-            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
-        }
-
-        toReturn.is_error = false
-        toReturn.numRecords = nameList.size()
-        toReturn.dataset = nameList
-
-        return toReturn;
-    }
+//    public JSONObject getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
+//        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+//
+//        // local variables
+//        JSONObject toReturn = []
+//        List<SampleGroup> groupList;
+//        List<JSONObject> nameList = new ArrayList<String>();
+//
+//        // get the sample group list for the phenotype
+//        try {
+//            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+//
+//            // sort the group list
+//            Collections.sort(groupList);
+//
+//            // add all the names to the name list
+//            for (SampleGroup group : groupList) {
+//                StringBuilder depthBuilder = new StringBuilder();
+//                for (int i = 0; i < group.getNestedLevel(); i++) {
+//                    depthBuilder.append("-");
+//                }
+//                String sysId = group.getSystemId()
+//                JSONObject currentGroup = [
+//                    name: sysId,
+//                    displayName: depthBuilder.toString() + g.message(code: "metadata." + sysId, default: sysId)
+//                ]
+//                nameList.add(currentGroup);
+//            }
+//
+//        } catch (PortalException exception) {
+//            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
+//        }
+//
+//        toReturn.is_error = false
+//        toReturn.numRecords = nameList.size()
+//        toReturn.dataset = nameList
+//
+//        return toReturn;
+//    }
 
 
 
@@ -526,9 +526,10 @@ class MetaDataService {
             // sort the group list
             Collections.sort(groupList);
 
-            // filter sample groups by name
+            // filter sample groups by name, or
             for (SampleGroup group : groupList) {
-                if (group.systemId == sampleGroupName)  {
+                if ((group.systemId == sampleGroupName)||
+                        (sampleGroupName==null)||(sampleGroupName.length()==0)){
                     filteredSampleGroupList.add(group) ;
                 }
             }
@@ -556,6 +557,36 @@ class MetaDataService {
     }
 
 
+    public List<SampleGroup> getSampleGroupsBasedOnPhenotypeAndMeaning(String phenotypeName,String  meaning) {
+        // local variables
+        List<SampleGroup> groupList;
+        List<SampleGroup> filteredSampleGroupList = [];
+        Property returnValue;
+
+
+        // get the sample group list for the phenotype
+        try {
+            groupList = this.getJsonSampleParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+
+            // sort the group list
+            Collections.sort(groupList);
+
+
+            for (SampleGroup group : groupList) {
+                if (group.hasMeaning(meaning))  {
+                    filteredSampleGroupList.add(group)
+                }
+            }
+
+        } catch (PortalException exception) {
+            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
+        }
+
+        //create the json string
+
+        // return
+        return filteredSampleGroupList.unique{SampleGroup a, SampleGroup b -> a.systemId <=> b.systemId}
+    }
 
 
 
@@ -575,6 +606,7 @@ class MetaDataService {
                     break;
                 case METADATA_SAMPLE:
                     groupList = this.getJsonSampleParser().getSampleGroupsForPhenotype(phenotype, version)
+                    //groupList = getSampleGroupsBasedOnPhenotypeAndMeaning(phenotype,'VARIANT')
                     break;
                 case METADATA_NONE:
                 default:
