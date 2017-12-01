@@ -174,7 +174,7 @@
         </div>
     {{/variantResultsTableHeader}}
 
-    <div class="dk-t2d-blue dk-edit-button dk-right-column-buttons-compact" style="float: right; margin-right: 20px;"><a href="javascript:;" data-toggle="modal" data-target="#{{dataModal}}">Add / Subtract Data to the table</a></div>
+    <div class="dk-t2d-blue dk-edit-button dk-right-column-buttons-compact" style="float: right; margin-right: 20px;"><a href="javascript:;" data-toggle="modal" data-target="#{{dataModal}}">Modify the table</a></div>
     <div id="{{holderForVariantSearchResults}}" class="container-fluid" ></div>
     <div id="{{dataModalGoesHere}}"></div>
 
