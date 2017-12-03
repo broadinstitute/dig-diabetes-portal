@@ -117,22 +117,34 @@
                     <tr>
                         <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>established diagnosis of T2D</li>
                         </ul>
                         </td>
                         <td valign="top">
+                        n/a
+                        </td></tr>
+                </table>
+            </div></td><td>East Asian</td></tr>
+
+                     <tr><td>0</td><td>1,945</td><td><a onclick="showSection(event)">Singapore Prospective Study Program (SP2)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                        n/a
+                        </td>
+                        <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>no prior history of diabetes</li>
+                        <li>fasting glucose level of &le; 6.0 mmol/L</li>
                         </ul>
                         </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
-                     <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Singapore Prospective Study Program (SP2)</a>
+                            <tr><td>794</td><td>1,240</td><td><a onclick="showSection(event)">Singapore Malay Eye Study (SiMES)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
@@ -140,22 +152,20 @@
                     <tr>
                         <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>history of T2D</li>
+                        <li>HbA1c level &gt; 6.5%</li>
                         </ul>
                         </td>
                         <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>no history of T2D</li>
+                        <li>HbA1c level &lt; 6.5%</li>
                         </ul>
                         </td></tr>
                 </table>
             </div></td><td>East Asian</td></tr>
 
-                            <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Singapore Malay Eye Study (SiMES)</a>
+                       <tr><td>997</td><td>999</td><td><a onclick="showSection(event)">Taiwan T2D Study (TDS)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
@@ -163,39 +173,16 @@
                     <tr>
                         <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>subjects aged &gt; 20 years</li>
+                        <li>T2D diagnosis according to ADA criteria</li>
+                        <li>T1D, gestational diabetes, and MODY cases excluded</li>
                         </ul>
                         </td>
                         <td valign="top">
                         <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        </ul>
-                        </td></tr>
-                </table>
-            </div></td><td>East Asian</td></tr>
-
-                       <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Taiwan T2D Study (TDS)</a>
-
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">
-                        <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
-                        </ul>
-                        </td>
-                        <td valign="top">
-                        <ul>
-                        <li></li>
-                        <li></li>
-                        <li></li>
+                        <li>no T2D diagnosis</li>
+                        <li>HbA1C ranging from 3.4 to 6</li>
+                        <li>BMI &le; 32</li>
                         </ul>
                         </td></tr>
                 </table>
