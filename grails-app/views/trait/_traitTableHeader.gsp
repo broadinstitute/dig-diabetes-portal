@@ -7,66 +7,100 @@
 
     mpgSoftware.manhattanPlot = function () {
 
-        var fillSampleGroupDropdown = function (phenotype) {
-            var loader = $('#rSpinner');
-            loader.show();
+        var initializeManhattanTableVars = function(){
 
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'trait',action: 'ajaxSampleGroupsPerTrait')}",
-                data: {phenotype: phenotype},
-                async: false,
-                success: function (data) {
+            var drivingVariables = {
+                phenotypeName: <%=phenotypeKey%>,
+                ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
+                ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
+                phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
+                variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
+                requestedSignificance:'<%=requestedSignificance%>',
+                local:"${locale}"
+                copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
+                printMsg:'<g:message code="table.buttons.printText" default="Print me!" />'
+            };
+            mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
+        }
 
-                    var rowDataStructure = [];
-                    if ((typeof data !== 'undefined') &&
-                        (data)) {
-                        if ((data.sampleGroups) &&
-                            (data.sampleGroups.length > 0)) {//assume we have data and process it
-                            for (var i = 0; i < data.sampleGroups.length; i++) {
-                                var sampleGroup = data.sampleGroups[i];
-                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
-                            }
-                        }
-                    }
-                    loader.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loader.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
+        return {
+            initializeManhattanTableVars: initializeManhattanTableVars
 
-        };
+        }
+    }();
 
-        var fillClumpVariants = function (phenotypeName, dataset) {
-            var loader = $('#rSpinner');
-            loader.show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'trait',action: 'ajaxClumpData')}",
-                data: {phenotype: phenotypeName, dataset: dataset},
-                async: false,
-                success: function (data) {
-                    console.log(data);
+    $( document ).ready(function() {
+        mpgSoftware.manhattanPlot.initializeManhattanTableVars();
+        mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(<%=phenotypeKey%>);
 
-                  mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+    });
 
-                },
-                error: function (jqXHR, exception) {
-                    loader.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            }).done(function (data, textStatus, jqXHR) {
-                _.forEach(data.children, function (eachKey,val) {
-                    console.log(data);
-                })
 
-            });
 
-       };
+</script>
+
+
+
+        %{--var fillSampleGroupDropdown = function (phenotype) {--}%
+            %{--var loader = $('#rSpinner');--}%
+            %{--loader.show();--}%
+
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller:'trait',action: 'ajaxSampleGroupsPerTrait')}",--}%
+                %{--data: {phenotype: phenotype},--}%
+                %{--async: false,--}%
+                %{--success: function (data) {--}%
+
+                    %{--var rowDataStructure = [];--}%
+                    %{--if ((typeof data !== 'undefined') &&--}%
+                        %{--(data)) {--}%
+                        %{--if ((data.sampleGroups) &&--}%
+                            %{--(data.sampleGroups.length > 0)) {//assume we have data and process it--}%
+                            %{--for (var i = 0; i < data.sampleGroups.length; i++) {--}%
+                                %{--var sampleGroup = data.sampleGroups[i];--}%
+                                %{--$('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))--}%
+                            %{--}--}%
+                        %{--}--}%
+                    %{--}--}%
+                    %{--loader.hide();--}%
+                %{--},--}%
+                %{--error: function (jqXHR, exception) {--}%
+                    %{--loader.hide();--}%
+                    %{--core.errorReporter(jqXHR, exception);--}%
+                %{--}--}%
+            %{--});--}%
+
+        %{--};--}%
+
+        %{--var fillClumpVariants = function (phenotypeName, dataset) {--}%
+            %{--var loader = $('#rSpinner');--}%
+            %{--loader.show();--}%
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller:'trait',action: 'ajaxClumpData')}",--}%
+                %{--data: {phenotype: phenotypeName, dataset: dataset},--}%
+                %{--async: false,--}%
+                %{--success: function (data) {--}%
+                    %{--console.log(data);--}%
+
+                  %{--mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);--}%
+
+                %{--},--}%
+                %{--error: function (jqXHR, exception) {--}%
+                    %{--loader.hide();--}%
+                    %{--core.errorReporter(jqXHR, exception);--}%
+                %{--}--}%
+            %{--}).done(function (data, textStatus, jqXHR) {--}%
+                %{--_.forEach(data.children, function (eachKey,val) {--}%
+                    %{--console.log(data);--}%
+                %{--})--}%
+
+            %{--});--}%
+
+       %{--};--}%
         %{--var unclickClumpCheckbox = function(){--}%
             %{--$("input[type=checkbox]").change(function() {--}%
                %{--// var selectedval = $(this).val();--}%
@@ -86,49 +120,15 @@
             %{--});--}%
 
         %{--}--}%
-//       var unclickClumpCheckbox = function(){
-//           $('#clump').change(function() {
-//               if(!$(this).is(':checked'))
-//                   alert('worked');
-//           });
-//       }
-
-
-        return {
-            fillSampleGroupDropdown: fillSampleGroupDropdown,
-            fillClumpVariants:fillClumpVariants
-        }
-    }();
+%{--//       var unclickClumpCheckbox = function(){--}%
+%{--//           $('#clump').change(function() {--}%
+%{--//               if(!$(this).is(':checked'))--}%
+%{--//                   alert('worked');--}%
+%{--//           });--}%
+%{--//       }--}%
 
 
 
-    mpgSoftware.pickNewDataSet = function (){
-        var sampleGroup = $('#manhattanSampleGroupChooser').val();
-        $('#manhattanPlot1').empty();
-        $('#traitTableBody').empty();
-        $('#phenotypeTraits').DataTable().rows().remove();
-        $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
-
-    }
-
-
-
-
-
-    $( document ).ready(function() {
-        mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
-        console.log("about to fire");
-    });
-
-    var callFillClumpVariants = function() {
-        //alert("hello world");
-        mpgSoftware.manhattanPlot.fillClumpVariants('<%=phenotypeKey%>',document.getElementById("manhattanSampleGroupChooser").value);
-    }
-
-
-
-</script>
 
 
 <div class="separator"></div>
@@ -137,7 +137,7 @@
 
     <g:message code="traitTable.messages.results" />
     <span id="traitTableDescription"></span>:
-    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)">
+    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)">
     </select>
 
 </p>
