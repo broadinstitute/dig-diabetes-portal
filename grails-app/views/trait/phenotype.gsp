@@ -8,45 +8,6 @@
 </head>
 
 <body>
-<script>
-    var mpgSoftware = mpgSoftware || {};
-
-    %{--mpgSoftware.regionalTraitAnalysis = (function () {--}%
-
-        %{--var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {--}%
-
-            %{--var loading = $('#spinner').show();--}%
-            %{--$('[data-toggle="popover"]').popover();--}%
-            %{--$.ajax({--}%
-                %{--cache: false,--}%
-                %{--type: "post",--}%
-                %{--url: "${createLink(controller:'trait',action: 'phenotypeAjax')}",--}%
-                %{--data: { trait: '<%=phenotypeKey%>',--}%
-                        %{--significance: '<%=requestedSignificance%>',--}%
-                        %{--sampleGroup: sampleGroup  },--}%
-                %{--async: true,--}%
-                %{--success: function (data) {--}%
-                    %{--try{--}%
-                        %{--mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);--}%
-                    %{--}--}%
-                    %{--catch (e){console.log("YYY",e)}--}%
-
-                %{--},--}%
-                %{--error: function (jqXHR, exception) {--}%
-                    %{--loading.hide();--}%
-                    %{--core.errorReporter(jqXHR, exception);--}%
-                %{--}--}%
-            %{--});--}%
-        %{--};--}%
-        %{--return {fillRegionalTraitAnalysis: fillRegionalTraitAnalysis}--}%
-    %{--}());--}%
-
-
-    $( document ).ready(function() {
-        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
-    });
-
-</script>
 
 
 <div id="main">
@@ -67,4 +28,6 @@
 
 </body>
 </html>
+
+
 

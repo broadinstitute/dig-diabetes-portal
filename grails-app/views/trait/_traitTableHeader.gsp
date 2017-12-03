@@ -3,37 +3,29 @@
 
 
 <script>
-    var mpgSoftware = mpgSoftware || {};
 
-    mpgSoftware.manhattanPlot = function () {
-
-        var initializeManhattanTableVars = function(){
-
-            var drivingVariables = {
-                phenotypeName: <%=phenotypeKey%>,
-                ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
-                ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
-                phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
-                variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
-                requestedSignificance:'<%=requestedSignificance%>',
-                local:"${locale}"
-                copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
-                printMsg:'<g:message code="table.buttons.printText" default="Print me!" />'
-            };
-            mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
-        }
-
-        return {
-            initializeManhattanTableVars: initializeManhattanTableVars
-
-        }
-    }();
+    
+    var drivingVariables = {
+        phenotypeName: '<%=phenotypeKey%>',
+        ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
+        ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
+        phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
+        variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
+        requestedSignificance:'<%=requestedSignificance%>',
+        local:"${locale}",
+        copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
+        printMsg:'<g:message code="table.buttons.printText" default="Print me!" />'
+    };
+    mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
 
     $( document ).ready(function() {
-        mpgSoftware.manhattanPlot.initializeManhattanTableVars();
-        mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(<%=phenotypeKey%>);
 
+        mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
+        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
+
+
+
 
 
 

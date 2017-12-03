@@ -272,10 +272,5 @@ var mpgSoftware = mpgSoftware || {};
 
 })();
 
-$( document ).ready(function() {
-    var savedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
 
-    //mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(savedVars.phenotypeName);
-    console.log("about to fire me");
-});
 
