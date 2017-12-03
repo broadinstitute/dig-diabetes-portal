@@ -2,8 +2,6 @@
 
 
 
-
-
 <script>
     var mpgSoftware = mpgSoftware || {};
 
@@ -54,7 +52,7 @@
                 success: function (data) {
                     console.log(data);
 
-                   mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+                  mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
 
                 },
                 error: function (jqXHR, exception) {
@@ -68,7 +66,7 @@
 
             });
 
-        };
+       };
         %{--var unclickClumpCheckbox = function(){--}%
             %{--$("input[type=checkbox]").change(function() {--}%
                %{--// var selectedval = $(this).val();--}%
@@ -88,18 +86,17 @@
             %{--});--}%
 
         %{--}--}%
-       var unclickClumpCheckbox = function(){
-           $('#clump').change(function() {
-               if(!$(this).is(':checked'))
-                   alert('worked');
-           });
-       }
+//       var unclickClumpCheckbox = function(){
+//           $('#clump').change(function() {
+//               if(!$(this).is(':checked'))
+//                   alert('worked');
+//           });
+//       }
 
 
         return {
             fillSampleGroupDropdown: fillSampleGroupDropdown,
-            fillClumpVariants: fillClumpVariants,
-            unclickClumpCheckbox:unclickClumpCheckbox
+            fillClumpVariants:fillClumpVariants
         }
     }();
 
@@ -111,15 +108,25 @@
         $('#traitTableBody').empty();
         $('#phenotypeTraits').DataTable().rows().remove();
         $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-        mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
+        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
 
     }
+
+
+
 
 
     $( document ).ready(function() {
         mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
         console.log("about to fire");
     });
+
+    var callFillClumpVariants = function() {
+        //alert("hello world");
+        mpgSoftware.manhattanPlot.fillClumpVariants('<%=phenotypeKey%>',document.getElementById("manhattanSampleGroupChooser").value);
+    }
+
+
 
 </script>
 
@@ -138,9 +145,11 @@
 <div id="manhattanPlot1"></div>
 
 
-%{--<input type="checkbox" name="clump" value="clump" checked> Clumped Variants <br>--}%
-<input type="checkbox" name="clump" id="clump" value="1" onclick="mpgSoftware.manhattanPlot.unclickClumpCheckbox(this.checked);" checked> Clumped Variants <br>
+%{--//Ajax call works in this case--}%
+%{--<input id="get clump" type="button" value="clickme" onclick="mpgSoftware.manhattanPlot.callFillClumpVariants();" />--}%
 
+%{--//ajax call doesn't work in this case--}%
+<input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" />
 
 
 <table id="phenotypeTraits" class="table basictable table-striped">

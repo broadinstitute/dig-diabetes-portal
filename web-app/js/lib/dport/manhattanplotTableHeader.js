@@ -6,6 +6,130 @@ var mpgSoftware = mpgSoftware || {};
     "use strict";
     mpgSoftware.manhattanplotTableHeader = (function () {
 
+        var fillSampleGroupDropdown = function (phenotype) {
+            var loader = $('#rSpinner');
+            loader.show();
+
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'trait',action: 'ajaxSampleGroupsPerTrait')}",
+                data: {phenotype: phenotype},
+                async: false,
+                success: function (data) {
+
+                    var rowDataStructure = [];
+                    if ((typeof data !== 'undefined') &&
+                        (data)) {
+                        if ((data.sampleGroups) &&
+                            (data.sampleGroups.length > 0)) {//assume we have data and process it
+                            for (var i = 0; i < data.sampleGroups.length; i++) {
+                                var sampleGroup = data.sampleGroups[i];
+                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
+                            }
+                        }
+                    }
+                    loader.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loader.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+
+        };
+
+
+        // var onPageLoad = function() {
+        //     document.getElementById("clump").checked = true;
+        // }
+
+        // var unclickClumpCheckbox = function(){
+        //     $('#clump').change(function() {
+        //         if(!$(this).is(':checked')){
+        //             mpgSoftware.manhattanplotTableHeader.fillClumpVariants('<%=phenotypeKey%>',document.getElementById("manhattanSampleGroupChooser").value);
+        //             alert('worked');
+        //         }
+        //         else {
+        //             //clear the clump and call the non-clump data and d3 plot
+        //             $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+        //             mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
+        //
+        //         }
+        //
+        //     })}
+
+
+
+        var fillClumpVariants = function (phenotypeName, dataset) {
+            var loader = $('#rSpinner');
+            //loader.show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'trait',action: 'ajaxClumpData')}",
+                data: {phenotype: phenotypeName, dataset: dataset},
+                async: true,
+                success: function (data) {
+                    console.log(data);
+
+                    //mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+
+                },
+                error: function (jqXHR, exception) {
+                    loader.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            }).done(function (data, textStatus, jqXHR) {
+                _.forEach(data.children, function (eachKey,val) {
+                    console.log(data);
+                })
+
+            });
+
+        };
+
+        var pickNewDataSet = function (){
+            var sampleGroup = $('#manhattanSampleGroupChooser').val();
+            $('#manhattanPlot1').empty();
+            $('#traitTableBody').empty();
+            $('#phenotypeTraits').DataTable().rows().remove();
+            $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+            mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
+
+        }
+
+        var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {
+
+            var loading = $('#spinner').show();
+            $('[data-toggle="popover"]').popover();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: "${createLink(controller:'trait',action: 'phenotypeAjax')}",
+                data: { trait: '<%=phenotypeKey%>',
+                    significance: '<%=requestedSignificance%>',
+                    sampleGroup: sampleGroup  },
+                async: true,
+                success: function (data) {
+                    try{
+                        mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+                    }
+                    catch (e){console.log("YYY",e)}
+
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
+        var callFillClumpVariants = function() {
+            //alert("hello world");
+            mpgSoftware.manhattanplotTableHeader.fillClumpVariants('<%=phenotypeKey%>',document.getElementById("manhattanSampleGroupChooser").value);
+        }
+
         var refreshManhattanplotTableView = (function(data) {
             var collector = [];
             var effectType = 'beta';
@@ -98,7 +222,15 @@ var mpgSoftware = mpgSoftware || {};
 
         })
 
-        return{ refreshManhattanplotTableView:refreshManhattanplotTableView}
+        return{
+            refreshManhattanplotTableView:refreshManhattanplotTableView,
+            fillClumpVariants:fillClumpVariants,
+            fillSampleGroupDropdown: fillSampleGroupDropdown,
+           // unclickClumpCheckbox:unclickClumpCheckbox,
+            pickNewDataSet:pickNewDataSet,
+            fillRegionalTraitAnalysis:fillRegionalTraitAnalysis,
+            callFillClumpVariants:callFillClumpVariants
+        }
 
 
     }());

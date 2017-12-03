@@ -11,40 +11,39 @@
 <script>
     var mpgSoftware = mpgSoftware || {};
 
-    mpgSoftware.regionalTraitAnalysis = (function () {
+    %{--mpgSoftware.regionalTraitAnalysis = (function () {--}%
 
-        var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {
+        %{--var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {--}%
 
-            var loading = $('#spinner').show();
-            $('[data-toggle="popover"]').popover();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'trait',action: 'phenotypeAjax')}",
-                data: { trait: '<%=phenotypeKey%>',
-                        significance: '<%=requestedSignificance%>',
-                        sampleGroup: sampleGroup  },
-                async: true,
-                success: function (data) {
-                    try{
-                        mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
-                    }
-                    catch (e){console.log("YYY",e)}
+            %{--var loading = $('#spinner').show();--}%
+            %{--$('[data-toggle="popover"]').popover();--}%
+            %{--$.ajax({--}%
+                %{--cache: false,--}%
+                %{--type: "post",--}%
+                %{--url: "${createLink(controller:'trait',action: 'phenotypeAjax')}",--}%
+                %{--data: { trait: '<%=phenotypeKey%>',--}%
+                        %{--significance: '<%=requestedSignificance%>',--}%
+                        %{--sampleGroup: sampleGroup  },--}%
+                %{--async: true,--}%
+                %{--success: function (data) {--}%
+                    %{--try{--}%
+                        %{--mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);--}%
+                    %{--}--}%
+                    %{--catch (e){console.log("YYY",e)}--}%
 
-
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
-        return {fillRegionalTraitAnalysis: fillRegionalTraitAnalysis}
-    }());
+                %{--},--}%
+                %{--error: function (jqXHR, exception) {--}%
+                    %{--loading.hide();--}%
+                    %{--core.errorReporter(jqXHR, exception);--}%
+                %{--}--}%
+            %{--});--}%
+        %{--};--}%
+        %{--return {fillRegionalTraitAnalysis: fillRegionalTraitAnalysis}--}%
+    %{--}());--}%
 
 
     $( document ).ready(function() {
-        mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
+        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
 
 </script>
