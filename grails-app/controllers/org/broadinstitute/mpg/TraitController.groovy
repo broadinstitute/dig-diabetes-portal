@@ -230,47 +230,6 @@ class TraitController {
     }
 
 
-//    def getClumpData() {
-//
-//        String jsonReturn;
-//        String phenotype = params.phenotype; // ex "T2D"
-//        String dataset = params.dataset; // ex "ExChip_CAMP_dv1__T2D"
-//
-////        String phenotype = params["trait"]
-////        String datasetName = params["sampleGroup"]
-//        JSONObject resultClumpDataJson
-//        try {
-////            phenotype = String.parseInt(startString);
-////            endInteger = Integer.parseInt(endString);
-//            String callingJson = """{"phenotype":"${phenotype}",
-//                                     "dataset":"${dataset}"}""".toString()
-//
-//            if (phenotype != null) {
-//                //resultLZJson= epigenomeService.getBigWigDataRestCall(callingJson)
-//                resultClumpDataJson= restServerService.getClumpDataRestCall(callingJson)
-//
-//            } else {
-//                resultClumpDataJson = errorJsonObject;
-//            }
-//
-//            // log
-//            log.info("got Clump Data result: " + jsonReturn);
-//
-//        } catch (NumberFormatException exception) {
-//            log.error("got incorrect parameters for clump call: " + params);
-//            resultClumpDataJson = errorJsonObject;
-//        }
-//
-//        // return
-//        render(status: 200, contentType: "application/json") {resultClumpDataJson}
-//        return;
-//       // JSONObject jsonObject = restServerService.getClumpInformation(payloadString)  ;
-//        //render(status: 200, contentType: "application/json") {
-//          //  [variant: jsonObject]
-//    }
-
-
-
 
 
 
