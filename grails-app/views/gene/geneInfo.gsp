@@ -24,10 +24,58 @@
 
     <style>
 
-</style>
+    </style>
+
+    <script>
+
+        $(function () {
+            "use strict";
+
+            function goToSelectedItem(item) {
+                window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
+            }
+
+            /***
+             * type ahead recognizing genes
+             */
+            $('#generalized-input').typeahead({
+                source: function (query, process) {
+                    $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {
+                        process(data);
+                    })
+                },
+                afterSelect: function(selection) {
+                    goToSelectedItem(selection);
+                }
+            });
+
+            /***
+             * respond to end-of-search-line button
+             */
+            $('#generalized-go').on('click', function () {
+                var somethingSymbol = $('#generalized-input').val();
+                alert(somethingSymbol);
+                if (somethingSymbol) {
+                    goToSelectedItem(somethingSymbol)
+                }
+            });
+
+            /***
+             * capture enter key, make it equivalent to clicking on end-of-search-line button
+             */
+            $("input").keypress(function (e) { // capture enter keypress
+                var k = e.keyCode || e.which;
+                if (k == 13) {
+                    $('#generalized-go').click();
+                }
+            });
+        });
+
+    </script>
 </head>
 
 <body>
+
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
@@ -92,26 +140,57 @@
 
     <div class="container">
 
-        <div class="gene-info-container">
+        <div class="gene-info-container row">
             <div class="gene-info-view">
+                <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
+                    <em style="font-weight: 900;"><%=geneName%></em>
 
-                <h1 class="dk-page-title">
-                    <em><%=geneName%></em>
+                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:if>
+                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
+                        </div>
+                    </g:elseif>
                 </h1>
-<g:if test="${g.portalTypeString()?.equals('t2d')}">
-                <div style="text-align: right;">
-                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                </div></g:if>
-                <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                    <div style="text-align: right;">
-                        <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                    </div></g:elseif>
-                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <div style="text-align: right;">
-                        <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                    </div></g:elseif>
-    </div>
-                <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+                <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
+                    <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -12px;">
+                        <r:img uri="/images/undeterminedlight2.png"/>
+                        <div id="signalLevelHolder" style="display:none"></div>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation1" style="font-size:16px; text-align: left;">
+                        No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation2" style="font-size:18px; text-align: left;">
+                        Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
+                    </div>
+                    <div class="trafficExplanations trafficExplanation3" style="font-size:18px; text-align: left;">
+                        Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
+                    </div>
+                </div>
+                <div class="form-inline col-md-6" style="height: 40px; padding:0; border-bottom: solid 1px #ccc; ">
+
+                    <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
+                    <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
+                    <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene</div>
+
+                </div>
+
+
+
+                <div class="col-md-12" style="padding-top: 30px;">
+                    <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+                </div>
+
+
 
                 <g:renderNotBetaFeaturesDisplayedValue>
                     <g:render template="../templates/geneSignalSummaryTemplate"/>

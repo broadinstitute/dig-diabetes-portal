@@ -4,7 +4,6 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core,sunburst,mustache,datasetsPage"/>
     <r:layoutResources/>
-
     <style>
     .aboutIconHolder {
         margin: auto;
@@ -70,6 +69,8 @@
         font-size: 14px;
     }
     </style>
+
+
 </head>
 
 <body>
@@ -283,15 +284,15 @@
                 </div>
             </g:renderBetaFeaturesDisplayedValue>
 
-            <g:if test="${!g.portalTypeString()?.equals('stroke')}">
-                <g:render template="data/t2dData" />
 
-            </g:if>
-            <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+            <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 <g:render template="data/strokeData" />
 
+            </g:if>
+            <g:else>
+                <g:render template="data/t2dData" />
 
-            </g:elseif>
+            </g:else>
         </div>
     </div>
 

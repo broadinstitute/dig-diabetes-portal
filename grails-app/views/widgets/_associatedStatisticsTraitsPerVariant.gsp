@@ -52,7 +52,7 @@ button.expandoButton:visited {
 </div>
 
 
-<div id="collapseVariantTraitAssociation" class="accordion-body collapse">
+<div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
     <div class="accordion-inner" id="traitAssociationInner">
 
     <r:require modules="core"/>
@@ -295,7 +295,7 @@ button.expandoButton:visited {
 
 
     <div class="gwas-table-container">
-        <table id="traitsPerVariantTable" class="table basictable gwas-table">
+        <table id="traitsPerVariantTable" class="table basictable gwas-table dk-t2d-general-table">
 
             <thead>
             <tr>
