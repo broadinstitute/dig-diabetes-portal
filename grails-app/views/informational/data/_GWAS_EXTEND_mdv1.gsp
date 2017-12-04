@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_EXTEND_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_EXTEND_mdv1_script" type="x-tmpl-mustache">
 
     %{--<h4><g:message code="informational.shared.headers.publications"></g:message></h4>--}%
 
