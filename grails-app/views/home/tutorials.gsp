@@ -200,9 +200,6 @@
                         code="portal.variantResultsTableGuide.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GeneticsGuidePdf"><g:message
                         code="portal.GeneticsGuide.title"/></a></div>
-                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="testPDF"><g:message
-                        code="portal.GeneticsGuide.title"/></a></div>
-                <div class="btn dk-t2d-yellow dk-reference-button dk-right-column-buttons-compact "><a id="StrokePhenotypeGuidePdf">test pdf</a></div>
             </div>
 
     </g:elseif>
