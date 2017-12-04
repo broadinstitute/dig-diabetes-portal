@@ -243,9 +243,9 @@ var mpgSoftware = mpgSoftware || {};
 
             mpgSoftware.phenotype.iterativeTableFiller(collector,
                 effectType,
-                "${locale}",
-                '<g:message code="table.buttons.copyText" default="Copy" />',
-                '<g:message code="table.buttons.printText" default="Print me!" />');
+                savedVar.local,
+                savedVar.copyMsg,
+                savedVar.printMsg);
             loading.hide();
 
 
