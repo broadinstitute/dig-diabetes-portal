@@ -6,13 +6,13 @@
                                       "WSF1"]}"/>
 
 <g:if test="${annotatedGenes.contains(geneToSummarize)}">
-    <div class="gene-summary">
+    <div class="gene-summary" style="border:none; margin:0; padding:0;">
         <div class="title"><g:message code="gene.header.geneSummary" default="Curated summary"/>
         <g:helpText title="gene.header.geneSummary.help.header" placement="right"
                     body="gene.header.geneSummary.help.text"/>
         </div>
 
-        <div id="geneHolderTop" class="top">
+        <div id="geneHolderTop" class="top" style="font-size:18px;">
             <script>
                 var contents = '<g:renderGeneSummary geneFile="${geneName}-top" locale="${locale}"></g:renderGeneSummary>';
                 $('#geneHolderTop').html(contents);
@@ -45,6 +45,6 @@
     <p>
         <g:helpText title="gene.header.uniprotSummary.help.header" placement="right"
                     body="gene.header.uniprotSummary.help.text"/>
-        <span id="uniprotSummaryGoesHere"></span>
+        <span id="uniprotSummaryGoesHere" style="font-size:18px;"></span>
     </p>
 </g:else>

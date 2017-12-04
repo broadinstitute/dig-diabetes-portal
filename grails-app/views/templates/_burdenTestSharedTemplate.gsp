@@ -14,8 +14,8 @@
             </div>
         </div>
 
-        <div class="col-sm-offset-5 col-sm-2 col-xs-12 vcenter center burden-test-btn-wrapper">
-            <button name="singlebutton" style="height: 50px; z-index: 10" id="singleRunButton"
+        <div class="col-md-offset-4 col-md-4 vcenter center burden-test-btn-wrapper">
+            <button name="singlebutton" style="height: 50px; z-index: 10;" id="singleRunButton"
                                                    class="btn btn-primary btn-lg burden-test-btn vcenter"
                                                    onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun('${createLink(controller: "variantInfo", action: "metadataAjax")}',
                                                    '${createLink(controller: "variantInfo", action: "burdenTestAjax")}',
@@ -78,32 +78,39 @@
 
         <div id="chooseSamples" class="">
             <div class="secBody">
-
-                <div class="row secHeader chooseExperiment">
-                    <div class="col-sm-12 col-xs-12 text-left"><label>Dataset</label></div>
-                </div>
-
-                <div class="row chooseExperiment">
-                    <div class="col-sm-12 col-xs-12 text-left"  style="padding-top: 8px; padding-bottom: 15px">
-                        <select id="datasetFilter" class="traitFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,
-                                         '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                         '${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                         '${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                         '${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                         '${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                         '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
-                        </select>
+            <div class="row">
+                <div class="col-md-4 text-left">
+                    <div class="secHeader chooseExperiment">
+                        <!-- <div class="col-sm-4 col-xs-4 text-left"> -->
+                            <label>Dataset</label>
+                        <!-- </div> -->
                     </div>
 
-                </div>
-                <div class="row secHeader  choosePhenotype" style="padding: 0 0 5px 0">
-                    <div class="col-sm-12 col-xs-12 text-left"><label>Phenotype</label></div>
+                    <div class="chooseExperiment">
+                        <!-- <div class="col-sm-4 col-xs-4 text-left"  style="padding-top: 8px; padding-bottom: 15px">-->
+                            <select id="datasetFilter" class="traitFilter form-control text-left"
+                                    onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,
+                                             '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                             '${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                             '${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                             '${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                             '${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                             '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                             '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
+                            </select>
+                        <!-- </div>-->
+                    </div>
                 </div>
 
-                <div class="row  choosePhenotype">
-                    <div class="col-sm-12 col-xs-12 text-left">
+                <div class="col-md-4 text-left">
+                <div class="secHeader  choosePhenotype" style="padding: 0 0 0 0">
+                    <!-- <div class="col-sm-4 col-xs-4 text-left">-->
+                        <label>Phenotype</label>
+                    <!-- </div>-->
+                </div>
+
+                <div class="choosePhenotype">
+                    <!-- <div class="col-sm-4 col-xs-4 text-left">-->
                         <select id="phenotypeFilter" class="traitFilter form-control text-left phenotypeFilter"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
                                          '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
@@ -114,17 +121,20 @@
                                          '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
                                          '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
                         </select>
-                    </div>
+                    <!-- </div>-->
                 </div>
+            </div>
 
-
+            <div class="col-md-4 text-left">
                 {{ #strataChooser }}
-                <div class="row secHeader stratificationHolder chooseStratification" style="margin: 20px 0 0 0">
-                    <div class="col-sm-12 col-xs-12 text-left"><label>Stratify</label></div>
+                <div class="secHeader stratificationHolder chooseStratification">
+                    <!-- <div class="col-sm-4 col-xs-4 text-left">-->
+                        <label>Stratify</label>
+                    <!-- </div>-->
                 </div>
 
-                <div class="row stratificationHolder chooseStratification">
-                    <div class="col-sm-12 col-xs-12 text-left">
+                <div class="stratificationHolder chooseStratification">
+                    <!-- <div class="col-sm-4 col-xs-4 text-left">-->
                         <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
                                 onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
                                          '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
@@ -137,10 +147,11 @@
                                     <option value="none">none</option>
                                     <option value="origin">ancestry</option>
                         </select>
-                    </div>
+                    <!-- </div>-->
                 </div>
                 {{ /strataChooser }}
-
+            </div>
+            </div>
 
                 <div class="row">
                     <div class="col-sm-12 col-xs-12 text-left">
@@ -201,7 +212,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <div class="row" style="{{modeledPhenotypeDisplay}}">
                         <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-pills modeledPhenotypeDisplay" id="modeledPhenotypeTabs">
+                            <ul class="nav nav-tabs modeledPhenotypeDisplay" id="modeledPhenotypeTabs">
                                 {{ #modeledPhenotype }}
                                    {{ #levels }}
                                         <li class="{{defaultDisplay}}">
@@ -218,15 +229,15 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
 
-                    <div class="tab-content">
+                    <div class="tab-content clearfix" style="border:solid 1px #ddd; margin-top: -2px; border-radius: 5px;">
                          {{ #modeledPhenotype }}
                            {{ #levels }}
                             <div class="tab-pane  {{defaultDisplay}}" id="{{name}}">
-                                <div class="row">
+                                <div class="">
 
-                                    <div class="row" style="{{tabDisplay}}">
+                                    <div class="" style="{{tabDisplay}}">
                                         <div class="col-sm-12 col-xs-12">
-                                            <ul class="nav nav-tabs stratsTabs" id="{{name}}_stratsTabs">
+                                            <ul class="nav nav-pills stratsTabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
                                                        <a data-target="#{{name}}_{{phenoLevelName}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
@@ -247,13 +258,11 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     <div class="tab-content">
                                         {{ #strataContent }}
                                             <div class="tab-pane {{defaultDisplay}}" id="{{name}}_{{phenoLevelName}}">
-                                                <div class="row">
-                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0">
+                                                <div class="">
+                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0; border-top:solid 1px #fff;">
                                                         <div class="row secHeader" style="padding: 20px 0 0 0">
-                                                            <div class="col-sm-6 col-xs-12 text-left"></div>
-
-                                                            <div class="col-sm-6 col-xs-12 text-right"><label
-                                                                    style="font-style: italic; font-size: 14px">Click arrows<br/> for distribution
+                                                            <div class="col-sm-12 col-xs-12 text-left">
+                                                            <label style="font-style: italic; font-size: 14px">Click a phenotype name or set value for a phenotype to render corresponding plot.
                                                             </label>
                                                             </div>
                                                         </div>
@@ -286,10 +295,10 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                                     </div>
 
-                                                    <div class="col-sm-7 col-xs-12 vcenter" style="padding: 0; margin: 0">
+                                                    <div class="col-sm-7 col-xs-12 vcenter" style="padding: 15px 0 0 0; margin: 0; border-top:solid 1px #fff;border-left:solid 1px #ccc;">
                                                         <div class="sampleNumberReporter text-center">
-                                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span></div>
-
+                                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span> | Trait: <span class="trait_name">Age</span></div>
+                                                            <!--<div>Phenotype: <strong class="trait_name">Age</strong></div>-->
                                                             <div><span style="display:none"
                                                                     class="phenotypeSpecifier" style="font-weight:bold"></span><span
                                                                     class="numberOfPhenotypeSpecificSamples"></span></div>
@@ -340,14 +349,15 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     %{--</div>--}%
 
                                     <div class="col-sm-6">
-                                        <span style="{{bold}}">{{trans}}</span>
+                                        <span class="btn btn-default form-control" style="{{bold}}; text-align: left !important; margin-left: -15px; border: solid 1px #fff; box-shadow: none !important;"  onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">{{trans}} <span style="color:#6699cc; font-size: 12px; margin: -2px 0 0 3px; padding: 0 0 1px 1px; border-left: solid 1px #000; border-bottom: solid 1px #000;" class="glyphicon glyphicon-align-left"></span></span>
                                     </div>
 
                                     <div class="col-sm-2">
                                         <select id="cmp_{{stratum}}_{{name}}_{{phenoLevelName}}" class="form-control filterCmp cmp_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                 data-selectfor="{{stratum}}_{{name}}Comparator"
                                                onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
                                             <option value="3">internal</option>
@@ -355,20 +365,20 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         </select>
                                     </div>
 
-                                    <div class="col-sm-3">
+                                    <div class="col-sm-4">
                                         <input type="text" id="inp_{{stratum}}_{{name}}_{{phenoLevelName}}" class="filterParm form-control inp_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                data-type="propertiesInput"
                                                data-prop="{{stratum}}_{{name}}Value" data-translatedname="{{stratum}}_{{name}}"
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}')"
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                                onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
 
                                     </div>
 
-                                    <div class="col-sm-1">
+                                    <div class="" style="display:none;">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}')"
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                               class="glyphicon glyphicon-arrow-right pull-right distPlotter {{phenoLevelName}}" id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
@@ -385,22 +395,23 @@ the individual filters themselves. That work is handled later as part of a loop-
                                    %{-- </div>--}%
 
                                     <div class="col-sm-6">
-                                        <span>{{trans}}</span>
+                                        <span class="btn btn-default form-control" style="{{bold}}; text-align: left !important; margin-left: -15px; border: solid 1px #fff; box-shadow: none !important;"  onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">{{trans}}  <span style="color:#6699cc; font-size: 12px; margin: -2px 0 0 3px; padding: 0 0 1px 1px; border-left: solid 1px #000; border-bottom: solid 1px #000;" class="glyphicon glyphicon-align-left"></span></span>
                                     </div>
 
 
-                                    <div class="col-sm-5">
+                                    <div class="col-sm-6">
                                         <select id="multi_{{stratum}}_{{name}}_{{phenoLevelName}}" class="form-control multiSelect multi_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                 data-selectfor="{{stratum}}_{{name}}FilterOpts" multiple="multiple"
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
                                         </select>
 
                                     </div>
 
-                                    <div class="col-sm-1">
+                                    <div class="" style="display:none;">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}')"
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                               class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
@@ -442,7 +453,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <div class="row"  style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-tabs" id="stratsCovTabs">
+                            <ul class="nav nav-pills" id="stratsCovTabs">
                                 {{ #modeledPhenotype }}
                                     {{ #levels }}
                                         {{ #strataContent }}
@@ -690,11 +701,12 @@ the individual filters themselves. That work is handled later as part of a loop-
 
     <div id="collapseBurden" class="accordion-body collapse">
         <div class="accordion-inner">
-            <div style="text-align: right;">
+            <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
                 <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
             </div>
+
             <div class="container">
-                <h5 style="margin-right: 30px">
+                <h5>
                     {{#modifiedGaitSummary}}
                         {{modifiedGaitSummary}}
                     {{/modifiedGaitSummary}}
@@ -719,9 +731,9 @@ variant by specifying the phenotype to test for association, a subset of samples
                         <div class="stratified-user-interaction"></div>
 
                         <div class="panel-group" id="accordion_iat" style="margin-bottom: 0px">%{--start accordion --}%
-                            <div id="chooseVariantFilterSelection" id="chooseVariantFilterSelectionTool"></div>
-                            <div id="chooseFiltersLocation"></div>
-                            <div id="chooseCovariatesLocation"></div>
+                            <div id="chooseVariantFilterSelection" id="chooseVariantFilterSelectionTool" style="margin-bottom:10px;"></div>
+                            <div id="chooseFiltersLocation" style="margin-bottom:10px;"></div>
+                            <div id="chooseCovariatesLocation" style="margin-bottom:10px;"></div>
                         </div>
 
                     </div>

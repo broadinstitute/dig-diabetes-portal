@@ -988,8 +988,9 @@ var baget = baget || {};
                 .data(boxWhiskerData)
                 .enter()
                 .append('g')
-                .attr("class", "boxHolder") ;
-            // .attr("transform", "translate(" + margin.left + ",0)");
+                .attr("class", "boxHolder")
+                .attr("transform", "translate(-130,0)");
+             //   .attr("transform", "translate(" + margin.left + ",0)");
 
             // calculate the maximum and min.  The user can override these
             // if they like.

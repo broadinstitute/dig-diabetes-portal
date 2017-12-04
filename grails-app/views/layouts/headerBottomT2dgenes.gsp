@@ -75,52 +75,52 @@
             </g:else>
             <sec:ifLoggedIn>
             <sec:ifAllGranted roles="ROLE_ADMIN">
-                <li style="display:inline-block; margin-right:15px; padding: 5px 0 5px 0; text-shadow: #333 0 1px 2px"><g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link></li>
-                <li style="display:inline-block; margin-right:15px; padding: 5px 0 5px 0; text-shadow: #333 0 1px 2px">
-                    <script>
-                        function aa(selector){
-                            window.open('<g:createLink controller="home" action="pickPortal"/>'+'?portal='+$(selector).val(), '_self');
-                        };
-                    </script>
-                    <select name="portal_typeSelector" style="background-color: #588fd3; padding-top: 0px; margin: 2px; font-weight: bold"
-                            onchange="aa(this)">
-                        <option value="t2d" <%=(g.portalTypeString()=='t2d')?"selected":"" %>>T2D</option>
-                        <option value="stroke" <%=(g.portalTypeString()=='stroke')?"selected":"" %>>Stroke</option>
-                        <option value="mi" <%=(g.portalTypeString()=='mi')?"selected":"" %>>MI</option>
-                        <option value="ibd" <%=(g.portalTypeString()=='ibd')?"selected":"" %>>IBD</option>
-                    </select>
-                    %{--<g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>--}%
+               <li style="display:inline-block; margin-right:15px; padding: 5px 0 5px 0; text-shadow: #333 0 1px 2px"><g:link controller='admin' action="users" class="mgr"><g:message code='site.layouts.option.manage_users'/></g:link></li>
+               <li style="display:inline-block; margin-right:15px; padding: 5px 0 5px 0; text-shadow: #333 0 1px 2px">
+                   <script>
+                       function aa(selector){
+                           window.open('<g:createLink controller="home" action="pickPortal"/>'+'?portal='+$(selector).val(), '_self');
+                       };
+                   </script>
+                   <select name="portal_typeSelector" style="background-color: #588fd3; padding-top: 0px; margin: 2px; font-weight: bold"
+                           onchange="aa(this)">
+                       <option value="t2d" <%=(g.portalTypeString()=='t2d')?"selected":"" %>>T2D</option>
+                       <option value="stroke" <%=(g.portalTypeString()=='stroke')?"selected":"" %>>Stroke</option>
+                       <option value="mi" <%=(g.portalTypeString()=='mi')?"selected":"" %>>MI</option>
+                       <option value="ibd" <%=(g.portalTypeString()=='ibd')?"selected":"" %>>IBD</option>
+                   </select>
+                   %{--<g:link controller='home' action="pickPortal" class="mgr"><g:message code='site.layouts.option.manage_skin'/></g:link>--}%
                     </li>
             </sec:ifAllGranted>
-            <sec:ifAllGranted roles="ROLE_SYSTEM">
-                <li><g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link></li>
-            </sec:ifAllGranted>
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #93806c;"><sec:loggedInUserInfo field="username"/></span></li>
-                <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-            </g:if>
-            <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #00b1f0;"><sec:loggedInUserInfo field="username"/></span></li>
-                <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-            </g:elseif>
-            <g:else>
-                <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial dk-t2d-green"><sec:loggedInUserInfo field="username"/></span></li>
-                <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; " class="dk-t2d-blue"><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
-            </g:else>
-            </sec:ifLoggedIn>
-        <sec:ifNotLoggedIn>
-            <li style="display:inline-block; margin-right:0px; padding: 5px 15px 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><oauth:connect provider="google" id="google-connect-link"><g:message code="google.log.in"/></oauth:connect></li>
-        </sec:ifNotLoggedIn>
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
-        </g:if>
-        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-            <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
-        </g:elseif>
-        <g:else>
-            <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
-        </g:else>
-    </ul>
-    </div>
+           <sec:ifAllGranted roles="ROLE_SYSTEM">
+               <li><g:link controller='system' action="systemManager"><g:message code='site.layouts.option.system_mgr'/></g:link></li>
+           </sec:ifAllGranted>
+           <g:if test="${g.portalTypeString()?.equals('stroke')}">
+               <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #93806c;"><sec:loggedInUserInfo field="username"/></span></li>
+               <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
+           </g:if>
+           <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+               <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial" style="background-color: #00b1f0;"><sec:loggedInUserInfo field="username"/></span></li>
+               <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#7fc343; "><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
+           </g:elseif>
+           <g:else>
+               <li id="usernameDisplay" class="dk-user-name" style="display:inline-block; margin-right:-1px; margin-bottom:-1px; padding: 5px 0 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><span class="user-name-initial dk-t2d-green"><sec:loggedInUserInfo field="username"/></span></li>
+               <li id="userLogoutDisplay" title ="Log out" style="display:inline-block; margin-right:15px; border-radius: 0 5px 5px 0; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; " class="dk-t2d-blue"><g:link controller='logout'><g:message code="mainpage.log.out"/></g:link></li>
+           </g:else>
+           </sec:ifLoggedIn>
+       <sec:ifNotLoggedIn>
+           <li style="display:inline-block; margin-right:0px; padding: 5px 15px 5px 15px; text-shadow: #333 0 1px 2px; border-left:solid 1px #aaaaaa;"><oauth:connect provider="google" id="google-connect-link"><g:message code="google.log.in"/></oauth:connect></li>
+       </sec:ifNotLoggedIn>
+       <g:if test="${g.portalTypeString()?.equals('stroke')}">
+           <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
+       </g:if>
+       <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+           <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
+       </g:elseif>
+       <g:else>
+           <li id="userNotificationDisplay" message='<g:message code="mainpage.user.notification"/>' style="display:inline-block; margin-left: -13px; text-align: left; margin-right:15px; border-radius: 5px; padding: 2px 5px 2px 5px; font-size: 12px;text-shadow: none; background-color:#f68920; color: #fff; width: 75px; height: 21px; overflow: hidden; text-overflow: ellipsis; vertical-align: -6px;"><g:message code="mainpage.user.notification"/></li>
+       </g:else>
+   </ul>
+   </div>
 </g:renderT2dGenesSection>
 </div>
