@@ -261,12 +261,9 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                 <div class="">
                                                     <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0; border-top:solid 1px #fff;">
                                                         <div class="row secHeader" style="padding: 20px 0 0 0">
-                                                            <div class="col-sm-6 col-xs-12 text-left">View plot for the trait</div>
-
-                                                            <div class="col-sm-6 col-xs-12 text-right">
-                                                            <!--<label style="font-style: italic; font-size: 14px">
-                                                                Click arrows<br/> for distribution
-                                                            </label>-->
+                                                            <div class="col-sm-12 col-xs-12 text-left">
+                                                            <label style="font-style: italic; font-size: 14px">Click a phenotype name or set value for a phenotype to render corresponding plot.
+                                                            </label>
                                                             </div>
                                                         </div>
 
@@ -300,8 +297,8 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                                     <div class="col-sm-7 col-xs-12 vcenter" style="padding: 15px 0 0 0; margin: 0; border-top:solid 1px #fff;border-left:solid 1px #ccc;">
                                                         <div class="sampleNumberReporter text-center">
-                                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span> | Trait: <span id="trait_name">Age</span></div>
-                                                            <!--<div>Trait: <strong id="trait_name">Age</strong></div>-->
+                                                            <div>Number of samples included in analysis:<span class="numberOfSamples"></span> | Trait: <span class="trait_name">Age</span></div>
+                                                            <!--<div>Phenotype: <strong class="trait_name">Age</strong></div>-->
                                                             <div><span style="display:none"
                                                                     class="phenotypeSpecifier" style="font-weight:bold"></span><span
                                                                     class="numberOfPhenotypeSpecificSamples"></span></div>
@@ -352,15 +349,15 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     %{--</div>--}%
 
                                     <div class="col-sm-6">
-                                        <span class="btn btn-default" style="{{bold}}"  onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')">{{trans}}</span>
+                                        <span class="btn btn-default form-control" style="{{bold}}; text-align: left !important; margin-left: -15px; border: solid 1px #fff; box-shadow: none !important;"  onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">{{trans}} <span style="color:#6699cc; font-size: 12px; margin: -2px 0 0 3px; padding: 0 0 1px 1px; border-left: solid 1px #000; border-bottom: solid 1px #000;" class="glyphicon glyphicon-align-left"></span></span>
                                     </div>
 
                                     <div class="col-sm-2">
                                         <select id="cmp_{{stratum}}_{{name}}_{{phenoLevelName}}" class="form-control filterCmp cmp_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                 data-selectfor="{{stratum}}_{{name}}Comparator"
                                                onchange="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
                                             <option value="1">&lt;</option>
                                             <option value="2">&gt;</option>
                                             <option value="3">internal</option>
@@ -373,15 +370,15 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                data-type="propertiesInput"
                                                data-prop="{{stratum}}_{{name}}Value" data-translatedname="{{stratum}}_{{name}}"
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')"
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                                onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
 
                                     </div>
 
                                     <div class="" style="display:none;">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')"
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                               class="glyphicon glyphicon-arrow-right pull-right distPlotter {{phenoLevelName}}" id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
@@ -398,8 +395,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                                    %{-- </div>--}%
 
                                     <div class="col-sm-6">
-                                        <span class="btn btn-default" style="{{bold}}"  onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')">{{trans}}</span>
+                                        <span class="btn btn-default form-control" style="{{bold}}; text-align: left !important; margin-left: -15px; border: solid 1px #fff; box-shadow: none !important;"  onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">{{trans}}  <span style="color:#6699cc; font-size: 12px; margin: -2px 0 0 3px; padding: 0 0 1px 1px; border-left: solid 1px #000; border-bottom: solid 1px #000;" class="glyphicon glyphicon-align-left"></span></span>
                                     </div>
 
 
@@ -407,14 +404,14 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         <select id="multi_{{stratum}}_{{name}}_{{phenoLevelName}}" class="form-control multiSelect multi_{{stratum}}_{{name}}_{{phenoLevelName}} {{phenoLevelName}}"
                                                 data-selectfor="{{stratum}}_{{name}}FilterOpts" multiple="multiple"
                                                 onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
                                         </select>
 
                                     </div>
 
                                     <div class="" style="display:none;">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $('#trait_name').text('{{trans}}')"
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',1,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                               class="glyphicon glyphicon-arrow-right pull-right"  id="distPlotter_{{stratum}}_{{name}}"></span>
                                     </div>
 
