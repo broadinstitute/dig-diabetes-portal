@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_METSIM_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_METSIM_eu_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
