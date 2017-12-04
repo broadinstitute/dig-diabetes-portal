@@ -1908,13 +1908,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName) {
         JSONObject returnValue
+        JsonSlurper slurper = new JsonSlurper()
 
         JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
 
-       // String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"" )
+        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
+        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
         //def slurper = new JsonSlurper()
         //returnValue = slurper.parseText(apiResults)
-        return apiResults
+        return dataJsonObject
     }
 
 
@@ -2345,6 +2347,82 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+
+
+    public String processInfoFromGetClumpDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        List<String> crossVariantData = []
+        if (!apiResults["is_error"]){
+            int numberOfVariants = apiResults.numRecords
+            for (int j = 0; j < numberOfVariants; j++) {
+                List<String> keys = []
+//                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
+//
+//                 //   keys << (new JSONObject(apiResults.variants[j].keys()));
+//
+//                    keys
+//
+//                    keys << (new JSONObject(apiResults.variants[i]).keys()).next;
+//                }
+
+                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE"];
+                List<String> variantSpecificList = []
+                for (String key in keys) {
+                    ArrayList valueArray = []
+                    valueArray.add(apiResults.variants[j][key]);
+                    def value = valueArray.findAll { it }[0]
+                    if (value instanceof String) {
+                        String stringValue = value as String
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
+                    } else if (value instanceof Integer) {
+                        Integer integerValue = value as Integer
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
+                    } else if (value instanceof BigDecimal) {
+                        BigDecimal bigDecimalValue = value as BigDecimal
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
+                    } else if (value instanceof Map) {
+                        Map mapValue = value as Map
+                        List<String> subKeys = mapValue.keySet() as List
+                        for (String subKey in subKeys) {
+                            // maybe subKey is always a group ID
+                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
+                            String dataSetName = sampleGroup.systemId
+                            String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                            String ancestry = "unknown"
+                            if (sampleGroup) {
+                                ancestry = sampleGroup.getAncestry()
+                            }
+                            def particularMapValue = mapValue[subKey]
+                            if (particularMapValue instanceof BigDecimal) {// data set particular values
+                                BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
+                                variantSpecificList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
+                            } else if (particularMapValue instanceof Integer) {// data set particular values
+                                Integer particularMapIntegerValue = particularMapValue as Integer
+                                variantSpecificList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
+                            } else if (particularMapValue instanceof Map) {
+                                Map particularSubMap = particularMapValue as Map
+                                List<String> particularSubKeys = particularSubMap.keySet() as List
+                                for (String particularSubKey in particularSubKeys) {
+                                    def particularSubMapValue = particularSubMap[particularSubKey]
+                                    BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
+                                    String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
+                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
+                                    variantSpecificList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
+                                }
+
+                            }
+                        }
+
+                    } else if (value instanceof ArrayList) {
+                        ArrayList arrayListValue = value as ArrayList
+                        log.error("An ArrayList is not an expected result.  Did the return data format change?")
+                    }
+                }
+                crossVariantData << "{ \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
+            }
+        }
+        return  "{\"results\":[" +  crossVariantData.join(",") + "]"+topLevelInformation+"}"
+    }
 
 
 
