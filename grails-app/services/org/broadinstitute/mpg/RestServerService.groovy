@@ -2377,9 +2377,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     } else if (value instanceof Integer) {
                         Integer integerValue = value as Integer
                         variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
-                    } else if (value instanceof BigDecimal) {
-                        BigDecimal bigDecimalValue = value as BigDecimal
-                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${bigDecimalValue}\"}"
+                    } else if (value instanceof Double) {
+                        Double doubleValue = value as Double
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${doubleValue}\"}"
                     } else if (value instanceof Map) {
                         Map mapValue = value as Map
                         List<String> subKeys = mapValue.keySet() as List
