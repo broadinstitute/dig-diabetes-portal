@@ -203,7 +203,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                             </p>
 
                             <p>
-                                To guide selection of each criterion, you can click on the arrow to the right of the text box to view the distribution of phenotypic values for the samples currently included
+                                Click on the "graph" icon near each phenotype name to view the distribution of phenotypic values for the samples currently included
                                 in the analysis. The number of samples included, as well as the distributions, will update whenever you modify the value in the text box.
                             </p>
                         </div>
