@@ -12,7 +12,7 @@
 <g:render template="./data/GWAS_CARDIoGRAM"/>
 <g:render template="./data/GWAS_AGEN" />
 <g:render template="./data/GWAS_SIGMA1"/>
-<g:render template="./data/GWAS_METSIM" />
+<g:render template="./data/GWAS_METSIM_eu" />
 <g:render template="./data/AMPLOAD_10_mdv1" />
 <g:render template="./data/GWAS_DIAGRAM"/>
 <g:render template="./data/GWAS_MAGIC"/>

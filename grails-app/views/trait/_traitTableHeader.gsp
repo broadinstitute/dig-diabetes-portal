@@ -1,4 +1,4 @@
-<h1><%=phenotypeName%></h1>
+<h1 class="dk-page-title"><%=phenotypeName%></h1>
 
 
 
@@ -65,12 +65,12 @@
 
 
 
-<div class="separator"></div>
+<!--<div class="separator"></div>-->
 
-<p>
+<p class="form-group">
 
-    <g:message code="traitTable.messages.results" />
-    <span id="traitTableDescription"></span>:
+    <label for="manhattanSampleGroupChooser" style="float:left;"><g:message code="traitTable.messages.results" />&nbsp;&nbsp;</label>
+    <!--<span id="traitTableDescription"></span>:-->
     %{--<g:if test="${sampleGroupOwner == 'DIAGRAM'}">--}%
         %{--<a href="http://diagram-consortium.org/downloads.html" class="boldlink"><g:message code="informational.shared.institution.DIAGRAM" />-3</a>--}%
     %{--</g:if>--}%
@@ -97,14 +97,19 @@
     %{--</g:elseif>--}%
     %{--<g:message code="gene.variantassociations.table.rowhdr.gwas" /> <g:message code="gene.variantassociations.table.rowhdr.meta_analyses" /> <g:message code="informational.shared.phrase.consortium" />:--}%
 
-    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)">
+    <select id="manhattanSampleGroupChooser" class="form-control" style="width:auto;" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)">
     </select>
 
 </p>
 
-<div id="manhattanPlot1"></div>
+<style>
+.mychart {width:100% !important; height:740px !important;}
+</style>
+</p>
+<div style="text-align: right;">Scroll to zoom. Rollover dots for variant information.</div>
+<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
-<table id="phenotypeTraits" class="table basictable table-striped">
+<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
         <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>

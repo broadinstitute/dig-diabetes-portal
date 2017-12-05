@@ -831,7 +831,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var favoredPhenotype = params.favoredPhenotype;
         if (listOfInterestingPhenotypes.length > 0) {
             $('.interestingPhenotypesHolder').css('display','block');
-            var phenotypeDescriptions = '<label>Phenotypes with signals</label><ul class="nav nav-pills">';
+            var phenotypeDescriptions = '<label style="font-size:20px; text-transform: uppercase;">Phenotypes with signals</label><ul class="nav nav-pills">';
             _.forEach(listOfInterestingPhenotypes, function (o,curIndex) {
                 if (o['signalStrength'] == 1) {
                     phenotypeDescriptions += ('<li id="'+o['phenotype']+'" ds="'+o['ds']+'" dsr="'+o['dsr']+'" class="nav-item redPhenotype phenotypeStrength">' + o['pname'] + '</li>');
@@ -844,8 +844,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                         overrideClickIndex = curIndex;
                     }                }
             });
-            phenotypeDescriptions += ('<li><a href="#" class="morePhenos"  onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Additional phenotypes...</a></li>');
-            phenotypeDescriptions += ('<li><a href="#" class="noMorePhenos" style="display:none" onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Collapse phenotypes without signals</a></li>');
+            phenotypeDescriptions += ('<li><a href="javascript:;" class="morePhenos"  onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Additional phenotypes...</a></li>');
+            phenotypeDescriptions += ('<li><a href="javascript:;" class="noMorePhenos" style="display:none" onclick="mpgSoftware.geneSignalSummaryMethods.toggleOtherPhenoBtns()">Collapse phenotypes without signals</a></li>');
             phenotypeDescriptions += '</ul>';
             $('#interestingPhenotypes').append(phenotypeDescriptions);
 
@@ -957,13 +957,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var significanceLevelDom = $('.trafficExplanation'+significanceLevel);
         significanceLevelDom.removeClass('unemphasize');
         significanceLevelDom.addClass('emphasize');
-        if (significanceLevel == 1){
+        /*if (significanceLevel == 1){
             $('#trafficLightHolder').append(params.redLightImage);
         } else if (significanceLevel == 2){
             $('#trafficLightHolder').append(params.yellowLightImage);
         } else if (significanceLevel == 3){
             $('#trafficLightHolder').append(params.greenLightImage);
+        }*/
+
+        if (significanceLevel == 1){
+            $('#trafficLightHolder').append("<div class='red-signal'>&nbsp;</div>");
+        } else if (significanceLevel == 2){
+            $('#trafficLightHolder').append("<div class='yellow-signal'>&nbsp;</div>");
+        } else if (significanceLevel == 3){
+            $('#trafficLightHolder').append("<div class='green-signal'>&nbsp;</div>");
         }
+
         $('#signalLevelHolder').text(significanceLevel);
     };
 

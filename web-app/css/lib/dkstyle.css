@@ -325,6 +325,46 @@ td.dk-selected-td {
 	background-color: #ddf7d7 !important;
 }
 
+table.dk-t2d-general-table.dataTable {
+	border-collapse: collapse !important;
+	font-size: 14px;
+}
+
+table.dk-t2d-general-table.dataTable th {
+	background-color: #d5f2f2;
+	text-align:center;
+	font-size: 12px;
+	border-right: solid 1px #fff !important;
+	border-bottom: solid 1px #fff !important;
+	color: #333 !important;
+}
+
+table.dk-t2d-general-table.dataTable th.sorting {
+	background-image: url('../../css/lib/datatables/sort_both2.png') !important;
+	background-repeat: no-repeat;
+	background-position: center right;
+}
+
+table.dk-t2d-general-table.dataTable td {
+	border-right:solid 1px #fff;
+	border-bottom:solid 1px #fff;
+	font-size: 14px !important;
+	padding-left: 10px !important;
+}
+
+table.dk-t2d-general-table.dataTable td.sorting_1 {
+	font-size: 12px !important;
+	background-color: #cce7b4 !important;
+}
+
+table.dk-t2d-general-table.dataTable th.sorting_asc, table.dk-t2d-general-table.dataTable th.sorting_desc { background-color: #7fc343;}
+
+div.dataTables_scrollBody { border-bottom: solid 1px #ccc !important;}
+
+li.variantTableLabels > a { background-color: #eee; border:solid 1px #ddd; color: #666;}
+li.variantTableLabels > a:hover { background-color: #fff; border:solid 1px #ddd; color: #2779a7;}
+li.variantTableLabels.active > a, li.variantTableLabels.active > a:hover { background-color: #fff; color:#333; }
+
 div.dk-table-navigation {
 	float: right;
 	margin-top: -20px;
@@ -532,15 +572,7 @@ h1.dk-page-title{
     color: #fff;
 }
 
-.dk-blue-bordered {
-    display:block;
-    border-top: solid 1px #57A7BA;
-    border-bottom: solid 1px #57A7BA;
-    color: #57A7BA;
-    padding: 5px 0;
-    text-align:left;
-    line-height:26px;
-}
+
 .dk-team-list {
     width: 100%;
     font-size: 14px;
@@ -644,26 +676,6 @@ h1.dk-page-title{
     background-color: rgba(255,255,255,0.4);
 }
 
-.dk-t2d-yellow {
-    background-color: #D2BC2C;
-}
-
-.dk-t2d-orange {
-    background-color: #F68920;
-}
-
-.dk-t2d-green {
-    background-color: #7fc343;
-}
-
-.dk-t2d-blue {
-    background-color: #62B4C5;
-}
-
-.dk-stroke-green {
-    background-color: #71CD73;
-}
-
 /* override select optgroup on phenotype list */
 select optgroup {
     background: #fff !important;
@@ -711,4 +723,150 @@ div.variantResultsFilterHolder > ul > li {
 #main {
     padding-top: 40px;
     padding-bottom: 0px !important;
+}
+
+
+.green-signal, .yellow-signal, .red-signal {
+	width:192px;
+	height: 62px;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: left;
+	padding-right: 15px;
+}
+
+.green-signal {
+	background-image: url("../../images/greenlight4.png");
+}
+
+.yellow-signal {
+	background-image: url("../../images/yellowlight4.png");
+}
+
+.red-signal {
+	background-image: url("../../images/redlight4.png");
+}
+
+.matchedGenesGoHere ul {
+	list-style: none;
+	padding: 0 0 0 0;
+}
+
+.matchedGenesGoHere ul > li {
+	display:inline-block;
+	padding: 2px 7px;
+	margin-right: 3px;
+	border-radius: 2px;
+	border: solid 1px #ddd;
+	background-color: #eee;
+}
+
+table.dk-t2d-general-table.dataTable tr.collapse.in  td:first-child{
+	padding-left: 30px !important;
+}
+
+table.dk-t2d-general-table.dataTable  td.sorting_1.nominallySignificant {
+    background-color: #9ED54C !important;
+}
+
+table.dk-t2d-general-table.dataTable  td.sorting_1.locusWideSignificant {
+    background-color: #7AB317 !important;
+}
+
+table.dk-t2d-general-table.dataTable  td.sorting_1.genomeWideSignificant {
+    background-color: #006633 !important;
+}
+
+table.dk-t2d-general-table.dataTable  i.jstree-icon.jstree-themeicon {
+    display: none !important;
+}
+
+div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
+    background-color: #d5f2f2 !important;
+}
+
+/*
+#modeledPhenotypeTabs {
+
+    background-color: #ddd;
+    display: inline-block !important;
+    font-size: 14px;
+    border: solid 1px #bbb;
+    padding: 2px;
+    border-radius: 25px;
+    display: inline-block !important;
+}
+
+#modeledPhenotypeTabs li {
+    margin-right: -3px;
+}
+
+#modeledPhenotypeTabs li > a {
+    border:solid 1px #ccc;
+    border-radius:0;
+}
+
+#modeledPhenotypeTabs li:last-child > a {
+    border-top-right-radius:23px;
+    border-bottom-right-radius:23px;
+    padding-right: 18px;
+    border-left: none;
+}
+
+#modeledPhenotypeTabs li:first-child > a {
+    border-top-left-radius:23px;
+    border-bottom-left-radius:23px;
+    padding-left: 18px;
+}
+
+#modeledPhenotypeTabs li.active > a {
+    background-color: #50AABB;
+    border:solid 1px #50AABB;
+    box-shadow: inset 0 0 2px #555;
+}
+
+*/
+
+#modeledPhenotypeTabs li > a {
+    background-color: #eee;
+    border-bottom: solid 1px #ccc;
+    color: #333;
+}
+
+#modeledPhenotypeTabs li.active > a {
+    background-color: #fff !important;
+    border-bottom: solid 1px #fff !important;
+    color: #333;
+}
+
+#stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs {
+    display: inline-block !important;
+    font-size: 14px;
+    padding-top: 20px;
+}
+
+#stratsCovTabs li, #CONTROL_stratsTabs li, #CASE_stratsTabs li, #strata1_stratsTabs li{
+
+}
+
+#stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
+    border:solid 1px #ccc;
+    border-radius:3px;
+    padding: 5px 10px;
+}
+
+#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {
+
+}
+
+#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {
+}
+
+#stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
+    background-color: #50AABB;
+    border:solid 1px #50AABB;
+}
+
+div.boxWhiskerPlot svg.box g.boxHolder {
+    border: solid 2px #f00;
 }

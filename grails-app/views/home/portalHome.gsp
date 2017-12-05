@@ -18,7 +18,9 @@
 
         <g:applyCodec encodeAs="none">
             var newsItems = ${newsItems};
+            //var warningMessage = ${warningText};
         </g:applyCodec>
+        //alert(warningMessage);
         mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
         mpgSoftware.homePage.setSlideWindows();
 
@@ -179,7 +181,7 @@
                                                    params="[id: 'HDAC9']"/>'>HDAC9</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                            <a href='<g:createLink controller="gene" action="geneInfo"
+                            <a style="color:#ffeeaa;" href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id: 'LPA']"/>'>LPA</a>
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
@@ -197,7 +199,7 @@
                             <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                            <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
+                            <a style="color:#ffeeaa;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                             <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs11209026']"/>'>rs11209026</a>,
@@ -213,7 +215,7 @@
                                                    params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
                         </g:if>
                         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                            <a href='<g:createLink controller="region" action="regionInfo"
+                            <a style="color:#ffeeaa;" href='<g:createLink controller="region" action="regionInfo"
                                                    params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
                         </g:elseif>
                         <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
