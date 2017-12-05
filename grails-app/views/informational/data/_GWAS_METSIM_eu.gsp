@@ -72,10 +72,10 @@
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>Genotype Data Quality Control Report (<a href="" target="_blank">download PDF</a>)</p>
+<p>AMP-DCC Genotype Data Quality Control Report: METSIM (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_METSIM.pdf" target="_blank">download PDF</a>)</p>
 
 
-<p>BioMe Phase 1 AMP-DCC Data Analysis Report (<a href="" target="_blank">download PDF</a>)</p>
+<p>AMP-DCC Data Analysis Report: METSIM Phase 1 (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_METSIM_Phase1.pdf" target="_blank">download PDF</a>)</p>
 
 
 <h4>Accessing METSIM GWAS data</h4>
