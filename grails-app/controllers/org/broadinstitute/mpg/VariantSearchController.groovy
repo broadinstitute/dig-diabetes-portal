@@ -421,9 +421,12 @@ class VariantSearchController {
         String geneName
         int limit = -1 // how many records to pull back.  -1 = no limit
         if (params.limit) {
-            log.debug "variantSearch params.limit = ${params.limit}"
             limit = Integer.parseInt(params.limit)
+        } else {
+            limit = RestServerService.DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
         }
+        log.debug "variantSearch params.limit = ${params.limit}"
+
 
         if (params.phenotype) {
             phenotypeName = params.phenotype
