@@ -71,6 +71,7 @@ class RestServerService {
     public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
+    public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
