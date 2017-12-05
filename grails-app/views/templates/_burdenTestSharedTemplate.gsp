@@ -711,8 +711,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                         {{modifiedGaitSummary}}
                     {{/modifiedGaitSummary}}
                     {{^modifiedGaitSummary}}
-                        The Genetic Association Interactive Tool allows you to compute custom association statistics for this
-variant by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
+                        The Genetic Association Interactive Tool allows you to compute custom association statistics by specifying the phenotype to test for association, a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
      In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.
                     {{/modifiedGaitSummary}}
                 </h5>
