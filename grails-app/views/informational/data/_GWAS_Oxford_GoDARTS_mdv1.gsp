@@ -17,7 +17,7 @@
     <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
-    <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
+    <li><g:message code="informational.shared.traits.log_tg"></g:message></li>
     </ul>
 
     %{--<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>--}%
@@ -48,7 +48,7 @@
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.GoDARTS"></g:message></p>
 
-    <h4>Accessing GoDARTS GWAS data</h4>
+    <h4>Accessing GoDARTS Affymetrix GWAS data</h4>
     <p><g:message code="informational.data.accessing.GoDARTS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GoDARTS2"></g:message></p>
 
 

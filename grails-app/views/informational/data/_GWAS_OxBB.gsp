@@ -46,7 +46,7 @@
             </td><td><g:message code="metadata.European"></g:message></td></tr>
     </table>
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-    <p><img src="${resource(dir: 'images/organizations', file: 'Oxford_BioBank_logo_Web.png')}" style="width: 200px; margin-right: 15px"
+    <p><img src="${resource(dir: 'images/organizations', file: 'Oxford_BioBank_logo_Web.png')}" style="width: 100px; margin-right: 15px"
         align="left">
 
 <p><g:message code="informational.data.project.OxfordBB"></g:message></p>
