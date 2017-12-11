@@ -17,7 +17,7 @@
     <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
-    <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
+    <li><g:message code="informational.shared.traits.log_tg"></g:message></li>
     </ul>
 
     %{--<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>--}%
