@@ -350,7 +350,7 @@
     <g:message code="variantTable.regionSummary.regionContains" default="This region contains the following genes:"/>
     {{/supressTitle}}
 <div class="row clearfix" style="margin:5px 0 5px 0">
-    <div class="col-md-6" style="text-align: left; max-height: 200px; overflow-y: auto; padding-left:0">
+    <div class="" style="text-align: left; max-height: 200px; overflow-y: auto; padding-left:0">
         <ul id="geneNames">
             {{#namedGeneArray}}
                 <li><a class="genelink" href="<g:createLink controller='gene'
