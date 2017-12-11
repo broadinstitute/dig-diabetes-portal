@@ -106,7 +106,7 @@
 .mychart {width:100% !important; height:740px !important;}
 </style>
 </p>
-<div style="text-align: right;">Scroll to zoom. Rollover dots for variant information.</div>
+<div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
 <div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
 <table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
