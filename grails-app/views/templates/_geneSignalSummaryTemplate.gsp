@@ -551,34 +551,35 @@
                 {{#incredibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
-                        <div class="col-xs-12">
+                        <div class="col-sm-12">
                             <div class="variantCategoryHolder"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message>
                                 <p>&nbsp;</p>
-                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                <div class="col-sm-2 credSetWindowSummary" align="right"> Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/> </div> 
-                                    <div class="col-sm-2 credSetWindowSummary">
+                                <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                <div class="col-md-12">
+                                    <div class="col-md-2 credSetWindowSummary" align="right"> Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/> </div> 
+                                    <div class="col-md-3 credSetWindowSummary">
                                         Start position
-                                        <input type="text" name="startPosition" class="credSetStartPos">
+                                        <input type="text" name="startPosition" class="credSetStartPos form-control">
                                     </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
+                                    <div class="col-md-3 credSetWindowSummary">
                                         End position
                                         <input type="text" name="endPosition"  class="credSetEndPos">
                                     </div>
-                                    <div class="col-sm-2">
-                                          <button class="btn btn-secondary btn-default" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                    <div class="col-md-4">
+                                          <button class="btn btn-secondary btn-default" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 22px">
                                           Go
                                           </button>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="row clearfix">
-                                            <div class="col-sm-2 credSetWindowSummary">
-                                                Genes in window
-                                            </div>
-                                            <div class="col-sm-10 regionParams">
-                                                <div class="matchedGenesGoHere"></div>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="col-md-12 clearfix" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                                    <div class="col-md-2 credSetWindowSummary" style="line-height: 16px;">
+                                         Genes in window
                                     </div>
+                                    <div class="col-md-10 regionParams">
+                                         <div class="matchedGenesGoHere"></div>
+                                    </div>
+                                </div>
+
                                 </div>
                                 <p>&nbsp;</p>
                                 <div><p><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p></div>

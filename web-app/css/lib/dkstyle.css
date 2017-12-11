@@ -756,6 +756,7 @@ div.variantResultsFilterHolder > ul > li {
 	display:inline-block;
 	padding: 2px 7px;
 	margin-right: 3px;
+	margin-bottom: 3px;
 	border-radius: 2px;
 	border: solid 1px #ddd;
 	background-color: #eee;
