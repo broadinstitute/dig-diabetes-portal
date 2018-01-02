@@ -520,10 +520,10 @@ class WidgetService {
             }
         } else if (metaDataService.portalTypeFromSession=='mi') {
             // for now we will favor GWAS.  Usually we filter on sample size but we have a special request
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="CARDIOVASCULAR DISEASE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ATRIAL FIBRILLATION"}){
                 buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="CARDIOVASCULAR DISEASE"}){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="ATRIAL FIBRILLATION"}){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
 
