@@ -12,6 +12,8 @@ class PortalVersionBean {
     private String phenotype
     private String dataSet
     private List<String> tissues
+    private List<String> orderedPhenotypeGroupNames
+    private List<String> excludeFromLZ
     private String epigeneticAssays
     private String lzDataset
 
@@ -21,6 +23,8 @@ class PortalVersionBean {
                              String phenotype,
                              String dataSet,
                              List<String> tissues,
+                             List<String> orderedPhenotypeGroupNames,
+                             List<String> excludeFromLZ,
                              String epigeneticAssays,
                              String lzDataset ) {
         this.portalType = portalType;
@@ -30,6 +34,8 @@ class PortalVersionBean {
         this.dataSet = dataSet
         this.tissues = tissues
         this.epigeneticAssays = epigeneticAssays
+        this.orderedPhenotypeGroupNames = orderedPhenotypeGroupNames
+        this.excludeFromLZ = excludeFromLZ
         this.lzDataset = lzDataset
     }
 
@@ -57,6 +63,14 @@ class PortalVersionBean {
         return tissues
     }
 
+    public List<String> getOrderedPhenotypeGroupNames() {
+        return orderedPhenotypeGroupNames
+    }
+
+    public List<String> getExcludeFromLZ() {
+        return excludeFromLZ
+    }
+
     public String getEpigeneticAssays() {
         return epigeneticAssays
     }
@@ -75,6 +89,8 @@ class PortalVersionBean {
 "phenotype":"${getPhenotype()}",
 "dataSet":"${getDataSet()}",
 "tissues":"${getTissues().toString()}",
+"orderedPhenotypeGroupNames":"${getOrderedPhenotypeGroupNames().toString()}",
+"excludeFromLZ":"${getExcludeFromLZ().toString()}",
 "epigeneticAssays":"${getEpigeneticAssays()}",
 "lzDataset":"${getLzDataset()}"}""".toString()
     }
