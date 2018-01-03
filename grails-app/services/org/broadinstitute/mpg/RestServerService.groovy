@@ -307,10 +307,13 @@ class RestServerService {
         if (existingPortalVersionBean){
             newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),
                     mdvName, existingPortalVersionBean.getPhenotype(), existingPortalVersionBean.getDataSet(),
-                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset() )
+                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
+                    existingPortalVersionBean.getExcludeFromLZ(),
+                    existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset()
+            )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [], "", "" )
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[], "", "" )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean

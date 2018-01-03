@@ -541,7 +541,7 @@ class WidgetService {
             }
         }
 
-        
+
         return returnValue
     }
 

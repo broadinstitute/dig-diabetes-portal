@@ -574,7 +574,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         ["GLYCEMIC"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
-                                                        "ExSeq_19k_mdv28"), // default data set used for a LocusZoom plot
+                                                        "ExSeq_13k_mdv23"), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv70",
@@ -584,7 +584,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["ISCHEMIC STROKE", "TOAST ALL STROKE", "HEMORRHAGIC STROKE"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
-                                                          "GWAS_Stroke_mdv70"),
+                                                          "ExSeq_13k_mdv23"),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv91",
