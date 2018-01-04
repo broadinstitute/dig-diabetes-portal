@@ -129,6 +129,7 @@ var mpgSoftware = mpgSoftware || {};
                     sampleGroup: sampleGroup  },
                 async: true,
                 success: function (data) {
+                    $('#spinner').hide();
                     try{
                         mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
                     }
@@ -144,7 +145,11 @@ var mpgSoftware = mpgSoftware || {};
 
         var callFillClumpVariants = function() {
             var mysavevars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            //alert("hello world");
+            var sampleGroup = $('#manhattanSampleGroupChooser').val();
+            $('#manhattanPlot1').empty();
+            $('#traitTableBody').empty();
+            $('#phenotypeTraits').DataTable().rows().remove();
+            $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
             mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mysavevars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value);
         }
 
@@ -246,7 +251,7 @@ var mpgSoftware = mpgSoftware || {};
                 savedVar.local,
                 savedVar.copyMsg,
                 savedVar.printMsg);
-            loading.hide();
+
 
 
 
