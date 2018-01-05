@@ -179,20 +179,14 @@ class GeneController {
         // DIGKB-217: get the default samples data set from the metadata
         SampleGroup defaultGeneBurdenSampleGroup = this.metaDataService.getDefaultBurdenGeneDataset();
         String defaultGeneBurdenSamplesDataSetName = defaultGeneBurdenSampleGroup?.getSystemId();
-        String defaultGeneBurdenDataSetName = restServerService.retrieveBeanForPortalType(portalType)?.getLzDataset()
-       // String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
-        if (defaultGeneBurdenSampleGroup == null) {
-            defaultGeneBurdenSamplesDataSetName = "samples_19k_"+metaDataService.getDataVersion();
+        String defaultGeneBurdenDataSetName
 
-        } else {
-            // TODO - DIGKB-217: store linked variant sample group in dataset sample group meaning field
-            Iterator<String> meaningIterator = defaultGeneBurdenSampleGroup?.getMeaningSet().iterator();
-            while (meaningIterator.hasNext()) {
-                String variantDataSet = meaningIterator.next();
-                if (variantDataSet.contains("DATASET_")) {
-                    defaultGeneBurdenDataSetName = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
-                    break;
-                }
+        Iterator<String> meaningIterator = defaultGeneBurdenSampleGroup?.getMeaningSet().iterator();
+        while (meaningIterator.hasNext()) {
+            String variantDataSet = meaningIterator.next();
+            if (variantDataSet.contains("DATASET_")) {
+                defaultGeneBurdenDataSetName = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
+                break;
             }
         }
 

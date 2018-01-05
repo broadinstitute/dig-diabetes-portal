@@ -571,22 +571,28 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
+                                                        ["GLYCEMIC"], // most important phenotype group name
+                                                        [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
-                                                        "ExSeq_19k_mdv28"), // default data set used for a LocusZoom plot
+                                                        "ExSeq_13k_mdv23"), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv70",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
+                                                          ["ISCHEMIC STROKE", "TOAST ALL STROKE", "HEMORRHAGIC STROKE"], // most important phenotype group name
+                                                          ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
-                                                          "GWAS_Stroke_mdv70"),
+                                                          "ExSeq_13k_mdv23"),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv91",
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["SkeletalMuscle"],
+                                                          ["ATRIAL FIBRILLATION", "ECG TRAITS"], // most important phenotype group name
+                                                          [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91"),
                                   new PortalVersionBean("ibd",
@@ -595,6 +601,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "IBD",
                                                           "GWAS_IBDGenomics_eu_mdv80",
                                                           ["E071","E106","E088","E085"],
+                                                          ["INFLAMMATORY BOWEL"], // most important phenotype group name
+                                                          [],
                                                           "[1,2]",
                                                           "GWAS_IBDGenomics_eu_mdv80")
 ]
