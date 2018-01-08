@@ -581,7 +581,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["ISCHEMIC STROKE", "TOAST ALL STROKE", "HEMORRHAGIC STROKE"], // most important phenotype group name
+                                                          ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23"),
@@ -591,7 +591,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["SkeletalMuscle"],
-                                                          ["ATRIAL FIBRILLATION", "ECG TRAITS"], // most important phenotype group name
+                                                          ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS"], // most important phenotype group name
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91"),
