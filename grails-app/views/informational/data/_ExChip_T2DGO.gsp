@@ -430,4 +430,8 @@
 
 <p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis."</p>
 
+   <h4>Accessing GoT2D exome chip analysis data</h4>
+<p><g:message code="informational.data.accessing.GoT2D_ExChip1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GoT2D_ExChip2"></g:message></p>
+
+
 </script>
