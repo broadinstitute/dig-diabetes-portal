@@ -1,9 +1,15 @@
 <script class="panel-body" id="ExSeq_19k_script" type="x-tmpl-mustache">
 <h4>Dataset</h4>
 <p><g:message code="informational.data.overlaps.19K"></g:message></p>
-<h4>Publications</h4>
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
+<g:message code="informational.shared.publications.Flannick_2017_SciData"></g:message><br>
+<g:message code="informational.shared.publications.Flannick_2017_SciData.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Flannick_2017_SciData.citation"></g:message> </div>
+</div></p>
+
+    <p><div class="paper">
     <g:message code="informational.shared.publications.Fuchsberger_2016_Nature"></g:message><br>
     <g:message code="informational.shared.publications.Fuchsberger_2016_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
     <div class="citation"><g:message code="informational.shared.publications.Fuchsberger_2016_Nature.citation"></g:message> </div>
@@ -22,11 +28,11 @@
 </div></p>
 
 
-<h4>Dataset phenotypes</h4>
+    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
-<h4>Dataset Subjects</h4>
+    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small>
     </th><th>Ancestry</th></tr>
@@ -472,7 +478,7 @@
         </div></td><td>European</td></tr>
 </table>
 
-<h4>Projects</h4>
+<h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
 <h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
 

@@ -1,5 +1,11 @@
 <script class="panel-body" id="ExChip_82k_script" type="x-tmpl-mustache">
-    <h4>Publications</h4>
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+
+    <p><div class="paper">
+<g:message code="informational.shared.publications.Flannick_2017_SciData"></g:message><br>
+<g:message code="informational.shared.publications.Flannick_2017_SciData.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Flannick_2017_SciData.citation"></g:message> </div>
+</div></p>
 
         <p><div class="paper">
 <g:message code="informational.shared.publications.Fuchsberger_2016_Nature"></g:message><br>
@@ -9,11 +15,11 @@
 
 </p>
 
-    <h4>Dataset phenotypes</h4>
+    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
     </ul>
-    <h4>Dataset subjects</h4>
+ <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
     <table class="table table-condensed table-responsive table-striped">
 
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
@@ -404,7 +410,7 @@
             </div></td><td>European</td></tr>
         <tr><td>Total: 29,161</td><td>Total: 48,571</td><td></td><td></td></tr>
     </table>
-    <h4>Projects</h4>
+<h4><g:message code="informational.shared.headers.project"></g:message></h4>
     <h5>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a
             href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
     </small></h5>
