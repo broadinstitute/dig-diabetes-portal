@@ -47,7 +47,8 @@ public class PhenotypeByTechAndVersionVisitor implements DataSetVisitor {
             experiment = (Experiment)dataSet;
 
             // if of proper tech and version, visit; if not, skip since phenotype children of no interest
-            if (experiment.getTechnology().equals(this.technology)) {
+            if (( this.technology == null )|| (this.technology.length()==0)||
+                (experiment.getTechnology().equals(this.technology))) {
                 if (experiment.getVersion().equals(this.metadataVersion)) {
                     visitChildren = true;
                 }

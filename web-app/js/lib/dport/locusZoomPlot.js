@@ -1332,7 +1332,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return url;
                 }
-            }, "BroadT2D");
+            }, "BroadT2Da");
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
 
@@ -1359,7 +1359,7 @@ var mpgSoftware = mpgSoftware || {};
                         "lzFormat=1";
                     return url;
                 }
-            }, "BroadT2D");
+            }, "BroadT2Db");
             //var tissueAsId = 'intervals-'+rawTissue;
             dataSources.add(intervalPanelName, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue,assayName));
         };
@@ -1377,7 +1377,7 @@ var mpgSoftware = mpgSoftware || {};
                         "lzFormat=1";
                     return url;
                 }
-            }, "BroadT2D");
+            }, "BroadT2Dc");
             var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
             dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
         };
