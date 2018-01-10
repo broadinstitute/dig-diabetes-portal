@@ -25,9 +25,6 @@
 
         <div class="col-sm-12 col-xs-12">
             <div class="row burden-test-specific-results burden-test-result">
-
-
-
                 <div class="col-md-12 col-sm-12">
                     <div>
                         <div class="vertical-center">
@@ -66,15 +63,16 @@
 </script>
 
 
+
 %{--Choose the phenotype and stratification options. Currently the top section in the interface--}%
 <script id="chooseDataSetAndPhenotypeTemplate"  type="x-tmpl-mustache">
-    <div class="">%{--should hold the Choose data set panel--}%
+    <!--<div class="">%{--should hold the Choose data set panel--}%
 
-        <div class="">
+        <div class="">-->
             <h3>
                 Choose a phenotype and partitioning strategy
             </h3>
-        </div>
+        <!--</div>-->
 
         <div id="chooseSamples" class="">
             <div class="secBody">
@@ -175,7 +173,7 @@
 
 
             </div>
-        </div>
+        <!--</div>-->
 
     </div>    %{--end accordion panel for id=chooseSamples--}%
 </script>
@@ -196,7 +194,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                 <div class="panel-body  secBody">
 
                     <div class="row">
-                        <div class="col-sm-12 col-xs-12">
+                        <div class="col-md-12">
                             <p>
                                 Each of the boxes below enables you to define a criterion for inclusion of samples in your analysis; each criterion is specified as a filter based on a single phenotype.
                                 The final subset of samples used will be those that match all of the specified criteria; to omit a criterion leave the text box blank.
@@ -210,8 +208,19 @@ the individual filters themselves. That work is handled later as part of a loop-
                     </div>
 
 
+                    <div class="row">
+                        <div class="col-md-12" style="padding:0; margin: 0;">
+                            <ul class="nav nav-tabs datasetNames" id="datasetNamesTabs">
+                                <li class="active"><a>19K exome sequence analysis</a></li>
+                                <li><a>CAMP GWAS</a></li>
+                                <li><a>BioMe AMP T2D GWAS</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+
                     <div class="row" style="{{modeledPhenotypeDisplay}}">
-                        <div class="col-sm-12 col-xs-12">
+                        <div class="col-md-12" style="padding:0; margin: 0;">
                             <ul class="nav nav-tabs modeledPhenotypeDisplay" id="modeledPhenotypeTabs">
                                 {{ #modeledPhenotype }}
                                    {{ #levels }}
@@ -229,15 +238,15 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
 
-                    <div class="tab-content clearfix" style="border:solid 1px #ddd; margin-top: -2px; border-radius: 5px;">
+                    <div class="tab-content clearfix" style="border: solid 1px #ddd; border-top: none; margin-top: -6px;">
                          {{ #modeledPhenotype }}
                            {{ #levels }}
                             <div class="tab-pane  {{defaultDisplay}}" id="{{name}}">
-                                <div class="">
+
 
                                     <div class="" style="{{tabDisplay}}">
-                                        <div class="col-sm-12 col-xs-12">
-                                            <ul class="nav nav-pills stratsTabs" id="{{name}}_stratsTabs">
+                                        <div class="col-md-12" style="padding:0; margin: 0;">
+                                            <ul class="nav nav-tabs stratsTabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
                                                        <a data-target="#{{name}}_{{phenoLevelName}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
@@ -259,7 +268,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         {{ #strataContent }}
                                             <div class="tab-pane {{defaultDisplay}}" id="{{name}}_{{phenoLevelName}}">
                                                 <div class="">
-                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0; border-top:solid 1px #fff;">
+                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:-7px;">
                                                         <div class="row secHeader" style="padding: 20px 0 0 0">
                                                             <div class="col-sm-12 col-xs-12 text-left">
                                                             <label style="font-style: italic; font-size: 14px">Click a phenotype name or set value for a phenotype to render corresponding plot.
@@ -312,11 +321,6 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             </div>
                                         {{ /strataContent }}
                                     </div>
-
-
-
-
-                                </div>
                             </div>
                            {{ /levels }}
                          {{ /modeledPhenotype }}
@@ -372,9 +376,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
                                                '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                                onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}'); highlightActiveTabs(event); ">
 
                                     </div>
+
 
                                     <div class="" style="display:none;">
                                         <span onclick="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
@@ -440,7 +445,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                 <div class="panel-body secBody">
 
                     <div class="row">
-                        <div class="col-sm-12 col-xs-12">
+                        <div class="col-md-12">
                             <p>
                                 Select principal components and/or phenotypes to be used as covariates in your association analysis. Principal
                                 components 1-4 are selected by default to minimize the influence of ancestry, though additional principal components
@@ -452,8 +457,8 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
                     <div class="row"  style="{{tabDisplay}}">
-                        <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-pills" id="stratsCovTabs">
+                        <div class="col-md-12" style="padding: 0; margin:0;">
+                            <ul class="nav nav-tabs" id="stratsCovTabs" style="border: solid 1px #ddd; border-bottom: none;">
                                 {{ #modeledPhenotype }}
                                     {{ #levels }}
                                         {{ #strataContent }}
@@ -465,7 +470,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                         </div>
                     </div>
 
-                    <div class="tab-content">
+                    <div class="tab-content" style="border:solid 1px #ddd; margin-top: -8px;">
                         {{ #modeledPhenotype }}
                             {{ #levels }}
                                 {{ #strataContent }}
@@ -723,7 +728,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
 
-                    <div class="user-interaction">
+                    <div class="user-interaction col-md-12">
 
                         <div id="chooseDataSetAndPhenotypeLocation"></div>
 
