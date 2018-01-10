@@ -203,6 +203,30 @@
                 }
             }
 
+            /* copy url of varian search result page to clipboard*/
+
+            $( window ).load( function() {
+                document.addEventListener('copy', function(e){
+
+                    e.clipboardData.setData('text/plain', $(location).attr("href"));
+                    e.preventDefault(); // default behaviour is to copy any selected text
+
+                    
+
+                });
+
+                /*document.getElementById("copyURL").onclick = function() {
+                    document.execCommand('copy'); // only works in click handler or other user-triggered thread
+                }*/
+
+                $("#copyURL").click(function() {
+                    document.execCommand('copy');
+                })
+            });
+
+
+
+
             $( window ).resize(function() {
                 menuHeaderSet();
             });

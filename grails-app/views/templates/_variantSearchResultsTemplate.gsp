@@ -152,7 +152,7 @@
                 <p><g:message code="variantTable.searchResults.guide" default="variant results table guide" /></p>
             </div>
             <div class="col-md-3" style="padding-top:15px;">
-                <div class="dk-t2d-blue dk-copy-button dk-right-column-buttons"><a href="#" onclick="mpgSoftware.variantSearchResults.saveLink(undefined,'{{uniqueRoot}}')">Copy URL to share the search result</a></div>
+                <div class="dk-t2d-blue dk-copy-button dk-right-column-buttons"><a href="#" id="copyURL">Copy URL to share the search result</a></div>
                 <div class="dk-t2d-green dk-reference-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_variant_results_guide.pdf"><g:message code="variantSearch.results.helpText" /></a></div>
             </div>
         </div>
