@@ -54,7 +54,7 @@
              */
             $('#generalized-go').on('click', function () {
                 var somethingSymbol = $('#generalized-input').val();
-                alert(somethingSymbol);
+                //alert(somethingSymbol);
                 if (somethingSymbol) {
                     goToSelectedItem(somethingSymbol)
                 }
