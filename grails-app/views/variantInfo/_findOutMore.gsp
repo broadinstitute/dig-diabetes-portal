@@ -1,3 +1,10 @@
+<table>
+<tr><td>
+<div class="linkout">
+    <a target="_blank" href="http://pheweb.sph.umich.edu:5000/variant/<%=variantToSearch%>">PheWeb</a></div></td>
+    <td><g:message code="findoutmore.variantpheweb.descr" default="PheWeb"/></td>
+</tr>
+</table>
 
 <div class="linkout">
     <a target="_blank" href="http://www.gtexportal.org/home/eqtls/bySnp?snpId=<%=variantToSearch%>&tissueName=All">GTEx</a>
