@@ -8057,7 +8057,7 @@ LocusZoom.Data.Source.prototype.parseArraysToObjects = function(x, fields, outna
         return item.length === N;
     });
     if (!sameLength) {
-      //  throw this.constructor.SOURCE_NAME + " expects a response in which all arrays of data are the same length";
+        throw this.constructor.SOURCE_NAME + " expects a response in which all arrays of data are the same length";
     }
 
     for(var i = 0; i < N; i++) {

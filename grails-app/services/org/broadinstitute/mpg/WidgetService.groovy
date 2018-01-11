@@ -821,6 +821,8 @@ class WidgetService {
                 }  else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
+                } else {
+                    dataJSONObject.remove(dataField);
                 }
             }
             JSONArray emptyArrays = new JSONArray()
