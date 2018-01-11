@@ -936,9 +936,13 @@ var mpgSoftware = mpgSoftware || {};
 
         var buildPanelLayout = function (colorBy,positionBy, phenotype,makeDynamic,dataSetName,variantInfoLink,lzParameters){
             var pageVars = getPageVars(currentLzPlotKey);
-            var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>"
-                + "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>"
-                + "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
+            var toolTipText = "<strong><a href="+variantInfoLink+"/?lzId={{" + phenotype + ":id}} target=_blank>{{" + phenotype + ":id}}</a></strong><br>";
+            if (positionBy==1) {
+                toolTipText += "P Value: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>";
+            } else if (positionBy==2) {
+                toolTipText += "Post. prob: <strong>{{" + phenotype + ":pvalue|scinotation}}</strong><br>";
+            }
+            toolTipText +=  "Ref. Allele: <strong>{{" + phenotype + ":refAllele}}</strong><br>";
             if ((typeof makeDynamic !== 'undefined') &&
                 (makeDynamic==='dynamic')){
                 toolTipText += "<a onClick=\"mpgSoftware.locusZoom.conditioning(this);\" style=\"cursor: pointer;\">Condition on this variant</a><br>";
@@ -1331,8 +1335,52 @@ var mpgSoftware = mpgSoftware || {};
                         url += "&maximumNumberOfResults=" + pageVars.maximumNumberOfResults;
                     }
                     return url;
-                }
-            }, "BroadT2D");
+                };
+                // this.prepareData = function(records){
+                //
+                //     // Below is an example of how we might use UM's latest in order to assign credible set definitions.  For now
+                //     //  I will leave it commented out.
+                //
+                //     // The first step is to find the key that points to the values
+                //     var pValueKeyName;
+                //     if ((records) &&
+                //         (records.length>0)){
+                //         _.forEach(records[0], function (value,key){
+                //             if (key.indexOf('pvalue|neglog10')>-1){
+                //                 pValueKeyName = key;
+                //             }
+                //
+                //         })
+                //     }
+                //     // everything else comes right out of the UM example, which I found by going to this URL (http://statgen.github.io/locuszoom/examples/credible_sets.html)
+                //     // and then looking at the browser console to see what they were actually doing
+                //     //
+                //     // Calculate raw bayes factors and posterior probabilities based on information returned from the API
+                //     if (typeof pValueKeyName !== 'undefined') {
+                //         var nlogpvals = records.map(function (item) {
+                //             return item[pValueKeyName];
+                //         });
+                //         var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
+                //         var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
+                //
+                //         // Use scores to mark the credible set in various ways (depending on your visualization preferences,
+                //         //    some of these may be unneeded)
+                //         var credibleSet = gwasCredibleSets.marking.findCredibleSet(scores);
+                //         var credSetScaled= gwasCredibleSets.marking.rescaleCredibleSet(credibleSet);
+                //         var credSetBool = gwasCredibleSets.marking.markBoolean(credibleSet);
+                //
+                //         // Annotate each response record based on credible set membership
+                //         records.forEach(function (item, index) {
+                //             item["assoc:credibleSetPosteriorProb"] = posteriorProbabilities[index];
+                //             item["assoc:credibleSetContribution"] = credSetScaled[index]; // Visualization helper: normalized to contribution within the set
+                //             item["assoc:isCredible"] = credSetBool[index];
+                //         });
+                //         return records;
+                //
+                //     }
+                //
+                // };
+            }, "BroadT2Da");
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
 
@@ -1358,8 +1406,8 @@ var mpgSoftware = mpgSoftware || {};
                         "assayIdList=" + assayIdList + "&" +
                         "lzFormat=1";
                     return url;
-                }
-            }, "BroadT2D");
+                };
+            }, "BroadT2Db");
             //var tissueAsId = 'intervals-'+rawTissue;
             dataSources.add(intervalPanelName, new broadIntervalsSource(retrieveFunctionalDataAjaxUrl, rawTissue,assayName));
         };
@@ -1376,8 +1424,8 @@ var mpgSoftware = mpgSoftware || {};
                         "assay_id=" + assayId + "&" +
                         "lzFormat=1";
                     return url;
-                }
-            }, "BroadT2D");
+                };
+            }, "BroadT2Dc");
             var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
             dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
         };

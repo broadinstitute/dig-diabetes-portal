@@ -481,17 +481,11 @@ class WidgetService {
         if (sampleGroup.size()==0) {
             sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
         }
-       //     sampleGroup = sampleGroup.findAll { it.parent.technology == 'GWAS' }
-            // if there are data sets that are GWAS then work only with those.  Otherwise take what you can get
-//        }        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
-//        if (sampleGroup.findAll{it.parent.technology=='GWAS'}.size()>0) {
-//            sampleGroup = sampleGroup.findAll { it.parent.technology == 'GWAS' }
-//            // if there are data sets that are GWAS then work only with those.  Otherwise take what you can get
-//        }
+
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         // KLUDGE alert
-        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
-        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
             Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
@@ -501,12 +495,27 @@ class WidgetService {
     }
 
 
+    private addSinglePhenotypeNameRecord(LinkedHashMap<String, List <List <String>>> groupedPhenotypes,String phenotypeGroupName,String phenotypeCode){
+        List <List <String>> groupedPhenotypesList
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        if (groupedPhenotypes.containsKey(phenotypeGroupName)) {
+            groupedPhenotypesList = groupedPhenotypes[phenotypeGroupName]
+        } else {
+            groupedPhenotypesList  = []
+            groupedPhenotypes[phenotypeGroupName] = groupedPhenotypesList
+        }
+        groupedPhenotypesList << [phenotypeCode, g.message(code: "metadata." + phenotypeCode, default: phenotypeCode)]
+
+    }
+
+
+
     public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
 
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
-        // kludge to reorder for stroke demo
+
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
         if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
@@ -544,6 +553,64 @@ class WidgetService {
 
         return returnValue
     }
+
+
+
+
+
+
+    public LinkedHashMap<String, List <List <String>>> retrieveGroupedPhenotypesNames(String technology){
+        LinkedHashMap<String, List <List <String>>> returnValue = []
+
+        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion(technology, metaDataService.getDataVersion())
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+
+        LinkedHashMap<String, List <List <String>>> groupedPhenotypes = [:]
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
+        if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
+                addSinglePhenotypeNameRecord(returnValue,phenotype.group,phenotype.name)
+            }
+        } else {
+            // let's impose any order that has been requested
+            for (String phenotypeGroupName in portalVersionBean.getOrderedPhenotypeGroupNames()){
+                for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group==phenotypeGroupName}){
+                    boolean skipIt = false
+                    for (String excludeString in portalVersionBean.getExcludeFromLZ()){
+                        if (phenotype?.parent?.systemId?.contains(excludeString)){
+                            skipIt = true
+                        }
+                    }
+                    if (!skipIt){
+                        addSinglePhenotypeNameRecord(returnValue,phenotype.group,phenotype.name)
+                    }
+                }
+            }
+            // now run over the list again. Anything that hasn't already been inserted goes in now
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
+                if (!(returnValue.containsKey(phenotype.group)&&(returnValue[phenotype.group]).find{it[0]==phenotype.name})){
+                    boolean skipIt = false
+                    for (String excludeString in portalVersionBean.getExcludeFromLZ()){
+                        if (phenotype?.parent?.systemId?.contains(excludeString)){
+                            skipIt = true
+                        }
+                    }
+                    if (!skipIt){
+                        addSinglePhenotypeNameRecord(returnValue,phenotype.group,phenotype.name)
+                    }
+                }
+            }
+        }
+
+
+        return returnValue
+    }
+
+
+
+
+
+
 
 
 
@@ -753,6 +820,8 @@ class WidgetService {
                     choseOurPValue = true
                 }  else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else {
                     dataJSONObject.remove(dataField);
                 }
             }
