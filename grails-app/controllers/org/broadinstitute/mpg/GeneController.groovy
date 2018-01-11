@@ -577,6 +577,7 @@ class GeneController {
         }
 
         // return
+        println("HHHHHHHHHHHHHHHHHHHHHHH: ${jsonReturn.toString()}")
         render(jsonReturn)
     }
 
@@ -646,7 +647,9 @@ class GeneController {
             resultLZJson = errorJsonObject;
         }
 
-        // return
+
+        // In V0.7.0 we have to remove the pastback field, which was never used anyway
+        resultLZJson.remove("passback")
         render(status: 200, contentType: "application/json") {resultLZJson}
         return;
     }

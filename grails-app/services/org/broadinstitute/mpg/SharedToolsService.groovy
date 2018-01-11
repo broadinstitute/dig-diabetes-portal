@@ -641,33 +641,36 @@ class SharedToolsService {
     }
 
 
-    public JSONObject packageUpSortedHierarchicalListAsJson(LinkedHashMap mapOfSampleGroups) {
-        int numberOfGroups = 0
-        StringBuilder sb = new StringBuilder()
-
-        JSONObject toReturn = [
-                dataset: new JSONObject()
-        ]
-
-        List<String> sampleGroupList = []
-        if (mapOfSampleGroups?.size() > 0) {
-            mapOfSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
-                toReturn.dataset[sampleGroupName] = propertyNames
-            }
-        }
-        toReturn.is_error = false
-        toReturn.numRecords = numberOfGroups
-
-        return toReturn
-    }
+//    public JSONObject packageUpSortedHierarchicalListAsJson(LinkedHashMap mapOfSampleGroups) {
+//        int numberOfGroups = 0
+//        StringBuilder sb = new StringBuilder()
+//
+//
+//        JSONObject toReturn = [
+//                dataset: new JSONObject()
+//        ]
+//
+//        List<String> sampleGroupList = []
+//        if (mapOfSampleGroups?.size() > 0) {
+//            mapOfSampleGroups.each { String sampleGroupName, List<String> propertyNames ->
+//                toReturn.dataset[sampleGroupName] = propertyNames
+//            }
+//        }
+//        toReturn.is_error = false
+//        toReturn.numRecords = numberOfGroups
+//
+//        return toReturn
+//    }
 
 
     public JSONObject packageUpAHierarchicalListAsJson(LinkedHashMap mapOfStrings) {
         int numberOfGroups = 0
 
+
         JSONObject toReturn = [
                 dataset: new JSONObject()
         ]
+
 
         if ((mapOfStrings) && (mapOfStrings?.size() > 0)) {
             LinkedHashMap sortedMapOfStrings = mapOfStrings

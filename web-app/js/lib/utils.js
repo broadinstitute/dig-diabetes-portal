@@ -360,115 +360,24 @@ var UTILS = {
             var options = $(phenotypeDropDownIdentifier);
 
             options.empty();
-            var groupList = dataSetJson.dataset;
 
-            // move GLYCEMIC to the front of the list, so it's the first section
-            // to display
-            var keys = Object.keys(groupList);
-            if(portaltype == "t2d"){
-                if (keys.indexOf("GLYCEMIC")>-1){
-                    keys.splice(keys.indexOf("GLYCEMIC"), 1);
-                    keys.unshift("GLYCEMIC");
-                    //$('#datasetDependent').prop( "disabled", false );
-                    //var phenotype = UTILS.extractValsFromCombobox(['phenotype']).phenotype;
-                    try{
-                        mpgSoftware.variantWF.retrieveDatasets("T2D", 'dependent');
-                    }catch(e){
-                        console.log("YO",e);
+           var keys = dataSetJson.datasetOrder;
+
+
+            _.forEach(keys,function(key){
+                var groupContents = dataSetJson.dataset[key];
+                options.append("<optgroup label='"+key+"'>");
+                for (var j = 0; j < groupContents.length; j++) {
+                    if(_.includes(phenotypesToOmit, groupContents[j][0])) {
+                        continue;
                     }
-
-
+                    options.append($("<option />").val(groupContents[j][0])
+                    // add some whitespace to create indentation
+                        .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
                 }
-               $('#datasetDependent').prop( "disabled", false );
-            }
-            else if (portaltype == "stroke"){
-            if (keys.indexOf("ISCHEMIC STROKE")>-1){
-                keys.splice(keys.indexOf("ISCHEMIC STROKE"), 1);
-                keys.unshift("ISCHEMIC STROKE");
-                try{
-                    mpgSoftware.variantWF.retrieveDatasets("allstroke", 'dependent');
-                }catch(e){
-                    console.log("retrievedatasets not readable property",e);
-                }
+                options.append("</optgroup>");
+            });
 
-            }
-                $('#datasetDependent').prop( "disabled", false );
-
-        }
-            else if (portaltype == "ibd"){
-                if (keys.indexOf("INFLAMMATORY BOWEL")>-1){
-                    keys.splice(keys.indexOf("INFLAMMATORY BOWEL"), 1);
-                    keys.unshift("INFLAMMATORY BOWEL");
-                    try{
-                        mpgSoftware.variantWF.retrieveDatasets("IBD", 'dependent');
-                    }catch(e){
-                        console.log("retrievedatasets not readable property",e);
-                    }
-                }
-                $('#datasetDependent').prop( "disabled", false );
-            }
-            else if (portaltype == "mi"){
-                if (keys.indexOf("CORONARY ARTERY DISEASE")>=-1){
-                    keys.splice(keys.indexOf("CORONARY ARTERY DISEASE"), 1);
-                    keys.splice(keys.indexOf("ATRIAL FIBRILLATION"), 2);
-                    keys.splice(keys.indexOf("LIPIDS"), 3);
-                    keys.splice(keys.indexOf("ECG TRAITS"), 4);
-                    keys.splice(keys.indexOf("ANTHROPOMETRIC"), 5);
-                    keys.splice(keys.indexOf("GLYCEMIC"), 6);
-
-                    keys.unshift("PSYCHIATRIC");
-                    keys.unshift("RENAL");
-                    keys.unshift("GLYCEMIC");
-                    keys.unshift("ANTHROPOMETRIC");
-                    keys.unshift("ECG TRAITS");
-                    keys.unshift("LIPIDS");
-                    keys.unshift("ATRIAL FIBRILLATION");
-                    keys.unshift("CORONARY ARTERY DISEASE");
-                    try{
-                        mpgSoftware.variantWF.retrieveDatasets("MI", 'dependent');
-                    }catch(e){
-                        console.log("retrievedatasets not readable property",e);
-                    }
-
-                }
-                $('#datasetDependent').prop( "disabled", false );
-
-            }
-
-
-            // if the OTHER key is defined, then move it to the bottom of the list
-            // currently, this should only appear on the variant search page, and will be going away soon
-            // I know that "soon" usually means in a couple years in the software world, but I mean
-            // it this time, I swear
-            if(keys.indexOf('OTHER') >= 0) {
-                keys.splice(keys.indexOf('OTHER'), 1);
-                keys.push('OTHER');
-            }
-
-            //String portalType = g.portalTypeString() as String
-
-            for (var x = 0; x < keys.length; x++) {
-                var key = keys[x];
-                if (groupList.hasOwnProperty(key)) {
-                    var groupContents = groupList[key];
-                    // if(key === "CARDIOVASCULAR DISEASE"){
-                    //     groupContents.push(["CAD","Coronary artery disease"]);
-                    // }
-                    // if(key === "LIPIDS"){
-                    //     phenotypesToOmit = ["CAD", "Coronary artery disease"];
-                    // }
-                    options.append("<optgroup label='"+key+"'>");
-                    for (var j = 0; j < groupContents.length; j++) {
-                        if(_.includes(phenotypesToOmit, groupContents[j][0])) {
-                            continue;
-                        }
-                        options.append($("<option />").val(groupContents[j][0])
-                            // add some whitespace to create indentation
-                            .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
-                    }
-                    options.append("</optgroup>");
-                }
-            }
 
             // enable the input
             options.prop('disabled', false);

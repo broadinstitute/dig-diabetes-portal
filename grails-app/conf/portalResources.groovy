@@ -212,6 +212,7 @@ modules = {
 //        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.6/locuszoom.css'
         resource url: 'js/lib/locuszoom.app.js'
         resource url: 'css/lib/locuszoom.css'
+        resource url: 'js/lib/gwas-credible-sets.js'
 
         resource url: 'js/lib/dport/locusZoomPlot.js'
     }
