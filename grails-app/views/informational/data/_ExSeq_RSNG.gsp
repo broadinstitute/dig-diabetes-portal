@@ -28,6 +28,15 @@
        <tr><td>174</td><td>1,082</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
 </table>
 
+<h4>Dataset subjects by ancestry</h4>
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
+
+<tr><td>346</td><td>2,155</td><td>African American</td></tr>
+<tr><td>1,388</td><td>7,268</td><td>European</td></tr>
+<tr><td>1,734</td><td>9,423</td><td>All</td></tr>
+</table>
+
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
     <h5><g:message code="informational.data.project.AFGen1"></g:message></h5>
