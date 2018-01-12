@@ -36,6 +36,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
+            $('#PheWebLink').attr("href", "http://pheweb.sph.umich.edu:5000/variant/"+varId);
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);

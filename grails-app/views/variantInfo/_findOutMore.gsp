@@ -1,7 +1,7 @@
 <table>
 <tr><td>
 <div class="linkout">
-    <a target="_blank" href="http://pheweb.sph.umich.edu:5000/variant/<%=variantToSearch%>">PheWeb</a></div></td>
+    <a target="_blank" id="PheWebLink">PheWeb</a></div></td>
     <td><g:message code="findoutmore.variantpheweb.descr" default="PheWeb"/></td>
 </tr>
 </table>
