@@ -132,100 +132,50 @@
     });
 
 </script>
-<g:if test="${g.portalTypeString()?.equals('stroke')}">
-    <div class="fluid" style="font-size:16px; background-image:url(${resource(dir: 'images/stroke', file: 'front_bg_2017_stroke.png')});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
-</g:if>
-<g:elseif test="${g.portalTypeString()?.equals('mi')}">
-    <div class="fluid" style="font-size:16px; background-size:100% 100%; background-image: url(${resource(dir: 'images/mi', file: 'front_bg_2017_mi5.png')}); background-position: center; padding-bottom: 70px; padding-top:0px;">
-</g:elseif>
-<g:else>
-    <div class="fluid" style="font-size:16px; background-image:url(${resource(dir: 'images', file: 'front_bg_2017-02.png')});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
-</g:else>
+<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
+
     <div class="container" style="color:#fff;">
         <div class="row" style="padding-top:40px;">
             <div class="col-md-6 portal-front-banner" style="color:#fff; font-weight:300;">
-                <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                    <img src="${resource(dir: 'images/stroke', file: g.message(code: "files.stroke.front.logo", default: "front_logo_stroke.svg"))}" style="width:500px; margin-top: 30px;" />
-                    <p style="padding-top:10px; padding-bottom:30px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.stroke.header.tagline" /></p>
-                </g:if>
-                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miFrontHeader", default:"mi_front_header1.svg"))}" style="width:450px; margin-top: -30px; margin-left: -48px;" />
-                    <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.mi.header.tagline" /></p>
-                </g:elseif>
-                <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                    <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibdFrontHeader4", default:"ibdFrontHeader4.png"))}" style="width:700px; margin-top: 50px; margin-left: -100px;" />
-                    <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.ibd.header.tagline" /></p>
-                </g:elseif>
-                <g:else>
-                    <img src="${resource(dir: 'images', file: g.message(code: "files.t2dFrontHeader", default: "t2d_front_logo.svg"))}" style="margin-top:20px; width:500px;" />
-                    <p style="padding-top:10px;">
-                        <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>' style="color:#ffffff; text-decoration: none;">
+                <img src="${resource(file:g.message(code: portalVersionBean.frontLogo, default:portalVersionBean.frontLogo)) }" style="width:500px; margin-top: 30px;" />
+                <p style="padding-top:10px;">
+                    <g:each in="${portalVersionBean.alternateLanguages}">
+                        <g:if test="${it.equals('English')}">
+                            <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>' style="color:#ffffff; text-decoration: none;">
+                                <g:message code="portal.language.setting.setEnglish" default="In English" /></a> |
+                        </g:if >
+                        <g:elseif test="${it.equals('Spanish')}">
+                            <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>' style="color:#ffffff; text-decoration: none;">
+                                <g:message code="portal.language.setting.setSpanish" default="En Español" /></a>
+                        </g:elseif>
 
+                    </g:each>
 
-                            <g:message code="portal.language.setting.setSpanish" default="En Español" /></a> |
-                        <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>' style="color:#ffffff; text-decoration: none;">
+                </p>
+                <p style="padding-top:10px; padding-bottom:30px; font-size:25px; font-weight: 300 !important;">
+                    <g:message code="${portalVersionBean.tagline}" /></p>
 
-                            <g:message code="portal.language.setting.setEnglish" default="In English" /></a>
-
-                    </p>
-                    <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;"><g:message code="portal.header.tagline" /></p>
-                </g:else>
             </div>
             <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
                 <div style="padding-bottom:20px; font-weight: 300;">
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
                     <div style="font-size: 14px;">
                         <span><g:message code="site.shared.phrases.examples" />: </span>
-                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <g:each in="${portalVersionBean.geneExamples}">
                             <a style="color:#cce6c3;" href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id: 'HDAC9']"/>'>HDAC9</a>
-                        </g:if>
-                        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                            <a style="color:#ffeeaa;" href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id: 'LPA']"/>'>LPA</a>
-                        </g:elseif>
-                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                            <a href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id: 'IL23R']"/>'>IL23R</a>
-                        </g:elseif>
-                        <g:else>
-                            <a class="dk-t2d-example" href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id: 'SLC30A8']"/>'>SLC30A8</a>
-                        </g:else>
+                                                   params="[id:it]"/>'>${it}</a>
+                        </g:each>
                         <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                     body="input.searchTerm.geneExample.help.text"/>,
-                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs2984613']"/>'>rs2984613</a>,
-                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'APOE-e2']"/>'>APOE-e2</a>
-                        </g:if>
-                        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                            <a style="color:#ffeeaa;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs10965215']"/>'>rs10965215</a>,
-                        </g:elseif>
-                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                            <a href='<g:createLink controller="variantInfo" action="variantInfo" params="[id: 'rs11209026']"/>'>rs11209026</a>,
-                        </g:elseif>
-                        <g:else>
-                            <a class="dk-t2d-example" href='<g:createLink controller="variantInfo" action="variantInfo"
-                                                   params="[id: 'rs13266634']"/>'>rs13266634</a>
-                        </g:else>
+                        <g:each in="${portalVersionBean.variantExamples}">
+                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
+                        </g:each>
                         <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                     body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
-                        <g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <g:each in="${portalVersionBean.rangeExamples}">
                             <a style="color:#cce6c3;" href='<g:createLink controller="region" action="regionInfo"
-                                                   params="[id: 'chr7:18,100,000-18,300,000']"/>'>chr7:18,100,000-18,300,000</a>
-                        </g:if>
-                        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                            <a style="color:#ffeeaa;" href='<g:createLink controller="region" action="regionInfo"
-                                                   params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
-                        </g:elseif>
-                        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-                            <a href='<g:createLink controller="region" action="regionInfo"
-                                                   params="[id: 'chr9:20,940,000-21,800,000']"/>'>chr9:20,940,000-21,800,000</a>
-                        </g:elseif>
-                        <g:else>
-                            <a class="dk-t2d-example" href='<g:createLink controller="region" action="regionInfo"
-                                                   params="[id: 'chr9:21,940,000-22,190,000']"/>'>chr9:21,940,000-22,190,000</a>
-                        </g:else>
+                                                                          params="[id:it]"/>'>${it}</a>
+                        </g:each>
                         <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
                                     body="input.searchTerm.rangeExample.help.text"/>
 
@@ -245,10 +195,12 @@
                 </div>
                 <div>
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}"><p class="dk-footnote"><g:message code="trait.search.specifics"/>
-                        <g:helpText title="pheno.help.header" placement="right" body="pheno.help.text"/></p></g:if>
-                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><p class="dk-footnote"><g:message code="trait.search.specifics"/>
-                        <g:helpText title="pheno.help.header" placement="right" body="stroke.pheno.help.text"/></p></g:elseif>
+
+                    <g:if test="${portalVersionBean.phenotypeLookupMessage}">
+                        <p class="dk-footnote">
+                        <g:message code="trait.search.specifics"/>
+                        <g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>
+                    </g:if>
                     <div class="form-inline" style="padding-top: 10px;">
                         <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                         </select>

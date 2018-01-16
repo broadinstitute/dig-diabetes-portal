@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import dig.diabetes.portal.NewsFeedService
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -27,7 +28,9 @@ class HomeController {
             render(view:'portalHome', model: [newsItems: (newsFeedService.getCurrentPosts(g.portalTypeString() as String) as JSON),
                                               show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                               show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
-                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)])
+                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
+                                              listPortalVersionBean: restServerService.retrieveBeanForAllPortals(),
+                                              portalVersionBean: restServerService.retrieveBeanForCurrentPortal()])
         }  else if (sharedToolsService.getApplicationIsBeacon()) {
             redirect(controller:'beacon', action:'beaconDisplay')
         } else {
@@ -68,7 +71,9 @@ class HomeController {
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
-                                                               warningText:sharedToolsService.getWarningText()])
+                                                               warningText:sharedToolsService.getWarningText(),
+                                                               listPortalVersionBean: restServerService.retrieveBeanForAllPortals(),
+                                                               portalVersionBean: restServerService.retrieveBeanForCurrentPortal()])
     }
 
     /***

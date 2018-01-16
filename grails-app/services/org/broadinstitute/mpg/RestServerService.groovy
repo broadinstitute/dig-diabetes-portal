@@ -309,15 +309,39 @@ class RestServerService {
                     mdvName, existingPortalVersionBean.getPhenotype(), existingPortalVersionBean.getDataSet(),
                     existingPortalVersionBean.getTissues(), existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
                     existingPortalVersionBean.getExcludeFromLZ(),
-                    existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset()
+                    existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset(),
+                    existingPortalVersionBean.getFrontLogo(), existingPortalVersionBean.getTagline(),
+                    existingPortalVersionBean.getAlternateLanguages(),existingPortalVersionBean.getGeneExamples(),
+                    existingPortalVersionBean.getVariantExamples(),existingPortalVersionBean.getRangeExamples(),
+                    existingPortalVersionBean.getBackgroundGraphic()
             )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[], "", "" )
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[], "", "","","",[],[],[],[],"" )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
     }
+
+
+    public PortalVersionBean retrieveBeanForCurrentPortal(){
+        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==metaDataService?.getPortalTypeFromSession()}
+        PortalVersionBean returnValue
+        if (existingPortalVersionBean){
+            returnValue = existingPortalVersionBean
+        } else {
+            log.error("ERROR: code requested portal ${metaDataService?.getPortalTypeFromSession()}, but we don't have anything by that name")
+        }
+        return returnValue
+    }
+
+
+    public List <PortalVersionBean> retrieveBeanForAllPortals(){
+        return PORTAL_VERSION_BEAN_LIST
+    }
+
+
+
     /***
      * Retrieve the MDV version for a portal type
      *

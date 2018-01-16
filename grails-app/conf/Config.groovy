@@ -574,7 +574,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         ["GLYCEMIC"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
-                                                        "ExSeq_13k_mdv23"), // default data set used for a LocusZoom plot
+                                                        "ExSeq_13k_mdv23",
+        "files.t2dFrontHeader",
+        "portal.header.tagline",
+["English", "Spanish"],
+        ["SLC30A8"],
+        ["rs13266634"],
+        ["chr9:21,940,000-22,190,000"],
+        'images/front_bg_2017-02.png',
+        "pheno.help.text"
+), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv70",
@@ -584,7 +593,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
-                                                          "ExSeq_13k_mdv23"),
+                                                          "ExSeq_13k_mdv23",
+                                          "files.stroke.front.logo",
+                                          "portal.stroke.header.tagline",
+                                          [],
+                                          ["HDAC9"],
+                                          ["rs2984613","APOE-e2"],
+                                          ["chr7:18,100,000-18,300,000"],
+                                          'images/stroke/front_bg_2017_stroke.png',
+                                          "stroke.pheno.help.text"
+                                  ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv91",
@@ -594,7 +612,15 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS"], // most important phenotype group name
                                                           [],
                                                           "[3]",
-                                                          "GWAS_CARDIoGRAM_mdv91"),
+                                                          "GWAS_CARDIoGRAM_mdv91",
+                                          "files.miFrontHeader",
+                                          "portal.mi.header.tagline",
+                                          [],
+                                          ["LPA"],
+                                          ["rs10965215"],
+                                          ["chr9:20,940,000-21,800,000"],
+                                          'images/mi/front_bg_2017_mi5.png',
+                                  ""),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
                                                           "mdv80",
@@ -604,7 +630,15 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
                                                           "[1,2]",
-                                                          "GWAS_IBDGenomics_eu_mdv80")
+                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "files.ibdFrontHeader4",
+                                          "portal.ibd.header.tagline",
+                                          [],
+                                          ["IL23R"],
+                                          ["rs11209026"],
+                                          ["chr9:20,940,000-21,800,000"],
+                                          'images/front_bg_2017-02.png',
+                                  "")
 ]
 
 
