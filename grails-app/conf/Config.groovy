@@ -582,7 +582,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
         ["rs13266634"],
         ["chr9:21,940,000-22,190,000"],
         'images/front_bg_2017-02.png',
-        "pheno.help.text"
+        "pheno.help.text",
+        "true"
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -601,7 +602,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs2984613","APOE-e2"],
                                           ["chr7:18,100,000-18,300,000"],
                                           'images/stroke/front_bg_2017_stroke.png',
-                                          "stroke.pheno.help.text"
+                                          "stroke.pheno.help.text",
+                                          "false"
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -620,7 +622,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/mi/front_bg_2017_mi5.png',
-                                  ""),
+                                  "",
+                                          "false"
+                                  ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
                                                           "mdv80",
@@ -638,7 +642,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
-                                  "")
+                                  "",
+                                          "false"
+                                  )
 ]
 
 

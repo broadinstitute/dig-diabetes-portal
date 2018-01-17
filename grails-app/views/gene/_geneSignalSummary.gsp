@@ -112,7 +112,7 @@
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
                     yellowLightImage: '<r:img uri="/images/yellowlight.png"/>',
                     greenLightImage: '<r:img uri="/images/greenlight.png"/>',
-                    suppressBurdenTest: ("<%=burdenDataSet%>".indexOf('GWAS')>-1),
+                    suppressBurdenTest: !(${sampleLevelSequencingDataExists}),
                     variantInfoUrl: '${createLink(controller: "VariantInfo", action: "variantInfo")}',
                     currentPhenotype: $('.chosenPhenotype').attr('id'),
                     retrieveTopVariantsAcrossSgsUrl: '${createLink(controller: "VariantSearch", action: "retrieveTopVariantsAcrossSgs")}',

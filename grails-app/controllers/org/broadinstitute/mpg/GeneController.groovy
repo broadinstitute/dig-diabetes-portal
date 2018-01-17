@@ -229,7 +229,8 @@ class GeneController {
                                              defaultTissuesDescriptions:passDefaultTissuesDescriptions,
                                              defaultPhenotype: defaultPhenotype,
                                              identifiedGenes:identifiedGenes,
-                                             assayId: assayId
+                                             assayId: assayId,
+                                             sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists()
             ] )
         }
     }

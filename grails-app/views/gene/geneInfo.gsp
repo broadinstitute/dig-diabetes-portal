@@ -146,7 +146,7 @@
                     <em style="font-weight: 900;"><%=geneName%></em>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
+                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
                         <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" style="border-radius: 2px;" target="_blank">Gene Page guide</a>
                         </div>
                     </g:if>
