@@ -3,11 +3,11 @@
 
      <div class="panel-body">
 
-<h4>Dataset</h4>
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
 <p><g:message code="aboutTheData.stroke.datasets.SiGN_2016"></g:message></p>
 
-<h4>Publications</h4>
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.NINDS_2016_LancetNeurol"></g:message><br>
@@ -22,7 +22,7 @@
 </div></p>
 
 
-    <h4>Dataset phenotypes</h4>
+    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
     <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
     <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
@@ -41,7 +41,7 @@
     <li><g:message code="informational.shared.traits.toast_Other_Undetermined"></g:message></li>
     </ul>
 
-    <h4>Dataset subjects</h4>
+    <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>P.I.</th><th>Ancestry</th></tr>
@@ -96,12 +96,12 @@
     </table>
 
 
-    <h4>Project</h4>
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
 <h5><b><g:message code="aboutTheData.stroke.datasets.SIGN.title"></g:message></b></h5>
     <p><g:message code="aboutTheData.stroke.datasets.SIGN.project"></g:message></p>
 
-<h4>Accessing SiGN 2016 data</h4>
+<h4>Accessing NINDS SiGN 2016 data</h4>
 
 <p><g:message code="informational.data.accessing.SiGN_2016"></g:message></p>
 </div>
