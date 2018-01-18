@@ -29,7 +29,8 @@ class PortalVersionBean {
     private List<String> rangeExamples
     private String backgroundGraphic
     private String phenotypeLookupMessage
-
+    private String logoCode
+    private String menuHeader
 
     public PortalVersionBean(String portalType,
                              String portalDescription,
@@ -48,7 +49,9 @@ class PortalVersionBean {
                              List<String> variantExamples,
                              List<String> rangeExamples,
                              String backgroundGraphic,
-                             String phenotypeLookupMessage){
+                             String phenotypeLookupMessage,
+                             String logoCode,
+                             String menuHeader ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -67,6 +70,8 @@ class PortalVersionBean {
         this.rangeExamples = rangeExamples
         this.backgroundGraphic = backgroundGraphic
         this.phenotypeLookupMessage = phenotypeLookupMessage
+        this.logoCode = logoCode
+        this.menuHeader = menuHeader
     }
 
     public String getPortalType() {
@@ -142,6 +147,15 @@ class PortalVersionBean {
         return phenotypeLookupMessage
     }
 
+    public String getLogoCode() {
+        return logoCode
+    }
+
+    public String getMenuHeader() {
+        return menuHeader
+    }
+
+
 
 
 
@@ -163,7 +177,9 @@ class PortalVersionBean {
 "variantExamples":"${getVariantExamples().toString()}",
 "rangeExamples":"${getRangeExamples().toString()}",
 "backgroundGraphic":"${getBackgroundGraphic()}",
-"phenotypeLookupMessage":"${getPhenotypeLookupMessage()}"
+"phenotypeLookupMessage":"${getPhenotypeLookupMessage()}",
+"logoCode":"${getLogoCode()}",
+"menuHeader":"${getMenuHeader()}"
 }""".toString()
     }
 }

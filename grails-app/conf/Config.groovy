@@ -582,7 +582,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
         ["rs13266634"],
         ["chr9:21,940,000-22,190,000"],
         'images/front_bg_2017-02.png',
-        "pheno.help.text"
+        "pheno.help.text",
+        "files.t2dBannerText",
+        "images/menu_header_bg_2017.png"
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -601,7 +603,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs2984613","APOE-e2"],
                                           ["chr7:18,100,000-18,300,000"],
                                           'images/stroke/front_bg_2017_stroke.png',
-                                          "stroke.pheno.help.text"
+                                          "stroke.pheno.help.text",
+                                          "files.stroke.header.logo",
+                                          "images/stroke/menu_header_bg_2017_stroke.png"
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -620,7 +624,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/mi/front_bg_2017_mi5.png',
-                                  ""),
+                                  "",
+                                          "files.miBannerText",
+                                          "images/mi/menu_header_bg_2017_mi1.png"
+                                  ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
                                                           "mdv80",
@@ -638,7 +645,31 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
-                                  "")
+                                  "",
+                                          "files.ibd.front.logo",
+                                          "images/menu_header_bg_2017.png"
+                                  ),
+                                  new PortalVersionBean("epilepsy",
+                                          "Epilepsy",
+                                          "mdv91",
+                                          "IBD",
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          ["AnteriorCaudate"],
+                                          ["ECG TRAITS"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "files.ibdFrontHeader4",
+                                          "portal.ibd.header.tagline",
+                                          [],
+                                          ["IL23R"],
+                                          ["rs11209026"],
+                                          ["chr9:20,940,000-21,800,000"],
+                                          'images/front_bg_2017-02.png',
+                                          "",
+                                          "files.ibd.front.logo",
+                                          "images/menu_header_bg_2017.png"
+                                  )
 ]
 
 

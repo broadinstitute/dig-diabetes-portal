@@ -5,6 +5,7 @@
     <meta name="wot-verification" content="9fd2c3983c1837397ff8"/>
     <r:require modules="core"/>
     <r:require modules="portalHome"/>
+    <r:require module="mustache"/>
     <r:layoutResources/>
 
 </head>

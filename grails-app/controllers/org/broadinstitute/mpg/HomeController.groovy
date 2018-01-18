@@ -1,11 +1,13 @@
 package org.broadinstitute.mpg
 
 import dig.diabetes.portal.NewsFeedService
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 import grails.converters.JSON
@@ -82,6 +84,18 @@ class HomeController {
      */
     def signAContract = {
         render(controller: 'home', view: 'signAContract')
+    }
+
+
+
+
+    def retrieveAllPortalsAjax = {
+        String portalJsonDescr = restServerService.getPortalVersionBeanListAsJson()
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(portalJsonDescr)
+        render(status:200, contentType:"application/json") {
+            jsonArray
+        }
     }
 
     /***

@@ -1,38 +1,76 @@
-<g:if test="${g.portalTypeString()?.equals('stroke')}">
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/stroke', file:'menu_header_bg_2017_stroke.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-</g:if>
-<g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-</g:elseif>
-<g:elseif test="${g.portalTypeString()?.equals('mi')}">
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/mi', file:'menu_header_bg_2017_mi1.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-</g:elseif>
-<g:else>
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-</g:else>
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left;  width:350px; padding:12px 0 14px 0; ">
-            <a href="${createLink(controller:'home',action:'portalHome')}">
-            <img src="${resource(dir: 'images/stroke', file:g.message(code:"files.stroke.header.logo", default:"stroke_header_logo.svg"))}" style=" width: 400px; margin-left: 10px;" />
-            </a>
-        </g:if>
-        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-            <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
-            <a href="${createLink(controller:'home',action:'portalHome')}">
-            <img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_header_logo_2017.svg"))}" style=" width: 450px; margin-left: 10px;" />
-            </a>
-        </g:elseif>
-        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-            <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
-            <img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibd.front.logo", default:"files.ibd.front.logo"))}" style=" width: 400px; margin-left: 10px;" />
-        </g:elseif>
-        <g:else>
-            <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0; ">
-            <a href="${createLink(controller:'home',action:'portalHome')}">
-                <img src="${resource(dir: 'images', file:g.message(code:"files.t2dBannerText", default:"t2d_logo.svg"))}" style=" width: 400px; margin-left: 16px;">
-            </a>
-        </g:else>
-    </div>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: '<g:createLink controller="home" action="retrieveAllPortalsAjax"/>',
+            async: true
+        }).done(function (data) {
+        var menuHeaderLine =
+            "{{#.}}"+
+        "<div class=\"container-fluid\" id=\"header-bottom\" style=\"background-image:url(${resource( file:'{{menuHeader}}')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; \">"+
+             "{{/.}}";
+            var substitutedMenuHeaderLine =  Mustache.render( menuHeaderLine,data);
+            $("#menuHeaderGoesHere").empty().append(substitutedMenuHeaderLine);
+
+            var logoCodeLine =
+                "{{#.}}"+
+                "<div class=\"dk-logo-wrapper\" style=\"position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;\">"+
+                "<a href=\"${createLink(controller:'home',action:'portalHome')}\">" +
+                "<img src=\"${resource(file:g.message(code:'{{logoCode}}', default:'mi_header_logo_2017.svg'))}\" style=\" width: 450px; margin-left: 10px;\" />"+
+                "</a></div>"+
+                "{{/.}}";
+            var substitutedLogoLine =  Mustache.render( logoCodeLine,data);
+            $("#logoGoesHere").empty().append(substitutedMenuHeaderLine);
+
+        });
+    });
+
+
+</script>
+
+<div id="menuHeaderGoesHere"></div>
+<div id="logoGoesHere"></div>
+%{--<g:if test="${g.portalTypeString()?.equals('stroke')}">--}%
+    %{--<div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/stroke', file:'menu_header_bg_2017_stroke.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">--}%
+%{--</g:if>--}%
+%{--<g:elseif test="${g.portalTypeString()?.equals('ibd')}">--}%
+    %{--<div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">--}%
+%{--</g:elseif>--}%
+%{--<g:elseif test="${g.portalTypeString()?.equals('mi')}">--}%
+    %{--<div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images/mi', file:'menu_header_bg_2017_mi1.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">--}%
+%{--</g:elseif>--}%
+%{--<g:else>--}%
+    %{--<div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">--}%
+%{--</g:else>--}%
+
+
+
+
+
+        %{--<g:if test="${g.portalTypeString()?.equals('stroke')}">--}%
+            %{--<div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left;  width:350px; padding:12px 0 14px 0; ">--}%
+            %{--<a href="${createLink(controller:'home',action:'portalHome')}">--}%
+            %{--<img src="${resource(dir: 'images/stroke', file:g.message(code:"files.stroke.header.logo", default:"stroke_header_logo.svg"))}" style=" width: 400px; margin-left: 10px;" />--}%
+            %{--</a>--}%
+        %{--</g:if>--}%
+        %{--<g:elseif test="${g.portalTypeString()?.equals('mi')}">--}%
+            %{--<div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">--}%
+            %{--<a href="${createLink(controller:'home',action:'portalHome')}">--}%
+            %{--<img src="${resource(dir: 'images/mi', file:g.message(code:"files.miBannerText", default:"mi_header_logo_2017.svg"))}" style=" width: 450px; margin-left: 10px;" />--}%
+            %{--</a>--}%
+        %{--</g:elseif>--}%
+        %{--<g:elseif test="${g.portalTypeString()?.equals('ibd')}">--}%
+            %{--<div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">--}%
+            %{--<img src="${resource(dir: 'images/ibd', file:g.message(code:"files.ibd.front.logo", default:"files.ibd.front.logo"))}" style=" width: 400px; margin-left: 10px;" />--}%
+        %{--</g:elseif>--}%
+        %{--<g:else>--}%
+            %{--<div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0; ">--}%
+            %{--<a href="${createLink(controller:'home',action:'portalHome')}">--}%
+                %{--<img src="${resource(dir: 'images', file:g.message(code:"files.t2dBannerText", default:"t2d_logo.svg"))}" style=" width: 400px; margin-left: 16px;">--}%
+            %{--</a>--}%
+        %{--</g:else>--}%
+    %{--</div>--}%
 
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
     <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/stroke', file:'menu_bg_2017_stroke.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
