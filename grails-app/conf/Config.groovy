@@ -583,7 +583,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
         ["chr9:21,940,000-22,190,000"],
         'images/front_bg_2017-02.png',
         "pheno.help.text",
-        "true"
+        "true",
+        "gene.genePage.warning",
+        ""
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -603,7 +605,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:18,100,000-18,300,000"],
                                           'images/stroke/front_bg_2017_stroke.png',
                                           "stroke.pheno.help.text",
-                                          "false"
+                                          "false",
+                                          "",
+                                          ""
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -623,7 +627,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/mi/front_bg_2017_mi5.png',
                                   "",
-                                          "false"
+                                          "false",
+                                          "",
+                                          ""
                                   ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
@@ -643,7 +649,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
                                   "",
-                                          "false"
+                                          "false",
+                                          "",
+                                          "geneSignalSummary.credSetsIBD.help"
                                   )
 ]
 

@@ -95,6 +95,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var buildRenderData = function (data,additionalParameters){
             var renderData = {  variants: [],
+                                credibleSetInfoCode:data.credibleSetInfoCode,
                                 const:{
                                     coding:[],
                                     spliceSite:[],

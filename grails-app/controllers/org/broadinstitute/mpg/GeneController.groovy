@@ -230,7 +230,8 @@ class GeneController {
                                              defaultPhenotype: defaultPhenotype,
                                              identifiedGenes:identifiedGenes,
                                              assayId: assayId,
-                                             sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists()
+                                             sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
+                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning())
             ] )
         }
     }

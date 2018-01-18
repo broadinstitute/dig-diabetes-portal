@@ -30,6 +30,9 @@ class PortalVersionBean {
     private String backgroundGraphic
     private String phenotypeLookupMessage
     private String sampleLevelSequencingDataExists
+    private String genePageWarning
+    private String credibleSetInfoCode
+
 
 
     public PortalVersionBean(String portalType,
@@ -50,7 +53,9 @@ class PortalVersionBean {
                              List<String> rangeExamples,
                              String backgroundGraphic,
                              String phenotypeLookupMessage,
-                             String sampleLevelSequencingDataExists ){
+                             String sampleLevelSequencingDataExists,
+                             String genePageWarning,
+                             String credibleSetInfoCode ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -70,6 +75,8 @@ class PortalVersionBean {
         this.backgroundGraphic = backgroundGraphic
         this.phenotypeLookupMessage = phenotypeLookupMessage
         this.sampleLevelSequencingDataExists = sampleLevelSequencingDataExists
+        this.genePageWarning = genePageWarning
+        this.credibleSetInfoCode = credibleSetInfoCode
     }
 
     public String getPortalType() {
@@ -149,6 +156,14 @@ class PortalVersionBean {
         return sampleLevelSequencingDataExists
     }
 
+    public String getGenePageWarning() {
+        return genePageWarning
+    }
+
+    public String getCredibleSetInfoCode() {
+        return credibleSetInfoCode
+    }
+
 
 
 
@@ -172,6 +187,8 @@ class PortalVersionBean {
 "backgroundGraphic":"${getBackgroundGraphic()}",
 "phenotypeLookupMessage":"${getPhenotypeLookupMessage()}",
 "sampleLevelSequencingDataExists":${getSampleLevelSequencingDataExists()}
+"genePageWarning":"${getGenePageWarning()}",
+"credibleSetInfoCode":"${getCredibleSetInfoCode()}"
 }""".toString()
     }
 }

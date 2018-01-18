@@ -47,12 +47,17 @@
 
                     </div>
                 </div>
-                <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="col-md-12" style="font-size:13px">
-                        Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
-                    </div>
-                </g:if>
+                {{#genePageWarning}}
+                <div class="col-md-12" style="font-size:13px">
+                    {{.}}
+                </div>
+                {{/genePageWarning}}
 
+                %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
+                    %{--<div class="col-md-12" style="font-size:13px">--}%
+                        %{--Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.--}%
+                    %{--</div>--}%
+                %{--</g:if>--}%
             </div>
             <div class="row geneWindowDescriptionHolder">
 
@@ -671,10 +676,12 @@
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <p>&nbsp;</p>
-<g:if test="${g.portalTypeString()?.equals('ibd')}">
-<p><g:message code="geneSignalSummary.credSetsIBD.help"></g:message></p></g:if>
-    %{--<g:elseif test="${g.portalTypeString()?.equals('t2d')}">--}%
-        %{--<p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>--}%
+
+{{#credibleSetInfoCode}}
+<p>{{.}}</p>
+{{/credibleSetInfoCode}}
+
+
 <div class='dataTable'>
                 <div id="ddd" style="width:100%; height: 60px">
                     <div style="float:left; width: 240px">
