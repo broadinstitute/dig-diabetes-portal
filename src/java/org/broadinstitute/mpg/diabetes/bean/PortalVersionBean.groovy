@@ -31,6 +31,12 @@ class PortalVersionBean {
     private String phenotypeLookupMessage
     private String logoCode
     private String menuHeader
+    private String sampleLevelSequencingDataExists
+    private String genePageWarning
+    private String credibleSetInfoCode
+    private String blogId
+
+
 
     public PortalVersionBean(String portalType,
                              String portalDescription,
@@ -51,7 +57,11 @@ class PortalVersionBean {
                              String backgroundGraphic,
                              String phenotypeLookupMessage,
                              String logoCode,
-                             String menuHeader ){
+                             String menuHeader,
+                             String sampleLevelSequencingDataExists,
+                             String genePageWarning,
+                             String credibleSetInfoCode,
+                             String blogId ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -72,6 +82,10 @@ class PortalVersionBean {
         this.phenotypeLookupMessage = phenotypeLookupMessage
         this.logoCode = logoCode
         this.menuHeader = menuHeader
+        this.sampleLevelSequencingDataExists = sampleLevelSequencingDataExists
+        this.genePageWarning = genePageWarning
+        this.credibleSetInfoCode = credibleSetInfoCode
+        this.blogId = blogId
     }
 
     public String getPortalType() {
@@ -156,6 +170,21 @@ class PortalVersionBean {
     }
 
 
+    public String getSampleLevelSequencingDataExists() {
+        return sampleLevelSequencingDataExists
+    }
+
+    public String getGenePageWarning() {
+        return genePageWarning
+    }
+
+    public String getCredibleSetInfoCode() {
+        return credibleSetInfoCode
+    }
+
+    public String getBlogId() {
+        return blogId
+    }
 
 
 
@@ -179,7 +208,11 @@ class PortalVersionBean {
 "backgroundGraphic":"${getBackgroundGraphic()}",
 "phenotypeLookupMessage":"${getPhenotypeLookupMessage()}",
 "logoCode":"${getLogoCode()}",
-"menuHeader":"${getMenuHeader()}"
+"menuHeader":"${getMenuHeader()}",
+"sampleLevelSequencingDataExists":${getSampleLevelSequencingDataExists()},
+"genePageWarning":"${getGenePageWarning()}",
+"credibleSetInfoCode":"${getCredibleSetInfoCode()}",
+"blogId":"${getBlogId()}"
 }""".toString()
     }
 }

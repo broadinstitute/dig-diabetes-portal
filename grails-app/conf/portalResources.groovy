@@ -95,7 +95,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo"
+        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo", "portalHome"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
@@ -106,7 +106,7 @@ modules = {
     }
     variantInfo {
 
-        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "matrix"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "matrix", "portalHome"
 
         resource url: 'css/images/controls.png'
 
@@ -122,16 +122,19 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantWF {
+        dependsOn "portalHome"
+
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
 
     datasetsPage {
+        dependsOn "portalHome"
         resource url: 'css/dport/datasets.css'
         resource url: 'js/lib/dport/datasetsPage.js'
     }
     variantSearchResults {
-        dependsOn "tableViewer"
+        dependsOn "tableViewer", "portalHome"
 
         resource url: 'css/dport/variantSearchResults.css'
         resource url: 'js/lib/dport/variantSearchResults.js'

@@ -9,6 +9,7 @@ import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -206,6 +207,7 @@ class GeneController {
                      endingExtentSpecified:geneExtent.endExtent])
             String defaultPhenotype = metaDataService.getDefaultPhenotype()
             String  geneUpperCase =   geneToStartWith.toUpperCase()
+
             List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
@@ -229,7 +231,9 @@ class GeneController {
                                              defaultTissuesDescriptions:passDefaultTissuesDescriptions,
                                              defaultPhenotype: defaultPhenotype,
                                              identifiedGenes:identifiedGenes,
-                                             assayId: assayId
+                                             assayId: assayId,
+                                             sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
+                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning())
             ] )
         }
     }

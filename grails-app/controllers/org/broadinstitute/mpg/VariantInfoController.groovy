@@ -440,7 +440,7 @@ class VariantInfoController {
         }
 
         if (variantDataSet == null) {
-            if (sampleGroup.parent) {
+                if (sampleGroup.parent) {
                 jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
             }
         } else {

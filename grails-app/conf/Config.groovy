@@ -575,16 +575,20 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
-        "files.t2dFrontHeader",
-        "portal.header.tagline",
-["English", "Spanish"],
-        ["SLC30A8"],
-        ["rs13266634"],
-        ["chr9:21,940,000-22,190,000"],
-        'images/front_bg_2017-02.png',
-        "pheno.help.text",
-        "files.t2dBannerText",
-        "images/menu_header_bg_2017.png"
+                                                "files.t2dFrontHeader",
+                                                "portal.header.tagline",
+                                        ["English", "Spanish"],
+                                                ["SLC30A8"],
+                                                ["rs13266634"],
+                                                ["chr9:21,940,000-22,190,000"],
+                                                'images/front_bg_2017-02.png',
+                                                "pheno.help.text",
+                                                "images/t2d_logo.svg",
+                                                "images/menu_header_bg_2017.png",
+                                                "true",
+                                                "gene.genePage.warning",
+                                                "",
+                                                '5010306206573083521'
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -604,8 +608,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr7:18,100,000-18,300,000"],
                                           'images/stroke/front_bg_2017_stroke.png',
                                           "stroke.pheno.help.text",
-                                          "files.stroke.header.logo",
-                                          "images/stroke/menu_header_bg_2017_stroke.png"
+                                          "images/stroke/stroke_header_logo.svg",
+                                          "images/stroke/menu_header_bg_2017_stroke.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '7961982646849648720'
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -625,8 +633,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/mi/front_bg_2017_mi5.png',
                                   "",
-                                          "files.miBannerText",
-                                          "images/mi/menu_header_bg_2017_mi1.png"
+                                          "images/mi/mi_header_logo_2017.svg",
+                                          "images/mi/menu_header_bg_2017_mi1.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '3944203828206499294'
                                   ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
@@ -646,8 +658,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
                                   "",
-                                          "files.ibd.front.logo",
-                                          "images/menu_header_bg_2017.png"
+                                          "images/ibd/IBD_logo.svg",
+                                          "images/menu_header_bg_2017.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '7857348124942584918'
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -667,8 +683,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
                                           "",
-                                          "files.ibd.front.logo",
-                                          "images/menu_header_bg_2017.png"
+                                          "images/ibd/IBD_logo.svg",
+                                          "images/menu_header_bg_2017.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '7961982646849648720'
                                   )
 ]
 

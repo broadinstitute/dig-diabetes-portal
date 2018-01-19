@@ -313,11 +313,19 @@ class RestServerService {
                     existingPortalVersionBean.getFrontLogo(), existingPortalVersionBean.getTagline(),
                     existingPortalVersionBean.getAlternateLanguages(),existingPortalVersionBean.getGeneExamples(),
                     existingPortalVersionBean.getVariantExamples(),existingPortalVersionBean.getRangeExamples(),
-                    existingPortalVersionBean.getBackgroundGraphic()
+                    existingPortalVersionBean.getBackgroundGraphic(),
+                    existingPortalVersionBean.getPhenotypeLookupMessage(),
+                    existingPortalVersionBean.getLogoCode(),
+                    existingPortalVersionBean.getMenuHeader(),
+                    existingPortalVersionBean.getSampleLevelSequencingDataExists(),
+                    existingPortalVersionBean.getGenePageWarning(),
+                    existingPortalVersionBean.getCredibleSetInfoCode(),
+                    existingPortalVersionBean.getBlogId()
             )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[], "", "","","",[],[],[],[],"" )
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
+                    "", "","","",[],[],[],[],"","","","","","","","" )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean

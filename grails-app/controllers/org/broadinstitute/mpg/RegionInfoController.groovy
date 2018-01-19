@@ -60,7 +60,7 @@ class RegionInfoController {
                     propertyName = property.name
                 }
                 jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
-                //jsonReturn = widgetService.getCredibleSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
+                jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
             } else {
                 jsonReturn = slurper.parse(errorJsonString);
             }

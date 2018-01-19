@@ -19,7 +19,7 @@ var mpgSoftware = mpgSoftware || {};
 
         function loadNewsFeed(arrayOfPosts) {
             // currently there are no stroke news items, so add a default
-            if(arrayOfPosts.length == 0) {
+            if (arrayOfPosts.length == 0) {
                 document.getElementById('newsFeedHolder').innerHTML =
                     '<li><b>Coming soon!</b></li>';
                 return;
@@ -28,8 +28,8 @@ var mpgSoftware = mpgSoftware || {};
                 var postHtml = document.createElement('li');
                 var text = document.createElement('span');
                 text.innerHTML = '<b>' + post.title + '</b>: ' +
-                                  getFirstWordsOfPost(post.content, 15) + '... ' +
-                                  '<a href=' + post.url + ' target="_blank">Read more</a>';
+                    getFirstWordsOfPost(post.content, 15) + '... ' +
+                    '<a href=' + post.url + ' target="_blank">Read more</a>';
                 postHtml.appendChild(text);
                 document.getElementById('newsFeedHolder').appendChild(postHtml);
             });
@@ -119,7 +119,44 @@ var mpgSoftware = mpgSoftware || {};
 
         }
 
+        var retrieveAllPortalsInfo = function (parms) {
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: parms.retrieveAllPortalsAjaxUrl,
+                async: true
+            }).done(function (data) {
+                // var menuHeaderLine =
+                //     "{{#.}}" +
+                //     "<div class=\"container-fluid\" id=\"header-bottom\" style=\"background-image:url('{{menuHeader}}'); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; \">" +
+                //     "{{/.}}";
+                // var substitutedMenuHeaderLine = Mustache.render(menuHeaderLine, data);
+                // $("#menuHeaderGoesHere").empty().append(substitutedMenuHeaderLine);
+                //
+                // var logoCodeLine =
+                //     "{{#.}}" +
+                //     "<div class=\"dk-logo-wrapper\" style=\"position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;\">" +
+                //     "<a href=\"${createLink(controller:'home',action:'portalHome')}\">" +
+                //     "<img src=\"{{logoCode}}\" style=\" width: 450px; margin-left: 10px;\" />" +
+                //     "</a></div>" +
+                //     "{{/.}}";
+                // var substitutedLogoLine = Mustache.render(logoCodeLine, data);
+                // $("#logoGoesHere").empty().append(substitutedMenuHeaderLine);
+                var portal_typeSelector = $("#portal_typeSelector");
+                _.forEach(data, function(eachPortal){
+                    var option = new Option( eachPortal.portalDescription,eachPortal.portalType);
+                    if  (parms.currentPortalType===eachPortal.portalType){
+                        $(option).prop('selected', true);
+                    }
+                    portal_typeSelector.append(option);
+                });
+
+            });
+        };
+
+
         return {
+            retrieveAllPortalsInfo:retrieveAllPortalsInfo,
             loadNewsFeed: loadNewsFeed,
             setSlideWindows: setSlideWindows
         }

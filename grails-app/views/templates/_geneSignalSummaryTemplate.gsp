@@ -35,59 +35,29 @@
             </select>
         </div>
     </div>
-    <!--<div >%{--should hold the Choose data set panel--}%
-        <div class="panel-heading">-->
-            <!--<div class="row">
-                <div class="col-md-3"">
-                    <div id='trafficLightHolder'>
-                        <r:img uri="/images/undeterminedlight2.png"/>
-                        <div id="signalLevelHolder" style="display:none"></div>
-                    </div>
-                    <div class="trafficExplanations trafficExplanation1" style="font-size:16px; text-align: center;">
-                        No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
-                    </div>
-                    <div class="trafficExplanations trafficExplanation2" style="font-size:18px; text-align: center;">
-                        Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
-                    </div>
-                    <div class="trafficExplanations trafficExplanation3" style="font-size:18px; text-align: center;">
-                        Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
-                    </div>
-<!--
-                    <div class="form-inline" style="padding:10px 0;">
-                        <input id="generalized-input" value="Look for another gene" type="text" class="form-control input-default" style="height: 40px; margin:0; width:75%;">
-                        <button id="generalized-go" class="btn btn-primary" type="button" style="height: 40px; margin:0; width:23%;">GO</button>
-                    </div>
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                        </div>
-                    </g:if>
-                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons">
-                            <a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/CDKP_gene_page_guide.pdf" target="_blank">Gene Page guide</a>
-                        </div>
-                    </g:elseif>
-                </div>-->
-             </div>
 
 
-                <!--<div class="col-md-5 col-xs-12">
 
-                </div>-->
 
-            </div>
+
+
             <div class="row interestingPhenotypesHolder">
                 <div class="col-md-12">
                     <div id="interestingPhenotypes">
 
                     </div>
                 </div>
-                <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="col-md-12" style="font-size:13px">
-                        Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
-                    </div>
-                </g:if>
+                {{#genePageWarning}}
+                <div class="col-md-12" style="font-size:13px">
+                    {{.}}
+                </div>
+                {{/genePageWarning}}
 
+                %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
+                    %{--<div class="col-md-12" style="font-size:13px">--}%
+                        %{--Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.--}%
+                    %{--</div>--}%
+                %{--</g:if>--}%
             </div>
             <div class="row geneWindowDescriptionHolder">
 
@@ -706,10 +676,12 @@
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <p>&nbsp;</p>
-<g:if test="${g.portalTypeString()?.equals('ibd')}">
-<p><g:message code="geneSignalSummary.credSetsIBD.help"></g:message></p></g:if>
-    %{--<g:elseif test="${g.portalTypeString()?.equals('t2d')}">--}%
-        %{--<p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>--}%
+
+{{#credibleSetInfoCode}}
+<p>{{.}}</p>
+{{/credibleSetInfoCode}}
+
+
 <div class='dataTable'>
                 <div id="ddd" style="width:100%; height: 60px">
                     <div style="float:left; width: 240px">

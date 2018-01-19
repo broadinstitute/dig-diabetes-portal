@@ -87,14 +87,43 @@ class HomeController {
     }
 
 
+    def retrieveOnePortalAjax = {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        String portalJsonDescr = restServerService.retrieveBeanForCurrentPortal().toJsonString()
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject= slurper.parseText(portalJsonDescr)
+//
+//            jsonObject["menuHeader"] = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).getPath()
+////            String logoCode = grailsApplication.getMainContext().getResource(g.message(code:jsonObject["logoCode"]))
+////            jsonObject.remove("logoCode")
+//            jsonObject["logoCode"] = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["logoCode"]).getPath()
+        render(status:200, contentType:"application/json") {
+            jsonObject
+        }
+    }
 
 
     def retrieveAllPortalsAjax = {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         String portalJsonDescr = restServerService.getPortalVersionBeanListAsJson()
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(portalJsonDescr)
+        JSONArray modifiedJsonArray = new JSONArray()
+        for(JSONObject jsonObject in jsonArray){
+//            String menuHeader = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).getPath()
+//            jsonObject.remove("menuHeader")
+//            jsonObject["menuHeader"] = menuHeader
+//            String logoCode = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["logoCode"]).getPath()
+//            jsonObject.remove("logoCode")
+//            jsonObject["logoCode"] = logoCode
+            modifiedJsonArray.add(jsonObject)
+        }
         render(status:200, contentType:"application/json") {
-            jsonArray
+            modifiedJsonArray
         }
     }
 
