@@ -1898,6 +1898,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
+    public JSONObject getChromPos(JSONObject apiresults){
+        return apiresults
+    }
 
     /***
      * Gather up the data that is used in the Manhattan plot
@@ -1910,14 +1913,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnValue
         JsonSlurper slurper = new JsonSlurper()
 
+       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
         JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
 
+        //JSONObject processedapiResults = getChromPos(apiResults);
         String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+
         //def slurper = new JsonSlurper()
         //returnValue = slurper.parseText(apiResults)
         return dataJsonObject
     }
+
 
 
 
@@ -2356,16 +2363,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
+                List<String> keys2 = []
 //                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
-//
-//                 //   keys << (new JSONObject(apiResults.variants[j].keys()));
-//
-//                    keys
-//
-//                    keys << (new JSONObject(apiResults.variants[i]).keys()).next;
+//                    keys2 << (new JSONObject(apiResults.variants[j][i]).keys()).next()
 //                }
 
-                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE"];
+                //dataJsonObject.results.pVals.level
+
+                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE", "VAR_ID", "CHROM", "POS"];
                 List<String> variantSpecificList = []
                 for (String key in keys) {
                     ArrayList valueArray = []
@@ -2475,12 +2480,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         //JsonSlurper jsonSlurper = new JsonSlurper()
         //JsonObject clumpDataJsonPayloadString =  jsonSlurper.parseText('{"phenotype":"${chromosomeName}","dataset":"ExChip_CAMP_dv1__T2D"}')
 
-       // String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
+       //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
 
-        String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
+       String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
 
 
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
+        //apiResults.variants.VAR_ID
+
+
+//
+//        for (int i = 0; i < VectorDataJson.numRecords; i++) {
+//            String CHROM = VectorDataJson.variants.VAR_ID;
+//            print CHROM
+//
+//        }
+
+
+
         return VectorDataJson;
     }
 

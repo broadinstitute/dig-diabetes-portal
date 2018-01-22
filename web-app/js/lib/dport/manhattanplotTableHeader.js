@@ -88,6 +88,7 @@ var mpgSoftware = mpgSoftware || {};
                 async: true,
                 success: function (data) {
                     console.log(data);
+                    data.variants
 
                     mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
 
