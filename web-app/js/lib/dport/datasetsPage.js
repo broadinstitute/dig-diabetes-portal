@@ -27,9 +27,7 @@ var mpgSoftware = mpgSoftware || {};
          */
         var getAccessName = function (dataTypeName){
             var access;
-            if (dataTypeName.includes('ForT2D')){
-                access = "Unpublished";}
-            else if (dataTypeName.includes('GoDARTS')){
+            if (dataTypeName.includes('GoDARTS')){
                 access = "Early access phase 1";}
             else if (dataTypeName.includes('METSIM')){
                 access = "Early access phase 1";}

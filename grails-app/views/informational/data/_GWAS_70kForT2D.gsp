@@ -2,19 +2,18 @@
 
 <script class="panel-body" id="GWAS_70kForT2D_script" type="x-tmpl-mustache">
 
-<h4><g:message code="informational.data.accessphase.70KforT2D"></g:message></h4>
-<p><g:message code="informational.data.accessphase.70KforT2Da"></g:message></p>
 
-<h4>Dataset</h4>
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.download.70KforT2D"></g:message></p>
 <p><g:message code="informational.data.overlaps.70KforT2D"></g:message></p>
 
-<h4>Publications</h4>
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Bonas-Guarch_2017_NatGenet"></g:message><br>
-<g:message code="informational.shared.publications.Bonas-Guarch_2017_NatGenet.author"></g:message>
+<g:message code="informational.shared.publications.Bonas-Guarch_2017_NatCommun"></g:message><br>
+<g:message code="informational.shared.publications.Bonas-Guarch_2017_NatCommun.author"></g:message>
 <g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Bonas-Guarch_2017_NatGenet.citation"></g:message> </div>
+<div class="citation"><g:message code="informational.shared.publications.Bonas-Guarch_2017_NatCommun.citation"></g:message> </div>
 </div></p>
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
@@ -22,7 +21,7 @@
     <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
 
-<h4>Dataset subjects</h4>
+<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
 <table class="table table-condensed table-responsive table-striped">
     <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
@@ -159,7 +158,7 @@
 
 
 <h4>External Links to 70KforT2D GWAS data</h4>
-
+<p><g:message code="informational.data.download.70KforT2D"></g:message></p>
 <p><g:message code="informational.data.external.70KforT2D1"></g:message></p>
 <p><g:message code="informational.data.external.70KforT2D2"></g:message></p>
 </script>

@@ -567,11 +567,11 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv28",    // the MDV number for this portal
+                                                        "mdv29",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
-                                                        ["GLYCEMIC"], // most important phenotype group name
+                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CORONARY ARTERY DISEASE", "BLOOD PRESSURE"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
@@ -596,7 +596,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE"], // most important phenotype group name
+                                                          ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
@@ -621,7 +621,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["SkeletalMuscle"],
-                                                          ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS"], // most important phenotype group name
+                                                          ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",

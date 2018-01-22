@@ -9,13 +9,15 @@
 
 
 <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-
-
-<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><h4><g:message code="informational.data.exptsumm.HPTxNCGM"></g:message>
+<p><g:message code="informational.data.project.HPTxNCGM"></g:message>
 </p>
 
-<h4>Accessing .... data</h4>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.HPTxNCGM"></g:message>
+</p>
+
+<h4>Accessing Han population Taiwan-NGCM data</h4>
+<p><g:message code="informational.data.accessing.HPTxNCGM1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.HPTxNCGM2"></g:message></p>
 
 
 </script>
