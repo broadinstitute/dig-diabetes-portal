@@ -29,28 +29,28 @@ class HomeControllerUnitSpec extends Specification {
     def cleanup() {
     }
 
-//    void "test index"() {
-//        setup:
-//        def newsFeedServiceMock = mockFor(NewsFeedService)
-//        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
-//        controller.newsFeedService = newsFeedServiceMock.createMock()
-//        controller.sharedToolsService = sharedToolsService
-//        controller.restServerService = restServerService
-//
-//        when:
-//        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
-//        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
-//        restServerService.metaClass.retrieveBeanForAllPortals = {unused-> []}
-//        restServerService.metaClass.retrieveBeanForCurrentPortal = {unused->null}
-//        controller.index()
-//
-//        then:
-//        response.status == 200
-//
-//        expect:
-//        grailsApplication != null
-//
-//    }
+    void "test index"() {
+        setup:
+        def newsFeedServiceMock = mockFor(NewsFeedService)
+        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
+        controller.newsFeedService = newsFeedServiceMock.createMock()
+        controller.sharedToolsService = sharedToolsService
+        controller.restServerService = restServerService
+
+        when:
+        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
+        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
+        restServerService.metaClass.retrieveBeanForAllPortals = {-> []}
+        restServerService.metaClass.retrieveBeanForCurrentPortal = {->null}
+        controller.index()
+
+        then:
+        response.status == 200
+
+        expect:
+        grailsApplication != null
+
+    }
 
     void "test index for beacon"() {
         setup:
@@ -68,27 +68,27 @@ class HomeControllerUnitSpec extends Specification {
     }
 
 
-//    void "test portalHome"() {
-//        setup:
-//        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
-//        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
-//        controller.sharedToolsService = sharedToolsService
-//        restServerService.metaClass.retrieveBeanForAllPortals = {unused-> []}
-//        restServerService.metaClass.retrieveBeanForCurrentPortal = {unused->null}
-//        controller.restServerService = restServerService
-//
-//        def newsFeedServiceMock = mockFor(NewsFeedService)
-//        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
-//        controller.newsFeedService = newsFeedServiceMock.createMock()
-//
-//        when:
-//        controller.portalHome()
-//
-//        then:
-//        response.status == 200
-//        view == '/home/portalHome'
-//
-//    }
+    void "test portalHome"() {
+        setup:
+        sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
+        sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
+        controller.sharedToolsService = sharedToolsService
+        restServerService.metaClass.retrieveBeanForAllPortals = {-> []}
+        restServerService.metaClass.retrieveBeanForCurrentPortal = {->null}
+        controller.restServerService = restServerService
+
+        def newsFeedServiceMock = mockFor(NewsFeedService)
+        newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
+        controller.newsFeedService = newsFeedServiceMock.createMock()
+
+        when:
+        controller.portalHome()
+
+        then:
+        response.status == 200
+        view == '/home/portalHome'
+
+    }
 
 
 
