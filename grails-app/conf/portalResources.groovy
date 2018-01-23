@@ -95,7 +95,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo", "portalHome"
+        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'
@@ -106,7 +106,7 @@ modules = {
     }
     variantInfo {
 
-        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "matrix", "portalHome"
+        dependsOn "core", "mbar", "bootstrapMultiselect", "igv","burdenTest", "matrix"
 
         resource url: 'css/images/controls.png'
 
@@ -122,19 +122,19 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantWF {
-        dependsOn "portalHome"
+        //dependsOn "portalHome"
 
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
 
     datasetsPage {
-        dependsOn "portalHome"
+       // dependsOn "portalHome"
         resource url: 'css/dport/datasets.css'
         resource url: 'js/lib/dport/datasetsPage.js'
     }
     variantSearchResults {
-        dependsOn "tableViewer", "portalHome"
+        dependsOn "tableViewer"
 
         resource url: 'css/dport/variantSearchResults.css'
         resource url: 'js/lib/dport/variantSearchResults.js'
@@ -173,7 +173,7 @@ modules = {
         resource url: 'js/lib/mustache.js'
     }
     core {
-        dependsOn "jquery"
+        dependsOn "jquery", "portalHome"
 
         resource url: 'images/ajax-loader.gif'
         resource url: 'images/icons/dna-strands.ico'
@@ -190,6 +190,8 @@ modules = {
         resource url: 'js/lib/bootstrap3-typeahead.min.js'
 
         resource url: 'js/lib/lodash.min.js'
+
+
 
     }
     igvNarrow {  // IGV on a page with core
