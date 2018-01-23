@@ -675,20 +675,20 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[1,2]",
                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "files.ibdFrontHeader4",
-                                          "portal.ibd.header.tagline",
+                                          "files.epilepsyFrontHeader",
+                                          "",
                                           [],
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
                                           "",
-                                          "images/ibd/IBD_logo.svg",
+                                          "images/epilepsy/epilepsy_logo.svg",
                                           "images/menu_header_bg_2017.png",
                                           "false",
                                           "",
                                           "",
-                                          '7961982646849648720'
+                                          '5414069947481666863'
                                   )
 ]
 
