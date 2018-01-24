@@ -128,41 +128,6 @@ if (grails.config.locations.isEmpty()){
     }
 }
 
-//    default server on start up
-server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
-restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
-
-//default  BackEndRestServer
-restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
-dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
-experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
-
-//burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-//burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
-//burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-//burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
-//burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-//burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/burden");
-//burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-//burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
-//burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenStraightFromTheDEVKb =  new ServerBean("Burden straight from Dev KB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenStraightFromTheMI_PRODKB =  new ServerBean("Burden straight from MI Prod KB", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/burden");
-
-
-//digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
-//digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
-//digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
-//digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
-//digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
-//digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
-
 digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
 digAWSKBV2prodServer = new ServerBean("KB-prod-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
@@ -180,27 +145,38 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 
 
 // this will be your default
-defaultRestServer = digawsprodstrokeKB
+defaultRestServer = digawsdevnewKB
 
- getRestServerList = [
-         digdevlocalServer,
-         digAWSKBV2prodServer,
-         digAWS02KBV2prodServer,
-         federatedAwsProdKBV2Server,
-         federatedAwsStageKBV2Server,
-         toddTestServer,
-         digdevmarcin,
-         digawsdevnewKB,
-         digawsdevnewKB_fed,
-         digawsqanewKB,
-         digawsqanewKB_fed,
-         digawsibddemoKB,
-         digawsprodmiKB,
-         digawsprodstrokeKB
- ]
+getRestServerList = [
+        digdevlocalServer,
+        digAWSKBV2prodServer,
+        digAWS02KBV2prodServer,
+        federatedAwsProdKBV2Server,
+        federatedAwsStageKBV2Server,
+        toddTestServer,
+        digdevmarcin,
+        digawsdevnewKB,
+        digawsdevnewKB_fed,
+        digawsqanewKB,
+        digawsqanewKB_fed,
+        digawsibddemoKB,
+        digawsprodmiKB,
+        digawsprodstrokeKB
+]
 
 
-println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
+
+//    default server on start up
+server.URL = defaultRestServer.getUrl()
+restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
+
+//default  BackEndRestServer
+restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
+dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
+experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
+
+
+println("\n\n%%%%%%%%%  Your initial backend REST server will be ${defaultRestServer.getUrl()}, aka ${defaultRestServer.getName()} %%%%%%%%%%%%%%%%\n\n")
 
 
 
@@ -667,19 +643,19 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
-                                          "mdv91",
-                                          "IBD",
+                                          "mdv100",
+                                          "EPI",
                                           "GWAS_IBDGenomics_eu_mdv80",
                                           ["AnteriorCaudate"],
-                                          ["ECG TRAITS"], // most important phenotype group name
+                                          ["PSYCHIATRIC"], // most important phenotype group name
                                           [],
                                           "[1,2]",
                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "files.epilepsyFrontHeader",
                                           "",
                                           [],
-                                          ["IL23R"],
-                                          ["rs11209026"],
+                                          ["CDKL5"],
+                                          ["rs2021722","X:18622693_G_A"],
                                           ["chr9:20,940,000-21,800,000"],
                                           'images/front_bg_2017-02.png',
                                           "",
