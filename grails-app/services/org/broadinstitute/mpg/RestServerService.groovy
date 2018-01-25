@@ -2480,9 +2480,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         //JsonSlurper jsonSlurper = new JsonSlurper()
         //JsonObject clumpDataJsonPayloadString =  jsonSlurper.parseText('{"phenotype":"${chromosomeName}","dataset":"ExChip_CAMP_dv1__T2D"}')
 
-       //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
+       String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
 
-       String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
+       //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
 
 
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
