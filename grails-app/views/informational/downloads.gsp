@@ -34,7 +34,7 @@
     <td><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/README_SiGN_2015.pdf" target="_blank">README</a></td></tr>
 
 
-    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4818561/" target="_blank">PMC4818561</a></td><td>Low-frequency and common genetic variation in ischemic stroke: The METASTROKE collaboration.</td><td><a href="https://personal.broadinstitute.org/mvon/4818561.Malik.2016.zip">4818561.Malik.2016.zip</a> (307MB)</td><td><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/README_Malik_2016.pdf" target="_blank">README</a></td></tr>
+    %{--<tr><td><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4818561/" target="_blank">PMC4818561</a></td><td>Low-frequency and common genetic variation in ischemic stroke: The METASTROKE collaboration.</td><td><a href="https://personal.broadinstitute.org/mvon/4818561.Malik.2016.zip">4818561.Malik.2016.zip</a> (307MB)</td><td><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/README_Malik_2016.pdf" target="_blank">README</a></td></tr>--}%
     %{--<tr><td><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5366092/" target="_blank">PMC5366092</a></td><td>Genetic variation at 16q24.2 is associated with small vessel stroke.</td><td>&nbsp;</td><td>&nbsp;</td></tr>--}%
     %{--<tr><td>Publication pending</td><td>Discovery of a novel locus and inverse causal associations between LDL cholesterol concentration and risk of intracerebral hemorrhage.</td><td>&nbsp;</td><td></td></tr>--}%
 </table>
