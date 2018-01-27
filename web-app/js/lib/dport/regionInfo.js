@@ -329,7 +329,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var specificCredibleSetSpecificDisplay = function(currentButton,variantsToInclude){
-
+            $('.credibleSetChooserButton').removeAttr('onclick'); // we will put this function back when the processing is complete
             $('.credibleSetChooserButton').removeClass('active');
             $('.credibleSetChooserButton').addClass('inactive');
             $(currentButton).removeClass('inactive');
@@ -569,6 +569,7 @@ var mpgSoftware = mpgSoftware || {};
             $('[data-toggle="popover"]').each(function() {
                     $(this).popover('hide');
             });
+
         };
 
         var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
@@ -594,6 +595,12 @@ var mpgSoftware = mpgSoftware || {};
 
 
                 displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, assayIdList,setDefaultButton );
+                // do we have any credible set buttons?  If so then it is now safe to turn them on
+                var credSetChoices = $('li.credibleSetChooserButton');
+                _.forEach(credSetChoices,function(credSetButton){
+                    var credSetButtonObj = $(credSetButton);
+                    credSetButtonObj.attr('onclick',credSetButtonObj.attr('toBeOnClick'));
+                });
 
             }, function(e) {
                 console.log("My ajax failed");
