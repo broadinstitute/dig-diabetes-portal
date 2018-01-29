@@ -1336,7 +1336,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return url;
                 };
-                // this.prepareData = function(records){
+                this.prepareData = function(records){
                 //
                 //     // Below is an example of how we might use UM's latest in order to assign credible set definitions.  For now
                 //     //  I will leave it commented out.
@@ -1379,7 +1379,9 @@ var mpgSoftware = mpgSoftware || {};
                 //
                 //     }
                 //
-                // };
+                //    alert('foo2');
+                    return records;
+                 };
             }, "BroadT2Da");
             dataSources.add(phenotype, new broadAssociationSource(geneGetLZ, rawPhenotype,dataSetName,propertyName,makeDynamic));
         };
@@ -1702,12 +1704,37 @@ var mpgSoftware = mpgSoftware || {};
                         locusZoomPlot[currentLzPlotKey].rescaleSVG();
                     });
 
-                    var clearCurtain = function() {
-                        locusZoomPlot[currentLzPlotKey].curtain.hide();
-                    };
-                    locusZoomPlot[currentLzPlotKey].on('data_rendered', clearCurtain);
-
+                    // var clearCurtain = function() {
+                    //     locusZoomPlot[currentLzPlotKey].curtain.hide();
+                    // };
+                    // locusZoomPlot[currentLzPlotKey].on('data_rendered', clearCurtain);
+                    "data_requested"
                 }
+                var clearCurtain = function() {
+                    locusZoomPlot[inParm.domId1].curtain.hide();
+                };
+                locusZoomPlot[inParm.domId1].on('data_rendered', clearCurtain);
+                var resetGenomicCoordinates = function() {
+                    if ("#lz-lzCredSet"===inParm.domId1) { // in the credible set tab we allow people to drag around their data region window
+                        var credSetStartPos = $('input.credSetStartPos').val();
+                        var credSetEndPos = $('input.credSetEndPos').val();
+                        var lzStart = ''+locusZoomPlot[inParm.domId1].state.start;
+                        var lzEnd = ''+locusZoomPlot[inParm.domId1].state.end;
+                        var somethingHasChanged = false;
+                        if (credSetStartPos!==lzStart){
+                            $('input.credSetStartPos').val(lzStart);
+                            somethingHasChanged = true;
+                        }
+                        if (credSetEndPos!==lzEnd){
+                            $('input.credSetEndPos').val(lzEnd);
+                            somethingHasChanged = true;
+                        }
+                        if (somethingHasChanged){
+                            mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap();
+                        }
+                    }
+                };
+                locusZoomPlot[inParm.domId1].on('data_requested', resetGenomicCoordinates);
             }
         };
 

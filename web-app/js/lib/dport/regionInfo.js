@@ -823,7 +823,17 @@ var mpgSoftware = mpgSoftware || {};
                                 return credibleSetPresenceIndicator;
                             }})
                         );
-
+                        var oldTabName = $('a[href=#credibleSetTabHolder]').text();
+                        $('a[href=#credibleSetTabHolder]').text("Credible sets: " +oldTabName);
+                        $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();   ///  think I'm executing this routine to early.
+                        // Can I call it after an appropriate promise is satisfied?
+                        //
+                        //
+                        //
+                        //
+                    } else {
+                        var oldTabName = $('a[href=#credibleSetTabHolder]').text();
+                        $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +oldTabName);
                     }
                     $.data($('#dataHolderForCredibleSets')[0],'allRenderData',drivingVariables);
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
