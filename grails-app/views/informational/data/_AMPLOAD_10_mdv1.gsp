@@ -51,7 +51,7 @@
 
 
 
-    <h4>Accessing Oxford BioBank Axiom GWAS GWAS data</h4>
+    <h4>Accessing Oxford BioBank Axiom GWAS data</h4>
     <p><g:message code="informational.data.accessing.OxBB_Axiom1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.OxBB_Axiom2"></g:message></p>
 
 
