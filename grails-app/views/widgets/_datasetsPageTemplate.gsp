@@ -55,6 +55,7 @@
 <g:render template="./data/ExSeq_RSNG" />
 <g:render template="./data/GWAS_DCSP2" />
 <g:render template="./data/GWAS_DIAGRAMimputed" />
+<g:render template="./data/GWAS_AFHRC" />
 
 
 <script id="metaData2" type="x-tmpl-mustache">

@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_AFGen_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_AFHRC_script" type="x-tmpl-mustache">
     <div class="panel-body">
 
     <table>
@@ -11,7 +11,16 @@
                 </table>
                 <hr />
 
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.overlaps.AFHRC"></g:message></p>
+
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Roselli_2018_journal"></g:message><br>
+<g:message code="informational.shared.publications.Roselli_2018_journal.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Roselli_2018_journal.citation"></g:message> </div>
+</div></p>
 
 <p><div class="paper">
 <g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message><br>
@@ -34,6 +43,7 @@
 
     <table class="table table-condensed table-responsive table-striped">
 
+<tr><th colspan="4">Subjects in the 2017 AFGen GWAS subset</th></tr>
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
        <tr><td>448</td><td>438</td><td>Atrial Fibrillation Biobank LMU/Cooperative Health Research in the Region of Augsburg (AFLMU/KORA)</td><td>European</td></tr>
@@ -74,7 +84,21 @@
 </table>
 
 <h4>Dataset subjects by ancestry</h4>
+
 <table class="table table-condensed table-responsive table-striped">
+<tr><th colspan="4">Subjects in the 2018 AF HRC GWAS dataset</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
+
+<tr><td>1,307</td><td>7,660</td><td>African American</td></tr>
+<tr><td>568</td><td>1,096</td><td>Brazilian</td></tr>
+<tr><td>8,180</td><td>28,612</td><td>East Asian</td></tr>
+<tr><td>55,114</td><td>482,295</td><td>European</td></tr>
+<tr><td>277</td><td>3,081</td><td>Hispanic</td></tr>
+<tr><td>65,446</td><td>522,744</td><td>All</td></tr>
+</table>
+
+<table class="table table-condensed table-responsive table-striped">
+<tr><th colspan="4">Subjects in the 2017 AFGen GWAS subset</th></tr>
 <tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
 
 <tr><td>641</td><td>5,234</td><td>African American</td></tr>
