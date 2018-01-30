@@ -386,11 +386,13 @@
                         <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                         {{#credibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">{{pName}}</a></li>
+                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>--}%
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">{{pName}}</a></li>
+                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>--}%
                         {{/incredibleSetTab}}
                     </ul>
                 </div>
