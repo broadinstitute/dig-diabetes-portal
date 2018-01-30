@@ -1,4 +1,7 @@
 <script class="panel-body" id="AMPLOAD_10_mdv1_script" type="x-tmpl-mustache">
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+
+<p><g:message code="informational.data.overlaps.OxBB_Axiom"></g:message></p>
 
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
@@ -51,7 +54,7 @@
 
 
 
-    <h4>Accessing Oxford BioBank Axiom GWAS GWAS data</h4>
+    <h4>Accessing Oxford BioBank Axiom GWAS data</h4>
     <p><g:message code="informational.data.accessing.OxBB_Axiom1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.OxBB_Axiom2"></g:message></p>
 
 

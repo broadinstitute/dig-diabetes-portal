@@ -1,5 +1,9 @@
 <script class="panel-body" id="GWAS_OxBB_script" type="x-tmpl-mustache">
 
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+
+<p><g:message code="informational.data.overlaps.OxBB_Axiom"></g:message></p>
+
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
