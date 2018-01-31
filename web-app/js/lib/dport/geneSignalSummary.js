@@ -1367,7 +1367,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             makeDynamic:additionalParameters.firstStaticPropertyName,
             retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
             sampleGroupsWithCredibleSetNames:credSetSpecific.sampleGroupsWithCredibleSetNames,
-            maximumNumberOfResults:credSetSpecific.maximumNumberOfResults
+            maximumNumberOfResults:credSetSpecific.maximumNumberOfResults,
+            credSetToVariants:credSetSpecific.credSetToVariants
         };
 
         if ((credSetSpecific.sampleGroupsWithCredibleSetNames)&&(credSetSpecific.sampleGroupsWithCredibleSetNames.length>0)) {
