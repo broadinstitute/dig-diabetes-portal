@@ -848,6 +848,34 @@ var mpgSoftware = mpgSoftware || {};
                         positionBy = 1;
                         maximumNumberOfResults = DEFAULT_NUMBER_OF_VARIANTS;
                     }
+
+                    // What we need is a listing of all of the variance inside each credible set which we can pass to LZ
+                    var variantToCredSetMap = _.map(drivingVariables.variants,function(v,k){return {"VAR_ID":v.details.VAR_ID,
+                        "CREDIBLE_SET_ID":( (typeof v.details.CREDIBLE_SET_ID === 'undefined')?'none':v.details.CREDIBLE_SET_ID)}});
+                    var credSetToVariants = {};
+                    _.forEach(variantToCredSetMap,function(objWithIdAndCredSet){
+                        var credSetId;
+                        if ($.type(objWithIdAndCredSet.CREDIBLE_SET_ID)==="string"){
+                            credSetId = objWithIdAndCredSet.CREDIBLE_SET_ID;
+                        } else {
+                            _.forEach(objWithIdAndCredSet.CREDIBLE_SET_ID,function(credSetVal,credSetKey){
+                                _.forEach(credSetVal,function(credSetName,phenotypeName){
+                                    credSetId = credSetName;
+                                });
+                            });
+                        }
+                        if ( typeof credSetToVariants[credSetId] === 'undefined'){
+                            credSetToVariants[credSetId] = [objWithIdAndCredSet.VAR_ID];
+                        } else {
+                            credSetToVariants[credSetId].push(objWithIdAndCredSet.VAR_ID);
+                        }
+                    });
+                    var sortedByKey = [];
+                    _.forEach(Object.keys(credSetToVariants).sort(), function(key) {
+                        sortedByKey.push({"credSetName":key,"varIds":credSetToVariants[key]});
+                    });
+
+
                     mpgSoftware.geneSignalSummaryMethods.lzOnCredSetTab(additionalParameters,{
                         positioningInformation:{
                             chromosome:additionalParameters.geneChromosome.substr(3),
@@ -862,7 +890,8 @@ var mpgSoftware = mpgSoftware || {};
                         datasetReadableName:data.datasetReadable,
                         positionBy:positionBy,
                         sampleGroupsWithCredibleSetNames:[data.dataset],
-                        maximumNumberOfResults:maximumNumberOfResults
+                        maximumNumberOfResults:maximumNumberOfResults,
+                        credSetToVariants:sortedByKey
                     });
 
 

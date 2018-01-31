@@ -988,6 +988,83 @@ var mpgSoftware = mpgSoftware || {};
                 namespace: { assoc: phenotype }
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
+
+
+
+            //  switch coloring options
+            panel_layout.dashboard.components.push(
+                {
+                    type: "display_options",
+                    position: "right",
+                    color: "blue",
+                    // Below: special config specific to this widget
+                    button_html: "Display options...",
+                    button_title: "Control how plot items are displayed",
+
+                    layer_name: "associationpvalues",
+                    default_config_display_name: "Linkage Disequilibrium (default)", // display name for the default plot color option (allow user to revert to plot defaults)
+
+                    options: [
+                        {
+                            // First dropdown menu item
+                            display_name: "95% credible set (boolean)",  // Human readable representation of field name
+                            display: {  // Specify layout directives that control display of the plot for this option
+                                point_shape: "circle",
+                                point_size: 40,
+                                color: {
+                                    field: "assoc:isCredible",
+                                    scale_function: "if",
+                                    parameters: {
+                                        field_value: true,
+                                        then: "#00CC00",
+                                        else: "#CCCCCC"
+                                    }
+                                },
+                                legend: [ // Tells the legend how to represent this display option
+                                    { shape: "circle", color: "#00CC00", size: 40, label: "In credible set", class: "lz-data_layer-scatter" },
+                                    { shape: "circle", color: "#CCCCCC", size: 40, label: "Not in credible set", class: "lz-data_layer-scatter" }
+                                ]
+                            }
+                        },
+                        {
+                            // Second option. The same plot- or even the same field- can be colored in more than one way.
+                            display_name: "95% credible set (gradient by contribution)",
+                            display: {
+                                point_shape: "circle",
+                                point_size: 40,
+                                color: [
+                                    {
+                                        field: "assoc:credibleSetContribution",
+                                        scale_function: "if",
+                                        parameters: {
+                                            field_value: 0,
+                                            then: "#777777"
+                                        }
+                                    },
+                                    {
+                                        scale_function: "interpolate",
+                                        field: "assoc:credibleSetContribution",
+                                        parameters: {
+                                            breaks: [0, 1],
+                                            values: ["#fafe87", "#9c0000"]
+                                        }
+                                    }
+                                ],
+                                legend: [
+                                    { shape: "circle", color: "#777777", size: 40, label: "No contribution", class: "lz-data_layer-scatter" },
+                                    { shape: "circle", color: "#fafe87", size: 40, label: "Some contribution", class: "lz-data_layer-scatter" },
+                                    { shape: "circle", color: "#9c0000", size: 40, label: "Most contribution", class: "lz-data_layer-scatter" }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            );
+
+
+
+
+
             panel_layout.axes.y1.label = yAxisLabel;
             panel_layout.y_index = -1;
             panel_layout.height = 270;
@@ -1380,6 +1457,34 @@ var mpgSoftware = mpgSoftware || {};
                 //     }
                 //
                 //    alert('foo2');
+                    var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+                    var pValueKeyName;
+                     if ((records) &&
+                         (records.length>0)&&
+                         ( typeof pageVars.credSetToVariants !== 'undefined')){
+                         _.forEach(records[0], function (value,key){
+                             if (key.indexOf(':id')>-1){
+                                 pValueKeyName = key;
+                             }
+
+                         });
+
+                         _.forEach(records, function (oneRecord){
+                             var varId = convertVarIdToBroadFavoredForm(oneRecord[pValueKeyName]) ;
+                             var substitutedVarId = varId;
+                             _.forEach(pageVars.credSetToVariants,function(credSetObj,count){
+                                 _.forEach(credSetObj.varIds,function(oneVariant){
+                                    if (substitutedVarId===oneVariant){
+                                        oneRecord["credSetName"] = credSetObj.credSetName;
+                                        oneRecord["credSetId"] = count;
+                                    }
+                                 });
+                             });
+
+
+                         });
+                     }
+
                     return records;
                  };
             }, "BroadT2Da");
