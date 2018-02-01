@@ -44,7 +44,7 @@
 <div id="manhattanPlot1"></div>
 
 
-<input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" />
+<input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
 
 
 <table id="phenotypeTraits" class="table basictable table-striped">
