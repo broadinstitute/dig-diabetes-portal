@@ -563,7 +563,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
@@ -606,10 +606,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["HDAC9"],
                                           ["rs2984613","APOE-e2"],
                                           ["chr7:18,100,000-18,300,000"],
-                                          'images/stroke/front_bg_2017_stroke.png',
+                                          'images/stroke/front_stroke_bg_2018.png',
                                           "stroke.pheno.help.text",
                                           "images/stroke/stroke_header_logo.svg",
-                                          "images/stroke/menu_header_bg_2017_stroke.png",
+                                          "images/stroke/front_stroke_bg_2018.png",
                                           "false",
                                           "",
                                           "",
@@ -656,10 +656,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          'images/front_bg_2017-02.png',
+                                          'images/front_ibd_bg_2018.png',
                                   "",
-                                          "images/ibd/IBD_logo.svg",
-                                          "images/menu_header_bg_2017.png",
+                                          "images/ibd/ibd_header_logo.svg",
+                                          "images/front_ibd_bg_2018.png",
                                           "false",
                                           "",
                                           "",
