@@ -55,6 +55,7 @@ class RestServerService {
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
+    private String GENE_METADATA_URL = "getGeneMetadata"
     private String GET_DATA_URL = "getData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_HAIL_DATA_URL = "getHailData"
@@ -1541,6 +1542,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         retdat = getRestCallBase(GET_SAMPLE_METADATA_URL, currentRestServer())
         return retdat
     }
+
+
+    public String getGeneMetadata() {
+        String retdat
+        retdat = getRestCallBase(GENE_METADATA_URL, currentRestServer())
+        return retdat
+    }
+
+
 
     /***
      * Make multiple calls to fill up the 'variation across continental ancestries' table, then combine all of those

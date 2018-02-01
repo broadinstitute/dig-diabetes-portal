@@ -32,9 +32,11 @@ class MetaDataService {
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     JsonParser jsonSampleParser = JsonParser.getSampleService();
+    JsonParser jsonGeneParser = JsonParser.getGeneService()
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     Integer forceProcessedMetadataOverride = -1
     Integer forceProcessedSampleMetadataOverride = -1
+    Integer forceProcessedGeneMetadataOverride = -1
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
@@ -219,6 +221,25 @@ class MetaDataService {
         return this.jsonSampleParser;
     }
 
+
+
+
+
+    private JsonParser getJsonGeneParser() {
+        // reload the metadata if scheduled
+        if (this.forceProcessedGeneMetadataOverride != 0) {
+
+            String jsonString = this.restServerService.getGeneMetadata();
+            this.jsonGeneParser.forceMetadataReload(jsonString);
+
+        }
+
+        // reset reload indicator
+        this.forceProcessedGeneMetadataOverride = 0;
+
+        // return
+        return this.jsonGeneParser;
+    }
 
 
 
