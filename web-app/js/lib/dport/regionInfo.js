@@ -818,7 +818,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     var drivingVariables = buildRenderData(data,additionalParameters);
                     var allCredibleSets = extractAllCredibleSetNames (drivingVariables);
-                    if (allCredibleSets.length > 1){
+                    if (allCredibleSets.length > 0){
                         if (allCredibleSets[0].credibleSetId===""){
                             var oldTabName = $('a[href=#credibleSetTabHolder]').text();
                             $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +oldTabName);
