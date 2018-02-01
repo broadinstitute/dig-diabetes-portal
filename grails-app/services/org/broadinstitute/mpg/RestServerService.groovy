@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import com.google.gson.JsonObject
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -63,6 +64,7 @@ class RestServerService {
     private String GET_REGION_URL = "getRegion"
     private String GET_VECTOR_URL = "getVectorData"
     private String GET_BIG_WIG_DATA = "getBigWigData"
+    private String GET_CLUMP_DATA = "getClumpData"
     private String GET_EPIGENETIC_POSSIBLE_DATA = "getEpigenomicData"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
@@ -638,6 +640,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public JSONObject postBigWigDataRestCall(String jsonString) {
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_BIG_WIG_DATA, currentRestServer() );
+        return tempObject;
+    }
+
+    public JSONObject postClumpDataRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_CLUMP_DATA, currentRestServer() );
         return tempObject;
     }
 
@@ -1927,6 +1934,32 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
+    public JSONObject getChromPos(JSONObject apiresults){
+        return apiresults
+    }
+
+    /***
+     * Gather up the data that is used in the Manhattan plot
+     *
+     * @param phenotype
+     * @param dataSetName
+
+     */
+    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName) {
+        JSONObject returnValue
+        JsonSlurper slurper = new JsonSlurper()
+
+       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
+        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
+
+        //JSONObject processedapiResults = getChromPos(apiResults);
+        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
+        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+
+        //def slurper = new JsonSlurper()
+        //returnValue = slurper.parseText(apiResults)
+        return dataJsonObject
+    }
 
 
 
@@ -2359,6 +2392,80 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public String processInfoFromGetClumpDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        List<String> crossVariantData = []
+        if (!apiResults["is_error"]){
+            int numberOfVariants = apiResults.numRecords
+            for (int j = 0; j < numberOfVariants; j++) {
+                List<String> keys = []
+                List<String> keys2 = []
+//                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
+//                    keys2 << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+//                }
+
+                //dataJsonObject.results.pVals.level
+
+                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE", "VAR_ID", "CHROM", "POS"];
+                List<String> variantSpecificList = []
+                for (String key in keys) {
+                    ArrayList valueArray = []
+                    valueArray.add(apiResults.variants[j][key]);
+                    def value = valueArray.findAll { it }[0]
+                    if (value instanceof String) {
+                        String stringValue = value as String
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
+                    } else if (value instanceof Integer) {
+                        Integer integerValue = value as Integer
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${integerValue}\"}"
+                    } else if (value instanceof Double) {
+                        Double doubleValue = value as Double
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${doubleValue}\"}"
+                    } else if (value instanceof Map) {
+                        Map mapValue = value as Map
+                        List<String> subKeys = mapValue.keySet() as List
+                        for (String subKey in subKeys) {
+                            // maybe subKey is always a group ID
+                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
+                            String dataSetName = sampleGroup.systemId
+                            String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
+                            String ancestry = "unknown"
+                            if (sampleGroup) {
+                                ancestry = sampleGroup.getAncestry()
+                            }
+                            def particularMapValue = mapValue[subKey]
+                            if (particularMapValue instanceof BigDecimal) {// data set particular values
+                                BigDecimal particularMapBigDecimalValue = particularMapValue as BigDecimal
+                                variantSpecificList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapBigDecimalValue}}"
+                            } else if (particularMapValue instanceof Integer) {// data set particular values
+                                Integer particularMapIntegerValue = particularMapValue as Integer
+                                variantSpecificList << "{\"level\":\"${key}^NONE^${key}^${subKey}^${ancestry}^${translatedDatasetName}\",\"count\":${particularMapIntegerValue}}"
+                            } else if (particularMapValue instanceof Map) {
+                                Map particularSubMap = particularMapValue as Map
+                                List<String> particularSubKeys = particularSubMap.keySet() as List
+                                for (String particularSubKey in particularSubKeys) {
+                                    def particularSubMapValue = particularSubMap[particularSubKey]
+                                    BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
+                                    String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
+                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
+                                    variantSpecificList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
+                                }
+
+                            }
+                        }
+
+                    } else if (value instanceof ArrayList) {
+                        ArrayList arrayListValue = value as ArrayList
+                        log.error("An ArrayList is not an expected result.  Did the return data format change?")
+                    }
+                }
+                crossVariantData << "{ \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
+            }
+        }
+        return  "{\"results\":[" +  crossVariantData.join(",") + "]"+topLevelInformation+"}"
+    }
+
+
 
 
 
@@ -2404,6 +2511,32 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     }
+
+    public JSONObject getClumpDataRestCall(String phenotype, String datasetName) {
+        //JsonSlurper jsonSlurper = new JsonSlurper()
+        //JsonObject clumpDataJsonPayloadString =  jsonSlurper.parseText('{"phenotype":"${chromosomeName}","dataset":"ExChip_CAMP_dv1__T2D"}')
+
+       String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
+
+       //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
+
+
+        JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
+        //apiResults.variants.VAR_ID
+
+
+//
+//        for (int i = 0; i < VectorDataJson.numRecords; i++) {
+//            String CHROM = VectorDataJson.variants.VAR_ID;
+//            print CHROM
+//
+//        }
+
+
+
+        return VectorDataJson;
+    }
+
 
     /***
      * Note: this call is not used interactively, but used instead to fill the grails domain object that holds

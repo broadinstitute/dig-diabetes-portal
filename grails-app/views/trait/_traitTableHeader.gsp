@@ -3,113 +3,51 @@
 
 
 <script>
-    var mpgSoftware = mpgSoftware || {};
 
-    mpgSoftware.manhattanPlot = (function () {
-
-        var fillSampleGroupDropdown = function (phenotype) {
-            var loader = $('#rSpinner');
-            loader.show();
-
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'trait',action: 'ajaxSampleGroupsPerTrait')}",
-                data: {phenotype: phenotype},
-                async: false,
-                success: function (data) {
-
-                    var rowDataStructure = [];
-                    if ((typeof data !== 'undefined') &&
-                            (data)) {
-                        if ((data.sampleGroups) &&
-                                (data.sampleGroups.length>0)) {//assume we have data and process it
-                            for ( var i = 0 ; i < data.sampleGroups.length ; i++ ){
-                                var sampleGroup = data.sampleGroups[i];
-                                $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn,sampleGroup.sg,sampleGroup.default))
-                            }
-                        }
-                    }
-                     loader.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loader.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-
-        };
-        return {fillSampleGroupDropdown: fillSampleGroupDropdown}
-    }());
-
-
-
-    mpgSoftware.pickNewDataSet = function (){
-        var sampleGroup = $('#manhattanSampleGroupChooser').val();
-        $('#manhattanPlot1').empty();
-        $('#traitTableBody').empty();
-        $('#phenotypeTraits').DataTable().rows().remove();
-        $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-        mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis('<%=phenotypeKey%>',sampleGroup);
-        %{--mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');--}%
-    }
-
+    
+    var drivingVariables = {
+        phenotypeName: '<%=phenotypeKey%>',
+        ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
+        ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
+        phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
+        variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
+        requestedSignificance:'<%=requestedSignificance%>',
+        local:"${locale}",
+        copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
+        printMsg:'<g:message code="table.buttons.printText" default="Print me!" />'
+    };
+    mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
 
     $( document ).ready(function() {
-        mpgSoftware.manhattanPlot.fillSampleGroupDropdown('<%=phenotypeKey%>');
+
+        mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
+        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
+
 
 </script>
 
 
 
-
-
-<!--<div class="separator"></div>-->
+<div class="separator"></div>
 
 <p class="form-group">
 
-    <label for="manhattanSampleGroupChooser" style="float:left;"><g:message code="traitTable.messages.results" />&nbsp;&nbsp;</label>
-    <!--<span id="traitTableDescription"></span>:-->
-    %{--<g:if test="${sampleGroupOwner == 'DIAGRAM'}">--}%
-        %{--<a href="http://diagram-consortium.org/downloads.html" class="boldlink"><g:message code="informational.shared.institution.DIAGRAM" />-3</a>--}%
-    %{--</g:if>--}%
-    %{--<g:elseif test="${sampleGroupOwner == 'MAGIC'}">--}%
-        %{--<a href="http://www.magicinvestigators.org/downloads/" class="boldlink"><g:message code="informational.shared.institution.MAGIC" /></a>--}%
-    %{--</g:elseif>--}%
-    %{--<g:elseif test="${sampleGroupOwner == 'GIANT'}">--}%
-        %{--<a href="http://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files#GIANT_Consortium_2010_GWAS_Metadata_is_Available_Here_for_Download"--}%
-           %{--class="boldlink"><g:message code="informational.shared.institution.GIANT" /></a>--}%
-    %{--</g:elseif>--}%
-    %{--<g:elseif test="${sampleGroupOwner == 'GLGC'}">--}%
-        %{--<a href="http://www.ncbi.nlm.nih.gov/pubmed/20686565"--}%
-           %{--class="boldlink"><g:message code="informational.shared.institution.GLGC" /></a>--}%
-    %{--</g:elseif>--}%
-    %{--<g:elseif test="${sampleGroupOwner == 'CARDIoGRAM'}">--}%
-        %{--<a href="http://www.cardiogramplusc4d.org/downloads/" class="boldlink"><g:message code="informational.shared.institution.CARDIoGRAM" /></a>--}%
-    %{--</g:elseif>--}%
-    %{--<g:elseif test="${sampleGroupOwner == 'CKDGenConsortium'}">--}%
-        %{--<a href="http://www.ncbi.nlm.nih.gov/pubmed/20383146" class="boldlink"><g:message code="informational.shared.institution.CKDGen" /></a>--}%
-    %{--</g:elseif>--}%
-    %{--<g:elseif test="${sampleGroupOwner == 'PGC'}">--}%
-        %{--<a href="https://www.nimhgenetics.org/available_data/data_biosamples/pgc_public.php"--}%
-           %{--class="boldlink"><g:message code="informational.shared.institution.PGC" /></a>--}%
-    %{--</g:elseif>--}%
-    %{--<g:message code="gene.variantassociations.table.rowhdr.gwas" /> <g:message code="gene.variantassociations.table.rowhdr.meta_analyses" /> <g:message code="informational.shared.phrase.consortium" />:--}%
-
-    <select id="manhattanSampleGroupChooser" class="form-control" style="width:auto;" name="manhattanSampleGroupChooser" onchange="mpgSoftware.pickNewDataSet(this)">
+    <g:message code="traitTable.messages.results" />
+    <span id="traitTableDescription"></span>:
+    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)">
     </select>
 
 </p>
 
-<style>
-.mychart {width:100% !important; height:740px !important;}
-</style>
-</p>
-<div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
-<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
-<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
+<div id="manhattanPlot1"></div>
+
+
+<input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
+
+
+<table id="phenotypeTraits" class="table basictable table-striped">
     <thead>
     <tr>
         <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>

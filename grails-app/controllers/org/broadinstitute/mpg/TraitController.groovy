@@ -133,6 +133,24 @@ class TraitController {
 
     }
 
+
+    /***
+     * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
+     * @return
+     */
+    def ajaxClumpData() {
+        String phenotype = params["phenotype"]
+
+        String dataSetName = params["dataset"]
+
+
+        JSONObject jsonObject = restServerService.getClumpSpecificInformation(phenotype, dataSetName)
+        render(status: 200, contentType: "application/json") {
+            [variant: jsonObject]
+        }
+
+    }
+
     /***
      *  search for a single trait from the main page and this will be the page frame.  The resulting Ajax call is  phenotypeAjax
      * @return
@@ -210,6 +228,10 @@ class TraitController {
         }
 
     }
+
+
+
+
 
     /***
      * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
