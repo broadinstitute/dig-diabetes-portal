@@ -105,9 +105,10 @@
                 </h1>
 
 
-
+                <!--
                 <div class="row">
                     <div class="col-md-12">
+
                         <a class="find-out-more-opener" data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact2">
                             <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span><br />External<br />resources</a>
 
@@ -118,21 +119,9 @@
                         </div>
                     </div>
                 </div>
-
+-->
 
                 <g:render template="variantPageHeader"/>
-
-
-                <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; margin-top: 15px; background-color: #eee; border-radius: 3px;">
-
-                    <a data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact" style="outline: none; font-size: 16px;"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources</a>
-
-                    <div id="findOutMoreCompact" class="collapse" style="margin-top: 10px;">
-                        <div class="accordion-inner">
-                            <g:render template="findOutMoreCompact"/>
-                        </div>
-                    </div>
-                </div>
 
 
 

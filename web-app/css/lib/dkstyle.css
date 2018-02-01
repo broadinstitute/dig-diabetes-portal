@@ -947,3 +947,8 @@ a.find-out-more-opener span {
 	right: 80px;
 	z-index: 10;
 }
+
+/* locus zoom */
+#trackList-tissue { height: 350px; overflow: auto;}
+
+#trackList-static, #trackList-dynamic { height: 350px; overflow: auto;}

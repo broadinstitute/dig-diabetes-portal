@@ -133,7 +133,7 @@
     });
 
 </script>
-<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
+<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-position: left top; padding-bottom: 70px; padding-top:0px;">
 
     <div class="container" style="color:#fff;">
         <div class="row" style="padding-top:40px;">
@@ -153,7 +153,7 @@
                     </g:each>
 
                 </p>
-                <p style="padding-top:10px; padding-bottom:30px; font-size:25px; font-weight: 300 !important;">
+                <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;">
                     <g:message code="${portalVersionBean.tagline}" /></p>
 
             </div>
