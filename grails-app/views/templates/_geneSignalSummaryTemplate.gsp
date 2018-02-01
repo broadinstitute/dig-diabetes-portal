@@ -1,16 +1,19 @@
+
+
+
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
 <div class="row">
-    <div class="col-xs-offset-7 col-xs-5">
-        <div class="row" style="margin: 10px 10px 0px 0; background-color: #eeeeee">
-            <div class="col-xs-5">
-                <label class="radio-inline" style="font-weight: bold">Genome browser</label>
+    <div class="col-md-offset-6 col-md-6">
+        <div class="row" style="margin: 30px 0 -5px 0; padding: 5px; background-color: #eeeeee">
+            <div class="col-md-6">
+                <label class="radio-inline" style="font-weight: bold">Select genome browser</label>
             </div>
-            <div class="col-xs-4">
+            <div class="col-md-3">
                 <label class="radio-inline"><input type="radio"  checked name="genomeBrowser" value=1
                                                    onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()"
                                                    checked>LocusZoom</label>
             </div>
-            <div class="col-xs-3">
+            <div class="col-md-3">
                 <label class="radio-inline"><input {{igvChecked}} type="radio"  name="genomeBrowser" value=2
                                                    onclick="mpgSoftware.geneSignalSummaryMethods.refreshSignalSummaryBasedOnPhenotype()">IGV</label>
             </div>
@@ -32,66 +35,39 @@
             </select>
         </div>
     </div>
-    <div >%{--should hold the Choose data set panel--}%
-        <div class="panel-heading">
-            <div class="row">
-                <div class="col-md-2 col-xs-12">
-                    <div id='trafficLightHolder'>
-                        <r:img uri="/images/undeterminedlight.png"/>
-                        <div id="signalLevelHolder" style="display:none"></div>
-                    </div>
 
-                </div>
 
-                <div class="col-md-5 col-xs-12">
-                    <div class="row">
-                        <div class="col-lg-12 trafficExplanations trafficExplanation1">
-                            No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
-                        </div>
 
-                        <div class="col-lg-12 trafficExplanations trafficExplanation2">
-                            Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
-                        </div>
 
-                        <div class="col-lg-12 trafficExplanations trafficExplanation3">
-                            Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="col-md-5 col-xs-12">
 
-                </div>
-
-            </div>
             <div class="row interestingPhenotypesHolder">
-                <div class="col-xs-12">
+                <div class="col-md-12">
                     <div id="interestingPhenotypes">
 
                     </div>
                 </div>
-                <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="col-xs-offset-2 col-xs-8" style="font-size:10px">
-                        Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.
-                    </div></g:if>
-                <div class="col-xs-2">
-
+                {{#genePageWarning}}
+                <div class="col-md-12" style="font-size:13px">
+                    {{.}}
                 </div>
+                {{/genePageWarning}}
+
+                %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
+                    %{--<div class="col-md-12" style="font-size:13px">--}%
+                        %{--Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.--}%
+                    %{--</div>--}%
+                %{--</g:if>--}%
             </div>
             <div class="row geneWindowDescriptionHolder">
-                <div class="col-sm-3">
-                    <div>
+
+                <div class="col-md-12">
+                <!-- <label style="font-size: 20px; font-weight: 900">VARIANTS ON <em>{{geneName}}</em></label> -->
+                    <div class="geneWindowDescription" style="font-size: 20px; font-weight: 900; font-style:normal;">
+                    <em style="font-weight: 900; ">{{geneName}}</em> is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
                     </div>
                 </div>
-                <div class="col-sm-6">
-                    <div class="geneWindowDescription">
-                    {{geneName}} is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
-                    </div>
-                </div>
-                <div class="col-sm-3">
-                    <div>
-                    </div>
-                </div>
+
             </div>
 
         </div>
@@ -305,7 +281,7 @@
                     <div class="row">
                         <div class="col-lg-12">
 
-                        <table id="highImpactTemplateHolder" class="compact row-border"></table>
+                        <table id="highImpactTemplateHolder" class="compact row-border dk-t2d-general-table"></table>
 
                         </div>
                     </div>
@@ -389,7 +365,7 @@
                     <div class="row">
                         <div class="col-sm-12">
 
-                        <table id="commonVariantsLocationHolder" class="compact row-border"></table>
+                        <table id="commonVariantsLocationHolder" class="compact row-border dk-t2d-general-table"></table>
 
                         </div>
                     </div>
@@ -410,11 +386,13 @@
                         <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                         {{#credibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">{{pName}}</a></li>
+                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>--}%
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">{{pName}}</a></li>
+                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>--}%
                         {{/incredibleSetTab}}
                     </ul>
                 </div>
@@ -429,7 +407,7 @@
 
                                 <div id="commonVariantsLocation"></div>
                                 <div class="browserChooserGoesHere"></div>
-                                <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                                 <div class="igvGoesHere"></div>
                             </div>
                         </div>
@@ -456,32 +434,34 @@
                         <div class="col-sm-12">
                             <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
                                 <p>&nbsp;</p>
-                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                    <div class="col-sm-2 credSetWindowSummary" align="right">
-                                    Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
+                                <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                    <div class="col-md-12">
+                                        <div class="col-md-2 credSetWindowSummary">
+                                        Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/>
+                                        </div>
+                                        <div class="col-md-3 credSetWindowSummary">
+                                            Start position
+                                            <input type="text" name="startPosition" class="credSetStartPos form-control">
+                                        </div>
+                                        <div class="col-md-3 credSetWindowSummary">
+                                            End position
+                                            <input type="text" name="endPosition"  class="credSetEndPos form-control">
+                                        </div>
+                                        <div class="col-md-4">
+                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 22px">
+                                              Go
+                                              </button>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
-                                        Start position
-                                        <input type="text" name="startPosition" class="credSetStartPos">
-                                    </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
-                                        End position
-                                        <input type="text" name="endPosition"  class="credSetEndPos">
-                                    </div>
-                                    <div class="col-sm-2">
-                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
-                                          Go
-                                          </button>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div class="row clearfix">
-                                            <div class="col-sm-2 credSetWindowSummary">
+                                    <div class="col-md-12 clearfix" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+
+                                            <div class="col-md-2 credSetWindowSummary" style="line-height: 16px;">
                                                 Genes in window
                                             </div>
-                                            <div class="col-sm-10 regionParams">
+                                            <div class="col-md-10 regionParams">
                                                 <div class="matchedGenesGoHere"></div>
                                             </div>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
@@ -520,12 +500,12 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-2">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
                                          <div class="col-sm-2">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          %{--<div class="col-sm-2"></div>--}%
@@ -535,7 +515,7 @@
                                 %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
-                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
                     </div>
                 </div>
@@ -543,34 +523,35 @@
                 {{#incredibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
-                        <div class="col-xs-12">
+                        <div class="col-sm-12">
                             <div class="variantCategoryHolder"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message>
                                 <p>&nbsp;</p>
-                                <div class="row clearfix credibleSetHeader" style="margin: 5px 0 0 0">
-                                <div class="col-sm-2 credSetWindowSummary" align="right"> Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/> </div> 
-                                    <div class="col-sm-2 credSetWindowSummary">
+                                <div class="clearfix credibleSetHeader" style="margin: 5px 0 0 0">
+                                <div class="col-md-12">
+                                    <div class="col-md-2 credSetWindowSummary" align="right"> Set range:&nbsp;<g:helpText title="range.window.help.header" placement="top" body="range.window.credibleSets.help.text"/> </div> 
+                                    <div class="col-md-3 credSetWindowSummary">
                                         Start position
-                                        <input type="text" name="startPosition" class="credSetStartPos">
+                                        <input type="text" name="startPosition" class="credSetStartPos form-control">
                                     </div>
-                                    <div class="col-sm-2 credSetWindowSummary">
+                                    <div class="col-md-3 credSetWindowSummary">
                                         End position
                                         <input type="text" name="endPosition"  class="credSetEndPos">
                                     </div>
-                                    <div class="col-sm-2">
-                                          <button class="btn btn-secondary" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 15px">
+                                    <div class="col-md-4">
+                                          <button class="btn btn-secondary btn-default" onclick="mpgSoftware.geneSignalSummaryMethods.buildNewCredibleSetPresentation()" style="margin-top: 22px">
                                           Go
                                           </button>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div class="row clearfix">
-                                            <div class="col-sm-2 credSetWindowSummary">
-                                                Genes in window
-                                            </div>
-                                            <div class="col-sm-10 regionParams">
-                                                <div class="matchedGenesGoHere"></div>
-                                            </div>
-                                        </div>
+                                </div>
+                                <div class="col-md-12 clearfix" style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #ddd;">
+                                    <div class="col-md-2 credSetWindowSummary" style="line-height: 16px;">
+                                         Genes in window
                                     </div>
+                                    <div class="col-md-10 regionParams">
+                                         <div class="matchedGenesGoHere"></div>
+                                    </div>
+                                </div>
+
                                 </div>
                                 <p>&nbsp;</p>
                                 <div><p><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p></div>
@@ -608,12 +589,12 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-2">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
                                          <div class="col-sm-4">
-                                             <button class="btn btn-secondary" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          %{--<div class="col-sm-2"></div>--}%
@@ -624,7 +605,7 @@
 
                                 <div class="credibleSetTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
-                                <div id="locusZoomLocationCredSet" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
                     </div>
                 </div>
@@ -638,7 +619,7 @@
     <label>Credible sets in this range</label>
         <ul class="nav nav-pills">
             {{#allCredibleSets}}
-                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>
+                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" toBeOnClick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>
             {{/allCredibleSets}}
             {{^allCredibleSets}}
                     <li class="nav-item redPhenotype phenotypeStrength">No credible sets</li>
@@ -686,7 +667,7 @@
                             <div class="variantCategoryHolder">
                                 <div id="commonVariantsLocation"></div>
                                 <div class="browserChooserGoesHere"></div>
-                                <div id="locusZoomLocation" class="locusZoomLocation"></div>
+                                <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                                 <div class="igvGoesHere"></div>
                             </div>
                         </div>
@@ -697,10 +678,12 @@
 
 <script id="credibleSetTableTemplate"  type="x-tmpl-mustache">
 <p>&nbsp;</p>
-<g:if test="${g.portalTypeString()?.equals('ibd')}">
-<p><g:message code="geneSignalSummary.credSetsIBD.help"></g:message></p></g:if>
-    %{--<g:elseif test="${g.portalTypeString()?.equals('t2d')}">--}%
-        %{--<p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></g:elseif>--}%
+
+{{#credibleSetInfoCode}}
+<p>{{.}}</p>
+{{/credibleSetInfoCode}}
+
+
 <div class='dataTable'>
                 <div id="ddd" style="width:100%; height: 60px">
                     <div style="float:left; width: 240px">
@@ -759,7 +742,7 @@
             %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credcellpval credSetConstLabel">TF binding motif</td>
             {{#tfBindingMotif}}
-            <td class="credcell {{descr}}">{{val}}</td>
+            <td class="credcellmotif {{descr}}">{{val}}</td>
             {{/tfBindingMotif}}
         </tr>
 

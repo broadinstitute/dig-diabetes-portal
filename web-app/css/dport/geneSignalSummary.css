@@ -6,9 +6,11 @@
     font-weight: 100;
 }
 .interestingPhenotypesHolder{
-    margin: 30px 30px 0 0;
-    padding: 20px 30px 10px 0;
-    border: 0.5px solid gray;
+    margin: 20px 0px 20px 0;
+    padding: 20px 0px 20px 0;
+    /*border: 1px solid gray;*/
+    border-top: solid 1px #ccc;
+    border-bottom: solid 1px #ccc;
     display: none;
 }
 #dropdownCommonVariantDsButton{
@@ -47,32 +49,51 @@ a.dataset-item{
 }
 .trafficExplanations.unemphasize {
     font-weight: normal;
+    display: none;
 }
 .morePhenos{
-    margin-top: 5px;
-    text-decoration: underline;
+    margin: 0;
+    padding: 0 !important;
+    font-size: 16px;
+    /*text-decoration: underline;*/
+}
+
+.morePhenos::before {
+    font-family: 'Glyphicons Halflings';
+    content: "\e258";
+    margin-right: 5px;
 }
 .noMorePhenos {
-    margin-top: 5px;
-    text-decoration: underline;
+    margin: 0;
+    padding: 0 !important;
+    font-size: 16px;
+    /*text-decoration: underline;*/
 }
+
+.noMorePhenos::before {
+    font-family: 'Glyphicons Halflings';
+    content: "\e260";
+    margin-right: 5px;
+}
+
 a.morePhenos:hover {
     background: rgba(0,0,0,.5);
 }
 .phenotypeStrength {
     cursor:pointer;
-    margin: 10px;
-    border: 1px solid black;
-    padding: 5px;
+    margin: 0px 10px 10px 0;
+    /*border: 1px solid black;*/
+    padding: 2px 20px;
     background-color: white;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    /*
     -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
     -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
-    border: 1px solid #000000;
-    font-size:14px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);*/
+    /*border: 1px solid #000000;*/
+    font-size:13px;
 }
 .chosenPhenotype{
     font-weight: bold;
@@ -88,16 +109,19 @@ a.morePhenos:hover {
     color: #000000;
 }
 .redPhenotype {
-    background-color: #dddddd;
+    background-color: #dfdfdf;
+    border: solid 1px #bbbbbb;
 }
 .nav>li.redPhenotype {
     display: none;
 }
 .yellowPhenotype {
     background-color: #ffffb3;
+    border: solid 1px #ffcc44;
 }
 .greenPhenotype {
     background-color: #ccffcc;
+    border: solid 1px #7fc343;
 }
 .credibleSetChooserStrength {
     cursor:pointer;

@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_EXTEND_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_EXTEND_mdv1_script" type="x-tmpl-mustache">
 
     %{--<h4><g:message code="informational.shared.headers.publications"></g:message></h4>--}%
 
@@ -45,7 +45,7 @@
 
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-<p><img src="${resource(dir: 'images/organizations', file: 'EXTEND_LOGO.png')}" style="width: 200px; margin-right: 15px"
+<p><img src="${resource(dir: 'images/organizations', file: 'EXTEND_logo.png')}" style="width: 200px; margin-right: 15px"
         align="left">
 </p>
     <p><g:message code="informational.data.project.EXTEND"></g:message></p>

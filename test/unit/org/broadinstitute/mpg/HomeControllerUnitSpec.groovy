@@ -6,6 +6,7 @@ import grails.test.mixin.Mock
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
@@ -18,6 +19,7 @@ import spock.lang.Specification
 class HomeControllerUnitSpec extends Specification {
 
     SharedToolsService sharedToolsService = new SharedToolsService()
+    RestServerService restServerService = new RestServerService()
     MailService mailService = new MailService()
 
     def setup() {
@@ -33,10 +35,13 @@ class HomeControllerUnitSpec extends Specification {
         newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}
         controller.newsFeedService = newsFeedServiceMock.createMock()
         controller.sharedToolsService = sharedToolsService
+        controller.restServerService = restServerService
 
         when:
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
+        restServerService.metaClass.retrieveBeanForAllPortals = {-> []}
+        restServerService.metaClass.retrieveBeanForCurrentPortal = {->null}
         controller.index()
 
         then:
@@ -68,6 +73,9 @@ class HomeControllerUnitSpec extends Specification {
         sharedToolsService.metaClass.getApplicationIsT2dgenes = {->true}
         sharedToolsService.metaClass.getSectionToDisplay = {unused->true}
         controller.sharedToolsService = sharedToolsService
+        restServerService.metaClass.retrieveBeanForAllPortals = {-> []}
+        restServerService.metaClass.retrieveBeanForCurrentPortal = {->null}
+        controller.restServerService = restServerService
 
         def newsFeedServiceMock = mockFor(NewsFeedService)
         newsFeedServiceMock.demand.getCurrentPosts {String type -> return ([posts: []] as JSONObject)}

@@ -1,4 +1,4 @@
-<h1><%=phenotypeName%></h1>
+<h1 class="dk-page-title"><%=phenotypeName%></h1>
 
 
 
@@ -31,7 +31,7 @@
 
 <div class="separator"></div>
 
-<p>
+<p class="form-group">
 
     <g:message code="traitTable.messages.results" />
     <span id="traitTableDescription"></span>:

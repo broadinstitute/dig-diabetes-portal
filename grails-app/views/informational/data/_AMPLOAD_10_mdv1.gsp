@@ -1,4 +1,7 @@
-<script class="panel-body" id="AMPLOAD_10_script" type="x-tmpl-mustache">
+<script class="panel-body" id="AMPLOAD_10_mdv1_script" type="x-tmpl-mustache">
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+
+<p><g:message code="informational.data.overlaps.OxBB_Axiom"></g:message></p>
 
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
@@ -18,7 +21,7 @@
     <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
-    <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
+    <li><g:message code="informational.shared.traits.log_tg"></g:message></li>
     </ul>
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
@@ -40,7 +43,7 @@
     </table>
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-    <p><img src="${resource(dir: 'images/organizations', file: 'Oxford_BioBank_logo_Web.png')}" style="width: 200px; margin-right: 15px"
+    <p><img src="${resource(dir: 'images/organizations', file: 'Oxford_BioBank_logo_Web.png')}" style="width: 100px; margin-right: 15px"
         align="left">
     <p><g:message code="informational.data.project.OxfordBB"></g:message></p>
 
@@ -51,7 +54,7 @@
 
 
 
-    <h4>Accessing Oxford BioBank Axiom GWAS GWAS data</h4>
+    <h4>Accessing Oxford BioBank Axiom GWAS data</h4>
     <p><g:message code="informational.data.accessing.OxBB_Axiom1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.OxBB_Axiom2"></g:message></p>
 
 

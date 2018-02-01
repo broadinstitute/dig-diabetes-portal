@@ -1,8 +1,17 @@
+<table>
+
+    <tr><td>
+<div class="linkout">
+    <a target="_blank" href="http://pheweb.sph.umich.edu:5000/gene/<%=geneName%>">PheWeb</a>
+</div></td>
+    <td><g:message code="findoutmore.pheweb.descr" default="Explore"/></td></tr>
+
+</table>
 
 
 <div class="linkout">
     <a target="_blank" href="http://www.gtexportal.org/home/gene/<%=geneName%>">GTEx</a>
-    <g:message code="findoutmore.gtex.descr" default="Explore"/>
+<g:message code="findoutmore.gtex.descr" default="Explore"/>
 </div>
 
 <div class="linkout">

@@ -123,11 +123,14 @@ modules = {
         resource url: 'js/lib/dport/igvLaunch.js'
     }
     variantWF {
+        //dependsOn "portalHome"
+
         resource url: 'css/dport/variantWorkflow.css'
         resource url: 'js/lib/dport/variantWorkflow.js'
     }
 
     datasetsPage {
+       // dependsOn "portalHome"
         resource url: 'css/dport/datasets.css'
         resource url: 'js/lib/dport/datasetsPage.js'
     }
@@ -171,7 +174,7 @@ modules = {
         resource url: 'js/lib/mustache.js'
     }
     core {
-        dependsOn "jquery"
+        dependsOn "jquery", "portalHome"
 
         resource url: 'images/ajax-loader.gif'
         resource url: 'images/icons/dna-strands.ico'
@@ -188,6 +191,8 @@ modules = {
         resource url: 'js/lib/bootstrap3-typeahead.min.js'
 
         resource url: 'js/lib/lodash.min.js'
+
+
 
     }
     igvNarrow {  // IGV on a page with core
@@ -213,6 +218,7 @@ modules = {
 //        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.6/locuszoom.css'
         resource url: 'js/lib/locuszoom.app.js'
         resource url: 'css/lib/locuszoom.css'
+        resource url: 'js/lib/gwas-credible-sets.js'
 
         resource url: 'js/lib/dport/locusZoomPlot.js'
     }

@@ -38,7 +38,9 @@
 <g:render template="./data/WGS_WgnomAD" />
 <g:render template="./data/GWAS_MetaStroke" />
 <g:render template="./data/GWAS_GIANT-PA" />
-
+<g:render template="./data/GWAS_HPTxNCGM" />
+<g:render template="./data/GWAS_VHIR" />
+<g:render template="./data/GWAS_DIAGRAMimputed" />
 
 
 <style type="text/css" class="init">
@@ -327,6 +329,8 @@ p.dataset-name {
     var regexStr = "";
 
 
+
+
     function renderFilteredData(selectedLevel2Phenotype){
         var sortedStoredJsonArray = [];
         if(typeof selectedLevel2Phenotype !== 'undefined'){
@@ -602,7 +606,7 @@ p.dataset-name {
         {{/parents}}
         </tbody>
     </table>
-</div>
+    </div>
 </script>
 
 <script id="datatypeFilter" type="x-tmpl-mustache">

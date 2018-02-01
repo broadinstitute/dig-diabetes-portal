@@ -9,6 +9,7 @@ import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
+import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -179,20 +180,14 @@ class GeneController {
         // DIGKB-217: get the default samples data set from the metadata
         SampleGroup defaultGeneBurdenSampleGroup = this.metaDataService.getDefaultBurdenGeneDataset();
         String defaultGeneBurdenSamplesDataSetName = defaultGeneBurdenSampleGroup?.getSystemId();
-        String defaultGeneBurdenDataSetName = restServerService.retrieveBeanForPortalType(portalType)?.getLzDataset()
-       // String defaultGeneBurdenDataSetName = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType];
-        if (defaultGeneBurdenSampleGroup == null) {
-            defaultGeneBurdenSamplesDataSetName = "samples_19k_"+metaDataService.getDataVersion();
+        String defaultGeneBurdenDataSetName
 
-        } else {
-            // TODO - DIGKB-217: store linked variant sample group in dataset sample group meaning field
-            Iterator<String> meaningIterator = defaultGeneBurdenSampleGroup?.getMeaningSet().iterator();
-            while (meaningIterator.hasNext()) {
-                String variantDataSet = meaningIterator.next();
-                if (variantDataSet.contains("DATASET_")) {
-                    defaultGeneBurdenDataSetName = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
-                    break;
-                }
+        Iterator<String> meaningIterator = defaultGeneBurdenSampleGroup?.getMeaningSet().iterator();
+        while (meaningIterator.hasNext()) {
+            String variantDataSet = meaningIterator.next();
+            if (variantDataSet.contains("DATASET_")) {
+                defaultGeneBurdenDataSetName = variantDataSet.substring(variantDataSet.indexOf("DATASET_") + 8);
+                break;
             }
         }
 
@@ -212,6 +207,7 @@ class GeneController {
                      endingExtentSpecified:geneExtent.endExtent])
             String defaultPhenotype = metaDataService.getDefaultPhenotype()
             String  geneUpperCase =   geneToStartWith.toUpperCase()
+
             List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
@@ -235,7 +231,9 @@ class GeneController {
                                              defaultTissuesDescriptions:passDefaultTissuesDescriptions,
                                              defaultPhenotype: defaultPhenotype,
                                              identifiedGenes:identifiedGenes,
-                                             assayId: assayId
+                                             assayId: assayId,
+                                             sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
+                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning())
             ] )
         }
     }
@@ -583,6 +581,7 @@ class GeneController {
         }
 
         // return
+        println("HHHHHHHHHHHHHHHHHHHHHHH: ${jsonReturn.toString()}")
         render(jsonReturn)
     }
 
@@ -652,7 +651,9 @@ class GeneController {
             resultLZJson = errorJsonObject;
         }
 
-        // return
+
+        // In V0.7.0 we have to remove the pastback field, which was never used anyway
+        resultLZJson.remove("passback")
         render(status: 200, contentType: "application/json") {resultLZJson}
         return;
     }

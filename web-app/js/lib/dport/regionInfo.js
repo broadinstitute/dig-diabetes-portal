@@ -21,6 +21,7 @@ var mpgSoftware = mpgSoftware || {};
         var defaultTissueRegionOverlapMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
             'stroke':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
             'mi':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'epilepsy':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
             'ibd':["DNase"]};
 
         /***
@@ -95,6 +96,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var buildRenderData = function (data,additionalParameters){
             var renderData = {  variants: [],
+                                credibleSetInfoCode:data.credibleSetInfoCode,
                                 const:{
                                     coding:[],
                                     spliceSite:[],
@@ -327,7 +329,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var specificCredibleSetSpecificDisplay = function(currentButton,variantsToInclude){
-
+            $('.credibleSetChooserButton').removeAttr('onclick'); // we will put this function back when the processing is complete
             $('.credibleSetChooserButton').removeClass('active');
             $('.credibleSetChooserButton').addClass('inactive');
             $(currentButton).removeClass('inactive');
@@ -567,6 +569,7 @@ var mpgSoftware = mpgSoftware || {};
             $('[data-toggle="popover"]').each(function() {
                     $(this).popover('hide');
             });
+
         };
 
         var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
@@ -592,6 +595,15 @@ var mpgSoftware = mpgSoftware || {};
 
 
                 displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, assayIdList,setDefaultButton );
+                // do we have any credible set buttons?  If so then it is now safe to turn them on
+                var credSetChoices = $('li.credibleSetChooserButton');
+                _.forEach(credSetChoices,function(credSetButton){
+                    var credSetButtonObj = $(credSetButton);
+                    credSetButtonObj.attr('onclick',credSetButtonObj.attr('toBeOnClick'));
+                });
+                if (setDefaultButton){
+                    $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
+                }
 
             }, function(e) {
                 console.log("My ajax failed");
@@ -644,7 +656,8 @@ var mpgSoftware = mpgSoftware || {};
                 container: 'body',
                 placement: 'bottom',
                 trigger: 'focus click'
-            }).on('show.bs.popover', removeAllCredSetHeaderPopUps )
+            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
+
             //.on("click", function(){
             //    $(this).parents(".popover").popover('hide');
             //});
@@ -805,7 +818,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     var drivingVariables = buildRenderData(data,additionalParameters);
                     var allCredibleSets = extractAllCredibleSetNames (drivingVariables);
-                    if (Object.keys(allCredibleSets).length > 1){
+                    if (Object.keys(allCredibleSets).length > 0){
                         $(".credibleSetChooserGoesHere").empty().append(
                             Mustache.render( $('#organizeCredibleSetChooserTemplate')[0].innerHTML,{allCredibleSets:allCredibleSets,
                                                                                                     atLeastOneCredibleSetExists: function(){
@@ -814,7 +827,11 @@ var mpgSoftware = mpgSoftware || {};
                                 return credibleSetPresenceIndicator;
                             }})
                         );
-
+                        var oldTabName = $('a[href=#credibleSetTabHolder]').text();
+                        $('a[href=#credibleSetTabHolder]').text("Credible sets: " +oldTabName);
+                    } else {
+                        var oldTabName = $('a[href=#credibleSetTabHolder]').text();
+                        $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +oldTabName);
                     }
                     $.data($('#dataHolderForCredibleSets')[0],'allRenderData',drivingVariables);
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
@@ -866,6 +883,7 @@ var mpgSoftware = mpgSoftware || {};
                //     $('#credSetDisplayChoice').multiselect('selectAllOption', false);
                     $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
                     $('#toggleVarianceTableLink').click();
+
                 }
             );
             promise.fail(function( jqXHR, textStatus, errorThrown ) {

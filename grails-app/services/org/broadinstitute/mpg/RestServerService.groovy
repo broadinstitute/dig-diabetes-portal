@@ -73,6 +73,7 @@ class RestServerService {
     public static String TECHNOLOGY_EXOME_CHIP = "ExChip"
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
+    public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -308,14 +309,49 @@ class RestServerService {
         if (existingPortalVersionBean){
             newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),
                     mdvName, existingPortalVersionBean.getPhenotype(), existingPortalVersionBean.getDataSet(),
-                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset() )
+                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
+                    existingPortalVersionBean.getExcludeFromLZ(),
+                    existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset(),
+                    existingPortalVersionBean.getFrontLogo(), existingPortalVersionBean.getTagline(),
+                    existingPortalVersionBean.getAlternateLanguages(),existingPortalVersionBean.getGeneExamples(),
+                    existingPortalVersionBean.getVariantExamples(),existingPortalVersionBean.getRangeExamples(),
+                    existingPortalVersionBean.getBackgroundGraphic(),
+                    existingPortalVersionBean.getPhenotypeLookupMessage(),
+                    existingPortalVersionBean.getLogoCode(),
+                    existingPortalVersionBean.getMenuHeader(),
+                    existingPortalVersionBean.getSampleLevelSequencingDataExists(),
+                    existingPortalVersionBean.getGenePageWarning(),
+                    existingPortalVersionBean.getCredibleSetInfoCode(),
+                    existingPortalVersionBean.getBlogId()
+            )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [], "", "" )
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
+                    "", "","","",[],[],[],[],"","","","","","","","" )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
     }
+
+
+    public PortalVersionBean retrieveBeanForCurrentPortal(){
+        PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==metaDataService?.getPortalTypeFromSession()}
+        PortalVersionBean returnValue
+        if (existingPortalVersionBean){
+            returnValue = existingPortalVersionBean
+        } else {
+            log.error("ERROR: code requested portal ${metaDataService?.getPortalTypeFromSession()}, but we don't have anything by that name")
+        }
+        return returnValue
+    }
+
+
+    public List <PortalVersionBean> retrieveBeanForAllPortals(){
+        return PORTAL_VERSION_BEAN_LIST
+    }
+
+
+
     /***
      * Retrieve the MDV version for a portal type
      *

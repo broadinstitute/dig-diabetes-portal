@@ -1,10 +1,13 @@
 package org.broadinstitute.mpg
 
 import dig.diabetes.portal.NewsFeedService
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
 import grails.converters.JSON
@@ -27,7 +30,9 @@ class HomeController {
             render(view:'portalHome', model: [newsItems: (newsFeedService.getCurrentPosts(g.portalTypeString() as String) as JSON),
                                               show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                               show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
-                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq)])
+                                              show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
+                                              listPortalVersionBean: restServerService.retrieveBeanForAllPortals(),
+                                              portalVersionBean: restServerService.retrieveBeanForCurrentPortal()])
         }  else if (sharedToolsService.getApplicationIsBeacon()) {
             redirect(controller:'beacon', action:'beaconDisplay')
         } else {
@@ -68,7 +73,9 @@ class HomeController {
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
-                                                               warningText:sharedToolsService.getWarningText()])
+                                                               warningText:sharedToolsService.getWarningText(),
+                                                               listPortalVersionBean: restServerService.retrieveBeanForAllPortals(),
+                                                               portalVersionBean: restServerService.retrieveBeanForCurrentPortal()])
     }
 
     /***
@@ -77,6 +84,47 @@ class HomeController {
      */
     def signAContract = {
         render(controller: 'home', view: 'signAContract')
+    }
+
+
+    def retrieveOnePortalAjax = {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        String portalJsonDescr = restServerService.retrieveBeanForCurrentPortal().toJsonString()
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject= slurper.parseText(portalJsonDescr)
+//
+//            jsonObject["menuHeader"] = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).getPath()
+////            String logoCode = grailsApplication.getMainContext().getResource(g.message(code:jsonObject["logoCode"]))
+////            jsonObject.remove("logoCode")
+//            jsonObject["logoCode"] = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["logoCode"]).getPath()
+        render(status:200, contentType:"application/json") {
+            jsonObject
+        }
+    }
+
+
+    def retrieveAllPortalsAjax = {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        String portalJsonDescr = restServerService.getPortalVersionBeanListAsJson()
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(portalJsonDescr)
+        JSONArray modifiedJsonArray = new JSONArray()
+        for(JSONObject jsonObject in jsonArray){
+//            String menuHeader = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).getPath()
+//            jsonObject.remove("menuHeader")
+//            jsonObject["menuHeader"] = menuHeader
+//            String logoCode = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
+//                    grailsApplication.getMainContext().getResource(jsonObject["logoCode"]).getPath()
+//            jsonObject.remove("logoCode")
+//            jsonObject["logoCode"] = logoCode
+            modifiedJsonArray.add(jsonObject)
+        }
+        render(status:200, contentType:"application/json") {
+            modifiedJsonArray
+        }
     }
 
     /***

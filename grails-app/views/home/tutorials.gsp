@@ -120,8 +120,23 @@
         $("#CDKPGenePageGuidePdf").click(function () {
             $(".media").attr("href", "${links.CDKPGenePageGuide}");
             $(".media").find("iframe").attr("src", "${links.CDKPGenePageGuide}");
-
         });
+
+        $("#testPdf").click(function () {
+            $(".media").attr("href", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf");
+            $(".media").find("iframe").attr("src", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf");
+        });
+
+        $("#MIgenePdf").click(function () {
+            $(".media").attr("href", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf");
+            $(".media").find("iframe").attr("src", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf");
+        });
+
+        $("#MIVFPdf").click(function () {
+            $(".media").attr("href", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf");
+            $(".media").find("iframe").attr("src", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf");
+        });
+        
     });
 
     function setPdfViewer() {
@@ -186,11 +201,11 @@
             <div class="tutorial" style="margin-bottom: 15px; text-align: center">
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
                     code="portal.introTutorial.title"/></a></div>
-                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_gene_page_guide.pdf"><g:message
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="MIgenePdf"><g:message
                         code="portal.GenePageGuide.title"/></a></div>
                 <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
                         code="portal.GAITguide.title"/></a></div>
-                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf"><g:message
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="MIVFPdf"><g:message
                         code="portal.variantFinderTutorial.title"/></a></div>
                 <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="VariantResultsPdf"><g:message
                         code="portal.variantResultsTableGuide.title"/></a></div>

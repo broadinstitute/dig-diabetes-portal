@@ -128,41 +128,6 @@ if (grails.config.locations.isEmpty()){
     }
 }
 
-//    default server on start up
-server.URL = 'http://69.173.71.178:8080/dev/rest/server/'
-restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
-
-//default  BackEndRestServer
-restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
-dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
-experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
-
-//burdenRestServerAws01 = new ServerBean("AWS01 burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-//burdenRestServerAws02 = new ServerBean("AWS02 burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8888/aws01/gs/burden");
-//burdenRestServerDev = new ServerBean("dev burden server", "http://dig-dev.broadinstitute.org:8888/dev/burden");
-//burdenRestServerQa = new ServerBean("qa burden server", "http://dig-api-qa.broadinstitute.org/qa/gs/burden");
-//burdenRestServerStaging = new ServerBean("staging burden server", "http://dig-api-prod.broadinstitute.org/prod/gs/burden");
-//burdenRestServerLocalhost = new ServerBean("localhost (DEV USE ONLY)", "http://localhost:8090/dccservices/burden");
-//burdenRestServerProd = new ServerBean("DIRECT prod burden server", "http://dig-dev.broadinstitute.org:8090/prod/burden");
-//burdenRestServerKb2NewCode = new ServerBean("KB2 code burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenRestServerKb2PassThrough = new ServerBean("KB2 code burden pass-through server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8084/dccservices/burden/dev");
-//burdenRestServerFederated01 = new ServerBean("Federated Prod burden server", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenRestServerFederated02 = new ServerBean("Federated Stage burden server", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenRestServerPassThrough =  new ServerBean("Burden pass through to Broad machines", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenStraightFromTheDEVKb =  new ServerBean("Burden straight from Dev KB", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenStraightFromTheDEVKb_fed =  new ServerBean("Burden straight from Dev KB_fed", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenStraightFromTheQAKb =  new ServerBean("Burden straight from QA KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/burden");
-//burdenStraightFromTheQAKb_fed =  new ServerBean("Burden straight from QA KB_fed", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/burden");
-//burdenStraightFromTheMI_PRODKB =  new ServerBean("Burden straight from MI Prod KB", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/burden");
-
-
-//digdev01Server = new ServerBean("digdev01Server", "http://dig-dev-01.broadinstitute.org:8090/dccservices/");
-//digdev02Server = new ServerBean("digdev02Server", "http://dig-dev-02.broadinstitute.org:8090/dccservices/");
-//digqa01Server = new ServerBean("digqa01Server", "http://dig-qa-01.broadinstitute.org:8090/dccservices/");
-//digqa02Server = new ServerBean("digqa02Server", "http://dig-qa-02.broadinstitute.org:8090/dccservices/");
-//digprod01Server = new ServerBean("digprod01Server", "http://dig-prod-01.broadinstitute.org:8090/dccservices/");
-//digprod02Server = new ServerBean("digprod02Server", "http://dig-prod-02.broadinstitute.org:8090/dccservices/");
-
 digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
 digAWSKBV2prodServer = new ServerBean("KB-prod-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
@@ -174,33 +139,43 @@ digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-228-247-254.co
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsibddemoKB = new ServerBean("KB-ibddemo-2017-aws", "http://ec2-34-204-84-85.compute-1.amazonaws.com:8090/dccservices/")
 digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
 digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
-
+digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsprodstrokeKB
+defaultRestServer = digawsdevnewKB
 
- getRestServerList = [
-         digdevlocalServer,
-         digAWSKBV2prodServer,
-         digAWS02KBV2prodServer,
-         federatedAwsProdKBV2Server,
-         federatedAwsStageKBV2Server,
-         toddTestServer,
-         digdevmarcin,
-         digawsdevnewKB,
-         digawsdevnewKB_fed,
-         digawsqanewKB,
-         digawsqanewKB_fed,
-         digawsibddemoKB,
-         digawsprodmiKB,
-         digawsprodstrokeKB
- ]
+getRestServerList = [
+        digdevlocalServer,
+        digAWSKBV2prodServer,
+        digAWS02KBV2prodServer,
+        federatedAwsProdKBV2Server,
+        federatedAwsStageKBV2Server,
+        toddTestServer,
+        digdevmarcin,
+        digawsdevnewKB,
+        digawsdevnewKB_fed,
+        digawsqanewKB,
+        digawsqanewKB_fed,
+        digawsprodmiKB,
+        digawsprodstrokeKB,
+        digawsdemoibdKB
+]
 
 
-println("\n\n%%%%%%%%%  Your initial backend REST server will be ${server.URL} %%%%%%%%%%%%%%%%\n\n")
+
+//    default server on start up
+server.URL = defaultRestServer.getUrl()
+restServer.URL = 'http://dig-api-qa.broadinstitute.org/qa/gs/'
+
+//default  BackEndRestServer
+restServer.URL = new ServerBean("qarestserver", "http://dig-api-qa.broadinstitute.org/qa/gs/");
+dbtRestServer.URL = 'http://diabetesgeneticsportal.broadinstitute.org:8888/test/burden/'
+experimentalRestServer.URL = 'http://dig-qa.broadinstitute.org:8888/qa/gs/'
+
+
+println("\n\n%%%%%%%%%  Your initial backend REST server will be ${defaultRestServer.getUrl()}, aka ${defaultRestServer.getName()} %%%%%%%%%%%%%%%%\n\n")
 
 
 
@@ -567,36 +542,129 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv28",    // the MDV number for this portal
+                                                        "mdv29",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
+                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CORONARY ARTERY DISEASE", "BLOOD PRESSURE"], // most important phenotype group name
+                                                        [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
-                                                        "ExSeq_19k_mdv28"), // default data set used for a LocusZoom plot
+                                                        "ExSeq_13k_mdv23",
+                                                "files.t2dFrontHeader",
+                                                "portal.header.tagline",
+                                        ["English", "Spanish"],
+                                                ["SLC30A8"],
+                                                ["rs13266634"],
+                                                ["chr9:21,940,000-22,190,000"],
+                                                'images/front_bg_2017-02.png',
+                                                "pheno.help.text",
+                                                "images/t2d_logo.svg",
+                                                "images/menu_header_bg_2017.png",
+                                                "true",
+                                                "gene.genePage.warning",
+                                                "",
+                                                '5010306206573083521'
+), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv70",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
+                                                          ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
+                                                          ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
-                                                          "GWAS_Stroke_mdv70"),
+                                                          "ExSeq_13k_mdv23",
+                                          "files.stroke.front.logo",
+                                          "portal.stroke.header.tagline",
+                                          [],
+                                          ["HDAC9"],
+                                          ["rs2984613","APOE-e2"],
+                                          ["chr7:18,100,000-18,300,000"],
+                                          'images/stroke/front_bg_2017_stroke.png',
+                                          "stroke.pheno.help.text",
+                                          "images/stroke/stroke_header_logo.svg",
+                                          "images/stroke/menu_header_bg_2017_stroke.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '7961982646849648720'
+                                  ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
                                                           "mdv91",
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["SkeletalMuscle"],
+                                                          ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
+                                                          [],
                                                           "[3]",
-                                                          "GWAS_CARDIoGRAM_mdv91"),
+                                                          "GWAS_CARDIoGRAM_mdv91",
+                                          "files.miFrontHeader",
+                                          "portal.mi.header.tagline",
+                                          [],
+                                          ["LPA"],
+                                          ["rs10965215"],
+                                          ["chr9:20,940,000-21,800,000"],
+                                          'images/mi/front_bg_2017_mi5.png',
+                                  "",
+                                          "images/mi/mi_header_logo_2017.svg",
+                                          "images/mi/menu_header_bg_2017_mi1.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '3944203828206499294'
+                                  ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
                                                           "mdv80",
                                                           "IBD",
                                                           "GWAS_IBDGenomics_eu_mdv80",
                                                           ["E071","E106","E088","E085"],
+                                                          ["INFLAMMATORY BOWEL"], // most important phenotype group name
+                                                          [],
                                                           "[1,2]",
-                                                          "GWAS_IBDGenomics_eu_mdv80")
+                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "files.ibdFrontHeader4",
+                                          "portal.ibd.header.tagline",
+                                          [],
+                                          ["IL23R"],
+                                          ["rs11209026"],
+                                          ["chr9:20,940,000-21,800,000"],
+                                          'images/front_bg_2017-02.png',
+                                  "",
+                                          "images/ibd/IBD_logo.svg",
+                                          "images/menu_header_bg_2017.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '7857348124942584918'
+                                  ),
+                                  new PortalVersionBean("epilepsy",
+                                          "Epilepsy",
+                                          "mdv100",
+                                          "EPI",
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          ["AnteriorCaudate"],
+                                          ["PSYCHIATRIC"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "files.epilepsyFrontHeader",
+                                          "",
+                                          [],
+                                          ["CDKL5"],
+                                          ["rs2021722","X:18622693_G_A"],
+                                          ["chr9:20,940,000-21,800,000"],
+                                          'images/front_bg_2017-02.png',
+                                          "",
+                                          "images/epilepsy/epilepsy_logo.svg",
+                                          "images/menu_header_bg_2017.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '5414069947481666863'
+                                  )
 ]
 
 

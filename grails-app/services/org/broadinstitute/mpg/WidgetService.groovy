@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import grails.transaction.Transactional
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
@@ -476,15 +477,15 @@ class WidgetService {
     }
 
     private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
-        if (sampleGroup.findAll{it.parent.technology=='GWAS'}.size()>0) {
-            sampleGroup = sampleGroup.findAll { it.parent.technology == 'GWAS' }
-            // if there are data sets that are GWAS then work only with those.  Otherwise take what you can get
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
+        if (sampleGroup.size()==0) {
+            sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
         }
+
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         // KLUDGE alert
-        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
-        sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
             Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
@@ -494,51 +495,122 @@ class WidgetService {
     }
 
 
+    private addSinglePhenotypeNameRecord(LinkedHashMap<String, List <List <String>>> groupedPhenotypes,String phenotypeGroupName,String phenotypeCode){
+        List <List <String>> groupedPhenotypesList
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        if (groupedPhenotypes.containsKey(phenotypeGroupName)) {
+            groupedPhenotypesList = groupedPhenotypes[phenotypeGroupName]
+        } else {
+            groupedPhenotypesList  = []
+            groupedPhenotypes[phenotypeGroupName] = groupedPhenotypesList
+        }
+        groupedPhenotypesList << [phenotypeCode, g.message(code: "metadata." + phenotypeCode, default: phenotypeCode)]
+
+    }
+
+
+
     public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
 
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
-        // kludge to reorder for stroke demo
-        if (metaDataService.portalTypeFromSession=='t2d') {
+
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
+        if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
                 buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
             }
-        } else if (metaDataService.portalTypeFromSession=='stroke') {
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="ISCHEMIC STROKE"&& (!it.parent?.systemId?.contains("SIGN")) &&
-                                                                                                                  (!it.parent?.systemId?.contains("MetaStroke"))}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+        } else {
+            for (String phenotypeGroupName in portalVersionBean.getOrderedPhenotypeGroupNames()){
+                for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group==phenotypeGroupName}){
+                    boolean skipIt = false
+                    for (String excludeString in portalVersionBean.getExcludeFromLZ()){
+                        if (phenotype?.parent?.systemId?.contains(excludeString)){
+                            skipIt = true
+                        }
+                    }
+                    if (!skipIt){
+                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
+                    }
+                }
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="TOAST ALL STROKE"&& (!it.parent?.systemId?.contains("SIGN"))&&
-                    (!it.parent?.systemId?.contains("MetaStroke"))}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
+                if (!returnValue.containsKey(phenotype.name)){
+                    boolean skipIt = false
+                    for (String excludeString in portalVersionBean.getExcludeFromLZ()){
+                        if (phenotype?.parent?.systemId?.contains(excludeString)){
+                            skipIt = true
+                        }
+                    }
+                    if (!skipIt){
+                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
+                    }
+                }
             }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="TOAST ALL STROKE"&&
-                    it.group!="ISCHEMIC STROKE"&& (!it.parent?.systemId?.contains("SIGN"))&&
-                    (!it.parent?.systemId?.contains("MetaStroke"))}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-            }
-        } else if (metaDataService.portalTypeFromSession=='mi') {
-            // for now we will favor GWAS.  Usually we filter on sample size but we have a special request
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="CARDIOVASCULAR DISEASE"}){
-                buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
-            }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="CARDIOVASCULAR DISEASE"}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-            }
-
-        } else if (metaDataService.portalTypeFromSession=='ibd') {
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group=="INFLAMMATORY BOWEL"}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-            }
-            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group!="INFLAMMATORY BOWEL"}){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
-            }
-
         }
+
 
         return returnValue
     }
+
+
+
+
+
+
+    public LinkedHashMap<String, List <List <String>>> retrieveGroupedPhenotypesNames(String technology){
+        LinkedHashMap<String, List <List <String>>> returnValue = []
+
+        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion(technology, metaDataService.getDataVersion())
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+
+        LinkedHashMap<String, List <List <String>>> groupedPhenotypes = [:]
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
+        if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
+                addSinglePhenotypeNameRecord(returnValue,phenotype.group,phenotype.name)
+            }
+        } else {
+            // let's impose any order that has been requested
+            for (String phenotypeGroupName in portalVersionBean.getOrderedPhenotypeGroupNames()){
+                for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList.findAll{it.group==phenotypeGroupName}){
+                    boolean skipIt = false
+                    for (String excludeString in portalVersionBean.getExcludeFromLZ()){
+                        if (phenotype?.parent?.systemId?.contains(excludeString)){
+                            skipIt = true
+                        }
+                    }
+                    if (!skipIt){
+                        addSinglePhenotypeNameRecord(returnValue,phenotype.group,phenotype.name)
+                    }
+                }
+            }
+            // now run over the list again. Anything that hasn't already been inserted goes in now
+            for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
+                if (!(returnValue.containsKey(phenotype.group)&&(returnValue[phenotype.group]).find{it[0]==phenotype.name})){
+                    boolean skipIt = false
+                    for (String excludeString in portalVersionBean.getExcludeFromLZ()){
+                        if (phenotype?.parent?.systemId?.contains(excludeString)){
+                            skipIt = true
+                        }
+                    }
+                    if (!skipIt){
+                        addSinglePhenotypeNameRecord(returnValue,phenotype.group,phenotype.name)
+                    }
+                }
+            }
+        }
+
+
+        return returnValue
+    }
+
+
+
+
+
+
 
 
 
@@ -748,6 +820,8 @@ class WidgetService {
                     choseOurPValue = true
                 }  else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField);
+                } else {
                     dataJSONObject.remove(dataField);
                 }
             }
@@ -1006,16 +1080,17 @@ class WidgetService {
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
 
-            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
-
-            for (SampleGroup sampleGroupWithCredibleSets in sampleGroupsWithCredibleSets){
-                beanList.add(new PhenotypeBean(key:sampleGroupWithCredibleSets.phenotypes?.first()?.name, name: "T2D_crd",
-                        description: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId, default: sampleGroupWithCredibleSets.systemId),
-                        dataSet:sampleGroupWithCredibleSets.systemId,
-                        dataSetReadable: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId,default: sampleGroupWithCredibleSets.systemId),
-                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
-                        suitableForDefaultDisplay: false));
-            }
+        // Previously I was adding credible set datasets as an option, but I don't think they belong
+//            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
+//
+//            for (SampleGroup sampleGroupWithCredibleSets in sampleGroupsWithCredibleSets){
+//                beanList.add(new PhenotypeBean(key:sampleGroupWithCredibleSets.phenotypes?.first()?.name, name: "T2D_crd",
+//                        description: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId, default: sampleGroupWithCredibleSets.systemId),
+//                        dataSet:sampleGroupWithCredibleSets.systemId,
+//                        dataSetReadable: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId,default: sampleGroupWithCredibleSets.systemId),
+//                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
+//                        suitableForDefaultDisplay: false));
+//            }
 
 
 

@@ -36,6 +36,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#exomeDataExistsTheMinorAlleleFrequency').append(variantTitle);
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
+            $('#PheWebLink').attr("href", "http://pheweb.sph.umich.edu:5000/variant/"+varId);
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);
@@ -298,14 +299,16 @@ var mpgSoftware = mpgSoftware || {};
                 if(phenotypeData.length == 0) {
                     return;
                 }
-                if(defaultPhenotype == 'T2D') {
+                if((typeof defaultPhenotype !== 'undefined')&&
+                    (typeof _.find(phenotypeData, {phenotype: defaultPhenotype}) !== 'undefined'))  {
                     // pull out t2d object and display that for primary
-                    var t2dData = _.find(phenotypeData, {phenotype: 'T2D'});
+                    var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
                     fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
                     // everything else is other
-                    var everythingElse = _.chain(phenotypeData).reject({phenotype: 'T2D'}).sortBy('bestPVal').value();
+                    var everythingElse = _.chain(phenotypeData).reject({phenotype: defaultPhenotype}).sortBy('bestPVal').value();
                     fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
-                } else {
+                }
+                else {
                     // otherwise, the primary phenotype is the one with the smallest p-value
                     var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
                     fillPrimaryPhenotypeBoxes(_.head(sortedPhenotypeData), variantAssociationStrings);

@@ -54,9 +54,6 @@ class VariantInfoController {
                 break
         }
 
-        locusZoomDataset = restServerService.retrieveBeanForPortalType(portalType)?.getLzDataset()
-       // locusZoomDataset = grailsApplication.config.portal.data.locuszoom.dataset.abbreviation.map[portalType]
-
        // this supports variant searches coming from links inside of LZ plots
         if(params.lzId) {
             // if defined, lzId will look like: 8:118184783_C/T
@@ -77,7 +74,6 @@ class VariantInfoController {
                             phenotypeDatasetMapping: (phenotypeDatasetMapping as JSON),
                             restServer: restServerService.currentRestServer(),
                             lzOptions   : lzOptions,
-                            locusZoomDataset:locusZoomDataset,
                             phenotype:phenotype,
                             igvIntro: igvIntro
                     ])
@@ -444,7 +440,7 @@ class VariantInfoController {
         }
 
         if (variantDataSet == null) {
-            if (sampleGroup.parent) {
+                if (sampleGroup.parent) {
                 jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
             }
         } else {

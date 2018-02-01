@@ -30,37 +30,27 @@ class VariantSearchController {
     def retrievePhenotypesAjax() {
         // specify whether to include the NONE phenotype--if this is unspecified,
         // default to no
-        Boolean getNonePhenotype = params.getNonePhenotype?.toBoolean() ?: false
+        LinkedHashMap<String, List <List <String>>>  groupedPhenotypesNames = widgetService.retrieveGroupedPhenotypesNames('')
 
-        LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson(propertyTree)
-
-        // process `result` so that metadata is translated
-        String[] keys = result.dataset.keySet().toArray()
-        LinkedHashMap<String, String[]> translatedNames = []
-
-        LinkedHashMap<String, Object> toReturn = []
-        toReturn.is_error = result.is_error
-        toReturn.numRecords = result.numRecords
-
-        keys.each {
-            def key = it;
-            // if we don't want the NONE phenotype, skip it
-            if (!getNonePhenotype && key == "OTHER") {
-                return
+        JSONObject result2 = [
+                dataset: new JSONObject()
+        ]
+        result2["datasetOrder"] = new JSONArray()
+        for (String groupName in groupedPhenotypesNames.keySet()){
+            (result2["datasetOrder"] as JSONArray).add(groupName)
+            result2.dataset[groupName] = new JSONArray()
+            JSONArray phenoParts = new JSONArray()
+            for (List phenoDetails in groupedPhenotypesNames[groupName]){
+                phenoParts.add(phenoDetails)
             }
-            translatedNames[key] = new ArrayList<String>()
-            String[] termsToProcess = result.dataset[key]
-            for (int i = 0; i < termsToProcess.length; i++) {
-                String thisTerm = termsToProcess[i]
-                translatedNames[key] << [thisTerm, g.message(code: "metadata." + thisTerm, default: thisTerm)]
-            }
+            result2.dataset[groupName] = phenoParts
+
         }
-
-        toReturn.dataset = translatedNames
+        result2.is_error = false
+        result2.numRecords = groupedPhenotypesNames.keySet()?.size()
 
         render(status: 200, contentType: "application/json") {
-            [datasets: toReturn]
+            [datasets: result2]
         }
 
     }
@@ -92,35 +82,29 @@ class VariantSearchController {
      * @return
      */
     def retrieveGwasSpecificPhenotypesAjax() {
+
         LinkedHashMap<String, List<String>> propertyTree = metaDataService.getHierarchicalPhenotypeTree()
-        JSONObject result = sharedToolsService.packageUpAHierarchicalListAsJson(propertyTree)
+        LinkedHashMap<String, List <List <String>>>  groupedPhenotypesNames = widgetService.retrieveGroupedPhenotypesNames('GWAS')
 
-        // process `result` so that metadata is translated
-        String[] keys = result.dataset.keySet().toArray()
-        LinkedHashMap<String, String> translatedNames = []
-
-        LinkedHashMap<String, Object> toReturn = []
-        toReturn.is_error = result.is_error
-        toReturn.numRecords = result.numRecords
-
-        keys.each {
-            def key = it;
-            // this particular method shouldn't return the NONE phenotype
-            if (key == "OTHER") {
-                return
+        JSONObject result2 = [
+                dataset: new JSONObject()
+        ]
+        result2["datasetOrder"] = new JSONArray()
+        for (String groupName in groupedPhenotypesNames.keySet()){
+            (result2["datasetOrder"] as JSONArray).add(groupName)
+            result2.dataset[groupName] = new JSONArray()
+            JSONArray phenoParts = new JSONArray()
+            for (List phenoDetails in groupedPhenotypesNames[groupName]){
+                phenoParts.add(phenoDetails)
             }
-            translatedNames[key] = new ArrayList<String>()
-            String[] termsToProcess = result.dataset[key]
-            for (int i = 0; i < termsToProcess.length; i++) {
-                String thisTerm = termsToProcess[i]
-                translatedNames[key] << [thisTerm, g.message(code: "metadata." + thisTerm, default: thisTerm)]
-            }
+            result2.dataset[groupName] = phenoParts
+
         }
-
-        toReturn.dataset = translatedNames
+        result2.is_error = false
+        result2.numRecords = groupedPhenotypesNames.keySet()?.size()
 
         render(status: 200, contentType: "application/json") {
-            [datasets: toReturn]
+            [datasets: result2]
         }
 
     }
@@ -421,9 +405,12 @@ class VariantSearchController {
         String geneName
         int limit = -1 // how many records to pull back.  -1 = no limit
         if (params.limit) {
-            log.debug "variantSearch params.limit = ${params.limit}"
             limit = Integer.parseInt(params.limit)
+        } else {
+            limit = RestServerService.DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
         }
+        log.debug "variantSearch params.limit = ${params.limit}"
+
 
         if (params.phenotype) {
             phenotypeName = params.phenotype
