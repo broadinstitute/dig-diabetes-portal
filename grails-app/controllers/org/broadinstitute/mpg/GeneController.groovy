@@ -562,7 +562,7 @@ class GeneController {
                     Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,propertyName)
                     propertyName = property.name
                 }
-
+                println("making LZ on dataset = ${dataSet} and pheno=${phenotype}")
                 jsonReturn = widgetService.getVariantJsonForLocusZoomString(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, dataType, conditionVariants, requestedResults);
             } else {
                 jsonReturn = errorJson;
