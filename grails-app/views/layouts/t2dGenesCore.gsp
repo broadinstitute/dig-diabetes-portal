@@ -203,6 +203,75 @@
                 }
             }
 
+
+            function highlightActiveTabs(event) {
+
+                var filterParmValue = $(event.target).val();
+
+                var tabID = "#"+ $(event.target).closest(".tab-pane").attr("id");
+
+                if(filterParmValue != "") {
+
+                    $("li.active").find("a").each(function(){
+
+                        if($(this).attr("data-target") == tabID){
+
+                            $(this).closest("li.active").addClass("adjusted");
+
+                            var scndTabID = "#" + $(this).closest(".tab-pane").attr("id");
+
+                            $("li.active").find("a").each(function() {
+
+                                if ($(this).attr("data-target") == scndTabID) {
+
+                                    $(this).closest("li.active").addClass("adjusted");
+
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    var totalInputNum = $(event.target).closest(".filterHolder").find("input.filterParm").length;
+
+                    $(event.target).closest(".filterHolder").find("input.filterParm").each(function() {
+
+                        totalInputNum = ($(this).val()) ? totalInputNum : totalInputNum-1;
+                    });
+
+                    if (totalInputNum == 0){
+                        $("li.active").find("a").each(function(){
+                            if($(this).attr("data-target") == tabID){$(this).closest("li.active").removeClass("adjusted")}
+                        });
+
+                        $("li.active").find("a").each(function() {
+
+                            if ($(this).attr("data-target") == tabID) {
+
+                                var adjustedTabNum = 0;
+
+                                $(this).closest("ul").find("li").each(function(){
+                                    adjustedTabNum = ($(this).hasClass("adjusted"))? adjustedTabNum + 1 : adjustedTabNum;
+                                })
+
+                                if(adjustedTabNum == 0) {
+                                    var scndTabID = "#" + $(this).closest(".tab-pane").attr("id");
+
+                                    $("li.active").find("a").each(function() {
+
+                                        if ($(this).attr("data-target") == scndTabID) {
+
+                                            $(this).closest("li.active").removeClass("adjusted");
+
+                                        }
+                                    });
+                                }
+
+                            }
+                        });
+                    }
+                }
+            }
+
             /* copy url of varian search result page to clipboard*/
 
             $( window ).load( function() {
