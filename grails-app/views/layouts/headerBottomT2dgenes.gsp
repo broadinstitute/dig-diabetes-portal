@@ -15,11 +15,7 @@
 
 
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
-<<<<<<< HEAD
     <div class="container-fluid floop" id="header-bottom" style="background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-=======
-    <div class="container-fluid floop" id="header-bottom" style="background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left top; font-size: 14px; font-weight:300; padding:0; margin:0; ">
->>>>>>> 509e4a5879302d873839419649ccf08ac85f19e1
     <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left;  width:350px; padding:12px 0 14px 0; ">
         <a href="${createLink(controller:'home',action:'portalHome')}">
             <img src="${resource( file:g.message(code:"files.stroke.header.logo", default:"stroke_header_logo.svg"))}" style=" width: 400px; margin-left: 10px;" />
@@ -28,11 +24,7 @@
     <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/stroke', file:'menu_bg_2017_stroke.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:if>
 <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-<<<<<<< HEAD
     <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-=======
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left top; font-size: 14px; font-weight:300; padding:0; margin:0; ">
->>>>>>> 509e4a5879302d873839419649ccf08ac85f19e1
     <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0;">
         <img src="${resource( file:g.message(code:"files.ibd.front.logo", default:"files.ibd.front.logo"))}" style=" width: 400px; margin-left: 10px;" />
     </div>
@@ -48,11 +40,9 @@
     <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images/mi', file:'menu_band_2017_mi.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 </g:elseif>
 <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
-<<<<<<< HEAD
+
     <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-=======
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left top; font-size: 14px; font-weight:300; padding:0; margin:0; ">
->>>>>>> 509e4a5879302d873839419649ccf08ac85f19e1
+
     <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left; width:350px; padding:12px 0 14px 0; ">
         <a href="${createLink(controller:'home',action:'portalHome')}">
             <img src="${resource( file:g.message(code:"files.t2dBannerText", default:"t2d_logo.svg"))}" style=" width: 400px; margin-left: 16px;">
