@@ -563,7 +563,7 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
-portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+portal.type.override = "mi"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
@@ -581,10 +581,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 ["SLC30A8"],
                                                 ["rs13266634"],
                                                 ["chr9:21,940,000-22,190,000"],
-                                                'images/front_bg_2017-02.png',
+                                                'images/front_t2d_bg_2018.png',
                                                 "pheno.help.text",
                                                 "images/t2d_logo.svg",
-                                                "images/menu_header_bg_2017.png",
+                                                "images/front_t2d_bg_2018.png",
                                                 "true",
                                                 "gene.genePage.warning",
                                                 "",
@@ -631,10 +631,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["LPA"],
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          'images/mi/front_bg_2017_mi5.png',
+                                          'images/mi/mi_banner_2018.png',
                                   "",
                                           "images/mi/mi_header_logo_2017.svg",
-                                          "images/mi/menu_header_bg_2017_mi1.png",
+                                          "images/mi/mi_banner_2018.png",
                                           "false",
                                           "",
                                           "",
@@ -656,10 +656,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          'images/front_ibd_bg_2018.png',
+                                          'images/ibd/IBD_banner_2018.png',
                                   "",
                                           "images/ibd/ibd_header_logo.svg",
-                                          "images/front_ibd_bg_2018.png",
+                                          "images/ibd/IBD_banner_2018.png",
                                           "false",
                                           "",
                                           "",
