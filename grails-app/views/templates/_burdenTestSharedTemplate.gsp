@@ -237,7 +237,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                     <div class="" style="{{tabDisplay}}">
                                         <div class="col-sm-12 col-xs-12">
-                                            <ul class="nav nav-pills stratsTabs" id="{{name}}_stratsTabs">
+                                            <ul class="nav nav-tabs stratsTabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
                                                        <a data-target="#{{name}}_{{phenoLevelName}}" data-toggle="tab" class="filterCohort {{trans}} {{phenoLevelName}}">{{trans}}</a>
@@ -453,7 +453,7 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                     <div class="row"  style="{{tabDisplay}}">
                         <div class="col-sm-12 col-xs-12">
-                            <ul class="nav nav-pills" id="stratsCovTabs">
+                            <ul class="nav nav-tabs" id="stratsCovTabs">
                                 {{ #modeledPhenotype }}
                                     {{ #levels }}
                                         {{ #strataContent }}

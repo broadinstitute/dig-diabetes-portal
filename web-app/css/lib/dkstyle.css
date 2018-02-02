@@ -888,6 +888,8 @@ div.boxWhiskerPlot svg.box g.boxHolder {
 	background-color: #eee;
 	border-bottom: solid 1px #ccc;
 	color: #333;
+}
+
 #datasetNamesTabs, #modeledPhenotypeTabs, #stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs {
 	display: inline-block !important;
 	font-size: 14px !important;
@@ -901,6 +903,8 @@ div.boxWhiskerPlot svg.box g.boxHolder {
 	background-color: #fff !important;
 	border-bottom: solid 1px #fff !important;
 	color: #333;
+}
+
 #datasetNamesTabs li > a, #modeledPhenotypeTabs li > a, #stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
 	border-radius: 0;
 	border: none;
@@ -913,22 +917,26 @@ div.boxWhiskerPlot svg.box g.boxHolder {
 	display: inline-block !important;
 	font-size: 14px;
 	padding-top: 20px;
+}
+
 #datasetNamesTabs li.adjusted > a::after, #modeledPhenotypeTabs li.adjusted > a::after, #stratsCovTabs li.adjusted > a::after, #CONTROL_stratsTabs li.adjusted > a::after, #CASE_stratsTabs li.adjusted > a::after, #strata1_stratsTabs li.adjusted > a::after {
 	content: ' *';
 	color: #268fcb;
 }
 
-#stratsCovTabs li, #CONTROL_stratsTabs li, #CASE_stratsTabs li, #strata1_stratsTabs li{
+#stratsCovTabs li, #CONTROL_stratsTabs li, #CASE_stratsTabs li, #strata1_stratsTabs li{}
+
 #datasetNamesTabs { background-color: #eee; border-bottom: none;}
 #datasetNamesTabs li > a { border-left:solid 2px #bfe3ef; border-right:solid 2px #bfe3ef;}
 #datasetNamesTabs li.active > a { background-color: #bfe3ef;}
 
-}
+
 #modeledPhenotypeTabs {background-color: #bfe3ef; padding-left:20px; border-top: none; border-bottom: none;}
 #modeledPhenotypeTabs li > a { border-left:solid 2px #9fd3df; border-right:solid 2px #9fd3df;}
 #modeledPhenotypeTabs li.active > a {background-color: #9fd3df;}
 
 #stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs { background-color: #9fd3df; padding-left:30px; margin-left:0px; margin-right: 0px; border:none;}
+
 #stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
 	border:solid 1px #ccc;
 	border-radius:3px;
@@ -936,20 +944,23 @@ div.boxWhiskerPlot svg.box g.boxHolder {
 	border-left:solid 2px #fff; border-right:solid 2px #fff;
 }
 
-#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {
+#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {}
 
 #stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
 	background-color: #fff;
 }
 
-#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {
+#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {}
+
 #modeledPhenotypeTabs li > a {
 	/*text-transform: lowercase;*/
 }
 
 #stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
 	background-color: #50AABB;
-	border:solid 1px #50AABB;
+	border: solid 1px #50AABB;
+}
+
 #modeledPhenotypeTabs li > a::first-letter {
 	/*text-transform: uppercase;*/
 }
