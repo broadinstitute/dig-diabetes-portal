@@ -563,7 +563,11 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
+<<<<<<< HEAD
 portal.type.override = "mi"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+=======
+portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+>>>>>>> 509e4a5879302d873839419649ccf08ac85f19e1
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
@@ -656,10 +660,17 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
+<<<<<<< HEAD
                                           'images/ibd/IBD_banner_2018.png',
                                   "",
                                           "images/ibd/ibd_header_logo.svg",
                                           "images/ibd/IBD_banner_2018.png",
+=======
+                                          'images/front_ibd_bg_2018.png',
+                                  "",
+                                          "images/ibd/ibd_header_logo.svg",
+                                          "images/front_ibd_bg_2018.png",
+>>>>>>> 509e4a5879302d873839419649ccf08ac85f19e1
                                           "false",
                                           "",
                                           "",
