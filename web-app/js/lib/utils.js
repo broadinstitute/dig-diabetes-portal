@@ -355,7 +355,7 @@ var UTILS = {
     fillPhenotypeCompoundDropdown: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,portaltype) { // help text for each row
         if ((typeof dataSetJson !== 'undefined')  &&
             (typeof dataSetJson["is_error"] !== 'undefined')&&
-            (dataSetJson["is_error"] === false))
+            (dataSetJsonwill === false))
         {
             var options = $(phenotypeDropDownIdentifier);
 

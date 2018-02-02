@@ -28,6 +28,7 @@ class MetaDataService {
     public static Integer METADATA_NONE = 0
     public static Integer METADATA_VARIANT = 1
     public static Integer METADATA_SAMPLE = 2
+    public static Integer METADATA_GENE = 3
 
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
@@ -313,6 +314,9 @@ class MetaDataService {
                     break;
                 case METADATA_SAMPLE:
                     experimentList = this.getJsonSampleParser().getAllExperimentsOfVersionTechnology( version, technology )
+                    break;
+                case METADATA_GENE:
+                    experimentList = this.getJsonGeneParser().getAllExperimentsOfVersionTechnology( version, technology )
                     break;
                 case METADATA_NONE:
                 default:
@@ -1053,8 +1057,31 @@ class MetaDataService {
      * @param dataVersion
      * @return
      */
-    public List<Phenotype> getPhenotypeListByTechnologyAndVersion(String technology, String dataVersion) {
-        return this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+    public List<Phenotype> getPhenotypeListByTechnologyAndVersion(String technology, String dataVersion, int metadataTree) {
+        List<Phenotype> phenotypeList = []
+
+        try {
+            switch (metadataTree){
+                case METADATA_VARIANT:
+                    phenotypeList = this.getJsonParser().getPhenotypeListByTechnologyAndVersion(technology, dataVersion)
+                    break;
+                case METADATA_SAMPLE:
+                    phenotypeList = this.getJsonSampleParser().getPhenotypeListByTechnologyAndVersion(technology, dataVersion)
+                    break;
+                case METADATA_GENE:
+                    phenotypeList = this.getJsonGeneParser().getPhenotypeListByTechnologyAndVersion(technology, dataVersion)
+                    break;
+                case METADATA_NONE:
+                default:
+                    break;
+            }
+
+        } catch (PortalException exception) {
+            log.error("Got metadata parsing exception getting getPhenotypeListByTechnologyAndVersion: " + exception.getMessage());
+        }
+
+        return phenotypeList
+
     }
 
 

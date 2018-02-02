@@ -347,7 +347,7 @@ class TraitController {
 
         // get the phenotype list
         // DIGP-291: centralize metadata version
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion(),MetaDataService.METADATA_VARIANT);
 
         // submit query
         JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
@@ -382,7 +382,7 @@ class TraitController {
 
         // get the phenotype list
         // DIGP-291: centralize metadata version
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion(),MetaDataService.METADATA_VARIANT);
 
         // submit query
         //JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);

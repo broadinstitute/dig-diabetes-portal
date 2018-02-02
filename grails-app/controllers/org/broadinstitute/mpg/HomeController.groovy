@@ -5,6 +5,7 @@ import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -77,6 +78,43 @@ class HomeController {
                                                                listPortalVersionBean: restServerService.retrieveBeanForAllPortals(),
                                                                portalVersionBean: restServerService.retrieveBeanForCurrentPortal()])
     }
+
+
+
+    def getGeneLevelResults() {
+        JSONObject returnResult = new JSONObject()
+        returnResult["is_error"] = false;
+        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("", metaDataService.getDataVersion(),metaDataService.METADATA_GENE)
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
+        returnResult["preferredGroups"] = portalVersionBean.getOrderedPhenotypeGroupNames() as JSONArray
+        JSONArray phenotypeArray = new JSONArray()
+        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in phenotypeList.sort{it.sortOrder}) {
+            JSONObject phenoRecord = new JSONObject()
+            phenoRecord['systemId'] = phenotype.parent.systemId
+            phenoRecord['name'] = phenotype.name
+            phenoRecord['group'] = phenotype.group
+            JSONArray propertyArray = new JSONArray()
+            for (org.broadinstitute.mpg.diabetes.metadata.PropertyBean property in phenotype.propertyList) {
+                if ( property.hasMeaning("P_VALUE") ){
+                    JSONObject propertyRecord = new JSONObject()
+                    propertyRecord["name"] = property.name
+                    propertyRecord["meaning"] = "P_VALUE"
+                    propertyArray.add(propertyRecord)
+                }
+                if ( property.hasMeaning("ODDS_RATIO") ){
+                    JSONObject propertyRecord = new JSONObject()
+                    propertyRecord["name"] = property.name
+                    propertyRecord["meaning"] = "ODDS_RATIO"
+                    propertyArray.add(propertyRecord)}
+            }
+            phenoRecord['properties'] = propertyArray
+            phenotypeArray.add(phenoRecord)
+        }
+        returnResult["pheotypeRecords"] = phenotypeArray
+        render(status: 200, contentType: "application/json") {returnResult}
+    }
+
+
 
     /***
      * The very first time you use the portal you have to sign something.  This should happen to everyone EXCEPT those

@@ -932,7 +932,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         int beginSearchNumber, endSearchNumber;
 
         // get the phenotype list
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion(),MetaDataService.METADATA_VARIANT);
 
         try {
             beginSearchNumber = Integer.valueOf(beginSearch).intValue();

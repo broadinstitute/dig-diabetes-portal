@@ -22,8 +22,18 @@
             //var warningMessage = ${warningText};
         </g:applyCodec>
         //alert(warningMessage);
-        mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
-        mpgSoftware.homePage.setSlideWindows();
+        mpgSoftware.homePage.setHomePageVariables(
+            {"retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
+                "defaultPhenotype":"${g.defaultPhenotype()}",
+                "getGeneLevelResults":"${createLink(controller:'home', action:'getGeneLevelResults')}"}
+        );
+        $(document).ready(function(){
+            mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
+            mpgSoftware.homePage.setSlideWindows();
+            mpgSoftware.homePage.retrievePhenotypes();
+            mpgSoftware.homePage.retrieveGenePhenotypes();
+        });
+
 
         function goToSelectedItem(item) {
             window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
@@ -79,40 +89,8 @@
 
 
 
-        var retrievePhenotypes = function () {
-            var loading = $('#spinner').show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
-                data: {},
-                async: true,
-                success: function (data) {
-                    if (( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !==  null ) ) {
 
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input',undefined,undefined,'${g.portalTypeString()}');
-                        var availPhenotypes = [];
-                        _.forEach( $("select#trait-input option"), function(a){
-                            availPhenotypes.push($(a).val());
-                        });
-                        if (availPhenotypes.indexOf('${g.defaultPhenotype()}')>-1){
-                            $('#trait-input').val('${g.defaultPhenotype()}');
-                        } else if (availPhenotypes.length>0){
-                            $('#trait-input').val(availPhenotypes[0]);
-                        }
-                    }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
-        retrievePhenotypes();
+
 
 
         $('#chooseDistributedKB').change(function(e){
@@ -207,6 +185,11 @@
                         </select>
                         <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                     </div>
+                    <g:if test="${g.portalTypeString()?.equals('epilepsy')}">
+                        <select name="" id="gene-trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                        </select>
+                        <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                    </g:if>
                 </div>
             </div>
         </div>
