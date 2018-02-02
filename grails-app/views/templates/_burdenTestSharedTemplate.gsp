@@ -209,9 +209,18 @@ the individual filters themselves. That work is handled later as part of a loop-
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-12" style="padding:0; margin: 0;">
+                            <ul class="nav nav-tabs datasetNames" id="datasetNamesTabs">
+                                <li class="active"><a>19K exome sequence analysis</a></li>
+                                <li><a>CAMP GWAS</a></li>
+                                <li><a>BioMe AMP T2D GWAS</a></li>
+                            </ul>
+                        </div>
+                    </div>
 
                     <div class="row" style="{{modeledPhenotypeDisplay}}">
-                        <div class="col-sm-12 col-xs-12">
+                        <div class="col-md-12" style="padding:0; margin: 0;">
                             <ul class="nav nav-tabs modeledPhenotypeDisplay" id="modeledPhenotypeTabs">
                                 {{ #modeledPhenotype }}
                                    {{ #levels }}
@@ -229,14 +238,14 @@ the individual filters themselves. That work is handled later as part of a loop-
 
 
 
-                    <div class="tab-content clearfix" style="border:solid 1px #ddd; margin-top: -2px; border-radius: 5px;">
+                    <div class="tab-content clearfix" style="border: solid 1px #ddd; border-top: none; margin-top: -6px;">
                          {{ #modeledPhenotype }}
                            {{ #levels }}
                             <div class="tab-pane  {{defaultDisplay}}" id="{{name}}">
                                 <div class="">
 
                                     <div class="" style="{{tabDisplay}}">
-                                        <div class="col-sm-12 col-xs-12">
+                                        <div class="col-md-12" style="padding:0; margin: 0;">
                                             <ul class="nav nav-tabs stratsTabs" id="{{name}}_stratsTabs">
                                                 {{ #strataContent }}
                                                    <li class="{{defaultDisplay}}">
@@ -259,7 +268,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                         {{ #strataContent }}
                                             <div class="tab-pane {{defaultDisplay}}" id="{{name}}_{{phenoLevelName}}">
                                                 <div class="">
-                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:0; border-top:solid 1px #fff;">
+                                                    <div class="col-sm-5 col-xs-12 vcenter" style="margin-top:-7px;">
                                                         <div class="row secHeader" style="padding: 20px 0 0 0">
                                                             <div class="col-sm-12 col-xs-12 text-left">
                                                             <label style="font-style: italic; font-size: 14px">Click a phenotype name or set value for a phenotype to render corresponding plot.
@@ -372,7 +381,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                onfocusin="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
                                                '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')"
                                                onkeyup="mpgSoftware.burdenTestShared.displaySampleDistribution('{{name}}', '.boxWhiskerPlot_{{stratum}}',
-                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}')">
+                                               '${createLink(controller: 'variantInfo', action: 'retrieveSampleSummary')}',0,'{{phenoLevelName}}'); $(this).closest('.tab-pane').find('.trait_name').text('{{trans}}');highlightActiveTabs(event);">
 
                                     </div>
 
