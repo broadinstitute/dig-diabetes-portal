@@ -58,6 +58,7 @@ class RestServerService {
     private String METADATA_URL = "getMetadata"
     private String GENE_METADATA_URL = "getGeneMetadata"
     private String GET_DATA_URL = "getData"
+    private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
@@ -726,6 +727,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
         String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
+    }
+
+    public JSONObject postGeneDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
+        QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
+        String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
+        return postRestCallBase(drivingJson, this.GET_GENE_DATA_URL, currentRestServer())
     }
 
     public JSONObject postMultiJoinProtectedDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
@@ -1436,7 +1443,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 resultColumnsToDisplay = addColumnsForPProperties(resultColumnsToDisplay, phenotype, dataset, pValueText)
                 GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService)
                 // we need this so we can order the variants, which makes the counting simpler
-                Property pvalProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueText, phenotype, dataset)
+                Property pvalProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueText, phenotype, dataset,MetaDataService.METADATA_VARIANT)
 
                 getDataQueryHolder.addOrderByProperty(pvalProperty, '1')
                 getDataQueryHolder.getDataQuery.setPageSize(-1)
@@ -1916,13 +1923,43 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataset, pValueName)
         addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", dataset)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueName, phenotypeName, dataset), '1')
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueName, phenotypeName, dataset,MetaDataService.METADATA_VARIANT), '1')
         getDataQueryHolder.getDataQuery.setLimit(500)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
         return dataJsonObject
     }
+
+
+
+
+
+    private JSONObject gatherGenePrioritizationInformation (String phenotypeName, String dataSetName, String propertyName) {
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID"])
+        List<String> filters = []
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
+
+        // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
+        List <String> piecesOfThePropertyName = propertyName.split("_")
+        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
+        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
+        addColumnsForDProperties(resultColumnsToDisplay, propertyNameForCaseCount, dataSetName)
+        addColumnsForDProperties(resultColumnsToDisplay, propertyNameForControlCount, dataSetName)
+
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
+        getDataQueryHolder.getDataQuery.setLimit(500)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
+
+
+
 
     /***
      * Gather up the data that is used in the Manhattan plot
@@ -1943,6 +1980,27 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
+
+
+    public JSONObject getGenePrioritizationInformation(String phenotypeName, String dataSetName, String propertyName) {
+        JSONObject returnValue
+
+        JSONObject apiResults = gatherGenePrioritizationInformation (phenotypeName, dataSetName, propertyName)
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"" )
+        def slurper = new JsonSlurper()
+        returnValue = slurper.parseText(jsonParsedFromApi)
+        return returnValue
+    }
+
+
+
+
+
+
+
+
+
+
 
     public JSONObject getChromPos(JSONObject apiresults){
         return apiresults
@@ -1988,7 +2046,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             if (orProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, orProperty.name)
             }
-            Property dirProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("DIR",oneReference.phenotype,oneReference.ds)
+            Property dirProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("DIR",oneReference.phenotype,oneReference.ds,MetaDataService.METADATA_VARIANT)
             if (dirProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, dirProperty.name)
             }

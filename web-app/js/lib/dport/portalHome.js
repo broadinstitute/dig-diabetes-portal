@@ -217,19 +217,25 @@ var mpgSoftware = mpgSoftware || {};
 
                 var keys = dataSetJson.preferredGroups;
 
-
+                // begin by retrieving the most desirable phenotype groups
                 _.forEach(keys,function(key){
-                    var groupContents =  _.filter(collection, function(oneGroup))
-                    options.append("<optgroup label='"+key+"'>");
-                    for (var j = 0; j < groupContents.length; j++) {
-                        if(_.includes(phenotypesToOmit, groupContents)) {
-                            continue;
-                        }
-                        options.append($("<option />").val(groupContents[j][0])
-                        // add some whitespace to create indentation
-                            .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                    var groupObjectPointer;
+                    var groupContents =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
+                        return oneGroup.group === key;
+
+                    });
+                    var groupObjectPointer = _.find(dataSetJson.pheotypeRecords, function(oneGroup){
+                        return oneGroup.group === key;
+                    });
+                    var uniquePhenotypeIdentifier = "";
+                    if (groupContents.length > 0){
+                        options.append("<optgroup label='"+key+"'>");
+                        _.forEach (groupContents, function (oneElement){
+                            options.append($("<option />").val(oneElement.name)
+                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.name));
+                        });
+                        options.append("</optgroup label='"+key+"'>");;
                     }
-                    options.append("</optgroup>");
                 });
 
 
@@ -245,7 +251,7 @@ var mpgSoftware = mpgSoftware || {};
             $.ajax({
                 cache: false,
                 type: "get",
-                url: homePageVars.retrieveGwasSpecificPhenotypesAjaxUrl,
+                url: homePageVars.getGeneLevelResultsUrl,
                 data: {},
                 async: true
             }).done(

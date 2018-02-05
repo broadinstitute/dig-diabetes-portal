@@ -25,7 +25,7 @@
         mpgSoftware.homePage.setHomePageVariables(
             {"retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
                 "defaultPhenotype":"${g.defaultPhenotype()}",
-                "getGeneLevelResults":"${createLink(controller:'home', action:'getGeneLevelResults')}"}
+                "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}"}
         );
         $(document).ready(function(){
             mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
@@ -83,6 +83,16 @@
                 alert('Please choose a trait and enter a valid significance!')
             } else {
                 window.location.href = "${createLink(controller:'trait',action:'traitSearch')}" + "?trait=" + trait_val + "&significance=" + significance;
+            }
+        });
+
+        $('#geneTraitSearchLaunch').on('click', function () {
+            var trait_val = $('#gene-trait-input option:selected').val();
+            var significance = 0.0005;
+            if (trait_val == "" || significance == 0) {
+                alert('Please choose a trait and enter a valid significance!')
+            } else {
+                window.location.href = "${createLink(controller:'trait',action:'genePrioritization')}" + "?trait=" + trait_val + "&significance=" + significance;
             }
         });
 
@@ -186,9 +196,11 @@
                         <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                     </div>
                     <g:if test="${g.portalTypeString()?.equals('epilepsy')}">
-                        <select name="" id="gene-trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
-                        </select>
-                        <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <select name="" id="gene-trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                            </select>
+                            <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
                     </g:if>
                 </div>
             </div>
