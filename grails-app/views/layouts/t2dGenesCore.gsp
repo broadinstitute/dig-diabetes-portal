@@ -204,6 +204,41 @@
             }
 
 
+            /* GAIT TAB UI */
+
+            function checkGaitTabs(event) {
+
+                if($(".modeled-phenotype-div").css('display') == "block") {
+
+                    $("#strata1_stratsTabs").css("background-color","#9fd3df");
+
+                    if($("#stratifyDesignation").val() == "none") {
+
+                        $(".modeled-phenotype-div").find("a").css("background","none");
+                        $(".modeled-phenotype-div").find("li.active").find("a").css("background-color","#ffffff");
+
+                        $(".modeled-phenotype-div").find("a").click(function() {
+
+                            $(".modeled-phenotype-div").find("a").css("background","none");
+
+                            $(this).css("background-color","#ffffff");
+
+                        })
+                    }
+
+                } else {
+
+                    $("#strata1_stratsTabs").css("background-color","#bfe3ef");
+
+                }
+
+
+
+                /*
+                */
+
+            }
+
             function highlightActiveTabs(event) {
 
                 var filterParmValue = $(event.target).val();

@@ -188,7 +188,7 @@ the individual filters themselves. That work is handled later as part of a loop-
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <a data-toggle="collapse" data-parent="#filterSamples"
-                       href="#filterSamples">Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>
+                       href="#filterSamples" onclick="checkGaitTabs(event);" >Step {{sectionNumber}}: Select a subset of samples based on phenotypic criteria</a>
                 </h4>
             </div>
 
@@ -219,7 +219,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                         </div>
                     </div>
 
-                    <div class="row" style="{{modeledPhenotypeDisplay}}">
+                    <div class="row modeled-phenotype-div" style="{{modeledPhenotypeDisplay}}">
                         <div class="col-md-12" style="padding:0; margin: 0;">
                             <ul class="nav nav-tabs modeledPhenotypeDisplay" id="modeledPhenotypeTabs">
                                 {{ #modeledPhenotype }}
@@ -235,7 +235,6 @@ the individual filters themselves. That work is handled later as part of a loop-
                             </ul>
                         </div>
                     </div>
-
 
 
                     <div class="tab-content clearfix" style="border: solid 1px #ddd; border-top: none; margin-top: -6px;">
@@ -460,8 +459,8 @@ the individual filters themselves. That work is handled later as part of a loop-
                     </div>
 
 
-                    <div class="row"  style="{{tabDisplay}}">
-                        <div class="col-sm-12 col-xs-12">
+                    <div class=""  style="{{tabDisplay}}">
+                        <div class="">
                             <ul class="nav nav-tabs" id="stratsCovTabs">
                                 {{ #modeledPhenotype }}
                                     {{ #levels }}
@@ -474,7 +473,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                         </div>
                     </div>
 
-                    <div class="tab-content">
+                    <div class="tab-content" style="border:solid 1px #ddd; margin-top: -7px;">
                         {{ #modeledPhenotype }}
                             {{ #levels }}
                                 {{ #strataContent }}
