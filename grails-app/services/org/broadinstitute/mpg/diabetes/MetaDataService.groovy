@@ -891,9 +891,9 @@ class MetaDataService {
 
 
 
-    public Property getCommonPropertyByName (String commonPropertyName){
+    public Property getCommonPropertyByName (String commonPropertyName, int metadataTree ){
         Property returnValue
-        List<Property> commonProperties =  this.getJsonParser().getAllCommonProperties()
+        List<Property> commonProperties =  retrieveJsonParser(metadataTree).getAllCommonProperties()
         if (commonProperties){
             for (Property property in commonProperties){
                 if (property.name == commonPropertyName){

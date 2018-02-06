@@ -18,18 +18,20 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var retrieveSpecifiedDataAndDisplayIt  = function(currentPhenotypeName,selectedDataset,currentPropertyName){
+            var mySavedVariables = getMySavedVariables();
             $.ajax({
                 cache: false,
                 type: "post",
-                url: mySavedVariables.getGeneLevelResultsUrl,
-                data: {phenotype: mySavedVariables.phenotypeName},
+                url: mySavedVariables.prioritizedGeneInfoAjaxUrl,
+                data: {
+                    trait: currentPhenotypeName,
+                    sampleGroup:selectedDataset,
+                    propertyName:currentPropertyName
+                },
                 async: false
             }).done ( function(data){
                 var myLocalSavedVariables = getMySavedVariables();
-                fillGenePhenotypeAndSubPhenotypeDropdown(data,
-                    myLocalSavedVariables.phenotypeName,
-                    myLocalSavedVariables.phenotypeDropdownIdentifier,
-                    myLocalSavedVariables.subphenotypeDropdownIdentifier);
+                alert('foo');
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 loading.hide();
                 core.errorReporter(jqXHR, errorThrown)

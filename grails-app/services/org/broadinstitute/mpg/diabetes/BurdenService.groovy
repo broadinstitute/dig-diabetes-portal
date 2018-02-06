@@ -10,6 +10,7 @@ import org.broadinstitute.mpg.diabetes.burden.parser.BurdenJsonBuilder
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.diabetes.util.PortalException
@@ -712,10 +713,10 @@ class BurdenService {
         builder.append("{\"options\": [ ");
         List <String> allOptions = []
         // new fields of been introduced, but don't let users search for them if they haven't migrated to this database yet
-        if ((metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY))&&
-                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY))&&
-                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY))&&
-                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_LRT_PRED_KEY))){
+        if ((metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_MUTATION_TASTER_PRED_KEY,MetaDataService.METADATA_VARIANT))&&
+                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HDIV_PRED_KEY,MetaDataService.METADATA_VARIANT))&&
+                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_POLYPHEN2_HVAR_PRED_KEY,MetaDataService.METADATA_VARIANT))&&
+                (metaDataService.getCommonPropertyByName(PortalConstants.JSON_VARIANT_LRT_PRED_KEY,MetaDataService.METADATA_VARIANT))){
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS, "Protein-truncating + missense with MAF<1%", false)
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD, "Protein-truncating + possibly deleterious missense with MAF<1%", false)
             allOptions << this.buildOptionString(PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT, "Protein-truncating + probably deleterious missense", false)

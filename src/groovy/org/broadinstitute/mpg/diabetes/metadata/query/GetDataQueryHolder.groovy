@@ -20,6 +20,8 @@ class GetDataQueryHolder {
     // log class
     private static final log = LogFactory.getLog(this)
 
+    private int metadataTree  = MetaDataService.METADATA_VARIANT
+
     GetDataQuery getDataQuery
 
     //  a couple of services. We pass these in through the constructor
@@ -71,7 +73,16 @@ class GetDataQueryHolder {
      * @param metaDataService
      * @return
      */
-    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
+    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList,
+                                                              SearchBuilderService searchBuilderService,
+                                                              MetaDataService metaDataService) {
+        return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService)
+    }
+    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList,
+                                                              SearchBuilderService searchBuilderService,
+                                                              MetaDataService metaDataService,
+                                                              int metadataTree) {
+        this.metadataTree = metadataTree
         return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService)
     }
 
@@ -204,7 +215,7 @@ class GetDataQueryHolder {
                 (resultColumnsToDisplay['cproperty'])) {
             List<String> cProperties = resultColumnsToDisplay['cproperty']
             for (String cProperty in cProperties?.unique()) {
-                Property displayProperty = metaDataService.getCommonPropertyByName(cProperty)
+                Property displayProperty = metaDataService.getCommonPropertyByName(cProperty,this.metadataTree)
                 if (!(cProperty in getDataQuery.getQueryPropertyList()?.name)){
                     getDataQuery.addQueryProperty(displayProperty)
                 }
