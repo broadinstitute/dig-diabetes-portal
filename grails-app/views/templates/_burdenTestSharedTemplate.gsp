@@ -209,7 +209,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                         </div>
                     </div>
 
-                    <div class="row">
+                    <!-- <div class="row">
                         <div class="col-md-12" style="padding:0; margin: 0;">
                             <ul class="nav nav-tabs datasetNames" id="datasetNamesTabs">
                                 <li class="active"><a>19K exome sequence analysis</a></li>
@@ -217,7 +217,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                 <li><a>BioMe AMP T2D GWAS</a></li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
 
                     <div class="row modeled-phenotype-div" style="{{modeledPhenotypeDisplay}}">
                         <div class="col-md-12" style="padding:0; margin: 0;">
