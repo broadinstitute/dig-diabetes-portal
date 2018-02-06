@@ -194,6 +194,16 @@ table.dk-search-result td.credcellpval  {
 	vertical-align: middle;
 	border-bottom:double 1px #000 !important;
 }
+table.dk-search-result td.credcellmotif  {;
+	background: #ffffff;
+	border-left:solid 1px #000 !important;
+	border-right:solid 1px #000 !important;
+	border-bottom:double 1px #000 !important;
+}
+table.dk-search-result td.credcellmotif.present  {
+	text-align: center;
+	vertical-align: middle;
+}
 
 table.dk-search-result th.dk-common {
 	background-color: #ddd;

@@ -42,7 +42,7 @@
         // load the phenotypes in the phenotype-dependent tab
         mpgSoftware.variantWF.retrievePhenotypes('${g.portalTypeString()}');
         // load the datasets in the phenotype-independent tab
-        mpgSoftware.variantWF.retrievePhenotypeIndependentDatasets();
+        mpgSoftware.variantWF.retrievePhenotypeIndependentDatasets('${g.portalTypeString()}');
         $('#geneInput').typeahead({
             source: function (query, process) {
                 $.get('<g:createLink controller="gene" action="index"/>', {query: query}, function (data) {

@@ -40,6 +40,7 @@
 <g:render template="./data/GWAS_GIANT-PA" />
 <g:render template="./data/GWAS_HPTxNCGM" />
 <g:render template="./data/GWAS_VHIR" />
+<g:render template="./data/GWAS_DIAGRAMimputed" />
 
 
 <style type="text/css" class="init">

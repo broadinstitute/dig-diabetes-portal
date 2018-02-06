@@ -386,11 +386,13 @@
                         <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                         {{#credibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">{{pName}}</a></li>
+                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>--}%
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                         <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>
+                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">{{pName}}</a></li>
+                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>--}%
                         {{/incredibleSetTab}}
                     </ul>
                 </div>
@@ -617,7 +619,7 @@
     <label>Credible sets in this range</label>
         <ul class="nav nav-pills">
             {{#allCredibleSets}}
-                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" onclick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>
+                    <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" toBeOnClick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>
             {{/allCredibleSets}}
             {{^allCredibleSets}}
                     <li class="nav-item redPhenotype phenotypeStrength">No credible sets</li>
@@ -740,7 +742,7 @@
             %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credcellpval credSetConstLabel">TF binding motif</td>
             {{#tfBindingMotif}}
-            <td class="credcell {{descr}}">{{val}}</td>
+            <td class="credcellmotif {{descr}}">{{val}}</td>
             {{/tfBindingMotif}}
         </tr>
 

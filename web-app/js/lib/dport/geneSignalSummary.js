@@ -1521,9 +1521,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var alwaysShowTheCredibleSetTab = true;
 
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
-
             buildOutCredibleSetPresentation(data, additionalParameters);
-
         } else if (alwaysShowTheCredibleSetTab){
             buildOutIncredibleSetPresentation(data, additionalParameters);
         }
