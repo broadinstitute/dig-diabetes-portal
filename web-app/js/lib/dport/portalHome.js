@@ -274,9 +274,10 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     loading.hide();
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                loading.hide();
-                core.errorReporter(jqXHR, errorThrown)
-            });
+                    loading.hide();
+                    core.errorReporter(jqXHR, errorThrown)
+                }
+            );
         };
 
 

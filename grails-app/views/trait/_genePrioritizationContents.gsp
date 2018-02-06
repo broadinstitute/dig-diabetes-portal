@@ -4,11 +4,12 @@
 
 <script>
 
-     alert('foo');
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
         prioritizedGeneInfoAjaxUrl: '${createLink(controller: "trait", action: "prioritizedGeneInfoAjax")}',
         getGeneLevelResultsUrl: '${createLink(controller: "home", action: "getGeneLevelResults")}',
+        phenotypeDropdownIdentifier:'#phenotypeDropdownIdentifier',
+        subphenotypeDropdownIdentifier:'#subphenotypeDropdownIdentifier',
         local:"${locale}",
         copyMsg:'<g:message code="table.buttons.copyText" default="Copy" />',
         printMsg:'<g:message code="table.buttons.printText" default="Print me!" />'
@@ -16,9 +17,8 @@
     mpgSoftware.genePrioritization.setMySavedVariables(drivingVariables);
 
     $( document ).ready(function() {
-        mpgSoftware.genePrioritization.fillDropdownsForGenePrioritization('#phenotypeDropdownIdentifier',
-            '#subphenotypeDropdownIdentifier' );
-        mpgSoftware.genePrioritization.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
+        mpgSoftware.genePrioritization.fillDropdownsForGenePrioritization();
+        //mpgSoftware.genePrioritization.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
 
 
@@ -33,6 +33,8 @@
     <g:message code="traitTable.messages.results" />
     <span id="traitTableDescription"></span>:
     <select id="phenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewDataSet(this)">
+    </select>
+
     <select id="subphenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewDataSet(this)">
     </select>
 

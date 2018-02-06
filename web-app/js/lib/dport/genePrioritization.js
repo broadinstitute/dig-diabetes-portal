@@ -17,8 +17,60 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
+        var retrieveSpecifiedDataAndDisplayIt  = function(currentPhenotypeName,selectedDataset,currentPropertyName){
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: mySavedVariables.getGeneLevelResultsUrl,
+                data: {phenotype: mySavedVariables.phenotypeName},
+                async: false
+            }).done ( function(data){
+                var myLocalSavedVariables = getMySavedVariables();
+                fillGenePhenotypeAndSubPhenotypeDropdown(data,
+                    myLocalSavedVariables.phenotypeName,
+                    myLocalSavedVariables.phenotypeDropdownIdentifier,
+                    myLocalSavedVariables.subphenotypeDropdownIdentifier);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                core.errorReporter(jqXHR, errorThrown)
+            });
+        };
+
+
+
+        var fillSubPhenotypeBoxBasedOnPhenotypeAndDataSet  = function( currentPhenotypeName,
+                                                                       selectedDataset,
+                                                                       phenotypeDropdownIdentifier,
+                                                                       subphenotypeDropdownIdentifier ){
+            var dataSetJson  = $.data($(phenotypeDropdownIdentifier)[0],'metadata',dataSetJson);
+            var options = $(subphenotypeDropdownIdentifier);
+
+            options.empty();
+
+            // now restrict all options based on the two incoming parameters
+            var matchingPhenotypeRecords =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
+                return (oneGroup.systemId === selectedDataset && oneGroup.name === currentPhenotypeName); // name here equals phenotype
+            });
+            if (matchingPhenotypeRecords.length > 0){  //I think this condition should always be unique  properties
+                if (matchingPhenotypeRecords[0].properties.length > 0) { // we have at least one property to display
+                    _.forEach(matchingPhenotypeRecords, function (oneElement) {
+                        _.forEach(oneElement.properties, function (subElement){
+                            options.append($("<option />").val(subElement.name)
+                                .html(subElement.name));
+                        });
+                    });
+                }
+            }
+
+            retrieveSpecifiedDataAndDisplayIt (currentPhenotypeName,selectedDataset,$(subphenotypeDropdownIdentifier+' option:selected').val());
+
+        };
+
+
+
 
         var fillGenePhenotypeAndSubPhenotypeDropdown = function ( dataSetJson,
+                                                                  currentPhenotypeName,
                                                                   phenotypeDropdownIdentifier,
                                                                   subphenotypeDropdownIdentifier ) { // help text for each row
             if ((typeof dataSetJson !== 'undefined')  &&
@@ -27,37 +79,33 @@ var mpgSoftware = mpgSoftware || {};
                 (typeof dataSetJson["pheotypeRecords"]  !== 'undefined' )&&
                 ( dataSetJson["pheotypeRecords"].length > 0 ))
             {
-                var options = $(phenotypeDropDownIdentifier);
-                option.data('metadata',dataSetJson);
+                var options = $(phenotypeDropdownIdentifier);
+                $.data(options[0],'metadata',dataSetJson);
 
                 options.empty();
 
                 var keys = dataSetJson.preferredGroups;
 
                 // begin by retrieving the most desirable phenotype groups
-                _.forEach(keys,function(key){
-                    var groupObjectPointer;
-                    var groupContents =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
-                        return oneGroup.group === key;
+                var matchingPhenotypeRecords =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
+                    return oneGroup.name === currentPhenotypeName;
 
-                    });
-                    var groupObjectPointer = _.find(dataSetJson.pheotypeRecords, function(oneGroup){
-                        return oneGroup.group === key;
-                    });
-                    var uniquePhenotypeIdentifier = "";
-                    if (groupContents.length > 0){
-                        options.append("<optgroup label='"+key+"'>");
-                        _.forEach (groupContents, function (oneElement){
-                            options.append($("<option />").val(oneElement.name)
-                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.name));
-                        });
-                        options.append("</optgroup label='"+key+"'>");;
-                    }
                 });
-
+                var dataSetRecordsForPhenotype = _.uniqBy(matchingPhenotypeRecords,'systemId');
+                if (dataSetRecordsForPhenotype.length > 0){
+                    _.forEach (dataSetRecordsForPhenotype, function (oneElement){
+                        options.append($("<option />").val(oneElement.systemId)
+                            .html(oneElement.systemId));
+                    });
+                }
 
                 // enable the input
                 options.prop('disabled', false);
+
+                fillSubPhenotypeBoxBasedOnPhenotypeAndDataSet(  currentPhenotypeName,
+                                                                $(phenotypeDropdownIdentifier+' option:selected').val(),
+                                                                phenotypeDropdownIdentifier,
+                                                                subphenotypeDropdownIdentifier );
 
             }
         }
@@ -65,20 +113,24 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillDropdownsForGenePrioritization = function (phenotypeDropdownIdentifier, subphenotypeDropdownIdentifier) {
-            var coreVariables = getMySavedVariables();
+        var fillDropdownsForGenePrioritization = function () {
+            var mySavedVariables = getMySavedVariables();
             var loader = $('#rSpinner');
             loader.show();
 
             $.ajax({
                 cache: false,
                 type: "post",
-                url: coreVariables.ajaxSampleGroupsPerTraitUrl,
-                data: {phenotype: phenotype},
+                url: mySavedVariables.getGeneLevelResultsUrl,
+                data: {phenotype: mySavedVariables.phenotypeName},
                 async: false
-            }).done (
-                fillGenePhenotypeAndSubPhenotypeDropdown(data,phenotypeDropdownIdentifier, subphenotypeDropdownIdentifier)
-            ).fail(function (jqXHR, textStatus, errorThrown) {
+            }).done ( function(data){
+                    var myLocalSavedVariables = getMySavedVariables();
+                    fillGenePhenotypeAndSubPhenotypeDropdown(data,
+                        myLocalSavedVariables.phenotypeName,
+                        myLocalSavedVariables.phenotypeDropdownIdentifier,
+                        myLocalSavedVariables.subphenotypeDropdownIdentifier);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
                 loading.hide();
                 core.errorReporter(jqXHR, errorThrown)
             });
