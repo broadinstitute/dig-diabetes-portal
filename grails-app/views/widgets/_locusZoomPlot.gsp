@@ -39,6 +39,75 @@
 
             <p><i class="fa fa-circle" style="color: #9632b8"></i> reference variant</p>
         </div>
+<style>
+
+</style>
+        <div class="row" style="border: solid 1px #ddd; padding: 0 15px;">
+            <h5>
+                Add new track
+            </h5>
+            <div class="col-md-6">
+                <ul >
+                    <li class="dropdown" id="tracks-menu-dropdown-dynamic" style="display:inline-block; margin-right: 25px;"><span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes <b class="caret"></b></a>
+                        <ul id="dk_lz_phenotype_list" class="dropdown-menu" style="max-height:500px; overflow:auto;">
+                            <g:each in="${lzOptions?.findAll{it.dataType=='dynamic' || it.dataType=='static'}}">
+                                <li><a href="javascript:;">
+                                    ${g.message(code: "metadata." + it.name)}
+                                </a>
+                                </li>
+                            </g:each>
+                        </ul>
+                    </li>
+                    <li class="dropdown" id="tracks-menu-dropdown-static" style="display:inline-block;"><span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Datasets <b class="caret"></b></a>
+                        <ul id="trackList-static" class="dropdown-menu" style="max-height:500px; overflow:auto;">
+                            <g:each in="${lzOptions?.findAll{it.dataType=='static'}}">
+                                <li>
+                                    <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                            phenotype: '${it.key}',
+                                            dataSet: '${it.dataSet}',
+                                            datasetReadableName: '${g.message(code: "metadata." + it.dataSet)}',
+                                            propertyName: '${it.propertyName}',
+                                            description: '${it.description}'
+                                        },
+                                        '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                        '${it.dataType}','#lz-47')">
+
+                                        <span class="dk-lz-dataset" style="display:none">${g.message(code: "metadata." + it.name)}</span><span>${g.message(code: "metadata." + it.dataSet)}</span><span> (${it.dataType})</span>
+
+                                    </a>
+                                </li>
+                            </g:each>
+                            <g:each in="${lzOptions?.findAll{it.dataType=='dynamic'}}">
+                                <li>
+                                    <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                            phenotype: '${it.key}',
+                                            dataSet: '${it.dataSet}',
+                                            datasetReadableName: '${g.message(code: "metadata." + it.name)}',
+                                            propertyName: '${it.propertyName}',
+                                            description: '${it.description}'
+                                        },
+                                        '${it.dataSet}','${createLink(controller:"gene", action:"getLocusZoom")}',
+                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                        '${it.dataType}','#lz-47')">
+
+                                        <span class="dk-lz-dataset" style="display:none">${g.message(code: "metadata." + it.name)}</span><span>${g.message(code: "metadata." + it.dataSet)}</span><span> (${it.dataType})</span>
+
+                                    </a>
+                                </li>
+                            </g:each>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="col-md-6">
+                <b>Region: <span id="lzRegion"></span></b>
+            </div>
+        </div>
+        <!--
         <ul class="nav navbar-nav navbar-left" style="display: flex;">
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
                     <li class="dropdown" id="tracks-menu-dropdown-dynamic">
@@ -87,10 +156,10 @@
             <li style="margin: auto;">
                 <b>Region: <span id="lzRegion"></span></b>
             </li>
-        </ul>
+        </ul> -->
 
         <div class="accordion-inner">
-            <div id="lz-47" class="lz-container-responsive"></div>
+            <div id="lz-47" class="lz-container-responsive" style="border:solid 1px #ddd; padding: 15px;"></div>
         </div>
 
     </div>

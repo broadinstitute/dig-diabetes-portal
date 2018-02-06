@@ -203,9 +203,49 @@
                 }
             }
 
-            /* copy url of varian search result page to clipboard*/
+            function massageLZ() {
+                var lzPhenotypes = [];
+
+                $("#dk_lz_phenotype_list").find("li").each(function() {
+                    var lzPhenotype = $(this).text();
+                    var lzExist = 0;
+                    $.each(lzPhenotypes, function(key, value) {
+                        (lzPhenotype == value)? lzExist = 1 : "";
+                    });
+
+                    (lzExist == 0)? lzPhenotypes.push(lzPhenotype) : "";
+                });
+
+                lzPhenotypes.sort(function(s1, s2){
+                    var l=s1.toLowerCase(), m=s2.toLowerCase();
+                    return l===m?0:l>m?1:-1;
+                });
+
+                var lzPhenotypeListContent = "";
+
+                $.each(lzPhenotypes, function(key, value) {
+                    lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event)'>"+value+"</a></li>";
+                });
+
+                $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
+
+            }
+
+            function setLZDatasets(event) {
+                //alert();
+
+                var phenotypeName = $.trim($(event.target).text());
+
+                $("span.dk-lz-dataset").each(function() {
+                    var trimmedPName = $.trim($(this).text());
+
+                    (trimmedPName == phenotypeName)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                })
+            }
+
 
             $( window ).load( function() {
+                /* copy url of varian search result page to clipboard*/
                 document.addEventListener('copy', function(e){
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
@@ -216,6 +256,11 @@
                 $("#copyURL").click(function() {
                     document.execCommand('copy');
                 })
+                /* copy URL function end */
+
+                /* massage LocusZoom UI */
+                massageLZ();
+
             });
 
 
