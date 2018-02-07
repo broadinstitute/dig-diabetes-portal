@@ -104,12 +104,12 @@ class BurdenService {
                 break;
         }
 
-        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC")
+        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC",MetaDataService.METADATA_VARIANT)
         List<Property> additionalProperties = []
         if (macProperty != null){
             additionalProperties << macProperty
         }
-        Property mafProperty = metaDataService.getSampleGroupProperty(dataSet,"MAF")
+        Property mafProperty = metaDataService.getSampleGroupProperty(dataSet,"MAF",MetaDataService.METADATA_VARIANT)
         if (mafProperty) {
             additionalProperties << mafProperty
         }
@@ -279,7 +279,7 @@ class BurdenService {
             jsonObject.numRecords = jsonObject.variants.size()
 
             // get the list of variants back
-            retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "" )
+            retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "", MetaDataService.METADATA_VARIANT )
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());

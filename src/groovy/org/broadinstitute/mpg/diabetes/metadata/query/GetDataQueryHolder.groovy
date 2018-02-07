@@ -82,8 +82,8 @@ class GetDataQueryHolder {
                                                               SearchBuilderService searchBuilderService,
                                                               MetaDataService metaDataService,
                                                               int metadataTree) {
-        this.metadataTree = metadataTree
-        return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService)
+
+        return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService,metadataTree)
     }
 
     public static GetDataQueryHolder createGetDataQueryHolderFromFilters(List<QueryFilter> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService, boolean orFlag) {
@@ -111,6 +111,15 @@ class GetDataQueryHolder {
         getDataQuery = generateGetDataQuery(filterList)
     }
 
+
+    public GetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService,
+                              int metadataTree) {
+        this()
+        this.searchBuilderService = searchBuilderService
+        this.metaDataService = metaDataService
+        getDataQuery = generateGetDataQuery(filterList)
+        this.metadataTree = metadataTree
+    }
 
     public GetDataQueryHolder(List<QueryFilter> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService, boolean orFlag) {
         this()
@@ -234,7 +243,7 @@ class GetDataQueryHolder {
             dProperties.each { String phenoKey, LinkedHashMap dataSets ->
                 dataSets?.each { String dataSetKey, List props ->
                     for (String prop in props) {
-                        Property displayProperty = metaDataService.getSampleGroupProperty(dataSetKey, prop)
+                        Property displayProperty = metaDataService.getSampleGroupProperty(dataSetKey, prop,this.metadataTree)
 
                         // avoid null pointers and log whenever null properties are added (unclear why this is not finding properties, so not sure if bug)
                         if (displayProperty != null) {
@@ -273,7 +282,7 @@ class GetDataQueryHolder {
             dProperties.each { String phenoKey, LinkedHashMap dataSets ->
                 dataSets?.each { String dataSetKey, List props ->
                     for (String prop in props) {
-                        List<Property> displayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection(phenoKey, dataSetKey, ["^${prop}"])
+                        List<Property> displayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection(phenoKey, dataSetKey, ["^${prop}"],this.metadataTree)
                         for (Property displayProperty in displayProperties) {
                             getDataQuery.addQueryProperty(displayProperty)
                         }

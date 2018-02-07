@@ -32,10 +32,10 @@
 
     <g:message code="traitTable.messages.results" />
     <span id="traitTableDescription"></span>:
-    <select id="phenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewDataSet(this)">
+    <select id="phenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
     </select>
 
-    <select id="subphenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewDataSet(this)">
+    <select id="subphenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
     </select>
 
 </p>
@@ -50,12 +50,12 @@
 <table id="phenotypeTraits" class="table basictable table-striped">
     <thead>
     <tr>
-        <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>
-        <th><g:message code="variantTable.columnHeaders.shared.nearestGene" /></th>
-        <th><g:message code="variantTable.columnHeaders.exomeChip.pValue" /></th>
-        <th id="effectTypeHeader"></th>
-        <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
-        <th><g:message code="variantTable.columnHeaders.shared.all_p_val" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.gene" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.all_p_val" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.oddsRatio" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.position" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.acu" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.aca" /></th>
     </tr>
     </thead>
     <tbody id="traitTableBody">

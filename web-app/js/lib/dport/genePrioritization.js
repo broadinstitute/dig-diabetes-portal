@@ -31,7 +31,7 @@ var mpgSoftware = mpgSoftware || {};
                 async: false
             }).done ( function(data){
                 var myLocalSavedVariables = getMySavedVariables();
-                alert('foo');
+                refreshGeneTableView(data);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 loading.hide();
                 core.errorReporter(jqXHR, errorThrown)
@@ -57,7 +57,11 @@ var mpgSoftware = mpgSoftware || {};
                 if (matchingPhenotypeRecords[0].properties.length > 0) { // we have at least one property to display
                     _.forEach(matchingPhenotypeRecords, function (oneElement) {
                         _.forEach(oneElement.properties, function (subElement){
-                            options.append($("<option />").val(subElement.name)
+                            var selectorOption = "";
+                            if (subElement.name.indexOf('ynonymous')>-1){
+                                selectorOption = " selected";
+                            }
+                            options.append($("<option "+selectorOption+"/>").val(subElement.name)
                                 .html(subElement.name));
                         });
                     });
@@ -141,47 +145,23 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {
-            var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-
-            var loading = $('#spinner').show();
-            $('[data-toggle="popover"]').popover();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url:rememVars.phenotypeAjaxUrl,
-                data: { trait: rememVars.phenotypeName,
-                    significance: rememVars.requestedSignificance,
-                    sampleGroup: sampleGroup  },
-                async: true,
-                success: function (data) {
-                    $('#spinner').hide();
-                    try{
-                        mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
-                    }
-                    catch (e){console.log("I tried calling refreshManhattanPlotTableView but failed",e)}
-
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
 
 
-        var pickNewDataSet = function (){
-            var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+        var pickNewGeneInfo = function (){
+            var mySavedVars = getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             $('#manhattanPlot1').empty();
             $('#traitTableBody').empty();
             $('#phenotypeTraits').DataTable().rows().remove();
             $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-            mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
+            retrieveSpecifiedDataAndDisplayIt (mySavedVars.phenotypeName,
+                $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
+                $(mySavedVars.subphenotypeDropdownIdentifier+' option:selected').val());
+            //mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
 
-        }
+        };
 
-        var refreshManhattanplotTableView = (function(data) {
+        var refreshGeneTableView = (function(data) {
             var savedVar = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var collector = [];
             var effectType = 'beta';
@@ -191,6 +171,7 @@ var mpgSoftware = mpgSoftware || {};
                     (data.variant.results)) {//assume we have data and process it
 
                     for (var i = 0; i < data.variant.results.length; i++) {
+                        var skipIt = false;
                         var d = {};
                         for (var j = 0; j < data.variant.results[i].pVals.length; j++) {
                             var key = data.variant.results[i].pVals[j].level;
@@ -198,21 +179,33 @@ var mpgSoftware = mpgSoftware || {};
                             var splitKey = key.split('^');
                             if (splitKey.length>3) {
                                 if (splitKey[2]=='P_VALUE') {
+                                    if (value===null) {
+                                        skipIt=true;
+                                    }
                                     d['P_VALUE'] = value;
                                 } else if (splitKey[2]=='ODDS_RATIO') {
-                                    d[key] = value;
+                                    d['ODDS_RATIO'] = value;
                                     effectType = 'odds ratio'
-                                } else if ((splitKey[2]=='BETA')||(splitKey[2]=='MAF')) {
-                                    d[key] = value;
+                                } else if ( (splitKey[2]!==null)&&
+                                            (splitKey[2].length>3)&&
+                                            (splitKey[2].substring(0, 3)==='ACA')) {
+                                    d['ACA'] = value;
+                                } else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[2].substring(0, 3)==='ACU')) {
+                                    d['ACU'] = value;
                                 }
-                            } else if (key==='POS') {
-                                d[key] = parseInt(value);
+                            } else if (key==='START') {
+                                d['POS'] = parseInt(value);
                             } else {
                                 d[key] = value;
                             }
 
                         }
-                        collector.push(d);
+                        if (!skipIt){
+                            collector.push(d);
+                        }
+
                     }
 
 
@@ -220,7 +213,6 @@ var mpgSoftware = mpgSoftware || {};
             }
             if ((data.variant) &&
                 (data.variant.dataset))  {
-//                        $('#traitTableDescription').text(data.variant.dataset);
                 $('#manhattanSampleGroupChooser').val(data.variant.dataset);
             }
 
@@ -251,7 +243,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 })
                 .nameAccessor(function (d) {
-                    return d.DBSNP_ID
+                    return d.GENE
                 })
                 .chromosomeAccessor(function (d) {
                     return d.CHROM
@@ -259,27 +251,101 @@ var mpgSoftware = mpgSoftware || {};
                 .includeXChromosome(true)
                 .includeYChromosome(false)
                 .dotClickLink(savedVar.variantInfoUrl)
-            ;
+                ;
 
             d3.select("#manhattanPlot1").call(manhattan.render);
-
-            mpgSoftware.phenotype.iterativeTableFiller(collector,
+            var mySavedVariables = getMySavedVariables();
+            iterativeTableFiller(collector,
                 effectType,
-                savedVar.local,
+                mySavedVariables.local,
                 savedVar.copyMsg,
                 savedVar.printMsg);
 
+        });
 
+        var convertLineForPhenotypicTraitTable = function (variant, effectsField) {
+                var retVal = [];
+                var pValueGreyedOut = (variant.P_VALUE > .05) ? "greyedout" : "normal";
+                var pValue='';
+                var orValue='';
+                var acaValue='';
+                var acuValue='';
+                var geneName='';
+                var position='';
+                var positionIndicator = {'start':'','end':'','chrom':''};
+                _.forEach(variant, function(value, key) {
 
+                    if (key.indexOf('^')>-1){
+                        ;
 
-        })
+                    }   else if (key === 'P_VALUE')  {
+                        pValue=UTILS.realNumberFormatter(value);
+                    } else if  (key==='ACA'){
+                        if (value===null){
+                            acaValue=0;
+                        } else {
+                            acaValue=value;
+                        }
+                    } else if (key==='ACU'){
+                        if (value===null){
+                            acuValue=0;
+                        } else {
+                            acuValue=value;
+                        }
+                    } else if (key === 'ODDS_RATIO'){
+                        orValue=UTILS.realNumberFormatter(value);
+                    } else if (key === 'GENE'){
+                        geneName=value;
+                    } else if (key === 'POS'){
+                        positionIndicator['start']=value;
+                    }else if (key === 'END'){
+                        positionIndicator['end']=value;
+                    }else if (key === 'CHROM'){
+                        positionIndicator['chrom']=value;
+                    }
+                });
+                position = positionIndicator['chrom']+":"+positionIndicator['start']+"-"+positionIndicator['end'];
+                retVal.push( geneName );
+                retVal.push( pValue );
+                retVal.push( orValue );
+                retVal.push(position);
+                retVal.push(acuValue);
+                retVal.push(acaValue);
+                return retVal;
+            };
 
+          var  iterativeTableFiller = function (variant, effectType, locale, copyText, printText) {
+                $('#effectTypeHeader').empty();
+                $('#effectTypeHeader').append(effectType);
+                var languageSetting = {}
+                // check if the browser is using Spanish
+                if (locale.startsWith("es")) {
+                    languageSetting = {url: '../js/lib/i18n/table.es.json'}
+                }
+                var table = $('#phenotypeTraits').dataTable({
+                    pageLength: 25,
+                    filter: false,
+                    order: [[1, "asc"]],
+                    columnDefs: [ {type: "scientific", targets: [1, 2]},{type: "allnumeric", targets: [4, 5]},{type: "positionIndicator", targets: [3]}],
+                    language: languageSetting,
+                    buttons: [
+                        { extend: 'copy', text: copyText },
+                        'csv',
+                        'pdf',
+                        { extend: 'print', text: printText }
+                    ]
+                });
+                var dataLength = variant.length;
+                var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
+                for (var i = 0; i < dataLength; i++) {
+                    var array = convertLineForPhenotypicTraitTable(variant[i], effectsField);
+                    $('#phenotypeTraits').dataTable().fnAddData(array, (i == 25) || (i == (dataLength - 1)));
+                }
+            };
 
         return{
-            refreshManhattanplotTableView:refreshManhattanplotTableView,
             fillDropdownsForGenePrioritization: fillDropdownsForGenePrioritization,
-            pickNewDataSet:pickNewDataSet,
-            fillRegionalTraitAnalysis:fillRegionalTraitAnalysis,
+            pickNewGeneInfo:pickNewGeneInfo,
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables
 

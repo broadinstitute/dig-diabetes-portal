@@ -405,7 +405,7 @@ class MetaDataService {
 
 
     public String getInstitutionNameFromSampleGroupName(String sampleGroupId){
-        SampleGroup  sampleGroup = getSampleGroupByName (sampleGroupId)
+        SampleGroup  sampleGroup = getSampleGroupByName (sampleGroupId, MetaDataService.METADATA_VARIANT)
         Experiment experiment = getExperimentFromSampleGroup( sampleGroup)
         return experiment.getInstitution()
     }
@@ -429,8 +429,8 @@ class MetaDataService {
     }
 
 
-    public SampleGroup  getSampleGroupByName(String sampleGroupId){
-        return jsonParser.getSampleGroupByName(sampleGroupId)
+    public SampleGroup  getSampleGroupByName(String sampleGroupId, int metadataTree){
+        return retrieveJsonParser(metadataTree).getSampleGroupByName(sampleGroupId)
     }
 
     public SampleGroup  getSampleGroupByFromSamplesName(String sampleGroupId){
@@ -442,45 +442,6 @@ class MetaDataService {
         return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
     }
 
-//    public JSONObject getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
-//        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-//
-//        // local variables
-//        JSONObject toReturn = []
-//        List<SampleGroup> groupList;
-//        List<JSONObject> nameList = new ArrayList<String>();
-//
-//        // get the sample group list for the phenotype
-//        try {
-//            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
-//
-//            // sort the group list
-//            Collections.sort(groupList);
-//
-//            // add all the names to the name list
-//            for (SampleGroup group : groupList) {
-//                StringBuilder depthBuilder = new StringBuilder();
-//                for (int i = 0; i < group.getNestedLevel(); i++) {
-//                    depthBuilder.append("-");
-//                }
-//                String sysId = group.getSystemId()
-//                JSONObject currentGroup = [
-//                    name: sysId,
-//                    displayName: depthBuilder.toString() + g.message(code: "metadata." + sysId, default: sysId)
-//                ]
-//                nameList.add(currentGroup);
-//            }
-//
-//        } catch (PortalException exception) {
-//            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
-//        }
-//
-//        toReturn.is_error = false
-//        toReturn.numRecords = nameList.size()
-//        toReturn.dataset = nameList
-//
-//        return toReturn;
-//    }
 
 
 
@@ -860,8 +821,8 @@ class MetaDataService {
         return propertyList
     }
 
-    public List<Property> getPhenotypeSpecificSampleGroupPropertyCollection(String phenotypeName,String sampleGroupName, List <String> propertyTemplates){
-        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
+    public List<Property> getPhenotypeSpecificSampleGroupPropertyCollection(String phenotypeName,String sampleGroupName, List <String> propertyTemplates, int metadataTree){
+        List<PhenotypeBean> phenotypeList =  retrieveJsonParser(metadataTree).getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.phenotypeSpecificSampleGroupBasedPropertyCollection(phenotypeList,sampleGroupName,propertyTemplates)
         return propertyList
     }
@@ -875,9 +836,9 @@ class MetaDataService {
 
 
 
-    public Property getSampleGroupProperty(String sampleGroupName,String propertyName){
+    public Property getSampleGroupProperty(String sampleGroupName,String propertyName, int metadataTree ){
         Property returnValue
-        List<Property> propertyList =  this.getJsonParser().getSearchablePropertiesForSampleGroupId( sampleGroupName )
+        List<Property> propertyList =  retrieveJsonParser(metadataTree).getSearchablePropertiesForSampleGroupId( sampleGroupName )
         if (propertyList){
             for (Property property in propertyList){
                 if (property.name == propertyName){
@@ -1111,13 +1072,13 @@ class MetaDataService {
     }
 
     public Property getPropertyByNamePhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName, int metadataTree ){
-        Property property =  this.retrieveJsonParser(metadataTree).getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
+        Property property =  retrieveJsonParser(metadataTree).getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         return property
     }
 
-    public String getMeaningForPhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName){
+    public String getMeaningForPhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName, int metadataTree){
         String returnValue = ""
-        PropertyBean propertyBean =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
+        PropertyBean propertyBean =  retrieveJsonParser(metadataTree).getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         List<String> listOfStrings = propertyBean.getMeanings()
 
         if (( listOfStrings.size() == 0 )||
