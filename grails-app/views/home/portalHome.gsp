@@ -163,18 +163,18 @@
                     <div style="font-size: 14px;">
                         <span><g:message code="site.shared.phrases.examples" />: </span>
                         <g:each in="${portalVersionBean.geneExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="gene" action="geneInfo"
+                            <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id:it]"/>'>${it}</a>
                         </g:each>
                         <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                     body="input.searchTerm.geneExample.help.text"/>,
                         <g:each in="${portalVersionBean.variantExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
+                            <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
                         </g:each>
                         <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                     body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                         <g:each in="${portalVersionBean.rangeExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="region" action="regionInfo"
+                            <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
                                                                           params="[id:it]"/>'>${it}</a>
                         </g:each>
                         <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"

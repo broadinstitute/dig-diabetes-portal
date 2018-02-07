@@ -62,6 +62,10 @@
                     text-align:left;
                     line-height:26px;
                 }
+
+                a.front-search-example {
+                    color:#cce6c3;
+                }
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 a {color:#de8800;}
@@ -79,6 +83,17 @@
                     text-align:left;
                     line-height:26px;
                 }
+
+
+            a.front-search-example {
+                color:#ffffb3;
+            }
+            </g:elseif>
+            <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+
+            a.front-search-example {
+                color:#cccce6;
+            }
             </g:elseif>
             <g:else>
                 a {color:#50AABB;}
@@ -96,6 +111,11 @@
                     text-align:left;
                     line-height:26px;
                 }
+
+                a.front-search-example {
+                    color:#cce6e6;
+                }
+
             </g:else>
         </style>
 
