@@ -563,7 +563,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "true",
                                                 "gene.genePage.warning",
                                                 "",
-                                                '5010306206573083521'
+                                                '5010306206573083521',
+                                                1,
+                                                0
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -588,7 +590,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '7961982646849648720'
+                                          '7961982646849648720',
+                                          1,
+                                          0
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -613,7 +617,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '3944203828206499294'
+                                          '3944203828206499294',
+                                          1,
+                                          0
                                   ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
@@ -638,7 +644,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '7857348124942584918'
+                                          '7857348124942584918',
+                                          1,
+                                          0
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -663,7 +671,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '5414069947481666863'
+                                          '5414069947481666863',
+                                          0,
+                                          1
                                   )
 ]
 
