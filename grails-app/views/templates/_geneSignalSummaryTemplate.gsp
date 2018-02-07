@@ -100,46 +100,16 @@
 
                 <li class="dropdown" id="tracks-menu-dropdown-dynamic">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes <b class="caret"></b></a>
-                    <ul id="trackList-dynamic" class="dropdown-menu">
+                    <ul id="dk_lz_phenotype_list" class="dropdown-menu">
 
                     {{#dynamic}}
                         <li>
-                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                                                phenotype: '{{key}}',
-                                                dataSet: '{{dataSet}}',
-                                                datasetReadableName: '{{dataSetReadable}}',
-                                                propertyName: '{{propertyName}}',
-                                                description: '{{description}}',
-                                                assayIdList: '{{assayIdList}}'
-                                        },
-                                        '{{dataSet}}',
-                                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '{{dataType}}',
-                                        ('#'+'{{lzDomSpec}}'),
-                                        {colorBy:1,positionBy:1})">
-                                        {{description}} ({{dataSetReadable}})
-                            </a>
+                            {{description}}
                         </li>
                     {{/dynamic}}
                     {{#static}}
                         <li>
-                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
-                                                phenotype: '{{key}}',
-                                                dataSet: '{{dataSet}}',
-                                                datasetReadableName: '{{dataSetReadable}}',
-                                                propertyName: '{{propertyName}}',
-                                                description: '{{description}}',
-                                                assayIdList: '{{assayIdList}}'
-                                        },
-                                        '{{dataSet}}',
-                                        '${createLink(controller:"gene", action:"getLocusZoom")}',
-                                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                                        '{{dataType}}',
-                                        ('#'+'{{lzDomSpec}}'),
-                                        {colorBy:1,positionBy:1})">
-                                        {{description}} ({{dataSetReadable}})
-                            </a>
+                            {{description}}
                         </li>
                         {{/static}}
 
@@ -148,7 +118,7 @@
 
                 {{#staticDataExists}}
                 <li class="dropdown" id="tracks-menu-dropdown-static">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes<b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Datasets<b class="caret"></b></a>
                     <ul id="trackList-static" class="dropdown-menu">
                     {{/staticDataExists}}
                         {{#static}}
@@ -167,10 +137,30 @@
                                         '{{dataType}}',
                                         ('#'+'{{lzDomSpec}}'),
                                         {colorBy:1,positionBy:1})">
-                                        {{description}} ({{dataSetReadable}})
+                                        <span class="dk-lz-dataset" style="display:none">{{description}}</span>{{dataSetReadable}} (static)
                             </a>
                         </li>
                         {{/static}}
+                        {{#dynamic}}
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                                    phenotype: '{{key}}',
+                                                    dataSet: '{{dataSet}}',
+                                                    datasetReadableName: '{{dataSetReadable}}',
+                                                    propertyName: '{{propertyName}}',
+                                                    description: '{{description}}',
+                                                    assayIdList: '{{assayIdList}}'
+                                            },
+                                            '{{dataSet}}',
+                                            '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                            '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                            '{{dataType}}',
+                                            ('#'+'{{lzDomSpec}}'),
+                                            {colorBy:1,positionBy:1})">
+                                            <span class="dk-lz-dataset" style="display:none">{{description}}</span>{{dataSetReadable}} (dynamic)
+                                </a>
+                            </li>
+                        {{/dynamic}}
                     {{#staticDataExists}}
                     </ul>
                 </li>
