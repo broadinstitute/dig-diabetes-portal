@@ -99,7 +99,7 @@
                 <ul class="nav navbar-nav navbar-left" style="display: flex;">
                     {{#staticDataExists}}
                     <li class="dropdown" id="tracks-menu-dropdown-dynamic">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="massageLZ()">
                         <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span> Phenotypes <b class="caret"></b></a>
 
                         <ul id="dk_lz_phenotype_list" class="dropdown-menu" style="max-height:500px; overflow:auto;">
@@ -169,9 +169,9 @@
                     </li>
                     {{/staticDataExists}}
                     {{#tissueDataExists}}
-                    <li class="dropdown" id="tracks-menu-dropdown-functional" style="">
+                    <li class="dropdown" id="tracks-menu-dropdown-functional">
                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
-                           <ul id="trackList-tissue" class="dropdown-menu">
+                           <ul id="trackList-tissue" class="dropdown-menu" style="max-height:500px; overflow:auto;">
                                {{/tissueDataExists}}
                                {{#tissues}}
                                     <li>
