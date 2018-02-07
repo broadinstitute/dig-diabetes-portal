@@ -912,6 +912,23 @@ div.dk-linkout-btn:hover div.tooltip-text {
 	visibility: visible;
 }
 
+div.dk-amp-funded {
+	background-color: #396ba6;
+	padding-left: 20px;
+	background-image:url(../images/AMP_banner_right.png);
+	background-position: right center;
+	background-size: 280% 100%;
+}
+
+div.dk-amp-funded > span {
+	font-size: 7px;
+	color: #cef;
+	margin-left: -23px;
+	display: inline-block;
+	width: 25px;
+	float: left;
+	padding-top: 8px;
+}
 
 a.find-out-more-opener {
 	outline: none;
