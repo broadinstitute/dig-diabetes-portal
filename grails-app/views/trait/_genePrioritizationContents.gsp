@@ -39,15 +39,18 @@
     </select>
 
 </p>
+<style>
+.mychart {width:100% !important; height:740px !important;}
+</style>
+<div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
+<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
-
-<div id="manhattanPlot1"></div>
 
 
 <input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
 
 
-<table id="phenotypeTraits" class="table basictable table-striped">
+<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
         <th><g:message code="geneTable.columnHeaders.shared.gene" /></th>
