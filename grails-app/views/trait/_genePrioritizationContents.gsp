@@ -54,8 +54,12 @@
         <th><g:message code="geneTable.columnHeaders.shared.all_p_val" /></th>
         <th><g:message code="geneTable.columnHeaders.shared.oddsRatio" /></th>
         <th><g:message code="geneTable.columnHeaders.shared.position" /></th>
-        <th><g:message code="geneTable.columnHeaders.shared.acu" /></th>
-        <th><g:message code="geneTable.columnHeaders.shared.aca" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.acu" />
+        <g:helpText title="geneTable.columnHeaders.shared.acu.help.header" placement="bottom" body="geneTable.columnHeaders.shared.acu.help.text"/>
+        </th>
+        <th><g:message code="geneTable.columnHeaders.shared.aca" />
+        <g:helpText title="geneTable.columnHeaders.shared.aca.help.header" placement="bottom" body="geneTable.columnHeaders.shared.aca.help.text"/>
+        </th>
     </tr>
     </thead>
     <tbody id="traitTableBody">
