@@ -62,7 +62,7 @@ var mpgSoftware = mpgSoftware || {};
                                 selectorOption = " selected";
                             }
                             options.append($("<option "+selectorOption+"/>").val(subElement.name)
-                                .html(subElement.name));
+                                .html(subElement.translatedProperty));
                         });
                     });
                 }
@@ -101,7 +101,7 @@ var mpgSoftware = mpgSoftware || {};
                 if (dataSetRecordsForPhenotype.length > 0){
                     _.forEach (dataSetRecordsForPhenotype, function (oneElement){
                         options.append($("<option />").val(oneElement.systemId)
-                            .html(oneElement.systemId));
+                            .html(oneElement.translatedSystemId));
                     });
                 }
 

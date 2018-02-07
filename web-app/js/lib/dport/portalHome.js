@@ -232,7 +232,7 @@ var mpgSoftware = mpgSoftware || {};
                         options.append("<optgroup label='"+key+"'>");
                         _.forEach (groupContents, function (oneElement){
                             options.append($("<option />").val(oneElement.name)
-                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.name));
+                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
                         });
                         options.append("</optgroup label='"+key+"'>");;
                     }
