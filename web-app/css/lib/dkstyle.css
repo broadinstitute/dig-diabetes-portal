@@ -865,5 +865,104 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
 }
 
 div.boxWhiskerPlot svg.box g.boxHolder {
-	border: solid 2px #f00;
+    border: solid 2px #f00;
 }
+
+div.dk-linkout-btn {
+	margin-right: 5px;
+	background-size: 25px 25px;
+	padding-left: 3px;
+	border-radius: 3px;
+}
+
+div.dk-linkout-btn a {
+	padding: 2px 5px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+div.tooltip-text {
+	visibility: hidden;
+	position: absolute;
+	color: #fff;
+	background-color: #0c0c0c;
+	padding: 0px 6px 3px 6px;
+	border-radius: 3px;
+	margin-left: -3px;
+	margin-top: 24px;
+	text-align: left;
+	z-index: 10;
+}
+
+div.dk-linkout-btn:hover div.tooltip-text {
+	visibility: visible;
+}
+
+div.dk-amp-funded {
+	background-color: #396ba6;
+	padding-left: 20px;
+	background-image:url(../images/AMP_banner_right.png);
+	background-position: right center;
+	background-size: 280% 100%;
+}
+
+div.dk-amp-funded > span {
+	font-size: 7px;
+	color: #cef;
+	margin-left: -23px;
+	display: inline-block;
+	width: 25px;
+	float: left;
+	padding-top: 8px;
+}
+
+a.find-out-more-opener {
+	outline: none;
+	font-size: 14px;
+	text-align: center !important;
+	display: block;
+	float: right;
+	width: 80px;
+	right: -80px;
+	position: absolute;
+	line-height: 14px;
+	padding: 5px;
+	color: #fff;
+	background-color: #50aabb;
+	border-radius: 3px;
+	top: 70px;
+}
+
+a.find-out-more-opener:hover, a.find-out-more-opener:active {
+	text-decoration: none;
+	background-color: #ddd;
+}
+
+a.find-out-more-opener span {
+	font-size: 20px;
+}
+
+.find-out-more-content {
+	position: absolute;
+	width: 80px;
+	right: -80px;
+	top: 140px;
+}
+
+.find-out-more-content div.tooltip-text {
+	visibility: hidden;
+	position: absolute;
+	color: #fff;
+	background-color: #0c0c0c;
+	padding: 0px 6px 3px 6px;
+	border-radius: 3px;
+	margin-top: 0px;
+	right: 80px;
+	z-index: 10;
+}
+
+/* locus zoom */
+#trackList-tissue { height: 350px; overflow: auto;}
+
+#trackList-static, #trackList-dynamic { height: 350px; overflow: auto;}
+>>>>>>> origin/master
