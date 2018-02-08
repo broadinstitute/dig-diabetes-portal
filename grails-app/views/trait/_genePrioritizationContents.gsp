@@ -32,30 +32,37 @@
 
     <g:message code="traitTable.messages.results" />
     <span id="traitTableDescription"></span>:
-    <select id="phenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewDataSet(this)">
+    <select id="phenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
     </select>
 
-    <select id="subphenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewDataSet(this)">
+    <select id="subphenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
     </select>
 
 </p>
+<style>
+.mychart {width:100% !important; height:740px !important;}
+</style>
+<div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
+<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
-
-<div id="manhattanPlot1"></div>
 
 
 <input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
 
 
-<table id="phenotypeTraits" class="table basictable table-striped">
+<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
-        <th><g:message code="variantTable.columnHeaders.shared.rsid" /></th>
-        <th><g:message code="variantTable.columnHeaders.shared.nearestGene" /></th>
-        <th><g:message code="variantTable.columnHeaders.exomeChip.pValue" /></th>
-        <th id="effectTypeHeader"></th>
-        <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
-        <th><g:message code="variantTable.columnHeaders.shared.all_p_val" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.gene" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.all_p_val" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.oddsRatio" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.position" /></th>
+        <th><g:message code="geneTable.columnHeaders.shared.acu" />
+        <g:helpText title="geneTable.columnHeaders.shared.acu.help.header" placement="bottom" body="geneTable.columnHeaders.shared.acu.help.text"/>
+        </th>
+        <th><g:message code="geneTable.columnHeaders.shared.aca" />
+        <g:helpText title="geneTable.columnHeaders.shared.aca.help.header" placement="bottom" body="geneTable.columnHeaders.shared.aca.help.text"/>
+        </th>
     </tr>
     </thead>
     <tbody id="traitTableBody">

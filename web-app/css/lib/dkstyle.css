@@ -796,88 +796,173 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
     background-color: #d5f2f2 !important;
 }
 
+#datasetNamesTabs, #modeledPhenotypeTabs, #stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs {
+	display: inline-block !important;
+	font-size: 14px !important;
+	padding: 7px 0 1px 10px;
+	width: 100%;
+	margin:-7px 0 0 0;
+	border: solid 1px #ddd;
+}
+
 /*
-#modeledPhenotypeTabs {
-
-    background-color: #ddd;
-    display: inline-block !important;
-    font-size: 14px;
-    border: solid 1px #bbb;
-    padding: 2px;
-    border-radius: 25px;
-    display: inline-block !important;
-}
-
-#modeledPhenotypeTabs li {
-    margin-right: -3px;
-}
-
-#modeledPhenotypeTabs li > a {
-    border:solid 1px #ccc;
-    border-radius:0;
-}
-
-#modeledPhenotypeTabs li:last-child > a {
-    border-top-right-radius:23px;
-    border-bottom-right-radius:23px;
-    padding-right: 18px;
-    border-left: none;
-}
-
-#modeledPhenotypeTabs li:first-child > a {
-    border-top-left-radius:23px;
-    border-bottom-left-radius:23px;
-    padding-left: 18px;
-}
-
 #modeledPhenotypeTabs li.active > a {
-    background-color: #50AABB;
-    border:solid 1px #50AABB;
-    box-shadow: inset 0 0 2px #555;
-}
+	background-color: #fff !important;
+	border-bottom: solid 1px #fff !important;
+	color: #333;
+}*/
 
-*/
-
-#modeledPhenotypeTabs li > a {
-    background-color: #eee;
-    border-bottom: solid 1px #ccc;
-    color: #333;
-}
-
-#modeledPhenotypeTabs li.active > a {
-    background-color: #fff !important;
-    border-bottom: solid 1px #fff !important;
-    color: #333;
+#datasetNamesTabs li > a, #modeledPhenotypeTabs li > a, #stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
+	border-radius: 0;
+	border: none;
+	padding: 5px 15px;
+	margin: 0 -1px 0 -1px;
+	color: #333;
 }
 
 #stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs {
-    display: inline-block !important;
-    font-size: 14px;
-    padding-top: 20px;
+	/*display: inline-block !important;
+	font-size: 14px;
+	padding-top: 20px;*/
 }
 
-#stratsCovTabs li, #CONTROL_stratsTabs li, #CASE_stratsTabs li, #strata1_stratsTabs li{
-
+#datasetNamesTabs li.adjusted > a::after, #modeledPhenotypeTabs li.adjusted > a::after, #stratsCovTabs li.adjusted > a::after, #CONTROL_stratsTabs li.adjusted > a::after, #CASE_stratsTabs li.adjusted > a::after, #strata1_stratsTabs li.adjusted > a::after {
+	content: ' *';
+	color: #268fcb;
 }
+
+#stratsCovTabs li, #CONTROL_stratsTabs li, #CASE_stratsTabs li, #strata1_stratsTabs li{}
+
+#datasetNamesTabs { background-color: #eee; border-bottom: none;}
+#datasetNamesTabs li > a { border-left:solid 2px #bfe3ef; border-right:solid 2px #bfe3ef;}
+#datasetNamesTabs li.active > a { background-color: #bfe3ef;}
+
+
+#modeledPhenotypeTabs {background-color: #bfe3ef; padding-left:20px; border-top: none; border-bottom: none;}
+#modeledPhenotypeTabs li > a { border-left:solid 2px #9fd3df; border-right:solid 2px #9fd3df;}
+#modeledPhenotypeTabs li.active > a {background-color: #9fd3df;}
+
+
+#stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs { background-color: #9fd3df; padding-left:30px; margin-left:0px; margin-right: 0px; border:none;}
 
 #stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
-    border:solid 1px #ccc;
-    border-radius:3px;
-    padding: 5px 10px;
+	/*border:solid 1px #ccc;
+	border-radius:3px;
+	padding: 5px 10px;*/
+	border-left:solid 2px #fff; border-right:solid 2px #fff;
 }
 
-#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {
-
-}
-
-#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {
-}
+#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {}
 
 #stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
-    background-color: #50AABB;
-    border:solid 1px #50AABB;
+	background-color: #fff;
+}
+
+#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {}
+
+#modeledPhenotypeTabs li > a {
+	/*text-transform: lowercase;*/
 }
 
 div.boxWhiskerPlot svg.box g.boxHolder {
     border: solid 2px #f00;
 }
+
+div.dk-linkout-btn {
+	margin-right: 5px;
+	background-size: 25px 25px;
+	padding-left: 3px;
+	border-radius: 3px;
+}
+
+div.dk-linkout-btn a {
+	padding: 2px 5px;
+	border-top-right-radius: 2px;
+	border-bottom-right-radius: 2px;
+}
+
+div.tooltip-text {
+	visibility: hidden;
+	position: absolute;
+	color: #fff;
+	background-color: #0c0c0c;
+	padding: 0px 6px 3px 6px;
+	border-radius: 3px;
+	margin-left: -3px;
+	margin-top: 24px;
+	text-align: left;
+	z-index: 10;
+}
+
+div.dk-linkout-btn:hover div.tooltip-text {
+	visibility: visible;
+}
+
+div.dk-amp-funded {
+	background-color: #396ba6;
+	padding-left: 20px;
+	background-image:url(../images/AMP_banner_right.png);
+	background-position: right center;
+	background-size: 280% 100%;
+}
+
+div.dk-amp-funded > span {
+	font-size: 7px;
+	color: #cef;
+	margin-left: -23px;
+	display: inline-block;
+	width: 25px;
+	float: left;
+	padding-top: 8px;
+}
+
+a.find-out-more-opener {
+	outline: none;
+	font-size: 14px;
+	text-align: center !important;
+	display: block;
+	float: right;
+	width: 80px;
+	right: -80px;
+	position: absolute;
+	line-height: 14px;
+	padding: 5px;
+	color: #fff;
+	background-color: #50aabb;
+	border-radius: 3px;
+	top: 70px;
+}
+
+a.find-out-more-opener:hover, a.find-out-more-opener:active {
+	text-decoration: none;
+	background-color: #ddd;
+}
+
+a.find-out-more-opener span {
+	font-size: 20px;
+}
+
+.find-out-more-content {
+	position: absolute;
+	width: 80px;
+	right: -80px;
+	top: 140px;
+}
+
+.find-out-more-content div.tooltip-text {
+	visibility: hidden;
+	position: absolute;
+	color: #fff;
+	background-color: #0c0c0c;
+	padding: 0px 6px 3px 6px;
+	border-radius: 3px;
+	margin-top: 0px;
+	right: 80px;
+	z-index: 10;
+}
+
+/* locus zoom */
+#trackList-tissue { height: 350px; overflow: auto;}
+
+#trackList-static, #trackList-dynamic { height: 350px; overflow: auto;}
+
