@@ -215,11 +215,27 @@
 
     </g:elseif>
 
+        <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+
+            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="GAITPdf"><g:message
+                        code="portal.GAITguide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="VariantResultsPdf"><g:message
+                        code="portal.variantResultsTableGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GeneticsGuidePdf"><g:message
+                        code="portal.GeneticsGuide.title"/></a></div>
+            </div>
+
+        </g:elseif>
+
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
             <a class="media" href="${links.introTutorial}">PDF File</a>
         </g:if>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <a class="media" href="${links.miIntroTutorial}">PDF File</a>
+        </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+            Tutorials will go here.
         </g:elseif>
         <g:else>
             <a class="media" href="${links.strokeIntroTutorial}">PDF File</a>

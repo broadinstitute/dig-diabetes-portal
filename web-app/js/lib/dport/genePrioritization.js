@@ -286,6 +286,7 @@ var mpgSoftware = mpgSoftware || {};
                 var acuValue='';
                 var geneName='';
                 var position='';
+                var chromosome = '';
                 var positionIndicator = {'start':'','end':'','chrom':''};
                 _.forEach(variant, function(value, key) {
 
@@ -315,14 +316,15 @@ var mpgSoftware = mpgSoftware || {};
                     }else if (key === 'END'){
                         positionIndicator['end']=value;
                     }else if (key === 'CHROM'){
-                        positionIndicator['chrom']=value;
+                        chromosome = value;
                     }
                 });
-                position = positionIndicator['chrom']+":"+positionIndicator['start']+"-"+positionIndicator['end'];
+                position = positionIndicator['start']+" - "+positionIndicator['end'];
                 retVal.push( geneName );
+                retVal.push( chromosome );
+                retVal.push(position);
                 retVal.push( pValue );
                 retVal.push( orValue );
-                retVal.push(position);
                 retVal.push(acuValue);
                 retVal.push(acaValue);
                 return retVal;
@@ -340,7 +342,9 @@ var mpgSoftware = mpgSoftware || {};
                     pageLength: 25,
                     filter: false,
                     order: [[1, "asc"]],
-                    columnDefs: [ {type: "scientific", targets: [1, 2]},{type: "allnumeric", targets: [4, 5]},{type: "positionIndicator", targets: [3]}],
+                    columnDefs: [ {type: "scientific", targets: [3, 4]},
+                        {type: "allnumeric", targets: [5, 6]},
+                        {"className": "dt-center", targets: [1,2,3,4,5,6]}],
                     language: languageSetting,
                     buttons: [
                         { extend: 'copy', text: copyText },
