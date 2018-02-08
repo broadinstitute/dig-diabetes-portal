@@ -75,8 +75,8 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         // called when page loads
-        var retrievePhenotypeIndependentDatasets = function () {
-            retrieveDatasets('none', 'independent');
+        var retrievePhenotypeIndependentDatasets = function (phenotype) {
+            retrieveDatasets(phenotype, 'dependent');
         };
 
         // query is a passthrough value, and may be undefined
