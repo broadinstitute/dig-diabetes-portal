@@ -166,7 +166,6 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var retrievePhenotypes = function () {
-            var loading = $('#spinner').show();
             var homePageVars = getHomePageVariables();
             $.ajax({
                 cache: false,
@@ -191,7 +190,6 @@ var mpgSoftware = mpgSoftware || {};
                             $('#trait-input').val(availPhenotypes[0]);
                         }
                     }
-                    loading.hide();
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -246,7 +244,6 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         var retrieveGenePhenotypes = function () {
-            var loading = $('#spinner').show();
             var homePageVars = getHomePageVariables();
             $.ajax({
                 cache: false,
@@ -272,7 +269,6 @@ var mpgSoftware = mpgSoftware || {};
                             $('#trait-input').val(availPhenotypes[0]);
                         }
                     }
-                    loading.hide();
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();
                     core.errorReporter(jqXHR, errorThrown)

@@ -1951,12 +1951,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
-//        addColumnsForDProperties(resultColumnsToDisplay, propertyNameForCaseCount, dataSetName)
-//        addColumnsForDProperties(resultColumnsToDisplay, propertyNameForControlCount, dataSetName)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
-        getDataQueryHolder.getDataQuery.setLimit(2000)
+        getDataQueryHolder.getDataQuery.setLimit(7000)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)

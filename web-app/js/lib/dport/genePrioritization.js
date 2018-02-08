@@ -19,6 +19,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var retrieveSpecifiedDataAndDisplayIt  = function(currentPhenotypeName,selectedDataset,currentPropertyName){
             var mySavedVariables = getMySavedVariables();
+            $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
@@ -28,12 +29,13 @@ var mpgSoftware = mpgSoftware || {};
                     sampleGroup:selectedDataset,
                     propertyName:currentPropertyName
                 },
-                async: false
+                async: true
             }).done ( function(data){
                 var myLocalSavedVariables = getMySavedVariables();
                 refreshGeneTableView(data);
+                $('#spinner').hide();
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                loading.hide();
+                $('#spinner').hide();
                 core.errorReporter(jqXHR, errorThrown)
             });
         };
@@ -121,15 +123,13 @@ var mpgSoftware = mpgSoftware || {};
 
         var fillDropdownsForGenePrioritization = function () {
             var mySavedVariables = getMySavedVariables();
-            var loader = $('#rSpinner');
-            loader.show();
 
             $.ajax({
                 cache: false,
                 type: "post",
                 url: mySavedVariables.getGeneLevelResultsUrl,
                 data: {phenotype: mySavedVariables.phenotypeName},
-                async: false
+                async: true
             }).done ( function(data){
                     var myLocalSavedVariables = getMySavedVariables();
                     fillGenePhenotypeAndSubPhenotypeDropdown(data,
@@ -137,7 +137,7 @@ var mpgSoftware = mpgSoftware || {};
                         myLocalSavedVariables.phenotypeDropdownIdentifier,
                         myLocalSavedVariables.subphenotypeDropdownIdentifier);
             }).fail(function (jqXHR, textStatus, errorThrown) {
-                loading.hide();
+                $('#spinner').hide();
                 core.errorReporter(jqXHR, errorThrown)
             });
 
@@ -149,6 +149,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var pickNewGeneInfo = function (){
             var mySavedVars = getMySavedVariables();
+            $('#spinner').show();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             $('#manhattanPlot1').empty();
             $('#traitTableBody').empty();
@@ -231,16 +232,29 @@ var mpgSoftware = mpgSoftware || {};
                 //                .overrideXMaximum (1000000000)
                 .dotRadius(3)
                 //.blockColoringThreshold(0.5)
-                .significanceThreshold(- Math.log10(parseFloat(savedVar.requestedSignificance)))
+                .significanceThreshold(undefined)
                 .xAxisAccessor(function (d) {
                     return d.POS
                 })
                 .yAxisAccessor(function (d) {
+                    var retVal;
+                    // if (d.P_VALUE > 0) {
+                    //     return (0 - Math.log10(d.P_VALUE));
+                    // } else {
+                    //     return 0
+                    // }
                     if (d.P_VALUE > 0) {
-                        return (0 - Math.log10(d.P_VALUE));
+                        retVal = (0 - Math.log10(d.P_VALUE));
                     } else {
-                        return 0
+                        retVal = 0;
                     }
+                    if (isNaN(retVal)){
+                        console.log('isNaN=true for Manhattan data!');
+                        return 0;
+                    } else {
+                        return retVal;
+                    }
+
                 })
                 .nameAccessor(function (d) {
                     return d.GENE
