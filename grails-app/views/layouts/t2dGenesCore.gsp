@@ -62,6 +62,11 @@
                     text-align:left;
                     line-height:26px;
                 }
+
+                a.front-search-example {
+                    color:#cce6c3;
+                }
+
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 a {color:#de8800;}
@@ -79,6 +84,17 @@
                     text-align:left;
                     line-height:26px;
                 }
+
+
+            a.front-search-example {
+                color:#ffffb3;
+            }
+            </g:elseif>
+            <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+
+            a.front-search-example {
+                color:#cccce6;
+            }
             </g:elseif>
             <g:else>
                 a {color:#50AABB;}
@@ -96,6 +112,11 @@
                     text-align:left;
                     line-height:26px;
                 }
+
+                a.front-search-example {
+                    color:#cce6e6;
+                }
+
             </g:else>
         </style>
 
@@ -243,6 +264,106 @@
                 })
             }
 
+
+            /* GAIT TAB UI */
+
+            function checkGaitTabs(event) {
+
+                if($(".modeled-phenotype-div").css('display') == "block") {
+
+                    $("#strata1_stratsTabs").css("background-color","#9fd3df");
+
+                    if($("#stratifyDesignation").val() == "none") {
+
+                        $(".modeled-phenotype-div").find("a").css("background","none");
+                        $(".modeled-phenotype-div").find("li.active").find("a").css("background-color","#ffffff");
+
+                        $(".modeled-phenotype-div").find("a").click(function() {
+
+                            $(".modeled-phenotype-div").find("a").css("background","none");
+
+                            $(this).css("background-color","#ffffff");
+
+                        })
+                    }
+
+                } else {
+
+                    $("#strata1_stratsTabs").css("background-color","#bfe3ef");
+
+                }
+
+            }
+
+            function highlightActiveTabs(event) {
+
+                var filterParmValue = $(event.target).val();
+
+                var tabID = "#"+ $(event.target).closest(".tab-pane").attr("id");
+
+                if(filterParmValue != "") {
+
+                    $("li.active").find("a").each(function(){
+
+                        if($(this).attr("data-target") == tabID){
+
+                            $(this).closest("li.active").addClass("adjusted");
+
+                            var scndTabID = "#" + $(this).closest(".tab-pane").attr("id");
+
+                            $("li.active").find("a").each(function() {
+
+                                if ($(this).attr("data-target") == scndTabID) {
+
+                                    $(this).closest("li.active").addClass("adjusted");
+
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    var totalInputNum = $(event.target).closest(".filterHolder").find("input.filterParm").length;
+
+                    $(event.target).closest(".filterHolder").find("input.filterParm").each(function() {
+
+                        totalInputNum = ($(this).val()) ? totalInputNum : totalInputNum-1;
+                    });
+
+                    if (totalInputNum == 0){
+                        $("li.active").find("a").each(function(){
+                            if($(this).attr("data-target") == tabID){$(this).closest("li.active").removeClass("adjusted")}
+                        });
+
+                        $("li.active").find("a").each(function() {
+
+                            if ($(this).attr("data-target") == tabID) {
+
+                                var adjustedTabNum = 0;
+
+                                $(this).closest("ul").find("li").each(function(){
+                                    adjustedTabNum = ($(this).hasClass("adjusted"))? adjustedTabNum + 1 : adjustedTabNum;
+                                })
+
+                                if(adjustedTabNum == 0) {
+                                    var scndTabID = "#" + $(this).closest(".tab-pane").attr("id");
+
+                                    $("li.active").find("a").each(function() {
+
+                                        if ($(this).attr("data-target") == scndTabID) {
+
+                                            $(this).closest("li.active").removeClass("adjusted");
+
+                                        }
+                                    });
+                                }
+
+                            }
+                        });
+                    }
+                }
+            }
+
+            /* copy url of varian search result page to clipboard*/
 
             $( window ).load( function() {
                 /* copy url of varian search result page to clipboard*/

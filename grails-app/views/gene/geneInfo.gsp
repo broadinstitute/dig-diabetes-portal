@@ -187,7 +187,20 @@
 
 
                 <div class="col-md-12" style="padding-top: 30px;">
+<!--
+                    <a class="find-out-more-opener" data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact2">
+                        <span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span><br />External<br />resources</a>
+
+                    <div class="find-out-more-content collapse" id="findOutMoreCompact2">
+                        <div class="accordion-inner">
+                            <g:render template="findOutMoreCompact"/>
+                        </div>
+                    </div>
+
+                    -->
+
                     <g:render template="geneSummary" model="[geneToSummarize:geneName]"/>
+
                 </div>
 
 
@@ -305,8 +318,21 @@
                     </g:if>
 
 
-                    <div class="separator"></div>
 
+
+                <div class="accordion-group" style="padding: 7px; border: solid 1px #ddd; border-radius: 3px; margin-top: 15px; background-color:#eee;">
+
+                    <a data-toggle="collapse" data-parent="#accordion2" href="#findOutMoreCompact3" style="outline: none; font-size: 16px;"><span class="glyphicon glyphicon-link" aria-hidden="true"></span> External resources</a>
+
+                    <div id="findOutMoreCompact3" class="" style="margin-top: 10px;">
+                        <div class="accordion-inner">
+                            <g:render template="findOutMoreCompact"/>
+                        </div>
+                    </div>
+                </div>
+
+<!--
+                    <div class="separator"></div>
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
@@ -322,6 +348,7 @@
                             </div>
                         </div>
                     </div>
+                    -->
 
                 </div>
             </div>
