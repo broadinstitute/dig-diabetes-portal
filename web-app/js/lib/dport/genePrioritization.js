@@ -341,7 +341,7 @@ var mpgSoftware = mpgSoftware || {};
                 var table = $('#phenotypeTraits').dataTable({
                     pageLength: 25,
                     filter: false,
-                    order: [[1, "asc"]],
+                    order: [[3, "asc"]],
                     columnDefs: [ {type: "scientific", targets: [3, 4]},
                         {type: "allnumeric", targets: [5, 6]},
                         {"className": "dt-center", targets: [1,2,3,4,5,6]}],
