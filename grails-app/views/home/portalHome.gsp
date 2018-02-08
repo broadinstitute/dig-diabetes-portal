@@ -133,7 +133,7 @@
     });
 
 </script>
-<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
+<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-position: left top; padding-bottom: 70px; padding-top:0px;">
 
     <div class="container" style="color:#fff;">
         <div class="row" style="padding-top:40px;">
@@ -153,7 +153,7 @@
                     </g:each>
 
                 </p>
-                <p style="padding-top:10px; padding-bottom:30px; font-size:25px; font-weight: 300 !important;">
+                <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;">
                     <g:message code="${portalVersionBean.tagline}" /></p>
 
             </div>
@@ -163,18 +163,18 @@
                     <div style="font-size: 14px;">
                         <span><g:message code="site.shared.phrases.examples" />: </span>
                         <g:each in="${portalVersionBean.geneExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="gene" action="geneInfo"
+                            <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
                                                    params="[id:it]"/>'>${it}</a>
                         </g:each>
                         <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
                                     body="input.searchTerm.geneExample.help.text"/>,
                         <g:each in="${portalVersionBean.variantExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
+                            <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
                         </g:each>
                         <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
                                     body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                         <g:each in="${portalVersionBean.rangeExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="region" action="regionInfo"
+                            <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
                                                                           params="[id:it]"/>'>${it}</a>
                         </g:each>
                         <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
