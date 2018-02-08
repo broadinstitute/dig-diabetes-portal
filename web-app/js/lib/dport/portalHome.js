@@ -5,6 +5,17 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.homePage = (function () {
 
+        var homePageVariables;
+
+        var setHomePageVariables = function(incomingHomePageVariables){
+            homePageVariables = incomingHomePageVariables;
+        };
+
+        var getHomePageVariables = function(){
+            return homePageVariables;
+        };
+
+
         /**
          * Return the first numWords of text
          * @param text
@@ -154,11 +165,125 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
+        var retrievePhenotypes = function () {
+            var homePageVars = getHomePageVariables();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: homePageVars.retrieveGwasSpecificPhenotypesAjaxUrl,
+                data: {},
+                async: true,
+                success: function (data) {
+                    if (( data !== null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !== null )) {
+
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#trait-input', undefined, undefined, homePageVars.defaultPhenotype);
+                        var availPhenotypes = [];
+                        _.forEach($("select#trait-input option"), function (a) {
+                            availPhenotypes.push($(a).val());
+                        });
+                        if (availPhenotypes.indexOf(homePageVars.defaultPhenotype) > -1) {
+                            $('#trait-input').val(homePageVars.defaultPhenotype);
+                        } else if (availPhenotypes.length > 0) {
+                            $('#trait-input').val(availPhenotypes[0]);
+                        }
+                    }
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
+
+        var fillGenePhenotypeCompoundDropdown = function (dataSetJson,
+                                                          phenotypeDropDownIdentifier,
+                                                          includeDefault,
+                                                          phenotypesToOmit) { // help text for each row
+            if ((typeof dataSetJson !== 'undefined')  &&
+                (typeof dataSetJson["is_error"] !== 'undefined')&&
+                (dataSetJson["is_error"] === false)&&
+                (typeof dataSetJson["pheotypeRecords"]  !== 'undefined' )&&
+                ( dataSetJson["pheotypeRecords"].length > 0 ))
+            {
+                var options = $(phenotypeDropDownIdentifier);
+
+                options.empty();
+
+                var keys = dataSetJson.preferredGroups;
+
+                // begin by retrieving the most desirable phenotype groups
+                _.forEach(keys,function(key){
+                    var groupObjectPointer;
+                    var groupContents =  _.filter(dataSetJson.pheotypeRecords, function(oneGroup){
+                        return oneGroup.group === key;
+
+                    });
+                    var groupObjectPointer = _.find(dataSetJson.pheotypeRecords, function(oneGroup){
+                        return oneGroup.group === key;
+                    });
+                    var uniquePhenotypeIdentifier = "";
+                    if (groupContents.length > 0){
+                        options.append("<optgroup label='"+key+"'>");
+                        _.forEach (groupContents, function (oneElement){
+                            options.append($("<option />").val(oneElement.name)
+                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
+                        });
+                        options.append("</optgroup label='"+key+"'>");;
+                    }
+                });
+
+
+                // enable the input
+                options.prop('disabled', false);
+
+            }
+        }
+
+        var retrieveGenePhenotypes = function () {
+            var homePageVars = getHomePageVariables();
+            $.ajax({
+                cache: false,
+                type: "get",
+                url: homePageVars.getGeneLevelResultsUrl,
+                data: {},
+                async: true
+            }).done(
+                function (data) {
+                    if (( data !==  null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.is_error !== 'undefined' ) &&
+                        (  !data.is_error ) ) {
+
+                        fillGenePhenotypeCompoundDropdown(data,'#gene-trait-input',undefined,undefined,homePageVars.defaultPhenotype);
+                        var availPhenotypes = [];
+                        _.forEach( $("select#trait-input option"), function(a){
+                            availPhenotypes.push($(a).val());
+                        });
+                        if (availPhenotypes.indexOf(homePageVars.defaultPhenotype)>-1){
+                            $('#trait-input').val(homePageVars.defaultPhenotype);
+                        } else if (availPhenotypes.length>0){
+                            $('#trait-input').val(availPhenotypes[0]);
+                        }
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, errorThrown)
+                }
+            );
+        };
+
 
         return {
             retrieveAllPortalsInfo:retrieveAllPortalsInfo,
             loadNewsFeed: loadNewsFeed,
-            setSlideWindows: setSlideWindows
+            setSlideWindows: setSlideWindows,
+            setHomePageVariables:setHomePageVariables,
+            retrieveGenePhenotypes:retrieveGenePhenotypes,
+            retrievePhenotypes:retrievePhenotypes
         }
     })();
 })();

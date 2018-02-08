@@ -28,13 +28,16 @@ class MetaDataService {
     public static Integer METADATA_NONE = 0
     public static Integer METADATA_VARIANT = 1
     public static Integer METADATA_SAMPLE = 2
+    public static Integer METADATA_GENE = 3
 
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     JsonParser jsonSampleParser = JsonParser.getSampleService();
+    JsonParser jsonGeneParser = JsonParser.getGeneService()
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     Integer forceProcessedMetadataOverride = -1
     Integer forceProcessedSampleMetadataOverride = -1
+    Integer forceProcessedGeneMetadataOverride = -1
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
@@ -223,6 +226,45 @@ class MetaDataService {
 
 
 
+    private JsonParser getJsonGeneParser() {
+        // reload the metadata if scheduled
+        if (this.forceProcessedGeneMetadataOverride != 0) {
+
+            String jsonString = this.restServerService.getGeneMetadata();
+            this.jsonGeneParser.forceMetadataReload(jsonString);
+
+        }
+
+        // reset reload indicator
+        this.forceProcessedGeneMetadataOverride = 0;
+
+        // return
+        return this.jsonGeneParser;
+    }
+
+
+    private JsonParser retrieveJsonParser(int metadataTree){
+        JsonParser returnValue
+        switch (metadataTree) {
+            case METADATA_VARIANT:
+                returnValue = this.getJsonParser()
+                break;
+            case METADATA_SAMPLE:
+                returnValue = this.getJsonSampleParser()
+                break;
+            case METADATA_GENE:
+                returnValue = this.getJsonGeneParser()
+                break;
+            case METADATA_NONE:
+            default:
+                log.error("Encountered unexpected parameter to retrieveJsonParser, metadataTree= ${metadataTree}")
+                break;
+        }
+        return returnValue
+    }
+
+
+
     /**
      * return the list of common cproperties in json format
      *
@@ -286,18 +328,7 @@ class MetaDataService {
 
         // get the sample group string
         try {
-            switch (metadataTree){
-                case METADATA_VARIANT:
-                    experimentList = this.getJsonParser().getAllExperimentsOfVersionTechnology( version, technology )
-                    break;
-                case METADATA_SAMPLE:
-                    experimentList = this.getJsonSampleParser().getAllExperimentsOfVersionTechnology( version, technology )
-                    break;
-                case METADATA_NONE:
-                default:
-                    break;
-            }
-
+            experimentList = retrieveJsonParser(metadataTree).getAllExperimentsOfVersionTechnology( version, technology )
         } catch (PortalException exception) {
             log.error("Got metadata parsing exception getting getExperimentByVersionAndTechnology: " + exception.getMessage());
         }
@@ -374,7 +405,7 @@ class MetaDataService {
 
 
     public String getInstitutionNameFromSampleGroupName(String sampleGroupId){
-        SampleGroup  sampleGroup = getSampleGroupByName (sampleGroupId)
+        SampleGroup  sampleGroup = getSampleGroupByName (sampleGroupId, MetaDataService.METADATA_VARIANT)
         Experiment experiment = getExperimentFromSampleGroup( sampleGroup)
         return experiment.getInstitution()
     }
@@ -398,8 +429,8 @@ class MetaDataService {
     }
 
 
-    public SampleGroup  getSampleGroupByName(String sampleGroupId){
-        return jsonParser.getSampleGroupByName(sampleGroupId)
+    public SampleGroup  getSampleGroupByName(String sampleGroupId, int metadataTree){
+        return retrieveJsonParser(metadataTree).getSampleGroupByName(sampleGroupId)
     }
 
     public SampleGroup  getSampleGroupByFromSamplesName(String sampleGroupId){
@@ -411,45 +442,6 @@ class MetaDataService {
         return jsonParser.getTechnologyPerSampleGroup(sampleGroupId)
     }
 
-//    public JSONObject getSampleGroupNameListForPhenotypeAsJson(String phenotypeName) {
-//        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-//
-//        // local variables
-//        JSONObject toReturn = []
-//        List<SampleGroup> groupList;
-//        List<JSONObject> nameList = new ArrayList<String>();
-//
-//        // get the sample group list for the phenotype
-//        try {
-//            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
-//
-//            // sort the group list
-//            Collections.sort(groupList);
-//
-//            // add all the names to the name list
-//            for (SampleGroup group : groupList) {
-//                StringBuilder depthBuilder = new StringBuilder();
-//                for (int i = 0; i < group.getNestedLevel(); i++) {
-//                    depthBuilder.append("-");
-//                }
-//                String sysId = group.getSystemId()
-//                JSONObject currentGroup = [
-//                    name: sysId,
-//                    displayName: depthBuilder.toString() + g.message(code: "metadata." + sysId, default: sysId)
-//                ]
-//                nameList.add(currentGroup);
-//            }
-//
-//        } catch (PortalException exception) {
-//            log.error("Got exception retrieving sample group name list for selected phenotype: " + phenotypeName + " : " + exception.getMessage());
-//        }
-//
-//        toReturn.is_error = false
-//        toReturn.numRecords = nameList.size()
-//        toReturn.dataset = nameList
-//
-//        return toReturn;
-//    }
 
 
 
@@ -600,18 +592,7 @@ class MetaDataService {
 
         // get the sample group list for a particular phenotype
         try {
-            switch (metadataTree) {
-                case METADATA_VARIANT:
-                    groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotype, version)
-                    break;
-                case METADATA_SAMPLE:
-                    groupList = this.getJsonSampleParser().getSampleGroupsForPhenotype(phenotype, version)
-                    //groupList = getSampleGroupsBasedOnPhenotypeAndMeaning(phenotype,'VARIANT')
-                    break;
-                case METADATA_NONE:
-                default:
-                    break;
-            }
+            groupList = retrieveJsonParser(metadataTree).getSampleGroupsForPhenotype(phenotype, version)
         } catch (PortalException exception) {
             log.error("Got exception retrieving sample group name list : " + exception.getMessage());
         }
@@ -840,8 +821,8 @@ class MetaDataService {
         return propertyList
     }
 
-    public List<Property> getPhenotypeSpecificSampleGroupPropertyCollection(String phenotypeName,String sampleGroupName, List <String> propertyTemplates){
-        List<PhenotypeBean> phenotypeList =  this.getJsonParser().getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
+    public List<Property> getPhenotypeSpecificSampleGroupPropertyCollection(String phenotypeName,String sampleGroupName, List <String> propertyTemplates, int metadataTree){
+        List<PhenotypeBean> phenotypeList =  retrieveJsonParser(metadataTree).getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
         List<String> propertyList =  metadataUtilityService.phenotypeSpecificSampleGroupBasedPropertyCollection(phenotypeList,sampleGroupName,propertyTemplates)
         return propertyList
     }
@@ -855,9 +836,9 @@ class MetaDataService {
 
 
 
-    public Property getSampleGroupProperty(String sampleGroupName,String propertyName){
+    public Property getSampleGroupProperty(String sampleGroupName,String propertyName, int metadataTree ){
         Property returnValue
-        List<Property> propertyList =  this.getJsonParser().getSearchablePropertiesForSampleGroupId( sampleGroupName )
+        List<Property> propertyList =  retrieveJsonParser(metadataTree).getSearchablePropertiesForSampleGroupId( sampleGroupName )
         if (propertyList){
             for (Property property in propertyList){
                 if (property.name == propertyName){
@@ -871,9 +852,9 @@ class MetaDataService {
 
 
 
-    public Property getCommonPropertyByName (String commonPropertyName){
+    public Property getCommonPropertyByName (String commonPropertyName, int metadataTree ){
         Property returnValue
-        List<Property> commonProperties =  this.getJsonParser().getAllCommonProperties()
+        List<Property> commonProperties =  retrieveJsonParser(metadataTree).getAllCommonProperties()
         if (commonProperties){
             for (Property property in commonProperties){
                 if (property.name == commonPropertyName){
@@ -1032,8 +1013,17 @@ class MetaDataService {
      * @param dataVersion
      * @return
      */
-    public List<Phenotype> getPhenotypeListByTechnologyAndVersion(String technology, String dataVersion) {
-        return this.jsonParser.getPhenotypeListByTechnologyAndVersion(technology, dataVersion);
+    public List<Phenotype> getPhenotypeListByTechnologyAndVersion(String technology, String dataVersion, int metadataTree) {
+        List<Phenotype> phenotypeList = []
+
+        try {
+            phenotypeList = retrieveJsonParser(metadataTree).getPhenotypeListByTechnologyAndVersion(technology, dataVersion)
+        } catch (PortalException exception) {
+            log.error("Got metadata parsing exception getting getPhenotypeListByTechnologyAndVersion: " + exception.getMessage());
+        }
+
+        return phenotypeList
+
     }
 
 
@@ -1081,14 +1071,14 @@ class MetaDataService {
         return returnValue
     }
 
-    public Property getPropertyByNamePhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName){
-        Property property =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
+    public Property getPropertyByNamePhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName, int metadataTree ){
+        Property property =  retrieveJsonParser(metadataTree).getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         return property
     }
 
-    public String getMeaningForPhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName){
+    public String getMeaningForPhenotypeAndSampleGroup(String propertyName, String phenotypeName, String sampleGroupName, int metadataTree){
         String returnValue = ""
-        PropertyBean propertyBean =  this.getJsonParser().getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
+        PropertyBean propertyBean =  retrieveJsonParser(metadataTree).getPropertyGivenItsAndPhenotypeAndSampleGroupNames( propertyName,  phenotypeName,  sampleGroupName)
         List<String> listOfStrings = propertyBean.getMeanings()
 
         if (( listOfStrings.size() == 0 )||

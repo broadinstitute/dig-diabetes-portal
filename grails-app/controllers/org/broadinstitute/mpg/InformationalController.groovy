@@ -1,7 +1,11 @@
 package org.broadinstitute.mpg
 
+import groovy.json.JsonOutput
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
+import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
+import org.broadinstitute.mpg.locuszoom.PhenotypeBean
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -9,6 +13,7 @@ import org.springframework.web.servlet.support.RequestContextUtils
 class InformationalController {
     RestServerService restServerService
     MetaDataService metaDataService
+    SharedToolsService sharedToolsService
 
     def index() {}
 
@@ -36,6 +41,38 @@ class InformationalController {
         String locale = RequestContextUtils.getLocale(request)
         render(view: 'data', model: [locale: locale, experiments: allExperimentsForGivenVersion, allVersions: listOfVersionsAsJson])
     }
+
+//
+//    def getGeneLevelResults() {
+//
+//        List<Experiment> allExperiments = metaDataService.getExperimentByVersionAndTechnology( metaDataService.getDataVersion(),"",metaDataService.METADATA_GENE)
+//        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("", metaDataService.getDataVersion(),metaDataService.METADATA_GENE)
+//        JSONArray jsonArray = new JSONArray()
+//        for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in phenotypeList.sort{it.sortOrder}) {
+//            JSONObject phenoRecord = new JSONObject()
+//            phenoRecord['systemId'] = phenotype.parent.systemId
+//            phenoRecord['name'] = phenotype.name
+//            JSONArray propertyArray = new JSONArray()
+//            for (org.broadinstitute.mpg.diabetes.metadata.PropertyBean property in phenotype.propertyList) {
+//                if ( property.hasMeaning("P_VALUE") ){
+//                    JSONObject propertyRecord = new JSONObject()
+//                    propertyRecord["name"] = property.name
+//                    propertyRecord["meaning"] = "P_VALUE"
+//                    propertyArray.add(propertyRecord)
+//                }
+//                if ( property.hasMeaning("ODDS_RATIO") ){
+//                    JSONObject propertyRecord = new JSONObject()
+//                    propertyRecord["name"] = property.name
+//                    propertyRecord["meaning"] = "ODDS_RATIO"
+//                    propertyArray.add(propertyRecord)}
+//            }
+//            phenoRecord['properties'] = propertyArray
+//            jsonArray.add(phenoRecord)
+//        }
+//
+//        render(status: 200, contentType: "application/json") {jsonArray}
+//    }
+//
 
     def aboutBeacon() {
         render(view: 'aboutBeacon')

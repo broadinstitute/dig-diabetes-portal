@@ -513,7 +513,7 @@ class WidgetService {
     public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
         LinkedHashMap<String,HashMap<String,String>> returnValue = []
 
-        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion())
+        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(),MetaDataService.METADATA_VARIANT)
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
 
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
@@ -562,7 +562,7 @@ class WidgetService {
     public LinkedHashMap<String, List <List <String>>> retrieveGroupedPhenotypesNames(String technology){
         LinkedHashMap<String, List <List <String>>> returnValue = []
 
-        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion(technology, metaDataService.getDataVersion())
+        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion(technology, metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
         List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
 
         LinkedHashMap<String, List <List <String>>> groupedPhenotypes = [:]

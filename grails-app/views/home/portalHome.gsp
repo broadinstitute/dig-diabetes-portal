@@ -22,8 +22,18 @@
             //var warningMessage = ${warningText};
         </g:applyCodec>
         //alert(warningMessage);
-        mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
-        mpgSoftware.homePage.setSlideWindows();
+        mpgSoftware.homePage.setHomePageVariables(
+            {"retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
+                "defaultPhenotype":"${g.defaultPhenotype()}",
+                "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}"}
+        );
+        $(document).ready(function(){
+            mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
+            mpgSoftware.homePage.setSlideWindows();
+            mpgSoftware.homePage.retrievePhenotypes();
+            mpgSoftware.homePage.retrieveGenePhenotypes();
+        });
+
 
         function goToSelectedItem(item) {
             window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
@@ -76,43 +86,21 @@
             }
         });
 
+        $('#geneTraitSearchLaunch').on('click', function () {
+            var trait_val = $('#gene-trait-input option:selected').val();
+            var significance = 0.0005;
+            if (trait_val == "" || significance == 0) {
+                alert('Please choose a trait and enter a valid significance!')
+            } else {
+                window.location.href = "${createLink(controller:'trait',action:'genePrioritization')}" + "?trait=" + trait_val + "&significance=" + significance;
+            }
+        });
 
 
 
-        var retrievePhenotypes = function () {
-            var loading = $('#spinner').show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
-                data: {},
-                async: true,
-                success: function (data) {
-                    if (( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !==  null ) ) {
 
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input',undefined,undefined,'${g.portalTypeString()}');
-                        var availPhenotypes = [];
-                        _.forEach( $("select#trait-input option"), function(a){
-                            availPhenotypes.push($(a).val());
-                        });
-                        if (availPhenotypes.indexOf('${g.defaultPhenotype()}')>-1){
-                            $('#trait-input').val('${g.defaultPhenotype()}');
-                        } else if (availPhenotypes.length>0){
-                            $('#trait-input').val(availPhenotypes[0]);
-                        }
-                    }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
-        retrievePhenotypes();
+
+
 
 
         $('#chooseDistributedKB').change(function(e){
@@ -158,35 +146,42 @@
 
             </div>
             <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
-                <div style="padding-bottom:20px; font-weight: 300;">
-                    <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
-                    <div style="font-size: 14px;">
-                        <span><g:message code="site.shared.phrases.examples" />: </span>
-                        <g:each in="${portalVersionBean.geneExamples}">
-                            <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id:it]"/>'>${it}</a>
-                        </g:each>
-                        <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
-                                    body="input.searchTerm.geneExample.help.text"/>,
-                        <g:each in="${portalVersionBean.variantExamples}">
-                            <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
-                        </g:each>
-                        <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
-                                    body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
-                        <g:each in="${portalVersionBean.rangeExamples}">
-                            <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
-                                                                          params="[id:it]"/>'>${it}</a>
-                        </g:each>
-                        <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
-                                    body="input.searchTerm.rangeExample.help.text"/>
+
+                <g:if test="${portalVersionBean.variantAssociationsExists}">
+                            %{--only useful if we have variant associations--}%
+                    <div style="padding-bottom:20px; font-weight: 300;">
+                        <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
+                            <div style="font-size: 14px;">
+                                <span><g:message code="site.shared.phrases.examples" />: </span>
+                                <g:each in="${portalVersionBean.geneExamples}">
+                                    <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
+                                                           params="[id:it]"/>'>${it}</a>
+                                </g:each>
+                                <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
+                                            body="input.searchTerm.geneExample.help.text"/>,
+                                <g:each in="${portalVersionBean.variantExamples}">
+                                    <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
+                                </g:each>
+                                <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
+                                            body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
+                                <g:each in="${portalVersionBean.rangeExamples}">
+                                    <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
+                                                                                  params="[id:it]"/>'>${it}</a>
+                                </g:each>
+                                <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
+                                            body="input.searchTerm.rangeExample.help.text"/>
+
+
+                            </div>
+
+
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
+                            <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
 
                     </div>
-                    <div class="form-inline" style="padding-top: 10px;">
-                        <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
-                        <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
-                    </div>
-
-                </div>
+                </g:if>
                 <div style="padding-bottom:10px;">
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="variant.search.header"/></h2>
                     <p class="dk-footnote" style="width:83%;"><g:message code="variant.search.specifics"/></p>
@@ -195,18 +190,32 @@
                     </a>
                 </div>
                 <div>
-                    <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
+                    <g:if test="${portalVersionBean.variantAssociationsExists}">
+                        <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
+                    </g:if>
+                    <g:if test="${portalVersionBean.geneLevelDataExists}">
+                        <h2 style="font-size:20px; font-weight:300;"><g:message code="gene.search.header" default="View full GWAS results for a phenotype" /></h2>
+                    </g:if>
 
                     <g:if test="${portalVersionBean.phenotypeLookupMessage}">
                         <p class="dk-footnote">
                         <g:message code="trait.search.specifics"/>
                         <g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>
                     </g:if>
-                    <div class="form-inline" style="padding-top: 10px;">
-                        <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
-                        </select>
-                        <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
-                    </div>
+                    <g:if test="${portalVersionBean.variantAssociationsExists}">
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                            </select>
+                            <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
+                    </g:if>
+                    <g:if test="${portalVersionBean.geneLevelDataExists}">
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <select name="" id="gene-trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                            </select>
+                            <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
+                    </g:if>
                 </div>
             </div>
         </div>
