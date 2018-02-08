@@ -92,6 +92,11 @@
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
                     </div>
                 </g:elseif>
+            <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+                <div class="col-md-12">
+                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.epi.descr" default="about the data"/></p>
+                </div>
+            </g:elseif>
                 <g:else>
                     <div class="col-md-9">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
