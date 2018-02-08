@@ -97,13 +97,13 @@
         <!-- DK test begin -->
             <div class="clearfix" style="border-bottom: solid 1px #ddd">
                 <ul class="nav navbar-nav navbar-left" style="display: flex;">
-                    {{#staticDataExists}}
+
                     <li class="dropdown" id="tracks-menu-dropdown-dynamic">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" onclick="massageLZ()">
                         <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span> Phenotypes <b class="caret"></b></a>
 
-                        <ul id="dk_lz_phenotype_list" class="dropdown-menu" style="max-height:500px; overflow:auto;">
-                    {{/staticDataExists}}
+                        <ul id="dk_lz_phenotype_list" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+
                         {{#dynamic}}
                             <li>
                                 {{description}}
@@ -114,16 +114,16 @@
                                 {{description}}
                             </li>
                          {{/static}}
-                    {{#staticDataExists}}
+
                         </ul>
                     </li>
-                    {{/staticDataExists}}
-                    {{#staticDataExists}}
+
+
                     <li class="dropdown" id="tracks-menu-dropdown-static" style="padding-right: 30px; margin-right:30px; border-right: solid 1px #ddd;">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span> Datasets<b class="caret"></b></a>
-                        <ul id="trackList-static" class="dropdown-menu" style="max-height:500px; overflow:auto;">
-                        {{/staticDataExists}}
+                        <ul id="trackList-static" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+
                             {{#static}}
                             <li>
                                 <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
@@ -164,14 +164,14 @@
                                     </a>
                                 </li>
                             {{/dynamic}}
-                        {{#staticDataExists}}
+
                         </ul>
                     </li>
-                    {{/staticDataExists}}
+
                     {{#tissueDataExists}}
                     <li class="dropdown" id="tracks-menu-dropdown-functional">
                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
-                           <ul id="trackList-tissue" class="dropdown-menu" style="max-height:500px; overflow:auto;">
+                           <ul id="trackList-tissue" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
                                {{/tissueDataExists}}
                                {{#tissues}}
                                     <li>
@@ -193,7 +193,7 @@
                     {{#atacDataExists}}
                     <li class="dropdown" id="tracks-menu-dropdown-functional">
                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
-                           <ul id="trackList-tissue" class="dropdown-menu">
+                           <ul id="trackList-tissue" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
                                {{/atacDataExists}}
                                {{#atacData}}
                                     <li>
