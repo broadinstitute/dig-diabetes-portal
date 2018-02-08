@@ -220,7 +220,66 @@
 
         </g:elseif>
 
-<g:else>
+    <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+        <div class="col-md-9">
+
+            <h2 id="data_use" class="dk-blue-bordered"><g:message code="policies.dataUse"></g:message></h2>
+
+            <p> <g:message code="informational.policies.epi.subheader1"></g:message></p>
+
+            <p><g:message code="informational.policies.epi.subheader2"></g:message></p>
+
+            <p><g:message code="informational.policies.epi.subheader3"></g:message></p>
+
+            %{--<h4><g:message code="informational.policies.stroke.deposition"></g:message></h4>--}%
+
+            %{--<p><g:message code="informational.policies.stroke.submission1"></g:message>--}%
+            %{--<ul><g:message code="informational.policies.stroke.submission2"></g:message></ul>--}%
+            %{--</p>--}%
+
+
+
+
+            <h4><g:message code="informational.policies.stroke.terms"></g:message></h4>
+
+            <h5><u><g:message code="informational.policies.conduct.registration.header"></g:message></u></h5>
+
+            <p><g:message code="informational.policies.epi.google"></g:message></p>
+
+            <h5><u><g:message code="informational.policies.conduct.availability.header"></g:message></u></h5>
+            <p><g:message code="informational.policies.conduct.stroke"></g:message></p>
+
+            <h5><u><g:message code="informational.policies.conduct.user_responsibilities.header"></g:message></u></h5>
+
+            <p><g:message code="informational.policies.conduct.section_3"></g:message></p>
+
+            <ol><g:message code="informational.policies.epi.conduct.section_4"></g:message></ol>
+
+            <p><g:message code="informational.policies.conduct.section_5"></g:message></p>
+
+
+            <h2 id="citing_data" class="dk-blue-bordered"><g:message code="policies.citations"></g:message></h2>
+
+            <p><g:message code="informational.policies.epi.citing"></g:message></p>
+
+            <p><g:message code="portal.stroke.use.citation.request"></g:message></p>
+
+            <p><g:message code="portal.epi.use.citation.itself"></g:message></p>
+
+
+        </div>
+        <div class="col-md-3" style="padding-top: 15px;">
+            <h5 style="position:fixed; bottom:20px;"><a href="#"><span class="glyphicon glyphicon-arrow-up"></span> <g:message code="policies.tothetop"></g:message></a></h5>
+            <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></div>
+            <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></div>
+            %{--<h4 class="dk-notice"><a href="#reusing_text"><g:message code="policies.reusing"></g:message></a></h4>--}%
+            %{--<h4 class="dk-notice"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></h4>--}%
+
+        </div>
+
+    </g:elseif>
+
+    <g:else>
 
             <div class="col-md-9">
 
