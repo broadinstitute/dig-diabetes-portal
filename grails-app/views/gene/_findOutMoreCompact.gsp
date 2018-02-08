@@ -42,7 +42,7 @@
 
 <div class="dk-t2d-blue dk-right-column-buttons-compact btn dk-linkout-btn">
     <div class="tooltip-text"><g:message code="findoutmore.UCSC.descr" default="Explore"/></div>
-    <a target="_blank" href="https://genome.ucsc.edu/cgi-bin/hgTracks?db=hg38&lastVirtModeType=default&lastVirtModeExtraState=&virtModeType=default&virtMode=0&nonVirtPosition=&position=<%=geneChromosome%>%3A<%=geneExtentBegin%>-<%=geneExtentEnd%>">UCSC Genome Browser</a>
+    <a target="_blank" href="http://genome.ucsc.edu/cgi-bin/hgTracks?org=human&db=hg19&position=<%=geneName%>">UCSC Genome Browser</a>
 
 </div>
 
