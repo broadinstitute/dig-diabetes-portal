@@ -1984,11 +1984,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
-
-    public JSONObject getChromPos(JSONObject apiresults){
-        return apiresults
-    }
-
+    
     public JSONObject getGenePrioritizationInformation(String phenotypeName, String dataSetName, String propertyName) {
         JSONObject returnValue
 
@@ -2008,15 +2004,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-
-
-
-
-
-    public JSONObject getChromPos(JSONObject apiresults){
-        return apiresults
-    }
 
     /***
      * Gather up the data that is used in the Manhattan plot
