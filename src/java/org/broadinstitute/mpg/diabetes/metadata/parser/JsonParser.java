@@ -63,6 +63,15 @@ public class JsonParser {
     }
 
 
+    public static JsonParser getGeneService() {
+        if (sampleService == null) {
+            sampleService = new JsonParser();
+        }
+
+        return sampleService;
+    }
+
+
     /**
      * returns the root object containing the parsed json onformation
      *

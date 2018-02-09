@@ -35,6 +35,8 @@ class PortalVersionBean {
     private String genePageWarning
     private String credibleSetInfoCode
     private String blogId
+    private Integer variantAssociationsExists
+    private Integer  geneLevelDataExists
 
 
 
@@ -61,7 +63,9 @@ class PortalVersionBean {
                              String sampleLevelSequencingDataExists,
                              String genePageWarning,
                              String credibleSetInfoCode,
-                             String blogId ){
+                             String blogId,
+                             Integer variantAssociationsExists,
+                             Integer geneLevelDataExists ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -86,6 +90,8 @@ class PortalVersionBean {
         this.genePageWarning = genePageWarning
         this.credibleSetInfoCode = credibleSetInfoCode
         this.blogId = blogId
+        this.variantAssociationsExists =  variantAssociationsExists
+        this.geneLevelDataExists = geneLevelDataExists
     }
 
     public String getPortalType() {
@@ -186,6 +192,14 @@ class PortalVersionBean {
         return blogId
     }
 
+    public Integer getVariantAssociationsExists() {
+        return variantAssociationsExists
+    }
+
+    public Integer getGeneLevelDataExists() {
+        return geneLevelDataExists
+    }
+
 
 
     public String toJsonString(){
@@ -212,7 +226,9 @@ class PortalVersionBean {
 "sampleLevelSequencingDataExists":${getSampleLevelSequencingDataExists()},
 "genePageWarning":"${getGenePageWarning()}",
 "credibleSetInfoCode":"${getCredibleSetInfoCode()}",
-"blogId":"${getBlogId()}"
+"blogId":"${getBlogId()}",
+"variantAssociationsExists":${getVariantAssociationsExists()},
+"geneLevelDataExists":${getGeneLevelDataExists()}
 }""".toString()
     }
 }

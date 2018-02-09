@@ -182,6 +182,41 @@ class TraitController {
 
     }
 
+
+
+
+    def genePrioritization(){
+        String phenotypeKey = sharedToolsService.convertOldPhenotypeStringsToNewOnes(params.trait)
+        String requestedSignificance = params.significance
+        String phenotypeTranslation = g.message(code: "metadata." + phenotypeKey, default: phenotypeKey)
+        String locale = RequestContextUtils.getLocale(request)
+
+        render(view: 'genePrioritization',
+                model: [
+                        phenotypeKey         : phenotypeKey,
+                        phenotypeName        : phenotypeTranslation,
+                        requestedSignificance: requestedSignificance,
+                        locale               : locale])
+
+    }
+
+
+
+    def prioritizedGeneInfoAjax() {
+        String phenotypeName = params["trait"]
+        String dataSetName = params["sampleGroup"]
+        String propertyName = params["propertyName"]
+
+        JSONObject jsonObject = restServerService.getGenePrioritizationInformation( phenotypeName, dataSetName, propertyName )
+        render(status: 200, contentType: "application/json") {
+            [variant: jsonObject]
+        }
+
+    }
+
+
+
+
     /***
      * This Ajax call is launched from the traitSearch page frame
      * @return
@@ -214,14 +249,6 @@ class TraitController {
             }
         }
 
-//          List<PhenotypeBean> phenotypeList = metaDataService.getAllPhenotypesWithName(phenotypicTrait)
-//         if ((phenotypeList?.size()>0) && (!dataSetName)){
-//             List<Property> propertyList =  metadataUtilityService.retrievePhenotypeProperties(phenotypeList)
-//             dataSetName = metadataUtilityService.retrievePhenotypeSampleGroupId(phenotypeList)
-//             for (Property property in propertyList){
-//                 properties[property.getName()] = property.getPropertyType()
-//             }
-//         }
         JSONObject jsonObject = restServerService.getTraitSpecificInformation(phenotypicTrait, dataSetName, properties, significanceValue, 0.0)
         render(status: 200, contentType: "application/json") {
             [variant: jsonObject]
@@ -347,7 +374,7 @@ class TraitController {
 
         // get the phenotype list
         // DIGP-291: centralize metadata version
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion(),MetaDataService.METADATA_VARIANT);
 
         // submit query
         JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);
@@ -382,7 +409,7 @@ class TraitController {
 
         // get the phenotype list
         // DIGP-291: centralize metadata version
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion(),MetaDataService.METADATA_VARIANT);
 
         // submit query
         //JSONObject jsonObject = this.metaDataService.searchTraitByUnparsedRegion(regionsSpecification, phenotypeList);

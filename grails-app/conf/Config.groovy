@@ -538,7 +538,9 @@ grails.plugin.springsecurity.userLookup.userDomainClassName = 'org.broadinstitut
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinstitute.mpg.people.UserRole'
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
+
 portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
@@ -550,20 +552,22 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
-                                                "files.t2dFrontHeader",
+                                                "files.t2d.front.logo",
                                                 "portal.header.tagline",
                                         ["English", "Spanish"],
                                                 ["SLC30A8"],
                                                 ["rs13266634"],
                                                 ["chr9:21,940,000-22,190,000"],
-                                                'images/front_t2d_bg_2018.png',
+                                                "files.t2d.front.bg",
                                                 "pheno.help.text",
-                                                "images/t2d_logo.svg",
+                                                "files.t2d.header.logo",
                                                 "images/front_t2d_bg_2018.png",
                                                 "true",
                                                 "gene.genePage.warning",
                                                 "",
-                                                '5010306206573083521'
+                                                '5010306206573083521',
+                                                1,
+                                                0
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -581,14 +585,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["HDAC9"],
                                           ["rs2984613","APOE-e2"],
                                           ["chr7:18,100,000-18,300,000"],
-                                          'images/stroke/front_stroke_bg_2018.png',
+                                          "files.stroke.front.bg",
                                           "stroke.pheno.help.text",
-                                          "images/stroke/stroke_header_logo.svg",
+                                          "files.stroke.header.logo",
                                           "images/stroke/front_stroke_bg_2018.png",
                                           "false",
                                           "",
                                           "",
-                                          '7961982646849648720'
+                                          '7961982646849648720',
+                                          1,
+                                          0
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -600,20 +606,22 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",
-                                          "files.miFrontHeader",
+                                          "files.mi.front.logo",
                                           "portal.mi.header.tagline",
                                           [],
                                           ["LPA"],
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          'images/mi/mi_banner_2018.png',
+                                          "files.mi.front.bg",
                                   "",
-                                          "images/mi/mi_header_logo_2017.svg",
+                                          "files.mi.header.logo",
                                           "images/mi/mi_banner_2018.png",
                                           "false",
                                           "",
                                           "",
-                                          '3944203828206499294'
+                                          '3944203828206499294',
+                                          1,
+                                          0
                                   ),
                                   new PortalVersionBean("ibd",
                                                           "Inflammatory Bowel Disease",
@@ -625,20 +633,22 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[1,2]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "files.ibdFrontHeader4",
+                                          "files.ibd.front.logo",
                                           "portal.ibd.header.tagline",
                                           [],
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          'images/ibd/IBD_banner_2018.png',
+                                          "files.ibd.front.bg",
                                   "",
-                                          "images/ibd/ibd_header_logo.svg",
+                                          "files.ibd.header.logo",
                                           "images/ibd/IBD_banner_2018.png",
                                           "false",
                                           "",
                                           "",
-                                          '7857348124942584918'
+                                          '7857348124942584918',
+                                          1,
+                                          0
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -650,20 +660,22 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[1,2]",
                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "files.epilepsyFrontHeader",
-                                          "",
+                                          "files.epilepsy.front.logo",
+                                          "portal.epilepsy.header.tagline",
                                           [],
                                           ["CDKL5"],
                                           ["rs2021722","X:18622693_G_A"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          'images/front_bg_2017-02.png',
+                                          "files.epilepsy.front.bg",
                                           "",
-                                          "images/epilepsy/epilepsy_logo.svg",
-                                          "images/menu_header_bg_2017.png",
+                                          "files.epilepsy.header.logo",
+                                          "images/epilepsy/front_epilepsy_bg_2018.png",
                                           "false",
                                           "",
                                           "",
-                                          '5414069947481666863'
+                                          '5414069947481666863',
+                                          0,
+                                          1
                                   )
 ]
 

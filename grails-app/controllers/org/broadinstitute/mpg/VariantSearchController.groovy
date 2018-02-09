@@ -59,7 +59,7 @@ class VariantSearchController {
         def slurper = new JsonSlurper()
         String phenotypeName = params.phenotype
         String sampleGroupName = params.sampleGroup
-        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName)
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(sampleGroupName, MetaDataService.METADATA_VARIANT)
 
         if (sampleGroup?.sampleGroupList?.size() > 0) {
             sampleGroup.sampleGroupList = sampleGroup.sampleGroupList.sort {
@@ -873,7 +873,7 @@ class VariantSearchController {
                     propertyBean.setParent(phenotypeBean)
                 case 2:
                     String dataset = propInfo[1]
-                    SampleGroupBean sampleGroupBean = metaDataService.getSampleGroupByName(dataset)
+                    SampleGroupBean sampleGroupBean = metaDataService.getSampleGroupByName(dataset, MetaDataService.METADATA_VARIANT)
 
                     if (propertyBean.getParent() == null) {
                         propertyBean.setParent(sampleGroupBean)
