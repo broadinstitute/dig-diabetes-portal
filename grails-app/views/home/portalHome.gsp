@@ -121,7 +121,7 @@
     });
 
 </script>
-<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-position: left top; padding-bottom: 70px; padding-top:0px;">
+<div class="fluid" style="font-size:16px; background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))});background-position: left top; padding-bottom: 70px; padding-top:0px;">
 
     <div class="container" style="color:#fff;">
         <div class="row" style="padding-top:40px;">
@@ -137,13 +137,10 @@
                             <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>' style="color:#ffffff; text-decoration: none;">
                                 <g:message code="portal.language.setting.setSpanish" default="En Español" /></a>
                         </g:elseif>
-
                     </g:each>
-
                 </p>
                 <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;">
                     <g:message code="${portalVersionBean.tagline}" /></p>
-
             </div>
             <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
 
