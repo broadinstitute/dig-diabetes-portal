@@ -56,7 +56,9 @@ class RestServerService {
     private String GENE_INFO_URL = "gene-info"
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
+    private String GENE_METADATA_URL = "getGeneMetadata"
     private String GET_DATA_URL = "getData"
+    private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
@@ -322,12 +324,14 @@ class RestServerService {
                     existingPortalVersionBean.getSampleLevelSequencingDataExists(),
                     existingPortalVersionBean.getGenePageWarning(),
                     existingPortalVersionBean.getCredibleSetInfoCode(),
-                    existingPortalVersionBean.getBlogId()
+                    existingPortalVersionBean.getBlogId(),
+                    existingPortalVersionBean.getVariantAssociationsExists(),
+                    existingPortalVersionBean.getGeneLevelDataExists()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],"","","","","","","","" )
+                    "", "","","",[],[],[],[],"","","","","","","","",0,0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -727,6 +731,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return postRestCallBase(drivingJson, this.GET_DATA_URL, currentRestServer())
     }
 
+    public JSONObject postGeneDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
+        QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
+        String drivingJson = queryJsonBuilder.getQueryJsonPayloadString(getDataQueryHolder.getGetDataQuery())
+        return postRestCallBase(drivingJson, this.GET_GENE_DATA_URL, currentRestServer())
+    }
+
     public JSONObject postMultiJoinProtectedDataQueryRestCall(GetDataQueryHolder getDataQueryHolder) {
         QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder()
         GetDataQueryBean getDataQueryBean = getDataQueryHolder.getGetDataQuery()
@@ -904,7 +914,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "Protein_change"
         ])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
-        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC")
+        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC",MetaDataService.METADATA_VARIANT)
         JsonSlurper slurper = new JsonSlurper()
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         if (macProperty != null){
@@ -931,7 +941,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         int beginSearchNumber, endSearchNumber;
 
         // get the phenotype list
-        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion());
+        phenotypeList = this.metaDataService.getPhenotypeListByTechnologyAndVersion("GWAS", this.metaDataService?.getDataVersion(),MetaDataService.METADATA_VARIANT);
 
         try {
             beginSearchNumber = Integer.valueOf(beginSearch).intValue();
@@ -1276,7 +1286,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnValue
         LinkedHashMap<String,List<SampleGroup>> sampleGroupByAncestry =  generateSampleGroupByAncestry(variantName)
         JSONObject apiResults = howCommonIsVariantSection(variantName,sampleGroupByAncestry)
-        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", "" )
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", "", MetaDataService.METADATA_VARIANT)
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
         if (showAll=="0"){// refine list based on sample size
@@ -1376,7 +1386,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String attribute = "T2D"
         JSONObject returnValue
         JSONObject apiResults = variantDiseaseRisk(variantName,sampleGroup)
-        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"", "" )
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"", "", MetaDataService.METADATA_VARIANT )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
@@ -1393,7 +1403,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                               List<Float> significanceList,
                                                               String phenotype) {
 
-        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataset)
+        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataset, MetaDataService.METADATA_VARIANT)
         String technology = metaDataService.getTechnologyPerSampleGroup(dataset)
         JSONObject returnValue = [
             dataset: dataset,
@@ -1435,7 +1445,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 resultColumnsToDisplay = addColumnsForPProperties(resultColumnsToDisplay, phenotype, dataset, pValueText)
                 GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService)
                 // we need this so we can order the variants, which makes the counting simpler
-                Property pvalProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueText, phenotype, dataset)
+                Property pvalProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueText, phenotype, dataset,MetaDataService.METADATA_VARIANT)
 
                 getDataQueryHolder.addOrderByProperty(pvalProperty, '1')
                 getDataQueryHolder.getDataQuery.setPageSize(-1)
@@ -1549,6 +1559,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return retdat
     }
 
+
+    public String getGeneMetadata() {
+        String retdat
+        retdat = getRestCallBase(GENE_METADATA_URL, currentRestServer())
+        return retdat
+    }
+
+
+
     /***
      * Make multiple calls to fill up the 'variation across continental ancestries' table, then combine all of those
      * numbers into a single JSON structure which we can return to the browser
@@ -1573,7 +1592,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 JSONObject apiResults = generateJsonVariantCountByGeneAndMaf(geneName, dataSetNames[j], numericBounds[i])
                 if (apiResults.is_error == false) {
                     if (i == 0) {
-                        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSetNames[j].dataset)
+                        SampleGroup sampleGroup = metaDataService.getSampleGroupByName(dataSetNames[j].dataset, MetaDataService.METADATA_VARIANT)
                         pValObject = [level: i, count: sampleGroup.getSubjectsNumber()]
                     } else {
                         pValObject = [level: i, count: apiResults.numRecords]
@@ -1906,13 +1925,45 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataset, pValueName)
         addColumnsForDProperties(resultColumnsToDisplay, "${MAFPHENOTYPE}", dataset)
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueName, phenotypeName, dataset), '1')
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(pValueName, phenotypeName, dataset,MetaDataService.METADATA_VARIANT), '1')
         getDataQueryHolder.getDataQuery.setLimit(500)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
         return dataJsonObject
     }
+
+
+
+
+
+    private JSONObject gatherGenePrioritizationInformation (String phenotypeName, String dataSetName, String propertyName) {
+        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID", "CHROM"])
+        List<String> filters = []
+        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
+
+        // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
+        List <String> piecesOfThePropertyName = propertyName.split("_")
+        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
+        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
+        String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
+
+        getDataQueryHolder.addProperties(resultColumnsToDisplay)
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
+        getDataQueryHolder.getDataQuery.setLimit(7000)
+        JsonSlurper slurper = new JsonSlurper()
+        String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
+
+
+
 
     /***
      * Gather up the data that is used in the Manhattan plot
@@ -1928,11 +1979,40 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnValue
 
         JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"" )
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSet}\"", MetaDataService.METADATA_VARIANT )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
+
+    public JSONObject getChromPos(JSONObject apiresults){
+        return apiresults
+    }
+
+    public JSONObject getGenePrioritizationInformation(String phenotypeName, String dataSetName, String propertyName) {
+        JSONObject returnValue
+
+        JSONObject apiResults = gatherGenePrioritizationInformation (phenotypeName, dataSetName, propertyName)
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"", MetaDataService.METADATA_GENE )
+        def slurper = new JsonSlurper()
+        returnValue = slurper.parseText(jsonParsedFromApi)
+        return returnValue
+    }
+
+       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
+        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
+
+        //JSONObject processedapiResults = getChromPos(apiResults);
+        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
+        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+
+
+
+
+
+
+
+
 
     public JSONObject getChromPos(JSONObject apiresults){
         return apiresults
@@ -1978,11 +2058,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             if (orProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, orProperty.name)
             }
-            Property dirProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("DIR",oneReference.phenotype,oneReference.ds)
+            Property dirProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("DIR",oneReference.phenotype,oneReference.ds,MetaDataService.METADATA_VARIANT)
             if (dirProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, dirProperty.name)
             }
-            Property mafProperty = metaDataService.getSampleGroupProperty(oneReference.ds,"MAF")
+            Property mafProperty = metaDataService.getSampleGroupProperty(oneReference.ds,"MAF",MetaDataService.METADATA_VARIANT)
             if (mafProperty){
                 addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, oneReference.ds)
             }
@@ -2321,7 +2401,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param apiResults
      * @return
      */
-    public String processInfoFromGetDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
+    public String processInfoFromGetDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation, int metadataTree ){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         List<String> crossVariantData = []
         if (!apiResults["is_error"]){
@@ -2349,7 +2429,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         List<String> subKeys = mapValue.keySet() as List
                         for (String subKey in subKeys) {
                             // maybe subKey is always a group ID
-                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
+                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey,metadataTree)
                             String dataSetName = sampleGroup.systemId
                             String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
                             String ancestry = "unknown"
@@ -2370,7 +2450,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     def particularSubMapValue = particularSubMap[particularSubKey]
                                     BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
                                     String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
-                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
+                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey, metadataTree)
                                     variantSpecificList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
                                 }
 
@@ -2426,7 +2506,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         List<String> subKeys = mapValue.keySet() as List
                         for (String subKey in subKeys) {
                             // maybe subKey is always a group ID
-                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey)
+                            SampleGroup sampleGroup = metaDataService.getSampleGroupByName(subKey, MetaDataService.METADATA_VARIANT)
                             String dataSetName = sampleGroup.systemId
                             String translatedDatasetName = g.message(code: 'metadata.' + dataSetName, default: dataSetName);
                             String ancestry = "unknown"
@@ -2447,7 +2527,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     def particularSubMapValue = particularSubMap[particularSubKey]
                                     BigDecimal phenoValue = particularSubMapValue.findAll { it }[0] as BigDecimal
                                     String translatedPhenotypeName = g.message(code: 'metadata.' + particularSubKey, default: particularSubKey);
-                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey)
+                                    String meaning = metaDataService.getMeaningForPhenotypeAndSampleGroup(key, particularSubKey, subKey, MetaDataService.METADATA_VARIANT)
                                     variantSpecificList << "{\"level\":\"${key}^${particularSubKey}^${meaning}^${subKey}^${ancestry}^${translatedDatasetName}^${translatedPhenotypeName}\",\"count\":${phenoValue}}"
                                 }
 
@@ -2479,7 +2559,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 openPhenotypesWithQuotes << "\"${openPhenotype}\""
             }
         }
-        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"\"openPhenotypes\": ["+openPhenotypesWithQuotes.join(',')+"]", "" )
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults,"\"openPhenotypes\": ["+openPhenotypesWithQuotes.join(',')+"]", "", MetaDataService.METADATA_VARIANT )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
 
@@ -2502,7 +2582,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             log.error("error in getTraitPerVariant = '${apiResults.error_msg}'")
         }
 
-        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "\"openPhenotypes\": []", "" )
+        String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "\"openPhenotypes\": []", "", MetaDataService.METADATA_VARIANT )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
 

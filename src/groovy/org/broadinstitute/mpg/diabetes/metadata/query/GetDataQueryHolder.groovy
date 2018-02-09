@@ -20,6 +20,8 @@ class GetDataQueryHolder {
     // log class
     private static final log = LogFactory.getLog(this)
 
+    private int metadataTree  = MetaDataService.METADATA_VARIANT
+
     GetDataQuery getDataQuery
 
     //  a couple of services. We pass these in through the constructor
@@ -71,8 +73,17 @@ class GetDataQueryHolder {
      * @param metaDataService
      * @return
      */
-    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService) {
+    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList,
+                                                              SearchBuilderService searchBuilderService,
+                                                              MetaDataService metaDataService) {
         return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService)
+    }
+    public static GetDataQueryHolder createGetDataQueryHolder(List<String> filterList,
+                                                              SearchBuilderService searchBuilderService,
+                                                              MetaDataService metaDataService,
+                                                              int metadataTree) {
+
+        return new GetDataQueryHolder(filterList, searchBuilderService, metaDataService,metadataTree)
     }
 
     public static GetDataQueryHolder createGetDataQueryHolderFromFilters(List<QueryFilter> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService, boolean orFlag) {
@@ -100,6 +111,15 @@ class GetDataQueryHolder {
         getDataQuery = generateGetDataQuery(filterList)
     }
 
+
+    public GetDataQueryHolder(List<String> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService,
+                              int metadataTree) {
+        this()
+        this.searchBuilderService = searchBuilderService
+        this.metaDataService = metaDataService
+        getDataQuery = generateGetDataQuery(filterList)
+        this.metadataTree = metadataTree
+    }
 
     public GetDataQueryHolder(List<QueryFilter> filterList, SearchBuilderService searchBuilderService, MetaDataService metaDataService, boolean orFlag) {
         this()
@@ -204,7 +224,7 @@ class GetDataQueryHolder {
                 (resultColumnsToDisplay['cproperty'])) {
             List<String> cProperties = resultColumnsToDisplay['cproperty']
             for (String cProperty in cProperties?.unique()) {
-                Property displayProperty = metaDataService.getCommonPropertyByName(cProperty)
+                Property displayProperty = metaDataService.getCommonPropertyByName(cProperty,this.metadataTree)
                 if (!(cProperty in getDataQuery.getQueryPropertyList()?.name)){
                     getDataQuery.addQueryProperty(displayProperty)
                 }
@@ -223,7 +243,7 @@ class GetDataQueryHolder {
             dProperties.each { String phenoKey, LinkedHashMap dataSets ->
                 dataSets?.each { String dataSetKey, List props ->
                     for (String prop in props) {
-                        Property displayProperty = metaDataService.getSampleGroupProperty(dataSetKey, prop)
+                        Property displayProperty = metaDataService.getSampleGroupProperty(dataSetKey, prop,this.metadataTree)
 
                         // avoid null pointers and log whenever null properties are added (unclear why this is not finding properties, so not sure if bug)
                         if (displayProperty != null) {
@@ -262,7 +282,7 @@ class GetDataQueryHolder {
             dProperties.each { String phenoKey, LinkedHashMap dataSets ->
                 dataSets?.each { String dataSetKey, List props ->
                     for (String prop in props) {
-                        List<Property> displayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection(phenoKey, dataSetKey, ["^${prop}"])
+                        List<Property> displayProperties = metaDataService.getPhenotypeSpecificSampleGroupPropertyCollection(phenoKey, dataSetKey, ["^${prop}"],this.metadataTree)
                         for (Property displayProperty in displayProperties) {
                             getDataQuery.addQueryProperty(displayProperty)
                         }

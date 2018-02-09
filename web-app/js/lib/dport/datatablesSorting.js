@@ -97,7 +97,11 @@
 
     jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         "scientific-pre": function ( a ) {
-            return parseFloat(a);
+            if (a==="") {
+                return -100;
+            } else {
+                return parseFloat(a);
+            }
         },
 
         "scientific-asc": function ( a, b ) {
@@ -124,6 +128,46 @@
         if (!str2) { str2 = ''; }
         return str2.localeCompare(str1);
     };
+
+    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+        // sort by chromosome and start position
+        "positionIndicator-pre": function ( a ) {
+            if (a==='')  {return 0;}
+            var split1 = a.split(':');
+            if (split1.length!==2)  {return 0;}
+            var split2 = split1[1].split('-');
+            if (split2.length!==2)  {return 0;}
+            var startPos = 0;
+            var chromosomeMatch = 0;
+            if ( /^\d+$/.test(split2[0])){
+                startPos = parseInt(split2[0]);
+            }
+            if ( /^\d+$/.test(split1[0])){
+                chromosomeMatch = parseInt(split1[0]);
+            } else if (split1[0]==='X') {
+                chromosomeMatch = 23;
+            } else if (split1[0]==='Y') {
+                chromosomeMatch = 24;
+            }
+            return {'start':startPos,'chrom':chromosomeMatch};
+            //return startPos;
+        },
+        "positionIndicator-asc": function ( a, b ) {
+            if (a['chrom']!== b['chrom']) {
+                return ((a['chrom']< b['chrom']) ? -1 : ((a['chrom'] > b['chrom']) ? 1 : 0));
+            } else {
+                return ((a['start'] < b['start']) ? -1 : ((a['start'] > b['start']) ? 1 : 0));
+            }
+        },
+
+        "positionIndicator-desc": function ( a, b ) {
+            if (a['chrom']!== b['chrom']) {
+                return ((a['chrom']< b['chrom']) ? 1 : ((a['chrom'] > b['chrom']) ? -1 : 0));
+            } else {
+                return ((a['start'] < b['start']) ? 1 : ((a['start'] > b['start']) ? -1 : 0));
+            }
+        }
+    } );
 
 
 }());

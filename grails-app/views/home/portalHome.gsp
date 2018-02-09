@@ -22,8 +22,18 @@
             //var warningMessage = ${warningText};
         </g:applyCodec>
         //alert(warningMessage);
-        mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
-        mpgSoftware.homePage.setSlideWindows();
+        mpgSoftware.homePage.setHomePageVariables(
+            {"retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
+                "defaultPhenotype":"${g.defaultPhenotype()}",
+                "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}"}
+        );
+        $(document).ready(function(){
+            mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
+            mpgSoftware.homePage.setSlideWindows();
+            mpgSoftware.homePage.retrievePhenotypes();
+            mpgSoftware.homePage.retrieveGenePhenotypes();
+        });
+
 
         function goToSelectedItem(item) {
             window.location.href = "${createLink(controller:'gene',action:'findTheRightDataPage')}/" + item;
@@ -76,43 +86,21 @@
             }
         });
 
+        $('#geneTraitSearchLaunch').on('click', function () {
+            var trait_val = $('#gene-trait-input option:selected').val();
+            var significance = 0.0005;
+            if (trait_val == "" || significance == 0) {
+                alert('Please choose a trait and enter a valid significance!')
+            } else {
+                window.location.href = "${createLink(controller:'trait',action:'genePrioritization')}" + "?trait=" + trait_val + "&significance=" + significance;
+            }
+        });
 
 
 
-        var retrievePhenotypes = function () {
-            var loading = $('#spinner').show();
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: "${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
-                data: {},
-                async: true,
-                success: function (data) {
-                    if (( data !==  null ) &&
-                            ( typeof data !== 'undefined') &&
-                            ( typeof data.datasets !== 'undefined' ) &&
-                            (  data.datasets !==  null ) ) {
 
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets,'#trait-input',undefined,undefined,'${g.portalTypeString()}');
-                        var availPhenotypes = [];
-                        _.forEach( $("select#trait-input option"), function(a){
-                            availPhenotypes.push($(a).val());
-                        });
-                        if (availPhenotypes.indexOf('${g.defaultPhenotype()}')>-1){
-                            $('#trait-input').val('${g.defaultPhenotype()}');
-                        } else if (availPhenotypes.length>0){
-                            $('#trait-input').val(availPhenotypes[0]);
-                        }
-                    }
-                    loading.hide();
-                },
-                error: function (jqXHR, exception) {
-                    loading.hide();
-                    core.errorReporter(jqXHR, exception);
-                }
-            });
-        };
-        retrievePhenotypes();
+
+
 
 
         $('#chooseDistributedKB').change(function(e){
@@ -133,7 +121,7 @@
     });
 
 </script>
-<div class="fluid" style="font-size:16px; background-image:url(${resource(file: portalVersionBean.backgroundGraphic)});background-size:100% 100%; background-position: center; padding-bottom: 70px; padding-top:0px;">
+<div class="fluid" style="font-size:16px; background-image:url(${resource(file: g.message(code: portalVersionBean.backgroundGraphic, default:portalVersionBean.backgroundGraphic))});background-position: left top; padding-bottom: 70px; padding-top:0px;">
 
     <div class="container" style="color:#fff;">
         <div class="row" style="padding-top:40px;">
@@ -149,44 +137,48 @@
                             <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>' style="color:#ffffff; text-decoration: none;">
                                 <g:message code="portal.language.setting.setSpanish" default="En Español" /></a>
                         </g:elseif>
-
                     </g:each>
-
                 </p>
-                <p style="padding-top:10px; padding-bottom:30px; font-size:25px; font-weight: 300 !important;">
+                <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;">
                     <g:message code="${portalVersionBean.tagline}" /></p>
-
             </div>
             <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
-                <div style="padding-bottom:20px; font-weight: 300;">
-                    <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
-                    <div style="font-size: 14px;">
-                        <span><g:message code="site.shared.phrases.examples" />: </span>
-                        <g:each in="${portalVersionBean.geneExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="gene" action="geneInfo"
-                                                   params="[id:it]"/>'>${it}</a>
-                        </g:each>
-                        <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
-                                    body="input.searchTerm.geneExample.help.text"/>,
-                        <g:each in="${portalVersionBean.variantExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
-                        </g:each>
-                        <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
-                                    body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
-                        <g:each in="${portalVersionBean.rangeExamples}">
-                            <a style="color:#cce6c3;" href='<g:createLink controller="region" action="regionInfo"
-                                                                          params="[id:it]"/>'>${it}</a>
-                        </g:each>
-                        <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
-                                    body="input.searchTerm.rangeExample.help.text"/>
+
+                <g:if test="${portalVersionBean.variantAssociationsExists}">
+                            %{--only useful if we have variant associations--}%
+                    <div style="padding-bottom:20px; font-weight: 300;">
+                        <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
+                            <div style="font-size: 14px;">
+                                <span><g:message code="site.shared.phrases.examples" />: </span>
+                                <g:each in="${portalVersionBean.geneExamples}">
+                                    <a class="front-search-example" href='<g:createLink controller="gene" action="geneInfo"
+                                                           params="[id:it]"/>'>${it}</a>
+                                </g:each>
+                                <g:helpText title="input.searchTerm.geneExample.help.header" placement="bottom"
+                                            body="input.searchTerm.geneExample.help.text"/>,
+                                <g:each in="${portalVersionBean.variantExamples}">
+                                    <a class="front-search-example" href='<g:createLink controller="variantInfo" action="variantInfo" params="[id:it]"/>'>${it}</a>,
+                                </g:each>
+                                <g:helpText title="input.searchTerm.variantExample.help.header" placement="right"
+                                            body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
+                                <g:each in="${portalVersionBean.rangeExamples}">
+                                    <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
+                                                                                  params="[id:it]"/>'>${it}</a>
+                                </g:each>
+                                <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
+                                            body="input.searchTerm.rangeExample.help.text"/>
+
+
+                            </div>
+
+
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
+                            <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
 
                     </div>
-                    <div class="form-inline" style="padding-top: 10px;">
-                        <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
-                        <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
-                    </div>
-
-                </div>
+                </g:if>
                 <div style="padding-bottom:10px;">
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="variant.search.header"/></h2>
                     <p class="dk-footnote" style="width:83%;"><g:message code="variant.search.specifics"/></p>
@@ -195,18 +187,32 @@
                     </a>
                 </div>
                 <div>
-                    <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
+                    <g:if test="${portalVersionBean.variantAssociationsExists}">
+                        <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
+                    </g:if>
+                    <g:if test="${portalVersionBean.geneLevelDataExists}">
+                        <h2 style="font-size:20px; font-weight:300;"><g:message code="gene.search.header" default="View full GWAS results for a phenotype" /></h2>
+                    </g:if>
 
                     <g:if test="${portalVersionBean.phenotypeLookupMessage}">
                         <p class="dk-footnote">
                         <g:message code="trait.search.specifics"/>
                         <g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>
                     </g:if>
-                    <div class="form-inline" style="padding-top: 10px;">
-                        <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
-                        </select>
-                        <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
-                    </div>
+                    <g:if test="${portalVersionBean.variantAssociationsExists}">
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                            </select>
+                            <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
+                    </g:if>
+                    <g:if test="${portalVersionBean.geneLevelDataExists}">
+                        <div class="form-inline" style="padding-top: 10px;">
+                            <select name="" id="gene-trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                            </select>
+                            <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                        </div>
+                    </g:if>
                 </div>
             </div>
         </div>
@@ -254,6 +260,12 @@
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.ibd.about.the.data.text" />
+                </g:elseif>
+                <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+                    <div class="col-md-12" style="padding-top:40px;">
+                        <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
+                    <p><g:message code="portal.epi.about.the.data.text" />
                 </g:elseif>
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
@@ -314,6 +326,29 @@
                             <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                         </div>
                     </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+                        <div style="margin-top: 25px;">
+                            <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
+                        </div>
+                        <div style="margin-top: 25px;">
+                            <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CVDI"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
+                        </div>
+
+                        <div style="margin-top: 15px;">
+                            <a href="http://www.cerebrovascularportal.org/"><img src="${resource(dir: 'images', file: 'stroke_symbol.svg')}" style="width: 70px; float: left; margin-right: 15px;"></a>
+                            <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_CDKP"></g:message></h3>
+                            <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
+                        </div>
+
+                    </g:elseif>
+
                     <g:else>
                         <div style="margin-top: 25px;">
                             <img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-13px; margin-left:-3px; margin-right: 13px;">
@@ -369,6 +404,9 @@
                         <g:elseif test="${g.portalTypeString()?.equals('t2d')}">
                             <g:message code="portal.use.citation.itself" />
                         </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+                        <g:message code="portal.epi.use.citation.itself" />
+                    </g:elseif>
                         <g:else></g:else>
                     </p>
                 </div>
@@ -434,6 +472,10 @@
 
             <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
                 <p><g:message code="about.the.ibd.portal.text"/></p>
+            </g:elseif>
+
+            <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+                <p><g:message code="about.the.epi.portal.text"/></p>
             </g:elseif>
 
             <g:else>
