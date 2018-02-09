@@ -40,15 +40,57 @@
             </div>
         </div>
 
+        <style>
+            .lz-list > ul {
+                margin-top: 3px;
+                 display: none;
+                 position: absolute;
+                 height: auto;
+                 max-height: 500px;
+                 overflow: auto;
+                 list-style: none;
+                 background-color: #fff;
+                 z-index: 100;
+                 padding: 20px 0px;
+                 border: solid 1px #ddd;
+                 border-radius: 5px;
+                 box-shadow: 0px 8px 5px #ccc;
+             }
+
+            .lz-list > ul > li > a{
+                display: block;
+                padding: 3px 20px;
+                clear: both;
+                font-weight: 400;
+                line-height: 1.42857143;
+                color: #333;
+                white-space: nowrap;
+            }
+
+            .lz-list > ul > li > a:hover {
+                background-color: #eee;
+            }
+
+            .lz-list.open > ul {
+                display: block;
+            }
+        </style>
+
+        <script>
+            function showLZlist(event) {
+                ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
+            }
+        </script>
+
         <div class="row" style="border: solid 1px #ddd; padding: 15px 15px; margin-top: 15px;">
 
             <strong>Add new track</strong>
 
             <div class="col-md-12">
-                <div class="dropdown" style="float:left; margin-right: 25px;">
+                <div style="float:left; margin-right: 25px;" class="lz-list">
                     <span style="padding: 1px; background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Phenotypes <b class="caret"></b></a>
-                    <ul id="dk_lz_phenotype_list" class="dropdown-menu" style="max-height:500px; overflow:auto;">
+                    <a href="javascript:;" onclick="showLZlist(event);" >Phenotypes <b class="caret"></b></a>
+                    <ul id="dk_lz_phenotype_list">
                         <g:each in="${lzOptions?.findAll{it.dataType=='dynamic' || it.dataType=='static'}}">
                             <li><a href="javascript:;">
                                 ${g.message(code: "metadata." + it.name)}
@@ -60,7 +102,7 @@
 
                 <div class="dropdown" style="float:left; margin-right: 25px;"><span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">Datasets <b class="caret"></b></a>
-                    <ul id="trackList-static" class="dropdown-menu" style="max-height:500px; overflow:auto;">
+                    <ul id="trackList-static" class="dropdown-menu" style="height: auto; max-height:500px; overflow:auto;">
                         <g:each in="${lzOptions?.findAll{it.dataType=='static'}}">
                             <li>
                                 <a onclick="mpgSoftware.locusZoom.addLZPhenotype({

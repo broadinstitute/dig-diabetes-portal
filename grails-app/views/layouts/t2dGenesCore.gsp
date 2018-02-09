@@ -242,13 +242,25 @@
                     return l===m?0:l>m?1:-1;
                 });
 
-                var lzPhenotypeListContent = "";
+                var lzPhenotypeListContent = "<li><input id='phenotype_search' type='text' name='search'></li>";
 
                 $.each(lzPhenotypes, function(key, value) {
-                    lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event)'>"+value+"</a></li>";
+                    lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
                 });
 
                 $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
+
+                $("#phenotype_search").on('input',function() {
+
+                    var searchWord = $("#phenotype_search").val().toLowerCase();
+
+                    $("#dk_lz_phenotype_list").find("a").each(function() {
+                        var phenotypeString = $(this).text().toLowerCase();
+
+
+                        (phenotypeString.indexOf(searchWord) >= 0)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                    })
+                });
 
             }
 
