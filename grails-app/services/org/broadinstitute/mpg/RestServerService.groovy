@@ -1995,13 +1995,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
-       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
-
-        //JSONObject processedapiResults = getChromPos(apiResults);
-        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
-        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
-
+//       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
+//        JSONObject apiResults = this.getClumpDataRestCall(phenotypeName, dataSetName)
+//
+//        //JSONObject processedapiResults = getChromPos(apiResults);
+//        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
+//        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+//
 
 
 
