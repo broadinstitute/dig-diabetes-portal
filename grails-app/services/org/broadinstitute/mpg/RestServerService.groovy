@@ -1826,7 +1826,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         // Add properties specific to a data set
         if (requestedProperties) {
             requestedProperties?.each { String phenotype, LinkedHashMap phenotypeProperties ->
-                if (phenotype == 'common') {
+                if (phenotype != 'common') { // has this bug always been here? Is it a bug?
                     phenotypeProperties?.each { String datasetName, v ->
                         if (v?.size() > 0) {
                             for (String property in v) {
