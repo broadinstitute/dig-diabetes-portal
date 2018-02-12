@@ -46,7 +46,8 @@
         </g:else>
 
         <style>
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
+
+    <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 a {color:#5cbc6d;}
                 a:hover, a:active {color:#43957e; text-decoration: none;}
                 .dk-t2d-yellow {  background-color: #d5cc29;  }

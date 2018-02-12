@@ -12,50 +12,13 @@
     <g:set var="restServer" bean="restServerService"/>
 </script>
 
-<div class="container-fluid floop" id="header-bottom" style="background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-<div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left;  width:350px; padding:12px 0 14px 0; ">
-<a href="${createLink(controller:'home',action:'portalHome')}">
-
-<g:if test="${g.portalTypeString()?.equals('stroke')}">
-
-            <img src="${resource( file:g.message(code:"files.stroke.header.logo", default:"files.stroke.header.logo"))}" style=" width: 400px; margin-left: 10px;" />
+<div class="container-fluid floop" id="header-bottom" style="background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getBackgroundGraphic())}); background-position: left bottom; font-size: 14px; font-weight:300; padding:0; margin:0; ">
+    <div class="dk-logo-wrapper" style="position:relative; z-index: 1001; float: left;  width:350px; padding:12px 0 14px 0; ">
+        <a href="${createLink(controller:'home',action:'portalHome')}">
+            <img src="${resource( file:restServer.retrieveBeanForCurrentPortal().getLogoCode())}" style=" width: 400px; margin-left: 10px;" />
         </a>
     </div>
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource( file:g.message(code:"files.stroke.menu.bg", default:"files.stroke.menu.bg"))}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
-</g:if>
-<g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-
-        <img src="${resource( file:g.message(code:"files.ibd.header.logo", default:"files.ibd.header.logo"))}" style=" width: 400px; margin-left: 10px;" />
-    </div>
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource( file:g.message(code:"files.ibd.menu.bg", default:"files.ibd.menu.bg"))}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
-</g:elseif>
-<g:elseif test="${g.portalTypeString()?.equals('mi')}">
-
-            <img src="${resource(file:g.message(code:"files.mi.header.logo", default:"files.mi.header.logo"))}" style=" width: 450px; margin-left: 10px;" />
-        </a>
-    </div>
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource( file:g.message(code:"files.mi.menu.bg", default:"files.mi.menu.bg"))}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
-</g:elseif>
-<g:elseif test="${g.portalTypeString()?.equals('t2d')}">
-
-            <img src="${resource( file:g.message(code:"files.t2d.header.logo", default:"files.t2d.header.logo"))}" style=" width: 400px; margin-left: 16px;">
-        </a>
-    </div>
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource( file:g.message(code:"files.t2d.menu.bg", default:"files.t2d.menu.bg"))}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
-</g:elseif>
-<g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
-
-            <img src="${resource( file:g.message(code:"files.epilepsy.header.logo", default:"files.epilepsy.header.logo"))}" style=" width: 400px; margin-left: 16px;">
-        </a>
-    </div>
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource( file:g.message(code:"files.epilepsy.menu.bg", default:"files.epilepsy.menu.bg"))}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
-</g:elseif>
-
-<g:else>
-    <div class="container-fluid" id="header-bottom" style="background-image:url(${resource(dir: 'images', file:'menu_header_bg_2017.png')}); background-size: 100% 100%; font-size: 14px; font-weight:300; padding:0; margin:0; ">
-    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource(dir: 'images', file:'menu_bg_2017_5.png')}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
-</g:else>
-
+    <div class="dk-menu-wrapper" style="position:relative; z-index: 1000; float:right; padding-left: 7px; width: 100%; margin-top:-50px; border-bottom:solid 1px #ffffff; background-image:url(${resource( file:restServer.retrieveBeanForCurrentPortal().getMenuHeader())}); background-size:100% 100%; background-repeat:no-repeat; background-position: center right; ">
 
         <ul class="dk-general-menu" style="list-style: none; float:right; margin:0; padding:10px 0 0 15px; text-align: right;  ">
             <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>
