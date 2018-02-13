@@ -227,6 +227,7 @@
                 }
             }
 
+            /* LocusZoom UI */
             function massageLZ() {
 
                 if($("#dk_lz_phenotype_list").hasClass("list-allset")) {
