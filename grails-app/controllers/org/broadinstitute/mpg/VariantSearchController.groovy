@@ -248,6 +248,34 @@ class VariantSearchController {
                         encodedFilterSets: URLEncoder.encode(jsonQueriesToReturn.toString())])
     }
 
+
+
+    // Here's a shortcut way to display the variant search results, which we are currently using
+    // in an anchor from the epilepsy gene prioritization page
+    def findEveryVariantForAGene (){
+        String geneName = params.gene
+        String phenotypeName = params.phenotype
+        String dataSetName = params.dataset
+        LinkedHashMap extents = sharedToolsService.getGeneExpandedExtent( geneName)
+        String chromosome = extents.chrom
+        if (chromosome?.startsWith('chr')){
+            chromosome = chromosome-'chr'
+        }
+        // for now we have some confusion about gene vs. variant phenotypes, so also but phenotype explicitly
+        if ((phenotypeName=='EE') || (phenotypeName=='GGE') || (phenotypeName=='NAFE')){
+            phenotypeName = 'EPI'
+        }
+
+        List <String> filtersForQuery = []
+        filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+        filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"MAC_PH","value":"0","comparator":">"}]""".toString()
+        forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+    }
+
+
+
+
+
     /***
      * This call occurs when you press the 'submit search request' button.
      * @return
@@ -818,7 +846,7 @@ class VariantSearchController {
                         }
                 // Otherwise, process the query like normal, so fall through to the next case
                     case [PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY, PortalConstants.JSON_VARIANT_SIFT_PRED_KEY, PortalConstants.JSON_VARIANT_CONDEL_PRED_KEY]:
-                        String comparator = currentQuery.comparator.replace(/=/, /|/)
+                        String comparator = currentQuery.comparator.replace("=", /|/)
                         processedQuery = '11=' + currentQuery.prop + comparator + currentQuery.value
                         computedStrings << processedQuery
                         break;
