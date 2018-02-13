@@ -138,13 +138,6 @@
 
 
 
-
-
-    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-
-    <h5><g:message code="informational.data.project.AFGen1"></g:message></h5>
-    <p><g:message code="informational.data.project.AFGen2"></g:message></p>
-
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.AFHRC_GWAS1"></g:message></p>
 <p><i><g:message code="informational.data.exptsumm.AFHRC_GWAS2"></g:message></i></p>
