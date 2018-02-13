@@ -91,6 +91,21 @@
             }
             </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+            a {color:#50AABB;}
+            a:hover, a:active {color:#2779a7; text-decoration: none;}
+            .dk-t2d-yellow {  background-color: #D2BC2C;  }
+            .dk-t2d-orange {  background-color: #F68920;  }
+            .dk-t2d-green {  background-color: #7fc343;  }
+            .dk-t2d-blue {  background-color: #62B4C5;  }
+            .dk-blue-bordered {
+                display:block;
+                border-top: solid 1px #57A7BA;
+                border-bottom: solid 1px #57A7BA;
+                color: #57A7BA;
+                padding: 5px 0;
+                text-align:left;
+                line-height:26px;
+            }
 
             a.front-search-example {
                 color:#cccce6;
