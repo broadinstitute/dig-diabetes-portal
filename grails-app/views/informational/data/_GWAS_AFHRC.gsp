@@ -70,40 +70,38 @@
 <tr><td>358</td><td>2,557</td><td>Ludwigshafen Risk and Cardiovascular Health (LURIC)</td><td>European</td></tr>
 <tr><td>110</td><td>0</td><td>Maastricht AFCT</td><td>European</td></tr>
 <tr><td>1,232</td><td>4,645</td><td>Malmö Diet and Cancer study (MDCS)</td><td>European</td></tr>
+<tr><td>799</td><td>796</td><td>Malmö Preventive Project (MPP) AF</td><td>European</td></tr>
+<tr><td>0</td><td>742</td><td>Malmö Preventive Project (MPP) Echo</td><td>European</td></tr>
 <tr><td>1,112</td><td>36</td><td>Massachusetts General Hospital Atrial Fibrillation study (MGH AF)</td><td>European</td></tr>
 <tr><td>651</td><td>2,054</td><td>Massachusetts General Hospital Cardiology and Metabolic Patient cohort (MGH CAMP)</td><td>European</td></tr>
 <tr><td>54</td><td>5</td><td>Massachusetts General Hospital - Genetics of QT Prolongation with Antiarrhythmics (MGH DOFEGEN)</td><td>European</td></tr>
-
-<tr><td>155</td><td>2,372</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
-
-
-<tr><td>187</td><td>307</td><td>MGH Stroke</td><td>European</td></tr>
+<tr><td>187</td><td>307</td><td>Massachusetts General Hospital Stroke Study</td><td>European</td></tr>
 <tr><td>174</td><td>2,132</td><td>Mount Sinai BioMe Biobank</td><td>African American</td></tr>
 <tr><td>291</td><td>860</td><td>Mount Sinai BioMe Biobank</td><td>European</td></tr>
 <tr><td>277</td><td>3,081</td><td>Mount Sinai BioMe Biobank</td><td>Hispanic</td></tr>
-<tr><td>799</td><td>796</td><td>MPP AF</td><td>European</td></tr>
-<tr><td>0</td><td>742</td><td>MPP Echo</td><td>European</td></tr>
-<tr><td>723</td><td>379</td><td>Penn</td><td>European</td></tr>
-<tr><td>485</td><td>3,491</td><td>PHB (MEGA)</td><td>European</td></tr>
-<tr><td>808</td><td>2,861</td><td>PHB (MEGA Ex)</td><td>European</td></tr>
-<tr><td>611</td><td>3,160</td><td>PHB (MEG)</td><td>European</td></tr>
-<tr><td>154</td><td>795</td><td>PIVUS</td><td>European</td></tr>
-<tr><td>147</td><td>3,407</td><td>PREVEND</td><td>European</td></tr>
-<tr><td>501</td><td>4,686</td><td>PROSPER</td><td>European</td></tr>
-<tr><td>1025</td><td>4,922</td><td>RS1</td><td>European</td></tr>
-<tr><td>146</td><td>1,660</td><td>RS2</td><td>European</td></tr>
-<tr><td>121</td><td>2,909</td><td>RS3</td><td>European</td></tr>
-<tr><td>106</td><td>1,811</td><td>SHIP</td><td>European</td></tr>
-<tr><td>157</td><td>1,586</td><td>SiGN Group1</td><td>European</td></tr>
-<tr><td>703</td><td>5,954</td><td>SiGN Group2</td><td>European</td></tr>
-<tr><td>119</td><td>2,022</td><td>SiGN Group4</td><td>African American</td></tr>
-<tr><td>751</td><td>11,820</td><td>SiGN Group4</td><td>European</td></tr>
-<tr><td>356</td><td>716</td><td>SiGN Group5</td><td>European</td></tr>
-<tr><td>120</td><td>453</td><td>SiGN Group6</td><td>European</td></tr>
-<tr><td>368</td><td>1,218</td><td>SiGN Group7</td><td>European</td></tr>
-<tr><td>203</td><td>816</td><td>SiGN Group8</td><td>European</td></tr>
-<tr><td>319</td><td>1,362</td><td>SiGN Group9</td><td>European</td></tr>
-<tr><td>184</td><td>728</td><td>SPHFC</td><td>Brazilian</td></tr>
+<tr><td>155</td><td>2,372</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
+<tr><td>485</td><td>3,491</td><td>Partners HealthCare Biobank (PHB) (MEGA)</td><td>European</td></tr>
+<tr><td>808</td><td>2,861</td><td>Partners HealthCare Biobank (PHB) (MEGA Ex)</td><td>European</td></tr>
+<tr><td>611</td><td>3,160</td><td>Partners HealthCare Biobank (PHB) (MEG)</td><td>European</td></tr>
+<tr><td>723</td><td>379</td><td>Penn Medicine Biobank (Penn)</td><td>European</td></tr>
+<tr><td>147</td><td>3,407</td><td>Prevention of Renal and Vascular Endstage Disease (PREVEND)</td><td>European</td></tr>
+<tr><td>154</td><td>795</td><td>Prospective Investigation of Vasculature in Uppsala Seniors (PIVUS)</td><td>European</td></tr>
+<tr><td>501</td><td>4,686</td><td>PROspective Study of Pravastatin in the Elderly at Risk (PROSPER)</td><td>European</td></tr>
+<tr><td>1025</td><td>4,922</td><td>Rotterdam Study I (RS I)</td><td>European</td></tr>
+<tr><td>146</td><td>1,660</td><td>Rotterdam Study II (RS II)</td><td>European</td></tr>
+<tr><td>121</td><td>2,909</td><td>Rotterdam Study III (RS III)</td><td>European</td></tr>
+<tr><td>184</td><td>728</td><td>Sao Paolo Heart Failure Cohort (SPHFC)</td><td>Brazilian</td></tr>
+<tr><td>157</td><td>1,586</td><td>Stroke Genetics Network (SiGN) Group1</td><td>European</td></tr>
+<tr><td>703</td><td>5,954</td><td>Stroke Genetics Network (SiGN) Group2</td><td>European</td></tr>
+<tr><td>119</td><td>2,022</td><td>Stroke Genetics Network (SiGN) Group4</td><td>African American</td></tr>
+<tr><td>751</td><td>11,820</td><td>Stroke Genetics Network (SiGN) Group4</td><td>European</td></tr>
+<tr><td>356</td><td>716</td><td>Stroke Genetics Network (SiGN) Group5</td><td>European</td></tr>
+<tr><td>120</td><td>453</td><td>Stroke Genetics Network (SiGN) Group6</td><td>European</td></tr>
+<tr><td>368</td><td>1,218</td><td>Stroke Genetics Network (SiGN) Group7</td><td>European</td></tr>
+<tr><td>203</td><td>816</td><td>Stroke Genetics Network (SiGN) Group8</td><td>European</td></tr>
+<tr><td>319</td><td>1,362</td><td>Stroke Genetics Network (SiGN) Group9</td><td>European</td></tr>
+<tr><td>106</td><td>1,811</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
+
 <tr><td>190</td><td>0</td><td>TCAI</td><td>European</td></tr>
 <tr><td>403</td><td>6,410</td><td>TWINGENE</td><td>European</td></tr>
 <tr><td>236</td><td>116</td><td>UCSF</td><td>European</td></tr>
