@@ -10,9 +10,10 @@
 
                 </table>
                 <hr />
-
+<h3><g:message code="informational.GWAS_AFHRC_title"></g:message></h3>
 <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
-<p><g:message code="informational.data.overlaps.AFHRC"></g:message></p>
+<p><g:message code="informational.data.overlaps.AFHRC"></g:message> <g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>, <g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message></p>
+
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
@@ -22,17 +23,7 @@
 <div class="citation"><g:message code="informational.shared.publications.Roselli_2018_journal.citation"></g:message> </div>
 </div></p>
 
-<p><div class="paper">
-<g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message><br>
-<g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Christophersen_2017_NatGenet.citation"></g:message> </div>
-</div></p>
 
-<p><div class="paper">
-<g:message code="informational.shared.publications.Weng_2017_Circulation"></g:message><br>
-<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Weng_2017_Circulation.citation"></g:message><br><i><g:message code="informational.data.download.LTRfile"></g:message></i></div>
-</div></p>
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
@@ -46,13 +37,13 @@
 <tr><th colspan="4">Subjects in the 2018 AF HRC GWAS dataset</th></tr>
         <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 <tr><td>110</td><td>0</td><td>AFCT</td><td>European</td></tr>
-<tr><td>2,282</td><td>0</td><td>AFLMU</td><td>European</td></tr>
-<tr><td>785</td><td>2,403</td><td>AGES</td><td>European</td></tr>
-<tr><td>226</td><td>553</td><td>ANGES</td><td>European</td></tr>
-<tr><td>278</td><td>2,490</td><td>ARIC</td><td>African American</td></tr>
-<tr><td>1,420</td><td>7,460</td><td>ARIC</td><td>European</td></tr>
+<tr><td>2,282</td><td>0</td><td>Atrial Fibrillation Biobank LMU (AFLMU)</td><td>European</td></tr>
+<tr><td>785</td><td>2,403</td><td>Age, Gene/Environment Susceptibility Study (AGES) Reykjavik study</td><td>European</td></tr>
+<tr><td>226</td><td>553</td><td>Angiography and Genes Study (ANGES)</td><td>European</td></tr>
+<tr><td>278</td><td>2,490</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>African American</td></tr>
+<tr><td>1,420</td><td>7,460</td><td>Atherosclerosis Risk in Communities Study (ARIC)</td><td>European</td></tr>
 <tr><td>146</td><td>139</td><td>Australian Familial</td><td>European</td></tr>
-<tr><td>8,180</td><td>28,612</td><td>BBJ</td><td>East Asian</td></tr>
+<tr><td>8,180</td><td>28,612</td><td>Biobank Japan (BBJ)</td><td>East Asian</td></tr>
 <tr><td>1,520</td><td>1,520</td><td>BEAT-AF</td><td>European</td></tr>
 <tr><td>174</td><td>2,132</td><td>BioMe</td><td>African American</td></tr>
 <tr><td>291</td><td>860</td><td>BioMe</td><td>European</td></tr>
@@ -182,17 +173,7 @@
 <tr><td>65,446</td><td>522,744</td><td>All</td></tr>
 </table>
 
-<table class="table table-condensed table-responsive table-striped">
-<tr><th colspan="4">Subjects in the 2017 AFGen GWAS subset</th></tr>
-<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
 
-<tr><td>641</td><td>5,234</td><td>African American</td></tr>
-<tr><td>197</td><td>758</td><td>Brazilian</td></tr>
-<tr><td>837</td><td>3,293</td><td>East Asian</td></tr>
-<tr><td>15,979</td><td>102,776</td><td>European</td></tr>
-<tr><td>277</td><td>3,081</td><td>Hispanic</td></tr>
-<tr><td>17,931</td><td>115,142</td><td>All</td></tr>
-</table>
 
 
 
@@ -208,6 +189,45 @@
 <h4>Accessing 2018 AF HRC GWAS data</h4>
 
 <p><g:message code="informational.data.accessing.AFGen_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.AFGen_GWAS2"></g:message></p>
+
+<hr>
+<h3><g:message code="informational.GWAS_AFHRC_title"></g:message></h3>
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.overlaps.AFHRC"></g:message> <g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>, <g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message></p>
+
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Christophersen_2017_NatGenet.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Weng_2017_Circulation"></g:message><br>
+<g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Weng_2017_Circulation.citation"></g:message><br><i><g:message code="informational.data.download.LTRfile"></g:message></i></div>
+</div></p>
+
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
+    <ul>
+        <li><g:message code="informational.shared.traits.AF"></g:message></li>
+    </ul>
+
+   <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
+
+
+<table class="table table-condensed table-responsive table-striped">
+<tr><th colspan="4">Subjects in the 2017 AFGen GWAS subset</th></tr>
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
+
+<tr><td>641</td><td>5,234</td><td>African American</td></tr>
+<tr><td>197</td><td>758</td><td>Brazilian</td></tr>
+<tr><td>837</td><td>3,293</td><td>East Asian</td></tr>
+<tr><td>15,979</td><td>102,776</td><td>European</td></tr>
+<tr><td>277</td><td>3,081</td><td>Hispanic</td></tr>
+<tr><td>17,931</td><td>115,142</td><td>All</td></tr>
+</table>
 
 </div>
 
