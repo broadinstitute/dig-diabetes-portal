@@ -67,7 +67,7 @@
                 </div>
 
                 <div class="dropdown lz-list" style="float:left; margin-right: 25px;"><span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Datasets <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="selected-phenotype"></span> Datasets <b class="caret"></b></a>
                     <ul id="trackList-static" class="dropdown-menu" style="height: auto; max-height:500px; overflow:auto;">
                         <g:each in="${lzOptions?.findAll{it.dataType=='static'}}">
                             <li>

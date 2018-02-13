@@ -97,9 +97,9 @@
         <!-- DK test begin -->
         <div class="col-md-12">
 
-            <div class="lz-list col-md-3" style="padding: 10px 10px">
+            <div class="lz-list col-md-2" style="padding: 10px 10px">
                 <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
-                <a href="javascript:;" onclick="massageLZ(); showLZlist(event);"> Phenotypes <b class="caret"></b></a>
+                <a href="javascript:;" onclick="massageLZ(); showLZlist(event);"> Phenotype <b class="caret"></b></a>
 
                 <ul id="dk_lz_phenotype_list">
 
@@ -112,9 +112,9 @@
 
                 </ul>
             </div>
-            <div class="dropdown col-md-3 lz-list" style="border-right: solid 1px #ddd; padding: 10px 10px">
+            <div class="dropdown col-md-4 lz-list" style="border-right: solid 1px #ddd; padding: 10px 10px">
                 <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Datasets <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="selected-phenotype"></span> Dataset <b class="caret"></b></a>
                 <ul id="trackList-static" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto; ">
 
                    {{#static}}

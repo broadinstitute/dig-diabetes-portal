@@ -228,51 +228,60 @@
             }
 
             function massageLZ() {
-                var lzPhenotypes = [];
 
-                $("#dk_lz_phenotype_list").find("li").each(function() {
-                    var lzPhenotype = $(this).text();
-                    var lzExist = 0;
-                    $.each(lzPhenotypes, function(key, value) {
-                        (lzPhenotype == value)? lzExist = 1 : "";
+                if($("#dk_lz_phenotype_list").hasClass("list-allset")) {
+
+                } else {
+                    var lzPhenotypes = [];
+
+                    $("#dk_lz_phenotype_list").find("li").each(function() {
+                        var lzPhenotype = $(this).text();
+                        var lzExist = 0;
+                        $.each(lzPhenotypes, function(key, value) {
+                            (lzPhenotype == value)? lzExist = 1 : "";
+                        });
+
+                        (lzExist == 0)? lzPhenotypes.push(lzPhenotype) : "";
                     });
 
-                    (lzExist == 0)? lzPhenotypes.push(lzPhenotype) : "";
-                });
+                    lzPhenotypes.sort(function(s1, s2){
+                        var l=s1.toLowerCase(), m=s2.toLowerCase();
+                        return l===m?0:l>m?1:-1;
+                    });
 
-                lzPhenotypes.sort(function(s1, s2){
-                    var l=s1.toLowerCase(), m=s2.toLowerCase();
-                    return l===m?0:l>m?1:-1;
-                });
+                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px;'></div>";
 
-                var lzPhenotypeListContent = "<li><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px;'></li>";
+                    $.each(lzPhenotypes, function(key, value) {
+                        lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
+                    });
 
-                $.each(lzPhenotypes, function(key, value) {
-                    lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
-                });
+                    $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
 
-                $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
-
-                $(".lz-list").each(function() {
-                    ($(this).find("ul").find("li").length == 0)? $(this).css("display","none") : "";
-                })
-
-                $("#phenotype_search").on('input',function() {
-
-                    var searchWord = $("#phenotype_search").val().toLowerCase();
-
-                    $("#dk_lz_phenotype_list").find("a").each(function() {
-                        var phenotypeString = $(this).text().toLowerCase();
-
-
-                        (phenotypeString.indexOf(searchWord) >= 0)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                    $(".lz-list").each(function() {
+                        ($(this).find("ul").find("li").length == 0)? $(this).css("display","none") : "";
                     })
-                });
+
+                    $("#phenotype_search").on('input',function() {
+
+                        var searchWord = $("#phenotype_search").val().toLowerCase();
+
+                        $("#dk_lz_phenotype_list").find("a").each(function() {
+                            var phenotypeString = $(this).text().toLowerCase();
+
+
+                            (phenotypeString.indexOf(searchWord) >= 0)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                        })
+                    });
+
+                    $("#dk_lz_phenotype_list").addClass("list-allset")
+
+                }
 
             }
 
             function setLZDatasets(event) {
-                //alert();
+
+                $(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
 
                 var phenotypeName = $.trim($(event.target).text());
 
@@ -285,8 +294,7 @@
 
             function showLZlist(event) {
                 ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
-                $("#phenotype_search").val('');
-                $("#dk_lz_phenotype_list").find("li").css("display","block");
+
             }
 
 
