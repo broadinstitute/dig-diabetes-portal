@@ -927,7 +927,33 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-
+        var arbitraryCredibleSetColors = function (index){
+            var returnValue = "#111111";
+            switch (index){
+                case 0:
+                    returnValue = "#FF0000";
+                    break;
+                case 1:
+                    returnValue = "#00FF00";
+                    break;
+                case 2:
+                    returnValue = "#0000FF";
+                    break;
+                case 3:
+                    returnValue = "#00FFFF";
+                    break;
+                case 4:
+                    returnValue = "#FF00FF";
+                    break;
+                case 5:
+                    returnValue = "#FFFF00";
+                    break;
+                case 6:
+                    returnValue = "#000000";
+                    break;
+            }
+            return returnValue
+        };
 
 
 
@@ -991,77 +1017,62 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-            //  switch coloring options
-            panel_layout.dashboard.components.push(
-                {
-                    type: "display_options",
-                    position: "right",
-                    color: "blue",
-                    // Below: special config specific to this widget
-                    button_html: "Display options...",
-                    button_title: "Control how plot items are displayed",
+            if ((typeof pageVars.credSetToVariants !== 'undefined') &&
+                (pageVars.credSetToVariants.length>0)&&
+                (pageVars.credSetToVariants[0].credSetName!=='none')){
+                panel_layout.dashboard.components.push(
+                    {
+                        type: "display_options",
+                        position: "right",
+                        color: "blue",
+                        // Below: special config specific to this widget
+                        button_html: "Display options...",
+                        button_title: "Control how plot items are displayed",
 
-                    layer_name: "associationpvalues",
-                    default_config_display_name: "Linkage Disequilibrium (default)", // display name for the default plot color option (allow user to revert to plot defaults)
+                        layer_name: "associationpvalues",
+                        default_config_display_name: "annotation (default)", // display name for the default plot color option (allow user to revert to plot defaults)
 
-                    options: [
-                        {
-                            // First dropdown menu item
-                            display_name: "95% credible set (boolean)",  // Human readable representation of field name
-                            display: {  // Specify layout directives that control display of the plot for this option
-                                point_shape: "circle",
-                                point_size: 40,
-                                color: {
-                                    field: "assoc:isCredible",
-                                    scale_function: "if",
-                                    parameters: {
-                                        field_value: true,
-                                        then: "#00CC00",
-                                        else: "#CCCCCC"
-                                    }
-                                },
-                                legend: [ // Tells the legend how to represent this display option
-                                    { shape: "circle", color: "#00CC00", size: 40, label: "In credible set", class: "lz-data_layer-scatter" },
-                                    { shape: "circle", color: "#CCCCCC", size: 40, label: "Not in credible set", class: "lz-data_layer-scatter" }
-                                ]
-                            }
-                        },
-                        {
-                            // Second option. The same plot- or even the same field- can be colored in more than one way.
-                            display_name: "95% credible set (gradient by contribution)",
-                            display: {
-                                point_shape: "circle",
-                                point_size: 40,
-                                color: [
-                                    {
-                                        field: "assoc:credibleSetContribution",
-                                        scale_function: "if",
+                        options: [
+                            {
+                                // Second option. The same plot- or even the same field- can be colored in more than one way.
+                                display_name: "credible set",
+                                display: {
+                                    point_shape: "circle",
+                                    point_size: 40,
+                                    color: {
+                                        field: "assoc:credSetId",
+                                        scale_function: "categorical_bin",
                                         parameters: {
-                                            field_value: 0,
-                                            then: "#777777"
+                                            categories: [0, 1,2,3,4,5,6],
+                                            values: [arbitraryCredibleSetColors (0),
+                                                arbitraryCredibleSetColors (1),
+                                                arbitraryCredibleSetColors (2),
+                                                arbitraryCredibleSetColors (3),
+                                                arbitraryCredibleSetColors (4),
+                                                arbitraryCredibleSetColors (5),
+                                                "#000000"],
+                                            null_value: "#B8B8B8"
                                         }
                                     },
-                                    {
-                                        scale_function: "interpolate",
-                                        field: "assoc:credibleSetContribution",
-                                        parameters: {
-                                            breaks: [0, 1],
-                                            values: ["#fafe87", "#9c0000"]
-                                        }
-                                    }
-                                ],
-                                legend: [
-                                    { shape: "circle", color: "#777777", size: 40, label: "No contribution", class: "lz-data_layer-scatter" },
-                                    { shape: "circle", color: "#fafe87", size: 40, label: "Some contribution", class: "lz-data_layer-scatter" },
-                                    { shape: "circle", color: "#9c0000", size: 40, label: "Most contribution", class: "lz-data_layer-scatter" }
-                                ]
+                                    legend: [
+                                    ]
+                                }
                             }
-                        }
-                    ]
-                }
-            );
+                        ]
+                    }
+                );
+                var emptyLegendArray = _.last(panel_layout.dashboard.components).options[0].display.legend;
+                _.forEach(pageVars.credSetToVariants, function (credSetObject, count){
+                    var oneLegend = { shape: "circle",
+                        color: arbitraryCredibleSetColors (count),
+                        size: 40,
+                        label: credSetObject.credSetName,
+                        class: "lz-data_layer-scatter" };
+                    emptyLegendArray.push(oneLegend);
+                });
+            }
 
-
+            // add legend elements to refer to individual credible sets
 
 
 
@@ -1456,7 +1467,6 @@ var mpgSoftware = mpgSoftware || {};
                 //
                 //     }
                 //
-                //    alert('foo2');
                     var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
                     var pValueKeyName;
                      if ((records) &&
