@@ -150,6 +150,7 @@
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.AFHRC_GWAS1"></g:message></p>
+<p><i><g:message code="informational.data.exptsumm.AFHRC_GWAS2"></g:message></i></p>
 
 
 <h4>Accessing 2018 AF HRC GWAS data</h4>
