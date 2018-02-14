@@ -1129,12 +1129,12 @@ var mpgSoftware = mpgSoftware || {};
                                 //     }
                                 // },
                     "#c8c8c8"];
-                    if (lzParameters.domId1!=='#lz-47') { // KLUDGE ALERT!   we have to give a different legend in the case of the variant info page.
-                        panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
-                    }
+                    // if (lzParameters.domId1!=='#lz-47') { // KLUDGE ALERT!   we have to give a different legend in the case of the variant info page.
+                    //     panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
+                    //         { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
+                    //         { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
+                    //         { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
+                    // }
                     break;
                 case 2:
                     panel_layout.data_layers[2].color = [
@@ -1156,10 +1156,14 @@ var mpgSoftware = mpgSoftware || {};
                         },
                         "#B8B8B8"
                     ];
-                    panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
-                        { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
-                        { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
-                        { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
+                    panel_layout.data_layers[2].legend = [
+                        // { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
+                        // { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
+                        // { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
+                        // { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" },
+                        { shape: "circle", color: "#B8B8B8", size: 40, label: "unselected", class: "lz-data_layer-scatter" },
+                        { shape: "diamond", color: "#9632b8", size: 40, label: "selected", class: "lz-data_layer-scatter" }
+                    ];
                     break;
                 default:
                     panel_layout.data_layers[2].point_shape = [
