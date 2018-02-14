@@ -67,6 +67,7 @@
                 a.front-search-example {
                     color:#cce6c3;
                 }
+
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 a {color:#de8800;}
@@ -133,6 +134,8 @@
                 }
 
             </g:else>
+
+
         </style>
 
         <script>
@@ -239,6 +242,77 @@
                 }
             }
 
+            /* LocusZoom UI */
+            function massageLZ() {
+
+                if($("#dk_lz_phenotype_list").hasClass("list-allset")) {
+
+                } else {
+                    var lzPhenotypes = [];
+
+                    $("#dk_lz_phenotype_list").find("li").each(function() {
+                        var lzPhenotype = $(this).text();
+                        var lzExist = 0;
+                        $.each(lzPhenotypes, function(key, value) {
+                            (lzPhenotype == value)? lzExist = 1 : "";
+                        });
+
+                        (lzExist == 0)? lzPhenotypes.push(lzPhenotype) : "";
+                    });
+
+                    lzPhenotypes.sort(function(s1, s2){
+                        var l=s1.toLowerCase(), m=s2.toLowerCase();
+                        return l===m?0:l>m?1:-1;
+                    });
+
+                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px;'></div>";
+
+                    $.each(lzPhenotypes, function(key, value) {
+                        lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
+                    });
+
+                    $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
+
+                    $(".lz-list").each(function() {
+                        ($(this).find("ul").find("li").length == 0)? $(this).css("display","none") : "";
+                    })
+
+                    $("#phenotype_search").on('input',function() {
+
+                        var searchWord = $("#phenotype_search").val().toLowerCase();
+
+                        $("#dk_lz_phenotype_list").find("a").each(function() {
+                            var phenotypeString = $(this).text().toLowerCase();
+
+
+                            (phenotypeString.indexOf(searchWord) >= 0)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                        })
+                    });
+
+                    $("#dk_lz_phenotype_list").addClass("list-allset")
+
+                }
+
+            }
+
+            function setLZDatasets(event) {
+
+                $(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
+
+                var phenotypeName = $.trim($(event.target).text());
+
+                $("span.dk-lz-dataset").each(function() {
+                    var trimmedPName = $.trim($(this).text());
+
+                    (trimmedPName == phenotypeName)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                })
+            }
+
+            function showLZlist(event) {
+                ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
+
+            }
+
 
             /* GAIT TAB UI */
 
@@ -267,11 +341,6 @@
                     $("#strata1_stratsTabs").css("background-color","#bfe3ef");
 
                 }
-
-
-
-                /*
-                */
 
             }
 
@@ -346,6 +415,7 @@
             /* copy url of varian search result page to clipboard*/
 
             $( window ).load( function() {
+                /* copy url of varian search result page to clipboard*/
                 document.addEventListener('copy', function(e){
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
@@ -356,6 +426,11 @@
                 $("#copyURL").click(function() {
                     document.execCommand('copy');
                 })
+                /* copy URL function end */
+
+                /* massage LocusZoom UI */
+                massageLZ();
+
             });
 
 

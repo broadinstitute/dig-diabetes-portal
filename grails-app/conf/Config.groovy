@@ -612,7 +612,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["LPA"],
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          "images/mi/mi_banner_2018.png",
+                                          "images/mi/mi_banner_2018_2.png",
                                   "",
                                           "images/mi/mi_header_logo_2017.svg",
                                           "images/mi/menu_band_2017_mi.png",

@@ -92,8 +92,122 @@
 
 
 <script id="locusZoomTemplate"  type="x-tmpl-mustache">
-        <div style="margin-top: 20px">
+<div class="row" style="border-bottom:solid 1px #ddd; padding-left: 15px;">
+<strong>Add new track</strong>
+        <!-- DK test begin -->
+        <div class="col-md-12">
 
+            <div class="lz-list col-md-2" style="padding: 10px 10px">
+                <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
+                <a href="javascript:;" onclick="massageLZ(); showLZlist(event);"> Phenotype <b class="caret"></b></a>
+
+                <ul id="dk_lz_phenotype_list">
+
+                   {{#dynamic}}
+                      <li>{{description}}</li>
+                   {{/dynamic}}
+                   {{#static}}
+                      <li>{{description}}</li>
+                   {{/static}}
+
+                </ul>
+            </div>
+            <div class="dropdown col-md-4 lz-list" style="border-right: solid 1px #ddd; padding: 10px 10px">
+                <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">2</span>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"> <span class="selected-phenotype"></span> Dataset <b class="caret"></b></a>
+                <ul id="trackList-static" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto; ">
+
+                   {{#static}}
+                      <li>
+                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                                    phenotype: '{{key}}',
+                                                    dataSet: '{{dataSet}}',
+                                                    datasetReadableName: '{{dataSetReadable}}',
+                                                    propertyName: '{{propertyName}}',
+                                                    description: '{{description}}',
+                                                    assayIdList: '{{assayIdList}}'
+                                            },
+                                            '{{dataSet}}',
+                                            '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                            '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                            '{{dataType}}',
+                                            ('#'+'{{lzDomSpec}}'),
+                                            {colorBy:1,positionBy:1})">
+                                            <span class="dk-lz-dataset" style="display:none">{{description}}</span>{{dataSetReadable}} (static)
+                            </a>
+                      </li>
+                   {{/static}}
+                   {{#dynamic}}
+                      <li>
+                            <a onclick="mpgSoftware.locusZoom.addLZPhenotype({
+                                                        phenotype: '{{key}}',
+                                                        dataSet: '{{dataSet}}',
+                                                        datasetReadableName: '{{dataSetReadable}}',
+                                                        propertyName: '{{propertyName}}',
+                                                        description: '{{description}}',
+                                                        assayIdList: '{{assayIdList}}'
+                                                },
+                                                '{{dataSet}}',
+                                                '${createLink(controller:"gene", action:"getLocusZoom")}',
+                                                '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                                                '{{dataType}}',
+                                                ('#'+'{{lzDomSpec}}'),
+                                                {colorBy:1,positionBy:1})">
+                                                <span class="dk-lz-dataset" style="display:none">{{description}}</span>{{dataSetReadable}} (dynamic)
+                            </a>
+                   </li>
+                {{/dynamic}}
+
+                </ul>
+            </div>
+            {{#tissueDataExists}}
+            <div class="dropdown col-md-3 lz-list" id="tracks-menu-dropdown-functional" style="padding: 10px 10px">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Tissues <b class="caret"></b></a>
+                           <ul id="trackList-tissue" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+                               {{/tissueDataExists}}
+                               {{#tissues}}
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: '{{name}}',
+                                                        tissueDescriptiveName: '{{description}}',
+                                                        retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                                                        assayIdList: '{{assayIdList}}'
+                                                    },
+                                                ('#'+'{{lzDomSpec}}'),
+                                                {colorBy:1,positionBy:1})">{{description}}
+                                        </a>
+                                    </li>
+                               {{/tissues}}
+                               {{#tissueDataExists}}
+                           </ul>
+            </div>
+            {{/tissueDataExists}}
+            {{#atacDataExists}}
+            <div class="dropdown col-md-3 lz-list" id="tracks-menu-dropdown-functional" style="padding: 10px 10px">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Tissues<b class="caret"></b></a>
+                           <ul id="trackList-tissue" class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+                               {{/atacDataExists}}
+                               {{#atacData}}
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: '{{name}}',
+                                                        tissueDescriptiveName: '{{description}}',
+                                                        retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                                                        assayIdList: '{{assayIdList}}'
+                                                    },
+                                                ('#'+'{{lzDomSpec}}'),
+                                                {colorBy:1,positionBy:1})">{{description}}
+                                        </a>
+                                    </li>
+                               {{/atacData}}
+                               {{#atacDataExists}}
+                           </ul>
+            </div>
+            {{/atacDataExists}}
+        </div>
+</div>
+            <!-- DK test end -->
+<!-- original
             <ul class="nav navbar-nav navbar-left" style="display: flex;">
                 {{#dynamicDataExists}}
                 <li class="dropdown" id="tracks-menu-dropdown-dynamic">
@@ -197,9 +311,9 @@
                        </ul>
                 </li>
                 {{/atacDataExists}}
-
             </ul>
-
+-->
+        <div style="margin-top: 20px">
             <div class="accordion-inner">
                 <div id="{{lzDomSpec}}" class="lz-container-responsive"></div>
             </div>

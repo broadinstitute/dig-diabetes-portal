@@ -966,3 +966,36 @@ a.find-out-more-opener span {
 
 #trackList-static, #trackList-dynamic { height: 350px; overflow: auto;}
 
+.lz-list > ul {
+	margin-top: 3px;
+	display: none;
+	position: absolute;
+	height: auto;
+	max-height: 500px;
+	overflow: auto;
+	list-style: none;
+	background-color: #fff;
+	z-index: 100;
+	padding: 20px 0px;
+	border: solid 1px #ddd;
+	border-radius: 5px;
+	box-shadow: 0px 8px 5px #ccc;
+}
+
+.lz-list > ul > li > a{
+	display: block;
+	padding: 3px 20px;
+	clear: both;
+	font-weight: 400;
+	line-height: 1.42857143;
+	color: #333;
+	white-space: nowrap;
+}
+
+.lz-list > ul > li > a:hover {
+	background-color: #eee;
+}
+
+.lz-list.open > ul {
+	display: block;
+}

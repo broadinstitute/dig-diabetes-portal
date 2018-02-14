@@ -1106,35 +1106,35 @@ class WidgetService {
 
             // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
             if (metaDataService.portalTypeFromSession=='t2d') {
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 diabetes", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
                         propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: true, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "BMI", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL cholesterol", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL cholesterol", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting insulin", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting glucose", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip circumference", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist circumference", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist hip ratio", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",
+                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total cholesterol", dataSet:"hail",
                         dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
                         defaultSelected: false, suitableForDefaultDisplay: true));
                 beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
