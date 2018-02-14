@@ -695,7 +695,8 @@ class WidgetService {
         }
 
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "verbose");
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition,
+                covariateList,maximumNumberOfPointsToRetrieve, "verbose", metaDataService);
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -776,7 +777,8 @@ class WidgetService {
         }
 
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "flat");
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,
+                maximumNumberOfPointsToRetrieve, "flat", metaDataService);
 
 
             //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
@@ -901,7 +903,8 @@ class WidgetService {
 
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
 
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,2000, "verbose");
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                2000, "verbose", metaDataService);
 
         JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
 
@@ -918,7 +921,8 @@ class WidgetService {
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE")
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,10, "verbose");
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                10, "verbose", , metaDataService);
         JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
         jsonResultString["dataset"] = dataSetName
         jsonResultString["phenotype"] = phenotype
@@ -936,12 +940,14 @@ class WidgetService {
         JSONObject jsonResultString
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
-             jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,1, "verbose");
+             jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                     1, "verbose", metaDataService);
              jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             if ((jsonResultString) &&
                     (!jsonResultString.is_error) &&
                     (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
-                jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,300, "verbose");
+                jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                        300, "verbose", metaDataService);
                 jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
                 jsonResultString["dataset"] = dataset
                 jsonResultString["phenotype"] = phenotype

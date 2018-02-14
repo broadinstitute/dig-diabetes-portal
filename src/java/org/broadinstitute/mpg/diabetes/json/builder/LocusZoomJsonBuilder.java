@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg.diabetes.json.builder;
 
+import org.broadinstitute.mpg.diabetes.MetaDataService;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.*;
@@ -13,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilterBean;
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,7 @@ public class LocusZoomJsonBuilder {
     private String rootDataSetString = "ExSeq_17k_mdv2";
     private String phenotypeString;
     private String propertyName = "P_VALUE";
+
 
     /**
      * default constructor
@@ -56,14 +59,14 @@ public class LocusZoomJsonBuilder {
      * @throws PortalException
      */
     public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
-                                          int maximumNumberOfPointsToRetrieve,String format) throws PortalException {
+                                          int maximumNumberOfPointsToRetrieve,String format,MetaDataService metadataService) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         String jsonQueryString;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format, metadataService);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
@@ -83,7 +86,7 @@ public class LocusZoomJsonBuilder {
      * @throws PortalException
      */
     public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
-                                              int maximumNumberOfPointsToRetrieve,String format) throws PortalException {
+                                              int maximumNumberOfPointsToRetrieve,String format,MetaDataService metaDataService) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
@@ -123,11 +126,18 @@ public class LocusZoomJsonBuilder {
 
         query.setResultFormat("\""+format+"\"");
 
+
+        List<org.broadinstitute.mpg.diabetes.metadata.Property> propertiesList = metaDataService.getCommonProperties();
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME));
+        for (Property property : propertiesList ){
+            if (property.hasMeaning("MOTIF_NAME")){
+                query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME));
+            }
+        }
+
         query.addQueryProperty(pValueProperty);
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
         query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
