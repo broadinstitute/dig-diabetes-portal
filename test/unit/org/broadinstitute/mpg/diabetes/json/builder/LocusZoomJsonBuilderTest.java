@@ -19,7 +19,7 @@ public class LocusZoomJsonBuilderTest extends TestCase {
     String metadataJsonString = null;
     String locusZoomJsonString = null;
     JsonParser jsonParser;
-    MetaDataService metaDataService = new MetaDataService()
+    MetaDataService metaDataService = new MetaDataService();
 
     @Before
     public void setUp() throws Exception {
