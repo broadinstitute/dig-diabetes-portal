@@ -57,6 +57,7 @@ class RestServerService {
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
     private String GENE_METADATA_URL = "getGeneMetadata"
+    private String HAIL_METADATA_URL = "getHailMetadata"
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
@@ -1563,6 +1564,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public String getGeneMetadata() {
         String retdat
         retdat = getRestCallBase(GENE_METADATA_URL, currentRestServer())
+        return retdat
+    }
+
+    public String getHailMetadata() {
+        String retdat
+        retdat = getRestCallBase(HAIL_METADATA_URL, currentRestServer())
         return retdat
     }
 

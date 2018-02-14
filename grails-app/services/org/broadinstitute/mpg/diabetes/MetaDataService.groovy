@@ -29,15 +29,18 @@ class MetaDataService {
     public static Integer METADATA_VARIANT = 1
     public static Integer METADATA_SAMPLE = 2
     public static Integer METADATA_GENE = 3
+    public static Integer METADATA_HAIL = 3
 
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     JsonParser jsonSampleParser = JsonParser.getSampleService();
     JsonParser jsonGeneParser = JsonParser.getGeneService()
+    JsonParser jsonHailParser = JsonParser.getHailService()
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     Integer forceProcessedMetadataOverride = -1
     Integer forceProcessedSampleMetadataOverride = -1
     Integer forceProcessedGeneMetadataOverride = -1
+    Integer forceProcessedHailMetadataOverride = -1
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
@@ -243,6 +246,22 @@ class MetaDataService {
     }
 
 
+    private JsonParser getJsonHailParser() {
+        // reload the metadata if scheduled
+        if (this.forceProcessedHailMetadataOverride != 0) {
+
+            String jsonString = this.restServerService.getHailMetadata();
+            this.jsonHailParser.forceMetadataReload(jsonString);
+
+        }
+        // reset reload indicator
+        this.forceProcessedHailMetadataOverride = 0;
+
+        // return
+        return this.jsonGeneParser;
+    }
+
+
     private JsonParser retrieveJsonParser(int metadataTree){
         JsonParser returnValue
         switch (metadataTree) {
@@ -254,6 +273,9 @@ class MetaDataService {
                 break;
             case METADATA_GENE:
                 returnValue = this.getJsonGeneParser()
+                break;
+            case METADATA_HAIL:
+                returnValue = this.getJsonHailParser()
                 break;
             case METADATA_NONE:
             default:

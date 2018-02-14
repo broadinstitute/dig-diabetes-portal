@@ -29,6 +29,8 @@ public class JsonParser {
     // static singleton
     private static JsonParser service;
     private static JsonParser sampleService;
+    private static JsonParser geneService;
+    private static JsonParser hailService;
 
     // private cached results
     private MetaDataRoot metaDataRoot = null;
@@ -58,17 +60,22 @@ public class JsonParser {
         if (sampleService == null) {
             sampleService = new JsonParser();
         }
-
         return sampleService;
     }
 
 
     public static JsonParser getGeneService() {
-        if (sampleService == null) {
-            sampleService = new JsonParser();
+        if (geneService == null) {
+            geneService = new JsonParser();
         }
+        return geneService;
+    }
 
-        return sampleService;
+    public static JsonParser getHailService() {
+        if (hailService == null) {
+            hailService = new JsonParser();
+        }
+        return hailService;
     }
 
 

@@ -1080,19 +1080,6 @@ class WidgetService {
             HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
             boolean firstTime = true
 
-        // Previously I was adding credible set datasets as an option, but I don't think they belong
-//            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
-//
-//            for (SampleGroup sampleGroupWithCredibleSets in sampleGroupsWithCredibleSets){
-//                beanList.add(new PhenotypeBean(key:sampleGroupWithCredibleSets.phenotypes?.first()?.name, name: "T2D_crd",
-//                        description: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId, default: sampleGroupWithCredibleSets.systemId),
-//                        dataSet:sampleGroupWithCredibleSets.systemId,
-//                        dataSetReadable: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId,default: sampleGroupWithCredibleSets.systemId),
-//                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
-//                        suitableForDefaultDisplay: false));
-//            }
-
-
 
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
