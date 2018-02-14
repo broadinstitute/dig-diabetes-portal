@@ -279,14 +279,33 @@
 
                     $("#phenotype_search").on('input',function() {
 
-                        var searchWord = $("#phenotype_search").val().toLowerCase();
+                        $("#dk_lz_phenotype_list").find("li").removeClass("hidden-phenotype");
 
-                        $("#dk_lz_phenotype_list").find("a").each(function() {
-                            var phenotypeString = $(this).text().toLowerCase();
+                        var searchWords = $("#phenotype_search").val().toLowerCase().split(",");
+
+                        $.each(searchWords, function(index,value){
 
 
-                            (phenotypeString.indexOf(searchWord) >= 0)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
-                        })
+                            $("#dk_lz_phenotype_list").find("a").each(function() {
+
+                                if($(this).closest("li").hasClass("hidden-phenotype")){
+
+                                } else {
+
+                                    var phenotypeString = $(this).text().toLowerCase();
+                                    var searchWord = value.trim();
+
+                                    if(phenotypeString.indexOf(searchWord) >= 0) {
+                                        $(this).closest("li").removeClass("hidden-phenotype");
+                                    } else {
+                                        $(this).closest("li").addClass("hidden-phenotype");
+                                    }
+
+                                }
+                            })
+                        });
+
+
                     });
 
                     $("#dk_lz_phenotype_list").addClass("list-allset")

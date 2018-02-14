@@ -966,6 +966,10 @@ a.find-out-more-opener span {
 
 #trackList-static, #trackList-dynamic { height: 350px; overflow: auto;}
 
+.hidden-phenotype {
+	display:none;
+}
+
 .lz-list > ul {
 	margin-top: 3px;
 	display: none;
