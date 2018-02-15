@@ -1563,7 +1563,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public String getGeneMetadata() {
         String retdat
-        retdat = getRestCallBase(GENE_METADATA_URL, currentRestServer())
+        retdat = getRestCallBase("${GENE_METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer())
         return retdat
     }
 

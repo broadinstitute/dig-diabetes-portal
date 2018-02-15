@@ -29,7 +29,7 @@ class MetaDataService {
     public static Integer METADATA_VARIANT = 1
     public static Integer METADATA_SAMPLE = 2
     public static Integer METADATA_GENE = 3
-    public static Integer METADATA_HAIL = 3
+    public static Integer METADATA_HAIL = 4
 
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
