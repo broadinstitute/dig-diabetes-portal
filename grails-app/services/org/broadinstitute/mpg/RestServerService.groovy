@@ -706,6 +706,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject postGetDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_URL);
     }
+    public JSONObject postGetHailDataCall(String jsonString) {
+        return this.postRestCall(jsonString, this.GET_HAIL_DATA_URL);
+    }
     public JSONObject postGetAggDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_AGGREGATION_URL);
     }
@@ -1357,7 +1360,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     private JSONObject variantDiseaseRisk( String variantId,String sampleGroup ) {
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(DEFAULTPHENOTYPE, TECHNOLOGY_EXOME_SEQ, metaDataService.getDataVersion(), "Mixed")
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(DEFAULTPHENOTYPE, TECHNOLOGY_EXOME_SEQ, metaDataService.getDataVersion(), "Mixed",MetaDataService.METADATA_VARIANT)
         String sampleGroupName = sampleGroupList[0]?.systemId
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${HETEROZYGOTE_AFFECTED}")
@@ -2049,11 +2052,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
         for(LinkedHashMap oneReference in propsToUse){
             addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, oneReference.prop)
-            Property betaProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,"BETA")
+            Property betaProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,
+                                                                                            "BETA",MetaDataService.METADATA_VARIANT)
             if (betaProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, betaProperty.name)
             }
-            Property orProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,"ODDS_RATIO")
+            Property orProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,
+                                                                                        "ODDS_RATIO",MetaDataService.METADATA_VARIANT)
             if (orProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, orProperty.name)
             }

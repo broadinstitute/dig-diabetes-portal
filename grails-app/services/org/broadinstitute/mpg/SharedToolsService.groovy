@@ -411,7 +411,7 @@ class SharedToolsService {
         // sort common
         if ((unsortedTree?.cproperty) && (unsortedTree?.cproperty?.size() > 0)) {
             LinkedHashMap temporaryHolder = [:]
-            List<Property> commonProperties = metaDataService.getCommonProperties()
+            List<Property> commonProperties = metaDataService.getCommonProperties(MetaDataService.METADATA_VARIANT)
             for (String property in unsortedTree.cproperty) {
                 if (commonProperties.collect { return it.name }?.contains(property)) {
                     temporaryHolder[property] = commonProperties.find { it.name == property }.sortOrder

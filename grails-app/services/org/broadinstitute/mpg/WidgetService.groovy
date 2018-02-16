@@ -461,8 +461,8 @@ class WidgetService {
 
 
 
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
+    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype, metadataPreference){
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '',MetaDataService.METADATA_VARIANT)
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         // KLUDGE alert
@@ -470,27 +470,34 @@ class WidgetService {
         sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')}
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
-            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
+            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
+                    metadataPreference)
             holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
         }
         return holdingStructure
     }
 
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
-        if (sampleGroup.size()==0) {
-            sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
+    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,
+                                                                                                          String phenotype,int metadataPreference){
+        if (phenotype != "none"){ // none is a keyword indicating that there is no phenotype matching these criteria
+            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS',
+                    metaDataService.getDataVersion(), '',metadataPreference)
+            if (sampleGroup.size()==0) {
+                sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '',metadataPreference)
+            }
+
+            List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+            // KLUDGE alert
+            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+            if (sortedSampleGroup.size()>0){
+                SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+                Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
+                        metadataPreference)
+                holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+            }
         }
 
-        List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
-        // KLUDGE alert
-        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
-        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
-        if (sortedSampleGroup.size()>0){
-            SampleGroup chosenSampleGroup = sortedSampleGroup.first()
-            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
-            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
-        }
         return holdingStructure
     }
 
@@ -527,7 +534,7 @@ class WidgetService {
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
         if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name, metadataPreference)
             }
         } else {
             for (String phenotypeGroupName in portalVersionBean.getOrderedPhenotypeGroupNames()){
@@ -539,7 +546,7 @@ class WidgetService {
                         }
                     }
                     if (!skipIt){
-                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
+                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name,metadataPreference)
                     }
                 }
             }
@@ -552,7 +559,7 @@ class WidgetService {
                         }
                     }
                     if (!skipIt){
-                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
+                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name,metadataPreference)
                     }
                 }
             }
@@ -702,9 +709,14 @@ class WidgetService {
             endPosition = (midpoint+(MAXIMUM_RANGE_FOR_HAIL/2))-1
         }
 
+        int metadataTree = MetaDataService.METADATA_VARIANT
+        if (attemptDynamicCall){
+            metadataTree = MetaDataService.METADATA_HAIL
+        }
+
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition,
-                covariateList,maximumNumberOfPointsToRetrieve, "verbose", metaDataService);
+                covariateList,maximumNumberOfPointsToRetrieve, "verbose", metaDataService,metadataTree);
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -757,7 +769,8 @@ class WidgetService {
                                             String propertyName,
                                             String dataType,
                                             List<String> covariateVariants,
-                                            int numberOfRequestedResults ) throws PortalException {
+                                            int numberOfRequestedResults,
+                                            String datatypeDesignation) throws PortalException {
         // local variables
         String jsonResultString, jsonGetDataString;
         LocusZoomJsonBuilder locusZoomJsonBuilder = null;
@@ -784,22 +797,36 @@ class WidgetService {
             maximumNumberOfPointsToRetrieve = 500
         }
 
+        int metadataTree = MetaDataService.METADATA_VARIANT
+        if (datatypeDesignation == "dynamic") {
+            metadataTree = MetaDataService.METADATA_HAIL
+        }
+
+
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,
-                maximumNumberOfPointsToRetrieve, "flat", metaDataService);
+                maximumNumberOfPointsToRetrieve, "flat", metaDataService, metadataTree);
 
 
             //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
         log.info("Got LZ static request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
-        jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        if (datatypeDesignation == "static") {
+            jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        } else if (datatypeDesignation == "dynamic") {
+            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString);
+        }
+
         JSONObject jsonObject
         if (jsonResultString != null){
             jsonObject =  new JsonSlurper().parseText(jsonResultString)
             jsonObject.lastPage = null
             JSONObject dataJSONObject = jsonObject["data"] as JSONObject
+            JSONObject tempDataJSONObject = new JSONObject()
             List<String> dataFields = dataJSONObject.names() as List
             int numberOfElements = 0
             boolean choseOurPValue = false
+            boolean foundVarId = false
+            boolean foundMDS = false
             for (String dataField in dataFields){
                 if (dataField == "metadata_rootPOS" ){
                     dataJSONObject.position = dataJSONObject[dataField] as JSONArray
@@ -812,32 +839,61 @@ class WidgetService {
                     dataJSONObject.id = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.id = dataJSONObject.id.collect{String it->List f=it.split("_");if (f.size()==4){return "${f[0]}:${f[1]}_${f[2]}/${f[3]}".toString()}else {return it}} as JSONArray
                     dataJSONObject.remove(dataField);
+                    foundVarId = true
                 } else if (dataField == "metadata_rootReference_Allele" ){
                     dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootConsequence" ){
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootEffect_Allele" ){
+                   // dataJSONObject.effAllele = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
                     dataJSONObject.scoreTestStat = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
+                    foundMDS = true
                 } else if (dataField.contains("CREDIBLE_SET_ID") ){
                     dataJSONObject.remove(dataField);
                 } else if (dataField.contains(propertyName)) { // Will capture either posterior probabilities or else P values
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                     choseOurPValue = true
-                }  else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
+                }
+                else if (dataField == "metadata_rootREF_ALLELE") { // Will capture either posterior probabilities or else P values
+                    dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField)
+                    //tempJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                } else if (dataField == "metadata_rootALT_ALLELE") { // Will capture either posterior probabilities or else P values
+                    tempDataJSONObject.effectAllele = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField)
+                    //tempJSONObject.effectAllele = dataJSONObject[dataField] as JSONArray
+                }else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else {
                     dataJSONObject.remove(dataField);
                 }
             }
+
             JSONArray emptyArrays = new JSONArray()
             for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
-//            dataJSONObject.scoreTestStat = emptyArrays
+
+            // Hail can't provide all of the fields that LZ expects.  Supplement these as needed
+            if ((foundVarId==false)&&
+                    (dataJSONObject.refAllele)&&
+                    (tempDataJSONObject.effectAllele)&&
+                    (dataJSONObject.chr)&&
+                    (dataJSONObject.position)){
+                List<String> varIdArray = []
+                 for( int  i = 0 ; i < dataJSONObject.refAllele.size() ; i++ ){
+                     varIdArray << "${dataJSONObject.chr[i]}:${dataJSONObject.position[i]}_${dataJSONObject.refAllele[i]}/${tempDataJSONObject.effectAllele[i]}"
+                 }
+                dataJSONObject.id = varIdArray as JSONArray
+            }
+            if (!foundMDS){
+                dataJSONObject.scoreTestStat = emptyArrays
+            }
+
             dataJSONObject.analysis = emptyArrays
             dataJSONObject.refAlleleFreq = emptyArrays
 
@@ -906,31 +962,32 @@ class WidgetService {
 
 
 
-    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
-                                                   String dataset, String phenotype, String propertyName) {
-
-        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
-
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                2000, "verbose", metaDataService);
-
-        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-
-
-
-        // return
-        return jsonResultString;
-    }
+//    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
+//                                                   String dataset, String phenotype, String propertyName) {
+//
+//        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
+//
+//        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+//                2000, "verbose", metaDataService);
+//
+//        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+//
+//
+//
+//        // return
+//        return jsonResultString;
+//    }
 
 
 
     private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
                                              String phenotype ){
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
-        Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE")
+        Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
+                MetaDataService.METADATA_VARIANT)
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
         String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                10, "verbose", , metaDataService);
+                10, "verbose", , metaDataService, MetaDataService.METADATA_VARIANT);
         JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
         jsonResultString["dataset"] = dataSetName
         jsonResultString["phenotype"] = phenotype
@@ -949,13 +1006,13 @@ class WidgetService {
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
              jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                     1, "verbose", metaDataService);
+                     1, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
              jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             if ((jsonResultString) &&
                     (!jsonResultString.is_error) &&
                     (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
                 jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                        300, "verbose", metaDataService);
+                        300, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
                 jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
                 jsonResultString["dataset"] = dataset
                 jsonResultString["phenotype"] = phenotype
@@ -1009,8 +1066,10 @@ class WidgetService {
         // get the query result and translate to a json string
         try {
             // get the variant list
-            if (dataType=='static') {
-                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants, numberOfRequestedResults);
+            if (true) {
+                //if (dataType=='static') {
+                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName,
+                        dataType, covariateVariants, numberOfRequestedResults,dataType);
             } else { // dynamic data are still processed the old way, whereas static data will use the new flat format result
                 variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 
@@ -1108,7 +1167,7 @@ class WidgetService {
 
         firstTime = true
         for (String phenotype in hailPhenotypeDataSetCombos.keySet()){
-            HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
+            HashMap<String,String> phenotypeDataSetCombo = hailPhenotypeDataSetCombos[phenotype]
             beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
                     dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
                     propertyName:phenotypeDataSetCombo.property,dataType:"dynamic",

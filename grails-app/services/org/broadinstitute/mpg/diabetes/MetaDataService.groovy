@@ -258,7 +258,7 @@ class MetaDataService {
         this.forceProcessedHailMetadataOverride = 0;
 
         // return
-        return this.jsonGeneParser;
+        return this.jsonHailParser;
     }
 
 
@@ -327,10 +327,10 @@ class MetaDataService {
 
 
 
-    public List <Property> getCommonProperties() {
+    public List <Property> getCommonProperties( int metadataTree ) {
         List<Property> propertyList;
 
-        propertyList = this.getJsonParser().getSearchableCommonProperties();
+        propertyList = retrieveJsonParser(metadataTree).getSearchableCommonProperties();
 
         return propertyList.sort{ a, b -> a.sortOrder <=> b.sortOrder };
     }
@@ -526,7 +526,7 @@ class MetaDataService {
 
 
 
-    public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning) {
+    public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning, int metadataTree) {
         // local variables
         List<SampleGroup> groupList;
         List<SampleGroup> filteredSampleGroupList = [];
@@ -535,7 +535,7 @@ class MetaDataService {
 
         // get the sample group list for the phenotype
         try {
-            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+            groupList = retrieveJsonParser(metadataTree).getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
 
             // sort the group list
             Collections.sort(groupList);
@@ -1049,8 +1049,8 @@ class MetaDataService {
     }
 
 
-    public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName){
-        return this.jsonParser.getSampleGroupForPhenotypeTechnologyAncestry ( phenotypeName,  technologyName,  metadataVersion,  ancestryName)
+    public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName, int metadataTree){
+        return retrieveJsonParser(metadataTree).getSampleGroupForPhenotypeTechnologyAncestry ( phenotypeName,  technologyName,  metadataVersion,  ancestryName)
     }
 
 
