@@ -135,7 +135,7 @@ public class QueryJsonBuilder {
             String covariateString = null;
 
             try {
-                covariateString = this.getCovariatesString(covariateList);
+                covariateString = this.getHailCovariatesString(covariateList);
                 stringBuilder.append(", ");
                 stringBuilder.append(covariateString);
 
@@ -150,6 +150,44 @@ public class QueryJsonBuilder {
         // return the string
         return stringBuilder.toString();
     }
+
+
+    protected String getHailCovariatesString(List<Covariate> covariateList) throws PortalException {
+        // local variables
+        StringBuffer buffer = new StringBuffer();
+        boolean isFirst = true;
+
+        // start the array
+        buffer.append("\"covariates\": [");
+
+        // add in the covariates
+        for (Covariate covariate : covariateList) {
+            if (covariate.getVariant() != null) {
+                if (!isFirst) {
+                    buffer.append(", ");
+                }
+                isFirst = false;
+                buffer.append("{\"type\": \"variant\", \"dataset_id\": \"blah\",  \"value\": ");
+                buffer.append(covariate.getVariant().getChromosome());
+                buffer.append("_");
+                buffer.append(covariate.getVariant().getPosition());
+                buffer.append("_");
+                buffer.append(covariate.getVariant().getReferenceAllele());
+                buffer.append("_");
+                buffer.append(covariate.getVariant().getAlternateAllele());
+                buffer.append("\"}");
+            }
+        }
+
+        // end the array
+        buffer.append("] ");
+
+        // return
+        return buffer.toString();
+    }
+
+
+
 
     protected String getCovariatesString(List<Covariate> covariateList) throws PortalException {
         // local variables
