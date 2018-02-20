@@ -118,6 +118,8 @@
         $(".pop-left").popover({placement: 'left'});
         $(".pop-auto").popover({placement: 'auto'});
         loading.hide();
+        massageLZ();
+
     }).fail(function (jqXHR, exception) {
         loading.hide();
         core.errorReporter(jqXHR, exception);

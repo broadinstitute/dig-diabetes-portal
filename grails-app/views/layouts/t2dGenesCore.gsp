@@ -280,7 +280,11 @@
                     $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
 
                     $(".lz-list").each(function() {
-                        ($(this).find("ul").find("li").length == 0)? $(this).css("display","none") : "";
+                        if ($(this).find("ul").find("li").length == 0){
+
+                            $(this).css("opacity","0.5");
+                            $(this).find("ul").remove();
+                        }
                     })
 
                     $("#phenotype_search").on('input',function() {
@@ -315,8 +319,10 @@
             }
 
             function showLZlist(event) {
-                ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
 
+                if($(event.target).closest(".lz-list").find("ul").find("li").length != 0) {
+                    ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
+                }
             }
 
 
