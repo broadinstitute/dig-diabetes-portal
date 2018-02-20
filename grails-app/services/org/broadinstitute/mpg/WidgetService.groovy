@@ -987,7 +987,7 @@ class WidgetService {
                 MetaDataService.METADATA_VARIANT)
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
         String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                10, "verbose", , metaDataService, MetaDataService.METADATA_VARIANT);
+                10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
         JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
         jsonResultString["dataset"] = dataSetName
         jsonResultString["phenotype"] = phenotype

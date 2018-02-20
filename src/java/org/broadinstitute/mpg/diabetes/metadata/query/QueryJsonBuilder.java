@@ -167,7 +167,7 @@ public class QueryJsonBuilder {
                     buffer.append(", ");
                 }
                 isFirst = false;
-                buffer.append("{\"type\": \"variant\", \"dataset_id\": \"blah\",  \"value\": ");
+                buffer.append("{\"type\": \"variant\", \"dataset_id\": \"blah\",  \"value\": \"");
                 buffer.append(covariate.getVariant().getChromosome());
                 buffer.append("_");
                 buffer.append(covariate.getVariant().getPosition());
