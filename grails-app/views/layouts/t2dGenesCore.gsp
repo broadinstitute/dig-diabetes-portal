@@ -323,28 +323,41 @@
 
                 $("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
-                    //$(this).find("th").eq("0").append(inputBox);
                 });
 
                 $("#traits_table_filter").on('input',function() {
 
-                    var searchWord = $("#traits_table_filter").val().toLowerCase();
+                    $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
 
-                    //alert(searchWord);
+                    var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
 
-                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+                    $.each(searchWords, function(index,value){
 
-                        var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                        $("#traitsPerVariantTableBody").find("tr").each(function() {
 
-                        (phenotypeString.indexOf(searchWord) >= 0)? $(this).css("display","table-row") : $(this).css("display","none");
+                            if($(this).hasClass("hidden-traits-row")) {
+
+                            } else {
+
+                                var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                                var searchWord = value.trim();
+
+                                if(phenotypeString.indexOf(searchWord) >= 0) {
+                                    $(this).removeClass("hidden-traits-row");
+                                } else {
+                                    $(this).addClass("hidden-traits-row");
+                                }
+                            }
+
+                        });
+
                     });
+
                 });
 
                 $("#traitsPerVariantTableBody").find("tr").each(function() {
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
                 })
-
-
             }
 
 

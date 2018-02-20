@@ -999,3 +999,10 @@ a.find-out-more-opener span {
 .lz-list.open > ul {
 	display: block;
 }
+
+
+/* traits table */
+
+.hidden-phenotype, .hidden-traits-row {
+	display: none;
+}
