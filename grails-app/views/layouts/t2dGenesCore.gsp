@@ -313,6 +313,40 @@
 
             }
 
+            /* traits table */
+
+            function massageTraitsTable() {
+
+                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0 20px 10px 20px;'>";
+
+                $(".dt-buttons").append(inputBox);
+
+                $("thead").find("tr").each(function() {
+                    $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
+                    //$(this).find("th").eq("0").append(inputBox);
+                });
+
+                $("#traits_table_filter").on('input',function() {
+
+                    var searchWord = $("#traits_table_filter").val().toLowerCase();
+
+                    //alert(searchWord);
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                        var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+
+                        (phenotypeString.indexOf(searchWord) >= 0)? $(this).css("display","table-row") : $(this).css("display","none");
+                    });
+                });
+
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+                    $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
+                })
+
+
+            }
+
 
             /* GAIT TAB UI */
 
