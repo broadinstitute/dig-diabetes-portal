@@ -418,10 +418,10 @@
                 }
             }
 
-            /* copy url of varian search result page to clipboard*/
+            /* copy url of variant search result page to clipboard*/
 
-            $( window ).load( function() {
-                /* copy url of varian search result page to clipboard*/
+
+            function copyVariantSearchURL() {
                 document.addEventListener('copy', function(e){
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
@@ -429,17 +429,17 @@
 
                 });
 
-                $("#copyURL").click(function() {
-                    document.execCommand('copy');
-                })
-                /* copy URL function end */
+                document.execCommand('copy');
+            }
+            /* copy URL function end */
+
+
+            $( window ).load( function() {
 
                 /* massage LocusZoom UI */
                 massageLZ();
 
             });
-
-
 
 
             $( window ).resize(function() {
