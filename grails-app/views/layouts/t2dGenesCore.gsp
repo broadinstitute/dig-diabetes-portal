@@ -14,6 +14,12 @@
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <title><g:message code="portal.mi.header.title.short"/> <g:message code="portal.mi.header.title.genetics"/></title>
         </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+            <title><g:message code="portal.ibd.header.title"/></title>
+        </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+            <title><g:message code="portal.epilepsy.header.title"/> <g:message code="portal.mi.header.title.genetics"/></title>
+        </g:elseif>
         <g:else>
             <title><g:message code="portal.header.title.short"/> <g:message code="portal.header.title.genetics"/></title>
         </g:else>
@@ -274,7 +280,11 @@
                     $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
 
                     $(".lz-list").each(function() {
-                        ($(this).find("ul").find("li").length == 0)? $(this).css("display","none") : "";
+                        if ($(this).find("ul").find("li").length == 0){
+
+                            $(this).css("opacity","0.5");
+                            $(this).find("ul").remove();
+                        }
                     })
 
                     $("#phenotype_search").on('input',function() {
@@ -328,8 +338,10 @@
             }
 
             function showLZlist(event) {
-                ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
 
+                if($(event.target).closest(".lz-list").find("ul").find("li").length != 0) {
+                    ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
+                }
             }
 
             /* traits table */
@@ -478,32 +490,25 @@
                 }
             }
 
-            /* copy url of varian search result page to clipboard*/
+            /* copy url of variant search result page to clipboard*/
+
+            function copyVariantSearchURL() {
+                document.addEventListener('copy', function(e){
+
+                    e.clipboardData.setData('text/plain', $(location).attr("href"));
+                    e.preventDefault(); // default behaviour is to copy any selected text
+                document.execCommand('copy');
+            }
+
+
+            /* copy URL function end */
 
             $( window ).load( function() {
-                /* copy url of varian search result page to clipboard*/
-
-
-                $("#copyURL").click(function() {
-
-                    document.addEventListener('copy', function(e){
-
-                        e.clipboardData.setData('text/plain', $(location).attr("href"));
-                        e.preventDefault(); // default behaviour is to copy any selected text
-
-                    });
-                    
-                    document.execCommand('copy');
-                })
-                /* copy URL function end */
-
 
                 /* massage LocusZoom UI */
                 massageLZ();
 
             });
-
-
 
 
             $( window ).resize(function() {

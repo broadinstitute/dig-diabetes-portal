@@ -927,7 +927,33 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-
+        var arbitraryCredibleSetColors = function (index){
+            var returnValue = "#111111";
+            switch (index){
+                case 0:
+                    returnValue = "#FF0000";
+                    break;
+                case 1:
+                    returnValue = "#00FF00";
+                    break;
+                case 2:
+                    returnValue = "#0000FF";
+                    break;
+                case 3:
+                    returnValue = "#00FFFF";
+                    break;
+                case 4:
+                    returnValue = "#FF00FF";
+                    break;
+                case 5:
+                    returnValue = "#FFFF00";
+                    break;
+                case 6:
+                    returnValue = "#000000";
+                    break;
+            }
+            return returnValue
+        };
 
 
 
@@ -988,6 +1014,68 @@ var mpgSoftware = mpgSoftware || {};
                 namespace: { assoc: phenotype }
             };
             var panel_layout = LocusZoom.Layouts.get("panel","association", mods);
+
+
+
+            if ((typeof pageVars.credSetToVariants !== 'undefined') &&
+                (pageVars.credSetToVariants.length>0)&&
+                (pageVars.credSetToVariants[0].credSetName!=='none')){
+                panel_layout.dashboard.components.push(
+                    {
+                        type: "display_options",
+                        position: "right",
+                        color: "blue",
+                        // Below: special config specific to this widget
+                        button_html: "Display options...",
+                        button_title: "Control how plot items are displayed",
+
+                        layer_name: "associationpvalues",
+                        default_config_display_name: "annotation (default)", // display name for the default plot color option (allow user to revert to plot defaults)
+
+                        options: [
+                            {
+                                // Second option. The same plot- or even the same field- can be colored in more than one way.
+                                display_name: "credible set",
+                                display: {
+                                    point_shape: "circle",
+                                    point_size: 40,
+                                    color: {
+                                        field: "assoc:credSetId",
+                                        scale_function: "categorical_bin",
+                                        parameters: {
+                                            categories: [0, 1,2,3,4,5,6],
+                                            values: [arbitraryCredibleSetColors (0),
+                                                arbitraryCredibleSetColors (1),
+                                                arbitraryCredibleSetColors (2),
+                                                arbitraryCredibleSetColors (3),
+                                                arbitraryCredibleSetColors (4),
+                                                arbitraryCredibleSetColors (5),
+                                                "#000000"],
+                                            null_value: "#B8B8B8"
+                                        }
+                                    },
+                                    legend: [
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                );
+                var emptyLegendArray = _.last(panel_layout.dashboard.components).options[0].display.legend;
+                _.forEach(pageVars.credSetToVariants, function (credSetObject, count){
+                    var oneLegend = { shape: "circle",
+                        color: arbitraryCredibleSetColors (count),
+                        size: 40,
+                        label: credSetObject.credSetName,
+                        class: "lz-data_layer-scatter" };
+                    emptyLegendArray.push(oneLegend);
+                });
+            }
+
+            // add legend elements to refer to individual credible sets
+
+
+
             panel_layout.axes.y1.label = yAxisLabel;
             panel_layout.y_index = -1;
             panel_layout.height = 270;
@@ -1041,12 +1129,12 @@ var mpgSoftware = mpgSoftware || {};
                                 //     }
                                 // },
                     "#c8c8c8"];
-                    if (lzParameters.domId1!=='#lz-47') { // KLUDGE ALERT!   we have to give a different legend in the case of the variant info page.
-                        panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
-                            { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
-                    }
+                    // if (lzParameters.domId1!=='#lz-47') { // KLUDGE ALERT!   we have to give a different legend in the case of the variant info page.
+                    //     panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
+                    //         { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
+                    //         { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
+                    //         { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
+                    // }
                     break;
                 case 2:
                     panel_layout.data_layers[2].color = [
@@ -1068,10 +1156,14 @@ var mpgSoftware = mpgSoftware || {};
                         },
                         "#B8B8B8"
                     ];
-                    panel_layout.data_layers[2].legend = [  { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
-                        { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
-                        { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
-                        { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" } ];
+                    panel_layout.data_layers[2].legend = [
+                        // { shape: "circle", color: "#ff0000", size: 40, label: "PTV", class: "lz-data_layer-scatter" },
+                        // { shape: "circle", color: "#00ff00", size: 40, label: "missense", class: "lz-data_layer-scatter" },
+                        // { shape: "circle", color: "#0000ff", size: 40, label: "coding", class: "lz-data_layer-scatter" },
+                        // { shape: "circle", color: "#ffcc00", size: 40, label: "non-coding", class: "lz-data_layer-scatter" },
+                        { shape: "circle", color: "#B8B8B8", size: 40, label: "unselected", class: "lz-data_layer-scatter" },
+                        { shape: "diamond", color: "#9632b8", size: 40, label: "selected", class: "lz-data_layer-scatter" }
+                    ];
                     break;
                 default:
                     panel_layout.data_layers[2].point_shape = [
@@ -1379,7 +1471,34 @@ var mpgSoftware = mpgSoftware || {};
                 //
                 //     }
                 //
-                //    alert('foo2');
+                    var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+                    var pValueKeyName;
+                     if ((records) &&
+                         (records.length>0)&&
+                         ( typeof pageVars.credSetToVariants !== 'undefined')){
+                         _.forEach(records[0], function (value,key){
+                             if (key.indexOf(':id')>-1){
+                                 pValueKeyName = key;
+                             }
+
+                         });
+
+                         _.forEach(records, function (oneRecord){
+                             var varId = convertVarIdToBroadFavoredForm(oneRecord[pValueKeyName]) ;
+                             var substitutedVarId = varId;
+                             _.forEach(pageVars.credSetToVariants,function(credSetObj,count){
+                                 _.forEach(credSetObj.varIds,function(oneVariant){
+                                    if (substitutedVarId===oneVariant){
+                                        oneRecord["credSetName"] = credSetObj.credSetName;
+                                        oneRecord["credSetId"] = count;
+                                    }
+                                 });
+                             });
+
+
+                         });
+                     }
+
                     return records;
                  };
             }, "BroadT2Da");

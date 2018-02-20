@@ -114,6 +114,8 @@ class PortalConstants {
     public final static String PROPERTY_KEY_COMMON_MOST_DEL_SCORE         = "metadata_rootMOST_DEL_SCORE";
     public final static String PROPERTY_KEY_COMMON_EFFECT_ALLELE          = "metadata_rootEffect_Allele";
     public final static String PROPERTY_KEY_COMMON_REFERENCE_ALLELE       = "metadata_rootReference_Allele";
+    public final static String PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE     = "metadata_rootALT_ALLELE";
+    public final static String PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE  = "metadata_rootREF_ALLELE";
     public final static String PROPERTY_KEY_COMMON_MUTATION_TASTER_PRED   = "metadata_rootMutationTaster_pred";
     public final static String PROPERTY_KEY_COMMON_LRT_PRED               = "metadata_rootLRT_pred";
     public final static String PROPERTY_KEY_COMMON_POLYPHEN2_HVAR_PRED    = "metadata_rootPolyphen2_HVAR_pred";

@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg.diabetes.json.builder;
 
+import org.broadinstitute.mpg.diabetes.MetaDataService;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.Variant;
 import org.broadinstitute.mpg.diabetes.knowledgebase.result.VariantBean;
 import org.broadinstitute.mpg.diabetes.metadata.*;
@@ -13,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilterBean;
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder;
 import org.broadinstitute.mpg.diabetes.util.PortalConstants;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
+import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,12 @@ import java.util.List;
 public class LocusZoomJsonBuilder {
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
+    JsonParser jsonHailParser = JsonParser.getHailService();
     QueryJsonBuilder jsonBuilder = new QueryJsonBuilder();
     private String rootDataSetString = "ExSeq_17k_mdv2";
     private String phenotypeString;
     private String propertyName = "P_VALUE";
+
 
     /**
      * default constructor
@@ -56,21 +60,42 @@ public class LocusZoomJsonBuilder {
      * @throws PortalException
      */
     public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
-                                          int maximumNumberOfPointsToRetrieve,String format) throws PortalException {
+                                          int maximumNumberOfPointsToRetrieve,String format,MetaDataService metadataService,
+                                          int metadataTree ) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         String jsonQueryString;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format, metadataService, metadataTree);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
 
+
+
         // return
         return jsonQueryString;
     }
+
+
+
+    private GetDataQuery addCommonPropertyIfItExists (JsonParser currentJsonParser,List<org.broadinstitute.mpg.diabetes.metadata.Property> propertiesList,
+                                         String portalConstantPropertyKey, GetDataQuery query)  throws PortalException {
+        String meaning = portalConstantPropertyKey.substring("metadata_root".length());
+        for (Property property : propertiesList ){
+            if (property.hasMeaning(meaning)){
+                query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(portalConstantPropertyKey));
+            }
+        }
+        return query;
+    }
+
+
+
+
+
 
     /**
      * build the locus zoom query object
@@ -83,8 +108,10 @@ public class LocusZoomJsonBuilder {
      * @throws PortalException
      */
     public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
-                                              int maximumNumberOfPointsToRetrieve,String format) throws PortalException {
+                                              int maximumNumberOfPointsToRetrieve,String format,MetaDataService metaDataService,
+                                              int metadataTree) throws PortalException {
         // local variables
+        JsonParser currentJsonParser;
         GetDataQuery query = new GetDataQueryBean();
         PropertyBean pValueProperty;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString+" "+this.propertyName);
@@ -103,43 +130,78 @@ public class LocusZoomJsonBuilder {
         pValueProperty.setParent(phenotypeBean);
         // end property spoofing
 
+        currentJsonParser = jsonParser;
+        if (metadataTree == MetaDataService.METADATA_HAIL ){
+            currentJsonParser = jsonHailParser;
+        }
 
-        Property posteriorPValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
-        Property credibleSetId =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "CREDIBLE_SET_ID",  this.phenotypeString,  rootDataSetString);
-        Property pValue =  jsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "P_VALUE",  this.phenotypeString,  rootDataSetString);
 
-        // get the query properties
-        float pValueCutOff = (float) 0.90;  // pValues > 0.9 don't interest us, and they slow down the query
-        if (posteriorPValue != null){
-            query.addQueryProperty(posteriorPValue);
-        }
-        if (credibleSetId != null){
-            query.addQueryProperty(credibleSetId);
-            pValueCutOff = (float) 1; // posterior probabilities near 1 are very interesting, so don't filter them out
-        }
-        if (pValue != null){
-            query.addQueryProperty(pValue);
-        }
+            Property posteriorPValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
+            Property credibleSetId =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "CREDIBLE_SET_ID",  this.phenotypeString,  rootDataSetString);
+            Property pValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "P_VALUE",  this.phenotypeString,  rootDataSetString);
+
+            // get the query properties, but only if they are not looking at hail, which can't do phenotype-based filtering
+            float pValueCutOff = (float) 0.90;  // pValues > 0.9 don't interest us, and they slow down the query
+            if (posteriorPValue != null){
+                query.addQueryProperty(posteriorPValue);
+            }
+            if (credibleSetId != null){
+                query.addQueryProperty(credibleSetId);
+                pValueCutOff = (float) 1; // posterior probabilities near 1 are very interesting, so don't filter them out
+            }
+            if (pValue != null){
+                query.addQueryProperty(pValue);
+            }
+
 
         query.setResultFormat("\""+format+"\"");
 
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME));
-        query.addQueryProperty(pValueProperty);
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
-        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
 
+        List<org.broadinstitute.mpg.diabetes.metadata.Property> propertiesList = metaDataService.getCommonProperties(metadataTree);
+//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
+//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
+//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
+//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
+
+        query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_POSITION,query);
+        query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME,query);
+        query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE,query);
+        query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE,query);
+        query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME,query);
+//        for (Property property : propertiesList ){
+//            if (property.hasMeaning("MOTIF_NAME")){
+//                query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME));
+//            }
+//        }
+
+        query.addQueryProperty(pValueProperty);
+        if (metadataTree == MetaDataService.METADATA_HAIL ) {
+            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE));
+            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE));
+//            query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE,query);
+//            query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE,query);
+//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE));
+//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE));
+
+        } else {
+            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
+            //query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_VAR_ID,query);
+            query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE,query);
+            query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE,query);
+
+//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
+//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
+//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
+        }
         // TODO - fix common property not shared with EBI
 //        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME));
         query.setLimit(maximumNumberOfPointsToRetrieve);
 
         // get the query filters
         query.addAllQueryFilters(this.getStandardQueryFilters(chromosome, startPosition, endPosition));
-        query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(pValueCutOff));
+        if (metadataTree != MetaDataService.METADATA_HAIL ){
+            query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(pValueCutOff));
+        }
         QueryFilterBean queryFilterBean = new QueryFilterBean(pValueProperty,"", String.valueOf(0.0));
         query.addOrderByQueryFilter(queryFilterBean);
 

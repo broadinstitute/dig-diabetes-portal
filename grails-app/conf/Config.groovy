@@ -301,7 +301,7 @@ environments {
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
@@ -322,7 +322,7 @@ environments {
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
-         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -544,7 +544,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", or
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv29",    // the MDV number for this portal
+                                                        "mdv30",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
@@ -680,5 +680,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ]
 
 
-
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 

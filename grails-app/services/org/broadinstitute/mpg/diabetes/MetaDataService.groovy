@@ -29,15 +29,18 @@ class MetaDataService {
     public static Integer METADATA_VARIANT = 1
     public static Integer METADATA_SAMPLE = 2
     public static Integer METADATA_GENE = 3
+    public static Integer METADATA_HAIL = 4
 
     // instance variables
     JsonParser jsonParser = JsonParser.getService();
     JsonParser jsonSampleParser = JsonParser.getSampleService();
     JsonParser jsonGeneParser = JsonParser.getGeneService()
+    JsonParser jsonHailParser = JsonParser.getHailService()
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     Integer forceProcessedMetadataOverride = -1
     Integer forceProcessedSampleMetadataOverride = -1
     Integer forceProcessedGeneMetadataOverride = -1
+    Integer forceProcessedHailMetadataOverride = -1
     RestServerService restServerService
     SharedToolsService sharedToolsService
     MetadataUtilityService metadataUtilityService
@@ -243,6 +246,22 @@ class MetaDataService {
     }
 
 
+    private JsonParser getJsonHailParser() {
+        // reload the metadata if scheduled
+        if (this.forceProcessedHailMetadataOverride != 0) {
+
+            String jsonString = this.restServerService.getHailMetadata();
+            this.jsonHailParser.forceMetadataReload(jsonString);
+
+        }
+        // reset reload indicator
+        this.forceProcessedHailMetadataOverride = 0;
+
+        // return
+        return this.jsonHailParser;
+    }
+
+
     private JsonParser retrieveJsonParser(int metadataTree){
         JsonParser returnValue
         switch (metadataTree) {
@@ -254,6 +273,9 @@ class MetaDataService {
                 break;
             case METADATA_GENE:
                 returnValue = this.getJsonGeneParser()
+                break;
+            case METADATA_HAIL:
+                returnValue = this.getJsonHailParser()
                 break;
             case METADATA_NONE:
             default:
@@ -305,10 +327,10 @@ class MetaDataService {
 
 
 
-    public List <Property> getCommonProperties() {
+    public List <Property> getCommonProperties( int metadataTree ) {
         List<Property> propertyList;
 
-        propertyList = this.getJsonParser().getSearchableCommonProperties();
+        propertyList = retrieveJsonParser(metadataTree).getSearchableCommonProperties();
 
         return propertyList.sort{ a, b -> a.sortOrder <=> b.sortOrder };
     }
@@ -504,7 +526,7 @@ class MetaDataService {
 
 
 
-    public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning) {
+    public Property getPropertyForPhenotypeAndSampleGroupAndMeaning(String phenotypeName,String sampleGroupName,String  meaning, int metadataTree) {
         // local variables
         List<SampleGroup> groupList;
         List<SampleGroup> filteredSampleGroupList = [];
@@ -513,7 +535,7 @@ class MetaDataService {
 
         // get the sample group list for the phenotype
         try {
-            groupList = this.getJsonParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+            groupList = retrieveJsonParser(metadataTree).getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
 
             // sort the group list
             Collections.sort(groupList);
@@ -1027,8 +1049,8 @@ class MetaDataService {
     }
 
 
-    public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName){
-        return this.jsonParser.getSampleGroupForPhenotypeTechnologyAncestry ( phenotypeName,  technologyName,  metadataVersion,  ancestryName)
+    public List<SampleGroup> getSampleGroupForPhenotypeTechnologyAncestry(String phenotypeName, String technologyName, String metadataVersion, String ancestryName, int metadataTree){
+        return retrieveJsonParser(metadataTree).getSampleGroupForPhenotypeTechnologyAncestry ( phenotypeName,  technologyName,  metadataVersion,  ancestryName)
     }
 
 
