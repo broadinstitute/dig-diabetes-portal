@@ -262,13 +262,13 @@ class VariantSearchController {
             chromosome = chromosome-'chr'
         }
         // for now we have some confusion about gene vs. variant phenotypes, so also but phenotype explicitly
-        if ((phenotypeName=='EE') || (phenotypeName=='GGE') || (phenotypeName=='NAFE')){
-            phenotypeName = 'EPI'
-        }
+//        if ((phenotypeName=='EE') || (phenotypeName=='GGE') || (phenotypeName=='NAFE')){
+//            phenotypeName = 'EPI'
+//        }
 
         List <String> filtersForQuery = []
         filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
-        filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"MAC_PH","value":"0","comparator":">"}]""".toString()
+        filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"ACA_PH","value":"0","comparator":">"}]""".toString()
         forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
     }
 

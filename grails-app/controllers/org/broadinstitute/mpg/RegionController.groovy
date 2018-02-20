@@ -27,10 +27,10 @@ class RegionController {
                 encounteredErrors = true
             }
             List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(metaDataService?.getDefaultPhenotype(),
-                    'GWAS',metaDataService.getDataVersion(),'') // try to get a GWAS result
+                    'GWAS',metaDataService.getDataVersion(),'',MetaDataService.METADATA_VARIANT) // try to get a GWAS result
             if (sampleGroupList.size()==0){
                 sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(metaDataService?.getDefaultPhenotype(),
-                        '',metaDataService.getDataVersion(),'') // if no GWAS then take whatever we can get
+                        '',metaDataService.getDataVersion(),'',MetaDataService.METADATA_VARIANT) // if no GWAS then take whatever we can get
             }
             List<SampleGroup> orderedSampleGroupList = sampleGroupList.sort{ it.subjectsNumber }
             SampleGroup preferredSampleGroup = orderedSampleGroupList?.last()
