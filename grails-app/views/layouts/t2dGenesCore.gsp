@@ -493,10 +493,12 @@
             /* copy url of variant search result page to clipboard*/
 
             function copyVariantSearchURL() {
-                document.addEventListener('copy', function(e){
+                document.addEventListener('copy', function(e) {
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
                     e.preventDefault(); // default behaviour is to copy any selected text
+                });
+
                 document.execCommand('copy');
             }
 
@@ -513,7 +515,7 @@
 
             $( window ).resize(function() {
                 menuHeaderSet();
-            });
+            })
 
         </script>
 
