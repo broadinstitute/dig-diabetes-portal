@@ -966,7 +966,7 @@ a.find-out-more-opener span {
 
 #trackList-static, #trackList-dynamic { height: 350px; overflow: auto;}
 
-.hidden-phenotype {
+.hidden-phenotype, .hidden-traits-row {
 	display:none;
 }
 
