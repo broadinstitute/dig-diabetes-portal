@@ -252,6 +252,7 @@ button.expandoButton:visited {
                         }
                         addMoreValues(data, dataSetGroupCount);
                         loading.hide();
+                        massageTraitsTable();
                     },
                     error: function (jqXHR, exception) {
                         loading.hide();

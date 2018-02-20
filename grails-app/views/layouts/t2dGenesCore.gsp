@@ -482,17 +482,21 @@
 
             $( window ).load( function() {
                 /* copy url of varian search result page to clipboard*/
-                document.addEventListener('copy', function(e){
 
-                    e.clipboardData.setData('text/plain', $(location).attr("href"));
-                    e.preventDefault(); // default behaviour is to copy any selected text
-
-                });
 
                 $("#copyURL").click(function() {
+
+                    document.addEventListener('copy', function(e){
+
+                        e.clipboardData.setData('text/plain', $(location).attr("href"));
+                        e.preventDefault(); // default behaviour is to copy any selected text
+
+                    });
+                    
                     document.execCommand('copy');
                 })
                 /* copy URL function end */
+
 
                 /* massage LocusZoom UI */
                 massageLZ();
