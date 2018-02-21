@@ -153,6 +153,8 @@ class MetaDataService {
     public void setForceProcessedMetadataOverride(Integer forceProcessedMetadataOverride) {
         this.forceProcessedMetadataOverride = forceProcessedMetadataOverride
         setForceProcessedSampleMetadataOverride(forceProcessedMetadataOverride)
+        this.forceProcessedHailMetadataOverride = forceProcessedMetadataOverride
+        this.forceProcessedGeneMetadataOverride  = forceProcessedMetadataOverride
     }
 
     /**
