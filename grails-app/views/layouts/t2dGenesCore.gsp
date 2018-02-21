@@ -307,7 +307,7 @@
 
             function setLZDatasets(event) {
 
-                $(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
+                $(event.target).closest(".col-md-12").find(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
 
                 var phenotypeName = $.trim($(event.target).text());
 
