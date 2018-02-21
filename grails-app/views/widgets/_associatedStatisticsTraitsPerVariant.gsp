@@ -138,6 +138,8 @@ button.expandoButton:visited {
                         $.when.apply($,deferreds).then(function() {
                             //console.log('really, really done');
                         });
+
+                        massageTraitsTable();
                         loading.hide();
                     },
                     error: function (jqXHR, exception) {
@@ -252,6 +254,8 @@ button.expandoButton:visited {
                         }
                         addMoreValues(data, dataSetGroupCount);
                         loading.hide();
+
+                        massageTraitsTable();
                     },
                     error: function (jqXHR, exception) {
                         loading.hide();
