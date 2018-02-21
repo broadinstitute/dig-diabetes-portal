@@ -118,6 +118,8 @@
         $(".pop-left").popover({placement: 'left'});
         $(".pop-auto").popover({placement: 'auto'});
         loading.hide();
+        massageLZ();
+
     }).fail(function (jqXHR, exception) {
         loading.hide();
         core.errorReporter(jqXHR, exception);
@@ -164,15 +166,15 @@
                 <div class="col-md-6" style="height: 40px; padding:0 0 0 15px; border-bottom: solid 1px #ccc; ">
                     <div id='trafficLightHolder' style="width:200px; float: left; margin-top: -12px;">
                         <r:img uri="/images/undeterminedlight2.png"/>
-                        <div id="signalLevelHolder" style="display:none"></div>
+                        <div id="signalLevelHolder" style=""></div>
                     </div>
-                    <div class="trafficExplanations trafficExplanation1" style="font-size:16px; text-align: left;">
+                    <div class="trafficExplanations trafficExplanation1 unemphasize" style="font-size:16px; text-align: left;">
                         No evidence for signal&nbsp;<g:helpText title="no.evidence.help.header" placement="right" body="no.evidence.help.text"/>
                     </div>
-                    <div class="trafficExplanations trafficExplanation2" style="font-size:18px; text-align: left;">
+                    <div class="trafficExplanations trafficExplanation2 unemphasize" style="font-size:18px; text-align: left;">
                         Suggestive evidence for signal&nbsp;<g:helpText title="suggestive.evidence.help.header" placement="right" body="suggestive.evidence.help.text"/>
                     </div>
-                    <div class="trafficExplanations trafficExplanation3" style="font-size:18px; text-align: left;">
+                    <div class="trafficExplanations trafficExplanation3 unemphasize" style="font-size:18px; text-align: left;">
                         Strong evidence for signal&nbsp;<g:helpText title="strong.evidence.help.header" placement="right" body="strong.evidence.help.text"/>
                     </div>
                 </div>

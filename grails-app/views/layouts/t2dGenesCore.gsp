@@ -280,7 +280,11 @@
                     $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
 
                     $(".lz-list").each(function() {
-                        ($(this).find("ul").find("li").length == 0)? $(this).css("display","none") : "";
+                        if ($(this).find("ul").find("li").length == 0){
+
+                            $(this).css("opacity","0.5");
+                            $(this).find("ul").remove();
+                        }
                     })
 
                     $("#phenotype_search").on('input',function() {
@@ -315,8 +319,10 @@
             }
 
             function showLZlist(event) {
-                ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
 
+                if($(event.target).closest(".lz-list").find("ul").find("li").length != 0) {
+                    ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
+                }
             }
 
 
@@ -418,10 +424,10 @@
                 }
             }
 
-            /* copy url of varian search result page to clipboard*/
+            /* copy url of variant search result page to clipboard*/
 
-            $( window ).load( function() {
-                /* copy url of varian search result page to clipboard*/
+
+            function copyVariantSearchURL() {
                 document.addEventListener('copy', function(e){
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
@@ -429,17 +435,17 @@
 
                 });
 
-                $("#copyURL").click(function() {
-                    document.execCommand('copy');
-                })
-                /* copy URL function end */
+                document.execCommand('copy');
+            }
+            /* copy URL function end */
+
+
+            $( window ).load( function() {
 
                 /* massage LocusZoom UI */
                 massageLZ();
 
             });
-
-
 
 
             $( window ).resize(function() {

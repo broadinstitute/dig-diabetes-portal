@@ -11,16 +11,16 @@
         <div class="row">
             <div class="col-md-12">
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <p><g:message code="variant.locusZoom.text1"></g:message><br/>
-                        <g:message code="variant.locusZoom.text2"></g:message><br/>
-                        <g:message code="variant.locusZoom.text3"></g:message><br/>
+                    <p><g:message code="variant.locusZoom.text1"></g:message></p>
+                    <p><g:message code="variant.locusZoom.text2"></g:message>
+                    <g:message code="variant.locusZoom.text3"></g:message></p>
                         <g:message code="variant.locusZoom.text4"></g:message></p>
 
                 </g:if>
                 <g:else>
-                    <p><g:message code="variant.locusZoom.text1"></g:message><br/>
-                        <g:message code="variant.locusZoom.text3"></g:message><br/>
-                        <g:message code="variant.locusZoom.text4"></g:message></p>
+                    <p><g:message code="variant.locusZoom.text1"></g:message></p>
+                    <p><g:message code="variant.locusZoom.text3"></g:message></p>
+                    <p><g:message code="variant.locusZoom.text4"></g:message></p>
 
                 </g:else>
             </div>
