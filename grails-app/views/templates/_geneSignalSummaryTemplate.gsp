@@ -93,7 +93,7 @@
 
 <script id="locusZoomTemplate"  type="x-tmpl-mustache">
 <div class="row" style="border-bottom:solid 1px #ddd; padding-left: 15px;">
-<strong>Add new track</strong>
+<strong>To add a new track, select a phenotype, then a dataset</strong>
         <!-- DK test begin -->
         <div class="col-md-12">
 
