@@ -50,7 +50,7 @@
 
         <div class="row" style="border: solid 1px #ddd; padding: 15px 15px; margin-top: 15px;">
 
-            <strong>Add new track</strong>
+            <strong>To add a new track, select a phenotype, then a dataset</strong>
 
             <div class="col-md-12">
                 <div style="float:left; margin-right: 25px;" class="lz-list">
