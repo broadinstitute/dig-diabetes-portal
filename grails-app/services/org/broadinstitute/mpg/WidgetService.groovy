@@ -529,7 +529,8 @@ class WidgetService {
             phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(),metadataPreference)
         }
 
-        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        //List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}
 
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
         if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
