@@ -268,7 +268,9 @@ class VariantSearchController {
 
         List <String> filtersForQuery = []
         filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
-        filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"ACA_PH","value":"0","comparator":">"}]""".toString()
+        if ((dataSetName!=null) && (phenotypeName!=null)){
+            filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"ACA_PH","value":"0","comparator":">"}]""".toString()
+        }
         forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
     }
 

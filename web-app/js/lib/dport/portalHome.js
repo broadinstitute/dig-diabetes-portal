@@ -276,8 +276,89 @@ var mpgSoftware = mpgSoftware || {};
             );
         };
 
+        var initializeInputFields = function (){
+            var homePageVars = getHomePageVariables();
+
+            /***
+             * type ahead recognizing genes
+             */
+            $(homePageVars.generalizedVariantInput).typeahead({
+                source: function (query, process) {
+                    $.get(homePageVars.geneIndexUrl, {query: query}, function (data) {
+                        process(data);
+                    })
+                },
+                afterSelect: function(selection) {
+                    window.location.href = homePageVars.findTheRightDataPageUrl +"/" + selection;
+                }
+            });
+
+            /***
+             * type ahead recognizing genes
+             */
+            $(homePageVars.generalizedGeneInput).typeahead({
+                source: function (query, process) {
+                    $.get(homePageVars.geneIndexUrl, {query: query}, function (data) {
+                        process(data);
+                    })
+                },
+                afterSelect: function(selection) {
+                    window.location.href = homePageVars.findEveryVariantForAGeneUrl +"?gene=" + selection;
+                }
+            });
+
+
+            /***
+             * respond to end-of-search-line button
+             */
+            $(homePageVars.generalizedVariantGo).on('click', function () {
+                var somethingSymbol = $(homePageVars.generalizedVariantInput).val();
+                if (somethingSymbol) {
+                    window.location.href = homePageVars.findTheRightDataPageUrl +"/" +somethingSymbol;
+                }
+            });
+
+            /***
+             * capture enter key, make it equivalent to clicking on end-of-search-line button
+             */
+            $("input").keypress(function (e) { // capture enter keypress
+                var k = e.keyCode || e.which;
+                if (k == 13) {
+                    $(homePageVars.generalizedVariantGo).click();
+                }
+            });
+
+            /***
+             *  Launch find variants associated with other traits
+             */
+            $(homePageVars.traitSearchLaunch).on('click', function () {
+                var trait_val = $(homePageVars.traitInput+' option:selected').val();
+                var significance = 0.0005;
+                if (trait_val == "" || significance == 0) {
+                    alert('Please choose a trait and enter a valid significance!')
+                } else {
+                    window.location.href = homePageVars.traitSearchUrl + "?trait=" + trait_val + "&significance=" + significance;
+                }
+            });
+
+            /***
+             *  Launch find genes associated with other traits
+             */
+            $(homePageVars.geneTraitSearchLaunch).on('click', function () {
+                var trait_val = $(homePageVars.geneTraitInput+ ' option:selected').val();
+                var significance = 0.0005;
+                if (trait_val == "" || significance == 0) {
+                    alert('Please choose a trait and enter a valid significance!')
+                } else {
+                    window.location.href = homePageVars.genePrioritizationUrl + "?trait=" + trait_val + "&significance=" + significance;
+                }
+            });
+
+        };
+
 
         return {
+            initializeInputFields:initializeInputFields,
             retrieveAllPortalsInfo:retrieveAllPortalsInfo,
             loadNewsFeed: loadNewsFeed,
             setSlideWindows: setSlideWindows,
