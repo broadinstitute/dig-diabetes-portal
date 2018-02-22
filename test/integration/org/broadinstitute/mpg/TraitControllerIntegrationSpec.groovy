@@ -34,16 +34,16 @@ class TraitControllerIntegrationSpec extends IntegrationSpec {
     }
 
 
-    void "test the search a trait (and potentially significance) page"() {
-        when:
-        controller.params.trait="CKD"
-        controller.params.significance='5e-8'
-        controller.traitSearch()
-
-        then: 'verify that we get valid responses back'
-        assert controller.response.status==200
-
-    }
+//    void "test the search a trait (and potentially significance) page"() {
+//        when:
+//        controller.params.trait="CKD"
+//        controller.params.significance='5e-8'
+//        controller.traitSearch()
+//
+//        then: 'verify that we get valid responses back'
+//        assert controller.response.status==200
+//
+//    }
 
 //
 //    void "test the search a trait by ajax page"() {
