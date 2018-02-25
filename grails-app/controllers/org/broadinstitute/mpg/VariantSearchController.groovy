@@ -261,10 +261,6 @@ class VariantSearchController {
         if (chromosome?.startsWith('chr')){
             chromosome = chromosome-'chr'
         }
-        // for now we have some confusion about gene vs. variant phenotypes, so also but phenotype explicitly
-//        if ((phenotypeName=='EE') || (phenotypeName=='GGE') || (phenotypeName=='NAFE')){
-//            phenotypeName = 'EPI'
-//        }
 
         List <String> filtersForQuery = []
         filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
@@ -274,6 +270,16 @@ class VariantSearchController {
         forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
     }
 
+
+    def findEveryVariantForARange (){
+        String regionSpecification = params.region
+        List <String> filtersForQuery = []
+        LinkedHashMap extractedNumbers =  restServerService.parseARange(regionSpecification)
+        if (!extractedNumbers.error){
+            filtersForQuery << """{"value":"${extractedNumbers.chromosome}:${extractedNumbers.start}-${extractedNumbers.end}","prop":"chromosome","comparator":"="}""".toString()
+        }
+        forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+    }
 
 
 
@@ -1135,25 +1141,6 @@ class VariantSearchController {
                 regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
             }
 
-            //identifiedGenes = restServerService.retrieveGenesInExtents(positioningInformation)
-//            if (positioningInformation.size() > 2) {
-//
-//                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-//                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
-//                for (Gene gene in geneList) {
-//                    try {
-//                        int startExtent = positioningInformation.beginningExtentSpecified as Long
-//                        int endExtent = positioningInformation.endingExtentSpecified as Long
-//                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-//                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-//                            identifiedGenes << gene.name2 as String
-//                        }
-//                    } catch (e) {
-//                        redirect(controller: 'home', action: 'portalHome')
-//                    }
-//
-//                }
-//            }
 
             List tempList = identifiedGenes.collect{return "\"$it\""};
             JSONArray JsonGeneHolder = new JSONArray();
