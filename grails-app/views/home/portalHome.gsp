@@ -36,6 +36,7 @@
                 "traitSearchUrl":"${createLink(controller:'trait',action:'traitSearch')}",
                 "genePrioritizationUrl":"${createLink(controller:'trait',action:'genePrioritization')}",
                 "findTheRightDataPageUrl": "${createLink(controller:'gene',action:'findTheRightDataPage')}",
+                "findTheRightGenePageUrl": "${createLink(controller:'variantSearch',action:'findTheRightGenePage')}",
                 "retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
                 "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}",
                 "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}"

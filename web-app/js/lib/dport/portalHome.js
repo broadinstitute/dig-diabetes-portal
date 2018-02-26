@@ -317,11 +317,29 @@ var mpgSoftware = mpgSoftware || {};
                     window.location.href = homePageVars.findTheRightDataPageUrl +"/" +somethingSymbol;
                 }
             });
+            /***
+             * respond to end-of-search-line button
+             */
+            $(homePageVars.generalizedGeneGo).on('click', function () {
+                var somethingSymbol = $(homePageVars.generalizedGeneInput).val();
+                if (somethingSymbol) {
+                    window.location.href = homePageVars.findTheRightGenePageUrl +"?symbol=" + somethingSymbol;
+                }
+            });
+
+
 
             /***
              * capture enter key, make it equivalent to clicking on end-of-search-line button
              */
-            $("input").keypress(function (e) { // capture enter keypress
+            $(homePageVars.generalizedGeneInput).keypress(function (e) { // capture enter keypress
+                var k = e.keyCode || e.which;
+                if (k == 13) {
+                    $(homePageVars.generalizedGeneGo).click();
+                }
+            });
+
+            $(homePageVars.generalizedVariantInput).keypress(function (e) { // capture enter keypress
                 var k = e.keyCode || e.which;
                 if (k == 13) {
                     $(homePageVars.generalizedVariantGo).click();

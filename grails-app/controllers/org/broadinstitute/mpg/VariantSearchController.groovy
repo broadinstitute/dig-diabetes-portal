@@ -248,7 +248,15 @@ class VariantSearchController {
                         encodedFilterSets: URLEncoder.encode(jsonQueriesToReturn.toString())])
     }
 
-
+    def findTheRightGenePage(){
+        String symbol = params.symbol
+        // currently for gene level searches we distinguish only between ranges and specific genes
+        if (symbol.contains(":") && symbol.contains(":")){
+            forward action: "findEveryVariantForARange", params:[region: "${symbol}"]
+        } else {
+            forward action: "findEveryVariantForAGene", params:[gene: "${symbol}"]
+        }
+    }
 
     // Here's a shortcut way to display the variant search results, which we are currently using
     // in an anchor from the epilepsy gene prioritization page
