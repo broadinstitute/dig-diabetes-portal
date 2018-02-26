@@ -36,6 +36,7 @@
                 "traitSearchUrl":"${createLink(controller:'trait',action:'traitSearch')}",
                 "genePrioritizationUrl":"${createLink(controller:'trait',action:'genePrioritization')}",
                 "findTheRightDataPageUrl": "${createLink(controller:'gene',action:'findTheRightDataPage')}",
+                "findTheRightGenePageUrl": "${createLink(controller:'variantSearch',action:'findTheRightGenePage')}",
                 "retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
                 "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}",
                 "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}"
@@ -131,8 +132,8 @@
                                         body="input.searchTerm.variantExample.help.text" qplacer="0 0 0 2px"/>,
                             </g:each>
                             <g:each in="${portalVersionBean.rangeExamples}">
-                                <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
-                                                                                    params="[id:it]"/>'>${it}</a>
+                                <a class="front-search-example" href='<g:createLink controller="variantSearch" action="findEveryVariantForARange"
+                                                                                    params="[region:it]"/>'>${it}</a>
                                 <g:helpText title="input.searchTerm.rangeExample.help.header" placement="bottom"
                                             body="input.searchTerm.rangeExample.help.text"/>
                             </g:each>
