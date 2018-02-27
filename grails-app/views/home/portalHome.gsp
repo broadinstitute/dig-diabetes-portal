@@ -161,11 +161,11 @@
                     </a>
                 </div>
                 <div>
-                    <g:if test="${portalVersionBean.phenotypeLookupMessage}">
-                        <p class="dk-footnote">
-                        <g:message code="trait.search.specifics"/>
-                        <g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>
-                    </g:if>
+                    %{--<g:if test="${portalVersionBean.phenotypeLookupMessage}">--}%
+                        %{--<p class="dk-footnote">--}%
+                        %{--<g:message code="trait.search.specifics"/>--}%
+                        %{--<g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>--}%
+                    %{--</g:if>--}%
                     <g:if test="${portalVersionBean.variantAssociationsExists}">
                         <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
                         <div class="form-inline" style="padding-top: 10px;">
