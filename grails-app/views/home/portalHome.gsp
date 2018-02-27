@@ -108,6 +108,7 @@
                         <div class="form-inline" style="padding-top: 10px;">
                             <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
                             <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                            <div class="errorReporter">${errorText}</div>
                         </div>
 
                     </div>
@@ -146,6 +147,7 @@
                         <div class="form-inline" style="padding-top: 10px;">
                             <input id="generalized-gene-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
                             <button id="generalized-gene-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                            <div class="errorReporter">${errorText}</div>
                         </div>
 
                     </div>

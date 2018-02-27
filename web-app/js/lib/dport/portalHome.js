@@ -258,15 +258,15 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data.is_error !== 'undefined' ) &&
                         (  !data.is_error ) ) {
 
-                        fillGenePhenotypeCompoundDropdown(data,'#gene-trait-input',undefined,undefined,homePageVars.defaultPhenotype);
+                        fillGenePhenotypeCompoundDropdown(data,homePageVars.geneTraitInput,undefined,undefined,homePageVars.defaultPhenotype);
                         var availPhenotypes = [];
-                        _.forEach( $("select#trait-input option"), function(a){
+                        _.forEach( $("select"+homePageVars.geneTraitInput+"  option"), function(a){
                             availPhenotypes.push($(a).val());
                         });
                         if (availPhenotypes.indexOf(homePageVars.defaultPhenotype)>-1){
-                            $('#trait-input').val(homePageVars.defaultPhenotype);
+                            $(homePageVars.geneTraitInput).val(homePageVars.defaultPhenotype);
                         } else if (availPhenotypes.length>0){
-                            $('#trait-input').val(availPhenotypes[0]);
+                            $(homePageVars.geneTraitInput).val(availPhenotypes[0]);
                         }
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {

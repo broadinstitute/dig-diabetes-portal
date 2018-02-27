@@ -271,11 +271,16 @@ class VariantSearchController {
         }
 
         List <String> filtersForQuery = []
-        filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+        if (chromosome!=null){
+            filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+        }
         if ((dataSetName!=null) && (phenotypeName!=null)){
             filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"ACA_PH","value":"0","comparator":">"}]""".toString()
         }
-        forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+        if (filtersForQuery.size()>0) {
+            forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+        }
+        forward controller:"home", action:"portalHome", params:[errorText:"No record for gene=${geneName}.  Please try different gene"]
     }
 
 
@@ -283,10 +288,11 @@ class VariantSearchController {
         String regionSpecification = params.region
         List <String> filtersForQuery = []
         LinkedHashMap extractedNumbers =  restServerService.parseARange(regionSpecification)
-        if (!extractedNumbers.error){
+        if ((extractedNumbers.size()>0)&&(!extractedNumbers.error)){
             filtersForQuery << """{"value":"${extractedNumbers.chromosome}:${extractedNumbers.start}-${extractedNumbers.end}","prop":"chromosome","comparator":"="}""".toString()
+            forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
         }
-        forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+        forward controller:"home", action:"portalHome", params:[errorText:"Could not parse range=${regionSpecification}.  Range format is chrX:[begin]-[end]"]
     }
 
 
