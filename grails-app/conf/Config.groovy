@@ -657,8 +657,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
-                                          "GGE",
-                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "GGE", // make sure your default phenotype exists in your default data set
+                                          "ExSeq_Epi25k_mdv100",// used to pick a default data set for a gene query
                                           ["AnteriorCaudate"],
                                           ["PSYCHIATRIC"], // most important phenotype group name
                                           [],
