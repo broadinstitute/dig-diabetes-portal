@@ -258,15 +258,15 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data.is_error !== 'undefined' ) &&
                         (  !data.is_error ) ) {
 
-                        fillGenePhenotypeCompoundDropdown(data,'#gene-trait-input',undefined,undefined,homePageVars.defaultPhenotype);
+                        fillGenePhenotypeCompoundDropdown(data,homePageVars.geneTraitInput,undefined,undefined,homePageVars.defaultPhenotype);
                         var availPhenotypes = [];
-                        _.forEach( $("select#trait-input option"), function(a){
+                        _.forEach( $("select"+homePageVars.geneTraitInput+"  option"), function(a){
                             availPhenotypes.push($(a).val());
                         });
                         if (availPhenotypes.indexOf(homePageVars.defaultPhenotype)>-1){
-                            $('#trait-input').val(homePageVars.defaultPhenotype);
+                            $(homePageVars.geneTraitInput).val(homePageVars.defaultPhenotype);
                         } else if (availPhenotypes.length>0){
-                            $('#trait-input').val(availPhenotypes[0]);
+                            $(homePageVars.geneTraitInput).val(availPhenotypes[0]);
                         }
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -317,11 +317,29 @@ var mpgSoftware = mpgSoftware || {};
                     window.location.href = homePageVars.findTheRightDataPageUrl +"/" +somethingSymbol;
                 }
             });
+            /***
+             * respond to end-of-search-line button
+             */
+            $(homePageVars.generalizedGeneGo).on('click', function () {
+                var somethingSymbol = $(homePageVars.generalizedGeneInput).val();
+                if (somethingSymbol) {
+                    window.location.href = homePageVars.findTheRightGenePageUrl +"?symbol=" + somethingSymbol;
+                }
+            });
+
+
 
             /***
              * capture enter key, make it equivalent to clicking on end-of-search-line button
              */
-            $("input").keypress(function (e) { // capture enter keypress
+            $(homePageVars.generalizedGeneInput).keypress(function (e) { // capture enter keypress
+                var k = e.keyCode || e.which;
+                if (k == 13) {
+                    $(homePageVars.generalizedGeneGo).click();
+                }
+            });
+
+            $(homePageVars.generalizedVariantInput).keypress(function (e) { // capture enter keypress
                 var k = e.keyCode || e.which;
                 if (k == 13) {
                     $(homePageVars.generalizedVariantGo).click();

@@ -70,13 +70,15 @@ class HomeController {
      * This is our standard home page. We get directed here from a few places in the portal
      */
     def portalHome = {
+        String errorText = params.errorText
         render(controller: 'home', view: 'portalHome', model: [newsItems: (newsFeedService.getCurrentPosts(g.portalTypeString() as String) as JSON),
                                                                show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                                                show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
                                                                show_exseq:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exseq),
                                                                warningText:sharedToolsService.getWarningText(),
                                                                listPortalVersionBean: restServerService.retrieveBeanForAllPortals(),
-                                                               portalVersionBean: restServerService.retrieveBeanForCurrentPortal()])
+                                                               portalVersionBean: restServerService.retrieveBeanForCurrentPortal(),
+                                                               errorText:errorText])
     }
 
 

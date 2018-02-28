@@ -301,7 +301,11 @@ environments {
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+
  //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
 
 //      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
@@ -684,10 +688,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ]
 
 
-
-
-
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 

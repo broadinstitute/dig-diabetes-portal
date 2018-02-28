@@ -36,6 +36,7 @@
                 "traitSearchUrl":"${createLink(controller:'trait',action:'traitSearch')}",
                 "genePrioritizationUrl":"${createLink(controller:'trait',action:'genePrioritization')}",
                 "findTheRightDataPageUrl": "${createLink(controller:'gene',action:'findTheRightDataPage')}",
+                "findTheRightGenePageUrl": "${createLink(controller:'variantSearch',action:'findTheRightGenePage')}",
                 "retrieveGwasSpecificPhenotypesAjaxUrl":"${createLink(controller:'VariantSearch', action:'retrieveGwasSpecificPhenotypesAjax')}",
                 "getGeneLevelResultsUrl":"${createLink(controller:'home', action:'getGeneLevelResults')}",
                 "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}"
@@ -107,6 +108,7 @@
                         <div class="form-inline" style="padding-top: 10px;">
                             <input id="generalized-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
                             <button id="generalized-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                            <div class="errorReporter">${errorText}</div>
                         </div>
 
                     </div>
@@ -145,6 +147,7 @@
                         <div class="form-inline" style="padding-top: 10px;">
                             <input id="generalized-gene-input" type="text" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
                             <button id="generalized-gene-go" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                            <div class="errorReporter">${errorText}</div>
                         </div>
 
                     </div>
@@ -158,11 +161,11 @@
                     </a>
                 </div>
                 <div>
-                    <g:if test="${portalVersionBean.phenotypeLookupMessage}">
-                        <p class="dk-footnote">
-                        <g:message code="trait.search.specifics"/>
-                        <g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>
-                    </g:if>
+                    %{--<g:if test="${portalVersionBean.phenotypeLookupMessage}">--}%
+                        %{--<p class="dk-footnote">--}%
+                        %{--<g:message code="trait.search.specifics"/>--}%
+                        %{--<g:helpText title="pheno.help.header" placement="right" body="portalVersionBean.phenotypeLookupMessage"/>--}%
+                    %{--</g:if>--}%
                     <g:if test="${portalVersionBean.variantAssociationsExists}">
                         <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
                         <div class="form-inline" style="padding-top: 10px;">
