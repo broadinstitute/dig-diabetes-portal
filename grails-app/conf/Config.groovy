@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digdevlocalServer
 
 getRestServerList = [
         digdevlocalServer,
@@ -301,7 +301,7 @@ environments {
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+ //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
@@ -325,7 +325,7 @@ environments {
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 
-         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+ //        grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -543,7 +543,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "epilepsy"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
