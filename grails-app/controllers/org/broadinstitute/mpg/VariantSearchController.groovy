@@ -126,6 +126,16 @@ class VariantSearchController {
             // id is the field that identifies what property the query refers to
             def (id, data) = currentQuery.trim().split('=')
             switch (id) {
+                case '6':
+                    // gene
+                    processedQuery = [
+                            prop          : 'closestgene',
+                            translatedName: 'closest gene',
+                            value         : data,
+                            comparator    : '='
+                    ]
+                    jsonQueries << processedQuery
+                    break;
                 case '7':
                     // gene
                     processedQuery = [
@@ -271,9 +281,9 @@ class VariantSearchController {
         }
 
         List <String> filtersForQuery = []
-        if (chromosome!=null){
-            filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
-        }
+//        if (chromosome!=null){
+//            filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+//        }
         if ((dataSetName!=null) && (phenotypeName!=null)){
             org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotypeName,dataSetName,
                     "ACA_PH",MetaDataService.METADATA_VARIANT)
@@ -1155,7 +1165,7 @@ class VariantSearchController {
         if (requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
             // if there are no specified properties, default to these
             requestForAdditionalProperties =
-                    ["common-common-CLOSEST_GENE",
+                    ["common-common-GENE",
                      "common-common-VAR_ID",
                      "common-common-DBSNP_ID",
                      "common-common-Protein_change",
@@ -1171,12 +1181,13 @@ class VariantSearchController {
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> translatedFilters = []
             if ((specificGene!=null)&&(specificGene.length()>0)){
-                translatedFilters << "gene = ${specificGene}".toString()
+                encodedFilters << "7=${specificGene}".toString()
             }
             encodedFilters.each {
                 translatedFilters.add(sharedToolsService.translatorFilter(getDataQueryHolder.decodeFilter(it)))
             }
             List<String> urlEncodedFilters = getDataQueryHolder.listOfUrlEncodedFilters(encodedFilters)
+
             LinkedHashMap genomicExtents = sharedToolsService.validGenomicExtents(getDataQueryHolder.retrieveGetDataQuery())
             List<String> identifiedGenes = sharedToolsService.allEncompassedGenes(genomicExtents)
             String encodedProteinEffects = sharedToolsService.urlEncodedListOfProteinEffect()

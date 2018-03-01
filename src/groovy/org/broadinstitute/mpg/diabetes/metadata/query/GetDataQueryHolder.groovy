@@ -429,8 +429,11 @@ class GetDataQueryHolder {
                 throw new PortalException("Expected '" + JsNamingQueryTranslator.QUERY_NUMBER_DELIMITER_STRING + "' in " + encodedFilter);
             } else {
                 switch (tempArray[0]) {
+                    case JsNamingQueryTranslator.QUERY_CLOSEST_GENE_LINE_NUMBER:
+                        returnValue =  "closest gene = ${tempArray[1]}".toString()
+                        break
                     case JsNamingQueryTranslator.QUERY_GENE_LINE_NUMBER:
-                        returnValue =  tempArray[1]
+                        returnValue =  "gene = ${tempArray[1]}".toString()
                         break
                     case JsNamingQueryTranslator.QUERY_CHROMOSOME_LINE_NUMBER:
                         returnValue = "chromosome = " + tempArray[1];

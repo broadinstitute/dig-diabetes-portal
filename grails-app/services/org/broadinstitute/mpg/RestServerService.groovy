@@ -65,6 +65,7 @@ class RestServerService {
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
     private String GET_REGION_URL = "getRegion"
+    private String GET_UCSD_REGION_URL = "getAnnotationRegion"
     private String GET_VECTOR_URL = "getVectorData"
     private String GET_BIG_WIG_DATA = "getBigWigData"
     private String GET_CLUMP_DATA = "getClumpData"
@@ -2256,8 +2257,36 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return postRestCall(specifyRequest, GET_REGION_URL)
     }
 
+// new stuff
+//    public JSONObject postRestCallBase( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd,
+//                                        String source,int assayId, String assayIdListInStringForm) {
+//        int revisedPageStart = 0;
+//        int revisedPageEnd = 1000;
+//        if (pageStart > 0){revisedPageStart = pageStart}
+//        if (pageEnd > 0){revisedPageEnd = pageEnd}
+//        List <String> restApiParameterList = []
+//        restApiParameterList << "\"passback\":\"abc123\""
+//        restApiParameterList << "\"page_start\": ${revisedPageStart}"
+//        restApiParameterList << "\"page_size\": ${revisedPageEnd}"
+//        restApiParameterList << "\"chrom\": \"${chromosome}\""
+//        restApiParameterList << "\"start_pos\": ${startPosition}"
+//        restApiParameterList << "\"end_pos\": ${endPosition}"
+//        if (source){
+//            restApiParameterList << "\"source\": \"${source}\""
+//        }
+//        if ((assayIdListInStringForm) ){
+//            restApiParameterList << "\"assay_id\": ${assayIdListInStringForm}"
+//        } else if ((assayId) && (assayId>-1)){
+//            restApiParameterList << "\"assay_id\": [${assayId}]"
+//        }
+//        String specifyRequest = "{${restApiParameterList.join(",")}}"
+//        return postRestCall(specifyRequest, GET_REGION_URL)
+//    }
 
 
+
+
+   // private JSONObject (String drivingJson, String targetUrl, currentRestServer)
 
 
 

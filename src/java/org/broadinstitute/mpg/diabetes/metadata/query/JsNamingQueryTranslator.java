@@ -30,6 +30,7 @@ public class JsNamingQueryTranslator {
     public final static String QUERY_SAMPLE_GROUP_BEGIN_STRING            = "\\[";
     public final static String QUERY_SAMPLE_GROUP_AND_STRING            = "\\]";
 
+    public final static String QUERY_CLOSEST_GENE_LINE_NUMBER                     = "6";
     public final static String QUERY_GENE_LINE_NUMBER                             = "7";
     public final static String QUERY_CHROMOSOME_LINE_NUMBER                       = "8";
     public final static String QUERY_START_POSITION_LINE_NUMBER                   = "9";
@@ -105,6 +106,10 @@ public class JsNamingQueryTranslator {
                 returnValue =  QUERY_GENE_LINE_NUMBER+
                                QUERY_NUMBER_DELIMITER_STRING+
                                value;
+            } else if (PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE.equals(property.getId())){ // gene specifier
+                returnValue =  QUERY_CLOSEST_GENE_LINE_NUMBER+
+                        QUERY_NUMBER_DELIMITER_STRING+
+                        value;
             } else if (PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME.equals(property.getId())){ // chromosome specifier
                 returnValue =  QUERY_CHROMOSOME_LINE_NUMBER+
                         QUERY_NUMBER_DELIMITER_STRING+
@@ -314,6 +319,9 @@ public class JsNamingQueryTranslator {
 
                 } else if (lineNumberString.equals(this.QUERY_GENE_LINE_NUMBER)) {
                     queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, tempString);
+
+                } else if (lineNumberString.equals(this.QUERY_CLOSEST_GENE_LINE_NUMBER)) {
+                    queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CLOSEST_GENE), PortalConstants.OPERATOR_EQUALS, tempString);
 
                 }else if (lineNumberString.equals(this.QUERY_CHROMOSOME_LINE_NUMBER)) {
                     queryFilter = new QueryFilterBean((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME), PortalConstants.OPERATOR_EQUALS, tempString);
