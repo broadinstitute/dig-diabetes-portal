@@ -616,6 +616,10 @@ class GeneController {
         if (oneResource){
             chosenBigWigUrl = oneResource.bigwigpath
         }
+        if (chosenBigWigUrl.startsWith('s3')){  // hack to circumvent bad values in getEpigenomicData.  Fix the darn values, so that everything starts with HTTP and then remove the kludge
+            chosenBigWigUrl = "https://"+chosenBigWigUrl
+            permissions = "private"
+        }
         List<String> filteredBigWigUrl = null //youpossibleBigwigAddresses.findAll{String t->t.toUpperCase().contains(tissue_id.toString().toUpperCase())}
 
         // log
