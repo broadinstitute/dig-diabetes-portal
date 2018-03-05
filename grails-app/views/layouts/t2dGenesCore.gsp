@@ -271,7 +271,7 @@
                         return l===m?0:l>m?1:-1;
                     });
 
-                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px;'></div>";
+                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
 
                     $.each(lzPhenotypes, function(key, value) {
                         lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
@@ -285,7 +285,15 @@
                             $(this).css("opacity","0.5");
                             $(this).find("ul").remove();
                         }
-                    })
+                    });
+
+                    $("#phenotype_search").focus(function() {
+                        $(this).attr("placeholder", "");
+                    });
+
+                    $("#phenotype_search").focusout(function() {
+                        $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
+                    });
 
                     $("#phenotype_search").on('input',function() {
 
@@ -348,12 +356,20 @@
 
             function massageTraitsTable() {
 
-                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0 20px 10px 20px;'>";
+                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; display: inline-block; width: 250px; float: right;' placeholder='Filter phenotypes (keyword, keyword)'>";
 
                 $(".dt-buttons").append(inputBox);
 
                 $("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
+                });
+
+                $("#traits_table_filter").focus(function() {
+                    $(this).attr("placeholder", "");
+                });
+
+                $("#traits_table_filter").focusout(function() {
+                    $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
                 });
 
                 $("#traits_table_filter").on('input',function() {
