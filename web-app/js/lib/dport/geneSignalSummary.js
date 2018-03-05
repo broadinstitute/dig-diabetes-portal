@@ -999,9 +999,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (typeof params.limit !== 'undefined') {
             callingObj["limit"] = params.limit;
         };
+        callingObj ["geneChromosome"] = params.geneChromosome;
+        callingObj ["geneExtentBegin"] =params.geneExtentBegin;
+        callingObj ["geneExtentEnd"] = params.geneExtentEnd;
 
 
-        $.ajax({
+
+                $.ajax({
             cache: false,
             type: "post",
             url: params.retrieveTopVariantsAcrossSgsUrl,
@@ -1292,6 +1296,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             propertiesToInclude: propertiesToIncludeQuoted.join(","),
             propertiesToRemove: propertiesToRemoveQuoted.join(",")
         };
+        callingObj ["geneChromosome"] = parameter.geneChromosome;
+        callingObj ["geneExtentBegin"] =parameter.geneExtentBegin;
+        callingObj ["geneExtentEnd"] = parameter.geneExtentEnd;
         if (typeof parameter.limit !== 'undefined') {
             callingObj["limit"] = parameter.limit;
         };
@@ -1468,8 +1475,16 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         $('#collapseExample div.wellPlace').empty();
 
+        var regionSpecificVersion = additionalParameters.regionSpecificVersion;
+        var displayCommonTab = [1];
+        var displayHighImpactTab = [1];
+        if (regionSpecificVersion === 1){
+            displayCommonTab = [];
+            displayHighImpactTab = [];
+        }
+
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
-            {pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab}));
+            {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab}));
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
 
@@ -1486,7 +1501,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('.igvGoesHere').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCommon;
-            $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
+            if (displayCommonTab.length>0){
+                $("#locusZoomLocation").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
+            }
             renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
             renderData.staticDataExists = false;
             renderData.dynamicDataExists = [];
@@ -1495,10 +1512,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         }
 
-        mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable(data, additionalParameters);
+        if (displayHighImpactTab.length>0){
+            mpgSoftware.geneSignalSummaryMethods.updateHighImpactTable(data, additionalParameters);
+        }
 
         //  set up the gait interface
-        if (!additionalParameters.suppressBurdenTest){
+        if ((!additionalParameters.suppressBurdenTest)&&
+            (displayHighImpactTab.length>0)){
             mpgSoftware.burdenTestShared.buildGaitInterface('#burdenGoesHere', {
                     accordionHeaderClass: 'toned-down-accordion-heading',
                     modifiedTitle: 'Run a custom burden test',
@@ -1523,7 +1543,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
 
 
-        $("#aggregateVariantsLocation").empty().append(Mustache.render($('#aggregateVariantsTemplate')[0].innerHTML, renderData));
+        if (displayHighImpactTab.length>0){
+            $("#aggregateVariantsLocation").empty().append(Mustache.render($('#aggregateVariantsTemplate')[0].innerHTML, renderData));
+        }
+
 
         var alwaysShowTheCredibleSetTab = true;
 
@@ -1533,7 +1556,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             buildOutIncredibleSetPresentation(data, additionalParameters);
         }
 
-        mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
+        if (displayCommonTab.length>0){
+            mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
+        }
 
         //var phenotypeName = $('#signalPhenotypeTableChooser option:selected').val();
         var sampleBasedPhenotypeName = mpgSoftware.geneSignalSummaryMethods.phenotypeNameForSampleData(phenotypeName,additionalParameters.portalTypeString);
@@ -1586,7 +1611,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 makeDynamic:additionalParameters.firstStaticPropertyName,
                 retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl
             };
-            mpgSoftware.locusZoom.initializeLZPage(lzParm);
+            if (displayCommonTab.length>0){
+                mpgSoftware.locusZoom.initializeLZPage(lzParm);
+            }
+
 
 
 
@@ -1601,7 +1629,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
         if (( typeof sampleBasedPhenotypeName !== 'undefined') &&
             ( sampleBasedPhenotypeName.length > 0)&&
-            (!additionalParameters.suppressBurdenTest)) {
+            (!additionalParameters.suppressBurdenTest)&&
+            ((displayHighImpactTab.length>0))) {
                 $('#aggregateVariantsLocation').css('display', 'block');
                 $('#noAggregatedVariantsLocation').css('display', 'none');
                 var arrayOfPromises = [];
@@ -1650,7 +1679,16 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (!commonSectionShouldComeFirst) {
             $('.commonVariantChooser').removeClass('active');
             $('.highImpacVariantChooser').addClass('active');
-            $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
+            if (displayHighImpactTab.length>0) {
+                $('#highImpactTemplateHolder').dataTable().fnAdjustColumnSizing();
+            }
+
+        }
+
+        if ((displayHighImpactTab.length===0) && (displayCommonTab.length===0)) {
+            $('.commonVariantChooser').removeClass('active');
+            $('.highImpacVariantChooser').removeClass('active');
+            $('.credibleSetChooser').addClass('active');
         }
 
     };

@@ -496,17 +496,25 @@
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">Common variants: {{pName}}</a></li>
-                        <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">High-impact variants: {{pName}}</a></li>
+                        {{#commonTab}}
+                            <li role="presentation" class="active variantTableLabels commonVariantChooser">
+                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">Common variants: {{pName}}</a>
+                            </li>
+                        {{/commonTab}}
+                        {{#highImpactTab}}
+                            <li role="presentation" class="variantTableLabels highImpacVariantChooser">
+                                <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">High-impact variants: {{pName}}</a>
+                            </li>
+                        {{/highImpactTab}}
                         {{#credibleSetTab}}
-                        <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a></li>
-                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>--}%
+                            <li role="presentation" class="variantTableLabels credibleSetChooser">
+                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a>
+                           </li>
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
-                        <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a></li>
-                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>--}%
+                            <li role="presentation" class="variantTableLabels credibleSetChooser">
+                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a>
+                            </li>
                         {{/incredibleSetTab}}
                     </ul>
                 </div>
@@ -514,19 +522,22 @@
             <div id="cDataModalGoesHere"></div>
 
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
-                    <div class="row"   style="border: none">
-                        <div class="col-xs-12">
-                            <div class="variantCategoryHolder">The Common variants tab shows information about variants associated with the selected phenotype whose minor allele frequency (MAF) is greater than 5%.
+                {{#commonTab}}
+                    <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
+                        <div class="row"   style="border: none">
+                            <div class="col-xs-12">
+                                <div class="variantCategoryHolder">The Common variants tab shows information about variants associated with the selected phenotype whose minor allele frequency (MAF) is greater than 5%.
 
-                                <div id="commonVariantsLocation"></div>
-                                <div class="browserChooserGoesHere"></div>
-                                <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
-                                <div class="igvGoesHere"></div>
+                                    <div id="commonVariantsLocation"></div>
+                                    <div class="browserChooserGoesHere"></div>
+                                    <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
+                                    <div class="igvGoesHere"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {{/commonTab}}
+                {{#highImpactTab}}
                 <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
@@ -542,6 +553,7 @@
                         </div>
                     </div>
                 </div>
+                {{/highImpactTab}}
                 {{#credibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">

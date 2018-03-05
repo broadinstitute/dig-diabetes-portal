@@ -464,6 +464,9 @@ class VariantSearchController {
 
     def retrieveTopVariantsAcrossSgs (){
         String portalType = g.portalTypeString() as String
+        String geneChromosome = params.geneChromosome
+        Long geneExtentBegin = params.geneExtentBegin;
+        Long geneExtentEnd = params.geneExtentEnd;
 
         Closure convertDynamicStructToJson = { incoming ->
             List<String> allOptions = []
@@ -508,11 +511,18 @@ class VariantSearchController {
 
         JSONObject dataJsonObject
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
+        if ((geneExtentBegin) && (geneExtentBegin) && (geneExtentEnd)){
+            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                    geneExtentBegin,
+                    geneExtentEnd,
+                    geneChromosome,
+                    -1,limit,currentVersion)
+        }else {
+            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
+        }
 
-//        if (dataJsonObject == null){
-//            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
-//        }
+
+
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
 

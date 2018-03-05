@@ -61,6 +61,7 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
+    private String GET_DATA_AGGREGATION_BY_RANGE_URL = "getRangeData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -327,12 +328,13 @@ class RestServerService {
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
-                    existingPortalVersionBean.getGeneLevelDataExists()
+                    existingPortalVersionBean.getGeneLevelDataExists(),
+                    existingPortalVersionBean.getRegionSpecificVersion()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],"","","","","","","","",0,0 )
+                    "", "","","",[],[],[],[],"","","","","","","","",0,0,0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -2229,6 +2231,44 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
+
+
+    public JSONObject gatherTopVariantsFromAggregatedTablesByRange( String phenotype,
+                                                                    Long startExtent,
+                                                                    Long endExtent,
+                                                                    String chromosomeNumber,
+                                                                     int  startHere, int pageSize,
+                                                                     String version ) {
+        List<String> specifyRequestList = []
+        //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "\"phenotype\":\"${phenotype}\""
+        }
+        if (startHere != -1) {
+            specifyRequestList << "\"page_start\":${startHere}"
+        }
+        if (pageSize != -1) {
+            specifyRequestList << "\"page_size\":${pageSize}"
+        }
+        if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
+            specifyRequestList << "\"chrom\":\"${chromosomeNumber}\""
+        }
+        if (startExtent != -1) {
+            specifyRequestList << "\"start\":${startExtent}"
+        }
+        if (endExtent != -1) {
+            specifyRequestList << "\"end\":${endExtent}"
+        }
+        if ((version) && (version.length() > 0)) {
+            specifyRequestList << "\"version\":\"${version}\""
+        }
+        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_BY_RANGE_URL)
+    }
+
+
+
+
+
 
 
     public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd,

@@ -76,6 +76,9 @@ class GeneController {
     def geneInfo() {
         String locale = RequestContextUtils.getLocale(request)
         String geneToStartWith = params.id
+        Long startExtent=params.startExtent
+        Long endExtent=params.endExtent
+        String chromosomeNumber=params.chromosomeNumber
         LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
         LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
         String newVandAColumnName = "custom significance"
@@ -127,6 +130,8 @@ class GeneController {
         // added test for unit test error
         if (geneToStartWith != null) {
             regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
+        } else {
+            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
         }
 
         List <LinkedHashMap<String,String>> columnInformation = []
@@ -191,8 +196,8 @@ class GeneController {
             }
         }
 
-
-        if (geneToStartWith)  {
+        if ((geneToStartWith)||
+                ((startExtent) &&(endExtent) && (chromosomeNumber)  ))  {
             String locusZoomDataset = metaDataService.getDefaultDataset()
             JSONArray passDefaultTissues = []
             JSONArray passDefaultTissuesDescriptions = []
@@ -200,13 +205,29 @@ class GeneController {
                 passDefaultTissues.put("'${tissue}'")
                 passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
             }
-            LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
+            LinkedHashMap geneExtent
+            if (geneToStartWith) {
+                geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
+            } else {
+                geneExtent["startExtent"] = startExtent
+                geneExtent["endExtent"] = endExtent
+                geneExtent["chrom"] = chromosomeNumber
+            }
+
+
             List<String> identifiedGenes = restServerService.retrieveGenesInExtents(
                     [chromosomeSpecified:geneExtent.chrom,
                      beginningExtentSpecified:geneExtent.startExtent,
                      endingExtentSpecified:geneExtent.endExtent])
             String defaultPhenotype = metaDataService.getDefaultPhenotype()
-            String  geneUpperCase =   geneToStartWith.toUpperCase()
+            String  geneUpperCase
+            if (geneToStartWith){
+                geneUpperCase =   geneToStartWith.toUpperCase()
+            } else {
+                geneUpperCase = regionSpecification.toUpperCase()
+            }
+
+
 
             List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -233,7 +254,8 @@ class GeneController {
                                              identifiedGenes:identifiedGenes,
                                              assayId: assayId,
                                              sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
-                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning())
+                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning()),
+                                             regionSpecificVersion:restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()
             ] )
         }
     }
@@ -250,7 +272,11 @@ class GeneController {
                 (extractedNumbers["startExtent"])   &&
                 (extractedNumbers["endExtent"])&&
                 (extractedNumbers["chromosomeNumber"]) ){
-            redirect(controller:'region',action:'regionInfo', params: [id: params.id])
+           // redirect(controller:'region',action:'regionInfo', params: [id: params.id])
+            redirect(controller:'gene',action:'geneInfo', params: [id: params.id,
+                                                                   startExtent:extractedNumbers["startExtent"],
+                                                                   endExtent:extractedNumbers["endExtent"],
+                                                                   chromosomeNumber:extractedNumbers["chromosomeNumber"]])
             return
         }
         // It's not a region.  Is our string a gene?
