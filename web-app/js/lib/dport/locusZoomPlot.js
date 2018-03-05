@@ -62,20 +62,44 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var weHaveAssociatedAtacSeqInfo = function (label){
-            var retval;
+            var retval = [];
             if (label.indexOf('Adipose')>-1){
-                return 'Adipose';
+                retval.push( {id:'Adipose',src:'Varshney17'} );
             } else if (label.indexOf('Islet')>-1){
-                return 'Islet1';
+                retval.push( {id:'Islet1',src:'Varshney17'} );
             } else if (label.indexOf('SkeletalMuscle')>-1){
-                return 'Skeleta';
+                retval.push( {id:'Skeleta',src:'Varshney17'} );
             } else if (label.indexOf('GM12878')>-1){
-                return 'gm12878';
+                retval.push( {id:'gm12878',src:'Varshney17'} );
             } else if (label.indexOf('Adipose')>-1){
-                return 'Adipose';
+                retval.push( {id:'Adipose',src:'Varshney17'} );
+            } else if (label.indexOf('Liver')>-1){
+                retval.push( {id:'TSTFF705759',src:'UCSD-ATAC-seq-2018'} );
             }
             return retval;
-        }
+        };
+
+        // var weHaveAssociatedAtacSeqInfo = function (label){
+        //     var retval;
+        //     if (label.indexOf('Adipose')>-1){
+        //         return 'Adipose';
+        //     } else if (label.indexOf('Islet')>-1){
+        //         return 'Islet1';
+        //     } else if (label.indexOf('SkeletalMuscle')>-1){
+        //         return 'Skeleta';
+        //     } else if (label.indexOf('GM12878')>-1){
+        //         return 'gm12878';
+        //     } else if (label.indexOf('Adipose')>-1){
+        //         return 'Adipose';
+        //     } else if (label.indexOf('Liver')>-1){
+        //         return 'TSTFF705759';
+        //     }
+        //     return retval;
+        // };
+
+
+
+
 
         var setPageVars = function (thisPageVars,pageVarOption){
             if (typeof pageVarOption !== 'undefined') {
@@ -540,15 +564,19 @@ var mpgSoftware = mpgSoftware || {};
                             if ((typeof pageVars.getLocusZoomFilledPlotUrl !== 'undefined') &&
                                 (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
                                 var tissueId = this.parent_panel.id.substr("intervals-".length).split('-')[0];
-                                addLZTissueChromatinAccessibility({
-                                    tissueCode: 'E00'+weHaveAssociatedAtacSeqInfo(tissueId),
-                                    tissueDescriptiveName: 'Reads in '+this.parent_panel.title.text(),
-                                    getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
-                                    phenoTypeName:pageVars.phenoTypeName,
-                                    domId1:pageVars.domId1,
-                                    assayId:'Varshney17'
-                                },pageVars.domId1,pageVars);
-                            }
+                                var readData = weHaveAssociatedAtacSeqInfo(tissueId);
+                                var titleOfTrack = this.parent_panel.title.text();
+                                _.forEach(readData,function(oneRec){
+                                    addLZTissueChromatinAccessibility({
+                                        tissueCode: 'E00'+oneRec.id,
+                                        tissueDescriptiveName: 'Reads in '+titleOfTrack,
+                                        getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
+                                        phenoTypeName:pageVars.phenoTypeName,
+                                        domId1:pageVars.domId1,
+                                        assayId:oneRec.src
+                                    },pageVars.domId1,pageVars);
+                                });
+                             }
 
                             data_layer.toggleSplitTracks();
                             if (this.scale_timeout){ clearTimeout(this.scale_timeout); }
@@ -721,15 +749,14 @@ var mpgSoftware = mpgSoftware || {};
                         data_layer_id: layerName,
                         position: "right"
                     });
-                    if ((typeof weHaveAssociatedAtacSeqInfo(layerName) !== 'undefined')){
+                    if ((typeof weHaveAssociatedAtacSeqInfo(layerName) !== 'undefined')&&
+                        (weHaveAssociatedAtacSeqInfo(layerName).length>0)){
                         l.components.push({
                             type: "toggle_atacData_tracks",
                             data_layer_id: layerName,
                             position: "right"
                         });
                     }
-
-
                     return l;
                 })(),
                     axes: {},

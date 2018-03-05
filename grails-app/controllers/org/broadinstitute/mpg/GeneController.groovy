@@ -158,22 +158,22 @@ class GeneController {
 
         List<PhenotypeBean> lzOptions = this.widgetService?.getHailPhenotypeMap()
 
-        StringBuilder sb = new StringBuilder("[")
-        if (portalType=='ibd'){
-            LinkedHashMap<String,List<String>> possibleExperiments =  epigenomeService.getThePossibleReadData("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
-            List <String> allElements = []
-            for (String key in possibleExperiments.keySet()){
-                StringBuilder isb = new StringBuilder()
-                isb << "{\"expt\":\"${key}\",\"assays\":[\""
-                isb << possibleExperiments[key].join("\",\"")
-                isb << "\"]}"
-                allElements << isb.toString()
-            }
-            sb << allElements.join(",")
-        }
-        sb << "]"
-        JsonSlurper slurper = new JsonSlurper()
-        JSONArray experimentAssays = slurper.parseText(sb.toString())
+//        StringBuilder sb = new StringBuilder("[")
+//        if (portalType=='ibd'){
+//            LinkedHashMap<String,List<String>> possibleExperiments =  epigenomeService.getThePossibleReadData("{\"version\":\"${ sharedToolsService.getCurrentDataVersion ()}\"}")
+//            List <String> allElements = []
+//            for (String key in possibleExperiments.keySet()){
+//                StringBuilder isb = new StringBuilder()
+//                isb << "{\"expt\":\"${key}\",\"assays\":[\""
+//                isb << possibleExperiments[key].join("\",\"")
+//                isb << "\"]}"
+//                allElements << isb.toString()
+//            }
+//            sb << allElements.join(",")
+//        }
+//        sb << "]"
+//        JsonSlurper slurper = new JsonSlurper()
+//        JSONArray experimentAssays = slurper.parseText(sb.toString())
 
         String assayId = restServerService.retrieveBeanForPortalType(portalType)?.getEpigeneticAssays()
 

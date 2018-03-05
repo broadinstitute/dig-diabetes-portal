@@ -60,16 +60,16 @@ class EpigenomeService {
     }
 
 
-    public List<String> getThePossibleBigwigAddresses (String jsonPayloadString){
-        List<String> returnValue = []
-        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
-        if (vectorDataJson){
-           for (JSONObject jsonObject in vectorDataJson.tissue) {
-               returnValue << jsonObject.bigwigpath as String
-           }
-        }
-        return returnValue
-    }
+//    public List<String> getThePossibleBigwigAddresses (String jsonPayloadString){
+//        List<String> returnValue = []
+//        JSONObject vectorDataJson = this.restServerService.postEpigeneticBigwigFileQueryRestCall(jsonPayloadString);
+//        if (vectorDataJson){
+//           for (JSONObject jsonObject in vectorDataJson.tissue) {
+//               returnValue << jsonObject.bigwigpath as String
+//           }
+//        }
+//        return returnValue
+//    }
 
 
     public List<LinkedHashMap<String,String>> getTheRemoteBigwigInformation (String jsonPayloadString){
