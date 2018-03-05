@@ -301,7 +301,11 @@ environments {
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+ //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
 
 //      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
@@ -322,7 +326,11 @@ environments {
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
+
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+
+         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -612,7 +620,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["LPA"],
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          "images/mi/mi_banner_2018_2.png",
+                                          "images/mi/front_mi_banner_2018.png",
                                   "",
                                           "images/mi/mi_header_logo_2017.svg",
                                           "images/mi/menu_band_2017_mi.png",
@@ -639,7 +647,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          "images/ibd/IBD_banner_2018.png",
+                                          "images/ibd/front_ibd_bg_2018.png",
                                   "",
                                           "images/ibd/ibd_header_logo.svg",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
@@ -653,8 +661,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
-                                          "EPI",
-                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "GGE", // make sure your default phenotype exists in your default data set
+                                          "ExSeq_Epi25k_mdv100",// used to pick a default data set for a gene query
                                           ["AnteriorCaudate"],
                                           ["PSYCHIATRIC"], // most important phenotype group name
                                           [],
@@ -664,8 +672,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "portal.epilepsy.header.tagline",
                                           [],
                                           ["CDKL5"],
-                                          ["rs2021722","X:18622693_G_A"],
-                                          ["chr9:20,940,000-21,800,000"],
+                                          [],
+                                          ["chr14:35,907,000-36,400,000"],
                                           "images/epilepsy/front_epilepsy_bg_2018.png",
                                           "",
                                           "images/epilepsy/epilepsy_header_logo.svg",
@@ -680,6 +688,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ]
 
 
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 

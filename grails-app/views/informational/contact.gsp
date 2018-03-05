@@ -92,6 +92,13 @@
                             <img style="width:180px;" src="${resource(dir: 'images/organizations', file:'EBI.png')}" />
 
                         </a></p>
+                         <hr>
+
+                         <p><a href="https://www.t2depigenome.org/" target="_blank">
+
+                             <img style="width:180px;" src="${resource(dir: 'images/icons', file:'T2DREAM_logo.png')}" />
+
+                         </a></p>
 
                     </div>
 

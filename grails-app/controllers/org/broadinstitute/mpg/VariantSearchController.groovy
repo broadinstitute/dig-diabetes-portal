@@ -248,7 +248,15 @@ class VariantSearchController {
                         encodedFilterSets: URLEncoder.encode(jsonQueriesToReturn.toString())])
     }
 
-
+    def findTheRightGenePage(){
+        String symbol = params.symbol
+        // currently for gene level searches we distinguish only between ranges and specific genes
+        if (symbol.contains(":") && symbol.contains(":")){
+            forward action: "findEveryVariantForARange", params:[region: "${symbol}"]
+        } else {
+            forward action: "findEveryVariantForAGene", params:[gene: "${symbol}"]
+        }
+    }
 
     // Here's a shortcut way to display the variant search results, which we are currently using
     // in an anchor from the epilepsy gene prioritization page
@@ -261,17 +269,59 @@ class VariantSearchController {
         if (chromosome?.startsWith('chr')){
             chromosome = chromosome-'chr'
         }
-        // for now we have some confusion about gene vs. variant phenotypes, so also but phenotype explicitly
-//        if ((phenotypeName=='EE') || (phenotypeName=='GGE') || (phenotypeName=='NAFE')){
-//            phenotypeName = 'EPI'
-//        }
 
         List <String> filtersForQuery = []
-        filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
-        filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"ACA_PH","value":"0","comparator":">"}]""".toString()
-        forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+        if (chromosome!=null){
+            filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+        }
+        if ((dataSetName!=null) && (phenotypeName!=null)){
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotypeName,dataSetName,
+                    "ACA_PH",MetaDataService.METADATA_VARIANT)
+            if (property){
+                filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
+            }
+
+        } else {
+            // let's provide a default data set
+            String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
+            String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
+            org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
+                    "ACA_PH",MetaDataService.METADATA_VARIANT)
+            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
+                    "ACU_PH",MetaDataService.METADATA_VARIANT)
+            if (property1 && property2){
+                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
+                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
+            }
+
+
+
+        }
+        if (filtersForQuery.size()>0) {
+            if ((geneName!=null)&& (geneName.length()>0)){
+                forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]", specificGene:"${geneName}"]
+                return
+            } else {
+                forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+                return
+            }
+        }
+        forward controller:"home", action:"portalHome", params:[errorText:"No record for gene=${geneName}.  Please try different gene"]
+        return
     }
 
+
+    def findEveryVariantForARange (){
+        String regionSpecification = params.region
+        List <String> filtersForQuery = []
+        LinkedHashMap extractedNumbers =  restServerService.parseARange(regionSpecification)
+        if ((extractedNumbers.size()>0)&&(!extractedNumbers.error)){
+            filtersForQuery << """{"value":"${extractedNumbers.chromosome}:${extractedNumbers.start}-${extractedNumbers.end}","prop":"chromosome","comparator":"="}""".toString()
+            forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
+            return
+        }
+        forward controller:"home", action:"portalHome", params:[errorText:"Could not parse range=${regionSpecification}.  Range format is chrX:[begin]-[end]"]
+    }
 
 
 
@@ -281,7 +331,7 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch() {
-        displayCombinedVariantSearch(params.filters, params.props)
+        displayCombinedVariantSearch(params.filters, params.props, params.specificGene)
     }
 
     /***
@@ -344,7 +394,7 @@ class VariantSearchController {
             encodedFiltersToJSON(listOfCodedFilters).each {
                 filters.add(it.toString())
             }
-            displayCombinedVariantSearch(filters.toString(), "")
+            displayCombinedVariantSearch(filters.toString(), "", "")
         }
 
     }
@@ -1098,7 +1148,7 @@ class VariantSearchController {
 
     }
 
-    private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties) {
+    private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties,String specificGene) {
         ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(filters)
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
 
@@ -1120,6 +1170,9 @@ class VariantSearchController {
         if (getDataQueryHolder.isValid()) {
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> translatedFilters = []
+            if ((specificGene!=null)&&(specificGene.length()>0)){
+                translatedFilters << "gene = ${specificGene}".toString()
+            }
             encodedFilters.each {
                 translatedFilters.add(sharedToolsService.translatorFilter(getDataQueryHolder.decodeFilter(it)))
             }
@@ -1133,25 +1186,6 @@ class VariantSearchController {
                 regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
             }
 
-            //identifiedGenes = restServerService.retrieveGenesInExtents(positioningInformation)
-//            if (positioningInformation.size() > 2) {
-//
-//                regionSpecifier = "chr${positioningInformation.chromosomeSpecified}:${positioningInformation.beginningExtentSpecified}-${positioningInformation.endingExtentSpecified}"
-//                List<Gene> geneList = Gene.findAllByChromosome("chr" + positioningInformation.chromosomeSpecified)
-//                for (Gene gene in geneList) {
-//                    try {
-//                        int startExtent = positioningInformation.beginningExtentSpecified as Long
-//                        int endExtent = positioningInformation.endingExtentSpecified as Long
-//                        if (((gene.addrStart > startExtent) && (gene.addrStart < endExtent)) ||
-//                                ((gene.addrEnd > startExtent) && (gene.addrEnd < endExtent))) {
-//                            identifiedGenes << gene.name2 as String
-//                        }
-//                    } catch (e) {
-//                        redirect(controller: 'home', action: 'portalHome')
-//                    }
-//
-//                }
-//            }
 
             List tempList = identifiedGenes.collect{return "\"$it\""};
             JSONArray JsonGeneHolder = new JSONArray();

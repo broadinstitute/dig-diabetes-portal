@@ -5,6 +5,9 @@
     font-size: 24px;
     font-weight: 100;
 }
+div.browserChooserGoesHere {
+    display:none;
+}
 .interestingPhenotypesHolder{
     margin: 20px 0px 20px 0;
     padding: 20px 0px 20px 0;

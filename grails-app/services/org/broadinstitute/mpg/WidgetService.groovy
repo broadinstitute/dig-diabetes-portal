@@ -477,7 +477,41 @@ class WidgetService {
         return holdingStructure
     }
 
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,
+
+
+//    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,
+//                                                                                                          String phenotype,int metadataPreference){
+//        if (phenotype != "none"){ // none is a keyword indicating that there is no phenotype matching these criteria
+//            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS',
+//                    metaDataService.getDataVersion(), '',metadataPreference)
+//            if (sampleGroup.size()==0) {
+//                sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '',metadataPreference)
+//            }
+//
+//            List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+//            // KLUDGE alert
+//            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+//            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+//            if (sortedSampleGroup.size()>0){
+//                SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+//                Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
+//                        metadataPreference)
+//                holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+//            }
+//        }
+//
+//        return holdingStructure
+//    }
+
+    /***
+     * Add to a structure in which each phenotype is a key into a map, and in each of those maps the different data sets is a map into the final Map.
+     *
+     * @param holdingStructure
+     * @param phenotype
+     * @param metadataPreference
+     * @return
+     */
+    private HashMap<String,HashMap<String,HashMap<String,String>>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,HashMap<String,String>>> holdingStructure,
                                                                                                           String phenotype,int metadataPreference){
         if (phenotype != "none"){ // none is a keyword indicating that there is no phenotype matching these criteria
             List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS',
@@ -490,11 +524,16 @@ class WidgetService {
             // KLUDGE alert
             //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
             //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
-            if (sortedSampleGroup.size()>0){
-                SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+            for (SampleGroup chosenSampleGroup in sortedSampleGroup){
                 Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
                         metadataPreference)
-                holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+                if (!holdingStructure.containsKey(phenotype)){
+                    holdingStructure[phenotype] = [:]
+                } // We don't arty have this phenotype key.  Add it.
+                HashMap currentPhenotypeMap = holdingStructure[phenotype]
+                if (!currentPhenotypeMap.containsKey(chosenSampleGroup.systemId)){ // Expected.  We shouldn't have multiple data sets for each phenotype
+                    currentPhenotypeMap[chosenSampleGroup.systemId] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+                } // There should be no reason for an else
             }
         }
 
@@ -517,8 +556,8 @@ class WidgetService {
 
 
 
-    public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(int metadataPreference){
-        LinkedHashMap<String,HashMap<String,String>> returnValue = []
+    public LinkedHashMap<String,HashMap<String,HashMap<String,String>>> retrieveAllPhenotypeDataSetCombos(int metadataPreference){
+        LinkedHashMap<String,HashMap<String,HashMap<String,String>>> returnValue = []
         // kludge alert -- it appears that MDV should be ignored for hail data?
         List<Phenotype> phenotypeList = []
         if (metadataPreference == metaDataService.METADATA_VARIANT){
@@ -529,7 +568,8 @@ class WidgetService {
             phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(),metadataPreference)
         }
 
-        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        //List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}
 
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
         if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
@@ -1150,29 +1190,34 @@ class WidgetService {
         String portalType = this.metaDataService?.getPortalTypeFromSession();
 
 
-        HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_VARIANT)
-        HashMap<String,HashMap<String,String>> hailPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_HAIL)
+        LinkedHashMap<String,HashMap<String,HashMap<String,String>>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_VARIANT)
+        LinkedHashMap<String,HashMap<String,HashMap<String,String>>> hailPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_HAIL)
             boolean firstTime = true
 
 
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
-                HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
-                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
-                        dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
-                        propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
-
+                HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = aAllPhenotypeDataSetCombos[phenotype]
+                for (String eachDataset in phenotypeDataKeyMap.keySet()){
+                    HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
+                    beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
+                            dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
+                            propertyName:phenotypeDataSetCombo.property,dataType:"static",
+                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+                }
                 firstTime = false
             }
 
         firstTime = true
         for (String phenotype in hailPhenotypeDataSetCombos.keySet()){
-            HashMap<String,String> phenotypeDataSetCombo = hailPhenotypeDataSetCombos[phenotype]
-            beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
-                    dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
-                    propertyName:phenotypeDataSetCombo.property,dataType:"dynamic",
-                    description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+            HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = hailPhenotypeDataSetCombos[phenotype]
+            for (String eachDataset in phenotypeDataKeyMap.keySet()){
+                HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
+                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
+                        dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
+                        propertyName:phenotypeDataSetCombo.property,dataType:"dynamic",
+                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
 
+            }
             firstTime = false
         }
 

@@ -434,6 +434,55 @@ class RestServerService {
         return returnValue
     }
 
+
+
+
+    public LinkedHashMap parseARange(String regionSpecification){
+        boolean encounteredErrors = false
+        LinkedHashMap returnValue = [:]
+        LinkedHashMap extractedNumbers =  extractNumbersWeNeed(regionSpecification)
+        if ((extractedNumbers)   &&
+                (extractedNumbers["startExtent"])   &&
+                (extractedNumbers["endExtent"])&&
+                (extractedNumbers["chromosomeNumber"]) ) {
+            Long startExtent = sharedToolsService.convertRegionString(extractedNumbers["startExtent"])
+            Long endExtent = sharedToolsService.convertRegionString(extractedNumbers["endExtent"])
+            if ((startExtent < 0) || (endExtent < 0) || (startExtent > endExtent)) {
+                encounteredErrors = true
+            }
+            String chromosome = extractedNumbers["chromosomeNumber"]
+            if (chromosome.contains('chr')){
+                chromosome = chromosome-"chr"
+            }
+            if (chromosome != 'X' && chromosome != 'x' && chromosome != 'Y' && chromosome != 'y'){
+                Integer chromosomeNumber
+                try {
+                    chromosomeNumber = Integer.parseInt(chromosome)
+                } catch(e){
+                    encounteredErrors = true
+                }
+                if ((chromosomeNumber < 1) || (chromosomeNumber > 22)){
+                    encounteredErrors = true
+                }
+            }
+            if (!encounteredErrors){
+                returnValue["start"] = startExtent
+                returnValue["end"] = endExtent
+                returnValue["chromosome"] = chromosome
+                returnValue["error"] = false
+            }
+        } else {
+            returnValue["error"] = true
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+
     /***
      * Need to to send through metadata sample groups recursively in order to generate a JSON structure
      * that can create the recursive Sunburst graphic
