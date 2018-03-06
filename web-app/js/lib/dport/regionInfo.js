@@ -882,9 +882,10 @@ var mpgSoftware = mpgSoftware || {};
                     });
 
 
+                    var chromosome = (additionalParameters.geneChromosome.length>3)?additionalParameters.geneChromosome.substr(3):additionalParameters.geneChromosome;
                     mpgSoftware.geneSignalSummaryMethods.lzOnCredSetTab(additionalParameters,{
                         positioningInformation:{
-                            chromosome:additionalParameters.geneChromosome.substr(3),
+                            chromosome:chromosome,
                             startPosition:getCurrentSequenceExtents().start,
                             endPosition:getCurrentSequenceExtents().end
                         },

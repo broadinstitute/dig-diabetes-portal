@@ -76,8 +76,8 @@ class GeneController {
     def geneInfo() {
         String locale = RequestContextUtils.getLocale(request)
         String geneToStartWith = params.id
-        Long startExtent=params.startExtent
-        Long endExtent=params.endExtent
+        Long startExtent=0L
+        Long endExtent=0L
         String chromosomeNumber=params.chromosomeNumber
         LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
         LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
@@ -105,6 +105,12 @@ class GeneController {
             default:
                 break
         }
+        try {
+            startExtent = Long.parseLong(params.startExtent)
+            endExtent = Long.parseLong(params.endExtent)
+        } catch(e){
+          //  e.printStackTrace()
+        }
         defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
 
         if (params.phenotypeChooser){
@@ -128,10 +134,10 @@ class GeneController {
         String regionSpecification = null
 
         // added test for unit test error
-        if (geneToStartWith != null) {
-            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
-        } else {
+        if ((chromosomeNumber)&&(endExtent>0)) {
             regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
+        } else {
+            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
         }
 
         List <LinkedHashMap<String,String>> columnInformation = []
@@ -197,7 +203,7 @@ class GeneController {
         }
 
         if ((geneToStartWith)||
-                ((startExtent) &&(endExtent) && (chromosomeNumber)  ))  {
+                ((endExtent>0) && (chromosomeNumber)  ))  {
             String locusZoomDataset = metaDataService.getDefaultDataset()
             JSONArray passDefaultTissues = []
             JSONArray passDefaultTissuesDescriptions = []
@@ -205,13 +211,13 @@ class GeneController {
                 passDefaultTissues.put("'${tissue}'")
                 passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
             }
-            LinkedHashMap geneExtent
-            if (geneToStartWith) {
-                geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
-            } else {
+            LinkedHashMap geneExtent =[:]
+            if ((chromosomeNumber)&&(endExtent>0)) {
                 geneExtent["startExtent"] = startExtent
                 geneExtent["endExtent"] = endExtent
                 geneExtent["chrom"] = chromosomeNumber
+            } else {
+                geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
             }
 
 

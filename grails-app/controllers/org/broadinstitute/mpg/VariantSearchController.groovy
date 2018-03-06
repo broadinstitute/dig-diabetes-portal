@@ -465,8 +465,25 @@ class VariantSearchController {
     def retrieveTopVariantsAcrossSgs (){
         String portalType = g.portalTypeString() as String
         String geneChromosome = params.geneChromosome
-        Long geneExtentBegin = params.geneExtentBegin;
-        Long geneExtentEnd = params.geneExtentEnd;
+        Long geneExtentBegin = 0L
+        Long geneExtentEnd = 0l
+        try {
+            geneExtentBegin = Long.parseLong(params.geneExtentBegin)
+            geneExtentEnd = Long.parseLong(params.geneExtentEnd)
+        } catch(e){
+            ;
+        }
+        if ((geneExtentEnd==0L)&&(params.geneToSummarize)&&(params.geneToSummarize.contains(':'))){
+            LinkedHashMap extractedNumbers =  restServerService.parseARange(params.geneToSummarize)
+            if (!extractedNumbers.error){
+                geneChromosome = extractedNumbers.chromosome
+                geneExtentBegin = extractedNumbers.start
+                geneExtentEnd = extractedNumbers.end
+            }
+
+        }
+
+
 
         Closure convertDynamicStructToJson = { incoming ->
             List<String> allOptions = []
@@ -512,6 +529,7 @@ class VariantSearchController {
         JSONObject dataJsonObject
 
         if ((geneExtentBegin) && (geneExtentBegin) && (geneExtentEnd)){
+            limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
                     geneExtentBegin,
                     geneExtentEnd,

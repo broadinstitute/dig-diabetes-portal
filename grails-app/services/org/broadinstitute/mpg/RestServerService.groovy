@@ -61,7 +61,7 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
-    private String GET_DATA_AGGREGATION_BY_RANGE_URL = "getRangeData"
+    private String GET_DATA_AGGREGATION_BY_RANGE_URL = "getAggregatedData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -452,9 +452,9 @@ class RestServerService {
             if ((startExtent < 0) || (endExtent < 0) || (startExtent > endExtent)) {
                 encounteredErrors = true
             }
-            String chromosome = extractedNumbers["chromosomeNumber"]
-            if (chromosome.contains('chr')){
-                chromosome = chromosome-"chr"
+            String chromosome = extractedNumbers["chromosomeNumber"].toUpperCase()
+            if (chromosome.contains('CHR')){
+                chromosome = chromosome-"CHR"
             }
             if (chromosome != 'X' && chromosome != 'x' && chromosome != 'Y' && chromosome != 'y'){
                 Integer chromosomeNumber
