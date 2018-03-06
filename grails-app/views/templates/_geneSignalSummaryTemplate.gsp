@@ -600,7 +600,7 @@
                                         {{#selectorInfoExists}}
                                          <div class="col-sm-6">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">Add/remove chromatin states:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                                <label for="credSetSelectorChoice">Select tissue:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     {{#selectorInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>

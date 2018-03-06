@@ -82,56 +82,60 @@
 <script>
     var loading = $('#spinner').show();
     $(document).ready(function() {
-    $.ajax({
-        cache: false,
-        type: "post",
-        url: '<g:createLink controller="gene" action="geneInfoAjax"/>',
-        data: {geneName: '<%=geneName%>'},
-        async: true
-    }).done(function (data) {
-        mpgSoftware.geneInfo.fillTheGeneFields(data);
-        $('[data-toggle="popover"]').popover({
-            animation: true,
-            html: true,
-            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
-        });
-        $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
-        var genePageExtent = 100000;
+        var positioningInformation = {};
+        if ('<%=geneName%>'.indexOf(':')>-1){ // this looks like a range, not a gene
+            var rangeList = '<%=geneName%>'.split(':');
+            if (rangeList.length === 2){
+                positioningInformation['chromosome'] = rangeList[0];
+                var genomicPositionList = rangeList[1].split('-');
+                if (genomicPositionList.length === 2){
+                    positioningInformation['startPosition'] = genomicPositionList[0];
+                    positioningInformation['endPosition'] = genomicPositionList[1];
+                }
+            }
+            $('#placeForAUniprotSummary').hide();
+            $('div.geneWindowDescription').hide()
+        } else { // this looks like a gene, which means that we need to figure out it's genomic coordinates
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: '<g:createLink controller="gene" action="geneInfoAjax"/>',
+                data: {geneName: '<%=geneName%>'},
+                async: true
+            }).done(function (data) {
+                mpgSoftware.geneInfo.fillTheGeneFields(data); // fills the uniprot summary
+                $('[data-toggle="popover"]').popover({
+                    animation: true,
+                    html: true,
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                });
+                $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
+                var genePageExtent = 100000;
 
-        var positioningInformation = {
-            chromosome: data.geneInfo.CHROM,
-            startPosition: data.geneInfo.BEG - genePageExtent,
-            endPosition: data.geneInfo.END + genePageExtent
-        };
-        <g:renderBetaFeaturesDisplayedValue>
-        mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junkGI',
-                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                '${lzOptions.first().dataType}','${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',true);
-        </g:renderBetaFeaturesDisplayedValue>
+                positioningInformation = {
+                    chromosome: data.geneInfo.CHROM,
+                    startPosition: data.geneInfo.BEG - genePageExtent,
+                    endPosition: data.geneInfo.END + genePageExtent
+                };
 
+                $(".pop-top").popover({placement: 'top'});
+                $(".pop-right").popover({placement: 'right'});
+                $(".pop-bottom").popover({placement: 'bottom'});
+                $(".pop-left").popover({placement: 'left'});
+                $(".pop-auto").popover({placement: 'auto'});
+                loading.hide();
+                //massageLZ();
 
-        $(".pop-top").popover({placement: 'top'});
-        $(".pop-right").popover({placement: 'right'});
-        $(".pop-bottom").popover({placement: 'bottom'});
-        $(".pop-left").popover({placement: 'left'});
-        $(".pop-auto").popover({placement: 'auto'});
-        loading.hide();
-        massageLZ();
-
-    }).fail(function (jqXHR, exception) {
-        loading.hide();
-        core.errorReporter(jqXHR, exception);
-    });
+            }).fail(function (jqXHR, exception) {
+                loading.hide();
+                core.errorReporter(jqXHR, exception);
+            });
+        }
 
         // call this inside the ready function because the page is still loading when the the parent
         // ajax calls returns
-
-
         $('#variantPageText').hide();
         $('#genePageText').show();
-
 
     });
     $('#collapseVariantAssociationStatistics').collapse({hide: false})

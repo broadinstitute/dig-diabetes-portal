@@ -144,7 +144,8 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+//defaultRestServer = digawsdevnewKB
+defaultRestServer = digAWS02KBV2prodServer
 
 getRestServerList = [
         digdevlocalServer,
@@ -321,7 +322,7 @@ environments {
 
 
 //        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
-//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
@@ -329,7 +330,7 @@ environments {
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 
-         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+//         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -646,9 +647,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "images/ibd/ibd_front_logo.svg",
                                           "portal.ibd.header.tagline",
                                           [],
-                                          ["IL23R"],
-                                          ["rs11209026"],
-                                          ["chr9:20,940,000-21,800,000"],
+                                          [],
+                                          [],
+                                          ["chr1:67,500,000-67,800,000"],
                                           "images/ibd/front_ibd_bg_2018.png",
                                   "",
                                           "images/ibd/ibd_header_logo.svg",

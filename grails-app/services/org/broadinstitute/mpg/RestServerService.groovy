@@ -2245,10 +2245,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             specifyRequestList << "\"phenotype\":\"${phenotype}\""
         }
         if (startHere != -1) {
-            specifyRequestList << "\"page_start\":${startHere}"
+            specifyRequestList << "\"pageStart\":${startHere}"
         }
         if (pageSize != -1) {
-            specifyRequestList << "\"page_size\":${pageSize}"
+            specifyRequestList << "\"pageSize\":${pageSize}"
         }
         if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
             specifyRequestList << "\"chrom\":\"${chromosomeNumber}\""

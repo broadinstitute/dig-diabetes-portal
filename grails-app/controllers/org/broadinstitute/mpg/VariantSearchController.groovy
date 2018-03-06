@@ -529,7 +529,7 @@ class VariantSearchController {
         JSONObject dataJsonObject
 
         if ((geneExtentBegin) && (geneExtentBegin) && (geneExtentEnd)){
-            limit=1000  // kludge
+            //limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
                     geneExtentBegin,
                     geneExtentEnd,
