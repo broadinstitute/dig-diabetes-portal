@@ -1445,12 +1445,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var selectorInfo = [];
         var displayInfo = [];
         if (additionalParameters.portalTypeString==='ibd'){
-            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
+            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
             selectorInfo = getParkerData(selectorInfo,[]);
-            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
+            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
             displayInfo = getParkerData(displayInfo,[]);
         } else {
-            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
+            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
         }
 
 
