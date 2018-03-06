@@ -604,6 +604,16 @@ var mpgSoftware = mpgSoftware || {};
                 if (setDefaultButton){
                     $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
                 }
+                $('[data-toggle="popover"]').popover({
+                    animation: true,
+                    html: true,
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                });
+                $(".pop-top").popover({placement: 'top'});
+                $(".pop-right").popover({placement: 'right'});
+                $(".pop-bottom").popover({placement: 'bottom'});
+                $(".pop-left").popover({placement: 'left'});
+                $(".pop-auto").popover({placement: 'auto'})
 
             }, function(e) {
                 console.log("My ajax failed");
