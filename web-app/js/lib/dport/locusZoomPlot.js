@@ -64,11 +64,13 @@ var mpgSoftware = mpgSoftware || {};
         var weHaveAssociatedAtacSeqInfo = function (label){
             var retval = [];
             if (label.indexOf('Adipose')>-1){
-                retval.push({id:'Adipose',src:'Varshney17'});
+               // retval.push({id:'Adipose',src:'Varshney17'});
+                retval.push({id:'TSTFF666780',src:'UCSD-ATAC-seq-2018'});
             } else if (label.indexOf('Islet')>-1){
                 retval.push({id:'Islet1',src:'Varshney17'});
             } else if (label.indexOf('SkeletalMuscle')>-1){
-                retval.push({id:'Skeleta',src:'Varshney17'});
+                retval.push({id:'TSTFF760188',src:'UCSD-ATAC-seq-2018'});
+               // retval.push({id:'Skeleta',src:'Varshney17'});
             } else if (label.indexOf('GM12878')>-1){
                 retval.push({id:'gm12878',src:'Varshney17'});
             } else if (label.indexOf('Liver')>-1){
@@ -804,7 +806,8 @@ var mpgSoftware = mpgSoftware || {};
 
         var customCurveDataLayer = function (layerName,assayId){
             var stateIdSpec = layerName+":state_id";
-            var color = "#FF0000";
+            var color = "#0000FF";
+            //
             if (assayId==="DNase" || assayId==="Varshney17"){
                 color = "#0000FF";
             }
@@ -1710,7 +1713,7 @@ var mpgSoftware = mpgSoftware || {};
             var getLocusZoomFilledPlotUrl = lzParameters.getLocusZoomFilledPlotUrl;
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
-            var phenotypeName = lzParameters.phenotypeName;
+            var phenotypeName = lzParameters.phenoTypeName;
             var domId1 = lzParameters.domId1;
             var assayId = lzParameters.assayId;
             setNewDefaultLzPlot(lzGraphicDomId);
