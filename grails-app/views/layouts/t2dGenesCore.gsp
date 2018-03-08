@@ -356,6 +356,9 @@
 
             function massageTraitsTable() {
 
+                $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
+
+
                 var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; display: inline-block; width: 250px; float: right;' placeholder='Filter phenotypes (keyword, keyword)'>";
 
                 $(".dt-buttons").append(inputBox);
@@ -404,6 +407,14 @@
 
                 $("#traitsPerVariantTableBody").find("tr").each(function() {
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
+                });
+
+                $("#traitsPerVariantTableBody").find("td").mouseenter(function() {
+                    var phenotypeName = $(this).closest("tr").find("td").eq("0").text();
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+                        ($(this).find("td").eq("0").text() == phenotypeName)? $(this).addClass("highlighted-phenotype"):$(this).removeClass("highlighted-phenotype");
+                    });
                 })
             }
 

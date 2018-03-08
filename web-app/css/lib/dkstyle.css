@@ -1003,3 +1003,26 @@ a.find-out-more-opener span {
 .lz-list.open > ul {
 	display: block;
 }
+
+
+/*traits table on variant page*/
+
+.open-glyphicon {
+	margin: 0 -8px 0 0;
+	border-top: solid 1px #000;
+	border-bottom: solid 1px #000;
+	padding: 3px 0 4px 0;
+	font-size: 10px;
+}
+
+tr.highlighted-phenotype {
+	background-color: #eee !important;
+}
+
+table.dk-t2d-general-table.dataTable tr.highlighted-phenotype td.sorting_1 {
+	background-color: #acc794 !important;
+}
+
+table.dk-t2d-general-table.dataTable tr.highlighted-phenotype td.sorting_1 a {
+	color: #357ebd !important;
+}
