@@ -1409,7 +1409,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var getIbdData = function(incomingArray,defaultSelected){
         var returnValues =  [
             {value:"DNase",name:"DNase"},
-            {value:"H3K27ac",name:"H3K27ac"}
+            {value:"H3K27ac",name:"H3K27ac"},
+            {value:"UCSD",name:"TF binding footprint"}
         ];
         _.forEach(returnValues,function(o){
             o["selected"] = (defaultSelected.findIndex(function(w){return w===o.value})>-1)?"selected":"";
@@ -1418,6 +1419,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
+    var getMoreEpiData = function(incomingArray,defaultSelected){
+        var returnValues =  [
+            {value:"DNase",name:"DNase"},
+            {value:"H3K27ac",name:"H3K27ac"},
+            {value:"UCSD",name:"TF binding footprint"}
+        ];
+        _.forEach(returnValues,function(o){
+            o["selected"] = (defaultSelected.findIndex(function(w){return w===o.value})>-1)?"selected":"";
+        });
+        return _.concat(incomingArray,returnValues);
+    };
 
 
 
@@ -1450,6 +1462,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
             displayInfo = getParkerData(displayInfo,[]);
         } else {
+            //selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            //selectorInfo = getParkerData(selectorInfo,[]);
             selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
         }
 

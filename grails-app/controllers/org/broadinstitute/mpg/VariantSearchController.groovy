@@ -541,12 +541,13 @@ class VariantSearchController {
             geneExtentBegin = genomicPosition["startPosition"]
             geneExtentEnd = genomicPosition["endPosition"]
             geneChromosome = genomicPosition["chromosome"]
+            limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
                     geneExtentBegin,
                     geneExtentEnd,
                     geneChromosome,
                     -1,limit,currentVersion)
-           // dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
+//           dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
         }
 
 

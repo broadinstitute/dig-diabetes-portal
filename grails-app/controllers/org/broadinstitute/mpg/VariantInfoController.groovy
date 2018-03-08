@@ -10,6 +10,8 @@ import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
+
+
 /**
  * Controller class to control the /variantInfo section of the T2D site
  */
@@ -304,8 +306,22 @@ class VariantInfoController {
         elementMapper["17_Weak_repressed_polycomb"] = [name:"Weak repressed polycomb",state_id:12]
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
-         dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
-                 source, 3, params.assayIdList )
+        List requestedAssays = []
+        if (params.assayIdList){
+            String assayIdStringContents = ((params.assayIdList as String) - "]") - "["
+            requestedAssays = assayIdStringContents.split(",")
+        }
+        if (!requestedAssays.contains("5")){
+            dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
+                    source, 3, params.assayIdList )
+        } else {
+            dataJsonObject = restServerService.getUcsdRangeData([],[],[],[],"binding footprints",
+            "chr${chromosome}:${startPos}-${endPos}", pageStart, pageEnd,source)
+        }
+
+
+
+
 
         if (lzFormat){
             JSONObject root = new JSONObject()
@@ -344,21 +360,43 @@ class VariantInfoController {
             root["data"] = rootData
             dataJsonObject = root
         } else {
-            if (dataJsonObject.variants) {
-                dataJsonObject['region_start'] = startPos;
-                dataJsonObject['region_end'] = endPos;
-                for (Map pval in dataJsonObject.variants){
+            if (!requestedAssays.contains("5")){
+                if (dataJsonObject.variants) {
+                    dataJsonObject['region_start'] = startPos;
+                    dataJsonObject['region_end'] = endPos;
+                    for (Map pval in dataJsonObject.variants){
 
-                    if (pval.containsKey("element")){
-                        pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
+                        if (pval.containsKey("element")){
+                            pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
+                        }
+                        if (pval.containsKey("source")){
+                            pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
+                        }
+                        pval["assayName"] = assayName
+
                     }
-                    if (pval.containsKey("source")){
-                        pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
-                    }
-                    pval["assayName"] = assayName
 
                 }
 
+            } else {
+                if (dataJsonObject."binding footprints") {
+                    dataJsonObject['region_start'] = startPos;
+                    dataJsonObject['region_end'] = endPos;
+                    for (Map pval in dataJsonObject."binding footprints"){
+                        pval["element"] = "null"
+                        pval["element_trans"] = "null_trans"
+                        pval["source"] = pval["biosample_term_name"]
+                        pval["source_trans"] = pval["biosample_term_name"]
+                        pval["assayName"] = assayName
+                        LinkedHashMap decipheredRange =  restServerService.parseARange (pval["region"] as String)
+                        pval["START"] = decipheredRange["start"]
+                        pval["STOP"] = decipheredRange["end"]
+                        pval["CHROM"] = decipheredRange["chromosome"]
+                        pval["VALUE"] = pval["value"]
+                        pval["ASSAY_ID"] = 5
+                    }
+                    dataJsonObject['variants'] = dataJsonObject."binding footprints"
+                }
             }
 
         }
@@ -370,9 +408,16 @@ class VariantInfoController {
                 dataJsonObject
             }
         } else {
-            render(status: 200, contentType: "application/json") {
-                [variants: dataJsonObject]
+            if (!requestedAssays.contains("5")) {
+                render(status: 200, contentType: "application/json") {
+                    [variants: dataJsonObject]
+                }
+            } else {
+                render(status: 200, contentType: "application/json") {
+                    [variants: dataJsonObject]
+                }
             }
+
         }
 
 

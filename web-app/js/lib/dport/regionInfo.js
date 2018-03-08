@@ -15,7 +15,9 @@ var mpgSoftware = mpgSoftware || {};
             "1":[0,167.9,888.4,2649.9,9213115], // h3ks2ac
             "2":[0,207.8,389.6,1248.1,854238], // dnase
             "3":[0,0,0,0,0], // parker -- not sorted by value
-            "4":[0,0,0,0,0]  // varshney -- not sorted by value
+            "4":[0,0,0,0,0], // varshney -- not sorted by value
+            "5":[9,10,11,12,13]  // UCSD footprint -- not sorted by value
+
         }
         var DEFAULT_NUMBER_OF_VARIANTS = 10;
         var defaultTissueRegionOverlapMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -58,7 +60,9 @@ var mpgSoftware = mpgSoftware || {};
         var convertUserChoicesIntoAssayIds = function(selectedValuesAndText) {;
             var assayIds = [];
             _.forEach(selectedValuesAndText,function(oe){
-                if (oe.name==='H3K27ac'){
+                if (oe.name==='UCSD'){
+                    assayIds.push(5);
+                } else if (oe.name==='H3K27ac'){
                     assayIds.push(1);
                 } else if (oe.name==='DNase'){
                     assayIds.push(2);
@@ -399,10 +403,14 @@ var mpgSoftware = mpgSoftware || {};
                         lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_"+determineCategoricalColorIndex(record.element)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                             ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
-                    } else {
+                    } else if (record.ASSAY_ID === 5) {
                         lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                            ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
+                            ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'>"+record.state+"</td>");
+                    } else {
+                        lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
+                        elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                        ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
                     }
                 } else {
                     lineToAdd = ("<td class='tissueTable "+elementName+"'></td>");
@@ -545,6 +553,8 @@ var mpgSoftware = mpgSoftware || {};
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),dnase:1});
                 } else if (oe.name==='H3K27ac') {
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),h3k27ac:1});
+                } else if (oe.name==='UCSD') {
+                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),tfbf:1});
                 } else {
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)});
                 }
@@ -745,7 +755,7 @@ var mpgSoftware = mpgSoftware || {};
 
         };
         var setIncludeRecordBasedOnUserChoice = function(assayIdList){
-            //if (assayIdList === '[1,2]') {
+
             if (true) {
                 mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
                     var selectedElements = getSelectedValuesAndText();
@@ -753,21 +763,12 @@ var mpgSoftware = mpgSoftware || {};
                     var retval = false;
                     _.forEach(selectedElements,function(oe){
 
-                        if ((o.ASSAY_ID===1)||(o.ASSAY_ID===2)){
+                        if ((o.ASSAY_ID===1)||(o.ASSAY_ID===2)||(o.ASSAY_ID===5)){
                             retval = true;
                         } else {
                             chosenElementTypes.push(oe.name);
                         }
 
-                        // if ((oe.name==="DNase")&&
-                        //     (o.ASSAY_ID===2)){
-                        //     retval = true;
-                        // } else if ((oe.name==="H3K27ac")&&
-                        //     (o.ASSAY_ID===1)){
-                        //     retval = true;
-                        // } else {
-                        //     chosenElementTypes.push(oe.name);
-                        // }
                     });
                     if (retval) {
                         return true;
@@ -777,17 +778,7 @@ var mpgSoftware = mpgSoftware || {};
 
                 };
             }
-            // else if (assayIdList === '[3]') {
-            //     mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
-            //         console.log("[3] choice function");
-            //         var selectedElements = $('#credSetSelectorChoice option:selected');
-            //         var chosenElementTypes = [];
-            //         _.forEach(selectedElements,function(oe){
-            //             chosenElementTypes.push($(oe).val());
-            //         });
-            //         return ((chosenElementTypes.indexOf(o.element)>-1))
-            //     };
-            // }
+
             return mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
         };
 

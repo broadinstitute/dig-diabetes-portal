@@ -91,6 +91,8 @@ class RestServerService {
     private String OBSERVED_UNAFFECTED = "OBSU"
     private Integer MAXIMUM_NUMBER_DB_JOINS = 60
     private List<PortalVersionBean> PORTAL_VERSION_BEAN_LIST = []
+    private String UCSD_HACK = "http://t2depigenome-test.org:8080/"
+    private String UCSD_GET_ANNOTATION = "getAnnotationRegion"
 
 
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
@@ -2266,6 +2268,47 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+    public JSONObject getUcsdRangeData( List <String> biosampleTermNameList,
+                                        List <String> labTitleList,
+                                        List <String> organSlimList,
+                                        List <String> biosampleTypeList,
+                                        String annotationType,
+                                        String region,
+                                        int  startHere,
+                                        int pageSize,
+                                        String version ) {
+        List<String> specifyRequestList = []
+        String objectJoiner = "\",\""
+        if ((biosampleTermNameList)&&(biosampleTermNameList.size()>0)) {
+            specifyRequestList << "\"biosample_term_name\":[\"${biosampleTermNameList.join(objectJoiner)}\"]"
+        }
+        if ((labTitleList)&&(labTitleList.size()>0)) {
+            specifyRequestList << "\"lab.title\":[\"${labTitleList.join(objectJoiner)}\"]"
+        }
+        if ((organSlimList)&&(organSlimList.size()>0)) {
+            specifyRequestList << "\"organ_slims\":[\"${organSlimList.join(objectJoiner)}\"]"
+        }
+        if ((biosampleTypeList)&&(biosampleTypeList.size()>0)) {
+            specifyRequestList << "\"biosample_type\":[\"${biosampleTypeList.join(objectJoiner)}\"]"
+        }
+        if ((region) && (region.length() > 0)) {
+            specifyRequestList << "\"region\":\"${region}\""
+        }
+        if ((annotationType) && (annotationType.length() > 0)) {
+            specifyRequestList << "\"annotation_type\":\"${annotationType}\""
+        }
+        specifyRequestList << "\"genome\":\"GRCh37\""
+//        if (startHere != -1) {
+//            specifyRequestList << "\"pageStart\":${startHere}"
+//        }
+//        if (pageSize != -1) {
+//            specifyRequestList << "\"pageSize\":${pageSize}"
+//        }
+//        if ((version) && (version.length() > 0)) {
+//            specifyRequestList << "\"version\":\"${version}\""
+//        }
+        return postRestCallBase("{${specifyRequestList.join(",")}}", UCSD_GET_ANNOTATION, UCSD_HACK )
+    }
 
 
 
