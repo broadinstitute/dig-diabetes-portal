@@ -927,11 +927,14 @@
     {{#chosenStatesForTissueDisplay}}
         <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">
             {{#dnase}}
-            <r:img class="currentlanguage" uri="/images/dnase_scale.jpg" alt="Spanish"/>
+            <r:img class="currentlanguage" uri="/images/dnase_scale.jpg" alt="DNase scale"/>
             {{/dnase}}
             {{#h3k27ac}}
-            <r:img class="currentlanguage" uri="/images/h3k27ac_scale.jpg" alt="English"/>
+            <r:img class="currentlanguage" uri="/images/h3k27ac_scale.jpg" alt="H3K27ac scale"/>
             {{/h3k27ac}}
+            {{#tfbf}}
+            <r:img class="currentlanguage" uri="/images/tfbf_scale.jpg" alt="transcription factor binding footprint scale"/>
+            {{/tfbf}}
             &nbsp;{{descr}}
         </li>
     {{/chosenStatesForTissueDisplay}}

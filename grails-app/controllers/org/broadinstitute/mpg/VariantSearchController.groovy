@@ -19,6 +19,7 @@ class VariantSearchController {
     SearchBuilderService searchBuilderService
     WidgetService widgetService
     EpigenomeService epigenomeService
+    GeneManagementService geneManagementService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -536,7 +537,17 @@ class VariantSearchController {
                     geneChromosome,
                     -1,limit,currentVersion)
         }else {
-            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
+            LinkedHashMap genomicPosition = geneManagementService.getRegionSpecificationDetailsForGene( geneName,  100000)
+            geneExtentBegin = genomicPosition["startPosition"]
+            geneExtentEnd = genomicPosition["endPosition"]
+            geneChromosome = genomicPosition["chromosome"]
+            limit=1000  // kludge
+            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                    geneExtentBegin,
+                    geneExtentEnd,
+                    geneChromosome,
+                    -1,limit,currentVersion)
+//           dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
         }
 
 
