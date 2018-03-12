@@ -705,17 +705,22 @@ var mpgSoftware = mpgSoftware || {};
             var countOfTissues = primaryTissueObject.sortedTissues.length;
             var countOfSubsidiaryTissues = subsidiaryTissueObject.sortedTissues.length;
             _.forEach(primaryTissueObject.sortedTissues,function(tissueKey, index){
-                var lineToAdd = "<tr>";
+                var lineToAdd = "";
                 if ( index === 0){
                     lineToAdd += "<td class='credSetOrgLabel' style='vertical-align: middle' rowspan="+(countOfTissues+countOfSubsidiaryTissues)+">tissue</td>"
                 }
-                lineToAdd += "<td>"+tissueKey+"</td>";
+                lineToAdd += "<td  class='credSetTissueLabel'>"+tissueKey+"</td>";
                 _.forEach(sortedVariants,function(variantRec){
                     lineToAdd+=writeOneLineOfTheHeatMap(primaryTissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec)
                 });
                 lineToAdd += '</tr>';
                 var drivingTissueRecordExists = false;
                 if (lineToAdd.indexOf('matchingRegion')>-1){
+                    if (((Object.keys(subsidiaryTissueGrid).length>0))&&(typeof subsidiaryTissueGrid[tissueKey] !== 'undefined')){
+                        lineToAdd = '<tr>'+ lineToAdd;
+                    } else {
+                        lineToAdd = "<tr style='border-bottom: solid 2px #bbb'>"+ lineToAdd;
+                    }
                     $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);
                     drivingTissueRecordExists = true;
                 }
@@ -724,7 +729,7 @@ var mpgSoftware = mpgSoftware || {};
                 // do we want to add a follow up lines?
                 if (drivingTissueRecordExists&&(Object.keys(subsidiaryTissueGrid).length>0)){
                     if (typeof subsidiaryTissueGrid[tissueKey] !== 'undefined') {
-                        var lineToAdd = "<tr><td><span  class='subsidiaryClass'>("+tissueKey+")</span></td>";
+                        var lineToAdd = "<tr style='border-bottom: solid 2px #bbb'><td><span  class='subsidiaryClass'>("+tissueKey+")</span></td>";
                         _.forEach(sortedVariants,function(variantRec){
                             lineToAdd+=writeOneLineOfTheHeatMap(subsidiaryTissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,variantRec)
                         });

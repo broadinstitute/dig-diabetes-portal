@@ -151,6 +151,13 @@ td.credSetOrgLabel{
     width: 2px;
     background: #eee;
 }
+td.credSetTissueLabel{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    width:30px;
+}
+
 td.credSetConstLabel{
     width: 180px;
 }
