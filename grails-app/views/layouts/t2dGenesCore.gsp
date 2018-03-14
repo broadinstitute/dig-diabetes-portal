@@ -359,9 +359,9 @@
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
 
-                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; display: inline-block; width: 250px; float: right;' placeholder='Filter phenotypes (keyword, keyword)'>";
-
-                $(".dt-buttons").append(inputBox);
+                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; position:absolute; top: 0; left: 250px; display: block; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'>";
+                inputBox += "<span style='font-size: 12px; margin-top: 0px; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+                $(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
 
                 $("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
