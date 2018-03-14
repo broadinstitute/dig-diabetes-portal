@@ -520,9 +520,16 @@
                     <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
                         <div class="row"   style="border: none">
                             <div class="col-xs-12">
-                                <div class="variantCategoryHolder">The Common variants tab shows information about variants located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}},
-                                 associated with the {{pname}}, and with
-                                allele frequency (MAF) is greater than 5%.
+                                <div class="variantCategoryHolder">
+                                    <div  style="margin: 0 0 -15px 10px">This tab displays variants:
+                                         <div>
+                                            <ul style="margin: 0 0 0 10px">
+                                                 <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
+                                                 <li>associated with {{pname}}</li>
+                                                 <li>and with allele frequency (MAF) is greater than 5%</li>
+                                            </ul>
+                                         </div>
+                                    </div>
 
                                     <div id="commonVariantsLocation"></div>
                                     <div class="browserChooserGoesHere"></div>
@@ -537,7 +544,18 @@
                 <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder">The High-impact variants tab shows information about variants associated with the selected phenotype that are predicted to cause missense or protein-truncating mutations in the encoded protein. High-impact variants with MAF > 5% will also be shown on the Common variants tab.
+                            <div class="variantCategoryHolder">
+                                <div  style="margin: 0 0 -15px 10px">This tab displays variants:
+                                     <div>
+                                        <ul style="margin: 0 0 0 10px">
+                                             <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
+                                             <li>associated with {{pname}}</li>
+                                             <li>predicted to cause missense or protein-truncating mutations in the encoded protein</li>
+                                        </ul>
+                                     </div>
+                                     Note: high-impact variants with MAF > 5% will also be shown on the Common variants tab.
+                                </div>
+
                                 <div id="highImpactVariantsLocation"></div>
                                 <div id="aggregateVariantsLocation"></div>
                                 <div class="row">

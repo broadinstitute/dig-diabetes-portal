@@ -305,7 +305,7 @@ class GeneController {
         if (sharedToolsService.getRecognizedStringsOnly()!=0){ // once we have the variant database complete we can use this
             Variant variant = Variant.retrieveVariant(canonicalVariant)
             if (variant) {
-                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
                 return
             } else {
                 redirect(controller: 'home', action: 'portalHome', params: [id: params.id])

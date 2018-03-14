@@ -352,7 +352,7 @@ class SharedToolsService {
             if (rawString.indexOf(':')) {
                 List<String> dividedByColons = rawString.tokenize(":")
                 if (dividedByColons.size() > 1) {
-                    chromosome = dividedByColons[0]
+                    chromosome = parseChromosome(dividedByColons[0])
                     position = dividedByColons[1]
                     canonicalForm = "${chromosome}_${position}"
                 }
@@ -364,8 +364,11 @@ class SharedToolsService {
                     alternate = dividedByColons[3]
                     canonicalForm += "_${alternate}"
                 }
+            } else {
+                canonicalForm = rawString.replaceAll('-', '_')
+                canonicalForm = canonicalForm.replaceAll('/', '_')
             }
-            canonicalForm = rawString.replaceAll('-', '_')
+
         }
         return canonicalForm
     }

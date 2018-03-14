@@ -54,7 +54,7 @@
              */
             $('#generalized-go').on('click', function () {
                 var somethingSymbol = $('#generalized-input').val();
-                //alert(somethingSymbol);
+                somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
                 if (somethingSymbol) {
                     goToSelectedItem(somethingSymbol)
                 }
@@ -150,7 +150,7 @@
         <div class="gene-info-container row">
             <div class="gene-info-view">
                 <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
-                    <em style="font-weight: 900;"><%=geneName%> locus</em>
+                    <em style="font-weight: 900;"><%=geneName%> &nbsp;locus</em>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">
