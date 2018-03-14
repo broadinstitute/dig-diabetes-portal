@@ -93,16 +93,7 @@
                     positioningInformation['endPosition'] = genomicPositionList[1];
                 }
             }
-//            $('[data-toggle="popover"]').popover({
-//                animation: true,
-//                html: true,
-//                template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
-//            });
-//            $(".pop-top").popover({placement: 'top'});
-//            $(".pop-right").popover({placement: 'right'});
-//            $(".pop-bottom").popover({placement: 'bottom'});
-//            $(".pop-left").popover({placement: 'left'});
-//            $(".pop-auto").popover({placement: 'auto'});
+
             $('#placeForAUniprotSummary').hide();
             $('div.geneWindowDescription').hide()
         } else { // this looks like a gene, which means that we need to figure out it's genomic coordinates
@@ -159,7 +150,7 @@
         <div class="gene-info-container row">
             <div class="gene-info-view">
                 <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
-                    <em style="font-weight: 900;"><%=geneName%></em>
+                    <em style="font-weight: 900;"><%=geneName%> locus</em>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">

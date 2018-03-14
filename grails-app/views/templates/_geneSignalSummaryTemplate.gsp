@@ -53,19 +53,13 @@
                 </div>
                 {{/genePageWarning}}
 
-                %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
-                    %{--<div class="col-md-12" style="font-size:13px">--}%
-                        %{--Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.--}%
-                    %{--</div>--}%
-                %{--</g:if>--}%
             </div>
             <div class="row geneWindowDescriptionHolder">
 
                 <div class="col-md-12">
-                <!-- <label style="font-size: 20px; font-weight: 900">VARIANTS ON <em>{{geneName}}</em></label> -->
-                    <div class="geneWindowDescription" style="font-size: 20px; font-weight: 900; font-style:normal;">
-                    <em style="font-weight: 900; ">{{geneName}}</em> is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
-                    </div>
+                    %{--<div class="geneWindowDescription" style="font-size: 20px; font-weight: 900; font-style:normal;">--}%
+                    %{--<em style="font-weight: 900; ">Displaying the region on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}--}%
+                    %{--</div>--}%
                 </div>
 
             </div>
@@ -526,7 +520,9 @@
                     <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
                         <div class="row"   style="border: none">
                             <div class="col-xs-12">
-                                <div class="variantCategoryHolder">The Common variants tab shows information about variants associated with the selected phenotype whose minor allele frequency (MAF) is greater than 5%.
+                                <div class="variantCategoryHolder">The Common variants tab shows information about variants located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}},
+                                 associated with the {{pname}}, and with
+                                allele frequency (MAF) is greater than 5%.
 
                                     <div id="commonVariantsLocation"></div>
                                     <div class="browserChooserGoesHere"></div>

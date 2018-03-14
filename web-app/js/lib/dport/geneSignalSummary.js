@@ -1333,19 +1333,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var lzOnCredSetTab = function (additionalParameters,credSetSpecific){
-        //additionalParameters
-        //{positioningInformation
-        //phenotypeName
-        //pName
-        //datasetName
-        //defaultTissuesDescriptions
-        //datasetReadableName
-        //sampleGroupsWithCredibleSetNames,
-        //positionBy
-        //phenoPropertyName
-        // }
-        //
-        //
+
         var lzParmCred = {
             assayIdList:additionalParameters.assayIdList,
             portalTypeString:additionalParameters.portalTypeString,
@@ -1490,8 +1478,16 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         $('#collapseExample div.wellPlace').empty();
 
         var regionSpecificVersion = additionalParameters.regionSpecificVersion;
-        var displayCommonTab = [1];
-        var displayHighImpactTab = [1];
+        var displayCommonTab = [{chromosome:additionalParameters.geneChromosomeMinusChr,
+            geneExtentBegin:additionalParameters.geneExtentBegin,
+            geneExtentEnd:additionalParameters.geneExtentEnd,
+            pname:additionalParameters.pname
+        }];
+        var displayHighImpactTab = [{chromosome:additionalParameters.geneChromosomeMinusChr,
+            geneExtentBegin:additionalParameters.geneExtentBegin,
+            geneExtentEnd:additionalParameters.geneExtentEnd,
+            pname:additionalParameters.pname
+        }];
         if (regionSpecificVersion === 1){
             displayCommonTab = [];
             displayHighImpactTab = [];
