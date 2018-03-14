@@ -307,7 +307,8 @@ environments {
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 
-//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
+//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal production for now
+//        grails.ServerURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"        // stroke portal demo for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
@@ -328,7 +329,7 @@ environments {
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
-
+//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
          grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
