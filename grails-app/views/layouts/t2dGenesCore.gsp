@@ -271,7 +271,7 @@
                         return l===m?0:l>m?1:-1;
                     });
 
-                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px;'></div>";
+                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
 
                     $.each(lzPhenotypes, function(key, value) {
                         lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
@@ -285,18 +285,45 @@
                             $(this).css("opacity","0.5");
                             $(this).find("ul").remove();
                         }
-                    })
+                    });
+
+                    $("#phenotype_search").focus(function() {
+                        $(this).attr("placeholder", "");
+                    });
+
+                    $("#phenotype_search").focusout(function() {
+                        $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
+                    });
 
                     $("#phenotype_search").on('input',function() {
 
-                        var searchWord = $("#phenotype_search").val().toLowerCase();
+                        $("#dk_lz_phenotype_list").find("li").removeClass("hidden-phenotype");
 
-                        $("#dk_lz_phenotype_list").find("a").each(function() {
-                            var phenotypeString = $(this).text().toLowerCase();
+                        var searchWords = $("#phenotype_search").val().toLowerCase().split(",");
+
+                        $.each(searchWords, function(index,value){
 
 
-                            (phenotypeString.indexOf(searchWord) >= 0)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
-                        })
+                            $("#dk_lz_phenotype_list").find("a").each(function() {
+
+                                if($(this).closest("li").hasClass("hidden-phenotype")){
+
+                                } else {
+
+                                    var phenotypeString = $(this).text().toLowerCase();
+                                    var searchWord = value.trim();
+
+                                    if(phenotypeString.indexOf(searchWord) >= 0) {
+                                        $(this).closest("li").removeClass("hidden-phenotype");
+                                    } else {
+                                        $(this).closest("li").addClass("hidden-phenotype");
+                                    }
+
+                                }
+                            })
+                        });
+
+
                     });
 
                     $("#dk_lz_phenotype_list").addClass("list-allset")
@@ -323,6 +350,72 @@
                 if($(event.target).closest(".lz-list").find("ul").find("li").length != 0) {
                     ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
                 }
+            }
+
+            /* traits table */
+
+            function massageTraitsTable() {
+
+                $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
+
+
+                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; position:absolute; top: 0; left: 250px; display: block; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'>";
+                inputBox += "<span style='font-size: 12px; margin-top: 0px; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+                $(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
+
+                $("thead").find("tr").each(function() {
+                    $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
+                });
+
+                $("#traits_table_filter").focus(function() {
+                    $(this).attr("placeholder", "");
+                });
+
+                $("#traits_table_filter").focusout(function() {
+                    $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
+                });
+
+                $("#traits_table_filter").on('input',function() {
+
+                    $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
+
+                    var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+
+                    $.each(searchWords, function(index,value){
+
+                        $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                            if($(this).hasClass("hidden-traits-row")) {
+
+                            } else {
+
+                                var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                                var searchWord = value.trim();
+
+                                if(phenotypeString.indexOf(searchWord) >= 0) {
+                                    $(this).removeClass("hidden-traits-row");
+                                } else {
+                                    $(this).addClass("hidden-traits-row");
+                                }
+                            }
+
+                        });
+
+                    });
+
+                });
+
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+                    $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
+                });
+
+                $("#traitsPerVariantTableBody").find("td").mouseenter(function() {
+                    var phenotypeName = $(this).closest("tr").find("td").eq("0").text();
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+                        ($(this).find("td").eq("0").text() == phenotypeName)? $(this).addClass("highlighted-phenotype"):$(this).removeClass("highlighted-phenotype");
+                    });
+                })
             }
 
 
@@ -426,19 +519,18 @@
 
             /* copy url of variant search result page to clipboard*/
 
-
             function copyVariantSearchURL() {
-                document.addEventListener('copy', function(e){
+                document.addEventListener('copy', function(e) {
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
                     e.preventDefault(); // default behaviour is to copy any selected text
-
                 });
 
                 document.execCommand('copy');
             }
-            /* copy URL function end */
 
+
+            /* copy URL function end */
 
             $( window ).load( function() {
 
@@ -450,7 +542,7 @@
 
             $( window ).resize(function() {
                 menuHeaderSet();
-            });
+            })
 
         </script>
 
