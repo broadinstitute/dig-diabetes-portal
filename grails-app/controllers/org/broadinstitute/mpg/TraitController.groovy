@@ -462,7 +462,7 @@ class TraitController {
      */
     def traitVariantCrossByGeneAjax() {
         String geneName = params.geneName
-        LinkedHashMap<String, Integer> geneExtents = sharedToolsService.getGeneExpandedExtent(geneName)
+        LinkedHashMap<String, Integer> geneExtents = sharedToolsService.getGeneExpandedExtent(geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
         JSONObject jsonObject = restServerService.searchForTraitBySpecifiedRegion(geneExtents.chrom as String,
                 geneExtents.startExtent as String,
                 geneExtents.endExtent as String)

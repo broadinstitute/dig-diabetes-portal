@@ -84,7 +84,6 @@ class GeneController {
         String newVandAColumnName = "custom significance"
         String newVandAColumnPValue
         String newDatasetName
-        String newDatasetRowName = ""
         String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
@@ -127,18 +126,9 @@ class GeneController {
         if (params.dataSetChooser) {
             newDatasetName =  params.dataSetChooser // data set^ P value property name
         }
-        if (params.newRowName) {
-            newDatasetRowName =  params.newRowName
-        }
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
-        String regionSpecification = null
 
-        // added test for unit test error
-        if ((chromosomeNumber)&&(endExtent>0)) {
-            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
-        } else {
-            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
-        }
+        String regionSpecification = sharedToolsService.generateRegionString(chromosomeNumber,  startExtent,  endExtent,  geneToStartWith,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE )
 
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
@@ -217,7 +207,7 @@ class GeneController {
                 geneExtent["endExtent"] = endExtent
                 geneExtent["chrom"] = chromosomeNumber
             } else {
-                geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
+                geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
             }
 
 

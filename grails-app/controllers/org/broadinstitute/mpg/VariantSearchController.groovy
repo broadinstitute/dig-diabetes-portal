@@ -265,7 +265,7 @@ class VariantSearchController {
         String geneName = params.gene
         String phenotypeName = params.phenotype
         String dataSetName = params.dataset
-        LinkedHashMap extents = sharedToolsService.getGeneExpandedExtent( geneName)
+        LinkedHashMap extents = sharedToolsService.getGeneExpandedExtent( geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
         String chromosome = extents.chrom
         if (chromosome?.startsWith('chr')){
             chromosome = chromosome-'chr'
@@ -465,7 +465,7 @@ class VariantSearchController {
 
     def retrieveTopVariantsAcrossSgs (){
         String portalType = g.portalTypeString() as String
-        String geneChromosome = params.geneChromosome
+        String geneChromosome = sharedToolsService.parseChromosome(params.geneChromosome)
         Long geneExtentBegin = 0L
         Long geneExtentEnd = 0l
         try {
@@ -537,17 +537,16 @@ class VariantSearchController {
                     geneChromosome,
                     -1,limit,currentVersion)
         }else {
-            LinkedHashMap genomicPosition = geneManagementService.getRegionSpecificationDetailsForGene( geneName,  100000)
-            geneExtentBegin = genomicPosition["startPosition"]
-            geneExtentEnd = genomicPosition["endPosition"]
-            geneChromosome = genomicPosition["chromosome"]
+            LinkedHashMap genomicPosition = sharedToolsService.getGeneExpandedExtent( geneName,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            geneExtentBegin = genomicPosition["startExtent"]
+            geneExtentEnd = genomicPosition["endExtent"]
+            geneChromosome = sharedToolsService.parseChromosome(genomicPosition["chrom"])
             limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
                     geneExtentBegin,
                     geneExtentEnd,
                     geneChromosome,
                     -1,limit,currentVersion)
-//           dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
         }
 
 

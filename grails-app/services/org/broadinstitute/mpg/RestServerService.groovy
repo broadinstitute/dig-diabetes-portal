@@ -78,6 +78,7 @@ class RestServerService {
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
+    public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 250000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -454,10 +455,7 @@ class RestServerService {
             if ((startExtent < 0) || (endExtent < 0) || (startExtent > endExtent)) {
                 encounteredErrors = true
             }
-            String chromosome = extractedNumbers["chromosomeNumber"].toUpperCase()
-            if (chromosome.contains('CHR')){
-                chromosome = chromosome-"CHR"
-            }
+            String chromosome = sharedToolsService.parseChromosome(extractedNumbers["chromosomeNumber"])
             if (chromosome != 'X' && chromosome != 'x' && chromosome != 'Y' && chromosome != 'y'){
                 Integer chromosomeNumber
                 try {
@@ -2147,10 +2145,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if ((experiment?.technology == 'ExSeq')||(experiment?.technology == 'WGS')){
             queryFilterStrings << "7=${geneName}"
         } else {
-            LinkedHashMap  regionSpecification = geneManagementService?.getRegionSpecificationDetailsForGene(geneName, 100000)
-            queryFilterStrings << "8=${regionSpecification.chromosome}"
-            queryFilterStrings << "9=${regionSpecification.startPosition}"
-            queryFilterStrings << "10=${regionSpecification.endPosition}"
+            LinkedHashMap  regionSpecification = sharedToolsService.getGeneExpandedExtent(geneName,EXPAND_ON_EITHER_SIDE_OF_GENE)
+            queryFilterStrings << "8=${regionSpecification.chrom}"
+            queryFilterStrings << "9=${regionSpecification.startExtent}"
+            queryFilterStrings << "10=${regionSpecification.endExtent}"
         }
 
 
@@ -2729,26 +2727,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
     public JSONObject getClumpDataRestCall(String phenotype, String datasetName) {
-        //JsonSlurper jsonSlurper = new JsonSlurper()
-        //JsonObject clumpDataJsonPayloadString =  jsonSlurper.parseText('{"phenotype":"${chromosomeName}","dataset":"ExChip_CAMP_dv1__T2D"}')
 
        String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
 
-       //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
-
-
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
-        //apiResults.variants.VAR_ID
-
-
-//
-//        for (int i = 0; i < VectorDataJson.numRecords; i++) {
-//            String CHROM = VectorDataJson.variants.VAR_ID;
-//            print CHROM
-//
-//        }
-
-
 
         return VectorDataJson;
     }

@@ -33,6 +33,8 @@ class SharedToolsService {
     RestServerService restServerService
     MetaDataService metaDataService
     FilterManagementService filterManagementService
+    GeneManagementService geneManagementService
+
     private static final log = LogFactory.getLog(this)
     JSONObject sharedMetadata = null
     LinkedHashMap sharedProcessedMetadata = null
@@ -824,17 +826,30 @@ class SharedToolsService {
         return phenotypeHolder
     }
 
+    public String generateRegionString(String chromosomeNumber, Long startExtent, Long endExtent, String geneToStartWith, int expansionSize) {
+        String regionSpecification
+        if ((chromosomeNumber)&&(endExtent>0)) {
+            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
+        } else {
+            regionSpecification = geneManagementService?.getRegionSpecificationForGene(geneToStartWith, expansionSize)
+        }
+        return regionSpecification
+    }
+
+
 
     public String parseChromosome(String rawChromosomeString) {
         String returnValue = ""
-        java.util.regex.Matcher chromosome = rawChromosomeString =~ /(CHR[\dXY]*)|(chr[\dXY]*)/
-        if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
-            chromosome = rawChromosomeString =~ /[\dXY]*/
-        }
-        if (chromosome.size() > 0) {
-            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
-            if (chromosomeString.size() > 0) {
-                returnValue = chromosomeString[0]
+        if (rawChromosomeString != null){
+            java.util.regex.Matcher chromosome = rawChromosomeString =~ /(CHR[\dXY]*)|(chr[\dXY]*)/
+            if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
+                chromosome = rawChromosomeString =~ /[\dXY]*/
+            }
+            if (chromosome.size() > 0) {
+                java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
+                if (chromosomeString.size() > 0) {
+                    returnValue = chromosomeString[0]
+                }
             }
         }
         return returnValue;
@@ -1265,7 +1280,7 @@ class SharedToolsService {
     }
 
     public LinkedHashMap getGeneExtent(String geneName) {
-        LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1"]
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1"]
         if (geneName) {
             String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
@@ -1277,15 +1292,15 @@ class SharedToolsService {
     }
 
 
-    public LinkedHashMap getGeneExpandedExtent(String geneName) {
-        LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000]
+    public LinkedHashMap getGeneExpandedExtent(String geneName,int bufferSpace) {
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000]
         if (geneName) {
             LinkedHashMap<String, Integer> geneExtent = getGeneExtent(geneName)
             Integer addrStart = geneExtent.startExtent
             if (addrStart) {
-                returnValue.startExtent = ((addrStart > 100000) ? (addrStart - 100000) : 0)
+                returnValue.startExtent = ((addrStart > bufferSpace) ? (addrStart - bufferSpace) : 0)
             }
-            returnValue.endExtent = geneExtent.endExtent + 100000
+            returnValue.endExtent = geneExtent.endExtent + bufferSpace
             returnValue.chrom = geneExtent.chrom
         }
         return returnValue
@@ -1309,11 +1324,21 @@ class SharedToolsService {
         if (geneName) {
             String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
-            LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent(geneName)
+            LinkedHashMap geneExtent = getGeneExpandedExtent(geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
             returnValue = "${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
         }
         return returnValue
     }
+
+//    public String generateExtentsFromRegionOrGeneName(String geneName) {
+//        String returnValue = ""
+//        if (geneName.indexOf(":")>-1){ // if it has a colon then we will assume that the name is a range
+//            LinkedHashMap codedRange = restServerService.parseARange(geneName)
+//        } else {
+//
+//        }
+//        return returnValue
+//    }
 
 
     public void decodeAFilterList(List<String> encodedOldParameterList, LinkedHashMap<String, String> returnValue) {
