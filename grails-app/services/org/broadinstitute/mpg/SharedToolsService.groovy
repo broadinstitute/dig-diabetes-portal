@@ -1283,7 +1283,7 @@ class SharedToolsService {
             LinkedHashMap<String, Integer> geneExtent = getGeneExtent(geneName)
             Integer addrStart = geneExtent.startExtent
             if (addrStart) {
-                returnValue.startExtent = ((addrStart > 100000) ? (addrStart - 100000) : 0)
+                returnValue.startExtent = ((addrStart > restServerService.) ? (addrStart - 100000) : 0)
             }
             returnValue.endExtent = geneExtent.endExtent + 100000
             returnValue.chrom = geneExtent.chrom

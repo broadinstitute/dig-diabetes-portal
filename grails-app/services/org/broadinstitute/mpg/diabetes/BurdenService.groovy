@@ -114,6 +114,70 @@ class BurdenService {
             additionalProperties << mafProperty
         }
 
+
+
+        String
+
+
+
+        // get the json string to send to the getData call
+        try {
+            jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore, additionalQueryFilterList, additionalProperties);
+        } catch (PortalException exception) {
+            log.error("Got json building error for getData payload creation: " + exception.getMessage());
+        }
+
+        // call the post REST call
+        resultJson = this.restServerService.postGetDataCall(jsonString);
+
+        // return the result
+        return resultJson;
+    }
+
+
+
+    protected JSONObject getVariantsForRange(String range, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
+        // local variables
+        String jsonString = "";
+        JSONObject resultJson;
+        int mostDelScore = 2;
+        String operand = PortalConstants.OPERATOR_LESS_THAN_EQUALS;
+
+        // set the most del score based on the variant filtering option given
+        // TODO - possibly combine this and polyphen/sift filtering into one method for clarity
+        switch (variantSelectionOptionId){
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING:
+                mostDelScore = 1;
+                operand = PortalConstants.OPERATOR_EQUALS;
+                break;
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE:
+                mostDelScore = 2;
+                break;
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING:
+                mostDelScore = 3;
+                break;
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
+            case PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT: // filter locally
+            case PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD:  // filter locally
+            case PortalConstants.BURDEN_VARIANT_OPTION_NS:  // filter locally
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
+                mostDelScore = 5;
+                break;
+            default:
+                mostDelScore = 5;
+                break;
+        }
+
+        Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC",MetaDataService.METADATA_VARIANT)
+        List<Property> additionalProperties = []
+        if (macProperty != null){
+            additionalProperties << macProperty
+        }
+        Property mafProperty = metaDataService.getSampleGroupProperty(dataSet,"MAF",MetaDataService.METADATA_VARIANT)
+        if (mafProperty) {
+            additionalProperties << mafProperty
+        }
+
         // get the json string to send to the getData call
         try {
             jsonString = this.getBurdenJsonBuilder().getKnowledgeBaseQueryPayloadForVariantSearch(geneString, operand, mostDelScore, additionalQueryFilterList, additionalProperties);
@@ -128,6 +192,9 @@ class BurdenService {
         // return the result
         return resultJson;
     }
+
+
+
 
 
 

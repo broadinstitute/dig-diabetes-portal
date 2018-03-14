@@ -93,6 +93,7 @@ class RestServerService {
     private List<PortalVersionBean> PORTAL_VERSION_BEAN_LIST = []
     private String UCSD_HACK = "http://t2depigenome-test.org:8080/"
     private String UCSD_GET_ANNOTATION = "getAnnotationRegion"
+    private Integer EXPAND_RANGE_ON_EACH_OF_GENE = 250000
 
 
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";

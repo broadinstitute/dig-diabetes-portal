@@ -24,6 +24,7 @@ class WidgetService {
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     RestServerService restServerService;
     MetaDataService metaDataService
+    GeneManagementService geneManagementService
     def grailsApplication
 
     // setting variables
@@ -1037,6 +1038,21 @@ class WidgetService {
 
 
 
+    public String
+
+
+
+
+
+    public String generateGenomicPositionString(String chromosomeNumber, Long startExtent, Long endExtent, String geneToStartWith, int expandRange){
+        String regionSpecification
+        if ((chromosomeNumber)&&(endExtent>0)) {
+            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
+        } else {
+            regionSpecification = geneManagementService?.getRegionSpecificationForGene(geneToStartWith, expandRange)
+        }
+        return regionSpecification
+    }
 
     public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
                                                               String dataset, String phenotype, String propertyName ) {

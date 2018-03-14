@@ -229,6 +229,7 @@ public class BurdenJsonBuilder {
         }
 
         // add in the filters
+
         query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_GENE), PortalConstants.OPERATOR_EQUALS, geneString);
         query.addFilterProperty((Property)parser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE), mostDelScoreOperand, String.valueOf(mostDelScore));
 

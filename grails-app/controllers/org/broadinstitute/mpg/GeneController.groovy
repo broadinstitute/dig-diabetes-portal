@@ -134,11 +134,12 @@ class GeneController {
         String regionSpecification = null
 
         // added test for unit test error
-        if ((chromosomeNumber)&&(endExtent>0)) {
-            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
-        } else {
-            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
-        }
+        regionSpecification = widgetService.generateGenomicPositionString(chromosomeNumber,startExtent,endExtent,geneToStartWith,restServerService.EXPAND_RANGE_ON_EACH_OF_GENE)
+//        if ((chromosomeNumber)&&(endExtent>0)) {
+//            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
+//        } else {
+//            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
+//        }
 
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
