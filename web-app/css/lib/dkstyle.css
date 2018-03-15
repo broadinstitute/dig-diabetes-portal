@@ -692,12 +692,13 @@ select optgroup {
     color: #aaa !important;
 }
 
-div.dt-buttons a.dt-button, div.dt-buttons a.dt-button:hover {
+div.dt-buttons a.dt-button, div.dt-buttons a.dt-button:hover, div.bottom a.dt-button, div.bottom a.dt-button:hover {
     background-image: none;
     background-color: #9dd7db;
     border: none;
     padding: 5px 15px 5px 15px;
     color: #333;
+    float: right;
 }
 
 div.variantResultsFilterHolder > ul {
@@ -1025,4 +1026,16 @@ table.dk-t2d-general-table.dataTable tr.highlighted-phenotype td.sorting_1 {
 
 table.dk-t2d-general-table.dataTable tr.highlighted-phenotype td.sorting_1 a {
 	color: #357ebd !important;
+}
+
+a.related-word, a.related-word-red {
+    display:inline-block;
+    border-radius: 3px;
+    padding: 2px 5px;
+    margin: 3px 5px 0 0;
+    background-color: #C0E1E7;
+}
+
+a.related-word-red {
+    background-color: #FFcccc;
 }

@@ -358,9 +358,16 @@
 
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
+                var dtButtons = $(".dt-buttons").html();
 
-                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; position:absolute; top: 0; left: 250px; display: block; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'>";
-                inputBox += "<span style='font-size: 12px; margin-top: 0px; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+                $(dtButtons).appendTo($("div.bottom"));
+
+                $(".dt-buttons").html("");
+
+
+                var inputBox = "<div class='phenotype-searchbox-wrapper'><input id='traits_table_filter' type='text' name='search' style='display: block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'>";
+                inputBox += "<div class='related-words'></div></div>";
+                inputBox += "<span style='font-size: 12px; margin: 15px 0 -10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
                 $(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
 
                 $("thead").find("tr").each(function() {
@@ -375,35 +382,7 @@
                     $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
                 });
 
-                $("#traits_table_filter").on('input',function() {
-
-                    $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
-
-                    var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
-
-                    $.each(searchWords, function(index,value){
-
-                        $("#traitsPerVariantTableBody").find("tr").each(function() {
-
-                            if($(this).hasClass("hidden-traits-row")) {
-
-                            } else {
-
-                                var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
-                                var searchWord = value.trim();
-
-                                if(phenotypeString.indexOf(searchWord) >= 0) {
-                                    $(this).removeClass("hidden-traits-row");
-                                } else {
-                                    $(this).addClass("hidden-traits-row");
-                                }
-                            }
-
-                        });
-
-                    });
-
-                });
+                $("#traits_table_filter").on('input',filterTraitsTable);
 
                 $("#traitsPerVariantTableBody").find("tr").each(function() {
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
@@ -416,6 +395,116 @@
                         ($(this).find("td").eq("0").text() == phenotypeName)? $(this).addClass("highlighted-phenotype"):$(this).removeClass("highlighted-phenotype");
                     });
                 })
+            }
+
+            function filterTraitsTable() {
+                $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
+
+                var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+
+                $.each(searchWords, function(index,value){
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                        if($(this).hasClass("hidden-traits-row")) {
+
+                        } else {
+
+                            var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                            var searchWord = value.trim();
+
+                            if(phenotypeString.indexOf(searchWord) >= 0) {
+                                $(this).removeClass("hidden-traits-row").addClass("targeted-trait-row");
+                            } else {
+                                $(this).addClass("hidden-traits-row").removeClass("targeted-trait-row");
+                            }
+                        }
+
+                    });
+
+                });
+
+                var relatedWords = showRelatedWords();
+
+                ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").append(relatedWords) : $(".related-words").html("");
+            }
+
+
+
+            function showRelatedWords() {
+                var relatedWords = "";
+                $(".targeted-trait-row").each(function() {
+                    relatedWords += $(this).find("td").eq("0").text()+" ";
+                });
+
+                relatedWords = relatedWords.split(" ").sort();
+
+                var appearedWords = [];
+
+                for(var x=1; x < relatedWords.length; x++){
+                    (relatedWords[x] != relatedWords[x-1])? appearedWords.push(relatedWords[x]):"";
+                }
+
+                var wordsByWeight = [];
+
+                $.each(appearedWords, function(index, value) {
+
+                    var coutAppearance = 0;
+
+                    for(var x=0; x < relatedWords.length; x++){
+                        (relatedWords[x] == value)? coutAppearance ++ :"";
+                    }
+
+                    wordsByWeight.push({"word":value,"appearance":coutAppearance});
+
+                });
+
+                wordsByWeight.sort( function(a,b){ return b.appearance - a.appearance } );
+
+                /*for(var x=0; x < wordsByWeight.length; x++){
+                    console.log("word: " + wordsByWeight[x].word + " appearance: " + wordsByWeight[x].appearance);
+                }*/
+
+                var returnText = "";
+
+                var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+
+                    for (var x = 0; x < wordsByWeight.length; x++) {
+
+                        var comparingWord = wordsByWeight[x].word.toLowerCase();
+                        var wordMatch = "";
+
+                        $.each(searchWords, function(index,value) {
+                            var searchWord = value.trim().toLowerCase();
+
+                            if( searchWord != "" ){
+                                if (comparingWord.indexOf(searchWord) >= 0) {
+                                    wordMatch = "<a class='related-word-red' href='javascript:;' onclick='addToPhenotypeFilter(event)'>" + wordsByWeight[x].word + "</a>";
+                                } else {
+                                    wordMatch = "<a class='related-word' href='javascript:;' onclick='addToPhenotypeFilter(event)'>" + wordsByWeight[x].word + "</a>";
+                                }
+                            }
+
+
+
+                        });
+
+                        returnText += wordMatch;
+                    }
+
+
+                return returnText;
+
+            }
+
+            function addToPhenotypeFilter(event) {
+                var wordToAdd = $(event.target).text();
+                var currnetVal = $("#traits_table_filter").val();
+
+                $("#traits_table_filter").val(currnetVal + ", " + wordToAdd);
+
+                filterTraitsTable();
+
             }
 
 
