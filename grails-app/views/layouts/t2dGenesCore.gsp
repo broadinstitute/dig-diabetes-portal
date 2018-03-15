@@ -358,17 +358,17 @@
 
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
-                var dtButtons = $(".dt-buttons").html();
+                var dtButtons = $("#traitsPerVariantTable_wrapper").find(".dt-buttons").html();
 
-                $(dtButtons).appendTo($("div.bottom"));
+                $(dtButtons).appendTo($("#traitsPerVariantTable_wrapper").find("div.bottom"));
 
-                $(".dt-buttons").html("");
+                $("#traitsPerVariantTable_wrapper").find(".dt-buttons").html("");
 
 
                 var inputBox = "<div class='phenotype-searchbox-wrapper'><input id='traits_table_filter' type='text' name='search' style='display: block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'>";
                 inputBox += "<div class='related-words'></div></div>";
                 inputBox += "<span style='font-size: 12px; margin: 15px 0 -10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
-                $(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
+                $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
 
                 $("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
