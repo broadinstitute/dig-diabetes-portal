@@ -360,7 +360,7 @@
 
 
                 var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; position:absolute; top: 0; left: 250px; display: block; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'>";
-                inputBox += "<span style='font-size: 12px; margin-top: 0px; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+                inputBox += "<span style='font-size: 12px; margin-top: 0px; display: block;'>To sort the table by multiple columns, hold the shift key and click the header of the secondary column.</span>";
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
 
                 $("thead").find("tr").each(function() {
