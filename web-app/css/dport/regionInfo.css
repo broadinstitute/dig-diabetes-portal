@@ -169,6 +169,10 @@ th.niceHeadersThatAreLinks{
     color: #9632b8;
 }
 span.subsidiaryClass{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    max-width:120px;
     color:#888888;
 }
 

@@ -155,7 +155,7 @@ td.credSetTissueLabel{
     overflow:hidden;
     white-space:nowrap;
     text-overflow:ellipsis;
-    width:30px;
+    max-width:120px;
 }
 
 td.credSetConstLabel{

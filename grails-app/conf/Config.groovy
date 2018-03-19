@@ -318,11 +318,11 @@ environments {
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
-//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
 //        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
-          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
@@ -635,7 +635,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   ),
                                   new PortalVersionBean("ibd",
-                                                          "Inflammatory Bowel Disease",
+                                          //"Inflammatory Bowel Disease",
+                                          "Variant to Function",
                                                           "mdv80",
                                                           "IBD",
                                                           "GWAS_IBDGenomics_eu_mdv80",
@@ -644,7 +645,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[1,2]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/ibd/ibd_front_logo.svg",
+                                          "images/ibd/ibd_front_logo_WOnT.svg",
                                           "portal.ibd.header.tagline",
                                           [],
                                           [],
@@ -692,6 +693,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   )
 ]
 
-
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 

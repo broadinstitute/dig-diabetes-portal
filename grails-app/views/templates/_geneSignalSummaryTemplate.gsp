@@ -614,7 +614,7 @@
                                         {{#selectorInfoExists}}
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">Add tissue:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                                <label for="credSetSelectorChoice">Display genomic features:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     {{#selectorInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>
