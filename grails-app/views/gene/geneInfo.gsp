@@ -11,6 +11,8 @@
     <r:require module="mustache"/>
     <r:require modules="boxwhisker"/>
     <r:require modules="burdenTest"/>
+    <r:require modules="gnomad"/>
+    <script type="text/javascript" src="../../js/lib/gnomadt2d.js"></script>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
@@ -126,6 +128,20 @@
                 $(".pop-auto").popover({placement: 'auto'});
                 loading.hide();
                 //massageLZ();
+
+
+
+                /**
+                 * Pass the TranscriptViewer component as the first arg
+                 * Pass the props as the second arg, this could be data from
+                 * other parts of your app, such as the current gene user is viewing
+                 * or settings for the component, like whether or not to show gtex values,
+                 * which could be hooked up to an external button of some kind
+                 * the width prop could be set by the parent component width, or page width, e.g.
+                 */
+
+
+
 
             }).fail(function (jqXHR, exception) {
                 loading.hide();

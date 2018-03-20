@@ -4,6 +4,11 @@ modules = {
         resource url: 'js/lib/jstree.min.js'
         resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'
     }
+    gnomad{
+//        resource url: 'js/lib/gnomadt2d.js'
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.js'
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.js'
+    }
     datatables {
         dependsOn 'jquery'
         resource url: 'js/lib/datatables/jquery.dataTables.js'

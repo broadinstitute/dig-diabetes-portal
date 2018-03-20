@@ -308,7 +308,8 @@ environments {
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 
-//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
+//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal production for now
+//        grails.ServerURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"        // stroke portal demo for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
@@ -330,7 +331,12 @@ environments {
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 
+
 //         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+
+//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
+         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -693,8 +699,5 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   )
 ]
 
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
 

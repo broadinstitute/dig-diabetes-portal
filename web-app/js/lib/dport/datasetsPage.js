@@ -20,9 +20,9 @@ var mpgSoftware = mpgSoftware || {};
         var getAccessName = function (dataTypeName){
             var access;
             if (dataTypeName.includes('GoDARTS')){
-                access = "Early access phase 1";}
+                access = "Early access phase 2";}
             else if (dataTypeName.includes('METSIM')){
-                access = "Early access phase 1";}
+                access = "Early access phase 2";}
             else{
                 access = "Open access";}
             return access;

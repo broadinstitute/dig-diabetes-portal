@@ -1419,8 +1419,25 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         return _.concat(incomingArray,returnValues);
     };
 
+    var gnomadDisplay = function(gene){
+        var props = {
+            gene: gene,
+            exonPadding: 100,
+            width: 1200,
+            trackHeight: 20,
+            showGtex: true,
+        }
 
+        var transcriptViewer = React.createElement(GnomadT2d.TranscriptViewer, props);
+       // var transcriptViewer = React.createElement(GnomadT2d.StructureViewer, props);
 
+        /**
+         * Render the component
+         */
+        var root = document.getElementsByClassName('geneWindowDescriptionHolder')[0];
+        ReactDOM.render(transcriptViewer, root);
+
+    };
 
 
     var updateSignificantVariantDisplay = function (data, additionalParameters) {
@@ -1700,6 +1717,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             $('.highImpacVariantChooser').removeClass('active');
             $('.credibleSetChooser').addClass('active');
         }
+       // gnomadDisplay(additionalParameters.geneName);
 
     };
 
