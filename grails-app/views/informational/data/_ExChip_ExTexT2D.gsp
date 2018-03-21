@@ -7,7 +7,11 @@
 <div class="citation"><g:message code="informational.shared.publications.Mahajan_2018_NatGenet.citation"></g:message> </div>
 </div></p>
 
-
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
+<ul>
+<li><g:message code="metadata.t2d"></g:message></li>
+<li><g:message code="metadata.T2DadjBMI"></g:message></li>
+</ul>
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
     <table class="table table-condensed table-responsive table-striped">
@@ -92,7 +96,7 @@
                         <td valign="top">
                             <ul>
                                 <li>Incident and prevalent cases of T2DM at year 5 using CHS & CMS data</li>
-                                <li>CHS criteria-taking diabetes medications or FG &ge; 7 mmol/l</li>
+                                <li>CHS criteria-taking diabetes medications or fasting glucose &ge; 7 mmol/l</li>
                             </ul>
                         </td>
                         <td valign="top">
@@ -103,7 +107,7 @@
                 </table>
             </div></td><td>African American</td></tr>
 
-<tr><td>969</td><td>2,476</td><td><a onclick="showSection(event)">Cardiovascular Health Study (CHS)</a></td><td>European</td></tr>
+<tr><td>969</td><td>2,476</td><td><a onclick="showSection(event)">Cardiovascular Health Study (CHS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -120,7 +124,7 @@
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
 <tr><td>1,505</td><td>4,515</td><td><a onclick="showSection(event)">CIHDS: Copenhagen Ischemic Heart Disease Study; CGPS: Copenhagen General Population Study (CIHDS/CGPS)</a>
             <div style="display: none;" class="cohortDetail">
@@ -183,7 +187,7 @@
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Fasting glucose &gt; > 7 mmol/L or T2D medication  use</li>
+                                <li>Fasting glucose &gt; 7 mmol/L or T2D medication  use</li>
                             </ul>
                         </td>
                         <td valign="top">
@@ -351,7 +355,6 @@
                         <td valign="top">
                             <ul>
                                 <li>Self-report or fasting glucose &ge; 7 mmol/l</li>
-                                <li></li>
                             </ul>
                         </td>
                         <td valign="top">
@@ -599,367 +602,336 @@
                 </table>
             </div></td><td>European</td></tr>
 
-<tr><td>1,159</td><td>2,652</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>African American</td></tr>
+<tr><td>1,159</td><td>2,652</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>T2D defined as fasting glucose &ge; 7mmol/L or on drug treatment or HbA1c &ge; 6.5%</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Not known to be diagnosed with T2D with normal glycemic index</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>African American</td></tr>
 
-<tr><td>367</td><td>2,029</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>European</td></tr>
+<tr><td>367</td><td>2,029</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>T2D defined as fasting glucose &ge; 7mmol/L or on drug treatment or HbA1c &ge; 6.5%</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Not known to be diagnosed with T2D with normal glycemic index</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>1,639</td><td>3,194</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>Hispanic</td></tr>
+<tr><td>1,639</td><td>3,194</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                             <ul>
+                                <li>T2D defined as fasting glucose &ge; 7mmol/L or on drug treatment or HbA1c &ge; 6.5%</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Not known to be diagnosed with T2D with normal glycemic index</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>Hispanic</td></tr>
+
+<tr><td>284</td><td>1,374</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>African American</td></tr>
 
-<tr><td>284</td><td>1,374</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>African American</td></tr>
+<tr><td>102</td><td>668</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>East Asian</td></tr>
 
-<tr><td>102</td><td>668</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>East Asian</td></tr>
+<tr><td>151</td><td>2,356</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>151</td><td>2,356</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>European</td></tr>
+<tr><td>256</td><td>1,184</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>Hispanic</td></tr>
 
-<tr><td>256</td><td>1,184</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>Hispanic American</td></tr>
+<tr><td>407</td><td>1,870</td><td><a onclick="showSection(event)">Nutrition and Health of Aging Population in China (NHAPC)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous diagnosis of T2D or on glucose-lowering medication or fasting glucose &gt; 7.0 mmol/L</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Fasting glucose &lt; 5.6 mmol/L</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>East Asian</td></tr>
 
-<tr><td>407</td><td>1,870</td><td><a onclick="showSection(event)">Nutrition and Health of Aging Population in China (NHAPC)</a></td><td>East Asian</td></tr>
+<tr><td>2,910</td><td>4,596</td><td><a onclick="showSection(event)">PPP and DIREVA</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>PPP: Diagnosis of diabetes was based on an OGTT or a history of previously known diabetes applying WHO criteria. In uncertain cases, the diagnosis was confirmed from patient records</li>
+                                <li>DIREVA: Previous diagnosis of T2D, normal C-peptide levels and no Anti-GAD antibody</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>PPP: No previously known diabetes. Free from diabetes after an OGTT applying WHO criteria</li>
+                                <li>DIREVA: no controls</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>2,910</td><td>4,596</td><td><a onclick="showSection(event)">PPP and DIREVA</a></td><td>European</td></tr>
+<tr><td>229</td><td>1,833</td><td><a onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS) / Uppsala Longitudinal Study of Adult Men (ULSAM)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>PIVUS: Known T2D or fasting whole blood glucose &ge; 6.1mmol/l</li>
+                                <li>ULSAM: Hospital discharge register-defined diabetes before 2002</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>No diagnosis of diabetes at the time of study</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>229</td><td>1,833</td><td><a onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS) / Uppsala Longitudinal Study of Adult Men (ULSAM)</a></td><td>European</td></tr>
+<tr><td>163</td><td>489</td><td><a onclick="showSection(event)">Prospective Study of Pravastatin in the Elderly at Risk clinical trial (PROSPER)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Self-reported diabetes</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based controls</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>163</td><td>489</td><td><a onclick="showSection(event)">Prospective Study of Pravastatin in the Elderly at Risk clinical trial (PROSPER)</a></td><td>European</td></tr>
+<tr><td>236</td><td>1,520</td><td><a onclick="showSection(event)">Rotterdam Study (RS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Prevalent diabetes</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l and without antihyperglycemic medication</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>236</td><td>1,520</td><td><a onclick="showSection(event)">Rotterdam Study (RS)</a></td><td>European</td></tr>
+<tr><td>335</td><td>2,112</td><td><a onclick="showSection(event)">Singapore Chinese Eye Study (CHES)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Diagnosis of T2D</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>No T2D</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>East Asian</td></tr>
 
-<tr><td>335</td><td>2,112</td><td><a onclick="showSection(event)">Singapore Chinese Eye Study (CHES)</a></td><td>East Asian</td></tr>
+<tr><td>109</td><td>877</td><td><a onclick="showSection(event)">SORBS</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Diabetes diagnosis or treatment, fasting glucose &ge; 7 mmol/l</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Not known to be diagnosed with T2D with normal glycemic index</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>109</td><td>877</td><td><a onclick="showSection(event)">SORBS</a></td><td>European</td></tr>
+<tr><td>806</td><td>1,261</td><td><a onclick="showSection(event)">Taiwan USA Diabetes Retinopathy/Chinese American Eye Study (TUDR/CHES)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>The diagnosis of diabetes was based on standard criteria defined by the American Diabetes Association</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population-based study recruited 4570 non-institutionalized Chinese Americans, aged 50 years and older</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>East Asian</td></tr>
 
-<tr><td>806</td><td>1,261</td><td><a onclick="showSection(event)">Taiwan USA Diabetes Retinopathy/Chinese American Eye Study (TUDR/CHES)</a></td><td>	East Asian</td></tr>
+<tr><td>622</td><td>5,471</td><td><a onclick="showSection(event)">The Netherlands Epidemiology of Obesity Study (NEO)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous diagnosis of T2D, and new diagnosed T2D, and fasting glucose &ge; 7 mmol/L and HbA1c &ge; 6.5%</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/L and no oral medication and insulin</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>622</td><td>5,471</td><td><a onclick="showSection(event)">The Netherlands Epidemiology of Obesity Study (NEO)</a></td><td>European</td></tr>
+<tr><td>7,154</td><td>14,669</td><td><a onclick="showSection(event)">The Pakistan Risk of Myocardial Infarction Study (PROMIS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>HbA1c &gt; 6.5%, previously diagnosed T2D, use of insulin or use of oral hypoglycemic medications</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based controls with HbA1c &lt; 6.5%, had not been diagnosed with T2D, did not use insulin or oral hypoglycemic medications</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>South Asian</td></tr>
 
-<tr><td>7,154</td><td>14,669</td><td><a onclick="showSection(event)">The Pakistan Risk of Myocardial Infarction Study (PROMIS)</a></td><td>South Asian</td></tr>
+<tr><td>3,576</td><td>12,675</td><td><a onclick="showSection(event)">Wellcome Trust Case Control Consortium (UK Type 2 Diabetes Consortium); Young Diabetics Study (YDX); Oxford Biobank; TwinsUK; 1958 Birth Cohort (BC58) / Genetics of Diabetes and Audit Research Tayside Study (GoDARTS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>The T2D cases were selected from UK Caucasian subjects who are part of the Diabetes UK Warren 2 repository. The remainder were recruited as isolated cases but these cases were (compared to population-based cases) of relatively early onset and had a high proportion of T2D parents and/or siblings. T2D was defined as current prescribed treatment with sulphonylureas, biguanides, other oral agents and/or insulin or, in the case of individuals treated with diet alone, historical or contemporary laboratory evidence of hyperglycemia.</li>
+                                <li>GoDARTS: Cases had T2D diagnosed between the ages of 35-70 years (inclusive). The diagnosis of diabetes was based on either current prescribed treatment with diabetes-specific medication or, in the case of individuals treated with diet alone, laboratory evidence of diabetes as defined by the WHO.</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Controls from all sources were selected without reference to T2D status and fasting glucose &le; 7.0 mmol/l</li>
+                                <li>GoDARTS: Controls were defined as having no diagnosis of diabetes at the time of recruitment (or subsequently), fasting glucose &le; 7.0 mmol/l, HbA1c &le; 6.4% and age &lt; 80 years</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>3,576</td><td>12,675</td><td><a onclick="showSection(event)">Wellcome Trust Case Control Consortium (UK Type 2 Diabetes Consortium); Young Diabetics Study (YDX); Oxford Biobank; TwinsUK; 1958 Birth Cohort (BC58) / Genetics of Diabetes and Audit Research Tayside Study (GoDARTS) (WTCCC UKT2D / YDX / Oxford Biobank / TwinsUK / BC58 / GoDARTS)</a></td><td>European</td></tr>
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">
-                            <ul>
-                                <li></li>
-                                <li></li>
-                            </ul>
-                        </td>
-                        <td valign="top">
-                             <ul>
-                                <li></li>
-                                <li></li>
-                            </ul>
-                        </td></tr>
-                </table>
-            </div>
-
-<tr><td>1,766</td><td>20,298</td><td><a onclick="showSection(event)">Women's Genome Health Study (WGHS)</a></td><td>European</td></tr>
+<tr><td>1,766</td><td>20,298</td><td><a onclick="showSection(event)">Women's Genome Health Study (WGHS)</a>
 
 
 
@@ -969,43 +941,38 @@
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Self-report</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Self-report</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
 
 
 
     </table>
 
-<h4>Projects</h4>
-<h4>DIAbetes Genetics Replication And Meta-analysis (DIAGRAM) <small><a
-        href="http://diagram-consortium.org/about.html" target="_blank">Learn more ></a>
-</small></h4>
+    <h4>Dataset subjects by ancestry</h4>
+<table class="table table-condensed table-responsive table-striped">
+<tr><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
 
-<p>The DIAGRAM consortium performs large-scale studies to characterize the genetic basis of type 2 diabetes, primarily focusing on samples of European descent.</p>
+<tr><td>3,087</td><td>9,773</td><td>African American</td></tr>
+<tr><td>4,315</td><td>18,743</td><td>East Asian</td></tr>
+<tr><td>41,067</td><td>136,049</td><td>European</td></tr>
+<tr><td>1,895</td><td>4,378</td><td>Hispanic</td></tr>
+<tr><td>8,061</td><td>19,115</td><td>South Asian</td></tr>
+</table>
 
-<h4>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d"
-                                                  target="_blank">Learn more ></a>
-</small></h4>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.ExTex"></g:message></p>
 
-<p>GoT2D led an effort to aggregate data for a meta-analysis of low-frequency variants in coding regions that influence risk of in type 2 diabetes and related traits such as LDL cholesterol levels. The study was based on data from high-density SNP genotyping with a custom array (the exome chip) in 82,000 people, of which 16,000 were funded by GoT2D. The dataset includes ~35,000 type 2 diabetes cases and ~51,000 controls, all of European ancestry.</p>
-<h4>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a
-        href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></h4>
-
-<p>T2D-GENES (Type 2 Diabetes Genetic Exploration by Next-generation sequencing in multi-Ethnic Samples) is a large collaborative effort to find genetic variants that influence risk of type 2 diabetes. With funding from NIDDK, the group is pursuing three projects: (1) deep whole-exome sequencing in 10,000 people from five ethnicities (African-American, East Asian, South Asian, European, and Hispanic); (2) deep whole-genome sequencing of 600 individuals selected from extended Mexican American pedigrees; and (3) a trans-ethnic fine-mapping "mega-meta-analysis."</p>
-
-   <h4>Accessing GoT2D exome chip analysis data</h4>
-<p><g:message code="informational.data.accessing.GoT2D_ExChip1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GoT2D_ExChip2"></g:message></p>
+   <h4>Accessing ExTexT2D exome chip analysis data</h4>
+<p><g:message code="informational.data.accessing.ExTex1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.ExTex2"></g:message></p>
 
 
 </script>
