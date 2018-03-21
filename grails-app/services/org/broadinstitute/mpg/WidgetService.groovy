@@ -800,6 +800,16 @@ class WidgetService {
 
 
 
+    public List<String> getAllSampleGroupsWithAParticularProperty(String propertyName, String dataVersion, String technology, Boolean recursivelyDescendSampleGroups){
+        List<String> sampleGroups = JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion(propertyName, dataVersion, technology, recursivelyDescendSampleGroups).
+                                        findAll {it.parent.class.simpleName == "SampleGroupBean"}.
+                                        collect{it.parent.systemId}
+        return sampleGroups
+    }
+
+
+
+
 
     public String getFlatDataForLocusZoom(  String chromosome,
                                             int startPosition,

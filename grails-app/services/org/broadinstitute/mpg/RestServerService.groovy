@@ -35,6 +35,7 @@ class RestServerService {
     BurdenService burdenService
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
+    WidgetService widgetService
 
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
@@ -2162,10 +2163,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology, sampleGroupName)
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology, sampleGroupName)
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE", technology, sampleGroupName)
-        List<String> sampleGroupsWithMaf =
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion(), technology, false).collect {
-                    it.parent.systemId
-                }
+        List<String> sampleGroupsWithMaf = widgetService.getAllSampleGroupsWithAParticularProperty("MAF",
+                                            sharedToolsService.getCurrentDataVersion(),  technology, false)
+
         for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
             if (sampleGroupWithMaf == sampleGroupName){
                 addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
@@ -2332,35 +2332,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherTopVariantsAcrossSgsWhenORsWork( List<SampleGroup> fullListOfSampleGroups, String phenotype, float pValueSignificance) {
-        List<QueryFilter> queryFilterList = []
-        for (SampleGroup  sampleGroup in fullListOfSampleGroups){
-            String pValueName = filterManagementService.findFavoredMeaningValue ( sampleGroup.systemId, phenotype, "P_VALUE" )
-            queryFilterList.addAll( burdenService.getBurdenJsonBuilder().getPValueFilters(sampleGroup.systemId,pValueSignificance,phenotype,pValueName))
-        }
-
-        String technology = ""
-        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR", technology)
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology)
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology)
-        resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE", technology)
-        List<String> sampleGroupsWithMaf =
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion("MAF", sharedToolsService.getCurrentDataVersion(), technology, false).collect {
-                    it.parent.systemId
-                }
-        for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
-            addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
-        }
-        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolderFromFilters(queryFilterList, searchBuilderService, metaDataService,true)
-        getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        JsonSlurper slurper = new JsonSlurper()
-        String dataJsonObjectString = postDataQueryRestCall(getDataQueryHolder)
-        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
-        return dataJsonObject
-    }
-
-
     /***
      * starting with a property name OR a meaning, produce a list of triplets mapping the name/meaning to phenotype and sample group name
      * @param propertyOrMeaning
@@ -2384,7 +2355,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             }
             matchers = tempPropertyList.values().collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
         } else {
-            matchers = JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion(propertyOrMeaning, sharedToolsService.getCurrentDataVersion(), technology, false).
+            matchers = widgetService.getAllSampleGroupsWithAParticularProperty(propertyOrMeaning, sharedToolsService.getCurrentDataVersion(), technology, false).
                     collect { ['pname':it.name,'pheno': it.parent.name, 'ds': it.parent.parent.systemId, 'meaning':propertyOrMeaning] }
         }
         return matchers
@@ -2431,10 +2402,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology )
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology )
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "P_VALUE", technology )
-        List<String> sampleGroupsWithMaf =
-                JsonParser.getService().getAllPropertiesWithNameForExperimentOfVersion( "MAF", sharedToolsService.getCurrentDataVersion(), technology, false ).collect {
-                    it.parent.systemId
-                }
+        List<String> sampleGroupsWithMaf = widgetService.getAllSampleGroupsWithAParticularProperty("MAF",
+                                          sharedToolsService.getCurrentDataVersion(), technology, false)
+
         for (String sampleGroupWithMaf in sampleGroupsWithMaf) {
             addColumnsForDProperties(resultColumnsToDisplay, MAFPHENOTYPE, sampleGroupWithMaf)
         }
