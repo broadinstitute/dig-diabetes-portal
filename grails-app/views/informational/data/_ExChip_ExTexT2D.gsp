@@ -12,56 +12,984 @@
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
     <table class="table table-condensed table-responsive table-striped">
 <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>341</td><td>2,639</td><td><a onclick="showSection(event)">Age, Gene/Environment Susceptibility (AGES Reykjavik) Study</a></td><td>European</td></tr>
-<tr><td>679</td><td>2,596</td><td><a onclick="showSection(event)">Atherosclerosis Risk in Communities Study (ARIC)</a></td><td>African American</td></tr>
-<tr><td>950</td><td>9,900</td><td><a onclick="showSection(event)">Atherosclerosis Risk in Communities Study (ARIC)</a></td><td>European</td></tr>
-<tr><td>678</td><td>2,034</td><td><a onclick="showSection(event)">Bangladesh Risk of Acute Vascular Events study (BRAVE)</a></td><td>South Asian</td></tr>
-<tr><td>302</td><td>433</td><td><a onclick="showSection(event)">Cardiovascular Health Study (CHS)</a></td><td>African American</td></tr>
+<tr><td>341</td><td>2,639</td><td><a onclick="showSection(event)">Age, Gene/Environment Susceptibility (AGES Reykjavik) Study</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous T2D diagnosis or fasting glucose &gt; 7mmol/l</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based with fasting glucose &lt; 7mmol/l</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>679</td><td>2,596</td><td><a onclick="showSection(event)">Atherosclerosis Risk in Communities Study (ARIC)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous T2D diagnosis</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based with fasting glucose &lt; 7mmol/l</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>African American</td></tr>
+
+<tr><td>950</td><td>9,900</td><td><a onclick="showSection(event)">Atherosclerosis Risk in Communities Study (ARIC)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                                      <ul>
+                                <li>Previous T2D diagnosis</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based with fasting glucose &lt; 7mmol/l</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>678</td><td>2,034</td><td><a onclick="showSection(event)">Bangladesh Risk of Acute Vascular Events study (BRAVE)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Self-reported diabetes but established by a medical doctor diagnosis and/or medical records</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based controls</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>South Asian</td></tr>
+
+<tr><td>302</td><td>433</td><td><a onclick="showSection(event)">Cardiovascular Health Study (CHS)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Incident and prevalent cases of T2DM at year 5 using CHS & CMS data</li>
+                                <li>CHS criteria-taking diabetes medications or FG &ge; 7 mmol/l</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based with fasting glucose &lt; 7mmol/l, no diabetes medications</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>African American</td></tr>
+
 <tr><td>969</td><td>2,476</td><td><a onclick="showSection(event)">Cardiovascular Health Study (CHS)</a></td><td>European</td></tr>
-<tr><td>1,505</td><td>4,515</td><td><a onclick="showSection(event)">CIHDS: Copenhagen Ischemic Heart Disease Study; CGPS: Copenhagen General Population Study (CIHDS/CGPS)</a></td><td>European</td></tr>
-<tr><td>5,802</td><td>7,896</td><td><a onclick="showSection(event)">Danish T2D case-control study by University of Copenhagen (DANISH-UCPH)</a></td><td>European</td></tr>
-<tr><td>198</td><td>2,174</td><td><a onclick="showSection(event)">Epidemiology for Health (EpiHealth)</a></td><td>European</td></tr>
-<tr><td>104</td><td>1,018</td><td><a onclick="showSection(event)">Erasmus Rucphen Family Study (ERF)</a></td><td>European</td></tr>
-<tr><td>882</td><td>1,506</td><td><a onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT)</a></td><td>European</td></tr>
-<tr><td>2,796</td><td>4,601</td><td><a onclick="showSection(event)">European Prospective Investigation into Cancer and Nutrition (InterAct)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                              <ul>
+                                <li>Incident and prevalent cases of T2DM at year 5 using CHS & CMS data</li>
+                                <li>CHS criteria-taking diabetes medications or FG &ge; 7 mmol/l</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based with fasting glucose &lt; 7mmol/l, no diabetes medications</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
+<tr><td>1,505</td><td>4,515</td><td><a onclick="showSection(event)">CIHDS: Copenhagen Ischemic Heart Disease Study; CGPS: Copenhagen General Population Study (CIHDS/CGPS)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Diabetes mellitus (ICD8:250,ICD10:E11,E13,E14)</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based controls</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>5,802</td><td>7,896</td><td><a onclick="showSection(event)">Danish T2D case-control study by University of Copenhagen (DANISH-UCPH)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous diagnosis of T2D or screen-detected T2D</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based controls with fasting glucose &lt; 7 mmol/l and 2-hr glucose &lt; 7.8 mmol/l (if measured)</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>198</td><td>2,174</td><td><a onclick="showSection(event)">Epidemiology for Health (EpiHealth)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Medication and/or fasting glucose &ge; 7 mmol/L</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based controls with fasting glucose &lt; 7 mmol/l</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>104</td><td>1,018</td><td><a onclick="showSection(event)">Erasmus Rucphen Family Study (ERF)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Fasting glucose &gt; > 7 mmol/L or T2D medication  use</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based controls with fasting glucose &lt; 7 mmol/l</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>882</td><td>1,506</td><td><a onclick="showSection(event)">Estonian Genome Center, University of Tartu (EGCUT)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Previous T2D diagnosis</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Population based controls with fasting glucose &lt; 7 mmol/l</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
+<tr><td>2,796</td><td>4,601</td><td><a onclick="showSection(event)">European Prospective Investigation into Cancer and Nutrition (InterAct)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Incident cases of T2D occurring in EPIC cohorts</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>Centre-stratified random subcohort</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>European</td></tr>
+
 <tr><td>900</td><td>2,296</td><td><a onclick="showSection(event)">European Prospective Investigation into Cancer and Nutrition, Potsdam (EPIC-POTSDAM)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>1,406</td><td>1,494</td><td><a onclick="showSection(event)">Exeter Family Study of Childhood Health (EFSOCH) and  Diabetes Alliance for Research in England (DARE)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>291</td><td>3,510</td><td><a onclick="showSection(event)">Family Heart Study (FamHS)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>4,529</td><td>10,546</td><td><a onclick="showSection(event)">FIN-D2D 2007; The Dose Responses to Exercise Training (DR's EXTRA) Study; National FINRISK 2007 Study; Finland-United States Investigation of NIDDM Genetics Study; and Metabolic Syndrome in Men Study (FUSION / Finrisk2007 / METSIM / DR’sEXTRA / D2D2007)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>987</td><td>7,043</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>960</td><td>957</td><td><a onclick="showSection(event)">Gene-Lifestyle Interactions and Complex Traits Involved in Elevated Disease Risk (GLACIER)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>438</td><td>8,255</td><td><a onclick="showSection(event)">Generation Scotland: Scottish Family Health Study (GS:SFHS)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>422</td><td>391</td><td><a onclick="showSection(event)">Genetic Overlap between Metabolic and Psychiatric Disease; TEENs of Attica: Genes & Environment (GOMAP (cases); TEENAGE (controls))</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>838</td><td>824</td><td><a onclick="showSection(event)">Guizhou-Bijie Type 2 Diabetes Study (GBTDS)</a></td><td>East Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>281</td><td>824</td><td><a onclick="showSection(event)">Health Aging and Body Composition (HABC)</a></td><td>African American</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>237</td><td>1,409</td><td><a onclick="showSection(event)">Health Aging and Body Composition (HABC)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>184</td><td>1,749</td><td><a onclick="showSection(event)">Initiative on Nephropathy, of relevance to public health, which is Chronic, possibly in its Initial stages, and carries a Potential risk of major clinical End-points (INCIPE)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>382</td><td>1,894</td><td><a onclick="showSection(event)">Jackson Heart Study (JHS)</a></td><td>African American</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>954</td><td>2,774</td><td><a onclick="showSection(event)">Kooperative Gesundheitsforschung in der Region Augsburg (KORA)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>1,827</td><td>12,008</td><td><a onclick="showSection(event)">Korea Association Resource, Health Examinee Cohort, and Cardio Vascular Disease Association Study (KOGES)</a></td><td>East Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>203</td><td>695</td><td><a onclick="showSection(event)">Leipzig-adults</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>128</td><td>1,536</td><td><a onclick="showSection(event)">London Life Sciences Prospective Population Study (LOLIPOP_Exome)</a></td><td>South Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>101</td><td>876</td><td><a onclick="showSection(event)">London Life Sciences Prospective Population Study (LOLIPOP_OmniEE)</a></td><td>South Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>5,404</td><td>4,633</td><td><a onclick="showSection(event)">MDC, ANDIS, and SDR (MDC/ANDIS)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>476</td><td>1,428</td><td><a onclick="showSection(event)">MOnica Risk, Genetics, Archiving and Monograph (MORGAM)	</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>1,159</td><td>2,652</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>African American</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>367</td><td>2,029</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>1,639</td><td>3,194</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>Hispanic</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>284</td><td>1,374</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>African American</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>102</td><td>668</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>East Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>151</td><td>2,356</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>256</td><td>1,184</td><td><a onclick="showSection(event)">Multi-Ethnic Study of Atherosclerosis (MESA)</a></td><td>Hispanic American</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>407</td><td>1,870</td><td><a onclick="showSection(event)">Nutrition and Health of Aging Population in China (NHAPC)</a></td><td>East Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>2,910</td><td>4,596</td><td><a onclick="showSection(event)">PPP and DIREVA</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>229</td><td>1,833</td><td><a onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS) / Uppsala Longitudinal Study of Adult Men (ULSAM)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>163</td><td>489</td><td><a onclick="showSection(event)">Prospective Study of Pravastatin in the Elderly at Risk clinical trial (PROSPER)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>236</td><td>1,520</td><td><a onclick="showSection(event)">Rotterdam Study (RS)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>335</td><td>2,112</td><td><a onclick="showSection(event)">Singapore Chinese Eye Study (CHES)</a></td><td>East Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>109</td><td>877</td><td><a onclick="showSection(event)">SORBS</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>806</td><td>1,261</td><td><a onclick="showSection(event)">Taiwan USA Diabetes Retinopathy/Chinese American Eye Study (TUDR/CHES)</a></td><td>	East Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>622</td><td>5,471</td><td><a onclick="showSection(event)">The Netherlands Epidemiology of Obesity Study (NEO)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>7,154</td><td>14,669</td><td><a onclick="showSection(event)">The Pakistan Risk of Myocardial Infarction Study (PROMIS)</a></td><td>South Asian</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>3,576</td><td>12,675</td><td><a onclick="showSection(event)">Wellcome Trust Case Control Consortium (UK Type 2 Diabetes Consortium); Young Diabetics Study (YDX); Oxford Biobank; TwinsUK; 1958 Birth Cohort (BC58) / Genetics of Diabetes and Audit Research Tayside Study (GoDARTS) (WTCCC UKT2D / YDX / Oxford Biobank / TwinsUK / BC58 / GoDARTS)</a></td><td>European</td></tr>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div>
+
 <tr><td>1,766</td><td>20,298</td><td><a onclick="showSection(event)">Women's Genome Health Study (WGHS)</a></td><td>European</td></tr>
 
 
@@ -72,15 +1000,15 @@
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>The T2D cases were selected from UK Caucasian subjects who are part of the Diabetes UK Warren 2 repository</li>
-                                <li>The remainder were recruited as isolated cases but these cases were (compared to population-based cases) of relatively early onset and had a high proportion of T2D parents and/or siblings</li>
-                                <li>T2D was defined as current prescribed treatment with sulphonylureas, biguanides, other oral agents and/or insulin or, in the case of individuals treated with diet alone, historical or contemporary laboratory evidence of hyperglycemia</li>
-                                <li>Individuals with maturity-onset diabetes of the young and mitochondrial diabetes, were excluded</li>
-                                <li>Other inclusion criteria included: absence of first-degree relatives with type 1 diabetes; an interval of &ge;1 year between diagnosis and institution of regular insulin therapy; and negative testing for antibodies to glutamic acid decarboxylase (anti-GAD). An anti-GAD titer >10 U (corresponding to ~8 SD above the mean of 88 normal control subjects) in duplicate samples was considered positive</li>
+                                <li></li>
+                                <li></li>
                             </ul>
                         </td>
                         <td valign="top">
-                            <li>Controls from all sources were selected without reference to T2D status and fasting glucose &le;7.0 mmol/l</li>
+                             <ul>
+                                <li></li>
+                                <li></li>
+                            </ul>
                         </td></tr>
                 </table>
             </div>
