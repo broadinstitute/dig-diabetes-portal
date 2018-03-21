@@ -230,405 +230,374 @@
                 </table>
             </div></td><td>European</td></tr>
 
-<tr><td>900</td><td>2,296</td><td><a onclick="showSection(event)">European Prospective Investigation into Cancer and Nutrition, Potsdam (EPIC-POTSDAM)</a></td><td>European</td></tr>
+<tr><td>900</td><td>2,296</td><td><a onclick="showSection(event)">European Prospective Investigation into Cancer and Nutrition, Potsdam (EPIC-POTSDAM)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Prevalent and incident diagnosis of T2D</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Members of a random subcohort without diabetes diagnosis</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>1,406</td><td>1,494</td><td><a onclick="showSection(event)">Exeter Family Study of Childhood Health (EFSOCH) and  Diabetes Alliance for Research in England (DARE)</a></td><td>European</td></tr>
+<tr><td>1,406</td><td>1,494</td><td><a onclick="showSection(event)">Exeter Family Study of Childhood Health (EFSOCH) and  Diabetes Alliance for Research in England (DARE)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Normoglycaemic on the basis of FG or HbA1c</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>291</td><td>3,510</td><td><a onclick="showSection(event)">Family Heart Study (FamHS)</a></td><td>European</td></tr>
+<tr><td>291</td><td>3,510</td><td><a onclick="showSection(event)">Family Heart Study (FamHS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Doctor diagnosis of T2D</li>
+                                <li>Using medication for T2D</li>
+                                <li>Fasting glucose &ge; 7 mmol/L  among family members</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>No doctor diagnosis of T2D</li>
+                                <li>Not using medication for T2D</li>
+                                <li>Fasting glucose &lt; 7 mmol/L  among family members</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>4,529</td><td>10,546</td><td><a onclick="showSection(event)">FIN-D2D 2007; The Dose Responses to Exercise Training (DR's EXTRA) Study; National FINRISK 2007 Study; Finland-United States Investigation of NIDDM Genetics Study; and Metabolic Syndrome in Men Study (FUSION / Finrisk2007 / METSIM / DR’sEXTRA / D2D2007)</a></td><td>European</td></tr>
+<tr><td>4,529</td><td>10,546</td><td><a onclick="showSection(event)">FIN-D2D 2007; The Dose Responses to Exercise Training (DR's EXTRA) Study; National FINRISK 2007 Study; Finland-United States Investigation of NIDDM Genetics Study; and Metabolic Syndrome in Men Study (FUSION / Finrisk2007 / METSIM / DR’sEXTRA / D2D2007)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>T2D as classified by WHO 1999 criteria</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>NGT as classified by WHO 1999 criteria</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>987</td><td>7,043</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a></td><td>European</td></tr>
+<tr><td>987</td><td>7,043</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>On T2D medication or fasting glucose &gt; 7 mmol/l or 2 hour glucose &gt; 11.1 or HbA1c &gt; 6.5</li>
+                                <li>In original cohort, when fasting glucose not avaialble, T2D = casual glucose &gt; 11.1 or T2D med</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Not on T2D med and fasting glucose &lt; 7 mmol/l and 2 hour glucose &lt; 11.1 and HbA1c &le; 6.5</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>960</td><td>957</td><td><a onclick="showSection(event)">Gene-Lifestyle Interactions and Complex Traits Involved in Elevated Disease Risk (GLACIER)</a></td><td>European</td></tr>
+<tr><td>960</td><td>957</td><td><a onclick="showSection(event)">Gene-Lifestyle Interactions and Complex Traits Involved in Elevated Disease Risk (GLACIER)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Incident T2D</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based controls</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>438</td><td>8,255</td><td><a onclick="showSection(event)">Generation Scotland: Scottish Family Health Study (GS:SFHS)</a></td><td>European</td></tr>
+<tr><td>438</td><td>8,255</td><td><a onclick="showSection(event)">Generation Scotland: Scottish Family Health Study (GS:SFHS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
+                                <li>Self-report or fasting glucose &ge; 7 mmol/l</li>
                                 <li></li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>422</td><td>391</td><td><a onclick="showSection(event)">Genetic Overlap between Metabolic and Psychiatric Disease; TEENs of Attica: Genes & Environment (GOMAP (cases); TEENAGE (controls))</a></td><td>European</td></tr>
+<tr><td>422</td><td>391</td><td><a onclick="showSection(event)">Genetic Overlap between Metabolic and Psychiatric Disease; TEENs of Attica: Genes & Environment (GOMAP (cases); TEENAGE (controls))</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous diagnosis of T2D with or without psychiatric disease</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Adolescent students from Athens, Greece (prospective cohort study)</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>838</td><td>824</td><td><a onclick="showSection(event)">Guizhou-Bijie Type 2 Diabetes Study (GBTDS)</a></td><td>East Asian</td></tr>
+<tr><td>838</td><td>824</td><td><a onclick="showSection(event)">Guizhou-Bijie Type 2 Diabetes Study (GBTDS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis or fasting glucose &gt; 7.0 mmol/L</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Fasting glucose &lt; 5.6 mmol/L</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>East Asian</td></tr>
 
-<tr><td>281</td><td>824</td><td><a onclick="showSection(event)">Health Aging and Body Composition (HABC)</a></td><td>African American</td></tr>
+<tr><td>281</td><td>824</td><td><a onclick="showSection(event)">Health Aging and Body Composition (HABC)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>African American</td></tr>
 
-<tr><td>237</td><td>1,409</td><td><a onclick="showSection(event)">Health Aging and Body Composition (HABC)</a></td><td>European</td></tr>
+<tr><td>237</td><td>1,409</td><td><a onclick="showSection(event)">Health Aging and Body Composition (HABC)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
-                            <ul>
-                                <li></li>
-                                <li></li>
+                           <ul>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>184</td><td>1,749</td><td><a onclick="showSection(event)">Initiative on Nephropathy, of relevance to public health, which is Chronic, possibly in its Initial stages, and carries a Potential risk of major clinical End-points (INCIPE)</a></td><td>European</td></tr>
+<tr><td>184</td><td>1,749</td><td><a onclick="showSection(event)">Initiative on Nephropathy, of relevance to public health, which is Chronic, possibly in its Initial stages, and carries a Potential risk of major clinical End-points (INCIPE)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>382</td><td>1,894</td><td><a onclick="showSection(event)">Jackson Heart Study (JHS)</a></td><td>African American</td></tr>
+<tr><td>382</td><td>1,894</td><td><a onclick="showSection(event)">Jackson Heart Study (JHS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>None (population based with subset of families)</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>None</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>African American</td></tr>
 
-<tr><td>954</td><td>2,774</td><td><a onclick="showSection(event)">Kooperative Gesundheitsforschung in der Region Augsburg (KORA)</a></td><td>European</td></tr>
+<tr><td>954</td><td>2,774</td><td><a onclick="showSection(event)">Kooperative Gesundheitsforschung in der Region Augsburg (KORA)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based controls</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>1,827</td><td>12,008</td><td><a onclick="showSection(event)">Korea Association Resource, Health Examinee Cohort, and Cardio Vascular Disease Association Study (KOGES)</a></td><td>East Asian</td></tr>
+<tr><td>1,827</td><td>12,008</td><td><a onclick="showSection(event)">Korea Association Resource, Health Examinee Cohort, and Cardio Vascular Disease Association Study (KOGES)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis or fasting glucose &ge; 7 mmol/l or 2hr glucose (only KARE) &ge; 11.1 mmol/l</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l, 2hr glucose (only KARE) &lt; 11.1 mmol/l, and no history of diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>East Asian</td></tr>
 
-<tr><td>203</td><td>695</td><td><a onclick="showSection(event)">Leipzig-adults</a></td><td>European</td></tr>
+<tr><td>203</td><td>695</td><td><a onclick="showSection(event)">Leipzig-adults</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Diagnosis of T2D</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>No T2D</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>128</td><td>1,536</td><td><a onclick="showSection(event)">London Life Sciences Prospective Population Study (LOLIPOP_Exome)</a></td><td>South Asian</td></tr>
+<tr><td>128</td><td>1,536</td><td><a onclick="showSection(event)">London Life Sciences Prospective Population Study (LOLIPOP_Exome)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>South Asian</td></tr>
 
-<tr><td>101</td><td>876</td><td><a onclick="showSection(event)">London Life Sciences Prospective Population Study (LOLIPOP_OmniEE)</a></td><td>South Asian</td></tr>
+<tr><td>101</td><td>876</td><td><a onclick="showSection(event)">London Life Sciences Prospective Population Study (LOLIPOP_OmniEE)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
-                            <ul>
-                                <li></li>
-                                <li></li>
+                             <ul>
+                                <li>Previous T2D diagnosis</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based with fasting glucose &lt; 7 mmol/l</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>South Asian</td></tr>
 
-<tr><td>5,404</td><td>4,633</td><td><a onclick="showSection(event)">MDC, ANDIS, and SDR (MDC/ANDIS)</a></td><td>European</td></tr>
+<tr><td>5,404</td><td>4,633</td><td><a onclick="showSection(event)">MDC, ANDIS, and SDR (MDC/ANDIS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>ANDiS: Previous diagnosis of T2D, normal C-peptide levels, no Anti-GAD antibody </li>
+                                <li>MDC: Self-report of a physician diagnosis or use of diabetes medication or fasting glucose &ge; 7.0 mmol/l</li>
+                                <li>SDR: Physicians own classification into T2D, based on WHO 1985 or WHO 1999 guidelines</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Fasting glucose &lt; 7.0 mmol/l (ANDIS)</li>
+                                <li>No controls in MDC and SDR</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
-<tr><td>476</td><td>1,428</td><td><a onclick="showSection(event)">MOnica Risk, Genetics, Archiving and Monograph (MORGAM)	</a></td><td>European</td></tr>
+<tr><td>476</td><td>1,428</td><td><a onclick="showSection(event)">MOnica Risk, Genetics, Archiving and Monograph (MORGAM)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li></li>
-                                <li></li>
+                                <li>History of diabetes at baseline</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li></li>
-                                <li></li>
+                                <li>Population based controls</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div>
+            </div></td><td>European</td></tr>
 
 <tr><td>1,159</td><td>2,652</td><td><a onclick="showSection(event)">MT. SINAI BioMe Biobank Platform (BioMe)</a></td><td>African American</td></tr>
             <div style="display: none;" class="cohortDetail">
