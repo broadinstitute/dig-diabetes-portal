@@ -845,19 +845,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     newEntry[key] = resultCategory[key]
                                     retValue['variants'][0] << newEntry
                                 } else { // must merge
-                                    Map everythingToAdd = result[key] as Map
-                                    List keysToAdd = everythingToAdd?.keySet() as List
-                                    for (def keyToAdd in keysToAdd) {
-                                        if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
-                                            List keysToAppend = result[key][keyToAdd].keySet() as List
-                                            for (String keyToAppend in keysToAppend){
-                                                retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                    if (result[key].getClass().simpleName!="String"){
+                                        Map everythingToAdd = result[key] as Map
+                                        List keysToAdd = everythingToAdd?.keySet() as List
+                                        for (def keyToAdd in keysToAdd) {
+                                            if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
+                                                List keysToAppend = result[key][keyToAdd].keySet() as List
+                                                for (String keyToAppend in keysToAppend){
+                                                    retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                                }
+                                            } else {
+                                                HashMap newEntryToAdd = [:]
+                                                newEntryToAdd[keyToAdd] = result[key][keyToAdd]
+                                                retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
                                             }
-                                        } else {
-                                            HashMap newEntryToAdd = [:]
-                                            newEntryToAdd[keyToAdd] = result[key][keyToAdd]
-                                            retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
                                         }
+
                                     }
 
                                 }
