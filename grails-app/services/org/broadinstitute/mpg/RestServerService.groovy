@@ -61,7 +61,7 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
-    private String GET_DATA_AGGREGATION_BY_RANGE_URL = "getAggregatedData"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -847,19 +847,22 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                     newEntry[key] = resultCategory[key]
                                     retValue['variants'][0] << newEntry
                                 } else { // must merge
-                                    Map everythingToAdd = result[key] as Map
-                                    List keysToAdd = everythingToAdd?.keySet() as List
-                                    for (def keyToAdd in keysToAdd) {
-                                        if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
-                                            List keysToAppend = result[key][keyToAdd].keySet() as List
-                                            for (String keyToAppend in keysToAppend){
-                                                retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                    if (result[key].getClass().simpleName!="String"){
+                                        Map everythingToAdd = result[key] as Map
+                                        List keysToAdd = everythingToAdd?.keySet() as List
+                                        for (def keyToAdd in keysToAdd) {
+                                            if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
+                                                List keysToAppend = result[key][keyToAdd].keySet() as List
+                                                for (String keyToAppend in keysToAppend){
+                                                    retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                                }
+                                            } else {
+                                                HashMap newEntryToAdd = [:]
+                                                newEntryToAdd[keyToAdd] = result[key][keyToAdd]
+                                                retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
                                             }
-                                        } else {
-                                            HashMap newEntryToAdd = [:]
-                                            newEntryToAdd[keyToAdd] = result[key][keyToAdd]
-                                            retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
                                         }
+
                                     }
 
                                 }

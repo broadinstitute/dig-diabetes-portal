@@ -108,7 +108,8 @@ class TraitController {
         String phenotype = params["phenotype"]
         List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "", MetaDataService.METADATA_VARIANT)
         List<String> sampleGroupStrings = []
-        List<String> sortedSampleGroupStrings = sampleGroupList.sort { a, b -> return b.subjectsNumber <=> a.subjectsNumber }
+        List<SampleGroup> sortedSampleGroupStrings = sampleGroupList
+       // List<String> sortedSampleGroupStrings = sampleGroupList.sort { a, b -> return b.subjectsNumber <=> a.subjectsNumber }
         String largestSampleGroup = sortedSampleGroupStrings?.first()?.getSystemId()
         for (SampleGroup sampleGroup in sampleGroupList) {
             String sampleGroupId = sampleGroup.getSystemId()
