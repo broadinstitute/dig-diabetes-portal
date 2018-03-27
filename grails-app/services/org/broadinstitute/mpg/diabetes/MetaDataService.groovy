@@ -622,7 +622,7 @@ class MetaDataService {
         }
 
         // return
-        return groupList.sort{it.sortOrder};
+        return groupList.sort{a,b-> a.sortOrder<=>b.sortOrder ?:  a.name<=>b.name}
     }
 
 

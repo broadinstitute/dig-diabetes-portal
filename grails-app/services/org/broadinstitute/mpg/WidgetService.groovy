@@ -569,7 +569,7 @@ class WidgetService {
         }
 
         //List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
-        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{a,b-> a.sortOrder<=>b.sortOrder ?:  a.parent?.sortOrder<=>b.parent?.sortOrder}
 
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
         if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
@@ -618,7 +618,7 @@ class WidgetService {
         LinkedHashMap<String, List <List <String>>> returnValue = []
 
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion(technology, metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
-        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        List<Phenotype> sortedPhenotypeList = phenotypeList.unique{it.name}.sort{a,b-> a.sortOrder<=>b.sortOrder ?:  a.parent?.sortOrder<=>b.parent?.sortOrder}
 
         LinkedHashMap<String, List <List <String>>> groupedPhenotypes = [:]
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
