@@ -14,6 +14,12 @@
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <title><g:message code="portal.mi.header.title.short"/> <g:message code="portal.mi.header.title.genetics"/></title>
         </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+            <title><g:message code="portal.ibd.header.title"/></title>
+        </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
+            <title><g:message code="portal.epilepsy.header.title"/> <g:message code="portal.mi.header.title.genetics"/></title>
+        </g:elseif>
         <g:else>
             <title><g:message code="portal.header.title.short"/> <g:message code="portal.header.title.genetics"/></title>
         </g:else>
@@ -67,6 +73,7 @@
                 a.front-search-example {
                     color:#cce6c3;
                 }
+
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 a {color:#de8800;}
@@ -91,6 +98,21 @@
             }
             </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
+            a {color:#50AABB;}
+            a:hover, a:active {color:#2779a7; text-decoration: none;}
+            .dk-t2d-yellow {  background-color: #D2BC2C;  }
+            .dk-t2d-orange {  background-color: #F68920;  }
+            .dk-t2d-green {  background-color: #7fc343;  }
+            .dk-t2d-blue {  background-color: #62B4C5;  }
+            .dk-blue-bordered {
+                display:block;
+                border-top: solid 1px #57A7BA;
+                border-bottom: solid 1px #57A7BA;
+                color: #57A7BA;
+                padding: 5px 0;
+                text-align:left;
+                line-height:26px;
+            }
 
             a.front-search-example {
                 color:#cccce6;
@@ -118,6 +140,8 @@
                 }
 
             </g:else>
+
+
         </style>
 
         <script>
@@ -224,6 +248,176 @@
                 }
             }
 
+            /* LocusZoom UI */
+            function massageLZ() {
+
+                if($("#dk_lz_phenotype_list").hasClass("list-allset")) {
+
+                } else {
+                    var lzPhenotypes = [];
+
+                    $("#dk_lz_phenotype_list").find("li").each(function() {
+                        var lzPhenotype = $(this).text();
+                        var lzExist = 0;
+                        $.each(lzPhenotypes, function(key, value) {
+                            (lzPhenotype == value)? lzExist = 1 : "";
+                        });
+
+                        (lzExist == 0)? lzPhenotypes.push(lzPhenotype) : "";
+                    });
+
+                    lzPhenotypes.sort(function(s1, s2){
+                        var l=s1.toLowerCase(), m=s2.toLowerCase();
+                        return l===m?0:l>m?1:-1;
+                    });
+
+                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
+
+                    $.each(lzPhenotypes, function(key, value) {
+                        lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
+                    });
+
+                    $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
+
+                    $(".lz-list").each(function() {
+                        if ($(this).find("ul").find("li").length == 0){
+
+                            $(this).css("opacity","0.5");
+                            $(this).find("ul").remove();
+                        }
+                    });
+
+                    $("#phenotype_search").focus(function() {
+                        $(this).attr("placeholder", "");
+                    });
+
+                    $("#phenotype_search").focusout(function() {
+                        $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
+                    });
+
+                    $("#phenotype_search").on('input',function() {
+
+                        $("#dk_lz_phenotype_list").find("li").removeClass("hidden-phenotype");
+
+                        var searchWords = $("#phenotype_search").val().toLowerCase().split(",");
+
+                        $.each(searchWords, function(index,value){
+
+
+                            $("#dk_lz_phenotype_list").find("a").each(function() {
+
+                                if($(this).closest("li").hasClass("hidden-phenotype")){
+
+                                } else {
+
+                                    var phenotypeString = $(this).text().toLowerCase();
+                                    var searchWord = value.trim();
+
+                                    if(phenotypeString.indexOf(searchWord) >= 0) {
+                                        $(this).closest("li").removeClass("hidden-phenotype");
+                                    } else {
+                                        $(this).closest("li").addClass("hidden-phenotype");
+                                    }
+
+                                }
+                            })
+                        });
+
+
+                    });
+
+                    $("#dk_lz_phenotype_list").addClass("list-allset")
+
+                }
+
+            }
+
+            function setLZDatasets(event) {
+
+                $(event.target).closest(".col-md-12").find(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
+
+                var phenotypeName = $.trim($(event.target).text());
+
+                $("span.dk-lz-dataset").each(function() {
+                    var trimmedPName = $.trim($(this).text());
+
+                    (trimmedPName == phenotypeName)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
+                })
+            }
+
+            function showLZlist(event) {
+
+                if($(event.target).closest(".lz-list").find("ul").find("li").length != 0) {
+                    ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
+                }
+            }
+
+            /* traits table */
+
+            function massageTraitsTable() {
+
+                $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
+
+
+                var inputBox = "<input id='traits_table_filter' type='text' name='search' style='margin: 0px 20px 10px 20px; position:absolute; top: 0; left: 250px; display: block; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'>";
+                inputBox += "<span style='font-size: 12px; margin-top: 0px; display: block;'>To sort the table by multiple columns, hold the shift key and click the header of the secondary column.</span>";
+                $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
+
+                $("thead").find("tr").each(function() {
+                    $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
+                });
+
+                $("#traits_table_filter").focus(function() {
+                    $(this).attr("placeholder", "");
+                });
+
+                $("#traits_table_filter").focusout(function() {
+                    $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
+                });
+
+                $("#traits_table_filter").on('input',function() {
+
+                    $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
+
+                    var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+
+                    $.each(searchWords, function(index,value){
+
+                        $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                            if($(this).hasClass("hidden-traits-row")) {
+
+                            } else {
+
+                                var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                                var searchWord = value.trim();
+
+                                if(phenotypeString.indexOf(searchWord) >= 0) {
+                                    $(this).removeClass("hidden-traits-row");
+                                } else {
+                                    $(this).addClass("hidden-traits-row");
+                                }
+                            }
+
+                        });
+
+                    });
+
+                });
+
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+                    $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
+                });
+
+                $("#traitsPerVariantTableBody").find("td").mouseenter(function() {
+                    var phenotypeName = $(this).closest("tr").find("td").eq("0").text();
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+                        ($(this).find("td").eq("0").text() == phenotypeName)? $(this).addClass("highlighted-phenotype"):$(this).removeClass("highlighted-phenotype");
+                    });
+                })
+            }
+
 
             /* GAIT TAB UI */
 
@@ -252,11 +446,6 @@
                     $("#strata1_stratsTabs").css("background-color","#bfe3ef");
 
                 }
-
-
-
-                /*
-                */
 
             }
 
@@ -328,27 +517,32 @@
                 }
             }
 
-            /* copy url of varian search result page to clipboard*/
+            /* copy url of variant search result page to clipboard*/
 
-            $( window ).load( function() {
-                document.addEventListener('copy', function(e){
+            function copyVariantSearchURL() {
+                document.addEventListener('copy', function(e) {
 
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
                     e.preventDefault(); // default behaviour is to copy any selected text
-
                 });
 
-                $("#copyURL").click(function() {
-                    document.execCommand('copy');
-                })
+                document.execCommand('copy');
+            }
+
+
+            /* copy URL function end */
+
+            $( window ).load( function() {
+
+                /* massage LocusZoom UI */
+                massageLZ();
+
             });
-
-
 
 
             $( window ).resize(function() {
                 menuHeaderSet();
-            });
+            })
 
         </script>
 

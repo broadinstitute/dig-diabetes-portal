@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.json.builder;
 
 import junit.framework.TestCase;
+import org.broadinstitute.mpg.diabetes.MetaDataService;
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser;
 import org.broadinstitute.mpg.diabetes.util.PortalException;
 import org.codehaus.groovy.grails.web.json.JSONObject;
@@ -18,6 +19,7 @@ public class LocusZoomJsonBuilderTest extends TestCase {
     String metadataJsonString = null;
     String locusZoomJsonString = null;
     JsonParser jsonParser;
+    MetaDataService metaDataService = new MetaDataService();
 
     @Before
     public void setUp() throws Exception {
@@ -49,7 +51,8 @@ public class LocusZoomJsonBuilderTest extends TestCase {
 
         // get the json string
         try {
-            jsonString = locusZoomJsonBuilder.getLocusZoomQueryString("8", 118000000, 121000000, null, 500, "verbose");
+            jsonString = locusZoomJsonBuilder.getLocusZoomQueryString("8", 118000000, 121000000,
+                    null, 500, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
 
             // create the json object
             locusZoomJsonObject = new JSONObject(jsonString);

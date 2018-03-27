@@ -1367,7 +1367,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             makeDynamic:additionalParameters.firstStaticPropertyName,
             retrieveFunctionalDataAjaxUrl:additionalParameters.retrieveFunctionalDataAjaxUrl,
             sampleGroupsWithCredibleSetNames:credSetSpecific.sampleGroupsWithCredibleSetNames,
-            maximumNumberOfResults:credSetSpecific.maximumNumberOfResults
+            maximumNumberOfResults:credSetSpecific.maximumNumberOfResults,
+            credSetToVariants:credSetSpecific.credSetToVariants
         };
 
         if ((credSetSpecific.sampleGroupsWithCredibleSetNames)&&(credSetSpecific.sampleGroupsWithCredibleSetNames.length>0)) {
@@ -1422,8 +1423,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var pName = additionalParameters.pname;
 
         // var useIgvNotLz = additionalParameters.preferIgv;
-        var useIgvNotLz = ($('input[name=genomeBrowser]:checked').val() === '2');
-
+        //var useIgvNotLz = ($('input[name=genomeBrowser]:checked').val() === '2');
+        var useIgvNotLz = false; // remove option for now
         var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData(data, 0.05, additionalParameters);
         var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
         var commonSectionShouldComeFirst = mpgSoftware.geneSignalSummaryMethods.commonSectionComesFirst(renderData);
@@ -1475,6 +1476,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if (useIgvNotLz) {
             $('.locusZoomLocation').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));
+            // renderData["lzDomSpec"] = "lz-"+additionalParameters.lzCredSet;
+            // renderData.staticDataExists = false;
+            // renderData.dynamicDataExists = [];
+            // renderData.dynamic = [];
+            // renderData.static = [];
+            // $("#locusZoomLocationCredSet").empty().append(Mustache.render($('#locusZoomTemplate')[0].innerHTML, renderData));
         } else {
             $('.igvGoesHere').css('display', 'none');
             $('.browserChooserGoesHere').empty().append(Mustache.render($('#genomeBrowserTemplate')[0].innerHTML, renderData));

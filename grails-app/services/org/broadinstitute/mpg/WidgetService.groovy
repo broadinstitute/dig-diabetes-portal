@@ -461,8 +461,8 @@ class WidgetService {
 
 
 
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
+    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecord (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype, metadataPreference){
+        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '',MetaDataService.METADATA_VARIANT)
         // List<SampleGroup> sortedSampleGroup = sampleGroup.sort{it.sortOrder}
         List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
         // KLUDGE alert
@@ -470,27 +470,73 @@ class WidgetService {
         sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')}
         if (sortedSampleGroup.size()>0){
             SampleGroup chosenSampleGroup = sortedSampleGroup.first()
-            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
+            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
+                    metadataPreference)
             holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
         }
         return holdingStructure
     }
 
-    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,String phenotype){
-        List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS', metaDataService.getDataVersion(), '')
-        if (sampleGroup.size()==0) {
-            sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '')
+
+
+//    private HashMap<String,HashMap<String,String>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,String>> holdingStructure,
+//                                                                                                          String phenotype,int metadataPreference){
+//        if (phenotype != "none"){ // none is a keyword indicating that there is no phenotype matching these criteria
+//            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS',
+//                    metaDataService.getDataVersion(), '',metadataPreference)
+//            if (sampleGroup.size()==0) {
+//                sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '',metadataPreference)
+//            }
+//
+//            List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+//            // KLUDGE alert
+//            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+//            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+//            if (sortedSampleGroup.size()>0){
+//                SampleGroup chosenSampleGroup = sortedSampleGroup.first()
+//                Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
+//                        metadataPreference)
+//                holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+//            }
+//        }
+//
+//        return holdingStructure
+//    }
+
+    /***
+     * Add to a structure in which each phenotype is a key into a map, and in each of those maps the different data sets is a map into the final Map.
+     *
+     * @param holdingStructure
+     * @param phenotype
+     * @param metadataPreference
+     * @return
+     */
+    private HashMap<String,HashMap<String,HashMap<String,String>>> buildSinglePhenotypeDataSetPropertyRecordFavoringGwas (HashMap<String,HashMap<String,HashMap<String,String>>> holdingStructure,
+                                                                                                          String phenotype,int metadataPreference){
+        if (phenotype != "none"){ // none is a keyword indicating that there is no phenotype matching these criteria
+            List<SampleGroup> sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, 'GWAS',
+                    metaDataService.getDataVersion(), '',metadataPreference)
+            if (sampleGroup.size()==0) {
+                sampleGroup = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(phenotype, '', metaDataService.getDataVersion(), '',metadataPreference)
+            }
+
+            List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
+            // KLUDGE alert
+            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
+            //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
+            for (SampleGroup chosenSampleGroup in sortedSampleGroup){
+                Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE",
+                        metadataPreference)
+                if (!holdingStructure.containsKey(phenotype)){
+                    holdingStructure[phenotype] = [:]
+                } // We don't arty have this phenotype key.  Add it.
+                HashMap currentPhenotypeMap = holdingStructure[phenotype]
+                if (!currentPhenotypeMap.containsKey(chosenSampleGroup.systemId)){ // Expected.  We shouldn't have multiple data sets for each phenotype
+                    currentPhenotypeMap[chosenSampleGroup.systemId] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
+                } // There should be no reason for an else
+            }
         }
 
-        List<SampleGroup> sortedSampleGroup = sampleGroup.sort{a,b->b.subjectsNumber<=>a.subjectsNumber} // pick largest number of subjects
-        // KLUDGE alert
-        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('SIGN')} // filter -- no sign allowed, since it is too big and stresses out LZ
-        //sortedSampleGroup = sortedSampleGroup.findAll{!it.systemId.contains('MetaStroke')} // filter -- no sign allowed, since it is too big and stresses out LZ
-        if (sortedSampleGroup.size()>0){
-            SampleGroup chosenSampleGroup = sortedSampleGroup.first()
-            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,chosenSampleGroup.systemId,"P_VALUE")
-            holdingStructure[phenotype] = [phenotype:phenotype, dataSet:chosenSampleGroup.systemId, property:property.name]
-        }
         return holdingStructure
     }
 
@@ -510,16 +556,25 @@ class WidgetService {
 
 
 
-    public LinkedHashMap<String,HashMap<String,String>> retrieveAllPhenotypeDataSetCombos(){
-        LinkedHashMap<String,HashMap<String,String>> returnValue = []
+    public LinkedHashMap<String,HashMap<String,HashMap<String,String>>> retrieveAllPhenotypeDataSetCombos(int metadataPreference){
+        LinkedHashMap<String,HashMap<String,HashMap<String,String>>> returnValue = []
+        // kludge alert -- it appears that MDV should be ignored for hail data?
+        List<Phenotype> phenotypeList = []
+        if (metadataPreference == metaDataService.METADATA_VARIANT){
+            phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(),metadataPreference)
+        } else if (metadataPreference == metaDataService.METADATA_HAIL){
+            phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(), metadataPreference)
+        } else {
+            phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(),metadataPreference)
+        }
 
-        List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion('GWAS', metaDataService.getDataVersion(),MetaDataService.METADATA_VARIANT)
-        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        //List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{a,b-> a.sortOrder<=>b.sortOrder ?:  a.parent?.sortOrder<=>b.parent?.sortOrder}
 
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
         if (portalVersionBean.getOrderedPhenotypeGroupNames().size()==0){
             for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in sortedPhenotypeList){
-                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name)
+                buildSinglePhenotypeDataSetPropertyRecord(returnValue,phenotype.name, metadataPreference)
             }
         } else {
             for (String phenotypeGroupName in portalVersionBean.getOrderedPhenotypeGroupNames()){
@@ -531,7 +586,7 @@ class WidgetService {
                         }
                     }
                     if (!skipIt){
-                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
+                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name,metadataPreference)
                     }
                 }
             }
@@ -544,7 +599,7 @@ class WidgetService {
                         }
                     }
                     if (!skipIt){
-                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name)
+                        buildSinglePhenotypeDataSetPropertyRecordFavoringGwas(returnValue,phenotype.name,metadataPreference)
                     }
                 }
             }
@@ -563,7 +618,7 @@ class WidgetService {
         LinkedHashMap<String, List <List <String>>> returnValue = []
 
         List<Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion(technology, metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
-        List<Phenotype> sortedPhenotypeList = phenotypeList.sort{it.sortOrder}.unique{it.name}
+        List<Phenotype> sortedPhenotypeList = phenotypeList.unique{it.name}.sort{a,b-> a.sortOrder<=>b.sortOrder ?:  a.parent?.sortOrder<=>b.parent?.sortOrder}
 
         LinkedHashMap<String, List <List <String>>> groupedPhenotypes = [:]
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForPortalType(metaDataService.portalTypeFromSession)
@@ -613,16 +668,16 @@ class WidgetService {
 
 
 
-
-    public HashMap<String,String> retrievePhenotypeDataSetCombo( String defaultPhenotype,
-                                                                 String defaultDataSet ){
-        LinkedHashMap returnValue = [phenotype:defaultPhenotype, dataSet:defaultDataSet]
-        HashMap<String,HashMap<String,String>> allPhenotypeDataSetCombos =  retrieveAllPhenotypeDataSetCombos()
-        if (allPhenotypeDataSetCombos.containsKey(defaultPhenotype)){
-            returnValue = allPhenotypeDataSetCombos[defaultPhenotype]
-        }
-        return returnValue
-    }
+//
+//    public HashMap<String,String> retrievePhenotypeDataSetCombo( String defaultPhenotype,
+//                                                                 String defaultDataSet ){
+//        LinkedHashMap returnValue = [phenotype:defaultPhenotype, dataSet:defaultDataSet]
+//        HashMap<String,HashMap<String,String>> allPhenotypeDataSetCombos =  retrieveAllPhenotypeDataSetCombos()
+//        if (allPhenotypeDataSetCombos.containsKey(defaultPhenotype)){
+//            returnValue = allPhenotypeDataSetCombos[defaultPhenotype]
+//        }
+//        return returnValue
+//    }
 
 
 
@@ -694,8 +749,14 @@ class WidgetService {
             endPosition = (midpoint+(MAXIMUM_RANGE_FOR_HAIL/2))-1
         }
 
+        int metadataTree = MetaDataService.METADATA_VARIANT
+        if (attemptDynamicCall){
+            metadataTree = MetaDataService.METADATA_HAIL
+        }
+
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "verbose");
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition,
+                covariateList,maximumNumberOfPointsToRetrieve, "verbose", metaDataService,metadataTree);
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -748,7 +809,8 @@ class WidgetService {
                                             String propertyName,
                                             String dataType,
                                             List<String> covariateVariants,
-                                            int numberOfRequestedResults ) throws PortalException {
+                                            int numberOfRequestedResults,
+                                            String datatypeDesignation) throws PortalException {
         // local variables
         String jsonResultString, jsonGetDataString;
         LocusZoomJsonBuilder locusZoomJsonBuilder = null;
@@ -775,21 +837,36 @@ class WidgetService {
             maximumNumberOfPointsToRetrieve = 500
         }
 
+        int metadataTree = MetaDataService.METADATA_VARIANT
+        if (datatypeDesignation == "dynamic") {
+            metadataTree = MetaDataService.METADATA_HAIL
+        }
+
+
         // get json getData query string
-        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, "flat");
+        jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,
+                maximumNumberOfPointsToRetrieve, "flat", metaDataService, metadataTree);
 
 
             //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
         log.info("Got LZ static request for dataset: " + dataset + " and start: " + startPosition + " and end: " + endPosition + " for phenotype: " + phenotype + " and data type: " + dataType);
-        jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        if (datatypeDesignation == "static") {
+            jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+        } else if (datatypeDesignation == "dynamic") {
+            jsonResultString = this.restServerService.postGetHailDataCall(jsonGetDataString);
+        }
+
         JSONObject jsonObject
         if (jsonResultString != null){
             jsonObject =  new JsonSlurper().parseText(jsonResultString)
             jsonObject.lastPage = null
             JSONObject dataJSONObject = jsonObject["data"] as JSONObject
+            JSONObject tempDataJSONObject = new JSONObject()
             List<String> dataFields = dataJSONObject.names() as List
             int numberOfElements = 0
             boolean choseOurPValue = false
+            boolean foundVarId = false
+            boolean foundMDS = false
             for (String dataField in dataFields){
                 if (dataField == "metadata_rootPOS" ){
                     dataJSONObject.position = dataJSONObject[dataField] as JSONArray
@@ -802,32 +879,61 @@ class WidgetService {
                     dataJSONObject.id = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.id = dataJSONObject.id.collect{String it->List f=it.split("_");if (f.size()==4){return "${f[0]}:${f[1]}_${f[2]}/${f[3]}".toString()}else {return it}} as JSONArray
                     dataJSONObject.remove(dataField);
+                    foundVarId = true
                 } else if (dataField == "metadata_rootReference_Allele" ){
                     dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootConsequence" ){
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootEffect_Allele" ){
+                   // dataJSONObject.effAllele = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else if (dataField == "metadata_rootMOST_DEL_SCORE" ){
                     dataJSONObject.scoreTestStat = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
+                    foundMDS = true
                 } else if (dataField.contains("CREDIBLE_SET_ID") ){
                     dataJSONObject.remove(dataField);
                 } else if (dataField.contains(propertyName)) { // Will capture either posterior probabilities or else P values
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                     choseOurPValue = true
-                }  else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
+                }
+                else if (dataField == "metadata_rootREF_ALLELE") { // Will capture either posterior probabilities or else P values
+                    dataJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField)
+                    //tempJSONObject.refAllele = dataJSONObject[dataField] as JSONArray
+                } else if (dataField == "metadata_rootALT_ALLELE") { // Will capture either posterior probabilities or else P values
+                    tempDataJSONObject.effectAllele = dataJSONObject[dataField] as JSONArray
+                    dataJSONObject.remove(dataField)
+                    //tempJSONObject.effectAllele = dataJSONObject[dataField] as JSONArray
+                }else if (!choseOurPValue) { // Will capture anything else, including p_values with other p_values names
                     dataJSONObject.pvalue = dataJSONObject[dataField] as JSONArray
                     dataJSONObject.remove(dataField);
                 } else {
                     dataJSONObject.remove(dataField);
                 }
             }
+
             JSONArray emptyArrays = new JSONArray()
             for (int i; i<numberOfElements; i++) { emptyArrays.put(JSONObject.NULL)}
-//            dataJSONObject.scoreTestStat = emptyArrays
+
+            // Hail can't provide all of the fields that LZ expects.  Supplement these as needed
+            if ((foundVarId==false)&&
+                    (dataJSONObject.refAllele)&&
+                    (tempDataJSONObject.effectAllele)&&
+                    (dataJSONObject.chr)&&
+                    (dataJSONObject.position)){
+                List<String> varIdArray = []
+                 for( int  i = 0 ; i < dataJSONObject.refAllele.size() ; i++ ){
+                     varIdArray << "${dataJSONObject.chr[i]}:${dataJSONObject.position[i]}_${dataJSONObject.refAllele[i]}/${tempDataJSONObject.effectAllele[i]}"
+                 }
+                dataJSONObject.id = varIdArray as JSONArray
+            }
+            if (!foundMDS){
+                dataJSONObject.scoreTestStat = emptyArrays
+            }
+
             dataJSONObject.analysis = emptyArrays
             dataJSONObject.refAlleleFreq = emptyArrays
 
@@ -896,29 +1002,32 @@ class WidgetService {
 
 
 
-    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
-                                                   String dataset, String phenotype, String propertyName) {
-
-        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
-
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,2000, "verbose");
-
-        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-
-
-
-        // return
-        return jsonResultString;
-    }
+//    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
+//                                                   String dataset, String phenotype, String propertyName) {
+//
+//        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
+//
+//        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+//                2000, "verbose", metaDataService);
+//
+//        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+//
+//
+//
+//        // return
+//        return jsonResultString;
+//    }
 
 
 
     private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
                                              String phenotype ){
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
-        Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE")
+        Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
+                MetaDataService.METADATA_VARIANT)
         LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,10, "verbose");
+        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
         JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
         jsonResultString["dataset"] = dataSetName
         jsonResultString["phenotype"] = phenotype
@@ -936,12 +1045,14 @@ class WidgetService {
         JSONObject jsonResultString
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
-             jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,1, "verbose");
+             jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                     1, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
              jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             if ((jsonResultString) &&
                     (!jsonResultString.is_error) &&
                     (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
-                jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,300, "verbose");
+                jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                        300, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
                 jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
                 jsonResultString["dataset"] = dataset
                 jsonResultString["phenotype"] = phenotype
@@ -995,8 +1106,10 @@ class WidgetService {
         // get the query result and translate to a json string
         try {
             // get the variant list
-            if (dataType=='static') {
-                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants, numberOfRequestedResults);
+            if (true) {
+                //if (dataType=='static') {
+                jsonResultString = this.getFlatDataForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName,
+                        dataType, covariateVariants, numberOfRequestedResults,dataType);
             } else { // dynamic data are still processed the old way, whereas static data will use the new flat format result
                 variantList = this.getVariantListForLocusZoom(chromosome, startPosition, endPosition, dataset, phenotype, propertyName, dataType, covariateVariants);
 
@@ -1077,69 +1190,74 @@ class WidgetService {
         String portalType = this.metaDataService?.getPortalTypeFromSession();
 
 
-            HashMap<String,HashMap<String,String>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos()
+        LinkedHashMap<String,HashMap<String,HashMap<String,String>>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_VARIANT)
+        LinkedHashMap<String,HashMap<String,HashMap<String,String>>> hailPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_HAIL)
             boolean firstTime = true
-
-        // Previously I was adding credible set datasets as an option, but I don't think they belong
-//            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning("T2D","CREDIBLE_SET_ID");
-//
-//            for (SampleGroup sampleGroupWithCredibleSets in sampleGroupsWithCredibleSets){
-//                beanList.add(new PhenotypeBean(key:sampleGroupWithCredibleSets.phenotypes?.first()?.name, name: "T2D_crd",
-//                        description: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId, default: sampleGroupWithCredibleSets.systemId),
-//                        dataSet:sampleGroupWithCredibleSets.systemId,
-//                        dataSetReadable: g.message(code: "metadata." + sampleGroupWithCredibleSets.systemId,default: sampleGroupWithCredibleSets.systemId),
-//                        propertyName: "P_VALUE", dataType: "static", defaultSelected: false,
-//                        suitableForDefaultDisplay: false));
-//            }
-
 
 
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
-                HashMap<String,String> phenotypeDataSetCombo = aAllPhenotypeDataSetCombos[phenotype]
-                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
-                        dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
-                        propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
-
+                HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = aAllPhenotypeDataSetCombos[phenotype]
+                for (String eachDataset in phenotypeDataKeyMap.keySet()){
+                    HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
+                    beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
+                            dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
+                            propertyName:phenotypeDataSetCombo.property,dataType:"static",
+                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+                }
                 firstTime = false
             }
 
+        firstTime = true
+        for (String phenotype in hailPhenotypeDataSetCombos.keySet()){
+            HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = hailPhenotypeDataSetCombos[phenotype]
+            for (String eachDataset in phenotypeDataKeyMap.keySet()){
+                HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
+                beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
+                        dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
+                        propertyName:phenotypeDataSetCombo.property,dataType:"dynamic",
+                        description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+
+            }
+            firstTime = false
+        }
+
+
             // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
             if (metaDataService.portalTypeFromSession=='t2d') {
-                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 Diabetes", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
-                        propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: true, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "Body Mass Index", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL Cholesterol", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL Cholesterol", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting Insulin", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting Glucose", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip Circumference", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist Circumference", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist Hip Ratio", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total Cholesterol", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 diabetes", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
+//                        propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: true, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "BMI", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL cholesterol", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL cholesterol", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting insulin", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting glucose", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip circumference", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist circumference", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist hip ratio", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total cholesterol", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
+//                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
+//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
+//                        defaultSelected: false, suitableForDefaultDisplay: true));
 
             } else if (metaDataService.portalTypeFromSession=='stroke') {
 /*

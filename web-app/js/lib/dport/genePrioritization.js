@@ -277,7 +277,7 @@ var mpgSoftware = mpgSoftware || {};
 
         });
 
-        var convertLineForPhenotypicTraitTable = function (variant, effectsField) {
+        var convertLineForPhenotypicTraitTable = function (variant, phenotype, dataset,launchGeneVariantQueryUrl) {
                 var retVal = [];
                 var pValueGreyedOut = (variant.P_VALUE > .05) ? "greyedout" : "normal";
                 var pValue='';
@@ -320,7 +320,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 });
                 position = positionIndicator['start']+" - "+positionIndicator['end'];
-                retVal.push( geneName );
+                retVal.push( "<a class='boldlink' href='"+launchGeneVariantQueryUrl+"?gene="+geneName+"&phenotype="+phenotype+"&dataset="+dataset+"'>"+geneName+"</a>");
                 retVal.push( chromosome );
                 retVal.push(position);
                 retVal.push( pValue );
@@ -354,9 +354,13 @@ var mpgSoftware = mpgSoftware || {};
                     ]
                 });
                 var dataLength = variant.length;
-                var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
+                //var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
+                var mySavedVars = getMySavedVariables();
                 for (var i = 0; i < dataLength; i++) {
-                    var array = convertLineForPhenotypicTraitTable(variant[i], effectsField);
+                    var array = convertLineForPhenotypicTraitTable( variant[i],
+                                                        mySavedVars.phenotypeName,
+                                                        $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
+                                                        mySavedVars.launchGeneVariantQueryUrl );
                     $('#phenotypeTraits').dataTable().fnAddData(array, (i == 25) || (i == (dataLength - 1)));
                 }
             };

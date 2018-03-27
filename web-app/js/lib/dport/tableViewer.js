@@ -287,9 +287,11 @@ var variantProcessing = (function () {
         });
         var criteriaArray = [query.prop, query.dataset, query.phenotype];
         var columnName = _.chain(criteriaArray).filter().join('.').value();
-        var index = _.findIndex(columns, function (column) {
-            return column.indexOf(columnName);
-        });
+        // var index = _.findIndex(columns, function (column) {
+        //     return columns.indexOf(columnName);
+        // });
+        var index = columns.indexOf(columnName);
+
         return index;
     }
 

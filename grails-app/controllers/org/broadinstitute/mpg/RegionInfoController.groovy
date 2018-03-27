@@ -56,7 +56,8 @@ class RegionInfoController {
                 if (chromosome.startsWith('chr')) { chromosome = chromosome.substring(3) }
 
                 if ((dataType=='static')&&(dataSet!='')){ // dynamically get the property name for static datasets
-                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,propertyName)
+                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,
+                                                propertyName,MetaDataService.METADATA_VARIANT)
                     propertyName = property.name
                 }
                 jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);

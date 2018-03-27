@@ -559,7 +559,8 @@ class GeneController {
             if (chromosome != null) {
 
                 if (dataType=='static'){ // dynamically get the property name for static datasets
-                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,propertyName)
+                    Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,
+                                        propertyName,MetaDataService.METADATA_VARIANT )
                     propertyName = property.name
                 }
                 println("making LZ on dataset = ${dataSet} and pheno=${phenotype}")
@@ -597,6 +598,7 @@ class GeneController {
         String endString = params.end; // ex "29937203"
         String assay_id = params.assay_id
         String tissue_id = params.source
+        String permissions = params.permissions;
 
         int startInteger;
         int endInteger;
@@ -630,7 +632,8 @@ class GeneController {
             String callingJson = """{"chr":"chr${chromosome}",
                                      "start":${startString},
                                      "end":${endString},
-                                     "bigwigUrl":"${chosenBigWigUrl}"}""".toString()
+                                     "bigwigUrl":"${chosenBigWigUrl}",
+                                      "permissions":"${permissions}"}""".toString()
 
             if (chromosome != null) {
                 resultLZJson= epigenomeService.getBigWigDataRestCall(callingJson)

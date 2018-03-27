@@ -287,7 +287,11 @@ environments {
     production {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://www.type2diabetesgenetics.org"
+
+//       grails.serverURL = "http://www.type2diabetesgenetics.org"
+
+        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
+
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //        grails.serverURL = "http://cerebrovascularportal.org"
@@ -301,9 +305,14 @@ environments {
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+
+ //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
 //      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
-//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal dev for now
+
+//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal production for now
+//        grails.ServerURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"        // stroke portal demo for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
@@ -322,7 +331,11 @@ environments {
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
-         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+
+//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+
+//         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
         grails.logging.jul.usebridge = false
@@ -539,12 +552,12 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", or "ibd".   What is the portal type for all nonsystem users?
+portal.type.override = "stroke"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv29",    // the MDV number for this portal
+                                                        "mdv30",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
@@ -612,7 +625,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["LPA"],
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          "images/mi/mi_banner_2018.png",
+                                          "images/mi/front_mi_banner_2018.png",
                                   "",
                                           "images/mi/mi_header_logo_2017.svg",
                                           "images/mi/menu_band_2017_mi.png",
@@ -639,7 +652,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["IL23R"],
                                           ["rs11209026"],
                                           ["chr9:20,940,000-21,800,000"],
-                                          "images/ibd/IBD_banner_2018.png",
+                                          "images/ibd/front_ibd_bg_2018.png",
                                   "",
                                           "images/ibd/ibd_header_logo.svg",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
@@ -653,8 +666,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
                                           "mdv100",
-                                          "EPI",
-                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "GGE", // make sure your default phenotype exists in your default data set
+                                          "ExSeq_Epi25k_mdv100",// used to pick a default data set for a gene query
                                           ["AnteriorCaudate"],
                                           ["PSYCHIATRIC"], // most important phenotype group name
                                           [],
@@ -664,8 +677,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "portal.epilepsy.header.tagline",
                                           [],
                                           ["CDKL5"],
-                                          ["rs2021722","X:18622693_G_A"],
-                                          ["chr9:20,940,000-21,800,000"],
+                                          [],
+                                          ["chr14:35,907,000-36,400,000"],
                                           "images/epilepsy/front_epilepsy_bg_2018.png",
                                           "",
                                           "images/epilepsy/epilepsy_header_logo.svg",
@@ -681,4 +694,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 
 
 
-
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'

@@ -2,7 +2,7 @@
 
     <div class="panel-body">
 
-<h4>Dataset</h4>
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
 <p><g:message code="aboutTheData.stroke.datasets.GERFHS_III_2017"></g:message></p>
 
@@ -18,13 +18,13 @@
 
 
 
-    <h4>Dataset phenotypes</h4>
+    <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
         <li><g:message code="informational.shared.traits.All_ICH"></g:message></li>
 
     </ul>
 
-<h4>Dataset subjects</h4>
+<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
 <table class="table table-condensed table-responsive table-striped">
 <tr><th>Cohort</th><th>Cases</th><th>Controls</th><th>Ancestry</th></tr>
@@ -77,7 +77,7 @@
 <g:message code="aboutTheData.stroke.datasets.GERFHS2017.casecontrol"></g:message>
 
 
-    <h4>Project</h4>
+    <h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
 <h5><b><g:message code="aboutTheData.stroke.datasets.GERFHS_III_2017.title"></g:message></b></h5>
     <p><g:message code="aboutTheData.stroke.datasets.Cincinnati.project"></g:message></p>

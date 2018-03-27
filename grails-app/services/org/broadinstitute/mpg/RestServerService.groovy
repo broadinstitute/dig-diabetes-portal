@@ -57,6 +57,7 @@ class RestServerService {
     private String GENE_SEARCH_URL = "gene-search" // TODO: Wipe out, but used for (inefficiently) obtaining gene list.
     private String METADATA_URL = "getMetadata"
     private String GENE_METADATA_URL = "getGeneMetadata"
+    private String HAIL_METADATA_URL = "getHailMetadata"
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
@@ -433,6 +434,55 @@ class RestServerService {
         return returnValue
     }
 
+
+
+
+    public LinkedHashMap parseARange(String regionSpecification){
+        boolean encounteredErrors = false
+        LinkedHashMap returnValue = [:]
+        LinkedHashMap extractedNumbers =  extractNumbersWeNeed(regionSpecification)
+        if ((extractedNumbers)   &&
+                (extractedNumbers["startExtent"])   &&
+                (extractedNumbers["endExtent"])&&
+                (extractedNumbers["chromosomeNumber"]) ) {
+            Long startExtent = sharedToolsService.convertRegionString(extractedNumbers["startExtent"])
+            Long endExtent = sharedToolsService.convertRegionString(extractedNumbers["endExtent"])
+            if ((startExtent < 0) || (endExtent < 0) || (startExtent > endExtent)) {
+                encounteredErrors = true
+            }
+            String chromosome = extractedNumbers["chromosomeNumber"]
+            if (chromosome.contains('chr')){
+                chromosome = chromosome-"chr"
+            }
+            if (chromosome != 'X' && chromosome != 'x' && chromosome != 'Y' && chromosome != 'y'){
+                Integer chromosomeNumber
+                try {
+                    chromosomeNumber = Integer.parseInt(chromosome)
+                } catch(e){
+                    encounteredErrors = true
+                }
+                if ((chromosomeNumber < 1) || (chromosomeNumber > 22)){
+                    encounteredErrors = true
+                }
+            }
+            if (!encounteredErrors){
+                returnValue["start"] = startExtent
+                returnValue["end"] = endExtent
+                returnValue["chromosome"] = chromosome
+                returnValue["error"] = false
+            }
+        } else {
+            returnValue["error"] = true
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+
     /***
      * Need to to send through metadata sample groups recursively in order to generate a JSON structure
      * that can create the recursive Sunburst graphic
@@ -704,6 +754,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public JSONObject postGetDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_URL);
+    }
+    public JSONObject postGetHailDataCall(String jsonString) {
+        return this.postRestCall(jsonString, this.GET_HAIL_DATA_URL);
     }
     public JSONObject postGetAggDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_DATA_AGGREGATION_URL);
@@ -1356,7 +1409,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     private JSONObject variantDiseaseRisk( String variantId,String sampleGroup ) {
         String filterByVariantName = codedfilterByVariant(variantId)
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID"])
-        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(DEFAULTPHENOTYPE, TECHNOLOGY_EXOME_SEQ, metaDataService.getDataVersion(), "Mixed")
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupForPhenotypeTechnologyAncestry(DEFAULTPHENOTYPE, TECHNOLOGY_EXOME_SEQ, metaDataService.getDataVersion(), "Mixed",MetaDataService.METADATA_VARIANT)
         String sampleGroupName = sampleGroupList[0]?.systemId
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filterByVariantName], searchBuilderService, metaDataService)
         addColumnsForPProperties(resultColumnsToDisplay, "${DEFAULTPHENOTYPE}", sampleGroupName, "${HETEROZYGOTE_AFFECTED}")
@@ -1562,7 +1615,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public String getGeneMetadata() {
         String retdat
-        retdat = getRestCallBase(GENE_METADATA_URL, currentRestServer())
+        retdat = getRestCallBase("${GENE_METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer())
+        return retdat
+    }
+
+    public String getHailMetadata() {
+        String retdat
+        retdat = getRestCallBase(HAIL_METADATA_URL, currentRestServer())
         return retdat
     }
 
@@ -1826,7 +1885,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         // Add properties specific to a data set
         if (requestedProperties) {
             requestedProperties?.each { String phenotype, LinkedHashMap phenotypeProperties ->
-                if (phenotype == 'common') {
+                if (phenotype != 'common') { // has this bug always been here? Is it a bug?
                     phenotypeProperties?.each { String datasetName, v ->
                         if (v?.size() > 0) {
                             for (String property in v) {
@@ -2037,11 +2096,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["VAR_ID", "DBSNP_ID", "CHROM", "POS"])
         for(LinkedHashMap oneReference in propsToUse){
             addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, oneReference.prop)
-            Property betaProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,"BETA")
+            Property betaProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,
+                                                                                            "BETA",MetaDataService.METADATA_VARIANT)
             if (betaProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, betaProperty.name)
             }
-            Property orProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,"ODDS_RATIO")
+            Property orProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(oneReference.phenotype,oneReference.ds,
+                                                                                        "ODDS_RATIO",MetaDataService.METADATA_VARIANT)
             if (orProperty){
                 addColumnsForPProperties(resultColumnsToDisplay, oneReference.phenotype, oneReference.ds, orProperty.name)
             }
