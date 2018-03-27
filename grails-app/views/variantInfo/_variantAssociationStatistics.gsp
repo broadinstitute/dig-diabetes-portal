@@ -88,7 +88,7 @@
                     style="color: #333; font-size: 12px;"><g:message code="variant.variantAssociations.legend.sampleSize"
                                                                      default="sample size"/>  <g:helpText title="variant.variantAssociations.size.help.header" placement="bottom" body="variant.variantAssociations.size.help.text"/></span> | <span
                     style="color: #F00; font-size: 12px;"><g:message code="variant.variantAssociations.legend.frequency"
-                                                                     default="frequency"/>  <g:helpText title="variant.variantAssociations.frequency.help.header" placement="bottom" body="variant.variantAssociations.frequency.help.text"/></span> | <span
+                                                                     default="frequency"/>  <g:helpText title="variant.alleleFrequency.help.header" placement="bottom" body="variant.alleleFrequency.help.text"/></span> | <span
                     style="color:#33F; font-size: 12px;"><g:message code="variant.variantAssociations.legend.count"
                                                                     default="count"/>  <g:helpText title="variant.variantAssociations.count.help.header" placement="bottom" body="variant.variantAssociations.count.help.text"/></span>
             </div>
