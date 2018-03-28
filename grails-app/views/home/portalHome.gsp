@@ -384,6 +384,9 @@
                     <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                         <g:message code="portal.epi.use.citation.itself" />
                     </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                        <g:message code="portal.sleep.use.citation.itself" />
+                    </g:elseif>
                         <g:else></g:else>
                     </p>
                 </div>
@@ -453,6 +456,10 @@
 
             <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                 <p><g:message code="about.the.epi.portal.text"/></p>
+            </g:elseif>
+
+            <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                <p><g:message code="about.the.sleep.portal.text"/></p>
             </g:elseif>
 
             <g:else>
