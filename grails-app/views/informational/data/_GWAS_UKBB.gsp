@@ -45,7 +45,7 @@
 <p><g:message code="informational.data.exptsumm.sleep"></g:message></p>
 
 <h4>Accessing UK Biobank Sleep Traits GWAS data</h4>
-<p><g:message code="informational.data.accessing.sleep"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.VHIR2"></g:message></p>
+<p><g:message code="informational.data.accessing.sleep1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.sleep2"></g:message></p>
 
 
 </script>
