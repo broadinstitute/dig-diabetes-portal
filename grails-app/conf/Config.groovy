@@ -689,6 +689,33 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           '5414069947481666863',
                                           0,
                                           1
+                                  ),
+                                  new PortalVersionBean("sleep",
+                                          "Sleep",
+                                          "mdv110",
+                                          "SleepChronotype", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
+                                          ["AnteriorCaudate"],
+                                          ["SLEEP AND CIRCADIAN"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_UKBB_mdv110",
+                                          "images/sleep/sleeping_penguin.png",
+                                          "portal.sleep.header.tagline",
+                                          [],
+                                          ["PAX8"],
+                                          ["rs62158211"],
+                                          ["chr2:113,873,524-114,136,577"],
+                                          "images/epilepsy/front_epilepsy_bg_2018.png",
+                                          "",
+                                          "images/epilepsy/epilepsy_header_logo.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '5414069947481666863',
+                                          0,
+                                          1
                                   )
 ]
 
