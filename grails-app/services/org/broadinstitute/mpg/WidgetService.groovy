@@ -14,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTr
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -24,6 +25,7 @@ class WidgetService {
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     RestServerService restServerService;
     MetaDataService metaDataService
+    SharedToolsService sharedToolsService
     def grailsApplication
 
     // setting variables
@@ -1145,6 +1147,13 @@ class WidgetService {
         // return
         return jsonResultString;
     }
+
+
+    public generateUserQueryContext(String stringToParse){
+        return UserQueryContext.parseUserQueryContext(stringToParse,restServerService,sharedToolsService)
+    }
+
+
 
     public String getLocusZoomEndpointSelection() {
         return locusZoomEndpointSelection

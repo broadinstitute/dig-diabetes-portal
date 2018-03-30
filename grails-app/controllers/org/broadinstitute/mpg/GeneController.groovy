@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -262,6 +263,47 @@ class GeneController {
      */
     def findTheRightDataPage () {
         String uncharacterizedString = params.id
+
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(uncharacterizedString)
+
+        if (userQueryContext.range){
+            redirect(controller:'gene',action:'geneInfo', params: [id: userQueryContext.originalRequest,
+                                                                   startExtent:userQueryContext.startOriginalExtent,
+                                                                   endExtent:userQueryContext.endOriginalExtent,
+                                                                   chromosomeNumber:userQueryContext.chromosome])
+            return
+        }
+
+        if (userQueryContext.gene){
+            redirect(controller:'gene',action:'geneInfo', params: [id: userQueryContext.originalRequest])
+            return
+        }
+
+        if (userQueryContext.variant) {
+            if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()) {
+                redirect(controller: 'gene', action: 'geneInfo', params: [id              : userQueryContext.originalRequest,
+                                                                          startExtent     : userQueryContext.startExpandedExtent,
+                                                                          endExtent       : userQueryContext.endExpandedExtent,
+                                                                          chromosomeNumber: userQueryContext.chromosome])
+            } else {
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                return
+            }
+        }
+
+
+        if (userQueryContext.genomicPosition) {
+            redirect(controller: 'gene', action: 'geneInfo', params: [id              : userQueryContext.originalRequest,
+                                                                      startExtent     : userQueryContext.startExpandedExtent,
+                                                                      endExtent       : userQueryContext.endExpandedExtent,
+                                                                      chromosomeNumber: userQueryContext.chromosome])
+            return
+         }
+
+        // give up and go home
+        redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
+        return
+ /*
         // Is our string a region?
         LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(uncharacterizedString)
         if ((extractedNumbers)   &&
@@ -328,6 +370,7 @@ class GeneController {
         log.error("why did we never finish parsing '${uncharacterizedString}'?")
         redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
         return
+        */
     }
 
     /***

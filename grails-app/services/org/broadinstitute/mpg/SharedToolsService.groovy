@@ -14,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.broadinstitute.mpg.people.Role
 import org.broadinstitute.mpg.people.User
 import org.broadinstitute.mpg.people.UserRole
@@ -1323,8 +1324,6 @@ class SharedToolsService {
         }
         return returnValue
     }
-
-
 
 
 
