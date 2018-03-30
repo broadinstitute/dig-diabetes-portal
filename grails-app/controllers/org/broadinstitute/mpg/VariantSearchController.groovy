@@ -538,10 +538,14 @@ class VariantSearchController {
                     -1,limit,currentVersion)
         }else {
             LinkedHashMap genomicPosition = sharedToolsService.getGeneExpandedExtent( geneName,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            if (genomicPosition.is_error){
+                genomicPosition = sharedToolsService.getVariantExtent(geneName)
+            }
             geneExtentBegin = genomicPosition["startExtent"]
             geneExtentEnd = genomicPosition["endExtent"]
             geneChromosome = sharedToolsService.parseChromosome(genomicPosition["chrom"])
-            limit=1000  // kludge
+
+            //limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
                     geneExtentBegin,
                     geneExtentEnd,

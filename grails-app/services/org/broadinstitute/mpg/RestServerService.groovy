@@ -78,7 +78,8 @@ class RestServerService {
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
-    public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 250000
+    public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
+    //public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 250000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -332,12 +333,14 @@ class RestServerService {
                     existingPortalVersionBean.getBlogId(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
                     existingPortalVersionBean.getGeneLevelDataExists(),
+                    existingPortalVersionBean.getExposeGrsModule(),
+                    existingPortalVersionBean.getHighSpeedGetAggregatedDataCall(),
                     existingPortalVersionBean.getRegionSpecificVersion()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],"","","","","","","","",0,0,0 )
+                    "", "","","",[],[],[],[],"","","","","","","","",0,0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -760,9 +763,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject postGetHailDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_HAIL_DATA_URL);
     }
-    public JSONObject postGetAggDataCall(String jsonString) {
-        return this.postRestCall(jsonString, this.GET_DATA_AGGREGATION_URL);
-    }
+
 
     public JSONObject postGetHailDataCall(String jsonString, String URL) {
         // TODO - hard code to QA server for now
@@ -2243,28 +2244,66 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                      int  startHere, int pageSize,
                                                                      String version ) {
         List<String> specifyRequestList = []
-        //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
-        if ((phenotype) && (phenotype.length() > 0)) {
-            specifyRequestList << "\"phenotype\":\"${phenotype}\""
+        if (retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall){
+
+            if ((version) && (version.length() > 0)) {
+                specifyRequestList << "\"version\":\"${version}\""
+            } else {
+                log.error("ERROR: gatherTopVariantsFromAggregatedTablesByRange. version parameter required")
+            }
+
+            // the following parameter is required byt the API she. Provide some defaults
+            if (pageSize == -1){
+                pageSize = DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
+            }
+            if (startHere == -1){
+                startHere = 0
+            }
+
+            specifyRequestList << "\"pagination\":{\"size\": ${pageSize},\"offset\":${startHere}}"
+
+            List<String> filterList = []
+            if ((phenotype) && (phenotype.length() > 0)) {
+                filterList <<  "{\"parameter\": \"phenotype\", \"operator\": \"eq\", \"value\": \"${phenotype}\"}"
+            }
+            if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
+                filterList <<  "{\"parameter\": \"chrom\", \"operator\": \"eq\", \"value\": \"${chromosomeNumber}\"}"
+            }
+            if (startExtent != -1) {
+                filterList <<  "{\"parameter\": \"pos\", \"operator\": \"ge\", \"value\": ${startExtent}}"
+            }
+            if (endExtent != -1) {
+                filterList <<  "{\"parameter\": \"pos\", \"operator\": \"le\", \"value\": ${endExtent}}"
+            }
+            specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
+
+            specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
+
+        } else {
+            if ((phenotype) && (phenotype.length() > 0)) {
+                specifyRequestList << "\"phenotype\":\"${phenotype}\""
+            }
+            if (startHere != -1) {
+                specifyRequestList << "\"pageStart\":${startHere}"
+            }
+            if (pageSize != -1) {
+                specifyRequestList << "\"pageSize\":${pageSize}"
+            }
+            if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
+                specifyRequestList << "\"chrom\":\"${chromosomeNumber}\""
+            }
+            if (startExtent != -1) {
+                specifyRequestList << "\"start\":${startExtent}"
+            }
+            if (endExtent != -1) {
+                specifyRequestList << "\"end\":${endExtent}"
+            }
+            if ((version) && (version.length() > 0)) {
+                specifyRequestList << "\"version\":\"${version}\""
+            }
         }
-        if (startHere != -1) {
-            specifyRequestList << "\"pageStart\":${startHere}"
-        }
-        if (pageSize != -1) {
-            specifyRequestList << "\"pageSize\":${pageSize}"
-        }
-        if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
-            specifyRequestList << "\"chrom\":\"${chromosomeNumber}\""
-        }
-        if (startExtent != -1) {
-            specifyRequestList << "\"start\":${startExtent}"
-        }
-        if (endExtent != -1) {
-            specifyRequestList << "\"end\":${endExtent}"
-        }
-        if ((version) && (version.length() > 0)) {
-            specifyRequestList << "\"version\":\"${version}\""
-        }
+
+
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_BY_RANGE_URL)
     }
 

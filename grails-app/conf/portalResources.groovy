@@ -35,6 +35,11 @@ modules = {
     portalHome {
         resource url: 'js/lib/dport/portalHome.js'
     }
+    grsInfo {
+        resource url: 'js/lib/dport/grsInfo.js'
+        resource url: 'css/dport/grsInfo.css'
+    }
+
     regionInfo {
         resource url: 'js/lib/dport/regionInfo.js'
         resource url: 'css/dport/jqDataTables.css'

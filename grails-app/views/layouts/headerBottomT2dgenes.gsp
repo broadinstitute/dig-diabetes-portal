@@ -23,6 +23,9 @@
         <ul class="dk-general-menu" style="list-style: none; float:right; margin:0; padding:10px 0 0 15px; text-align: right;  ">
             <li class="home-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'home',action:'portalHome')}"><g:message code="localized.home"/></a>
             <li class="variant-search-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}"><g:message code="variant.search.header"/></a></li>
+            <g:if test="${restServer.retrieveBeanForCurrentPortal().exposeGrsModule}">
+                <li class="grs-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'grs', action:'grsInfo')}"><g:message code="portal.header.nav.grs"/></a></li>
+            </g:if>
             <li class="data-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'data')}"><g:message code="portal.header.nav.about_data"/></a></li>
             <li class="about-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'about')}"><g:message code="portal.header.nav.about"/></a></li>
             <li class="policies-btn" style="display:inline-block;margin-right:15px;padding-bottom: 15px;text-shadow: #333 0 1px 2px"><a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.header.nav.policies"/></a></li>

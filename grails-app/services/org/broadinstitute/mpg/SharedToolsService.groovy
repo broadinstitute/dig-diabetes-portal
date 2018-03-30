@@ -1283,28 +1283,62 @@ class SharedToolsService {
     }
 
     public LinkedHashMap getGeneExtent(String geneName) {
-        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1"]
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1", is_error: true]
         if (geneName) {
             String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
             returnValue.startExtent = gene?.addrStart ?: 0
             returnValue.endExtent = gene?.addrEnd ?: 0
             returnValue.chrom = gene?.chromosome
+            if (gene == null){
+                returnValue.is_error = true
+            } else {
+                returnValue.is_error = false
+            }
+
         }
         return returnValue
     }
 
 
+    public LinkedHashMap getVariantExtent(String variantName) {
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1", is_error: true]
+        if (variantName) {
+            List<String> variantFields = variantName.split("_")
+            if (variantFields.size()>1){
+                returnValue.chrom = variantFields[0]
+                Integer start = 0
+                try {
+                    start = Integer.parseInt(variantFields[1])
+                } catch(e){}
+                if (start>RestServerService.EXPAND_ON_EITHER_SIDE_OF_GENE){
+                    start -= RestServerService.EXPAND_ON_EITHER_SIDE_OF_GENE
+                } else {
+                    start = 0
+                }
+                returnValue.startExtent = start
+                returnValue.endExtent = start+(2*RestServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+                returnValue.is_error = false
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
     public LinkedHashMap getGeneExpandedExtent(String geneName,int bufferSpace) {
-        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000]
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, is_error: true]
         if (geneName) {
-            LinkedHashMap<String, Integer> geneExtent = getGeneExtent(geneName)
+            LinkedHashMap geneExtent = getGeneExtent(geneName)
             Integer addrStart = geneExtent.startExtent
             if (addrStart) {
                 returnValue.startExtent = ((addrStart > bufferSpace) ? (addrStart - bufferSpace) : 0)
             }
             returnValue.endExtent = geneExtent.endExtent + bufferSpace
             returnValue.chrom = geneExtent.chrom
+            returnValue.is_error = geneExtent.is_error
         }
         return returnValue
     }

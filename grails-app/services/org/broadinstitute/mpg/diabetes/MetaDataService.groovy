@@ -482,7 +482,9 @@ class MetaDataService {
             // sort the group list
             groupList = groupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
 
-            returnValue = groupList?.first()?.systemId
+            if ((groupList)&&(groupList.size()>0)){
+                returnValue = groupList?.first()?.systemId
+            }
 
         } catch (PortalException exception) {
             log.error("Got exception in getPreferredSampleGroupNameForPhenotypeAsJson with phenotype = " + phenotypeName + " : " + exception.getMessage());

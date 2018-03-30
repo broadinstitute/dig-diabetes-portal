@@ -1022,16 +1022,19 @@ class WidgetService {
 
     private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
                                              String phenotype ){
+        JSONObject jsonResultString = new JSONObject()
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
                 MetaDataService.METADATA_VARIANT)
-        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
-        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-        jsonResultString["dataset"] = dataSetName
-        jsonResultString["phenotype"] = phenotype
-        jsonResultString["propertyName"] = newlyChosenProperty.name
+        if (newlyChosenProperty!=null){
+            LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
+            String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                    10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
+            jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+            jsonResultString["dataset"] = dataSetName
+            jsonResultString["phenotype"] = phenotype
+            jsonResultString["propertyName"] = newlyChosenProperty.name
+        }
         return jsonResultString
     }
 

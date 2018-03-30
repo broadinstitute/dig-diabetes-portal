@@ -312,7 +312,16 @@ class GeneController {
                 return
             }
         } else {// for now we don't have to verify of variant's existence
-            redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
+            if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()){ // treat a variant is a range
+                Map variantPieces = sharedToolsService.getVariantExtent(params.id)
+                redirect(controller:'gene',action:'geneInfo', params: [id: params.id,
+                                                                       startExtent:variantPieces["startExtent"],
+                                                                       endExtent:variantPieces["endExtent"],
+                                                                       chromosomeNumber:variantPieces["chrom"]])
+                return
+            } else {
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
+            }
             return
         }
         // this is an error condition -- we should never get here in the code
@@ -413,9 +422,24 @@ class GeneController {
         String geneToStartWith = params.geneName
         if (geneToStartWith)      {
             JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
-            render(status:200, contentType:"application/json") {
-                [geneInfo:jsonObject['gene-info']]
+            if (jsonObject["is_error"]){
+                Map variantPieces = sharedToolsService.getVariantExtent(geneToStartWith)
+                jsonObject = new JSONObject()
+                jsonObject["id"] = geneToStartWith
+                jsonObject["CHROM"] = variantPieces.chrom
+                jsonObject["BEG"] = variantPieces.startExtent
+                jsonObject["END"] = variantPieces.endExtent
+                render(status:200, contentType:"application/json") {
+                    [geneInfo:jsonObject]
+                }
+                return
+            } else {
+                render(status:200, contentType:"application/json") {
+                    [geneInfo:jsonObject['gene-info']]
+                }
+                return
             }
+
 
         }
     }
