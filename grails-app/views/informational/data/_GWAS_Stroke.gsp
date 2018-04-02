@@ -44,19 +44,19 @@
 
 <h5><b><g:message code="aboutTheData.stroke.datasets.european_centers.title"></b></g:message></h5>
 <p><g:message code="aboutTheData.stroke.datasets.european_centers"></g:message></p>
+<ul>
+<li><b><g:message code="aboutTheData.stroke.datasets.hospital_del_mar.title"></g:message></b><br>
+<g:message code="aboutTheData.stroke.datasets.hospital_del_mar.pi"></g:message></li>
 
- <p><b><g:message code="aboutTheData.stroke.datasets.hospital_del_mar.title"></g:message></b><br>
-<g:message code="aboutTheData.stroke.datasets.hospital_del_mar.pi"></g:message></p>
+<li><b><g:message code="aboutTheData.stroke.datasets.juhss.title"></g:message></b><br>
+<g:message code="aboutTheData.stroke.datasets.juhss.pi"></g:message></li>
 
- <p><b><g:message code="aboutTheData.stroke.datasets.juhss.title"></g:message></b><br>
-<g:message code="aboutTheData.stroke.datasets.juhss.pi"></g:message></p>
+<li><b><g:message code="aboutTheData.stroke.datasets.lund_stroke.title"></g:message></b><br>
+<g:message code="aboutTheData.stroke.datasets.lund_stroke.pi"></g:message></li>
 
- <p><b><g:message code="aboutTheData.stroke.datasets.lund_stroke.title"></g:message></b><br>
-<g:message code="aboutTheData.stroke.datasets.lund_stroke.pi"></g:message></p>
-
- <p><b><g:message code="aboutTheData.stroke.datasets.vhh_ich.title"></g:message></b><br>
-<g:message code="aboutTheData.stroke.datasets.vhh_ich.pi"></g:message></p>
-
+<li><b><g:message code="aboutTheData.stroke.datasets.vhh_ich.title"></g:message></b><br>
+<g:message code="aboutTheData.stroke.datasets.vhh_ich.pi"></g:message></li>
+</ul>
 <h4>Accessing ICH GWAS 2014 data</h4>
 
 <p><g:message code="informational.data.accessing.ICH_GWAS_2014"></g:message></p>
