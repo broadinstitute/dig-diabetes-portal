@@ -845,9 +845,10 @@ class SharedToolsService {
     public String parseChromosome(String rawChromosomeString) {
         String returnValue = ""
         if (rawChromosomeString != null){
-            java.util.regex.Matcher chromosome = rawChromosomeString =~ /(CHR[\dXY]*)|(chr[\dXY]*)/
+            String trimmedRwChromosomeString = rawChromosomeString.trim()
+            java.util.regex.Matcher chromosome = trimmedRwChromosomeString =~ /(CHR[\dXY]*)|(chr[\dXY]*)/
             if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
-                chromosome = rawChromosomeString =~ /[\dXY]*/
+                chromosome = trimmedRwChromosomeString =~ /[\dXY]*/
             }
             if (chromosome.size() > 0) {
                 java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/

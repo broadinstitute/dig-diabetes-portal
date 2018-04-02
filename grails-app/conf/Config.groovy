@@ -562,7 +562,7 @@ portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", "ibd", or
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv30",    // the MDV number for this portal
+                                                        "mdv31",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
@@ -661,11 +661,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[1,2]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/ibd/ibd_front_logo_WOnT.svg",
+                                          "images/ibd/ibd_front_logo_WOnT2.png",
                                           "portal.ibd.header.tagline",
                                           [],
-                                          [],
-                                          [],
+                                          ["IL23R"],
+                                          ["1_67704863_G_A"],
                                           ["chr1:67,500,000-67,800,000"],
                                           "images/ibd/front_ibd_bg_2018.png",
                                   "",

@@ -1,10 +1,13 @@
 package org.broadinstitute.mpg.meta
 
+import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.Variant
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
+import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.beans.factory.annotation.Autowired
 
 /**
@@ -31,6 +34,8 @@ class UserQueryContext {
     public Boolean gene = false
     public Boolean variant = false
     public Boolean genomicPosition = false
+    public Boolean regionSpecificVersion = false
+
 
 
     public UserQueryContext(  ){}
@@ -48,7 +53,7 @@ class UserQueryContext {
         LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(originalRequest.trim().toUpperCase(),0)
         if ( geneExtent.is_error == false ) { gene = true }
         if (gene){
-            chromosome = geneExtent.chrom
+            chromosome = sharedToolsService.parseChromosome(geneExtent.chrom)
             startOriginalExtent = geneExtent.startExtent
             endOriginalExtent = geneExtent.endExtent
             startExpandedExtent = ((startOriginalExtent > expandBy) ?
@@ -135,6 +140,8 @@ class UserQueryContext {
                 error = true
             }
         }
+
+        regionSpecificVersion=  (restServerService.retrieveBeanForCurrentPortal().regionSpecificVersion==1)
     }
 
     public static UserQueryContext parseUserQueryContext( String userInput,
@@ -169,5 +176,25 @@ class UserQueryContext {
     public Boolean getError(){
         return error
     }
+
+    public String toJsonString(){
+        return """{"startOriginalExtent":${getStartOriginalExtent() as Integer},
+"endOriginalExtent":"${getEndOriginalExtent() as Integer}",
+"chromosome":"${getChromosome()}",
+"originalRequest":"${getOriginalRequest()}",
+"range":${this.range},
+"gene":${this.gene},
+"variant":${this.variant},
+"genomicPosition":${this.genomicPosition},
+"regionSpecificVersion":${this.regionSpecificVersion}
+}""".toString()
+    }
+
+    public JSONObject toJSONObject(){
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject= slurper.parseText(this.toJsonString())
+        return jsonObject
+    }
+
 
 }

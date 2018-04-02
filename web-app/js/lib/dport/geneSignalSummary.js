@@ -1506,8 +1506,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             pname:additionalParameters.pname
         }];
         if (regionSpecificVersion === 1){
-            displayCommonTab = [];
+            //displayCommonTab = [];
             displayHighImpactTab = [];
+        } else {
+            if ((typeof data.userQueryContext !== 'undefined')&&
+                (!data.userQueryContext.gene)){
+                displayHighImpactTab = []; // don't display the high-impact tab unless this is actually a gene we're looking at
+            }
+
         }
 
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
@@ -1712,7 +1718,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         }
 
-        if ((displayHighImpactTab.length===0) && (displayCommonTab.length===0)) {
+        if (((displayHighImpactTab.length===0) && (displayCommonTab.length===0)) ||
+            (data.userQueryContext.regionSpecificVersion)){
             $('.commonVariantChooser').removeClass('active');
             $('.highImpacVariantChooser').removeClass('active');
             $('.credibleSetChooser').addClass('active');

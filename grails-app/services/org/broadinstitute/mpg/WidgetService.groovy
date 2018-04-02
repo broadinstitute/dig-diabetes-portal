@@ -1204,17 +1204,23 @@ class WidgetService {
 
         LinkedHashMap<String,HashMap<String,HashMap<String,String>>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_VARIANT)
         LinkedHashMap<String,HashMap<String,HashMap<String,String>>> hailPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_HAIL)
+ //       List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning("","POSTERIOR_PROBABILITY")
             boolean firstTime = true
 
-
+           // List<String> sampleGroupIdList = sampleGroupList.collect{this.getId()}
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = aAllPhenotypeDataSetCombos[phenotype]
                 for (String eachDataset in phenotypeDataKeyMap.keySet()){
                     HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
+                    Boolean suitableForLzDefaultDisplay = true
+
+//                    if (sampleGroupIdList.contains(phenotypeDataSetCombo.dataSet)) {
+//                        suitableForLzDefaultDisplay = false
+//                    }
                     beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
                             dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
                             propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: suitableForLzDefaultDisplay))
                 }
                 firstTime = false
             }
@@ -1232,61 +1238,6 @@ class WidgetService {
             }
             firstTime = false
         }
-
-
-            // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
-            if (metaDataService.portalTypeFromSession=='t2d') {
-//                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 diabetes", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
-//                        propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: true, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "BMI", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL cholesterol", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL cholesterol", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting insulin", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting glucose", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip circumference", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist circumference", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist hip ratio", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total cholesterol", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-
-            } else if (metaDataService.portalTypeFromSession=='stroke') {
-/*
-                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: true, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-*/
-            }
 
 
         // return

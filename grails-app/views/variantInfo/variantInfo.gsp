@@ -30,6 +30,9 @@
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans'>
 
+    %{--Need to call directly or else the images don't come out right--}%
+    <link rel="stylesheet" type="text/css"  src="../../js/lib/locuszoom.css">
+
 </head>
 
 <body>

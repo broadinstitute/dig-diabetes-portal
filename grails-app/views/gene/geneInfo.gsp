@@ -12,6 +12,8 @@
     <r:require modules="boxwhisker"/>
     <r:require modules="burdenTest"/>
     <r:require modules="gnomad"/>
+    %{--Need to call directly or else the images don't come out right--}%
+    <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
     <script type="text/javascript" src="../../js/lib/gnomadt2d.js"></script>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
@@ -24,9 +26,7 @@
     <g:set var="restServer" bean="restServerService"/>
 
 
-    <style>
 
-    </style>
 
     <script>
 
@@ -103,7 +103,7 @@
                 cache: false,
                 type: "post",
                 url: '<g:createLink controller="gene" action="geneInfoAjax"/>',
-                data: {geneName: '<%=geneName%>'},
+                data: {geneName: '${geneName}'},
                 async: true
             }).done(function (data) {
                 mpgSoftware.geneInfo.fillTheGeneFields(data); // fills the uniprot summary
@@ -166,7 +166,7 @@
         <div class="gene-info-container row">
             <div class="gene-info-view">
                 <h1 class="dk-page-title" style="vertical-align: bottom; margin-bottom: 0; ">
-                    <em style="font-weight: 900;"><%=geneName%> &nbsp;locus</em>
+                    <em style="font-weight: 900;"><%=geneName%></em>
 
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact f" style="float:right; border-radius: 2px; margin: 0 15px 0 -140px; font-size:12px;">

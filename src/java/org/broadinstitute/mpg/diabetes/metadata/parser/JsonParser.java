@@ -639,8 +639,9 @@ public class JsonParser {
      */
     public List<SampleGroup> getSampleGroupsForPhenotype(String phenotypeName, String dataVersion) throws PortalException {
         // local variables
-        SampleGroupForPhenotypeVisitor sampleGroupVisitor = new SampleGroupForPhenotypeVisitor(phenotypeName);
         List<SampleGroup> groupList;
+        SampleGroupForPhenotypeVisitor sampleGroupVisitor = new SampleGroupForPhenotypeVisitor(phenotypeName);
+
         // pass in visitor looking for sample groups with the selected phenotype
         for (Experiment experiment: this.getMetaDataRoot().getExperiments()) {
             // if no version, then go through all experiments

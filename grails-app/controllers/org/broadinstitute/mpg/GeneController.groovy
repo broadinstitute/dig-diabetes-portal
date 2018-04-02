@@ -225,7 +225,6 @@ class GeneController {
             }
 
 
-
             List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
                                              show_exchp:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_exchp),
@@ -303,75 +302,7 @@ class GeneController {
         // give up and go home
         redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
         return
- /*
-        // Is our string a region?
-        LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(uncharacterizedString)
-        if ((extractedNumbers)   &&
-                (extractedNumbers["startExtent"])   &&
-                (extractedNumbers["endExtent"])&&
-                (extractedNumbers["chromosomeNumber"]) ){
-           // redirect(controller:'region',action:'regionInfo', params: [id: params.id])
-            redirect(controller:'gene',action:'geneInfo', params: [id: params.id,
-                                                                   startExtent:extractedNumbers["startExtent"],
-                                                                   endExtent:extractedNumbers["endExtent"],
-                                                                   chromosomeNumber:extractedNumbers["chromosomeNumber"]])
-            return
-        }
-        // It's not a region.  Is our string a gene?
-        String possibleGene = params.id
-        if (possibleGene){
-            possibleGene = possibleGene.trim().toUpperCase()
-        }
-        Gene gene = Gene.retrieveGene(possibleGene)
-        if (gene){
-            redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
-            return
-        }
-
-        // KDUXTD-99: check to see if dbSnpId provided so that it gets past search box filter
-        if (sharedToolsService.getRecognizedStringsOnly()!=0) {
-            // once we have the variant database complete we can use this
-            String inputString = params.id
-            if (sqlService?.isDbSnpIdString(inputString)) {
-                // search for the variant by dbSnpId and if found, return; if not found, drop down to below test (just in case for now)
-                Variant variant = Variant.findByDbSnpId(inputString)
-                if (variant) {
-                    redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
-                    return
-                }
-            }
-        }
-
-        // Is our string a variant?  Build an identifying string and test
-        String canonicalVariant = sharedToolsService.createCanonicalVariantName(params.id)
-        if (sharedToolsService.getRecognizedStringsOnly()!=0){ // once we have the variant database complete we can use this
-            Variant variant = Variant.retrieveVariant(canonicalVariant)
-            if (variant) {
-                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
-                return
-            } else {
-                redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
-                return
-            }
-        } else {// for now we don't have to verify of variant's existence
-            if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()){ // treat a variant is a range
-                Map variantPieces = sharedToolsService.getVariantExtent(params.id)
-                redirect(controller:'gene',action:'geneInfo', params: [id: params.id,
-                                                                       startExtent:variantPieces["startExtent"],
-                                                                       endExtent:variantPieces["endExtent"],
-                                                                       chromosomeNumber:variantPieces["chrom"]])
-                return
-            } else {
-                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
-            }
-            return
-        }
-        // this is an error condition -- we should never get here in the code
-        log.error("why did we never finish parsing '${uncharacterizedString}'?")
-        redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
-        return
-        */
-    }
+     }
 
     /***
      * Get the information for the variants and association tables on the gene info page
@@ -463,9 +394,12 @@ class GeneController {
      */
     def geneInfoAjax() {
         String geneToStartWith = params.geneName
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(geneToStartWith)
+
         if (geneToStartWith)      {
             JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
             if (jsonObject["is_error"]){
+                JSONObject userQueryContextAsJsonObject = userQueryContext.toJSONObject()
                 Map variantPieces = sharedToolsService.getVariantExtent(geneToStartWith)
                 jsonObject = new JSONObject()
                 jsonObject["id"] = geneToStartWith
@@ -473,12 +407,15 @@ class GeneController {
                 jsonObject["BEG"] = variantPieces.startExtent
                 jsonObject["END"] = variantPieces.endExtent
                 render(status:200, contentType:"application/json") {
-                    [geneInfo:jsonObject]
+                    [geneInfo:jsonObject,
+                     userQueryContext:userQueryContextAsJsonObject]
                 }
                 return
             } else {
+                JSONObject userQueryContextAsJsonObject = userQueryContext.toJSONObject()
                 render(status:200, contentType:"application/json") {
-                    [geneInfo:jsonObject['gene-info']]
+                    [geneInfo:jsonObject['gene-info'],
+                     userQueryContext:userQueryContextAsJsonObject]
                 }
                 return
             }

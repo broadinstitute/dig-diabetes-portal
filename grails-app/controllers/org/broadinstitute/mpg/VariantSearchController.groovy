@@ -7,6 +7,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -465,24 +466,25 @@ class VariantSearchController {
 
     def retrieveTopVariantsAcrossSgs (){
         String portalType = g.portalTypeString() as String
-        String geneChromosome = sharedToolsService.parseChromosome(params.geneChromosome)
-        Long geneExtentBegin = 0L
-        Long geneExtentEnd = 0l
-        try {
-            geneExtentBegin = Long.parseLong(params.geneExtentBegin)
-            geneExtentEnd = Long.parseLong(params.geneExtentEnd)
-        } catch(e){
-            ;
-        }
-        if ((geneExtentEnd==0L)&&(params.geneToSummarize)&&(params.geneToSummarize.contains(':'))){
-            LinkedHashMap extractedNumbers =  restServerService.parseARange(params.geneToSummarize)
-            if (!extractedNumbers.error){
-                geneChromosome = extractedNumbers.chromosome
-                geneExtentBegin = extractedNumbers.start
-                geneExtentEnd = extractedNumbers.end
-            }
-
-        }
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(params.geneToSummarize)
+//        String geneChromosome = sharedToolsService.parseChromosome(params.geneChromosome)
+//        Long geneExtentBegin = 0L
+//        Long geneExtentEnd = 0l
+//        try {
+//            geneExtentBegin = Long.parseLong(params.geneExtentBegin)
+//            geneExtentEnd = Long.parseLong(params.geneExtentEnd)
+//        } catch(e){
+//            ;
+//        }
+//        if ((geneExtentEnd==0L)&&(params.geneToSummarize)&&(params.geneToSummarize.contains(':'))){
+//            LinkedHashMap extractedNumbers =  restServerService.parseARange(params.geneToSummarize)
+//            if (!extractedNumbers.error){
+//                geneChromosome = extractedNumbers.chromosome
+//                geneExtentBegin = extractedNumbers.start
+//                geneExtentEnd = extractedNumbers.end
+//            }
+//
+//        }
 
 
 
@@ -529,27 +531,27 @@ class VariantSearchController {
 
         JSONObject dataJsonObject
 
-        if ((geneExtentBegin) && (geneExtentBegin) && (geneExtentEnd)){
+        if (userQueryContext.range){
             //limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
-                    geneExtentBegin,
-                    geneExtentEnd,
-                    geneChromosome,
+                    userQueryContext.startOriginalExtent,
+                    userQueryContext.endOriginalExtent,
+                    userQueryContext.chromosome,
                     -1,limit,currentVersion)
         }else {
-            LinkedHashMap genomicPosition = sharedToolsService.getGeneExpandedExtent( geneName,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
-            if (genomicPosition.is_error){
-                genomicPosition = sharedToolsService.getVariantExtent(geneName)
-            }
-            geneExtentBegin = genomicPosition["startExtent"]
-            geneExtentEnd = genomicPosition["endExtent"]
-            geneChromosome = sharedToolsService.parseChromosome(genomicPosition["chrom"])
+//            LinkedHashMap genomicPosition = sharedToolsService.getGeneExpandedExtent( geneName,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+//            if (genomicPosition.is_error){
+//                genomicPosition = sharedToolsService.getVariantExtent(geneName)
+//            }
+//            geneExtentBegin = genomicPosition["startExtent"]
+//            geneExtentEnd = genomicPosition["endExtent"]
+//            geneChromosome = sharedToolsService.parseChromosome(genomicPosition["chrom"])
 
             //limit=1000  // kludge
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
-                    geneExtentBegin,
-                    geneExtentEnd,
-                    geneChromosome,
+                    userQueryContext.startExpandedExtent,
+                    userQueryContext.endExpandedExtent,
+                    userQueryContext.chromosome,
                     -1,limit,currentVersion)
         }
 
@@ -606,7 +608,8 @@ class VariantSearchController {
              datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap)),
              lzOptions:phenotypeMap,
              sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
-             experimentAssays:experimentAssays
+             experimentAssays:experimentAssays,
+             userQueryContext:userQueryContext.toJSONObject()
             ]
         }
 
