@@ -1,12 +1,48 @@
 <h1 class="dk-page-title"><%=phenotypeName%></h1>
 
+<style>
+.slidecontainer {
+    width: 100%;
+}
 
+.slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 25px;
+    background: #d3d3d3;
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: .2s;
+    transition: opacity .2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #4CAF50;
+    cursor: pointer;
+}
+</style>
 
 <script>
 
     
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
+        r2:'0.4',
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
         ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
         phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
@@ -18,11 +54,14 @@
     };
     mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
 
+
+
     $( document ).ready(function() {
 
         mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
+
 
 
 </script>
@@ -49,6 +88,22 @@
 <input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" />
 
 <input id="unclump" type="button" value="Not clump" onclick="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)" />
+
+%{--slider default value = 1(non-clump data) and anything less than 1 (clump data)--}%
+<div class="slidecontainer">
+    <input type="range" min="0" max="10" value="0" class="slider" id="myRange">
+    <p>Value: <span id="demo"></span></p>
+</div>
+
+<script>
+    var slider = document.getElementById("myRange");
+    var output = document.getElementById("demo");
+    output.innerHTML = slider.value;
+
+    slider.oninput = function() {
+        output.innerHTML = this.value;
+    }
+</script>
 
 
 <table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">

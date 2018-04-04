@@ -2071,14 +2071,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSetName
 
      */
-    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName) {
+    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName,Float r2) {
         JSONObject returnValue
         JsonSlurper slurper = new JsonSlurper()
 
-       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
+        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName,r2)
 
-        //JSONObject processedapiResults = getChromPos(apiResults);
         String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
@@ -2534,7 +2532,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
                 //dataJsonObject.results.pVals.level
 
-                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE", "VAR_ID", "CHROM", "POS"];
+                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE", "VAR_ID", "CHROM", "POS","R2"];
                 List<String> variantSpecificList = []
                 for (String key in keys) {
                     ArrayList valueArray = []
@@ -2640,11 +2638,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
-    public JSONObject getClumpDataRestCall(String phenotype, String datasetName) {
-        //JsonSlurper jsonSlurper = new JsonSlurper()
-        //JsonObject clumpDataJsonPayloadString =  jsonSlurper.parseText('{"phenotype":"${chromosomeName}","dataset":"ExChip_CAMP_dv1__T2D"}')
+    public JSONObject getClumpDataRestCall(String phenotype, String datasetName, Float r2) {
 
-       String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
+
+       String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}","pagination":{"size":500,"offset":1}, 
+                                                   "filters":[{"parameter":"phenotype", "operator": "eq", "value": "${phenotype}"},
+                                                              {"parameter": "r2", "operator": "le", "value": ${r2}}],
+                                                             "sort": [{"parameter": "P_VALUE"}] } """.toString()
 
        //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
 

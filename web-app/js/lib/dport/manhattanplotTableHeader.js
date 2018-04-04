@@ -76,7 +76,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillClumpVariants = function (phenotypeNamex, dataset) {
+        var fillClumpVariants = function (phenotypeNamex, dataset, r2) {
             var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var loader = $('#rSpinner');
             loader.show();
@@ -84,7 +84,7 @@ var mpgSoftware = mpgSoftware || {};
                 cache: false,
                 type: "post",
                 url: coreVariables.ajaxClumpDataUrl,
-                data: {phenotype: phenotypeNamex, dataset: dataset},
+                data: {phenotype: phenotypeNamex, dataset: dataset,r2:r2},
                 async: true,
                 success: function (data) {
                     console.log(data);
@@ -105,16 +105,6 @@ var mpgSoftware = mpgSoftware || {};
             });
 
         };
-
-        // var pickNewDataSet = function (){
-        //     var sampleGroup = $('#manhattanSampleGroupChooser').val();
-        //     $('#manhattanPlot1').empty();
-        //     $('#traitTableBody').empty();
-        //     $('#phenotypeTraits').DataTable().rows().remove();
-        //     $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-        //     mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(getMySavedVariables().phenotypeName,sampleGroup);
-        //
-        // }
 
         var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {
             var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
@@ -151,7 +141,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#traitTableBody').empty();
             $('#phenotypeTraits').DataTable().rows().remove();
             $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-            mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mysavevars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value);
+            mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mysavevars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,mysavevars.r2);
         }
 
         var pickNewDataSet = function (){
@@ -164,6 +154,8 @@ var mpgSoftware = mpgSoftware || {};
             mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
 
         }
+
+
 
         var refreshManhattanplotTableView = (function(data) {
             var savedVar = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();

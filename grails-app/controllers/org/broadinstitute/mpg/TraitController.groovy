@@ -144,8 +144,9 @@ class TraitController {
 
         String dataSetName = params["dataset"]
 
+        Float r2 = 0.4
 
-        JSONObject jsonObject = restServerService.getClumpSpecificInformation(phenotype, dataSetName)
+        JSONObject jsonObject = restServerService.getClumpSpecificInformation(phenotype, dataSetName,r2)
         render(status: 200, contentType: "application/json") {
             [variant: jsonObject]
         }
