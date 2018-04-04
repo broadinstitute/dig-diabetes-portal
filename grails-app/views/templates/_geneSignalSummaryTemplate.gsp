@@ -614,7 +614,7 @@
                                         {{#selectorInfoExists}}
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">Display genomic features:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                                <label for="credSetSelectorChoice">Select tissues based on overlap with:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     {{#selectorInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>
@@ -623,7 +623,7 @@
                                              </span>
 
                                          </div>
-                                         <div class="col-sm-2">
+                                         <div class="col-sm-2" style="margin-top: 10px">
                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/selectorInfoExists}}
@@ -634,7 +634,7 @@
                                          {{#displayInfoExists}}
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetDisplayChoice">Add marks:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.text"/>
+                                                <label for="credSetDisplayChoice">Display genomic features:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.text"/>
                                                  <select id="credSetDisplayChoice" multiple="multiple">
                                                     {{#displayInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>
@@ -642,14 +642,12 @@
                                                 </select>
                                              </span>
                                          </div>
-                                         <div class="col-sm-2">
+                                         <div class="col-sm-2" style="margin-top: 10px">
                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
-                                         <div class="col-sm-2">
-                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
-                                         </div>
+
                                          {{/displayInfoExists}}
                                          %{--<div class="col-sm-2"></div>--}%
                                     </div>

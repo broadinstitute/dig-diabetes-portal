@@ -888,7 +888,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     (assessOneSignalsSignificance(renderData.variants[0])===3)){
                     var variant = data.variants.variants[0];
                     var phenocode = variant.phenotype;
-                    var ds = variant.dataset;
+                    //var ds = variant.dataset;
+                    var ds = undefined;// signal that we need to look this up later when we get the full results
                     var dsr = variant.dsr;
                     var phenoName = variant.pname;
                     var favoredPhenotype = params.favoredPhenotype;
@@ -1397,8 +1398,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var getIbdData = function(incomingArray,defaultSelected){
         var returnValues =  [
             {value:"DNase",name:"DNase"},
-            {value:"H3K27ac",name:"H3K27ac"},
-            {value:"UCSD",name:"TF binding footprint"}
+            {value:"H3K27ac",name:"H3K27ac"}
+            // ,
+            // {value:"UCSD",name:"TF binding footprint"}
         ];
         _.forEach(returnValues,function(o){
             o["selected"] = (defaultSelected.findIndex(function(w){return w===o.value})>-1)?"selected":"";
@@ -1445,6 +1447,33 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var datasetName = additionalParameters.ds;
         var datasetReadableName = additionalParameters.dsr;
         var pName = additionalParameters.pname;
+
+        if ((typeof datasetName === 'undefined') ||
+            (datasetName === null))   {
+            var suboptimalDefaultDataSets = _.map(_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==="false"}),function(oo){return oo.dataset});
+            // can we find a variant of from our preferred phenotype, which is still an acceptable default?
+            var variant;
+            if ((typeof suboptimalDefaultDataSets !== 'undefined')&&
+                (suboptimalDefaultDataSets.length>0)){
+                variant = _.find(data.variants.variants,function(o){return (    (suboptimalDefaultDataSets.indexOf(o.dataset)<0)&&
+                                                                                (o.phenotype==phenotypeName)    )});
+
+            }
+            if (typeof variant === 'undefined'){ // nothing? Okay will take anything from the chosen phenotype
+                variant = _.find(data.variants.variants,function(o){return (o.phenotype==phenotypeName) });
+            }
+            if (typeof variant === 'undefined') { // still nothing? That's unexpected, but let's take any old variant we can get
+                variant = data.variants.variants[0]
+            }
+            if (typeof variant === 'undefined') { // we have no variants.  Give up and go home
+                return;
+            } else {
+                phenotypeName = variant.phenotype;
+                datasetName = variant.dataset;
+                datasetReadableName = variant.dsr;
+                pName = variant.pname;
+            }
+        }
 
         // var useIgvNotLz = additionalParameters.preferIgv;
         //var useIgvNotLz = ($('input[name=genomeBrowser]:checked').val() === '2');

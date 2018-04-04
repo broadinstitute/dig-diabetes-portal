@@ -575,7 +575,7 @@ class MetaDataService {
     }
 
 
-    public List<SampleGroup> getSampleGroupsBasedOnPhenotypeAndMeaning(String phenotypeName,String  meaning) {
+    public List<SampleGroup> getSampleGroupsBasedOnPhenotypeAndMeaning(String phenotypeName,String  meaning, int metadataTree) {
         // local variables
         List<SampleGroup> groupList;
         List<SampleGroup> filteredSampleGroupList = [];
@@ -584,15 +584,19 @@ class MetaDataService {
 
         // get the sample group list for the phenotype
         try {
-            groupList = this.getJsonSampleParser().getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
+            groupList = this.retrieveJsonParser(metadataTree).getSampleGroupsForPhenotype(phenotypeName, this.getDataVersion());
 
             // sort the group list
             Collections.sort(groupList);
 
 
             for (SampleGroup group : groupList) {
-                if (group.hasMeaning(meaning))  {
-                    filteredSampleGroupList.add(group)
+                for (Phenotype phenotype in group.phenotypes) {
+                    for (Property property in phenotype.properties){
+                        if (property.hasMeaning(meaning))  {
+                            filteredSampleGroupList.add(group)
+                        }
+                    }
                 }
             }
 

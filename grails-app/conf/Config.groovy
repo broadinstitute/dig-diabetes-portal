@@ -338,7 +338,7 @@ environments {
                                         // CVDKP (MI portal) production
 
 //        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
-         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                  // Epilepsy test portal
+//I         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                  // Epilepsy test portal
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -713,4 +713,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   )
 ]
 
-
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'

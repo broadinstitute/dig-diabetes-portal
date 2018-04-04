@@ -1204,23 +1204,25 @@ class WidgetService {
 
         LinkedHashMap<String,HashMap<String,HashMap<String,String>>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_VARIANT)
         LinkedHashMap<String,HashMap<String,HashMap<String,String>>> hailPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_HAIL)
- //       List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning("","POSTERIOR_PROBABILITY")
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning("","POSTERIOR_PROBABILITY",
+                                                                                                        MetaDataService.METADATA_VARIANT)
             boolean firstTime = true
 
-           // List<String> sampleGroupIdList = sampleGroupList.collect{this.getId()}
+            List<String> sampleGroupIdList = sampleGroupList.collect{SampleGroup sb->sb.systemId}
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = aAllPhenotypeDataSetCombos[phenotype]
                 for (String eachDataset in phenotypeDataKeyMap.keySet()){
                     HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
                     Boolean suitableForLzDefaultDisplay = true
 
-//                    if (sampleGroupIdList.contains(phenotypeDataSetCombo.dataSet)) {
-//                        suitableForLzDefaultDisplay = false
-//                    }
+                    if (sampleGroupIdList.contains(phenotypeDataSetCombo.dataSet)) {
+                        suitableForLzDefaultDisplay = false
+                    }
                     beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
                             dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
                             propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: suitableForLzDefaultDisplay))
+                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: (firstTime&&suitableForLzDefaultDisplay),
+                            suitableForDefaultDisplay: suitableForLzDefaultDisplay))
                 }
                 firstTime = false
             }
