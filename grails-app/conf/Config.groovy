@@ -713,6 +713,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   )
 ]
 
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
