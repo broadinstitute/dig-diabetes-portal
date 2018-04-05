@@ -66,6 +66,34 @@ class TraitController {
         }
     }
 
+
+
+    def phewasAjaxCallInLzFormat(){
+
+    }
+    /*
+     {
+            "build": "GRCh37",
+            "chromosome": "10",
+            "description": "Insulin at 30-min OGTT",
+            "id": 60,
+            "log_pvalue": 1.71947,
+            "pmid": "24699409",
+            "position": 114758349,
+            "ref_allele": "C",
+            "ref_allele_freq": null,
+            "score_test_stat": null,
+            "study": "MAGIC",
+            "tech": "GWAS + Metabochip",
+            "trait": "Ins30",
+            "trait_group": "Glycemic traits",
+            "trait_label": "Insulin at 30-min OGTT",
+            "variant": "10:114758349_C/T"
+        },
+
+     */
+
+
     /**
      * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
      *
