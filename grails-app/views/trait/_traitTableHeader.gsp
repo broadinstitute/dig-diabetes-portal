@@ -42,7 +42,7 @@
     
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
-        r2:'0.4',
+        r2:0.4,
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
         ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
         phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
@@ -100,9 +100,7 @@
     var output = document.getElementById("demo");
     output.innerHTML = slider.value;
 
-    slider.oninput = function() {
-        output.innerHTML = this.value;
-    }
+    slider.onclick = mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();
 </script>
 
 

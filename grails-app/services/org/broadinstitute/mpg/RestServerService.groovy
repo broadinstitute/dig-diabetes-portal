@@ -2071,7 +2071,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSetName
 
      */
-    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName,Float r2) {
+    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName,String r2) {
         JSONObject returnValue
         JsonSlurper slurper = new JsonSlurper()
 
@@ -2080,12 +2080,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
-        //def slurper = new JsonSlurper()
-        //returnValue = slurper.parseText(apiResults)
         return dataJsonObject
     }
-
-
 
 
 
@@ -2638,28 +2634,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
-    public JSONObject getClumpDataRestCall(String phenotype, String datasetName, Float r2) {
+    public JSONObject getClumpDataRestCall(String phenotype, String datasetName, String r2) {
 
 
-       String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}","pagination":{"size":500,"offset":1}, 
+       String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}","pagination":{"size":5000,"offset":1}, 
                                                    "filters":[{"parameter":"phenotype", "operator": "eq", "value": "${phenotype}"},
                                                               {"parameter": "r2", "operator": "le", "value": ${r2}}],
                                                              "sort": [{"parameter": "P_VALUE"}] } """.toString()
 
-       //String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "T2D","dataset": "ExChip_CAMP_dv1__T2D"} """.toString()
-
-
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
-        //apiResults.variants.VAR_ID
-
-
-//
-//        for (int i = 0; i < VectorDataJson.numRecords; i++) {
-//            String CHROM = VectorDataJson.variants.VAR_ID;
-//            print CHROM
-//
-//        }
-
 
 
         return VectorDataJson;
