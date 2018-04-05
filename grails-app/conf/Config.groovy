@@ -714,8 +714,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '5414069947481666863',
-                                          0,
-                                          1
+                                          1,
+                                          0
                                   )
 ]
 
