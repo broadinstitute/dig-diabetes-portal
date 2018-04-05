@@ -137,11 +137,12 @@ var mpgSoftware = mpgSoftware || {};
         var callFillClumpVariants = function() {
             var mysavevars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
+            var r2 = $('#rthreshold').val();
             $('#manhattanPlot1').empty();
             $('#traitTableBody').empty();
             $('#phenotypeTraits').DataTable().rows().remove();
             $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-            mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mysavevars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,mysavevars.r2);
+            mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mysavevars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
         }
 
         var pickNewDataSet = function (){

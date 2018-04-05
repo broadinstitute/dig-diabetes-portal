@@ -1,4 +1,4 @@
-<h1 class="dk-page-title"><%=phenotypeName%></h1>
+<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
 
 <style>
 .slidecontainer {
@@ -42,7 +42,6 @@
     
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
-        r2:0.4,
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
         ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
         phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
@@ -85,23 +84,39 @@
 <div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
 
-<input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" />
+
 
 <input id="unclump" type="button" value="Not clump" onclick="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)" />
 
+   <form>
+       <select id="rthreshold">
+           <option value="0.1" >0.1 </option>
+           <option value="0.2" >0.2 </option>
+           <option value="0.4" >0.4 </option>
+           <option value="0.6" >0.6 </option>
+           <option value="0.8" >0.8 </option>
+       </select>
+   </form>
+
+
+
+<input id="getClump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this);" />
+
+
+
 %{--slider default value = 1(non-clump data) and anything less than 1 (clump data)--}%
-<div class="slidecontainer">
-    <input type="range" min="0" max="10" value="0" class="slider" id="myRange">
-    <p>Value: <span id="demo"></span></p>
-</div>
+%{--<div class="slidecontainer">--}%
+    %{--<input type="range" min="0" max="10" value="0" class="slider" id="myRange">--}%
+    %{--<p>Value: <span id="demo"></span></p>--}%
+%{--</div>--}%
 
-<script>
-    var slider = document.getElementById("myRange");
-    var output = document.getElementById("demo");
-    output.innerHTML = slider.value;
+%{--<script>--}%
+    %{--var slider = document.getElementById("myRange");--}%
+    %{--var output = document.getElementById("demo");--}%
+    %{--output.innerHTML = slider.value;--}%
 
-    slider.onclick = mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();
-</script>
+    %{--slider.onclick = mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();--}%
+%{--</script>--}%
 
 
 <table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">
