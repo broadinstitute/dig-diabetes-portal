@@ -552,7 +552,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -689,6 +689,33 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           '5414069947481666863',
                                           0,
                                           1
+                                  ),
+                                  new PortalVersionBean("sleep",
+                                          "Sleep",
+                                          "mdv110",
+                                          "SleepChronotype", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
+                                          ["AnteriorCaudate"],
+                                          ["SLEEP AND CIRCADIAN", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_UKBB_mdv110",
+                                          "images/sleep/sleeping_penguin.png",
+                                          "portal.sleep.header.tagline",
+                                          [],
+                                          ["PAX8"],
+                                          ["rs62158211"],
+                                          ["chr2:113,873,524-114,136,577"],
+                                          "images/epilepsy/front_epilepsy_bg_2018.png",
+                                          "",
+                                          "images/epilepsy/epilepsy_header_logo.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '5414069947481666863',
+                                          1,
+                                          0
                                   )
 ]
 
