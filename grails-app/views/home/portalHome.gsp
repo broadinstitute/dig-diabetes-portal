@@ -249,7 +249,7 @@
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="about.the.portal.data.text" />
-                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">29 Datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">62 traits</span></h1>
+                    <h1 style="display:block; font-size:65px; letter-spacing:-0.03em; width:550px; margin-top: 0px;"><span style="color:#F58A1F;font-family: 'Oswald'; ">30 Datasets,</span> <span style="color:#80C242;font-family: 'Oswald'; ">62 traits</span></h1>
 
                     <span style="display:block; width: 100%;text-align:left;"><a style=" font-size: 20px; padding:10px 40px 10px 0; margin-right: -30px;background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; text-decoration:none; color:#333333; " href="${createLink(controller:'informational', action:'data')}"><g:message code="about.the.portal.data.text2"/></a></span>
                 </g:else>
@@ -279,7 +279,11 @@
                             <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cardiovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
                             <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.broadcvdi.org/">Visit portal</a></h3>
                         </div>
-
+                        <hr />
+                        <div style="margin-top: 15px;">
+                            <h3 style="font-size:35px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Other Resources</h3>
+                            <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.med.unc.edu/pgc" target="_blank">Psychiatric Genomics Consortium</a></h3>
+                        </div>
 
                     </g:if>
                     <g:elseif test="${g.portalTypeString()?.equals('mi')}">
