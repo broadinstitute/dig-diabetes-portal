@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digAWS02KBV2prodServer
 
 getRestServerList = [
         digdevlocalServer,
@@ -557,7 +557,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", or
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv30",    // the MDV number for this portal
+                                                        "mdv31",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot

@@ -2263,7 +2263,44 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject gatherTopVariantsFromAggregatedTablesByVarId( String phenotype,
+                                                                    String varId,
+                                                                    int  startHere, int pageSize,
+                                                                    String version ) {
+        List<String> specifyRequestList = []
 
+        if ((version) && (version.length() > 0)) {
+            specifyRequestList << "\"version\":\"${version}\""
+        } else {
+            specifyRequestList << "\"version\":\"${metaDataService.getDataVersion()}\""
+        }
+
+        // the following parameter is required byt the API she. Provide some defaults
+        if (pageSize == -1){
+            pageSize = DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
+        }
+        if (startHere == -1){
+            startHere = 0
+        }
+
+        specifyRequestList << "\"pagination\":{\"size\": ${pageSize},\"offset\":${startHere}}"
+
+        List<String> filterList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            filterList <<  "{\"parameter\": \"phenotype\", \"operator\": \"eq\", \"value\": \"${phenotype}\"}"
+        }
+        if ((varId) && (varId.length() > 0)) {
+            filterList <<  "{\"parameter\": \"VAR_ID\", \"operator\": \"eq\", \"value\": \"${varId}\"}"
+        }
+
+        specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
+
+        specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
+
+
+
+        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
+    }
 
 
 

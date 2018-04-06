@@ -611,6 +611,72 @@ class WidgetService {
 
 
 
+    public JSONObject generatePhewasDataForLz(String varId){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion() )
+        List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("",
+                metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
+        LinkedHashMap <String,String> phenotypeToPhenotypegroupMap = [:]
+        for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
+            if (!phenotypeToPhenotypegroupMap.containsKey(phenotype.name)){ // we are not allowing phenotypes to be in multiple groups
+                phenotypeToPhenotypegroupMap[phenotype.name] = phenotype.group
+            }
+        }
+        // we have a response from the KB.  Let's convert that into the favored LZ format
+        List<String> dataFromQuery = []
+        if ((jsonObject)&&(!jsonObject.is_error)){
+            if (jsonObject.variants){
+                int id = 1
+                for (Map variant in jsonObject.variants){
+                    List<String> singleVariantData = []
+                    String retrievedVarId = ""
+                    List<String> varIdParts = []
+                    String phenotype = ""
+                    String phenotypeDescription = ""
+                    String phenotypeGroup = "unknown phenotype group"
+
+                    if (variant."VAR_ID"){retrievedVarId = variant."VAR_ID"}
+                    if (variant."phenotype"){phenotype = variant."phenotype"}
+                    phenotypeDescription =  g.message(code: "metadata." + phenotype, default: phenotype)
+                    if (phenotypeToPhenotypegroupMap.containsKey(phenotype)) {
+                        phenotypeGroup = phenotypeToPhenotypegroupMap[phenotype]
+                    }
+                    varIdParts = retrievedVarId.split("_")
+
+                    singleVariantData<<"\"build\": \"GRCh37\""
+                    singleVariantData<<"\"chromosome\": \"${varIdParts[0]}\""
+                    singleVariantData<<"\"description\": \"${phenotypeDescription}\""
+                    singleVariantData<<"\"id\": \"${id++}\""
+                    singleVariantData<<"\"log_pvalue\": ${variant.P_VALUE}"
+                    singleVariantData<<"\"position\": ${varIdParts[1]}"
+                    singleVariantData<<"\"ref_allele\": \"${varIdParts[2]}\""
+                    singleVariantData<<"\"score_test_stat\": ${variant.MOST_DEL_SCORE}"
+                    singleVariantData<<"\"study\": \"${variant.dataset}\""
+                    singleVariantData<<"\"trait\": \"${phenotype}\""
+                    singleVariantData<<"\"trait_group\": \"${phenotypeGroup}\""
+                    singleVariantData<<"\"trait_label\": \"${phenotypeDescription}\""
+                    singleVariantData<<"\"variant\": \"${varIdParts[0]}:${varIdParts[1]}_${varIdParts[2]}/${varIdParts[3]}\""
+
+                    dataFromQuery << "{${singleVariantData.join(",")}}"
+                 }
+            }
+
+        }
+        String returnJson = """{
+            "data": [
+                ${dataFromQuery.join(",")}
+        ],
+            "lastPage": null,
+            "meta": {
+            "build": [
+                    "GRCh37"
+            ]
+        }
+        }""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(returnJson)
+    }
+
 
 
 
