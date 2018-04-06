@@ -149,7 +149,9 @@
                     </div>
 
                 <div class="separator"></div>
-
+                <div id="plot">
+                    <h4>insane in the membrane</h4>
+                </div>
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
                           model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
