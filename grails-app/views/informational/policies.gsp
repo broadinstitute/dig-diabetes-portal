@@ -303,7 +303,7 @@
 
             <h5><u><g:message code="informational.policies.conduct.registration.header"></g:message></u></h5>
 
-            <p><g:message code="informational.policies.epi.google"></g:message></p>
+            <p><g:message code="informational.policies.sleep.google"></g:message></p>
 
             <h5><u><g:message code="informational.policies.conduct.availability.header"></g:message></u></h5>
             <p><g:message code="informational.policies.conduct.stroke"></g:message></p>
