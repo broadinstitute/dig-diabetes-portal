@@ -696,7 +696,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
                                           ["AnteriorCaudate"],
-                                          ["SLEEP AND CIRCADIAN"], // most important phenotype group name
+                                          ["CHRONOTYPE", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
                                           "[1,2]",
                                           "GWAS_UKBB_mdv110",
