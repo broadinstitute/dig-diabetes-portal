@@ -75,7 +75,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
             _.forEach(sortedStoredJsonArray, function(kl,vl){
-                regexStr = kl.name.replace(/_mdv[0-9][0-9]/, "");
+                regexStr = kl.name.replace(/_mdv[0-9][0-9][0-9]/, "");
                 informationGspFileNames.push("#" + regexStr + '_script');
             })
 
@@ -225,7 +225,7 @@ var mpgSoftware = mpgSoftware || {};
                                 return "red";
                             }
                         };
-                        eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
