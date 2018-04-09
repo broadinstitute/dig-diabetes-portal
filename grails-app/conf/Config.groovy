@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = federatedAwsProdKBV2Server
 
 getRestServerList = [
         digdevlocalServer,
@@ -288,9 +288,9 @@ environments {
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 
-//       grails.serverURL = "http://www.type2diabetesgenetics.org"
+       grails.serverURL = "http://www.type2diabetesgenetics.org"
 
-        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
@@ -557,7 +557,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv30",    // the MDV number for this portal
+                                                        "mdv31",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
@@ -718,5 +718,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
-
-
