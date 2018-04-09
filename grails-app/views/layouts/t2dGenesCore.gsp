@@ -53,6 +53,8 @@
 
         <style>
 
+
+
     <g:if test="${g.portalTypeString()?.equals('stroke')}">
                 a {color:#5cbc6d;}
                 a:hover, a:active {color:#43957e; text-decoration: none;}
@@ -354,6 +356,14 @@
 
             /* traits table */
 
+            var phenotypeDatasetMapping1 = {};
+
+            phenotypeDatasetMapping1 = {"HDL":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"LIPIDS","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GLGC_mdv30":{"count":"188577","mac":"","maf":"","name":"GWAS_GLGC_mdv30","phenotypeGroup":"LIPIDS","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GLGC_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"LIPIDS","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"TG":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"LIPIDS","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GLGC_mdv30":{"count":"188577","mac":"","maf":"","name":"GWAS_GLGC_mdv30","phenotypeGroup":"LIPIDS","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GLGC_mdv30"}},"VATHU":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"ISen":{"GWAS_GENESIS_eu_mdv30":{"count":"2765","mac":"","name":"GWAS_GENESIS_eu_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GENESIS_eu_mdv30"}},"FGadjBMI":{"GWAS_METSIM_eu_mdv30":{"count":"8791","mac":"","name":"GWAS_METSIM_eu_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_METSIM_eu_mdv30"}},"FGadjAgeSex":{"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"HIPC":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"ANTHROPOMETRIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"}},"HEIGHT":{"GWAS_GIANT_mdv30":{"count":"253288","mac":"","name":"GWAS_GIANT_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GIANT_mdv30"},"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"ANTHROPOMETRIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"}},"eGFRcrea":{"GWAS_CKDGenConsortium-eGFRcrea_mdv30":{"count":"133814","mac":"","name":"GWAS_CKDGenConsortium-eGFRcrea_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CKDGenConsortium-eGFRcrea_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"CKD":{"GWAS_CKDGenConsortium_mdv30":{"count":"133814","mac":"","name":"GWAS_CKDGenConsortium_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CKDGenConsortium_mdv30"}},"WAIST":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"ANTHROPOMETRIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GIANT-PA_mdv30":{"count":"200452","mac":"","maf":"","name":"GWAS_GIANT-PA_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GIANT-PA_mdv30"}},"CAD":{"GWAS_CARDIoGRAM_mdv30":{"count":"184305","mac":"","name":"GWAS_CARDIoGRAM_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"CORONARY ARTERY DISEASE","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CARDIoGRAM_mdv30"}},"eGFRcys":{"GWAS_CKDGenConsortium_mdv30":{"count":"133814","mac":"","name":"GWAS_CKDGenConsortium_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CKDGenConsortium_mdv30"}},"LDL":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"LIPIDS","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GLGC_mdv30":{"count":"188577","mac":"","maf":"","name":"GWAS_GLGC_mdv30","phenotypeGroup":"LIPIDS","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GLGC_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"LIPIDS","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"WHR":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"ANTHROPOMETRIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GIANT-PA_mdv30":{"count":"200452","mac":"","maf":"","name":"GWAS_GIANT-PA_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GIANT-PA_mdv30"}},"MDD":{"GWAS_PGC_mdv30":{"count":"16731","mac":"","name":"GWAS_PGC_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"PSYCHIATRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_PGC_mdv30"}},"VATSAT":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"HBA1CadjAgeSexBMI":{"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"SAT":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"SATHU":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"BMI":{"GWAS_GIANT_mdv30":{"count":"253288","mac":"","name":"GWAS_GIANT_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GIANT_mdv30"},"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"ANTHROPOMETRIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GIANT-PA_mdv30":{"count":"200452","mac":"","maf":"","name":"GWAS_GIANT-PA_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GIANT-PA_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"VATadjBMI":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"ISenBMI":{"GWAS_GENESIS_eu_mdv30":{"count":"2765","mac":"","name":"GWAS_GENESIS_eu_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GENESIS_eu_mdv30"}},"FG":{"GWAS_CAMP_mdv30":{"count":"3628","mac":"","name":"GWAS_CAMP_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CAMP_mdv30"},"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"GLYCEMIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"ExChip_T2DGO_mdv30":{"count":"75670","mac":"","name":"ExChip_T2DGO_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"ExChip","value":"ExChip_T2DGO_mdv30"},"GWAS_METSIM_eu_mdv30":{"count":"8791","mac":"","name":"GWAS_METSIM_eu_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_METSIM_eu_mdv30"},"GWAS_MAGIC_mdv30":{"count":"58074","mac":"","name":"GWAS_MAGIC_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_MAGIC_mdv30"}},"MA":{"GWAS_CKDGenConsortium_mdv30":{"count":"133814","mac":"","name":"GWAS_CKDGenConsortium_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CKDGenConsortium_mdv30"}},"FI":{"GWAS_CAMP_mdv30":{"count":"3628","mac":"","name":"GWAS_CAMP_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CAMP_mdv30"},"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"GLYCEMIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"ExChip_T2DGO_mdv30":{"count":"75670","mac":"","name":"ExChip_T2DGO_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"ExChip","value":"ExChip_T2DGO_mdv30"},"GWAS_METSIM_eu_mdv30":{"count":"8791","mac":"","name":"GWAS_METSIM_eu_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_METSIM_eu_mdv30"},"GWAS_MAGIC_mdv30":{"count":"58074","mac":"","name":"GWAS_MAGIC_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_MAGIC_mdv30"}},"SCZ":{"GWAS_PGC_mdv30":{"count":"16731","mac":"","name":"GWAS_PGC_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"PSYCHIATRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_PGC_mdv30"}},"UACR":{"GWAS_CKDGenConsortium-UACR_mdv30":{"count":"133814","mac":"","name":"GWAS_CKDGenConsortium-UACR_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CKDGenConsortium-UACR_mdv30"}},"HBA1CadjAgeSex":{"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"T2D":{"ExChip_T2DGO_mdv30":{"count":"75670","mac":"","name":"ExChip_T2DGO_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"ExChip","value":"ExChip_T2DGO_mdv30"},"GWAS_METSIM_eu_mdv30":{"count":"8791","mac":"","name":"GWAS_METSIM_eu_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_METSIM_eu_mdv30"},"ExChip_SIGMA1_mdv30":{"count":"8214","mina":"MINA","minu":"MINU","name":"ExChip_SIGMA1_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"ExChip","value":"ExChip_SIGMA1_mdv30"},"GWAS_70kForT2D_mdv30":{"count":"70127","mac":"","name":"GWAS_70kForT2D_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_70kForT2D_mdv30"},"ExSeq_19k_mdv30":{"count":"18844","mina":"MINA","minu":"MINU","name":"ExSeq_19k_mdv30","orvalue":"OR_FIRTH_FE_IV","phenotypeGroup":"GLYCEMIC","pvalue":"P_FIRTH_FE_IV","technology":"ExSeq","value":"ExSeq_19k_mdv30"},"GWAS_DIAGRAMimputed_mdv30":{"count":"159208","mac":"","maf":"","name":"GWAS_DIAGRAMimputed_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_DIAGRAMimputed_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"},"GWAS_AGEN_mdv30":{"count":"18817","mac":"","maf":"","name":"GWAS_AGEN_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_AGEN_mdv30"},"WGS_GoT2D_mdv30":{"count":"2657","mac":"","name":"WGS_GoT2D_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"WGS","value":"WGS_GoT2D_mdv30"},"GWAS_CAMP_mdv30":{"count":"3628","mac":"","name":"GWAS_CAMP_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_CAMP_mdv30"},"GWAS_DCSP2_mdv30":{"count":"3951","mac":"","name":"GWAS_DCSP2_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_DCSP2_mdv30"},"GWAS_DIAGRAM_mdv30":{"count":"110452","mac":"","maf":"","name":"GWAS_DIAGRAM_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_DIAGRAM_mdv30"},"WGS_GoT2Dimputed_mdv30":{"count":"44414","mac":"","name":"WGS_GoT2Dimputed_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"WGS_GoT2Dimputed_mdv30"},"GWAS_SIGMA1_mdv30":{"count":"8891","mac":"","name":"GWAS_SIGMA1_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_SIGMA1_mdv30"}},"T2DadjBMI":{"GWAS_METSIM_eu_mdv30":{"count":"8791","mac":"","name":"GWAS_METSIM_eu_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_METSIM_eu_mdv30"},"GWAS_DIAGRAMimputed_mdv30":{"count":"159208","mac":"","maf":"","name":"GWAS_DIAGRAMimputed_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_DIAGRAMimputed_mdv30"},"GWAS_AGEN_mdv30":{"count":"18817","mac":"","maf":"","name":"GWAS_AGEN_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_AGEN_mdv30"}},"CHOL":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"LIPIDS","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_GLGC_mdv30":{"count":"188577","mac":"","maf":"","name":"GWAS_GLGC_mdv30","phenotypeGroup":"LIPIDS","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_GLGC_mdv30"}},"VATSATadjBMI":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"FIadjBMI":{"GWAS_METSIM_eu_mdv30":{"count":"8791","mac":"","name":"GWAS_METSIM_eu_mdv30","phenotypeGroup":"GLYCEMIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_METSIM_eu_mdv30"}},"HBA1C":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"GLYCEMIC","technology":"ExSeq","value":"ExSeq_13k_mdv30"}},"PAT":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"SBP":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"BLOOD PRESSURE","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"BLOOD PRESSURE","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"Creatinine":{"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"RENAL","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"DBP":{"ExSeq_13k_mdv30":{"count":"12954","name":"ExSeq_13k_mdv30","phenotypeGroup":"BLOOD PRESSURE","technology":"ExSeq","value":"ExSeq_13k_mdv30"},"GWAS_BioMe_mdv30":{"count":"9173","mac":"","name":"GWAS_BioMe_mdv30","phenotypeGroup":"BLOOD PRESSURE","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_BioMe_mdv30"}},"BIP":{"GWAS_PGC_mdv30":{"count":"16731","mac":"","name":"GWAS_PGC_mdv30","orvalue":"ODDS_RATIO","phenotypeGroup":"PSYCHIATRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_PGC_mdv30"}},"VAT":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"PATadjHtWt":{"GWAS_VATGen_mdv30":{"count":"18332","mac":"","maf":"","name":"GWAS_VATGen_mdv30","phenotypeGroup":"ANTHROPOMETRIC","pvalue":"P_VALUE","technology":"GWAS","value":"GWAS_VATGen_mdv30"}},"2hrG":{}};
+
+            function readDataset() {
+
+            }
+
             function massageTraitsTable() {
 
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
@@ -367,11 +377,15 @@
 
                 var inputBox = "<div class='phenotype-searchbox-wrapper'><input id='traits_table_filter' type='text' name='search' style='display: block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'>";
                 inputBox += "<div class='related-words'></div></div>";
+                inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
+                inputBox += '<div class="traits-svg-wrapper" style=""><div class="phenotypes-for-plot"></div><svg  xmlns="http://www.w3.org/2000/svg" version="1.1" id="pheSvg" height="450" style="border:1px solid #fff;">Your browser doesn\'t support html 5.</svg></div>';
                 inputBox += "<span style='font-size: 12px; margin: 15px 0 -10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
 
                 $("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
+                    $("<th>sample</th>").appendTo($(this));
                 });
 
                 $("#traits_table_filter").focus(function() {
@@ -384,8 +398,24 @@
 
                 $("#traits_table_filter").on('input',filterTraitsTable);
 
+                var phenoTypeID = "";
                 $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                    /*if ($(this).attr("id")) {  // if this row has phenotype name
+                        phenoTypeID =  $(this).attr("id"); // set the id as phenotype index
+                        $(this).attr("phename",phenoTypeID);  // add index as phename
+                    } else {
+                        $(this).attr("phename",phenoTypeID); // use the phename set from the closest tr with id
+                    }*/
+
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
+
+                    var pheName = $(this).find("div.vandaRowHdr").attr("phenotypename");
+                    var dtsetName = $(this).find("div.vandaRowHdr").attr("datasetname");
+                    var sampleNum = phenotypeDatasetMapping1[pheName][dtsetName]["count"];
+
+                    $("<td class='sample-size'>"+sampleNum+"</td>").appendTo($(this));
+
                 });
 
                 $("#traitsPerVariantTableBody").find("td").mouseenter(function() {
@@ -395,12 +425,24 @@
                         ($(this).find("td").eq("0").text() == phenotypeName)? $(this).addClass("highlighted-phenotype"):$(this).removeClass("highlighted-phenotype");
                     });
                 })
+
+
+                phePlotApp();
+
+                var phePlotLoaded = true;
+
+
+
             }
 
             function filterTraitsTable() {
+
+
                 $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
 
                 var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+
+                var phenotypesArray = [];
 
                 $.each(searchWords, function(index,value){
 
@@ -413,16 +455,83 @@
                             var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
                             var searchWord = value.trim();
 
-                            if(phenotypeString.indexOf(searchWord) >= 0) {
-                                $(this).removeClass("hidden-traits-row").addClass("targeted-trait-row");
+                            if(searchWord.indexOf("=") >= 0) {
+
+                                searchWord = searchWord.substring(1);
+
+                                if(phenotypeString == searchWord) {
+                                    $(this).removeClass("hidden-traits-row").addClass("targeted-trait-row");
+                                } else {
+                                    $(this).addClass("hidden-traits-row").removeClass("targeted-trait-row");
+                                }
+
+
                             } else {
-                                $(this).addClass("hidden-traits-row").removeClass("targeted-trait-row");
+
+                                if(phenotypeString.indexOf(searchWord) >= 0) {
+                                    $(this).removeClass("hidden-traits-row").addClass("targeted-trait-row");
+                                } else {
+                                    $(this).addClass("hidden-traits-row").removeClass("targeted-trait-row");
+                                }
+
                             }
+
                         }
 
                     });
 
+
+                    var phenotypes = "";
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+                        if($(this).hasClass("hidden-traits-row")) {
+
+                        } else {
+                            phenotypes += "," + $(this).attr("phenotype");
+
+                        };
+                    });
+
+                    function unique(list) {
+                        var result = [];
+                        $.each(list, function(i, e) {
+                            if ($.inArray(e, result) == -1) result.push(e);
+                        });
+                        return result;
+                    }
+
+                    phenotypesArray = phenotypes.split(",");
+
+                    phenotypesArray = unique(phenotypesArray);
+
                 });
+
+                $("#pheSvg").find("svg").each(function() {
+                    $(this).attr("class","hidden-traits-row");
+                });
+
+
+
+                ($("#traits_table_filter").val() != "")? $(".phenotypes-for-plot").html("<H5>Click to apply color </H5>") : $(".phenotypes-for-plot").html("");
+
+                $.each(phenotypesArray, function(index,value) {
+
+                    if(value != "" && $("#traits_table_filter").val() != "") { $(".phenotypes-for-plot").append("<a href='javascript:;' class='btn btn-default btn-xs'>"+value+"</a>");};
+
+
+
+                    $("#pheSvg").find("svg").each(function() {
+
+                        if($(this).attr("phenotype") == value) {
+
+                            $(this).attr("class","");
+
+                        }
+
+                    });
+                });
+
+
 
                 var relatedWords = showRelatedWords();
 
@@ -505,6 +614,289 @@
 
                 filterTraitsTable();
 
+            }
+
+
+            var phePlotLoaded = false;
+
+
+
+            function phePlotApp() {
+
+console.log("called");
+                $("#pheSvg").html("").attr("width", $("#traitsPerVariantTable").width());
+
+
+                function biggistSample(SAMPLE) {
+
+                    SAMPLE.sort(function(a, b){return b-a});
+
+                    var n = Math.pow(10, SAMPLE[0].length-3);
+
+
+                    return Math.ceil((SAMPLE[0]/6) * (1/n))*n;
+
+                }
+
+                function getLogValue(pValue) {
+                    var logValue;
+                    if(pValue != ""){
+                        if (pValue.indexOf("e") >= 0) {
+
+                            var pValues = pValue.split("e-");
+                            logValue = pValues[1];
+                        } else {
+                            logValue = -Math.log10(pValue);
+                        }
+                    } else {
+                        logValue = 0;
+                    }
+
+                    return logValue;
+                }
+
+                var traitsDatasets = [];
+
+
+                var samples =[];
+
+                $("#traitsPerVariantTableBody").find("tr").each(function(index, value) {
+                    var phenotypeName = $(this).find("td").eq("0").text();
+                    var datasetName = $(this).find("div.vandaRowHdr").attr("datasetname");
+                    var pValue = $(this).find("td").eq("2").text();
+                    var sampleNum = $(this).find("td").eq("7").text();
+                    var logValue = getLogValue(pValue);
+                    var oddsRatio = $(this).find("td").eq("4").text();
+                    var effect = $(this).find("td").eq("6").text();
+                    var directionOfEffect = $(this).find("td").eq("3").find("span").attr("class");
+
+                    samples.push(sampleNum);
+
+                    $(this).attr("phenotype",phenotypeName).attr("p-value",pValue).attr("sample",sampleNum).attr("log-value",logValue).attr("odds-ratio",oddsRatio).attr("effect",effect).attr("effect-direction",directionOfEffect);
+
+                });
+
+                var sampleGuide = biggistSample(samples); // get basic unit for sample number
+
+
+
+                function Shape(SHAPE, X, Y, W, H, S, COLOR, CLASS, EXTRA) {
+                    this.shape = SHAPE
+                    this.x = X || 0
+                    this.y = Y || 0
+                    this.w = W || 5
+                    this.h = H || 5
+                    this.s = S || 0
+                    this.fill = COLOR || '#333333'
+                    this.class = "" || CLASS
+                    this.extra = "" || EXTRA
+                }
+
+                Shape.prototype.draw =  function(SVGDOC) {
+                    switch(this.shape) {
+                        case 'rect':
+                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","rect")).attr({
+                                x: this.x,
+                                y: this.y,
+                                width: this.w,
+                                height: this.h,
+                                stroke : this.s,
+                                fill : this.fill,
+                                class : this.class,
+                            })
+
+                            SVGDOC.append(shape);
+
+                            break;
+
+                        case 'line':
+                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
+                                x1: this.x,
+                                y1: this.y,
+                                x2: this.w,
+                                y2: this.h,
+                                style : this.fill,
+                                class : this.class,
+                            })
+
+                            SVGDOC.append(shape);
+
+                            break;
+
+                        case 'text':
+                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","text")).attr({
+                                x: this.x,
+                                y: this.y,
+                                class : this.class,
+                            }).html(this.extra)
+
+                            SVGDOC.append(shape);
+
+                            break;
+
+                        case 'svg':
+                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","svg")).attr({
+                                x: this.x,
+                                y: this.y,
+                                width: this.w,
+                                height: this.h,
+                                phenotype : this.fill,
+                                class: this.class,
+                            }).html(this.extra)
+
+                            SVGDOC.append(shape);
+
+                            break;
+                    }
+                }
+
+
+                function CanvasState(CANVAS) {
+                    this.canvas = CANVAS
+                }
+
+                CanvasState.prototype.addShape =  function(SHAPE) {
+                    var shape = SHAPE
+                    shape.draw(this.canvas)
+                }
+
+                function drawScreen() {
+                    var canvas = $("#pheSvg");
+                    var s = new CanvasState(canvas);
+                    var leftEdge = 70;
+                    var rightEdge = 70
+                    var BGWidth = canvas.width() - leftEdge - rightEdge;
+                    var BGEachWidth = BGWidth/6;
+                    var topEdge = 10;
+                    var BGBottom = 70;
+                    var BGHeight = canvas.height() - (BGBottom + topEdge);
+                    var BGEachHeight = BGHeight/6;
+                    var nominalLog = -Math.log10(0.05);
+
+                    var BGVRects = [["#f5f9e3","nominally-sig", nominalLog],["#e6f2da","locus-wide-sig", 4],["#dde9d9","genome-wide-sig", 8]];
+
+                    $.each(BGVRects, function(index, value) {
+                        var rectNum = BGVRects.length;
+                        var topNum = topEdge;
+                        var boxHeight = BGHeight - ((BGHeight/30)*value[2]);
+                        s.addShape(new Shape('rect', leftEdge,topNum,BGWidth, boxHeight, 0 ,value[0],value[1],""));
+                    });
+
+                    var BGVRects = [["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""]];
+
+                    //var BGRects = [["#dde9d9","genome-wide-sig"],["#e6f2da","locus-wide-sig"],["#f5f9e3","nominally-sig"],["#f9f9f9","unsig"]]
+
+                    $.each(BGVRects, function(index, value) {
+                        var rectNum = BGVRects.length;
+                        var topNum = ((BGHeight / rectNum)*index) + topEdge;
+                        s.addShape(new Shape('rect', leftEdge,topNum,BGWidth,BGHeight/rectNum, value[0],'transparent',value[1],""));
+                    });
+
+                    var BGHRects = [["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""]];
+
+                    $.each(BGHRects, function(index, value) {
+                        var rectNum = BGHRects.length;
+                        var leftNum = ((BGWidth / rectNum)*index) + leftEdge;
+                        s.addShape(new Shape('rect', leftNum,topEdge,BGWidth/rectNum,BGHeight, value[0],'transparent',value[1],""));
+                    });
+
+                    var strokeValue = "stroke:#999999;stroke-width:1";
+
+                    var BGLines = [[leftEdge, topEdge, leftEdge, topEdge+BGHeight+15 ,"", strokeValue],
+                        [leftEdge-15, topEdge+BGHeight, leftEdge+BGWidth, topEdge+BGHeight,"", strokeValue],
+                        [leftEdge-15, topEdge, leftEdge, topEdge,"", strokeValue],
+                        [leftEdge-15, topEdge+BGEachHeight, leftEdge, topEdge+BGEachHeight,"", strokeValue],
+                        [leftEdge-15, topEdge+(BGEachHeight*2), leftEdge, topEdge+(BGEachHeight*2),"", strokeValue],
+                        [leftEdge-15, topEdge+(BGEachHeight*3), leftEdge, topEdge+(BGEachHeight*3),"", strokeValue],
+                        [leftEdge-15, topEdge+(BGEachHeight*4), leftEdge, topEdge+(BGEachHeight*4),"", strokeValue],
+                        [leftEdge-15, topEdge+(BGEachHeight*5), leftEdge, topEdge+(BGEachHeight*5),"", "stroke:#808080;stroke-width:1"],
+                        [leftEdge+BGEachWidth, topEdge+BGHeight, leftEdge+BGEachWidth, topEdge+BGHeight+15,"", strokeValue],
+                        [leftEdge+(BGEachWidth*2), topEdge+BGHeight, leftEdge+(BGEachWidth*2), topEdge+BGHeight+15,"", strokeValue],
+                        [leftEdge+(BGEachWidth*3), topEdge+BGHeight, leftEdge+(BGEachWidth*3), topEdge+BGHeight+15,"", strokeValue],
+                        [leftEdge+(BGEachWidth*4), topEdge+BGHeight, leftEdge+(BGEachWidth*4), topEdge+BGHeight+15,"", strokeValue],
+                        [leftEdge+(BGEachWidth*5), topEdge+BGHeight, leftEdge+(BGEachWidth*5), topEdge+BGHeight+15,"", strokeValue],
+                        [leftEdge+(BGEachWidth*6), topEdge+BGHeight, leftEdge+(BGEachWidth*6), topEdge+BGHeight+15,"", strokeValue]
+                    ];
+
+                    $.each(BGLines, function(index, value) {
+                        s.addShape(new Shape('line', value[0],value[1],value[2],value[3], value[4], value[5],""))
+                    })
+
+                    var BGText = [[topEdge*-1,leftEdge-20,"v-axis-text","30"],
+                        [(BGEachHeight*-1)-topEdge,leftEdge-20,"v-axis-text","25"],
+                        [(BGEachHeight*-2)-topEdge,leftEdge-20,"v-axis-text","20"],
+                        [(BGEachHeight*-3)-topEdge,leftEdge-20,"v-axis-text","15"],
+                        [(BGEachHeight*-4)-topEdge,leftEdge-20,"v-axis-text","10"],
+                        [(BGEachHeight*-5)-topEdge,leftEdge-20,"v-axis-text","5"],
+                        [(BGEachHeight*-6)-topEdge,leftEdge-20,"v-axis-text","0"],
+                        [(BGEachHeight*-3)-topEdge,leftEdge-45,"v-axis-text","p-value (-log10)"],
+                        [leftEdge,BGHeight+27+topEdge,"h-axis-text","0"],
+                        [leftEdge+(BGEachWidth*1),BGHeight+27+topEdge,"h-axis-text",sampleGuide],
+                        [leftEdge+(BGEachWidth*2),BGHeight+27+topEdge,"h-axis-text",sampleGuide*2],
+                        [leftEdge+(BGEachWidth*3),BGHeight+27+topEdge,"h-axis-text",sampleGuide*3],
+                        [leftEdge+(BGEachWidth*4),BGHeight+27+topEdge,"h-axis-text",sampleGuide*4],
+                        [leftEdge+(BGEachWidth*5),BGHeight+27+topEdge,"h-axis-text",sampleGuide*5],
+                        [leftEdge+(BGEachWidth*6),BGHeight+27+topEdge,"h-axis-text",sampleGuide*6]]
+
+                    $.each(BGText, function(index, value) {
+                        //Shape(SHAPE, X, Y, W, H, S, COLOR, CLASS, EXTRA)
+                        s.addShape(new Shape('text',value[0],value[1],"","","","",value[2],value[3]))
+                    })
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function(index, value) {
+                        var phenotype = $(this).attr("phenotype");
+                        var pValue = $(this).attr("p-value");
+                        var logValue = $(this).attr("log-value");
+                        var sample = $(this).attr("sample");
+                        var dataset = $(this).attr("dataset");
+                        var OR = $(this).attr("odds-ratio");
+                        var effect = $(this).attr("effect");
+
+                        var svgWidth = 500;
+                        var svgHeight = 300;
+                        var svgX = ((BGWidth/(sampleGuide*6))*sample)+leftEdge-(svgWidth/2);
+                        var svgY = BGHeight - ((BGHeight/30)*logValue);
+                        var svgTextClass = "hide-svg-text ";
+
+                        svgTextClass += ((svgX+(svgWidth/2)) <= canvas.width()/3)? "phenotype-svg-text-start" : "phenotype-svg-text-middle";
+
+                        svgTextClass += ((svgX+(svgWidth/2)) >= (canvas.width()/3)*2)? "phenotype-svg-text-end" : svgTextClass;
+
+                        var svgTextX = svgWidth/2;
+                        var svgTextContent = "";
+                        var svgTextVDistance = 15;
+                        var svgTextVStartPoint = 25;
+
+                        var trianglePosition = svgTextX+",0 "+(svgTextX-5)+",10 "+(svgTextX+5)+",10";
+
+                        if (dataset != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >'+dataset+'</text>'; svgTextVStartPoint += svgTextVDistance;}
+                        if (pValue != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >p-value: '+pValue+'</text>'; svgTextVStartPoint += svgTextVDistance;}
+                        if (sample != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >sample: '+sample+'</text>'; svgTextVStartPoint += svgTextVDistance;}
+                        if (OR != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >odds ratio: '+OR+'</text>'; svgTextVStartPoint += svgTextVDistance;}
+                        if (effect != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >effect: '+effect+'</text>'; svgTextVStartPoint += svgTextVDistance;}
+
+
+
+                        var testSVG = '<polygon points="'+trianglePosition+'" onclick="showSvgText()" class="triangle" style="fill:rgba(0,0,0, .3)" />' + svgTextContent;
+
+                        s.addShape(new Shape('svg',svgX,svgY,svgWidth,svgHeight,"",phenotype,"",testSVG));
+
+                    });
+
+                }
+
+                drawScreen();
+
+            }
+
+            function showSvgText () {
+
+                console.log("event called");
+                //$(event.target).closest("svg").find("text").removeClass("hide-svg-text");
+            }
+
+            function hideSvgText () {
+                //$(event.target).closest("svg").find("text").addClass("hide-svg-text");
             }
 
 
@@ -606,6 +998,9 @@
                 }
             }
 
+
+
+
             /* copy url of variant search result page to clipboard*/
 
             function copyVariantSearchURL() {
@@ -631,6 +1026,9 @@
 
             $( window ).resize(function() {
                 menuHeaderSet();
+
+
+                //if($("#pheSvg")) phePlotApp();
             })
 
         </script>

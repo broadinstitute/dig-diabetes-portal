@@ -73,6 +73,7 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         }
                     }
+
                     if ($(data[0]).hasClass('indexRow')){
                         var rowsPerPhenotype = parseInt($(data[0]).attr('rowsPerPhenotype'));
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
@@ -80,6 +81,8 @@ var mpgSoftware = mpgSoftware || {};
                         //rowPtr.attr('data-toggle','collapse');
                         //rowPtr.attr('data-target',"."+$(data[0]).attr('phenotypename')+"collapsed");
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
+                        rowPtr.attr('dataset',convertedSampleGroup);
+
                         if (rowsPerPhenotype>1) {
                            // if (convertedSampleGroup.indexOf(':')===-1) {
                                 if ($(data[0]).hasClass('openPhenotype')) { // it phenotype is already been opened, so don't prepare to open it
@@ -92,6 +95,7 @@ var mpgSoftware = mpgSoftware || {};
                            // }
                         }
                      } else {
+                        rowPtr.attr('dataset',convertedSampleGroup);
                         if (convertedSampleGroup.indexOf(':')===-1) { // non cohort may be collapsed
                             if ($(data[0]).hasClass('openPhenotype')){ // it phenotype is already been opened then don't hide it
                                 rowPtr.attr('class',"collapse in "+$(data[0]).attr('phenotypename')+"collapsed");

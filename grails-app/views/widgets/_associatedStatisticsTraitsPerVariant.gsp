@@ -265,6 +265,7 @@ button.expandoButton:visited {
             }
             // get the indenting for now...
             UTILS.labelIndenter('traitsPerVariantTable');
+
         };
 
 

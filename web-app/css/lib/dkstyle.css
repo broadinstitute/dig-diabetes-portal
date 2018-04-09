@@ -1039,3 +1039,30 @@ a.related-word, a.related-word-red {
 a.related-word-red {
     background-color: #FFcccc;
 }
+
+
+.v-axis-text, .h-axis-text {
+	font-size: 12px;
+	text-anchor: middle;
+	fill: #999999;
+}
+
+.v-axis-text {
+	transform: rotate(-90deg);
+}
+
+.hide-svg-text {
+	display: none;
+}
+
+.phenotype-svg-text-start {
+	 fill: #000000; font-size:12px;text-anchor: start;
+ }
+
+.phenotype-svg-text-middle {
+	fill: #000000; font-size:12px;text-anchor: middle;
+}
+
+.phenotype-svg-text-end {
+	fill: #000000; font-size:12px;text-anchor: end;
+}
