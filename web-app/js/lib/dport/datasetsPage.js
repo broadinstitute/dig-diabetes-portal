@@ -225,7 +225,15 @@ var mpgSoftware = mpgSoftware || {};
                                 return "red";
                             }
                         };
-                        eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
+                        //check if its more than mdv99 then do
+                        // eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
+                        //else  eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        if((eachKey.name.match(/[0-9 , \.]+/g)[0]) >= 100){
+                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
+                        }
+                        else{
+                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        }
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
@@ -247,7 +255,12 @@ var mpgSoftware = mpgSoftware || {};
                                 return "red";
                             }
                         };
-                        eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        if((eachKey.name.match(/[0-9 , \.]+/g)[0]) >= 100){
+                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
+                        }
+                        else{
+                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
+                        }
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
