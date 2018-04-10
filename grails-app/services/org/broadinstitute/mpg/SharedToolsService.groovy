@@ -870,6 +870,70 @@ class SharedToolsService {
     }
 
     /***
+     * parse a string coming back from the pheWAS front end and break it into the pieces we need
+     * in order to make a call to the KB.  We are expecting something of the form:
+     * "variant eq '10:114758349_CCA/A,TT'"
+     * though the leading and trailing characters should be optional
+     *
+     * @param lzFormatVarId
+     * @return
+     */
+    public LinkedHashMap<String,String> purseVarIdReturnedFromLzCaller(String lzFormatVarId){
+        LinkedHashMap returnValue = [is_error: true]
+
+        if (!lzFormatVarId){
+            return returnValue
+        }
+
+
+        java.util.regex.Matcher variantNameExtractor = (lzFormatVarId =~ /'([^' ]+)'/)
+        if (!(variantNameExtractor.size()>0&&
+                variantNameExtractor[0].size()>1)) {
+            return returnValue
+        }
+
+        String v=variantNameExtractor[0][1]
+        java.util.regex.Matcher chromosomeExtractor = (v =~ /^(.*?):/)
+        if (!(chromosomeExtractor.size()>0&&
+                chromosomeExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["chromosome"] = chromosomeExtractor[0][1]
+        }
+
+        java.util.regex.Matcher positionExtractor = (v =~ /:(.*?)_/)
+        if (!(positionExtractor.size()>0&&
+                positionExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["position"] = positionExtractor[0][1]
+        }
+
+        java.util.regex.Matcher referenceAlleleExtractor = (v =~ /_(.*?)\//)
+        if (!(referenceAlleleExtractor.size()>0&&
+                referenceAlleleExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["referenceAllele"] = referenceAlleleExtractor[0][1]
+        }
+
+        java.util.regex.Matcher alternateAlleleExtractor = (v =~ /\/(.*?)$/)
+        if (!(alternateAlleleExtractor.size()>0&&
+                alternateAlleleExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["alternateAllele"] = alternateAlleleExtractor[0][1]
+        }
+        returnValue ["is_error"] = false
+
+        return returnValue
+    }
+
+
+
+
+
+    /***
      * split up a compound string on the basis of commas.  Turn it into a nice clean list
      *
      * @param initialString

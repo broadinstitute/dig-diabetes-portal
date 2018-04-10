@@ -70,8 +70,14 @@ class TraitController {
 
     def phewasAjaxCallInLzFormat() {
         String phenotype = params["phenotype"]
-        String varId = params["varId"]
-        JSONObject jsonObject = widgetService.generatePhewasDataForLz( varId )
+        String varIdInLzFormat = params["filter"]
+        Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
+        JSONObject jsonObject = new JSONObject()
+        if (!variantPieces.is_error){
+            String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
+                    "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
+            jsonObject = widgetService.generatePhewasDataForLz( varId )
+        }
         render(status: 200, contentType: "application/json") { jsonObject }
         return
     }
