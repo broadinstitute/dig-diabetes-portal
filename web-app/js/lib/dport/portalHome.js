@@ -312,7 +312,7 @@ var mpgSoftware = mpgSoftware || {};
              * respond to end-of-search-line button
              */
             $(homePageVars.generalizedVariantGo).on('click', function () {
-                var somethingSymbol = $(homePageVars.generalizedVariantInput).val();
+                var somethingSymbol = $(homePageVars.generalizedVariantInput).val().replace(/^[a-zA-Z0-9_:]+$/gi,'');
                 if (somethingSymbol) {
                     window.location.href = homePageVars.findTheRightDataPageUrl +"/" +somethingSymbol;
                 }
@@ -321,7 +321,7 @@ var mpgSoftware = mpgSoftware || {};
              * respond to end-of-search-line button
              */
             $(homePageVars.generalizedGeneGo).on('click', function () {
-                var somethingSymbol = $(homePageVars.generalizedGeneInput).val();
+                var somethingSymbol = $(homePageVars.generalizedGeneInput).val().replace(/^[a-zA-Z0-9_:]+$/gi,'');
                 if (somethingSymbol) {
                     window.location.href = homePageVars.findTheRightGenePageUrl +"?symbol=" + somethingSymbol;
                 }
