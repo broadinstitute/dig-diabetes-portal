@@ -279,6 +279,16 @@ var mpgSoftware = mpgSoftware || {};
         var initializeInputFields = function (){
             var homePageVars = getHomePageVariables();
 
+            var filterOutIllegalCharacters = function (rawString){
+                var returnValue = "";
+                if ((typeof rawString !== 'undefined') &&
+                    (rawString !==  null )){
+                    var substitutedSlash = rawString.replace("/","_");
+                    returnValue = substitutedSlash.replace(/^\s+|\s+$/g, "").match(/^[a-zA-Z0-9_\-:]+$/gi,'');
+                }
+                return returnValue;
+            }
+
             /***
              * type ahead recognizing genes
              */
@@ -312,7 +322,7 @@ var mpgSoftware = mpgSoftware || {};
              * respond to end-of-search-line button
              */
             $(homePageVars.generalizedVariantGo).on('click', function () {
-                var somethingSymbol = $(homePageVars.generalizedVariantInput).val().replace(/^[a-zA-Z0-9_:]+$/gi,'');
+                var somethingSymbol = filterOutIllegalCharacters($(homePageVars.generalizedVariantInput).val());
                 if (somethingSymbol) {
                     window.location.href = homePageVars.findTheRightDataPageUrl +"/" +somethingSymbol;
                 }
@@ -321,7 +331,7 @@ var mpgSoftware = mpgSoftware || {};
              * respond to end-of-search-line button
              */
             $(homePageVars.generalizedGeneGo).on('click', function () {
-                var somethingSymbol = $(homePageVars.generalizedGeneInput).val().replace(/^[a-zA-Z0-9_:]+$/gi,'');
+                var somethingSymbol = filterOutIllegalCharacters($(homePageVars.generalizedGeneInput).val());
                 if (somethingSymbol) {
                     window.location.href = homePageVars.findTheRightGenePageUrl +"?symbol=" + somethingSymbol;
                 }
@@ -350,7 +360,7 @@ var mpgSoftware = mpgSoftware || {};
              *  Launch find variants associated with other traits
              */
             $(homePageVars.traitSearchLaunch).on('click', function () {
-                var trait_val = $(homePageVars.traitInput+' option:selected').val();
+                var trait_val = filterOutIllegalCharacters($(homePageVars.traitInput+' option:selected').val());
                 var significance = 0.0005;
                 if (trait_val == "" || significance == 0) {
                     alert('Please choose a trait and enter a valid significance!')
@@ -363,7 +373,7 @@ var mpgSoftware = mpgSoftware || {};
              *  Launch find genes associated with other traits
              */
             $(homePageVars.geneTraitSearchLaunch).on('click', function () {
-                var trait_val = $(homePageVars.geneTraitInput+ ' option:selected').val();
+                var trait_val = filterOutIllegalCharacters($(homePageVars.geneTraitInput+ ' option:selected').val());
                 var significance = 0.0005;
                 if (trait_val == "" || significance == 0) {
                     alert('Please choose a trait and enter a valid significance!')
