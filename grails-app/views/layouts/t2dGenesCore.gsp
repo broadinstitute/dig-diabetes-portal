@@ -507,24 +507,44 @@
                 });
 
                 $("#pheSvg").find("svg").each(function() {
-                    $(this).attr("class","hidden-traits-row");
+
+                    var svgClass = $(this).attr("class");
+
+                    svgClass += (svgClass.indexOf("hidden-traits-row") >= 0)?  "" : " hidden-traits-row";
+                    $(this).attr("class",svgClass);
                 });
 
 
 
                 ($("#traits_table_filter").val() != "")? $(".phenotypes-for-plot").html("<H5>Click to apply color </H5>") : $(".phenotypes-for-plot").html("");
 
+                var plotColors = ["rgba(255, 0, 0, .75)",
+                    "rgba(204, 102, 0, .75)",
+                    "rgba(204, 153, 0, .75)",
+                    "rgba(153, 204, 0, .75)",
+                    "rgba(0, 153, 0, .75)",
+                    "rgba(0, 204, 153, .75)",
+                    "rgba(0, 153, 255, .75)",
+                    "rgba(102, 102, 255, .75)",
+                    "rgba(153, 51, 255, .75)",
+                    "rgba(255, 0, 255, .75)",
+                    "rgba(255, 153, 102, .75)"];
+
+                var plotColorIndex = 0;
+
                 $.each(phenotypesArray, function(index,value) {
+                    plotColorIndex = (plotColorIndex == (plotColors.length-1))? 0 : plotColorIndex;
 
-                    if(value != "" && $("#traits_table_filter").val() != "") { $(".phenotypes-for-plot").append("<a href='javascript:;' class='btn btn-default btn-xs'>"+value+"</a>");};
+                    if(value != "" && $("#traits_table_filter").val() != "") { $(".phenotypes-for-plot").append("<a href='javascript:;' switch='off' onclick='setColorToPlot(event)' class='btn btn-default btn-xs' color='"+plotColors[plotColorIndex]+"'>"+value+"</a>");};
 
-
+                    plotColorIndex++;
 
                     $("#pheSvg").find("svg").each(function() {
 
                         if($(this).attr("phenotype") == value) {
 
-                            $(this).attr("class","");
+                            var svgClass = $(this).attr("class").replace(" hidden-traits-row","");
+                            $(this).attr("class",svgClass);
 
                         }
 
@@ -536,6 +556,25 @@
                 var relatedWords = showRelatedWords();
 
                 ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").append(relatedWords) : $(".related-words").html("");
+            }
+
+            function setColorToPlot(event) {
+
+                var phenotype = $(event.target).text();
+                var switchOnOff = $(event.target).attr("switch");
+
+                var color = (switchOnOff == "off")? $(event.target).attr("color"):"rgba(0,0,0, .3)";
+
+                $("#pheSvg").find("svg").each(function() {
+
+                    if($(this).attr("phenotype") == phenotype) {
+                        $(this).find("polygon").attr("style","fill:"+color);
+                    }
+                })
+
+                if (switchOnOff == "off") {$(event.target).attr("switch","on")} else {$(event.target).attr("switch","off")}
+
+
             }
 
 
@@ -623,8 +662,10 @@
 
             function phePlotApp() {
 
-console.log("called");
+
                 $("#pheSvg").html("").attr("width", $("#traitsPerVariantTable").width());
+
+
 
 
                 function biggistSample(SAMPLE) {
@@ -694,6 +735,20 @@ console.log("called");
 
                 Shape.prototype.draw =  function(SVGDOC) {
                     switch(this.shape) {
+
+                        case 'circle':
+                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
+                                cx: this.x,
+                                cy: this.y,
+                                r: this.w,
+                                fill : this.fill,
+                                class : this.class,
+                            })
+
+                            SVGDOC.append(shape);
+
+                            break;
+
                         case 'rect':
                             var shape = $(document.createElementNS("http://www.w3.org/2000/svg","rect")).attr({
                                 x: this.x,
@@ -761,6 +816,7 @@ console.log("called");
                 }
 
                 function drawScreen() {
+
                     var canvas = $("#pheSvg");
                     var s = new CanvasState(canvas);
                     var leftEdge = 70;
@@ -851,23 +907,36 @@ console.log("called");
                         var dataset = $(this).attr("dataset");
                         var OR = $(this).attr("odds-ratio");
                         var effect = $(this).attr("effect");
+                        var effectDirection = "";
+
+                        if($(this).attr("effect-direction")) {effectDirection = ($(this).attr("effect-direction").indexOf("up") >= 0)? "up":"down";}
+
 
                         var svgWidth = 500;
                         var svgHeight = 300;
                         var svgX = ((BGWidth/(sampleGuide*6))*sample)+leftEdge-(svgWidth/2);
-                        var svgY = BGHeight - ((BGHeight/30)*logValue);
-                        var svgTextClass = "hide-svg-text ";
+                        var svgY = BGHeight - ((BGHeight/30)*logValue) + (topEdge/2 );
+                        var svgTextClass = "svg-text";
 
-                        svgTextClass += ((svgX+(svgWidth/2)) <= canvas.width()/3)? "phenotype-svg-text-start" : "phenotype-svg-text-middle";
+                        if((svgX+(svgWidth/2)) <= (canvas.width()/3)) {
+                            svgTextClass += " phenotype-svg-text-start";
+                        } else if((svgX+(svgWidth/2)) >= ((canvas.width()/3)*2)) {
+                            svgTextClass += " phenotype-svg-text-end";
+                        } else {
+                            svgTextClass += " phenotype-svg-text-middle"
+                        }
 
-                        svgTextClass += ((svgX+(svgWidth/2)) >= (canvas.width()/3)*2)? "phenotype-svg-text-end" : svgTextClass;
 
                         var svgTextX = svgWidth/2;
                         var svgTextContent = "";
                         var svgTextVDistance = 15;
-                        var svgTextVStartPoint = 25;
+                        var svgTextVStartPoint = 30;
 
-                        var trianglePosition = svgTextX+",0 "+(svgTextX-5)+",10 "+(svgTextX+5)+",10";
+                        var trianglePosition = "";
+
+                        if(effectDirection == "up"){trianglePosition = svgTextX+",0 "+(svgTextX-7)+",12 "+(svgTextX+7)+",12";}
+                        if(effectDirection == "down"){trianglePosition = svgTextX+",12 "+(svgTextX-7)+",0 "+(svgTextX+7)+",0";}
+                        if(effectDirection == ""){trianglePosition = (svgTextX-5)+",0 "+(svgTextX-5)+",10 "+(svgTextX+5)+",10 "+(svgTextX+5)+",0";}
 
                         if (dataset != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >'+dataset+'</text>'; svgTextVStartPoint += svgTextVDistance;}
                         if (pValue != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >p-value: '+pValue+'</text>'; svgTextVStartPoint += svgTextVDistance;}
@@ -877,9 +946,9 @@ console.log("called");
 
 
 
-                        var testSVG = '<polygon points="'+trianglePosition+'" onclick="showSvgText()" class="triangle" style="fill:rgba(0,0,0, .3)" />' + svgTextContent;
+                        var testSVG = '<polygon points="'+trianglePosition+'" class="triangle" style="fill:rgba(0,0,0, .3)" /><circle cx="250" cy="5" r="2" fill="#ffffff" />' + svgTextContent;
 
-                        s.addShape(new Shape('svg',svgX,svgY,svgWidth,svgHeight,"",phenotype,"",testSVG));
+                        s.addShape(new Shape('svg',svgX,svgY,svgWidth,svgHeight,"",phenotype,"hide-svg-text",testSVG));
 
                     });
 
@@ -887,18 +956,34 @@ console.log("called");
 
                 drawScreen();
 
+
+
+                $("#pheSvg").find(".triangle").each(function() {
+                    $(this).mouseenter(function() {
+
+                        var targetSvg = $(this).closest("svg");
+
+                        (targetSvg.attr("class") == "hide-svg-text")? targetSvg.attr("class","") : targetSvg.attr("class","hide-svg-text");
+
+                    });
+
+                    $(this).mouseleave(function() {
+
+                        var targetSvg = $(this).closest("svg");
+
+                        (targetSvg.attr("class") == "hide-svg-text")? targetSvg.attr("class","") : targetSvg.attr("class","hide-svg-text");
+
+                    });
+                })
+
             }
 
-            function showSvgText () {
+            /*
+            var svgClass = $(this).attr("class");
 
-                console.log("event called");
-                //$(event.target).closest("svg").find("text").removeClass("hide-svg-text");
-            }
-
-            function hideSvgText () {
-                //$(event.target).closest("svg").find("text").addClass("hide-svg-text");
-            }
-
+            svgClass += (svgClass.indexOf("hidden-traits-row") >= 0)?  "" : " hidden-traits-row";
+            $(this).attr("class",svgClass);
+            */
 
             /* GAIT TAB UI */
 

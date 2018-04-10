@@ -1051,8 +1051,8 @@ a.related-word-red {
 	transform: rotate(-90deg);
 }
 
-.hide-svg-text {
-	display: none;
+.hide-svg-text > text {
+	visibility: hidden
 }
 
 .phenotype-svg-text-start {
