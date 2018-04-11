@@ -1722,7 +1722,8 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var phewasExperiment = function(varId,phewasAjaxCallInLzFormatUrl){
-            var variantForPlot = "10:114758349_C/T";
+            //var variantForPlot = "10:114758349_C/T";
+            var variantForPlot = convertVarIdToUmichFavoredForm(varId);
             // Throughout this demo, we will match variants of the format 10:100_C/T
             var VARIANT_PATTERN = /(\d+):(\d+)_([ATGC])\/([ATGC])/;
             // Break the variant into constituent parts for setting plot state
@@ -1859,14 +1860,14 @@ var mpgSoftware = mpgSoftware || {};
                 }
             }
             // Control to jump to any variant
-            document.getElementById("button-jump").addEventListener("click", function(event) {
-                jumpToVariant()
-            });
-            document.getElementById("input-variant").addEventListener("keyup", function(event) {
-                if (event.key === "Enter") {
-                    jumpToVariant()
-                }
-            })
+            // document.getElementById("button-jump").addEventListener("click", function(event) {
+            //     jumpToVariant()
+            // });
+            // document.getElementById("input-variant").addEventListener("keyup", function(event) {
+            //     if (event.key === "Enter") {
+            //         jumpToVariant()
+            //     }
+            // })
 
         }
 
@@ -2059,6 +2060,7 @@ var mpgSoftware = mpgSoftware || {};
         replaceTissuesWithOverlappingIbdRegionsVarId:replaceTissuesWithOverlappingIbdRegionsVarId,
         changeCurrentReference:changeCurrentReference,
         convertVarIdToBroadFavoredForm:convertVarIdToBroadFavoredForm,
+        convertVarIdToUmichFavoredForm:convertVarIdToUmichFavoredForm,
         phewasExperiment:phewasExperiment
     }
 

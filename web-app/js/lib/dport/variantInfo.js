@@ -131,7 +131,7 @@ var mpgSoftware = mpgSoftware || {};
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       locusZoomReadableDatasetName,geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
@@ -141,7 +141,7 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
-
+            mpgSoftware.locusZoom.phewasExperiment(variantObject.VAR_ID,phewasAjaxCallInLzFormatUrl);
             setVariantTitleAndSummary(variantObject.VAR_ID,
                                         variantObject.DBSNP_ID,
                                         variantObject.CHROM,

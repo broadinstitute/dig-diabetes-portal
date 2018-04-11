@@ -96,7 +96,7 @@ button.expandoButton:visited {
         };
 
         mpgSoftware.widgets = (function () {
-            mpgSoftware.locusZoom.phewasExperiment('<%=variantIdentifier%>','<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />');
+           // mpgSoftware.locusZoom.phewasExperiment('<%=variantIdentifier%>','<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />');
             var loadAssociationTable = function () {
                 var variant;
                 var loading = $('#spinner').show();

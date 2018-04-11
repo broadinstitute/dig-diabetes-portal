@@ -78,7 +78,8 @@
                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    ${defaultTissues});
+                    '<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />');
+
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});

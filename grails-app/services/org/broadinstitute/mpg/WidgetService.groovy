@@ -634,24 +634,39 @@ class WidgetService {
                     String phenotype = ""
                     String phenotypeDescription = ""
                     String phenotypeGroup = "unknown phenotype group"
+                    String pValueAsString = "0"
+                    Double pValue =0d
+                    Double logPValue =0d
 
                     if (variant."VAR_ID"){retrievedVarId = variant."VAR_ID"}
+                    if (variant."P_VALUE"){pValueAsString = variant."P_VALUE"}
                     if (variant."phenotype"){phenotype = variant."phenotype"}
                     phenotypeDescription =  g.message(code: "metadata." + phenotype, default: phenotype)
                     if (phenotypeToPhenotypegroupMap.containsKey(phenotype)) {
                         phenotypeGroup = phenotypeToPhenotypegroupMap[phenotype]
                     }
                     varIdParts = retrievedVarId.split("_")
+                    if (pValueAsString){
+                        try{
+                            pValue = Double.parseDouble(pValueAsString)
+                            if (pValue>0){
+                                logPValue = 0-Math.log(pValue)
+                            }
+                        }catch(e){
+                            log.error("we have a P value that's nonnumeric, which is bad news")
+                        }
+                    }
 
                     singleVariantData<<"\"build\": \"GRCh37\""
                     singleVariantData<<"\"chromosome\": \"${varIdParts[0]}\""
                     singleVariantData<<"\"description\": \"${phenotypeDescription}\""
                     singleVariantData<<"\"id\": \"${id++}\""
-                    singleVariantData<<"\"log_pvalue\": ${variant.P_VALUE}"
+                    singleVariantData<<"\"log_pvalue\": ${logPValue}"
                     singleVariantData<<"\"position\": ${varIdParts[1]}"
                     singleVariantData<<"\"ref_allele\": \"${varIdParts[2]}\""
                     singleVariantData<<"\"score_test_stat\": ${variant.MOST_DEL_SCORE}"
                     singleVariantData<<"\"study\": \"${variant.dataset}\""
+                    singleVariantData<<"\"pmid\": \"28566273\""
                     singleVariantData<<"\"trait\": \"${phenotype}\""
                     singleVariantData<<"\"trait_group\": \"${phenotypeGroup}\""
                     singleVariantData<<"\"trait_label\": \"${phenotypeDescription}\""
