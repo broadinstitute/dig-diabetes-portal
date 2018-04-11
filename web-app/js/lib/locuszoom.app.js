@@ -45,7 +45,7 @@
  * @namespace
  */
 var LocusZoom = {
-    version: "0.7.0"
+    version: "0.7.1"
 };
 
 /**
@@ -6113,6 +6113,10 @@ LocusZoom.Dashboard.prototype.destroy = function(force){
  * @class
  * @param {Object} layout A JSON-serializable object of layout configuration parameters
  * @param {('left'|'right')} [layout.position='left']  Whether to float the component left or right.
+ * @param {('start'|'middle'|'end')} [layout.group_position] Buttons can optionally be gathered into a visually
+ *  distinctive group whose elements are closer together. If a button is identified as the start or end of a group,
+ *  it will be drawn with rounded corners and an extra margin of spacing from any button not part of the group.
+ *  For example, the region_nav_plot dashboard is a defined as a group.
  * @param {('gray'|'red'|'orange'|'yellow'|'green'|'blue'|'purple'} [layout.color='gray']  Color scheme for the
  *   component. Applies to buttons and menus.
  * @param {LocusZoom.Dashboard} parent The dashboard that contains this component
@@ -6843,22 +6847,23 @@ LocusZoom.Dashboard.Components.add("download", function(layout){
  *   NOTE: Will only work on panel dashboards.
  * @class LocusZoom.Dashboard.Components.remove_panel
  * @augments LocusZoom.Dashboard.Component
+ * @param {Boolean} [layout.suppress_confirm=false] If true, removes the panel without prompting user for confirmation
  */
-LocusZoom.Dashboard.Components.add("remove_panel", function(layout){
+LocusZoom.Dashboard.Components.add("remove_panel", function(layout) {
     LocusZoom.Dashboard.Component.apply(this, arguments);
-    this.update = function(){
+    this.update = function() {
         if (this.button){ return this; }
         this.button = new LocusZoom.Dashboard.Component.Button(this)
             .setColor(layout.color).setHtml("×").setTitle("Remove panel")
             .setOnclick(function(){
-                if (confirm("Are you sure you want to remove this panel? This cannot be undone!")){
-                    var panel = this.parent_panel;
-                    panel.dashboard.hide(true);
-                    d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
-                    d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
-                    return panel.parent.removePanel(panel.id);
+                if (!layout.suppress_confirm && !confirm("Are you sure you want to remove this panel? This cannot be undone!")){
+                    return false;
                 }
-                return false;
+                var panel = this.parent_panel;
+                panel.dashboard.hide(true);
+                d3.select(panel.parent.svg.node().parentNode).on("mouseover." + panel.getBaseId() + ".dashboard", null);
+                d3.select(panel.parent.svg.node().parentNode).on("mouseout." + panel.getBaseId() + ".dashboard", null);
+                return panel.parent.removePanel(panel.id);
             }.bind(this));
         this.button.show();
         return this;
@@ -7903,8 +7908,17 @@ LocusZoom.Data.Requester = function(sources) {
  * @public
  */
 LocusZoom.Data.Source = function() {
-    /** @member {Boolean} */
+    /**
+     * Whether this source should enable caching
+     * @member {Boolean}
+     */
     this.enableCache = true;
+    /**
+     * Whether this data source type is dependent on previous requests- for example, the LD source cannot annotate
+     *  association data if no data was found for that region.
+     * @member {boolean}
+     */
+    this.dependentSource = false;
 };
 
 /**
@@ -7999,11 +8013,18 @@ LocusZoom.Data.Source.prototype.getData = function(state, fields, outnames, tran
         }
     }
 
+    var self = this;
     return function (chain) {
-        return this.getRequest(state, chain, fields).then(function(resp) {
-            return this.parseResponse(resp, chain, fields, outnames, trans);
-        }.bind(this));
-    }.bind(this);
+        if (self.dependentSource && chain && chain.body && !chain.body.length) {
+            // A "dependent" source should not attempt to fire a request if there is no data for it to act on.
+            // Therefore, it should simply return the previous data chain.
+            return Q.when(chain);
+        }
+
+        return self.getRequest(state, chain, fields).then(function(resp) {
+            return self.parseResponse(resp, chain, fields, outnames, trans);
+        });
+    };
 };
 
 /**
@@ -8051,9 +8072,6 @@ LocusZoom.Data.Source.prototype.parseArraysToObjects = function(x, fields, outna
     var N = x[keys[0]].length;
     var sameLength = keys.every(function(key) {
         var item = x[key];
-        if (item.length !== N){
-            console.log("item with key="+key+" has length="+item.length+", while x key[0] ("+keys[0]+" has length = "+N+".");
-        }
         return item.length === N;
     });
     if (!sameLength) {
@@ -8223,12 +8241,15 @@ LocusZoom.Data.AssociationSource.prototype.getURL = function(state, chain, field
 
 /**
  * Data Source for LD Data, as fetched from the LocusZoom API server (or compatible)
+ * This source is designed to connect its results to association data, and therefore depends on association data having
+ *  been loaded by a previous request in the data chain.
  * @class
  * @public
  * @augments LocusZoom.Data.Source
  */
 LocusZoom.Data.LDSource = LocusZoom.Data.Source.extend(function(init) {
     this.parseInit(init);
+    this.dependentSource = true;
 }, "LDLZ");
 
 LocusZoom.Data.LDSource.prototype.preGetData = function(state, fields) {

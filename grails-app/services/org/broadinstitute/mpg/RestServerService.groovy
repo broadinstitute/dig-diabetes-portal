@@ -62,6 +62,9 @@ class RestServerService {
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2244,6 +2247,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                      int  startHere, int pageSize,
                                                                      String version ) {
         List<String> specifyRequestList = []
+        Boolean phenotypeQuery = false
         if (retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall){
 
             if ((version) && (version.length() > 0)) {
@@ -2264,6 +2268,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
             List<String> filterList = []
             if ((phenotype) && (phenotype.length() > 0)) {
+                phenotypeQuery = true
                 filterList <<  "{\"parameter\": \"phenotype\", \"operator\": \"eq\", \"value\": \"${phenotype}\"}"
             }
             if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
@@ -2303,8 +2308,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             }
         }
 
-
-        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_BY_RANGE_URL)
+        String restApiGetAggregationAndPoint = GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL
+        if (phenotypeQuery){
+            restApiGetAggregationAndPoint = GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL
+        }
+        return postRestCall("{${specifyRequestList.join(",")}}", restApiGetAggregationAndPoint)
     }
 
 
