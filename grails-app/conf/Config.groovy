@@ -665,7 +665,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "portal.ibd.header.tagline",
                                           [],
                                           ["IL23R"],
-                                          ["1_67704863_G_A"],
+                                          ["6_31628397_T_A"],
                                           ["chr1:67,500,000-67,800,000"],
                                           "images/ibd/front_ibd_bg_2018.png",
                                   "",

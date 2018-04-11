@@ -704,7 +704,9 @@ var mpgSoftware = mpgSoftware || {};
                 // The logic ultimately employed is this: primaryTissueGrid tells us which tissues to display.  subsidiaryTissueGrid holds any additional tissues that we will display,
                 //  which assumes that that tissue is already a primary tissue.  If
                 primaryTissueGrid = filterTissueGrid(tissueGrid,getSelectorAssayIds()); // DNase drives
-                subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,getDisplayAssayIds(),primaryTissueGrid);
+              //  subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,getDisplayAssayIds(),primaryTissueGrid);
+                subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,
+                    _.difference(getDisplayAssayIds(),getSelectorAssayIds()),primaryTissueGrid);
             }
 
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
@@ -925,14 +927,15 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%',onChange: function() {
                             console.log($('#credSetSelectorChoice').val());
                         }});
-        //            $('#credSetSelectorChoice').multiselect('selectAllOption', false);
                     $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
                     $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
                         // allSelectedText: 'All Selected',
                         buttonWidth: '60%'});
-               //     $('#credSetDisplayChoice').multiselect('selectAllOption', false);
                     $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
                     $('#toggleVarianceTableLink').click();
+                    // $('#credSetSelectorChoice').on('change', function() {
+                    //     console.log("foo"+$(this).val());
+                    // });
 
                 }
             );
