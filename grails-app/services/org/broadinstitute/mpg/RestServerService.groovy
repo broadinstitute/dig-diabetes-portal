@@ -61,6 +61,7 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
+    private String GET_DATA_AGGREGATION_PHEWAS_URL = "getAggregatedData/PheWAS"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2299,7 +2300,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
+        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_PHEWAS_URL)
     }
 
 

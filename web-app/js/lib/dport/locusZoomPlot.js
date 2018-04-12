@@ -128,6 +128,19 @@ var mpgSoftware = mpgSoftware || {};
             }
         }
 
+        LocusZoom.Layouts.add("plot", "abbreviated_phewas", {
+            width: 800,
+            height: 300,
+            min_width: 800,
+            min_height: 300,
+            responsive_resize: true,
+            dashboard: LocusZoom.Layouts.get("dashboard", "standard_plot", { unnamespaced: true } ),
+            panels: [
+                LocusZoom.Layouts.get("panel", "phewas", { unnamespaced: true, proportional_height: 0.90 })
+            ],
+            mouse_guide: false
+        });
+
         LocusZoom.Layouts.add("data_layer", "recomb_rate_filled", {
             namespace: { "recomb": "recomb" },
             id: "recombratenew",
@@ -1786,20 +1799,10 @@ var mpgSoftware = mpgSoftware || {};
                     chr: variantChrom
                 }
             };
-            var layout = LocusZoom.Layouts.get("plot", "standard_phewas", mods);
+            var layout = LocusZoom.Layouts.get("plot", "abbreviated_phewas", mods);
             layout.panels[0].margin.top = 32;
             layout.panels[0].data_layers[0].offset = 7.30103; // Higher offset for line of GWAS significance than the default 4.522
-            layout.panels[2].data_layers.push({
-                id: "variant",
-                type: "orthogonal_line",
-                orientation: "vertical",
-                offset: variantPosition,
-                style: {
-                    "stroke": "#FF3333",
-                    "stroke-width": "2px",
-                    "stroke-dasharray": "4px 4px"
-                }
-            });
+
             // Modify the tooltips for PheWAS result data layer points to contain more data. The fields in this sample
             //   tooltip are specific to the LZ-Portal API, and are not guaranteed to be in other PheWAS datasources.
             var phewas_layer = layout.panels[0].data_layers[1];
@@ -1849,25 +1852,6 @@ var mpgSoftware = mpgSoftware || {};
                     return true;
                 }
             }
-            function jumpToVariant() {
-                var input_variant = document.getElementById("input-variant");
-                if (input_variant) {
-                    var jmp_variant = input_variant.value || input_variant.placeholder;
-                    if (checkVariant(jmp_variant)) {
-                        hideInvalidVariant();
-                        loadPheWAS(jmp_variant)
-                    }
-                }
-            }
-            // Control to jump to any variant
-            // document.getElementById("button-jump").addEventListener("click", function(event) {
-            //     jumpToVariant()
-            // });
-            // document.getElementById("input-variant").addEventListener("keyup", function(event) {
-            //     if (event.key === "Enter") {
-            //         jumpToVariant()
-            //     }
-            // })
 
         }
 
