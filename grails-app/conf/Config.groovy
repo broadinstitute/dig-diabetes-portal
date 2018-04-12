@@ -285,56 +285,45 @@ environments {
 
     }
     production {
-//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
+
 
        grails.serverURL = "http://www.type2diabetesgenetics.org"
-
-//        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
+//      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//        grails.serverURL = "http://cerebrovascularportal.org"
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
-//        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
+
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 
-//      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+        //      grails.serverURL = "http://cerebrovascularportal.org"             // CDKP (stroke portal) production
+        //      grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"      // CDKP (stroke portal) test site
+//        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"
 
- //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com/"                    // CVDKP (MI portal) test site
+//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-
-
-//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal production for now
-//        grails.ServerURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"        // stroke portal demo for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
 
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
-
-//        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
-
-//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
-
 
 //        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
-
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
 
-//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
-
-//         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                                             // CVDKP (MI portal) production
+//         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
