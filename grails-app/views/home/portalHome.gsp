@@ -238,6 +238,12 @@
                         <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
                     <p><g:message code="portal.epi.about.the.data.text" />
                 </g:elseif>
+                <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                    <div class="col-md-12" style="padding-top:40px;">
+                        <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
+                        <h2 style="font-family:'Oswald'; font-size: 40px;font-weight:700; margin-top:5px;"><g:message code="portal.aboutTheData" default="About the data" /></h2>
+                    <p><g:message code="portal.sleep.about.the.data.text" />
+                </g:elseif>
                 <g:else>
                     <div class="col-md-12" style="padding-top:40px;">
                         <img src="${resource(dir: 'images', file: 'data_icon3.png')}" style="width: 200px; margin-right: -50px;" align="right" >
@@ -382,6 +388,9 @@
                     <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                         <g:message code="portal.epi.use.citation.itself" />
                     </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                        <g:message code="portal.sleep.use.citation.itself" />
+                    </g:elseif>
                         <g:else></g:else>
                     </p>
                 </div>
@@ -451,6 +460,10 @@
 
             <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                 <p><g:message code="about.the.epi.portal.text"/></p>
+            </g:elseif>
+
+            <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                <p><g:message code="about.the.sleep.portal.text"/></p>
             </g:elseif>
 
             <g:else>

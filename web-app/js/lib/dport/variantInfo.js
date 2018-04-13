@@ -215,14 +215,27 @@ var mpgSoftware = mpgSoftware || {};
             var phenotypeData = [];
             // make the ajax call to get the data for each phenotype
             _.forEach(phenotypeDatasetMap, function(datasets, phenotype) {
+                // console.log(" here we go with '"+datasets+"'");
+                // if (_.values(datasets).length===0){
+                //     console.log(" here we go with problem "+datasets);
+                // }
+                // console.log("raw value="+_.values(datasets));
+                // try{
+                //     console.log("interpreted JSON"+JSON.stringify(_.values(datasets)));
+                // } catch(e){
+                //     console.log(" could not interpret:"+_.values(datasets));
+                // }
+                //
+                // console.log("all done");
                 var thisRequest = $.ajax({
                     cache: false,
-                    type: 'get',
+                    type: 'post',
                     url: dataUrl,
                     data: {
                         variantId: variantId,
                         phenotype: phenotype,
                         datasets: JSON.stringify(_.values(datasets))
+                        //datasets: _.values(datasets)
                     },
                     async: true
                 });
