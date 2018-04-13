@@ -9,6 +9,8 @@ import org.broadinstitute.mpg.diabetes.util.PortalException;
 
 import java.util.List;
 
+import static java.io.FileDescriptor.out;
+
 /**
  * Class to create common getData queries
  *
@@ -129,21 +131,28 @@ public class CommonGetDataQueryBuilder {
         // add in all the default query properties
         this.addInAllCommonAndParentAndSelfProperties(queryBean, phenotype);
 
-        // add in the phenotype's parent sample group properties
-        sampleGroup = (SampleGroup)phenotype.getParent();
-        if (sampleGroup != null) {
-            for (Property sampleGroupProperty: sampleGroup.getProperties()) {
-                queryBean.addQueryProperty(sampleGroupProperty);
+        if (phenotype==null){
+            System.out.println("getDataQueryForPhenotype::Phenotype was null");
+        } else if (phenotype.getParent()==null){
+            System.out.println("getDataQueryForPhenotype::Phenotype="+phenotype.getName()+" had no parent");
+        } else {
+            // add in the phenotype's parent sample group properties
+            sampleGroup = (SampleGroup)phenotype.getParent();
+            if (sampleGroup != null) {
+                for (Property sampleGroupProperty: sampleGroup.getProperties()) {
+                    queryBean.addQueryProperty(sampleGroupProperty);
+                }
+            }
+
+            // make sure there is a match for the phenotype
+            for (Property tempProperty : phenotype.getProperties()) {
+                if (tempProperty.getName().equals(PortalConstants.NAME_PHENOTYPE_PROPERTY_P_VALUE)) {
+                    property = tempProperty;
+                    break;
+                }
             }
         }
 
-        // make sure there is a match for the phenotype
-        for (Property tempProperty : phenotype.getProperties()) {
-            if (tempProperty.getName().equals(PortalConstants.NAME_PHENOTYPE_PROPERTY_P_VALUE)) {
-                property = tempProperty;
-                break;
-            }
-        }
         // if p-value property found, the add filter property that will ensure we only get variants that have p values for this trait/phenotype (don't want null p values)
         if (property != null) {
             queryBean.addFilterProperty(property, PortalConstants.OPERATOR_LESS_THAN_EQUALS, pValueString);
@@ -173,14 +182,21 @@ public class CommonGetDataQueryBuilder {
         }
 
         // add in all the phenotype sample group parent's properties
-        sampleGroup = (SampleGroup)phenotype.getParent();
-        for (Property property : sampleGroup.getProperties()) {
-            queryBean.addQueryProperty(property);
-        }
+        if (phenotype==null){
+            System.out.println("addInAllCommonAndParentAndSelfProperties::Phenotype was null");
+        } else if (phenotype.getParent()==null){
+            System.out.println("addInAllCommonAndParentAndSelfProperties::Phenotype="+phenotype.getName()+" had no parent");
+        } else {
+            sampleGroup = (SampleGroup)phenotype.getParent();
+            for (Property property : sampleGroup.getProperties()) {
+                queryBean.addQueryProperty(property);
+            }
 
-        // add in all the phenotype's properties
-        for (Property property : phenotype.getProperties()) {
-            queryBean.addQueryProperty(property);
+            // add in all the phenotype's properties
+            for (Property property : phenotype.getProperties()) {
+                queryBean.addQueryProperty(property);
+            }
+
         }
 
         // return
