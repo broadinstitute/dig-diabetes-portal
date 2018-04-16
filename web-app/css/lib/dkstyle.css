@@ -1066,3 +1066,15 @@ a.related-word-red {
 .phenotype-svg-text-end {
 	fill: #000000; font-size:12px;text-anchor: end;
 }
+
+.axis line, .axis path {
+	fill: none;
+	stroke: #999;
+	shape-rendering: crispEdges;
+}
+
+.axis text {
+	font-size: 10px;
+	cursor: move;
+	fill: #333;
+}

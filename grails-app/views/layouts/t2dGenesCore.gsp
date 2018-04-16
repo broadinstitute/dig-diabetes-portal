@@ -362,7 +362,7 @@
                 var inputBox = "<div class='phenotype-searchbox-wrapper'><input id='traits_table_filter' type='text' name='search' style='display: block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'>";
                 inputBox += "<div class='related-words'></div></div>";
                 inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
-                inputBox += '<div class="traits-svg-wrapper" style=""><div class="phenotypes-for-plot"></div><svg  xmlns="http://www.w3.org/2000/svg" version="1.1" id="pheSvg" height="450" style="border:1px solid #fff;">Your browser doesn\'t support html 5.</svg></div>';
+                inputBox += '<div class="traits-svg-wrapper" style=""><div class="phenotypes-for-plot"></div></div>';
                 inputBox += "<span style='font-size: 12px; margin: 15px 0 -10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
 
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
@@ -383,6 +383,9 @@
                 $("#traits_table_filter").on('input',filterTraitsTable);
 
                 var phenoTypeID = "";
+
+
+
                 $("#traitsPerVariantTableBody").find("tr").each(function() {
 
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
@@ -403,8 +406,37 @@
                     });
                 })
 
+                var traitsTableData = [];
 
-                phePlotApp();
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                    var eachDataset = {};
+                    eachDataset.dataset = $(this).attr("dataset");
+                    eachDataset.phenotype = $(this).find("td").eq(0).text();
+                    eachDataset.logValue = $(this).find("td").eq(2).text();
+                    eachDataset.pvalue = $(this).find("td").eq(2).text();
+                    eachDataset.effectDirection = effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
+                    eachDataset.oddsRatio = $(this).find("td").eq(4).text();
+                    eachDataset.maf = $(this).find("td").eq(5).text();
+                    eachDataset.sample = $(this).find("td").eq(7).text();
+
+                    traitsTableData.push(eachDataset);
+
+                });
+
+                $.each(traitsTableData,function(index) {
+
+                    traitsTableData[index].logValue = getLogValue(traitsTableData[index].pvalue);
+                    traitsTableData[index].sample = parseFloat(traitsTableData[index].sample);
+                    traitsTableData[index].oddsRatio = parseFloat(traitsTableData[index].oddsRatio);
+                    traitsTableData[index].maf = parseFloat(traitsTableData[index].maf);
+
+                })
+
+                console.log(traitsTableData);
+
+
+                phePlotApp(traitsTableData);
             }
 
             function filterTraitsTable() {
@@ -625,8 +657,138 @@
 
             }
 
+            /*
 
-            function phePlotApp() {
+            var traitsTableData = [{phenotype:"BMI",dataset:"GIANT GWAS",pvalue:"2.638272163982407",sample:"253288",or:"",frequency:"0.250",effectDirection:"up"},
+                {phenotype:"BMI",dataset:"GIANT GWAS - stratified by physical activity",pvalue:"2.3861581781239307",sample:"200452",or:"",frequency:"",effectDirection:"up"},
+                {phenotype:"BMI",dataset:"13K exome sequence analysis",pvalue:"0.832682665251824",sample:"12954",or:"",frequency:"0.282",effectDirection:"up"}];
+
+            //data = data.map(function(d) { return +d; });
+
+            $.each(traitsTableData,function(index) {
+                traitsTableData[index].pvalue = parseFloat(traitsTableData[index].pvalue);
+                traitsTableData[index].sample = parseFloat(traitsTableData[index].sample);
+            })*/
+
+            function phePlotApp(data) {
+                var svg,circles,group,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
+
+                w = $("#traitsPerVariantTable").width(), h = 400, xbumperLeft = 60, xbumperRight = 20, ybumperTop = 20, ybumperBottom = 60;
+
+
+
+
+
+                var x = d3.scale.linear()
+                    .domain([0, d3.max(data, function(d) { return d.sample })])
+                    .range([xbumperLeft, w-xbumperRight]);
+
+                var y = d3.scale.linear()
+                    .domain([0, d3.max(data, function(d) { return d.logValue })])
+                    .range([h-ybumperBottom, ybumperTop]);
+
+                arc = d3.svg.symbol().type('triangle-up').size(60);
+
+
+                svg = d3.select(".traits-svg-wrapper").append("svg")
+                    .attr("width", w)
+                    .attr("height",h)
+                    .attr("style","border:solid 1px #ddd;")
+                    .attr("id","pheSvg");
+
+//draw x-axis grid lines
+                svg.selectAll("line.x")
+                    .data(x.ticks(10))
+                    .enter().append("line")
+                    .attr("class", "x")
+                    .attr("x1", x)
+                    .attr("x2", x)
+                    .attr("y1", ybumperTop)
+                    .attr("y2", h-ybumperBottom)
+                    .style("stroke", "#eee");
+
+                // Draw Y-axis grid lines
+                svg.selectAll("line.y")
+                    .data(y.ticks(10))
+                    .enter().append("line")
+                    .attr("class", "y")
+                    .attr("x1", xbumperLeft)
+                    .attr("x2", w-xbumperRight)
+                    .attr("y1", y)
+                    .attr("y2", y)
+                    .style("stroke", "#eee");
+
+
+
+                group = svg.selectAll("g")
+                    .data(data)
+                    .enter()
+                    .append("g")
+                    .attr("transform", function(d) {
+                        var xposition = x(d.sample);
+                        var yposition = y(d.logValue);
+                        return "translate("+xposition+","+yposition+")"});
+
+                group.append('path')
+                    .attr('d',arc)
+                    .attr('fill','rgba(100,100,100,0.5)')
+                    .attr('transform',function(d){
+
+                        var angle = (d.effectDirection == "up")? 0 : (d.effectDirection == "down")? 180: 90;
+
+                        return 'rotate('+angle+')';
+                    });
+
+                group.append("text")
+                    .attr("x","0")
+                    .attr("y","15")
+                    .text(function(d){return "p: "+d.pvalue+", s: "+d.sample})
+                    .attr("style","fill: red; font-size: 10px; text-anchor: middle;");
+
+
+                //add labels
+
+                svg.append("g").attr("transform", "translate(0,"+(h-ybumperBottom)+")")
+                    .attr("class","axis")
+                    .call(d3.svg.axis().orient("bottom").scale(x))
+                    .append("text")
+                    .text("Sample")
+                    .attr("x",w/2)
+                    .attr("y", "40")
+                    .attr("style","font-size: 14px; font-weight: 400;text-anchor:middle");
+
+
+                svg.append("g").attr("transform", "translate("+xbumperLeft+",0)")
+                    .attr("class","axis")
+                    .call(d3.svg.axis().orient("left").scale(y))
+                    .append("text")
+                    .text("p-value (-log10)")
+                    .attr("x",-(h/2))
+                    .attr("y", -40)
+                    .attr("transform","rotate(-90)")
+                    .attr("style","font-size: 14px; font-weight: 400;text-anchor:middle");
+
+            }
+
+            function getLogValue(pValue) {
+                var logValue;
+                if(pValue != ""){
+                    if (pValue.indexOf("e") >= 0) {
+
+                        var pValues = pValue.split("e-");
+                        logValue = parseFloat(pValues[1]);
+                    } else {
+                        logValue = -Math.log10(pValue);
+                    }
+                } else {
+                    logValue = 0;
+                }
+
+                return logValue;
+            }
+
+
+            /*function phePlotApp() {
 
 
                 $("#pheSvg").html("").attr("width", $("#traitsPerVariantTable").width());
@@ -645,22 +807,7 @@
 
                 }
 
-                function getLogValue(pValue) {
-                    var logValue;
-                    if(pValue != ""){
-                        if (pValue.indexOf("e") >= 0) {
 
-                            var pValues = pValue.split("e-");
-                            logValue = pValues[1];
-                        } else {
-                            logValue = -Math.log10(pValue);
-                        }
-                    } else {
-                        logValue = 0;
-                    }
-
-                    return logValue;
-                }
 
                 var traitsDatasets = [];
 
@@ -943,6 +1090,8 @@
                 })
 
             }
+
+            */
 
 
             /* GAIT TAB UI */
