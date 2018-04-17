@@ -139,6 +139,7 @@ var mpgSoftware = mpgSoftware || {};
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
             if(r2 == 1){
+                var loading = $('#spinner').show();
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
@@ -146,6 +147,7 @@ var mpgSoftware = mpgSoftware || {};
                 mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
             }
             else{
+                var loading = $('#spinner').show();
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
