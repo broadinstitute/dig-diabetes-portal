@@ -81,7 +81,7 @@ public class CommonGetDataQueryBuilderTest extends TestCase {
 
         try {
             // get the phenotype to test
-            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv2");
+            List<Phenotype> phenotypeList = this.jsonParser.getPhenotypeListByTechnologyAndVersion("GWAS", "mdv31");
             if (phenotypeList.size() > 0) {
                 phenotype = phenotypeList.get(0);
 

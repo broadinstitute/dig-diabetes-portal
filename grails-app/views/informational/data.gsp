@@ -290,14 +290,14 @@
             </g:renderBetaFeaturesDisplayedValue>
 
 
-            <g:if test="${g.portalTypeString()?.equals('stroke')}">
-                <g:render template="data/strokeData" />
+            %{--<g:if test="${g.portalTypeString()?.equals('stroke')}">--}%
+                %{--<g:render template="data/strokeData" />--}%
 
-            </g:if>
-            <g:else>
+            %{--</g:if>--}%
+            %{--<g:else>--}%
                 <g:render template="data/t2dData" />
 
-            </g:else>
+            %{--</g:else>--}%
         </div>
     </div>
 

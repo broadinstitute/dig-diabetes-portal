@@ -2,6 +2,7 @@
 %{--this will have all the mustache templates--}%
 %{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
 
+<g:render template="./data/GWAS_UKBB" />
 <g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
 <g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
 <g:render template="./data/GWAS_GIANT"/>
@@ -57,6 +58,13 @@
 <g:render template="./data/GWAS_DIAGRAMimputed" />
 <g:render template="./data/GWAS_AFHRC" />
 <g:render template="./data/ExChip_ExTexT2D" />
+<g:render template="./data/ExChip_FUSION" />
+<g:render template="./data/GWAS_FUSION" />
+<g:render template="./data/GWAS_FUSIONonlyMetaboChip" />
+<g:render template="./data/ExChip_EPRI" />
+<g:render template="./data/GWAS_MetaStroke" />
+<g:render template="./data/GWAS_HPTxNCGM" />
+<g:render template="./data/GWAS_VHIR" />
 
 
 
@@ -73,6 +81,13 @@
                 <th>Ancestry</th>
                 <th>Data type</th>
                 </g:if>
+
+<g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+    <th>Samples</th>
+    <th>Ancestry</th>
+    <th>Data type</th>
+</g:elseif>
+
                 <g:else>
                 <th>Access</th>
                 <th>Samples</th>
@@ -102,6 +117,12 @@
                 <td class="ethnicity">{{ancestry}}</td>
                 <td class="datatype">{{technology}}</td>
             </g:if>
+
+<g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+    <td class="samples">{{size}}</td>
+    <td class="ethnicity">{{ancestry}}</td>
+    <td class="datatype">{{technology}}</td>
+</g:elseif>
             <g:else>
                 <td class="access" style="color:{{accessColor}}">{{access}} </td>
                 <td class="samples">{{size}}</td>
