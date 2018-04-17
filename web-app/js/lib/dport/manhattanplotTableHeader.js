@@ -135,26 +135,45 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var callFillClumpVariants = function() {
-            var mysavevars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            var sampleGroup = $('#manhattanSampleGroupChooser').val();
-            var r2 = $('#rthreshold').val();
-            $('#manhattanPlot1').empty();
-            $('#traitTableBody').empty();
-            $('#phenotypeTraits').DataTable().rows().remove();
-            $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-            mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mysavevars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
-        }
-
-        var pickNewDataSet = function (){
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
-            $('#manhattanPlot1').empty();
-            $('#traitTableBody').empty();
-            $('#phenotypeTraits').DataTable().rows().remove();
-            $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-            mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
-
+            var r2 = $('#rthreshold').val();
+            if(r2 == 1){
+                $('#manhattanPlot1').empty();
+                $('#traitTableBody').empty();
+                $('#phenotypeTraits').DataTable().rows().remove();
+                $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+                mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
+            }
+            else{
+                $('#manhattanPlot1').empty();
+                $('#traitTableBody').empty();
+                $('#phenotypeTraits').DataTable().rows().remove();
+                $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
+            }
         }
+
+        // var pickNewDataSet = function (){
+        //     var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+        //     var sampleGroup = $('#manhattanSampleGroupChooser').val();
+        //     var r2 = $('#rthreshold').val();
+        //     if(r2== 1){
+        //         $('#manhattanPlot1').empty();
+        //         $('#traitTableBody').empty();
+        //         $('#phenotypeTraits').DataTable().rows().remove();
+        //         $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+        //         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
+        //     }
+        //     else{
+        //         $('#manhattanPlot1').empty();
+        //         $('#traitTableBody').empty();
+        //         $('#phenotypeTraits').DataTable().rows().remove();
+        //         $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+        //         mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
+        //     }
+        //
+        // }
 
 
 
@@ -265,7 +284,7 @@ var mpgSoftware = mpgSoftware || {};
             fillClumpVariants:fillClumpVariants,
             fillSampleGroupDropdown: fillSampleGroupDropdown,
             unclickClumpCheckbox:unclickClumpCheckbox,
-            pickNewDataSet:pickNewDataSet,
+            //pickNewDataSet:pickNewDataSet,
             fillRegionalTraitAnalysis:fillRegionalTraitAnalysis,
             callFillClumpVariants:callFillClumpVariants,
             setMySavedVariables:setMySavedVariables,

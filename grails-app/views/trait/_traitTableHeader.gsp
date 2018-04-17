@@ -79,7 +79,7 @@
 
     <g:message code="traitTable.messages.results" />
     <span id="traitTableDescription"></span>:
-    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)">
+    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
     </select>
 
     <select id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
