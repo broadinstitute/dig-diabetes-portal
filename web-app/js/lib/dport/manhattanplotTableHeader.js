@@ -56,24 +56,6 @@ var mpgSoftware = mpgSoftware || {};
             document.getElementById("clump").checked = true;
         }
 
-        var unclickClumpCheckbox = function(){
-            var myVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            $('#clump').change(function() {
-                if(!$(this).is(':checked')){
-                    mpgSoftware.manhattanplotTableHeader.fillClumpVariants(myVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value);
-                    alert('worked');
-                }
-                else {
-                    //clear the clump and call the non-clump data and d3 plot
-                    $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-                    mpgSoftware.regionalTraitAnalysis.fillRegionalTraitAnalysis(myVars.phenotypeName,sampleGroup);
-
-                }
-
-            })}
-
-
-
 
 
         var fillClumpVariants = function (phenotypeNamex, dataset, r2) {
@@ -155,28 +137,6 @@ var mpgSoftware = mpgSoftware || {};
                 mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
             }
         }
-
-        // var pickNewDataSet = function (){
-        //     var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-        //     var sampleGroup = $('#manhattanSampleGroupChooser').val();
-        //     var r2 = $('#rthreshold').val();
-        //     if(r2== 1){
-        //         $('#manhattanPlot1').empty();
-        //         $('#traitTableBody').empty();
-        //         $('#phenotypeTraits').DataTable().rows().remove();
-        //         $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-        //         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
-        //     }
-        //     else{
-        //         $('#manhattanPlot1').empty();
-        //         $('#traitTableBody').empty();
-        //         $('#phenotypeTraits').DataTable().rows().remove();
-        //         $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-        //         mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
-        //     }
-        //
-        // }
-
 
 
         var refreshManhattanplotTableView = (function(data) {
@@ -273,27 +233,16 @@ var mpgSoftware = mpgSoftware || {};
         });
 
 
-
-
-
-
-
-
-
-
         return{
             refreshManhattanplotTableView:refreshManhattanplotTableView,
             fillClumpVariants:fillClumpVariants,
             fillSampleGroupDropdown: fillSampleGroupDropdown,
-            unclickClumpCheckbox:unclickClumpCheckbox,
-            //pickNewDataSet:pickNewDataSet,
             fillRegionalTraitAnalysis:fillRegionalTraitAnalysis,
             callFillClumpVariants:callFillClumpVariants,
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables
 
         }
-
 
     }());
 
