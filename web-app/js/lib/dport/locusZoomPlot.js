@@ -17,12 +17,6 @@ var mpgSoftware = mpgSoftware || {};
             // UM form example: 8:118183491_C/T
             var extractedParts = extractParts(varId);
             var returnValue = extractedParts.chromosome+":"+extractedParts.position+"_"+extractedParts.reference+"/"+extractedParts.alternate;
-            //if (( typeof varId !== 'undefined')&&(varId.length>0)){
-            //    var varIdSplit = varId.split("_");
-            //    if (varIdSplit.length==4){
-            //        returnValue = varIdSplit[0]+":"+varIdSplit[1]+"_"+varIdSplit[2]+"/"+varIdSplit[3];
-            //    }
-            //}
             return returnValue;
         };
         var convertVarIdToBroadFavoredForm =  function (varId){
@@ -915,6 +909,30 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+        var initLocusZoomPheWASLayout = function(variantForPlot){
+            var mods = {
+                state: {
+                    variant: variantForPlot
+                }
+            };
+            var layout = LocusZoom.Layouts.get("plot", "abbreviated_phewas", mods);
+            layout.panels[0].margin.top = 32;
+            layout.panels[0].data_layers[0].offset = 7.30103; // Higher offset for line of GWAS significance than the default 4.522
+            // Add covariates model button/menu to the plot-level dashboard
+            var phewas_layer = layout.panels[0].data_layers[1];
+            // Tell the layer to also fetch some special fields; otherwise the datasource will hide this info (TODO)
+            phewas_layer.fields.push("phewas:pmid", "phewas:description", "phewas:study");
+            phewas_layer.tooltip.html = [
+                "<strong>Trait:</strong> {{phewas:trait_label|htmlescape}}<br>",
+                "<strong>Trait Category:</strong> {{phewas:trait_group|htmlescape}}<br>",
+                "<strong>P-value:</strong> {{phewas:log_pvalue|logtoscinotation|htmlescape}}<br>",
+                "{{#if phewas:study}}",
+                "<strong>Study:</strong> {{phewas:study|htmlescape}}<br>",
+                "{{/if}}"//,
+                //"<strong>Subjects:</strong> {{phewas:subject_number|htmlescape}}<br>"
+            ].join("");
+            return layout;
+        };
 
 
 
@@ -1566,35 +1584,81 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+        var initLocusZoom = function(selector, variantIdString) {
+            // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
+            // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
+            var newLayout = initLocusZoomLayout();
+            standardLayout[currentLzPlotKey] = newLayout;
+            if(variantIdString != '') {
+                setNewDefaultLzPlot(selector);
+                standardLayout[currentLzPlotKey].state = {
+                    ldrefvar: variantIdString
+                };
+            }
+            var ds = new LocusZoom.DataSources();
+            ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+                .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+                .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
+                .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+                .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
+                .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+
+            var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
+
+            return {
+                layoutPanels:lzp.layout.panels,
+                locusZoomPlot: lzp,
+                dataSources: ds
+            };
+        };
 
 
-        var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
-        // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
-        // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-        var newLayout = initLocusZoomLayout();
-        standardLayout[currentLzPlotKey] = newLayout;
-        if(variantIdString != '') {
-            setNewDefaultLzPlot(selector);
-            standardLayout[currentLzPlotKey].state = {
-                ldrefvar: variantIdString
+        var generalizedInitLocusZoom = function(selector, variantIdString, plotType) {
+            var pageVars = getPageVars(selector);
+            var newLayout;
+            var ds = new LocusZoom.DataSources();
+            var lzp;
+            switch (plotType){
+                case 1: // Association plot
+                    newLayout = initLocusZoomLayout();
+                    ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+                        .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+                        .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
+                        .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+                        .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
+                        .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                    break;
+                case 2: // pheWAS plot
+                    newLayout = initLocusZoomPheWASLayout(convertVarIdToUmichFavoredForm(variantIdString));
+                    ds
+                        .add("phewas", ["PheWASLZ", {
+                            url: pageVars.phewasAjaxCallInLzFormatUrl,
+                            params: { build: ["GRCh37"] }
+                        }]);
+                    //lzp = LocusZoom.populate("#plot", ds, layout);
+                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                    lzp.panels.phewas.setTitle("Variant " + variantIdString);
+                    break;
+                default: // Association plot
+                    break;
+            }
+
+
+            standardLayout[selector] = newLayout;
+            if(variantIdString != '') {
+                //setNewDefaultLzPlot(selector);
+                standardLayout[selector].state = {
+                    ldrefvar: variantIdString
+                };
+            }
+            locusZoomPlot[selector] = lzp;
+            return {
+                layoutPanels:lzp.layout.panels,
+                locusZoomPlot: lzp,
+                dataSources: ds
             };
         }
-        var ds = new LocusZoom.DataSources();
-        ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
-            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
-            .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
-            .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
-            .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
-
-        var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
-
-        return {
-            layoutPanels:lzp.layout.panels,
-            locusZoomPlot: lzp,
-            dataSources: ds
-        };
-    };
 
 
     var reorderPanels = function(plot){
@@ -1735,68 +1799,19 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var phewasExperiment = function(varId,phewasAjaxCallInLzFormatUrl){
-            //var variantForPlot = "10:114758349_C/T";
+
             var variantForPlot = convertVarIdToUmichFavoredForm(varId);
-            // Throughout this demo, we will match variants of the format 10:100_C/T
-            var VARIANT_PATTERN = /(\d+):(\d+)_([ATGC])\/([ATGC])/;
-            // Break the variant into constituent parts for setting plot state
-            var variantGroups = VARIANT_PATTERN.exec(variantForPlot);
-            var variantChrom = variantGroups[1];
-            var variantPosition = +variantGroups[2];
-            var variantRefAlt = variantGroups[3];
-            // Genome base pairs static data
-            var genome_data =  [
-                { chr: 1, base_pairs: 249250621 },
-                { chr: 2, base_pairs: 243199373 },
-                { chr: 3, base_pairs: 198022430 },
-                { chr: 4, base_pairs: 191154276 },
-                { chr: 5, base_pairs: 180915260 },
-                { chr: 6, base_pairs: 171115067 },
-                { chr: 7, base_pairs: 159138663 },
-                { chr: 8, base_pairs: 146364022 },
-                { chr: 9, base_pairs: 141213431 },
-                { chr: 10, base_pairs: 135534747 },
-                { chr: 11, base_pairs: 135006516 },
-                { chr: 12, base_pairs: 133851895 },
-                { chr: 13, base_pairs: 115169878 },
-                { chr: 14, base_pairs: 107349540 },
-                { chr: 15, base_pairs: 102531392 },
-                { chr: 16, base_pairs: 90354753 },
-                { chr: 17, base_pairs: 81195210 },
-                { chr: 18, base_pairs: 78077248 },
-                { chr: 19, base_pairs: 59128983 },
-                { chr: 20, base_pairs: 63025520 },
-                { chr: 21, base_pairs: 48129895 },
-                { chr: 22, base_pairs: 51304566 }
-            ];
-            // Define LocusZoom Data Sources object differently depending on online status
-            var online = !(typeof navigator != "undefined" && !navigator.onLine);
-            if (window.location.search.indexOf("offline") != -1){ online = false; }
-            var apiBase;
             var dataSources= new LocusZoom.DataSources();
-
-                apiBase = "https://portaldev.sph.umich.edu/api/v1/";
-                dataSources
-                    .add("phewas", ["PheWASLZ", {
-                        // TODO: This source is currently development-only
-                       // url: "https://portaldev.sph.umich.edu/" + "api_internal_dev/v1/statistic/phewas/",
-                        url: phewasAjaxCallInLzFormatUrl,
-                        params: { build: ["GRCh37"] }
-                    }])
-                    .add("gene", ["GeneLZ", { url: apiBase + "annotation/genes/", params: {source: 2} }])
-                    .add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
-
-            // Static blobs (independent of host)
             dataSources
-                .add("variant", ["StaticJSON", [{ "x": variantPosition, "y": 0 }, { "x": variantPosition, "y": 1 }]])
-                .add("genome", ["StaticJSON", genome_data]);
+                .add("phewas", ["PheWASLZ", {
+                    url: phewasAjaxCallInLzFormatUrl,
+                    params: { build: ["GRCh37"] }
+                }]);
+            
             // Define the layout
             var mods = {
                 state: {
-                    variant: variantForPlot,
-                    start: variantPosition - 250000,
-                    end: variantPosition + 250000,
-                    chr: variantChrom
+                    variant: variantForPlot
                 }
             };
             var layout = LocusZoom.Layouts.get("plot", "abbreviated_phewas", mods);
@@ -1815,44 +1830,11 @@ var mpgSoftware = mpgSoftware || {};
                 "{{#if phewas:study}}",
                 "<strong>Study:</strong> {{phewas:study|htmlescape}}<br>",
                 "{{/if}}",
-                "{{#if phewas:pmid}} {{#if phewas:description}}",
-                '<strong>Description:</strong> <a target=_blank href="https://www.ncbi.nlm.nih.gov/pubmed/?term={{phewas:pmid}}">{{phewas:description|htmlescape}}</a>',
-                "{{/if}} {{/if}}"
+                "<strong>Subjects:</strong> {{phewas:subject_number}}<br>"
             ].join("");
             // Generate the plot
             var plot = LocusZoom.populate("#plot", dataSources, layout);
             plot.panels.phewas.setTitle("Variant " + variantForPlot);
-            // Function to load new PheWAS data into the plot
-            function loadPheWAS(variant_tag){
-                var match = VARIANT_PATTERN.exec(variant_tag);
-                var locus = +match[2];
-                var state = {
-                    variant: variant_tag,
-                    start: (locus - 250000),
-                    end: (locus + 250000),
-                    chr: +match[1]
-                };
-                plot.panels.genes.data_layers.variant.layout.offset = locus;
-                plot.panels.phewas.setTitle("Variant " + variant_tag);
-                plot.clearPanelData(null, "reset");
-                plot.applyState(state);
-            }
-            function showInvalidVariant() {
-                document.getElementById("error-variant").style.display = "";
-            }
-            function hideInvalidVariant() {
-                document.getElementById("error-variant").style.display = "none";
-            }
-            function checkVariant(variant) {
-                var match = VARIANT_PATTERN.exec(variant);
-                if (!match) {
-                    showInvalidVariant();
-                    return false;
-                } else {
-                    return true;
-                }
-            }
-
         }
 
 
@@ -1893,8 +1875,7 @@ var mpgSoftware = mpgSoftware || {};
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
                 var returned = mpgSoftware.locusZoom.initLocusZoom( lzGraphicDomId,
-                                                                    lzVarId,
-                                                                    inParm.retrieveFunctionalDataAjaxUrl);
+                                                                    lzVarId );
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources[currentLzPlotKey] = returned.dataSources;
 
@@ -2045,7 +2026,9 @@ var mpgSoftware = mpgSoftware || {};
         changeCurrentReference:changeCurrentReference,
         convertVarIdToBroadFavoredForm:convertVarIdToBroadFavoredForm,
         convertVarIdToUmichFavoredForm:convertVarIdToUmichFavoredForm,
-        phewasExperiment:phewasExperiment
+        phewasExperiment:phewasExperiment,
+        generalizedInitLocusZoom:generalizedInitLocusZoom,
+        setPageVars:setPageVars
     }
 
 }());

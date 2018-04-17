@@ -634,6 +634,9 @@ class WidgetService {
                     String phenotype = ""
                     String phenotypeDescription = ""
                     String phenotypeGroup = "unknown phenotype group"
+                    String dataSetDescription = g.message(code: "metadata." + variant.dataset, default: variant.dataset)
+                    SampleGroup sampleGroup = metaDataService.getSampleGroupByName (variant.dataset as String,metaDataService.METADATA_VARIANT)
+                    int subjectNumber = sampleGroup?.getSubjectsNumber()
                     String pValueAsString = "0"
                     Double pValue =0d
                     Double logPValue =0d
@@ -665,11 +668,12 @@ class WidgetService {
                     singleVariantData<<"\"position\": ${varIdParts[1]}"
                     singleVariantData<<"\"ref_allele\": \"${varIdParts[2]}\""
                     singleVariantData<<"\"score_test_stat\": ${variant.MOST_DEL_SCORE}"
-                    singleVariantData<<"\"study\": \"${variant.dataset}\""
+                    singleVariantData<<"\"study\": \"${dataSetDescription}\""
                     singleVariantData<<"\"pmid\": \"28566273\""
                     singleVariantData<<"\"trait\": \"${phenotype}\""
                     singleVariantData<<"\"trait_group\": \"${phenotypeGroup}\""
                     singleVariantData<<"\"trait_label\": \"${phenotypeDescription}\""
+                    singleVariantData<<"\"subject_number\": \"${subjectNumber}\""
                     singleVariantData<<"\"variant\": \"${varIdParts[0]}:${varIdParts[1]}_${varIdParts[2]}/${varIdParts[3]}\""
 
                     dataFromQuery << "{${singleVariantData.join(",")}}"

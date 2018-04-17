@@ -141,7 +141,7 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
-            mpgSoftware.locusZoom.phewasExperiment(variantObject.VAR_ID,phewasAjaxCallInLzFormatUrl);
+            //mpgSoftware.locusZoom.phewasExperiment(variantObject.VAR_ID,phewasAjaxCallInLzFormatUrl);
             setVariantTitleAndSummary(variantObject.VAR_ID,
                                         variantObject.DBSNP_ID,
                                         variantObject.CHROM,
@@ -181,10 +181,39 @@ var mpgSoftware = mpgSoftware || {};
                 geneGetLZ:geneLocusZoomUrl,
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
-                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
             };
-            mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
+            mpgSoftware.locusZoom.initializeLZPage(lzParm);
+            var selector = '#plot';
+            var lzPheWASParm = {
+                page:'variantInfo',
+                variantId:variantObject.VAR_ID,
+                positionInfo:positioningInformation,
+                domId1:selector,
+                collapsingDom:collapseDomHolder,
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:phenotypeDescription,
+                phenoPropertyName:propertyName,
+                locusZoomDataset:locusZoomDataset,
+                pageInitialization:true,
+                functionalTrack:null,
+                defaultTissues:null,
+                defaultTissuesDescriptions:null,
+                datasetReadableName:locusZoomReadableDatasetName,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:'junk',
+                geneGetLZ:geneLocusZoomUrl,
+                variantInfoUrl:variantInfoUrl,
+                makeDynamic:makeDynamic,
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+            };
+            mpgSoftware.locusZoom.setPageVars(lzPheWASParm,selector);
+            //mpgSoftware.locusZoom.phewasExperiment(variantObject.VAR_ID,phewasAjaxCallInLzFormatUrl);
+            mpgSoftware.locusZoom.generalizedInitLocusZoom (selector,variantObject.VAR_ID, 2);
 
             $('[data-toggle="popover"]').popover();
 
