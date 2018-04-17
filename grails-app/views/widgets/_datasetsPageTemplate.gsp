@@ -61,7 +61,7 @@
 <g:render template="./data/ExChip_FUSION" />
 <g:render template="./data/GWAS_FUSION" />
 <g:render template="./data/GWAS_FUSIONonlyMetaboChip" />
-<g:render template="./data/GWAS_EPRI" />
+<g:render template="./data/ExChip_EPRI" />
 <g:render template="./data/GWAS_MetaStroke" />
 <g:render template="./data/GWAS_HPTxNCGM" />
 <g:render template="./data/GWAS_VHIR" />

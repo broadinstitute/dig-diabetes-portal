@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_EPRI_script" type="x-tmpl-mustache">
+<script class="panel-body" id="ExChip_EPRI_script" type="x-tmpl-mustache">
 
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
@@ -64,7 +64,7 @@
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.EPRI_GWAS"></g:message></p>
 
-<h4>Accessing EPRI GWAS data in the CVDKP</h4>
+<h4>Accessing PR interval exome chip analysis data in the CVDKP</h4>
 
 <p><g:message code="informational.data.accessing.EPRI_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.EPRI_GWAS2"></g:message></p>
 
