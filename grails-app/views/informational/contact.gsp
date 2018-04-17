@@ -61,9 +61,12 @@
 
                 <table class="dk-team-list"><g:message code="contact.methods.team_edp"></g:message></table>
 
-                <h3><g:message code="contact.methods.team.subtitle3"></g:message></h3>
+                <h4><g:message code="contact.methods.team.subtitle3"></g:message></h4>
+
 
                 <table class="dk-team-list"><g:message code="contact.methods.team_federated"></g:message></table>
+                        <h4><g:message code="contact.methods.team.subtitle4"></g:message></h4>
+                        <table class="dk-team-list"><g:message code="contact.methods.team_T2DREAM"></g:message></table>
                 </div>
                      <div class="col-md-3 text-center" id="t2dImageHolder" style="padding-top: 10px;">
                         <p style="margin-top: 10px;"><a href="https://broadinstitute.org" target="_blank">
