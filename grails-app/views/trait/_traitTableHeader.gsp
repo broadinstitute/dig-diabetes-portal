@@ -1,6 +1,12 @@
+<script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
+<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
 
 <style>
+
+#ex1Slider .slider-selection {
+    background: #BABABA;
+}
 .slidecontainer {
     width: 100%;
 }
@@ -76,7 +82,23 @@
     <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)">
     </select>
 
+    <select id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+        <option value="0.1000001" >0.1 </option>
+        <option value="0.2" >0.2 </option>
+        <option value="0.4" >0.4 </option>
+        <option value="0.6" >0.6 </option>
+        <option value="0.8" >0.8 </option>
+        <option value="1" selected="selected"> 1 </option>
+    </select>
+
+    %{--<input id="unclump" type="button" value="Not clump" onclick="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)" />--}%
+    %{----}%
+    %{--<input id="getClump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this);" />--}%
+
+
 </p>
+
+
 <style>
 .mychart {width:100% !important; height:740px !important;}
 </style>
@@ -86,37 +108,9 @@
 
 
 
-<input id="unclump" type="button" value="Not clump" onclick="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)" />
-
-   <form>
-       <select id="rthreshold">
-           <option value="0.1" >0.1 </option>
-           <option value="0.2" >0.2 </option>
-           <option value="0.4" >0.4 </option>
-           <option value="0.6" >0.6 </option>
-           <option value="0.8" >0.8 </option>
-       </select>
-   </form>
 
 
 
-<input id="getClump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this);" />
-
-
-
-%{--slider default value = 1(non-clump data) and anything less than 1 (clump data)--}%
-%{--<div class="slidecontainer">--}%
-    %{--<input type="range" min="0" max="10" value="0" class="slider" id="myRange">--}%
-    %{--<p>Value: <span id="demo"></span></p>--}%
-%{--</div>--}%
-
-%{--<script>--}%
-    %{--var slider = document.getElementById("myRange");--}%
-    %{--var output = document.getElementById("demo");--}%
-    %{--output.innerHTML = slider.value;--}%
-
-    %{--slider.onclick = mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();--}%
-%{--</script>--}%
 
 
 <table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">
