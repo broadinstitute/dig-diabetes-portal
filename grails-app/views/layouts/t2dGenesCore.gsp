@@ -364,10 +364,11 @@
                 inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
                 inputBox += '<div class="traits-svg-wrapper" style=""><div class="phenotypes-for-plot"></div></div>';
                 inputBox += "<span style='font-size: 12px; margin: 15px 0 -10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+                //inputBox += '<div id="phePlotTooltip" class="hidden"><span id="value">100</span></div>';
 
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
 
-                $("thead").find("tr").each(function() {
+                $("#traitsPerVariantTable").find("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
                     $("<th>sample</th>").appendTo($(this));
                 });
@@ -406,37 +407,16 @@
                     });
                 })
 
-                var traitsTableData = [];
 
-                $("#traitsPerVariantTableBody").find("tr").each(function() {
+                phePlotApp();
+            }
 
-                    var eachDataset = {};
-                    eachDataset.dataset = $(this).attr("dataset");
-                    eachDataset.phenotype = $(this).find("td").eq(0).text();
-                    eachDataset.logValue = $(this).find("td").eq(2).text();
-                    eachDataset.pvalue = $(this).find("td").eq(2).text();
-                    eachDataset.effectDirection = effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
-                    eachDataset.oddsRatio = $(this).find("td").eq(4).text();
-                    eachDataset.maf = $(this).find("td").eq(5).text();
-                    eachDataset.sample = $(this).find("td").eq(7).text();
-
-                    traitsTableData.push(eachDataset);
-
+            function unique(list) {
+                var result = [];
+                $.each(list, function(i, e) {
+                    if ($.inArray(e, result) == -1) result.push(e);
                 });
-
-                $.each(traitsTableData,function(index) {
-
-                    traitsTableData[index].logValue = getLogValue(traitsTableData[index].pvalue);
-                    traitsTableData[index].sample = parseFloat(traitsTableData[index].sample);
-                    traitsTableData[index].oddsRatio = parseFloat(traitsTableData[index].oddsRatio);
-                    traitsTableData[index].maf = parseFloat(traitsTableData[index].maf);
-
-                })
-
-                console.log(traitsTableData);
-
-
-                phePlotApp(traitsTableData);
+                return result;
             }
 
             function filterTraitsTable() {
@@ -496,14 +476,6 @@
                         };
                     });
 
-                    function unique(list) {
-                        var result = [];
-                        $.each(list, function(i, e) {
-                            if ($.inArray(e, result) == -1) result.push(e);
-                        });
-                        return result;
-                    }
-
                     phenotypesArray = phenotypes.split(",");
 
                     phenotypesArray = unique(phenotypesArray);
@@ -560,6 +532,8 @@
                 var relatedWords = showRelatedWords();
 
                 ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").append(relatedWords) : $(".related-words").html("");
+
+                phePlotApp();
             }
 
             function setColorToPlot(event) {
@@ -655,39 +629,103 @@
 
                 filterTraitsTable();
 
+
             }
 
-            /*
 
-            var traitsTableData = [{phenotype:"BMI",dataset:"GIANT GWAS",pvalue:"2.638272163982407",sample:"253288",or:"",frequency:"0.250",effectDirection:"up"},
-                {phenotype:"BMI",dataset:"GIANT GWAS - stratified by physical activity",pvalue:"2.3861581781239307",sample:"200452",or:"",frequency:"",effectDirection:"up"},
-                {phenotype:"BMI",dataset:"13K exome sequence analysis",pvalue:"0.832682665251824",sample:"12954",or:"",frequency:"0.282",effectDirection:"up"}];
+            function phePlotApp() {
 
-            //data = data.map(function(d) { return +d; });
+                //inputBox += '<div id="phePlotTooltip" class="hidden"><span id="value">100</span></div>';
 
-            $.each(traitsTableData,function(index) {
-                traitsTableData[index].pvalue = parseFloat(traitsTableData[index].pvalue);
-                traitsTableData[index].sample = parseFloat(traitsTableData[index].sample);
-            })*/
+                ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
 
-            function phePlotApp(data) {
-                var svg,circles,group,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
+                var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
 
-                w = $("#traitsPerVariantTable").width(), h = 400, xbumperLeft = 60, xbumperRight = 20, ybumperTop = 20, ybumperBottom = 60;
+                var traitsTableData = [];
+
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                    if($(this).hasClass("hidden-traits-row")) {
+
+                    } else {
+
+                        var eachDataset = {};
+                        eachDataset.dataset = $(this).attr("dataset");
+                        eachDataset.phenotype = $(this).find("td").eq(0).text();
+                        eachDataset.logValue = $(this).find("td").eq(2).text();
+                        eachDataset.pvalue = $(this).find("td").eq(2).text();
+                        eachDataset.effectDirection = effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
+                        eachDataset.oddsRatio = $(this).find("td").eq(4).text();
+                        eachDataset.maf = $(this).find("td").eq(5).text();
+                        eachDataset.sample = $(this).find("td").eq(7).text();
+
+                        traitsTableData.push(eachDataset);
+
+                    }
+
+                });
+
+                $.each(traitsTableData,function(index) {
+
+                    traitsTableData[index].logValue = getLogValue(traitsTableData[index].pvalue);
+                    traitsTableData[index].sample = parseFloat(traitsTableData[index].sample);
+                    traitsTableData[index].oddsRatio = parseFloat(traitsTableData[index].oddsRatio);
+                    traitsTableData[index].maf = parseFloat(traitsTableData[index].maf);
+
+                })
+
+                traitsTableData = traitsTableData.sort(function (a, b) {
+                    return  b.logValue - a.logValue ;
+                });
+
+                var datasetArray = [];
+
+                $.each(traitsTableData,function(index) {
+
+                        var eachDataset = {};
+
+                        eachDataset.dataset = traitsTableData[index].dataset;
+                        eachDataset.sample = parseFloat(traitsTableData[index].sample);
+
+                        datasetArray.push(eachDataset);
+
+                })
+
+                datasetArray.sort(function (a, b) {
+                    return a.dataset.localeCompare(b.dataset);
+                });
+
+                var result = [];
+
+                $.each(datasetArray,function(index, value) {
+                    if (index == 0) {
+
+                        result.push(value);
+
+                    } else {
+                        (datasetArray[index-1].dataset != value.dataset)? result.push(value) :"";
+                    }
+                });
+
+                datasetArray = result;
 
 
+                //console.log(datasetArray);
 
+                w = $("#traitsPerVariantTable").width(), h = 500, xbumperLeft = 80, xbumperRight = 80, ybumperTop = 20, ybumperBottom = 150;
 
 
                 var x = d3.scale.linear()
-                    .domain([0, d3.max(data, function(d) { return d.sample })])
+                    .domain([0, d3.max(traitsTableData, function(d) { return d.sample })])
                     .range([xbumperLeft, w-xbumperRight]);
 
                 var y = d3.scale.linear()
-                    .domain([0, d3.max(data, function(d) { return d.logValue })])
+                    .domain([0, d3.max(traitsTableData, function(d) { return d.logValue })])
                     .range([h-ybumperBottom, ybumperTop]);
 
                 arc = d3.svg.symbol().type('triangle-up').size(60);
+
+                $(".traits-svg-wrapper").html("");
 
 
                 svg = d3.select(".traits-svg-wrapper").append("svg")
@@ -696,7 +734,9 @@
                     .attr("style","border:solid 1px #ddd;")
                     .attr("id","pheSvg");
 
-//draw x-axis grid lines
+
+
+                //draw x-axis grid lines
                 svg.selectAll("line.x")
                     .data(x.ticks(10))
                     .enter().append("line")
@@ -719,43 +759,169 @@
                     .style("stroke", "#eee");
 
 
-
-                group = svg.selectAll("g")
-                    .data(data)
+                group = svg.selectAll("g.datasets")
+                    .data(datasetArray)
                     .enter()
-                    .append("g")
+                    .append("g");
+
+
+                group.append("g")
+                    .attr("class","dataset-group")
+                    .attr("transform", function(d) {
+                        var xposition = x(d.sample);
+                        var yposition = 380;
+                        return "translate("+xposition+","+yposition+")"});
+
+                group.select(".dataset-group")
+                    .append("circle")
+                    .attr("cx", 0)
+                    .attr("cy", 0)
+                    .attr("r", 4)
+                    .attr("fill","rgba(255,0,0,.3)")
+                    .attr("stroke","rgba(255,0,0,0)")
+                    .attr("stroke-width","10")
+                    .attr("shape-rendering","auto")
+                    .attr("xp", function(d) {
+                        return x(d.sample)
+                    })
+                    .attr("yp", function(d) {
+                        return 380
+                    })
+                    .on("mouseover", function(d) {
+
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var svgPosition = $(pheSvg).position();
+                        var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
+                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top - 50;
+
+                        //Update the tooltip position and value
+                        d3.select("#phePlotTooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px")
+                            .select("#value")
+                            .text(d.dataset +": " + d.sample);
+
+                        //Show the tooltip
+                        d3.select("#phePlotTooltip").classed("hidden", false);
+                        d3.select(this).attr('stroke','rgba(255,0,0,0.2)');
+
+                    })
+                    .on("mouseout", function() {
+
+                        //Hide the tooltip
+                        d3.select("#phePlotTooltip").classed("hidden", true);
+                        d3.select(this).attr('stroke','rgba(255,0,0,0.0)');
+
+                    });
+
+                group.select(".dataset-group")
+                    .append("line")
+                    .attr("x1", 0)
+                    .attr("y1", -360)
+                    .attr("x2", 0)
+                    .attr("y2", 0)
+                    .attr("stroke","rgba(255,150,150,.3)")
+                    .attr("shape-rendering","auto");
+
+                group.select(".dataset-group")
+                    .append("text")
+                    .attr("x", 7)
+                    .attr("y", 5)
+                    .text(function(d){ return d.dataset })
+                    .attr("transform","rotate(35)")
+                    .attr("style","text-anchor:start; font-size: 12px !important;");
+
+                group = svg.selectAll("g.traits")
+                    .data(traitsTableData)
+                    .enter()
+                    .append("g");
+
+                group.append("g")
+                    .attr("class","triangle-group")
                     .attr("transform", function(d) {
                         var xposition = x(d.sample);
                         var yposition = y(d.logValue);
-                        return "translate("+xposition+","+yposition+")"});
+                        return "translate("+xposition+","+yposition+")"})
+                    .attr("xp", function(d) {
+                        return x(d.sample)
+                    })
+                    .attr("yp", function(d) {
+                        return y(d.logValue)
+                    })
+                    .on("mouseover", function(d) {
 
-                group.append('path')
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var svgPosition = $(pheSvg).position();
+                        var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
+                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top - 50;
+
+                        //Update the tooltip position and value
+                        d3.select("#phePlotTooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px")
+                            .select("#value")
+                            .text("Phenotype: "+ d.phenotype +", Dataset: "+ d.dataset +", p-value: " + d.pvalue +", odds-ratio: "+ d.oddsRatio);
+
+                        //Show the tooltip
+                        d3.select("#phePlotTooltip").classed("hidden", false);
+
+                    })
+                    .on("mouseout", function() {
+
+                        //Hide the tooltip
+                        d3.select("#phePlotTooltip").classed("hidden", true);
+
+                    });
+
+
+                group.select(".triangle-group").append('path')
                     .attr('d',arc)
                     .attr('fill','rgba(100,100,100,0.5)')
+                    .attr('stroke','rgba(255,0,0,0.0)')
+                    .attr('stroke-width','10')
+                    .attr('stroke-linejoin','round')
                     .attr('transform',function(d){
 
                         var angle = (d.effectDirection == "up")? 0 : (d.effectDirection == "down")? 180: 90;
 
                         return 'rotate('+angle+')';
-                    });
+                    })
+                    .attr("shape-rendering","auto")
+                    .on("mouseover", function(d) {
 
-                group.append("text")
+                        d3.select(this).attr('stroke','rgba(255,0,0,0.3)');
+
+                    })
+                    .on("mouseout", function() {
+
+                        d3.select(this).attr('stroke','rgba(255,0,0,0.0)');
+
+                    });;
+
+                group.select(".triangle-group").append("text")
                     .attr("x","0")
                     .attr("y","15")
-                    .text(function(d){return "p: "+d.pvalue+", s: "+d.sample})
-                    .attr("style","fill: red; font-size: 10px; text-anchor: middle;");
+                    .attr("class","")
+                    .append('tspan')
+                    .attr('x', "0")
+                    .attr('dy', 5)
+                    .text(function(d) {
+                        var phenotypeName = (d.logValue > 4 )? d.phenotype : "";
+                        return phenotypeName;
+                    })
+                    .attr("style","fill: #666; font-size: 10px; text-anchor: middle;");
 
 
-                //add labels
+                // add labels
 
                 svg.append("g").attr("transform", "translate(0,"+(h-ybumperBottom)+")")
                     .attr("class","axis")
                     .call(d3.svg.axis().orient("bottom").scale(x))
                     .append("text")
                     .text("Sample")
-                    .attr("x",w/2)
-                    .attr("y", "40")
-                    .attr("style","font-size: 14px; font-weight: 400;text-anchor:middle");
+                    .attr("x",xbumperLeft/2)
+                    .attr("y", 3)
+                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:middle");
 
 
                 svg.append("g").attr("transform", "translate("+xbumperLeft+",0)")
@@ -763,10 +929,14 @@
                     .call(d3.svg.axis().orient("left").scale(y))
                     .append("text")
                     .text("p-value (-log10)")
-                    .attr("x",-(h/2))
-                    .attr("y", -40)
+                    .attr("x",-((h-ybumperBottom)/2))
+                    .attr("y", -(xbumperLeft/2))
                     .attr("transform","rotate(-90)")
-                    .attr("style","font-size: 14px; font-weight: 400;text-anchor:middle");
+                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:middle");
+
+                // add dataset names
+
+
 
             }
 
@@ -776,7 +946,12 @@
                     if (pValue.indexOf("e") >= 0) {
 
                         var pValues = pValue.split("e-");
-                        logValue = parseFloat(pValues[1]);
+                        var num1 = pValues[0];
+                        var num2 = Math.pow(10, parseFloat(pValues[1]));
+                        var num3 = num1/num2;
+                        logValue = -Math.log10(num3);
+
+                        //console.log(num1 +" : "+ num2 +" : "+ num3 +" : "+ logValue)
                     } else {
                         logValue = -Math.log10(pValue);
                     }
@@ -786,312 +961,6 @@
 
                 return logValue;
             }
-
-
-            /*function phePlotApp() {
-
-
-                $("#pheSvg").html("").attr("width", $("#traitsPerVariantTable").width());
-
-
-
-
-                function biggistSample(SAMPLE) {
-
-                    SAMPLE.sort(function(a, b){return b-a});
-
-                    var n = Math.pow(10, SAMPLE[0].length-3);
-
-
-                    return Math.ceil((SAMPLE[0]/6) * (1/n))*n;
-
-                }
-
-
-
-                var traitsDatasets = [];
-
-
-                var samples =[];
-
-                $("#traitsPerVariantTableBody").find("tr").each(function(index, value) {
-                    var phenotypeName = $(this).find("td").eq("0").text();
-                    var datasetName = $(this).find("div.vandaRowHdr").attr("datasetname");
-                    var pValue = $(this).find("td").eq("2").text();
-                    var sampleNum = $(this).find("td").eq("7").text();
-                    var logValue = getLogValue(pValue);
-                    var oddsRatio = $(this).find("td").eq("4").text();
-                    var effect = $(this).find("td").eq("6").text();
-                    var directionOfEffect = $(this).find("td").eq("3").find("span").attr("class");
-
-                    samples.push(sampleNum);
-
-                    $(this).attr("phenotype",phenotypeName).attr("p-value",pValue).attr("sample",sampleNum).attr("log-value",logValue).attr("odds-ratio",oddsRatio).attr("effect",effect).attr("effect-direction",directionOfEffect);
-
-                });
-
-                var sampleGuide = biggistSample(samples); // get basic unit for sample number
-
-
-
-                function Shape(SHAPE, X, Y, W, H, S, COLOR, CLASS, EXTRA) {
-                    this.shape = SHAPE
-                    this.x = X || 0
-                    this.y = Y || 0
-                    this.w = W || 5
-                    this.h = H || 5
-                    this.s = S || 0
-                    this.fill = COLOR || '#333333'
-                    this.class = "" || CLASS
-                    this.extra = "" || EXTRA
-                }
-
-                Shape.prototype.draw =  function(SVGDOC) {
-                    switch(this.shape) {
-
-                        case 'circle':
-                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","circle")).attr({
-                                cx: this.x,
-                                cy: this.y,
-                                r: this.w,
-                                fill : this.fill,
-                                class : this.class,
-                            })
-
-                            SVGDOC.append(shape);
-
-                            break;
-
-                        case 'rect':
-                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","rect")).attr({
-                                x: this.x,
-                                y: this.y,
-                                width: this.w,
-                                height: this.h,
-                                stroke : this.s,
-                                fill : this.fill,
-                                class : this.class,
-                            })
-
-                            SVGDOC.append(shape);
-
-                            break;
-
-                        case 'line':
-                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","line")).attr({
-                                x1: this.x,
-                                y1: this.y,
-                                x2: this.w,
-                                y2: this.h,
-                                style : this.fill,
-                                class : this.class,
-                            })
-
-                            SVGDOC.append(shape);
-
-                            break;
-
-                        case 'text':
-                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","text")).attr({
-                                x: this.x,
-                                y: this.y,
-                                class : this.class,
-                            }).html(this.extra)
-
-                            SVGDOC.append(shape);
-
-                            break;
-
-                        case 'svg':
-                            var shape = $(document.createElementNS("http://www.w3.org/2000/svg","svg")).attr({
-                                x: this.x,
-                                y: this.y,
-                                width: this.w,
-                                height: this.h,
-                                phenotype : this.fill,
-                                class: this.class,
-                            }).html(this.extra)
-
-                            SVGDOC.append(shape);
-
-                            break;
-                    }
-                }
-
-
-                function CanvasState(CANVAS) {
-                    this.canvas = CANVAS
-                }
-
-                CanvasState.prototype.addShape =  function(SHAPE) {
-                    var shape = SHAPE
-                    shape.draw(this.canvas)
-                }
-
-                function drawScreen() {
-
-                    var canvas = $("#pheSvg");
-                    var s = new CanvasState(canvas);
-                    var leftEdge = 70;
-                    var rightEdge = 70
-                    var BGWidth = canvas.width() - leftEdge - rightEdge;
-                    var BGEachWidth = BGWidth/6;
-                    var topEdge = 10;
-                    var BGBottom = 70;
-                    var BGHeight = canvas.height() - (BGBottom + topEdge);
-                    var BGEachHeight = BGHeight/6;
-                    var nominalLog = -Math.log10(0.05);
-
-                    var BGVRects = [["#f5f9e3","nominally-sig", nominalLog],["#e6f2da","locus-wide-sig", 4],["#dde9d9","genome-wide-sig", 8]];
-
-                    $.each(BGVRects, function(index, value) {
-                        var rectNum = BGVRects.length;
-                        var topNum = topEdge;
-                        var boxHeight = BGHeight - ((BGHeight/30)*value[2]);
-                        s.addShape(new Shape('rect', leftEdge,topNum,BGWidth, boxHeight, 0 ,value[0],value[1],""));
-                    });
-
-                    var BGVRects = [["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""]];
-
-                    //var BGRects = [["#dde9d9","genome-wide-sig"],["#e6f2da","locus-wide-sig"],["#f5f9e3","nominally-sig"],["#f9f9f9","unsig"]]
-
-                    $.each(BGVRects, function(index, value) {
-                        var rectNum = BGVRects.length;
-                        var topNum = ((BGHeight / rectNum)*index) + topEdge;
-                        s.addShape(new Shape('rect', leftEdge,topNum,BGWidth,BGHeight/rectNum, value[0],'transparent',value[1],""));
-                    });
-
-                    var BGHRects = [["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""],["#ffffff",""]];
-
-                    $.each(BGHRects, function(index, value) {
-                        var rectNum = BGHRects.length;
-                        var leftNum = ((BGWidth / rectNum)*index) + leftEdge;
-                        s.addShape(new Shape('rect', leftNum,topEdge,BGWidth/rectNum,BGHeight, value[0],'transparent',value[1],""));
-                    });
-
-                    var strokeValue = "stroke:#999999;stroke-width:1";
-
-                    var BGLines = [[leftEdge, topEdge, leftEdge, topEdge+BGHeight+15 ,"", strokeValue],
-                        [leftEdge-15, topEdge+BGHeight, leftEdge+BGWidth, topEdge+BGHeight,"", strokeValue],
-                        [leftEdge-15, topEdge, leftEdge, topEdge,"", strokeValue],
-                        [leftEdge-15, topEdge+BGEachHeight, leftEdge, topEdge+BGEachHeight,"", strokeValue],
-                        [leftEdge-15, topEdge+(BGEachHeight*2), leftEdge, topEdge+(BGEachHeight*2),"", strokeValue],
-                        [leftEdge-15, topEdge+(BGEachHeight*3), leftEdge, topEdge+(BGEachHeight*3),"", strokeValue],
-                        [leftEdge-15, topEdge+(BGEachHeight*4), leftEdge, topEdge+(BGEachHeight*4),"", strokeValue],
-                        [leftEdge-15, topEdge+(BGEachHeight*5), leftEdge, topEdge+(BGEachHeight*5),"", "stroke:#808080;stroke-width:1"],
-                        [leftEdge+BGEachWidth, topEdge+BGHeight, leftEdge+BGEachWidth, topEdge+BGHeight+15,"", strokeValue],
-                        [leftEdge+(BGEachWidth*2), topEdge+BGHeight, leftEdge+(BGEachWidth*2), topEdge+BGHeight+15,"", strokeValue],
-                        [leftEdge+(BGEachWidth*3), topEdge+BGHeight, leftEdge+(BGEachWidth*3), topEdge+BGHeight+15,"", strokeValue],
-                        [leftEdge+(BGEachWidth*4), topEdge+BGHeight, leftEdge+(BGEachWidth*4), topEdge+BGHeight+15,"", strokeValue],
-                        [leftEdge+(BGEachWidth*5), topEdge+BGHeight, leftEdge+(BGEachWidth*5), topEdge+BGHeight+15,"", strokeValue],
-                        [leftEdge+(BGEachWidth*6), topEdge+BGHeight, leftEdge+(BGEachWidth*6), topEdge+BGHeight+15,"", strokeValue]
-                    ];
-
-                    $.each(BGLines, function(index, value) {
-                        s.addShape(new Shape('line', value[0],value[1],value[2],value[3], value[4], value[5],""))
-                    })
-
-                    var BGText = [[topEdge*-1,leftEdge-20,"v-axis-text","30"],
-                        [(BGEachHeight*-1)-topEdge,leftEdge-20,"v-axis-text","25"],
-                        [(BGEachHeight*-2)-topEdge,leftEdge-20,"v-axis-text","20"],
-                        [(BGEachHeight*-3)-topEdge,leftEdge-20,"v-axis-text","15"],
-                        [(BGEachHeight*-4)-topEdge,leftEdge-20,"v-axis-text","10"],
-                        [(BGEachHeight*-5)-topEdge,leftEdge-20,"v-axis-text","5"],
-                        [(BGEachHeight*-6)-topEdge,leftEdge-20,"v-axis-text","0"],
-                        [(BGEachHeight*-3)-topEdge,leftEdge-45,"v-axis-text","p-value (-log10)"],
-                        [leftEdge,BGHeight+27+topEdge,"h-axis-text","0"],
-                        [leftEdge+(BGEachWidth*1),BGHeight+27+topEdge,"h-axis-text",sampleGuide],
-                        [leftEdge+(BGEachWidth*2),BGHeight+27+topEdge,"h-axis-text",sampleGuide*2],
-                        [leftEdge+(BGEachWidth*3),BGHeight+27+topEdge,"h-axis-text",sampleGuide*3],
-                        [leftEdge+(BGEachWidth*4),BGHeight+27+topEdge,"h-axis-text",sampleGuide*4],
-                        [leftEdge+(BGEachWidth*5),BGHeight+27+topEdge,"h-axis-text",sampleGuide*5],
-                        [leftEdge+(BGEachWidth*6),BGHeight+27+topEdge,"h-axis-text",sampleGuide*6]]
-
-                    $.each(BGText, function(index, value) {
-                        //Shape(SHAPE, X, Y, W, H, S, COLOR, CLASS, EXTRA)
-                        s.addShape(new Shape('text',value[0],value[1],"","","","",value[2],value[3]))
-                    })
-
-                    $("#traitsPerVariantTableBody").find("tr").each(function(index, value) {
-                        var phenotype = $(this).attr("phenotype");
-                        var pValue = $(this).attr("p-value");
-                        var logValue = $(this).attr("log-value");
-                        var sample = $(this).attr("sample");
-                        var dataset = $(this).attr("dataset");
-                        var OR = $(this).attr("odds-ratio");
-                        var effect = $(this).attr("effect");
-                        var effectDirection = "";
-
-                        if($(this).attr("effect-direction")) {effectDirection = ($(this).attr("effect-direction").indexOf("up") >= 0)? "up":"down";}
-
-
-                        var svgWidth = 500;
-                        var svgHeight = 300;
-                        var svgX = ((BGWidth/(sampleGuide*6))*sample)+leftEdge-(svgWidth/2);
-                        var svgY = BGHeight - ((BGHeight/30)*logValue) + (topEdge/2 );
-                        var svgTextClass = "svg-text";
-
-                        if((svgX+(svgWidth/2)) <= (canvas.width()/3)) {
-                            svgTextClass += " phenotype-svg-text-start";
-                        } else if((svgX+(svgWidth/2)) >= ((canvas.width()/3)*2)) {
-                            svgTextClass += " phenotype-svg-text-end";
-                        } else {
-                            svgTextClass += " phenotype-svg-text-middle"
-                        }
-
-
-                        var svgTextX = svgWidth/2;
-                        var svgTextContent = "";
-                        var svgTextVDistance = 15;
-                        var svgTextVStartPoint = 30;
-
-                        var trianglePosition = "";
-
-                        if(effectDirection == "up"){trianglePosition = svgTextX+",0 "+(svgTextX-7)+",12 "+(svgTextX+7)+",12";}
-                        if(effectDirection == "down"){trianglePosition = svgTextX+",12 "+(svgTextX-7)+",0 "+(svgTextX+7)+",0";}
-                        if(effectDirection == ""){trianglePosition = (svgTextX-5)+",0 "+(svgTextX-5)+",10 "+(svgTextX+5)+",10 "+(svgTextX+5)+",0";}
-
-                        if (dataset != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >'+dataset+'</text>'; svgTextVStartPoint += svgTextVDistance;}
-                        if (pValue != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >p-value: '+pValue+'</text>'; svgTextVStartPoint += svgTextVDistance;}
-                        if (sample != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >sample: '+sample+'</text>'; svgTextVStartPoint += svgTextVDistance;}
-                        if (OR != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >odds ratio: '+OR+'</text>'; svgTextVStartPoint += svgTextVDistance;}
-                        if (effect != "") { svgTextContent += '<text x="'+svgTextX+'" y="'+svgTextVStartPoint+'" class="'+svgTextClass+'" >effect: '+effect+'</text>'; svgTextVStartPoint += svgTextVDistance;}
-
-
-
-                        var testSVG = '<polygon points="'+trianglePosition+'" class="triangle" style="fill:rgba(0,0,0, .3)" /><circle cx="250" cy="5" r="2" fill="#ffffff" />' + svgTextContent;
-
-                        s.addShape(new Shape('svg',svgX,svgY,svgWidth,svgHeight,"",phenotype,"hide-svg-text",testSVG));
-
-                    });
-
-                }
-
-                drawScreen();
-
-
-
-                $("#pheSvg").find(".triangle").each(function() {
-                    $(this).mouseenter(function() {
-
-                        var targetSvg = $(this).closest("svg");
-
-                        (targetSvg.attr("class") == "hide-svg-text")? targetSvg.attr("class","") : targetSvg.attr("class","hide-svg-text");
-
-                    });
-
-                    $(this).mouseleave(function() {
-
-                        var targetSvg = $(this).closest("svg");
-
-                        (targetSvg.attr("class") == "hide-svg-text")? targetSvg.attr("class","") : targetSvg.attr("class","hide-svg-text");
-
-                    });
-                })
-
-            }
-
-            */
 
 
             /* GAIT TAB UI */
