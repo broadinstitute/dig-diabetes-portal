@@ -104,9 +104,7 @@ class RestServerService {
     public static final String HAIL_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
     public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
 
-
-    private List<ServerBean> burdenServerList;
-    private List<ServerBean> restServerList;
+    private static List <String> grsVariants = []
 
     private ServerBean REST_SERVER = null;
 
@@ -211,6 +209,13 @@ class RestServerService {
             REMEMBER_BASE_URL = BASE_URL
             log.info("NOTE: change to server ${BASE_URL} is complete")
         }
+    }
+
+    public List <String> getGrsVariants(){
+        return grsVariants
+    }
+    public void setGrsVariants(List <String> grsVariants){
+        this.grsVariants = grsVariants
     }
 
     public String getCurrentServer() {

@@ -145,7 +145,7 @@ digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-2
 
 // this will be your default
 //defaultRestServer = digawsdevnewKB
-defaultRestServer = digAWS02KBV2prodServer
+defaultRestServer = digawsdemoibdKB
 
 getRestServerList = [
         digdevlocalServer,
@@ -291,7 +291,7 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 
-        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
@@ -557,7 +557,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
