@@ -931,7 +931,9 @@ mpgSoftware.burdenTestShared = (function () {
                 renderData.sectionNumber++;
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
                 mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
-                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl);
+                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters( {generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl},
+                                                                                 buildVariantTable,
+                                                                                {variantInfoUrl:variantInfoUrl} );
                 $('#addVariant').on( 'click', respondedToAddVariantButtonClick , variantAndDsAjaxUrl,variantInfoUrl);
                 $('#proposedMultiVariant').typeahead({});
                 $('#proposedVariant').typeahead({
@@ -945,7 +947,9 @@ mpgSoftware.burdenTestShared = (function () {
                 renderData.sectionNumber++;
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
                 mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
-                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl);
+                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters( {generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl},
+                                                                                buildVariantTable,
+                                                                                {variantInfoUrl:variantInfoUrl} );
                 $('#addVariant').on( 'click', respondedToAddVariantButtonClick , variantAndDsAjaxUrl,variantInfoUrl);
                 $('#proposedMultiVariant').typeahead({});
                 $('#proposedVariant').typeahead({
@@ -1552,172 +1556,402 @@ var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDich
 
 
 
-var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,trailerFunc){
-
-    var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
-        selectedFilterValueId = 8,
-        selectedMafOption = $('input[name=mafOption]:checked').val(),
-        selectedMafOptionId =  parseInt(selectedMafOption),
-        specifiedMafValue = $('#mafInput').val(),
-        specifiedMafValueId  = parseFloat(specifiedMafValue),
-        burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
-        datasetFilter = $('#datasetFilter').val(),
-        rTrailerFunc = trailerFunc;
-    var dataSet;
-    if (typeof selectedFilterValue !== 'undefined') {
-        selectedFilterValueId =  parseInt(selectedFilterValue);
-    }
-    if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
-        var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
-        dataSet = metadata.conversion[datasetFilter];
 
 
-        $('#rSpinner').show();
-        var promise = $.ajax({
-            cache: false,
-            type: "post",
-            url: generateListOfVariantsFromFiltersAjaxUrl,
-            data: {geneName: getGeneForGait(),
-                filterNum: selectedFilterValueId,
-                burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
-                mafValue: specifiedMafValueId,
-                mafOption: selectedMafOptionId,
-                dataSet: dataSet
-            },
-            async: true
-        });
-        promise.done(
-            function (data) {
-                $('#rSpinner').hide();
-                if ((typeof data !== 'undefined') &&
-                    (data)) {
-                    var variantListHolder = [];
-                    if ((typeof data.results !== 'undefined') &&
-                        (data.results)) {
-                        var variantListHolder = [];
-                        _.forEach(data.results, function (oneVariant) {
-                            var variant = {};
-                            _.forEach(oneVariant.pVals, function (fieldHolder) {
-                                variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
-                            });
-                            variantListHolder.push(variant);
-                        });
-                    }
 
-                    var gaitTable = $('#gaitTable').DataTable(
-                        {
-                            "select": {
-                                style: 'none',
-                                selector: 'td:first-child'
-                            },
-                            dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
-                            "buttons": [
-                                {
-                                    text: 'Select all',
-                                    class: 'gaitButtons',
-                                    action: function () {
-                                        //gaitTable.rows().select();
-                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", true);
-                                    }
-                                },
-                                {
-                                    text: 'Select none',
-                                    class: 'gaitButtons',
-                                    action: function () {
-                                        // gaitTable.rows().deselect();
-                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", false);
-                                    }
-                                },
-                                { extend: "copy", text: "Copy all to clipboard" },
-                                { extend: "csv", text: "Copy all to csv" },
-                                { extend: "pdf", text: "Copy all to pdf" }
-                            ],
-                            "aLengthMenu": [
-                                [10, 50, -1],
-                                [10, 50, "All"]
-                            ],
-                            "bDestroy": true,
-                            "bAutoWidth": false,
-                            "order": [
-                                [ 1, "asc" ]
-                            ],
-                            "columnDefs": [
-                                { "name": "IncludeCheckbox", "targets": [0], "type": "checkBoxGait", "title": "Use?",
-                                    "render": function (data, type, full, meta) {
-                                        if ((data) && (data.indexOf('input') > -1)) {
-                                            return data;
-                                        } else {
-                                            return "<input type='checkbox' id='variant_sel_" + data + "' class='geneGaitVariantSelector' checked>";
-                                        }
-
-                                    },
-                                    "bSortable": false,
-                                    "width": "50px"
-
-                                },
-                                { "name": "VAR_ID", "targets": [1], "type": "allAnchor", "title": "Variant ID",
-                                    "width": "auto"  },
-                                { "name": "DBSNP_ID", "targets": [2], "title": "dbSNP ID",
-                                    "width": "auto"  },
-                                { "name": "CHROM", "targets": [3], "title": "Chrom.",
-                                    "width": "40px"  },
-                                { "name": "POS", "targets": [4], "title": "Position",
-                                    "width": "auto" },
-                                { "name": "MAC", "targets": [5], "title": "MAC",
-                                    "width": "auto" },
-                                { "name": "PolyPhen_PRED", "targets": [6], "title": "Polyphen",
-                                    "width": "auto" },
-                                { "name": "SIFT_PRED", "targets": [7], "title": "SIFT",
-                                    "width": "auto" },
-                                { "name": "Protein_change", "targets": [8], "title": "Protein change",
-                                    "width": "60px"  },
-                                { "name": "Consequence", "targets": [9], "title": "Consequence",
-                                    "width": "100px"  }
-
-                            ],
-                            "sPaginationType": "full_numbers",
-                            "iDisplayLength": 10,
-                            "bFilter": false,
-                            "bLengthChange": true,
-                            "bInfo": true,
-                            "bProcessing": true
-                        }
-                    );
-                    $('#gaitTable').DataTable().clear();
-                    _.forEach(variantListHolder, function (variantRec) {
-                        //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
-                        var arrayOfRows = [];
-                        var variantID = variantRec.VAR_ID;
-                        if ((variantRec.CHROM) && (variantRec.POS)) {
-                            variantID = variantRec.CHROM + ":" + variantRec.POS;
-                        }
-                        arrayOfRows.push(variantRec.VAR_ID);
-                        arrayOfRows.push('<a href="' + variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
-                        var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
-                        arrayOfRows.push(DBSNP_ID);
-                        arrayOfRows.push(variantRec.CHROM);
-                        arrayOfRows.push(variantRec.POS);
-                        var codedMac = variantRec.MAC;
-                        if (typeof codedMac === 'undefined') {
-                            codedMac = '';
-                        }
-                        arrayOfRows.push(codedMac);
-                        arrayOfRows.push((variantRec.PolyPhen_PRED) ? variantRec.PolyPhen_PRED : '');
-                        arrayOfRows.push((variantRec.SIFT_PRED) ? variantRec.SIFT_PRED : '');
-                        var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
-                        arrayOfRows.push(protein_change);
-                        arrayOfRows.push(variantRec.Consequence);
-                        $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+    var buildVariantTable = function (data,parms) {
+        $('#rSpinner').hide();
+        if ((typeof data !== 'undefined') &&
+            (data)) {
+            var variantListHolder = [];
+            if ((typeof data.results !== 'undefined') &&
+                (data.results)) {
+                var variantListHolder = [];
+                _.forEach(data.results, function (oneVariant) {
+                    var variant = {};
+                    _.forEach(oneVariant.pVals, function (fieldHolder) {
+                        variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
                     });
-                    if (typeof rTrailerFunc !== 'undefined') {
-                        rTrailerFunc();
-                    }
-                }
+                    variantListHolder.push(variant);
+                });
             }
-        );
+
+            var gaitTable = $('#gaitTable').DataTable(
+                {
+                    "select": {
+                        style: 'none',
+                        selector: 'td:first-child'
+                    },
+                    dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+                    "buttons": [
+                        {
+                            text: 'Select all',
+                            class: 'gaitButtons',
+                            action: function () {
+                                //gaitTable.rows().select();
+                                $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", true);
+                            }
+                        },
+                        {
+                            text: 'Select none',
+                            class: 'gaitButtons',
+                            action: function () {
+                                // gaitTable.rows().deselect();
+                                $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", false);
+                            }
+                        },
+                        { extend: "copy", text: "Copy all to clipboard" },
+                        { extend: "csv", text: "Copy all to csv" },
+                        { extend: "pdf", text: "Copy all to pdf" }
+                    ],
+                    "aLengthMenu": [
+                        [10, 50, -1],
+                        [10, 50, "All"]
+                    ],
+                    "bDestroy": true,
+                    "bAutoWidth": false,
+                    "order": [
+                        [ 1, "asc" ]
+                    ],
+                    "columnDefs": [
+                        { "name": "IncludeCheckbox", "targets": [0], "type": "checkBoxGait", "title": "Use?",
+                            "render": function (data, type, full, meta) {
+                                if ((data) && (data.indexOf('input') > -1)) {
+                                    return data;
+                                } else {
+                                    return "<input type='checkbox' id='variant_sel_" + data + "' class='geneGaitVariantSelector' checked>";
+                                }
+
+                            },
+                            "bSortable": false,
+                            "width": "50px"
+
+                        },
+                        { "name": "VAR_ID", "targets": [1], "type": "allAnchor", "title": "Variant ID",
+                            "width": "auto"  },
+                        { "name": "DBSNP_ID", "targets": [2], "title": "dbSNP ID",
+                            "width": "auto"  },
+                        { "name": "CHROM", "targets": [3], "title": "Chrom.",
+                            "width": "40px"  },
+                        { "name": "POS", "targets": [4], "title": "Position",
+                            "width": "auto" },
+                        { "name": "MAC", "targets": [5], "title": "MAC",
+                            "width": "auto" },
+                        { "name": "PolyPhen_PRED", "targets": [6], "title": "Polyphen",
+                            "width": "auto" },
+                        { "name": "SIFT_PRED", "targets": [7], "title": "SIFT",
+                            "width": "auto" },
+                        { "name": "Protein_change", "targets": [8], "title": "Protein change",
+                            "width": "60px"  },
+                        { "name": "Consequence", "targets": [9], "title": "Consequence",
+                            "width": "100px"  }
+
+                    ],
+                    "sPaginationType": "full_numbers",
+                    "iDisplayLength": 10,
+                    "bFilter": false,
+                    "bLengthChange": true,
+                    "bInfo": true,
+                    "bProcessing": true
+                }
+            );
+            $('#gaitTable').DataTable().clear();
+            _.forEach(variantListHolder, function (variantRec) {
+                //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
+                var arrayOfRows = [];
+                var variantID = variantRec.VAR_ID;
+                if ((variantRec.CHROM) && (variantRec.POS)) {
+                    variantID = variantRec.CHROM + ":" + variantRec.POS;
+                }
+                arrayOfRows.push(variantRec.VAR_ID);
+                arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
+                var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
+                arrayOfRows.push(DBSNP_ID);
+                arrayOfRows.push(variantRec.CHROM);
+                arrayOfRows.push(variantRec.POS);
+                var codedMac = variantRec.MAC;
+                if (typeof codedMac === 'undefined') {
+                    codedMac = '';
+                }
+                arrayOfRows.push(codedMac);
+                arrayOfRows.push((variantRec.PolyPhen_PRED) ? variantRec.PolyPhen_PRED : '');
+                arrayOfRows.push((variantRec.SIFT_PRED) ? variantRec.SIFT_PRED : '');
+                var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
+                arrayOfRows.push(protein_change);
+                arrayOfRows.push(variantRec.Consequence);
+                $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+            });
+            if (typeof rTrailerFunc !== 'undefined') {
+                rTrailerFunc();
+            }
+        }
     }
-    promise.fail();
-}
+
+
+
+
+    var generateListOfVariantsFromFilters = function (immediateParams,callBack,parameters){
+
+        var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+            selectedFilterValueId = 8,
+            selectedMafOption = $('input[name=mafOption]:checked').val(),
+            selectedMafOptionId =  parseInt(selectedMafOption),
+            specifiedMafValue = $('#mafInput').val(),
+            specifiedMafValueId  = parseFloat(specifiedMafValue),
+            burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
+            datasetFilter = $('#datasetFilter').val(),
+            rememberCallBack = callBack,
+            rememberParameters = parameters;
+        var dataSet;
+        if (typeof selectedFilterValue !== 'undefined') {
+            selectedFilterValueId =  parseInt(selectedFilterValue);
+        }
+        if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
+            var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+            dataSet = metadata.conversion[datasetFilter];
+
+
+            $('#rSpinner').show();
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                url: immediateParams.generateListOfVariantsFromFiltersAjaxUrl,
+                data: {geneName: getGeneForGait(),
+                    filterNum: selectedFilterValueId,
+                    burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+                    mafValue: specifiedMafValueId,
+                    mafOption: selectedMafOptionId,
+                    dataSet: dataSet
+                },
+                async: true
+            });
+            promise.done(
+                function(data,d){
+                    rememberCallBack(data,rememberParameters);
+                }
+
+            );
+        }
+        promise.fail();
+    }
+
+
+
+
+
+    var getGRSListOfVariants = function (immediateParams,callBack,parameters){
+
+        var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+            selectedFilterValueId = 8,
+            selectedMafOption = $('input[name=mafOption]:checked').val(),
+            selectedMafOptionId =  parseInt(selectedMafOption),
+            specifiedMafValue = $('#mafInput').val(),
+            specifiedMafValueId  = parseFloat(specifiedMafValue),
+            burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
+            datasetFilter = $('#datasetFilter').val(),
+            rememberCallBack = callBack,
+            rememberParameters = parameters;
+        var dataSet;
+        if (typeof selectedFilterValue !== 'undefined') {
+            selectedFilterValueId =  parseInt(selectedFilterValue);
+        }
+        if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
+            var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+            dataSet = metadata.conversion[datasetFilter];
+
+
+            $('#rSpinner').show();
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                url: immediateParams.generateListOfVariantsFromFiltersAjaxUrl,
+                data: {geneName: getGeneForGait(),
+                    filterNum: selectedFilterValueId,
+                    burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+                    mafValue: specifiedMafValueId,
+                    mafOption: selectedMafOptionId,
+                    dataSet: dataSet
+                },
+                async: true
+            });
+            promise.done(
+                function(data,d){
+                    rememberCallBack(data,rememberParameters);
+                }
+
+            );
+        }
+        promise.fail();
+    }
+
+
+
+//var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,trailerFunc){
+//
+//    var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+//        selectedFilterValueId = 8,
+//        selectedMafOption = $('input[name=mafOption]:checked').val(),
+//        selectedMafOptionId =  parseInt(selectedMafOption),
+//        specifiedMafValue = $('#mafInput').val(),
+//        specifiedMafValueId  = parseFloat(specifiedMafValue),
+//        burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
+//        datasetFilter = $('#datasetFilter').val(),
+//        rTrailerFunc = trailerFunc;
+//    var dataSet;
+//    if (typeof selectedFilterValue !== 'undefined') {
+//        selectedFilterValueId =  parseInt(selectedFilterValue);
+//    }
+//    if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
+//        var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+//        dataSet = metadata.conversion[datasetFilter];
+//
+//
+//        $('#rSpinner').show();
+//        var promise = $.ajax({
+//            cache: false,
+//            type: "post",
+//            url: generateListOfVariantsFromFiltersAjaxUrl,
+//            data: {geneName: getGeneForGait(),
+//                filterNum: selectedFilterValueId,
+//                burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+//                mafValue: specifiedMafValueId,
+//                mafOption: selectedMafOptionId,
+//                dataSet: dataSet
+//            },
+//            async: true
+//        });
+//        promise.done(
+//            function (data) {
+//                $('#rSpinner').hide();
+//                if ((typeof data !== 'undefined') &&
+//                    (data)) {
+//                    var variantListHolder = [];
+//                    if ((typeof data.results !== 'undefined') &&
+//                        (data.results)) {
+//                        var variantListHolder = [];
+//                        _.forEach(data.results, function (oneVariant) {
+//                            var variant = {};
+//                            _.forEach(oneVariant.pVals, function (fieldHolder) {
+//                                variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
+//                            });
+//                            variantListHolder.push(variant);
+//                        });
+//                    }
+//
+//                    var gaitTable = $('#gaitTable').DataTable(
+//                        {
+//                            "select": {
+//                                style: 'none',
+//                                selector: 'td:first-child'
+//                            },
+//                            dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+//                            "buttons": [
+//                                {
+//                                    text: 'Select all',
+//                                    class: 'gaitButtons',
+//                                    action: function () {
+//                                        //gaitTable.rows().select();
+//                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", true);
+//                                    }
+//                                },
+//                                {
+//                                    text: 'Select none',
+//                                    class: 'gaitButtons',
+//                                    action: function () {
+//                                        // gaitTable.rows().deselect();
+//                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", false);
+//                                    }
+//                                },
+//                                { extend: "copy", text: "Copy all to clipboard" },
+//                                { extend: "csv", text: "Copy all to csv" },
+//                                { extend: "pdf", text: "Copy all to pdf" }
+//                            ],
+//                            "aLengthMenu": [
+//                                [10, 50, -1],
+//                                [10, 50, "All"]
+//                            ],
+//                            "bDestroy": true,
+//                            "bAutoWidth": false,
+//                            "order": [
+//                                [ 1, "asc" ]
+//                            ],
+//                            "columnDefs": [
+//                                { "name": "IncludeCheckbox", "targets": [0], "type": "checkBoxGait", "title": "Use?",
+//                                    "render": function (data, type, full, meta) {
+//                                        if ((data) && (data.indexOf('input') > -1)) {
+//                                            return data;
+//                                        } else {
+//                                            return "<input type='checkbox' id='variant_sel_" + data + "' class='geneGaitVariantSelector' checked>";
+//                                        }
+//
+//                                    },
+//                                    "bSortable": false,
+//                                    "width": "50px"
+//
+//                                },
+//                                { "name": "VAR_ID", "targets": [1], "type": "allAnchor", "title": "Variant ID",
+//                                    "width": "auto"  },
+//                                { "name": "DBSNP_ID", "targets": [2], "title": "dbSNP ID",
+//                                    "width": "auto"  },
+//                                { "name": "CHROM", "targets": [3], "title": "Chrom.",
+//                                    "width": "40px"  },
+//                                { "name": "POS", "targets": [4], "title": "Position",
+//                                    "width": "auto" },
+//                                { "name": "MAC", "targets": [5], "title": "MAC",
+//                                    "width": "auto" },
+//                                { "name": "PolyPhen_PRED", "targets": [6], "title": "Polyphen",
+//                                    "width": "auto" },
+//                                { "name": "SIFT_PRED", "targets": [7], "title": "SIFT",
+//                                    "width": "auto" },
+//                                { "name": "Protein_change", "targets": [8], "title": "Protein change",
+//                                    "width": "60px"  },
+//                                { "name": "Consequence", "targets": [9], "title": "Consequence",
+//                                    "width": "100px"  }
+//
+//                            ],
+//                            "sPaginationType": "full_numbers",
+//                            "iDisplayLength": 10,
+//                            "bFilter": false,
+//                            "bLengthChange": true,
+//                            "bInfo": true,
+//                            "bProcessing": true
+//                        }
+//                    );
+//                    $('#gaitTable').DataTable().clear();
+//                    _.forEach(variantListHolder, function (variantRec) {
+//                        //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
+//                        var arrayOfRows = [];
+//                        var variantID = variantRec.VAR_ID;
+//                        if ((variantRec.CHROM) && (variantRec.POS)) {
+//                            variantID = variantRec.CHROM + ":" + variantRec.POS;
+//                        }
+//                        arrayOfRows.push(variantRec.VAR_ID);
+//                        arrayOfRows.push('<a href="' + variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
+//                        var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
+//                        arrayOfRows.push(DBSNP_ID);
+//                        arrayOfRows.push(variantRec.CHROM);
+//                        arrayOfRows.push(variantRec.POS);
+//                        var codedMac = variantRec.MAC;
+//                        if (typeof codedMac === 'undefined') {
+//                            codedMac = '';
+//                        }
+//                        arrayOfRows.push(codedMac);
+//                        arrayOfRows.push((variantRec.PolyPhen_PRED) ? variantRec.PolyPhen_PRED : '');
+//                        arrayOfRows.push((variantRec.SIFT_PRED) ? variantRec.SIFT_PRED : '');
+//                        var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
+//                        arrayOfRows.push(protein_change);
+//                        arrayOfRows.push(variantRec.Consequence);
+//                        $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+//                    });
+//                    if (typeof rTrailerFunc !== 'undefined') {
+//                        rTrailerFunc();
+//                    }
+//                }
+//            }
+//        );
+//    }
+//    promise.fail();
+//}
 
 
 /**
