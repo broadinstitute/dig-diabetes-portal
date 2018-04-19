@@ -1089,7 +1089,7 @@ a.related-word-red {
 	width: auto;
 	height: auto;
 	max-width: 400px;
-	margin-left: -200px;
+	margin-left: 20px;
 	padding: 5px;
 	background-color: white;
 	-webkit-border-radius: 3px;
@@ -1105,8 +1105,6 @@ a.related-word-red {
 	display: none;
 }
 
-#phePlotTooltip p {
-	margin: 0;
-	font-size: 14px;
-	line-height: 1.25em;
+#phePlotTooltip #value {
+
 }

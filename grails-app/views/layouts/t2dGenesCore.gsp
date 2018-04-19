@@ -359,14 +359,16 @@
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
 
-                var inputBox = "<div class='phenotype-searchbox-wrapper'><input id='traits_table_filter' type='text' name='search' style='display: block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'>";
-                inputBox += "<div class='related-words'></div></div>";
-                inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
-                inputBox += '<div class="traits-svg-wrapper" style=""><div class="phenotypes-for-plot"></div></div>';
-                inputBox += "<span style='font-size: 12px; margin: 15px 0 -10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
-                //inputBox += '<div id="phePlotTooltip" class="hidden"><span id="value">100</span></div>';
+                var inputBox = "<div class='phenotype-searchbox-wrapper'><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'>";
+                inputBox += "<span style='display: inline-block; margin-left: 15px;'>p-value(-log10) < </span><input id='pvalue-min' style='display: inline-block; height: 35px; padding-left: 10px;' value='0' /><span style='display: inline-block; margin-left: 15px;'>sample > </span><input id='sample-min' value='0'  style='display: inline-block; height: 35px; padding-left: 10px;' />"
+                inputBox += "<div class='related-words' style='clear: left;'></div></div>";
+                //inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
+                inputBox += '<div class="traits-svg-wrapper" style=""></div>';
+                inputBox += "<span style='font-size: 12px; margin: 15px 0 10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
 
-                $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).append(inputBox);
+                $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).insertAfter($("#traitsPerVariantTable"));
+
+                $(inputBox).insertBefore($("#traitsPerVariantTable"));
 
                 $("#traitsPerVariantTable").find("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
@@ -382,6 +384,8 @@
                 });
 
                 $("#traits_table_filter").on('input',filterTraitsTable);
+                $("#pvalue-min").on('input',filterTraitsTable);
+                $("#sample-min").on('input',filterTraitsTable);
 
                 var phenoTypeID = "";
 
@@ -465,68 +469,7 @@
                     });
 
 
-                    var phenotypes = "";
-
-                    $("#traitsPerVariantTableBody").find("tr").each(function() {
-                        if($(this).hasClass("hidden-traits-row")) {
-
-                        } else {
-                            phenotypes += "," + $(this).attr("phenotype");
-
-                        };
-                    });
-
-                    phenotypesArray = phenotypes.split(",");
-
-                    phenotypesArray = unique(phenotypesArray);
-
                 });
-
-                $("#pheSvg").find("svg").each(function() {
-
-                    var svgClass = $(this).attr("class");
-
-                    svgClass += (svgClass.indexOf("hidden-traits-row") >= 0)?  "" : " hidden-traits-row";
-                    $(this).attr("class",svgClass);
-                });
-
-
-
-                ($("#traits_table_filter").val() != "")? $(".phenotypes-for-plot").html("<H5>Click to apply color </H5>") : $(".phenotypes-for-plot").html("");
-
-                var plotColors = ["rgba(255, 0, 0, .75)",
-                    "rgba(204, 102, 0, .75)",
-                    "rgba(204, 153, 0, .75)",
-                    "rgba(153, 204, 0, .75)",
-                    "rgba(0, 153, 0, .75)",
-                    "rgba(0, 204, 153, .75)",
-                    "rgba(0, 153, 255, .75)",
-                    "rgba(102, 102, 255, .75)",
-                    "rgba(153, 51, 255, .75)",
-                    "rgba(255, 0, 255, .75)",
-                    "rgba(255, 153, 102, .75)"];
-
-                var plotColorIndex = 0;
-
-                $.each(phenotypesArray, function(index,value) {
-                    plotColorIndex = (plotColorIndex == (plotColors.length-1))? 0 : plotColorIndex;
-
-                    if(value != "" && $("#traits_table_filter").val() != "") { $(".phenotypes-for-plot").append("<a href='javascript:;' switch='off' onclick='setColorToPlot(event)' class='btn btn-default btn-xs' color='"+plotColors[plotColorIndex]+"'>"+value+"</a>");};
-
-                    plotColorIndex++;
-
-                    $("#pheSvg").find("svg").each(function() {
-
-                        if($(this).attr("phenotype") == value) {
-
-                            var svgClass = $(this).attr("class").replace(" hidden-traits-row","");
-                            $(this).attr("class",svgClass);
-
-                        }
-
-                    });
-                });
-
 
 
                 var relatedWords = showRelatedWords();
@@ -635,11 +578,13 @@
 
             function phePlotApp() {
 
-                //inputBox += '<div id="phePlotTooltip" class="hidden"><span id="value">100</span></div>';
+
 
                 ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
 
                 var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
+                var pvalueMin = $("#pvalue-min").val();
+                var sampleMin = $("#sample-min").val();
 
                 var traitsTableData = [];
 
@@ -649,30 +594,23 @@
 
                     } else {
 
-                        var eachDataset = {};
-                        eachDataset.dataset = $(this).attr("dataset");
-                        eachDataset.phenotype = $(this).find("td").eq(0).text();
-                        eachDataset.logValue = $(this).find("td").eq(2).text();
-                        eachDataset.pvalue = $(this).find("td").eq(2).text();
-                        eachDataset.effectDirection = effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
-                        eachDataset.oddsRatio = $(this).find("td").eq(4).text();
-                        eachDataset.maf = $(this).find("td").eq(5).text();
-                        eachDataset.sample = $(this).find("td").eq(7).text();
+                        if(getLogValue($(this).find("td").eq(2).text()) > pvalueMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) > sampleMin) {
 
-                        traitsTableData.push(eachDataset);
+                            var eachDataset = {};
+                            eachDataset.dataset = $(this).attr("dataset");
+                            eachDataset.phenotype = $(this).find("td").eq(0).text();
+                            eachDataset.logValue = getLogValue($(this).find("td").eq(2).text());
+                            eachDataset.pvalue = $(this).find("td").eq(2).text();
+                            eachDataset.effectDirection = effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
+                            eachDataset.oddsRatio = parseFloat($(this).find("td").eq(4).text());
+                            eachDataset.maf = $(this).find("td").eq(5).text();
+                            eachDataset.sample = parseFloat(parseFloat($(this).find("td").eq(7).text()));
 
+                            traitsTableData.push(eachDataset);
+                        }
                     }
 
                 });
-
-                $.each(traitsTableData,function(index) {
-
-                    traitsTableData[index].logValue = getLogValue(traitsTableData[index].pvalue);
-                    traitsTableData[index].sample = parseFloat(traitsTableData[index].sample);
-                    traitsTableData[index].oddsRatio = parseFloat(traitsTableData[index].oddsRatio);
-                    traitsTableData[index].maf = parseFloat(traitsTableData[index].maf);
-
-                })
 
                 traitsTableData = traitsTableData.sort(function (a, b) {
                     return  b.logValue - a.logValue ;
@@ -715,17 +653,109 @@
                 w = $("#traitsPerVariantTable").width(), h = 500, xbumperLeft = 80, xbumperRight = 80, ybumperTop = 20, ybumperBottom = 150;
 
 
+                $(".traits-svg-wrapper").html("");
+
+                $(".traits-svg-wrapper").append('<div class="phenotypes-for-plot" style="margin: 5px 0 5px 0;"></div>');
+
+                var phenotypes = "";
+
+                $.each(traitsTableData, function(index,value){
+                    phenotypes += value.phenotype + ",";
+                });
+
+                var phenotypesArray = phenotypes.split(",");
+
+                phenotypesArray.splice(-1,1);
+
+                phenotypesArray = unique(phenotypesArray);
+
+                if ($("#traits_table_filter").val() != "") $(".phenotypes-for-plot").append("<p>Click to apply color to the plot</p>");
+
+                $.each(phenotypesArray, function(index,value){
+                    if($("#traits_table_filter").val() != "") {
+                        if(value != " " || value != null) $(".phenotypes-for-plot").append("<span class='btn btn-default btn-xs' style='margin-right: 5px;'>"+value + "</span>");
+                    }
+
+                });
+
+
+
+                /*
+
+
+                    $(".phenotypes-for-plot").append(value.phenotype);
+
+                    $("#traitsPerVariantTableBody").find("tr").each(function() {
+                        if($(this).hasClass("hidden-traits-row")) {
+
+                        } else {
+                            phenotypes += "," + $(this).attr("phenotype");
+
+                        };
+                    });
+
+                    phenotypesArray = phenotypes.split(",");
+
+                    phenotypesArray = unique(phenotypesArray);
+
+                $("#pheSvg").find("svg").each(function() {
+
+                    var svgClass = $(this).attr("class");
+
+                    svgClass += (svgClass.indexOf("hidden-traits-row") >= 0)?  "" : " hidden-traits-row";
+                    $(this).attr("class",svgClass);
+                });
+
+
+
+                ($("#traits_table_filter").val() != "")? $(".phenotypes-for-plot").html("<H5>Click to apply color </H5>") : $(".phenotypes-for-plot").html("");
+
+                var plotColors = ["rgba(255, 0, 0, .75)",
+                    "rgba(204, 102, 0, .75)",
+                    "rgba(204, 153, 0, .75)",
+                    "rgba(153, 204, 0, .75)",
+                    "rgba(0, 153, 0, .75)",
+                    "rgba(0, 204, 153, .75)",
+                    "rgba(0, 153, 255, .75)",
+                    "rgba(102, 102, 255, .75)",
+                    "rgba(153, 51, 255, .75)",
+                    "rgba(255, 0, 255, .75)",
+                    "rgba(255, 153, 102, .75)"];
+
+                var plotColorIndex = 0;
+
+                $.each(phenotypesArray, function(index,value) {
+                    plotColorIndex = (plotColorIndex == (plotColors.length-1))? 0 : plotColorIndex;
+
+                    if(value != "" && $("#traits_table_filter").val() != "") { $(".phenotypes-for-plot").append("<a href='javascript:;' switch='off' onclick='setColorToPlot(event)' class='btn btn-default btn-xs' color='"+plotColors[plotColorIndex]+"'>"+value+"</a>");};
+
+                    plotColorIndex++;
+
+                    $("#pheSvg").find("svg").each(function() {
+
+                        if($(this).attr("phenotype") == value) {
+
+                            var svgClass = $(this).attr("class").replace(" hidden-traits-row","");
+                            $(this).attr("class",svgClass);
+
+                        }
+
+                    });
+                });
+
+                */
+
+
+
                 var x = d3.scale.linear()
-                    .domain([0, d3.max(traitsTableData, function(d) { return d.sample })])
+                    .domain([sampleMin, d3.max(traitsTableData, function(d) { return d.sample })])
                     .range([xbumperLeft, w-xbumperRight]);
 
                 var y = d3.scale.linear()
-                    .domain([0, d3.max(traitsTableData, function(d) { return d.logValue })])
+                    .domain([pvalueMin, d3.max(traitsTableData, function(d) { return d.logValue })])
                     .range([h-ybumperBottom, ybumperTop]);
 
                 arc = d3.svg.symbol().type('triangle-up').size(60);
-
-                $(".traits-svg-wrapper").html("");
 
 
                 svg = d3.select(".traits-svg-wrapper").append("svg")
@@ -737,7 +767,7 @@
 
 
                 //draw x-axis grid lines
-                svg.selectAll("line.x")
+                /*svg.selectAll("line.x")
                     .data(x.ticks(10))
                     .enter().append("line")
                     .attr("class", "x")
@@ -745,7 +775,7 @@
                     .attr("x2", x)
                     .attr("y1", ybumperTop)
                     .attr("y2", h-ybumperBottom)
-                    .style("stroke", "#eee");
+                    .style("stroke", "#eee");*/
 
                 // Draw Y-axis grid lines
                 svg.selectAll("line.y")
@@ -768,9 +798,10 @@
                 group.append("g")
                     .attr("class","dataset-group")
                     .attr("transform", function(d) {
-                        var xposition = x(d.sample);
-                        var yposition = 380;
-                        return "translate("+xposition+","+yposition+")"});
+                            var xposition = x(d.sample);
+                            var yposition = 380;
+                            return "translate("+xposition+","+yposition+")"
+                        });
 
                 group.select(".dataset-group")
                     .append("circle")
@@ -792,14 +823,16 @@
                         //Get this bar's x/y values, then augment for the tooltip
                         var svgPosition = $(pheSvg).position();
                         var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
-                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top - 50;
+                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top;
 
                         //Update the tooltip position and value
                         d3.select("#phePlotTooltip")
                             .style("left", xPosition + "px")
-                            .style("top", yPosition + "px")
-                            .select("#value")
-                            .text(d.dataset +": " + d.sample);
+                            .style("top", yPosition + "px");
+
+                            var tipValue = d.dataset +"<br>sample: " + d.sample;
+
+                            $("#phePlotTooltip").find("#value").html(tipValue);
 
                         //Show the tooltip
                         d3.select("#phePlotTooltip").classed("hidden", false);
@@ -820,7 +853,7 @@
                     .attr("y1", -360)
                     .attr("x2", 0)
                     .attr("y2", 0)
-                    .attr("stroke","rgba(255,150,150,.3)")
+                    .attr("stroke","rgba(255,150,150,.2)")
                     .attr("shape-rendering","auto");
 
                 group.select(".dataset-group")
@@ -841,37 +874,7 @@
                     .attr("transform", function(d) {
                         var xposition = x(d.sample);
                         var yposition = y(d.logValue);
-                        return "translate("+xposition+","+yposition+")"})
-                    .attr("xp", function(d) {
-                        return x(d.sample)
-                    })
-                    .attr("yp", function(d) {
-                        return y(d.logValue)
-                    })
-                    .on("mouseover", function(d) {
-
-                        //Get this bar's x/y values, then augment for the tooltip
-                        var svgPosition = $(pheSvg).position();
-                        var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
-                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top - 50;
-
-                        //Update the tooltip position and value
-                        d3.select("#phePlotTooltip")
-                            .style("left", xPosition + "px")
-                            .style("top", yPosition + "px")
-                            .select("#value")
-                            .text("Phenotype: "+ d.phenotype +", Dataset: "+ d.dataset +", p-value: " + d.pvalue +", odds-ratio: "+ d.oddsRatio);
-
-                        //Show the tooltip
-                        d3.select("#phePlotTooltip").classed("hidden", false);
-
-                    })
-                    .on("mouseout", function() {
-
-                        //Hide the tooltip
-                        d3.select("#phePlotTooltip").classed("hidden", true);
-
-                    });
+                        return "translate("+xposition+","+yposition+")"});
 
 
                 group.select(".triangle-group").append('path')
@@ -887,14 +890,39 @@
                         return 'rotate('+angle+')';
                     })
                     .attr("shape-rendering","auto")
+                    .attr("xp", function(d) {
+                        return x(d.sample)
+                    })
+                    .attr("yp", function(d) {
+                        return y(d.logValue)
+                    })
                     .on("mouseover", function(d) {
 
                         d3.select(this).attr('stroke','rgba(255,0,0,0.3)');
+
+                        //Get this bar's x/y values, then augment for the tooltip
+                        var svgPosition = $(pheSvg).position();
+                        var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
+                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top;
+
+                        //Update the tooltip position and value
+                        d3.select("#phePlotTooltip")
+                            .style("left", xPosition + "px")
+                            .style("top", yPosition + "px");
+
+                        var tipValue = "Phenotype: "+ d.phenotype +"<br>Dataset: "+ d.dataset +"<br>p-value: " + d.pvalue +"<br>sample: "+ d.sample+"<br>odds-ratio: "+ d.oddsRatio+"<br>MAF: "+ d.maf;
+
+                        $("#phePlotTooltip").find("#value").html(tipValue).css("font-size: 10px !important");
+
+                        //Show the tooltip
+                        d3.select("#phePlotTooltip").classed("hidden", false);
 
                     })
                     .on("mouseout", function() {
 
                         d3.select(this).attr('stroke','rgba(255,0,0,0.0)');
+                        //Hide the tooltip
+                        d3.select("#phePlotTooltip").classed("hidden", true);
 
                     });;
 
@@ -906,7 +934,8 @@
                     .attr('x', "0")
                     .attr('dy', 5)
                     .text(function(d) {
-                        var phenotypeName = (d.logValue > 4 )? d.phenotype : "";
+                        var textRenderMin = (pvalueMin == 0)? 8 : pvalueMin;
+                        var phenotypeName = (d.logValue > textRenderMin )? d.phenotype : "";
                         return phenotypeName;
                     })
                     .attr("style","fill: #666; font-size: 10px; text-anchor: middle;");
