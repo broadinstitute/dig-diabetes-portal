@@ -9,7 +9,8 @@ $( document ).ready( function (){
             modifiedTitleStyling:'${modifiedTitleStyling}',
             allowExperimentChoice: ${allowExperimentChoice},
             allowPhenotypeChoice : ${allowPhenotypeChoice},
-            allowStratificationChoice: ${allowStratificationChoice}
+            allowStratificationChoice: ${allowStratificationChoice},
+            grsVariantSet:'${grsVariantSet}'
         },
         '${geneName}',
         true,

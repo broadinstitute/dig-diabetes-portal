@@ -36,6 +36,9 @@ modules = {
         resource url: 'js/lib/dport/portalHome.js'
     }
     grsInfo {
+        dependsOn "core", "mbar", "bootstrapMultiselect", "mustache","burdenTest"
+
+
         resource url: 'js/lib/dport/grsInfo.js'
         resource url: 'css/dport/grsInfo.css'
     }

@@ -175,7 +175,8 @@
                                                                            'accordionHeaderClass': 'accordion-heading',
                                                                            'allowExperimentChoice': 1,
                                                                            'allowPhenotypeChoice' : 1,
-                                                                           'allowStratificationChoice': 1   ]"/>
+                                                                           'allowStratificationChoice': 1,
+                                                                           'grsVariantSet':''   ]"/>
                     <div class="separator"></div>
                     </g:if>
 

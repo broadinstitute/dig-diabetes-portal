@@ -336,7 +336,8 @@
                                                                                'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
                                                                                'allowExperimentChoice': 0,
                                                                                'allowPhenotypeChoice' : 1,
-                                                                               'allowStratificationChoice': 1    ]"/>
+                                                                               'allowStratificationChoice': 1,
+                                                                               'grsVariantSet':'']"/>
                     </g:renderBetaFeaturesDisplayedValue>
                     </g:if>
 

@@ -9,6 +9,7 @@ mpgSoftware.burdenTestShared = (function () {
     var minimumNumberOfSamples = 100;
     var portalTypeWithAncestry = true;
     var geneForGaitStr = '';
+    var grsVariantSetStr = '';
     var fillVariantOptionFilterDropDown;
 
 
@@ -34,6 +35,16 @@ mpgSoftware.burdenTestShared = (function () {
 
     var getGeneForGait  = function (){
         return geneForGaitStr;
+    };
+
+
+    var storeGrsVariantSet = function (grsVariantSet){
+        grsVariantSetStr = grsVariantSet;
+    };
+
+
+    var getGrsVariantSet  = function (){
+        return grsVariantSetStr;
     };
 
 
@@ -185,6 +196,7 @@ mpgSoftware.burdenTestShared = (function () {
                     mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
                         displayParameters);
                     mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
+                    mpgSoftware.burdenTestShared.storeGrsVariantSet(displayParameters.grsVariantSet);
                     mpgSoftware.burdenTestShared.setPortalTypeWithAncestry(allowStratificationByAncestry);
                     mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,sampleMetadataExperimentAjaxUrl, geneName );
                     mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(sampleMetadataAjaxWithAssumedExperimentUrl,
@@ -516,24 +528,7 @@ mpgSoftware.burdenTestShared = (function () {
                 datasetFilter:datasetFilter
             });
         }
-        //var sampleMetadata = getStoredSampleMetadata();
-        //var phenotypeFilterValue = $(phenotypeFilter).val();
-        //var stratifyDesignationValue = $(stratifyDesignation).val();
-        //var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
-        //var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames||o.name===phenotypeFilterValue;})
-        //if (typeof filterDetails !== 'undefined'){
-        //    if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
-        //        $(caseControlDesignator).prop('checked', false);
-        //        $(caseControlDesignator).prop('disabled', true);
-        //    } else {
-        //        $(caseControlDesignator).prop('disabled', false);
-        //    }
-        //}
-        //$('#stratsTabs').empty();
-        //var caseControlFiltering = $('#caseControlFiltering').prop('checked');
-        //stratifiedSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
-        //    linkToTypeaheadUrl,generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,burdenTestVariantSelectionOptionsAjaxUrl);
-        //displayTestResultsSection(false);
+
     };
 
 
@@ -946,7 +941,21 @@ mpgSoftware.burdenTestShared = (function () {
                         })
                     }
                 });
-        }
+            } else if (getGrsVariantSet().length>0){
+                renderData.sectionNumber++;
+                $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+                mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
+                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl);
+                $('#addVariant').on( 'click', respondedToAddVariantButtonClick , variantAndDsAjaxUrl,variantInfoUrl);
+                $('#proposedMultiVariant').typeahead({});
+                $('#proposedVariant').typeahead({
+                    source: function (query, process) {
+                        $.get(linkToTypeaheadUrl, {query: query}, function (data) {
+                            process(data);
+                        })
+                    }
+                });
+            }
 
 
 
@@ -2565,7 +2574,8 @@ return {
     initializeGaitUi:initializeGaitUi,
     fillVariantOptionFilterDropDown:fillVariantOptionFilterDropDown,
     buildGaitInterface:buildGaitInterface,
-    getStoredSampleMetadata:getStoredSampleMetadata
+    getStoredSampleMetadata:getStoredSampleMetadata,
+    storeGrsVariantSet:storeGrsVariantSet
 }
 
 }());
