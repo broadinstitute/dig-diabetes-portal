@@ -793,11 +793,12 @@ mpgSoftware.burdenTestShared = (function () {
 
 
         // For each strata create the necessary data. Handle the case of a single strata as a special case.
-        var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype){
+        var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype,grsVariantSet){
 
             var defaultDisplayString  = '';
             var tabDisplayString;
             var displayBurdenVariantSelectorString = (displayBurdenVariantSelector())?[1]:[];
+            var variantsSetRefinement = (( typeof grsVariantSet === 'undefined')||(grsVariantSet.length===0))?[1]:[]; // if we aren't using a GRS variants set then allow the user to modify the set
             if (!multipleStrataExist){
                 defaultDisplayString  = ' active';
                 tabDisplayString  = ' display: none';
@@ -805,6 +806,7 @@ mpgSoftware.burdenTestShared = (function () {
 
             var renderData  = {
                 strataProperty:strataProperty,
+                variantsSetRefinement:variantsSetRefinement,
                 phenotypeProperty:convertPhenotypeNames(phenotype),
                 defaultDisplay : defaultDisplayString,
                 tabDisplay:tabDisplayString,
@@ -934,7 +936,7 @@ mpgSoftware.burdenTestShared = (function () {
             var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
             var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
             var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
-            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements);
+            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements,getGrsVariantSet());
 
 // kludge alert!  Currently we have no way of specifying whether or not a data set can be used for stratification.
 //  For now I will erase the hide the stratification section if it doesn't apply to a data set, but clearly we need to do better

@@ -598,34 +598,36 @@ the individual filters themselves. That work is handled later as part of a loop-
                                 <div  class="row">
                                       <div style="margin:15px 8px 15px 10px" class="separator"></div>
                                 </div>
-                                <div  class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
-                                        <div class="labelAndInput">
-                                            MAF &lt;&nbsp;
-                                            <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value"
-                                            onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
-                                            '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
-                                        </div>
+                                {{#variantsSetRefinement}}
+                                    <div  class="row">
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label for="mafInput"><g:message code="gene.burdenTesting.label.maf"/>:</label>
+                                            <div class="labelAndInput">
+                                                MAF &lt;&nbsp;
+                                                <input style="display: inline-block" type="text" class="form-control" id="mafInput" placeholder="value"
+                                                onkeyup="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
+                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
+                                            </div>
 
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-12">
-                                        <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
-                                        <div class="form-inline mafOptionChooser">
-                                            <div class="radio">
-                                                <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
-                                            '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
-                                            </div>
-                                            <div class="radio">
-                                                <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
-                                            '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                        </div>
+                                        <div class="col-md-6 col-sm-6 col-xs-12">
+                                            <label><g:message code="gene.burdenTesting.label.apply_maf"/>:&nbsp;&nbsp;</label>
+                                            <div class="form-inline mafOptionChooser">
+                                                <div class="radio">
+                                                    <label><input type="radio" name="mafOption" value="1" onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
+                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.all_samples"/></label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label><input type="radio" name="mafOption"  value="2" checked onclick="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
+                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')"/>&nbsp;<g:message code="gene.burdenTesting.label.each_ancestry"/></label>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div  class="row">
-                                      <div style="margin:15px 8px 15px 10px" class="separator"></div>
-                                </div>
+                                    <div  class="row">
+                                          <div style="margin:15px 8px 15px 10px" class="separator"></div>
+                                    </div>
+
                                 <div  class="row" style="margin: 10px 0 0px 0">
                                     <div class="col-md-offset-2 col-md-8 col-sm-12 col-xs-12">
                                         <div  class="row">
@@ -666,6 +668,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                     </div>
                                     <div class="col-md-2"></div>
                                 </div>
+                                {{/variantsSetRefinement}}
                             </div>
                             <div  class="col-md-1 col-sm-1 col-xs-12 burden-test-btn-wrapper vcenter">
                             </div>
