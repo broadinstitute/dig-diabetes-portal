@@ -1090,7 +1090,7 @@ a.related-word-red {
 	height: auto;
 	max-width: 400px;
 	margin-left: 20px;
-	padding: 5px;
+	padding: 15px;
 	background-color: white;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
@@ -1099,6 +1099,7 @@ a.related-word-red {
 	-moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 	box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);
 	pointer-events: none;
+	font-size: 12px;
 }
 
 #phePlotTooltip.hidden {
