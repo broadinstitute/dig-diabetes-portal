@@ -87,18 +87,17 @@
                     </div>
 
                     <div class="chooseExperiment">
-                        <!-- <div class="col-sm-4 col-xs-4 text-left"  style="padding-top: 8px; padding-bottom: 15px">-->
-                            <select id="datasetFilter" class="traitFilter form-control text-left"
-                                    onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,
-                                             '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                             '${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                             '${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                             '${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                             '${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                             '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                             '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
-                            </select>
-                        <!-- </div>-->
+                        <select id="datasetFilter" class="traitFilter form-control text-left"
+                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,
+                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}'
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                        </select>
                     </div>
                 </div>
 
@@ -110,18 +109,17 @@
                 </div>
 
                 <div class="choosePhenotype">
-                    <!-- <div class="col-sm-4 col-xs-4 text-left">-->
-                        <select id="phenotypeFilter" class="traitFilter form-control text-left phenotypeFilter"
-                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
-                                         '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                         '${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                         '${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                         '${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                         '${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                         '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
-                        </select>
-                    <!-- </div>-->
+                    <select id="phenotypeFilter" class="traitFilter form-control text-left phenotypeFilter"
+                            onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
+                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}'
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                     </select>
                 </div>
             </div>
 
@@ -134,20 +132,19 @@
                 </div>
 
                 <div class="stratificationHolder chooseStratification">
-                    <!-- <div class="col-sm-4 col-xs-4 text-left">-->
-                        <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
-                                onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
-                                         '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                         '${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                         '${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                         '${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                         '${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                         '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
-                                    <option value="none">none</option>
-                                    <option value="origin">ancestry</option>
-                        </select>
-                    <!-- </div>-->
+                    <select id="stratifyDesignation" class="stratifyFilter form-control text-left"
+                            onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
+                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}'
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
+                                <option value="none">none</option>
+                                <option value="origin">ancestry</option>
+                    </select>
                 </div>
                 {{ /strataChooser }}
             </div>

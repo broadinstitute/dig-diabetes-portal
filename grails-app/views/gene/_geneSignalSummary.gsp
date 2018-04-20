@@ -133,6 +133,7 @@
                     traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                    getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
                     assayIdList: "${assayIdList}",
