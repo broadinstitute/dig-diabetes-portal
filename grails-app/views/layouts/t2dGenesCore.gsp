@@ -368,9 +368,9 @@
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
 
-                var inputBox = "<div class='phenotype-searchbox-wrapper'><div style='display:inline-block'><h5>Filter phenotypes</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
-                inputBox += "<div style='display:inline-block; margin-left: 15px; padding-left: 15px; border-left: solid 1px #ddd;'><h5>Filter plot (*1000 for sample)</h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 50px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 50px; padding-left: 10px;' />";
-                inputBox += "<input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 75px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 75px; padding-left: 10px;' />";
+                var inputBox = "<div class='phenotype-searchbox-wrapper'><div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select></div>";
+                inputBox += "<div style='display:inline-block; margin-left: 15px; padding-left: 15px; border-left: solid 1px #ddd;'><h5>Filter plot (*1000 for sample)</h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
+                inputBox += "<input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 55px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 55px; padding-left: 10px;' />";
                 inputBox += "<a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div>"
                 inputBox += "<div class='related-words' style='clear: left;'></div></div>";
                 //inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
@@ -386,6 +386,8 @@
                     $("<th>sample</th>").appendTo($(this));
                 });
 
+                // PHENOTYPE FILTER PLACE OLDER INTERACTION
+/*
                 $("#traits_table_filter").focus(function() {
                     $(this).attr("placeholder", "");
                 });
@@ -393,16 +395,19 @@
                 $("#traits_table_filter").focusout(function() {
                     $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
                 });
+                */
 
                 $("#traits_table_filter").on('input',filterTraitsTable);
                 $("#pvalue-min").on('input',filterTraitsTable);
                 $("#pvalue-max").on('input',filterTraitsTable);
                 $("#sample-min").on('input',filterTraitsTable);
                 $("#sample-max").on('input',filterTraitsTable);
+                $("#phePlotGroups").on('input',filterTraitsTable);
 
 
 
                 var phenoTypeID = "";
+                var phenotypeGroupList = []
 
 
 
@@ -413,11 +418,23 @@
                     var sampleNum = phenotypeDatasetMapping[pheName][dtsetName].count;
                     var phenotypeGroup = phenotypeDatasetMapping[pheName][dtsetName].phenotypeGroup;
 
+                    phenotypeGroupList.push(phenotypeGroup)
+
                     $(this).attr("phenotype", $(this).find("td").eq("1").text()+","+phenotypeGroup );
 
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
 
                     $("<td class='sample-size'>"+sampleNum+"</td>").appendTo($(this));
+
+                });
+
+                phenotypeGroupList = unique(phenotypeGroupList).sort();
+
+                $.each(phenotypeGroupList, function(index, value) {
+
+                    //console.log(value);
+
+                    $("#phePlotGroups").append('<option value="'+value+'">'+value+'</option>');
 
                 });
 
@@ -446,7 +463,8 @@
 
                 $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
 
-                var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+                var searchWords = $("#traits_table_filter").val() + "," + $("#phePlotGroups option:selected").val();
+                searchWords = searchWords.toLowerCase().split(",");
 
                 var phenotypesArray = [];
 
@@ -465,8 +483,9 @@
                             if(searchWord.indexOf("=") >= 0) {
 
                                 searchWord = searchWord.substring(1);
+                                phenotypeString = phenotypeString.split(",");
 
-                                if(phenotypeString == searchWord) {
+                                if(phenotypeString[0] == searchWord) {
                                     $(this).removeClass("hidden-traits-row").addClass("targeted-trait-row");
                                 } else {
                                     $(this).addClass("hidden-traits-row").removeClass("targeted-trait-row");
@@ -613,7 +632,7 @@
 
             function phePlotApp() {
 
-
+//$("#phePlotGroups")
 
                 ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
 
@@ -755,11 +774,11 @@
 
 
                 var x = d3.scale.linear()
-                    .domain([sampleMin, d3.max(traitsTableData, function(d) { return d.sample })])
+                    .domain([sampleMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.02])
                     .range([xbumperLeft, w-xbumperRight]);
 
                 var y = d3.scale.linear()
-                    .domain([pvalueMin, d3.max(traitsTableData, function(d) { return d.logValue })])
+                    .domain([pvalueMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.02])
                     .range([h-ybumperBottom, ybumperTop]);
 
                 arc = d3.svg.symbol().type('triangle-up').size(60);
@@ -837,7 +856,7 @@
                     .attr("style","fill:rgba(122, 179, 23, .3); text-anchor: end");
 
                 svg.append("text")
-                    .text("Top 25 unique phenotypes")
+                    .text("Top 20 unique phenotypes")
                     .attr("x", w-xbumperRight+ 45)
                     .attr("y", ybumperTop+5)
                     .attr("style","font-size: 12px;");
@@ -993,17 +1012,21 @@
                     .enter()
                     .append("g");
 
+                var phenotypeNameLineH = 17;
+                var phenotypeNameNum = 20;
+                var phenotypeNameTop = (h - (phenotypeNameLineH * phenotypeNameNum) - ybumperTop)/2;
+
                 group.append("g")
                     .attr("class","phenotype-name-group")
                     .attr("transform", function(d, i) {
 
-                        var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
+                        var namesTopPos = phenotypeNameTop;
 
                         var xposition = w-xbumperRight + 45;
-                        var yposition = ((i%25)*15)+namesTopPos;
+                        var yposition = ((i%phenotypeNameNum)*phenotypeNameLineH)+namesTopPos;
                         return "translate("+xposition+","+yposition+")"})
                     .attr("style", function(d,i) {
-                        var returnStyle = (i<25)? "visibility: visible":"visibility: hidden";
+                        var returnStyle = (i<phenotypeNameNum)? "visibility: visible":"visibility: hidden";
 
                         return returnStyle;
                     });
@@ -1012,13 +1035,13 @@
                     .append("line")
                     .attr("x1", -30)
                     .attr("y1", function(d,i) {
-                        var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
-                        return y(d.logValue) - (((i%25)*15)+namesTopPos)
+                        var namesTopPos = phenotypeNameTop;
+                        return y(d.logValue) - (((i%phenotypeNameNum)*phenotypeNameLineH)+namesTopPos)
                     })
                     .attr("x2", -(w-xbumperLeft-xbumperRight+45))
                     .attr("y2", function(d, i) {
-                        var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
-                        return y(d.logValue) - (((i%25)*15)+namesTopPos)
+                        var namesTopPos = phenotypeNameTop;
+                        return y(d.logValue) - (((i%phenotypeNameNum)*phenotypeNameLineH)+namesTopPos)
                     })
                     .attr("stroke",function(d) {
 
@@ -1033,8 +1056,8 @@
                     .attr("y1", 5)
                     .attr("x2", -30)
                     .attr("y2", function(d, i) {
-                        var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
-                        return y(d.logValue) - (((i%25)*15)+namesTopPos)
+                        var namesTopPos = phenotypeNameTop;
+                        return y(d.logValue) - (((i%phenotypeNameNum)*phenotypeNameLineH)+namesTopPos)
                     })
                     .attr("stroke",function(d) {
 
@@ -1060,7 +1083,7 @@
                     .append("text")
                     .attr("y", 10)
                     .text(function(d){ return d.phenotype})
-                    .attr("style","font-size: 10px; text-anchor: start;")
+                    .attr("style","font-size: 12px; text-anchor: start;")
                     .attr("fill", function(d) {
                         var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, 1)" : (d.logValue >= 4)? "rgba(122, 179, 23, 1)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, 1)" : "rgba(200, 200, 200, 1)"
                         return dotColor ;
@@ -1200,10 +1223,10 @@
                     .attr("class","axis")
                     .call(d3.svg.axis().orient("bottom").scale(x))
                     .append("text")
-                    .text("Sample number")
-                    .attr("x",w - xbumperRight)
+                    .text("Sample >")
+                    .attr("x",10)
                     .attr("y", 50)
-                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:end");
+                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:start");
 
 
                 svg.append("g").attr("transform", "translate("+xbumperLeft+",0)")
@@ -1211,10 +1234,10 @@
                     .call(d3.svg.axis().orient("left").scale(y))
                     .append("text")
                     .text("p-value (-log10)")
-                    .attr("x",-(ybumperTop))
+                    .attr("x",-(y(0)))
                     .attr("y",-30 )
                     .attr("transform","rotate(-90)")
-                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:end");
+                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:start");
 
 
 
