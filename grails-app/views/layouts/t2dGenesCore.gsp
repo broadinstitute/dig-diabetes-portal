@@ -354,14 +354,24 @@
 
             /* traits table */
 
+            function resetPhePlot() {
+                $("#traits_table_filter").val("");
+                $("#pvalue-min").val("");
+                $("#pvalue-max").val("");
+                $("#sample-min").val("");
+                $("#sample-max").val("");
+                filterTraitsTable();
+            }
+
             function massageTraitsTable() {
 
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
 
                 var inputBox = "<div class='phenotype-searchbox-wrapper'><div style='display:inline-block'><h5>Filter phenotypes</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 350px; height: 35px; padding-left: 10px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
-                inputBox += "<div style='display:inline-block; margin-left: 15px; padding-left: 15px; border-left: solid 1px #ddd;'><h5>Filter plot (*1000 for sample)</h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 50px; padding-left: 10px;' value='0' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 50px; padding-left: 10px;' />";
-                inputBox += "<input id='sample-min' value='0'  style='display: inline-block; height: 35px; width: 75px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 75px; padding-left: 10px;' /></div>"
+                inputBox += "<div style='display:inline-block; margin-left: 15px; padding-left: 15px; border-left: solid 1px #ddd;'><h5>Filter plot (*1000 for sample)</h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 50px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 50px; padding-left: 10px;' />";
+                inputBox += "<input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 75px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 75px; padding-left: 10px;' />";
+                inputBox += "<a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div>"
                 inputBox += "<div class='related-words' style='clear: left;'></div></div>";
                 //inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
                 inputBox += '<div class="traits-svg-wrapper" style=""></div>';
@@ -390,17 +400,22 @@
                 $("#sample-min").on('input',filterTraitsTable);
                 $("#sample-max").on('input',filterTraitsTable);
 
+
+
                 var phenoTypeID = "";
 
 
 
                 $("#traitsPerVariantTableBody").find("tr").each(function() {
 
-                    $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
-
                     var pheName = $(this).find("div.vandaRowHdr").attr("phenotypename");
                     var dtsetName = $(this).find("div.vandaRowHdr").attr("datasetname");
-                    var sampleNum = phenotypeDatasetMapping[pheName][dtsetName]["count"];
+                    var sampleNum = phenotypeDatasetMapping[pheName][dtsetName].count;
+                    var phenotypeGroup = phenotypeDatasetMapping[pheName][dtsetName].phenotypeGroup;
+
+                    $(this).attr("phenotype", $(this).find("td").eq("1").text()+","+phenotypeGroup );
+
+                    $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
 
                     $("<td class='sample-size'>"+sampleNum+"</td>").appendTo($(this));
 
@@ -443,7 +458,8 @@
 
                         } else {
 
-                            var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                            //var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+                            var phenotypeString = $(this).attr("phenotype").toLowerCase();
                             var searchWord = value.trim();
 
                             if(searchWord.indexOf("=") >= 0) {
@@ -504,7 +520,10 @@
             function showRelatedWords() {
                 var relatedWords = "";
                 $(".targeted-trait-row").each(function() {
-                    relatedWords += $(this).find("td").eq("0").text()+" ";
+
+                    var phenotypeAndGroup = $(this).attr("phenotype").replace(","," ");
+
+                    relatedWords += phenotypeAndGroup + " ";
                 });
 
                 relatedWords = relatedWords.split(" ").sort();
@@ -531,9 +550,6 @@
 
                 wordsByWeight.sort( function(a,b){ return b.appearance - a.appearance } );
 
-                /*for(var x=0; x < wordsByWeight.length; x++){
-                    console.log("word: " + wordsByWeight[x].word + " appearance: " + wordsByWeight[x].appearance);
-                }*/
 
                 var returnText = "";
 
@@ -554,9 +570,6 @@
                                 wordMatch = "<a class='related-word' href='javascript:;' onclick='addToPhenotypeFilter(event)'>" + wordsByWeight[x].word + "</a>";
                             }
                         }
-
-
-
                     });
 
                     returnText += wordMatch;
@@ -569,12 +582,31 @@
 
             function addToPhenotypeFilter(event) {
                 var wordToAdd = $(event.target).text();
-                var currnetVal = $("#traits_table_filter").val();
+                var currentVal = $("#traits_table_filter").val().trim();
 
-                $("#traits_table_filter").val(currnetVal + ", " + wordToAdd);
+                var newKeyword = (currentVal[currentVal.length -1] == ",")? true : false;
+
+                currentVal = currentVal.split(",");
+
+                if(currentVal[currentVal.length -1] == "") currentVal.splice(currentVal.length -1,1);
+
+                console.log(currentVal);
+
+                if(newKeyword) {
+
+                    $("#traits_table_filter").val(currentVal + ", " + wordToAdd);
+
+                } else {
+
+                    currentVal[currentVal.length -1] = wordToAdd;
+
+                    $("#traits_table_filter").val(currentVal+", ");
+
+                }
+
+
 
                 filterTraitsTable();
-
 
             }
 
@@ -805,38 +837,18 @@
                     .attr("style","fill:rgba(122, 179, 23, .3); text-anchor: end");
 
                 svg.append("text")
-                    .text("Top 20 unique phenotypes")
+                    .text("Top 25 unique phenotypes")
                     .attr("x", w-xbumperRight+ 45)
-                    .attr("y", ybumperTop)
+                    .attr("y", ybumperTop+5)
                     .attr("style","font-size: 12px;");
 
                 svg.append("text")
                     .text("against p-value")
                     .attr("x", w-xbumperRight+ 45)
-                    .attr("y", ybumperTop + 15)
+                    .attr("y", ybumperTop + 20)
                     .attr("style","font-size: 12px;");
 
-                // add labels
 
-                svg.append("g").attr("transform", "translate(0,"+(h-ybumperBottom)+")")
-                    .attr("class","axis")
-                    .call(d3.svg.axis().orient("bottom").scale(x))
-                    .append("text")
-                    .text("Sample number")
-                    .attr("x",w - xbumperRight)
-                    .attr("y", 50)
-                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:end");
-
-
-                svg.append("g").attr("transform", "translate("+xbumperLeft+",0)")
-                    .attr("class","axis")
-                    .call(d3.svg.axis().orient("left").scale(y))
-                    .append("text")
-                    .text("p-value (-log10)")
-                    .attr("x",-(ybumperTop))
-                    .attr("y",-30 )
-                    .attr("transform","rotate(-90)")
-                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:end");
 
                 // add dataset names
                 group = svg.selectAll("g.datasetnames")
@@ -988,45 +1000,29 @@
                         var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
 
                         var xposition = w-xbumperRight + 45;
-                        var yposition = ((i%20)*15)+namesTopPos;
+                        var yposition = ((i%25)*15)+namesTopPos;
                         return "translate("+xposition+","+yposition+")"})
                     .attr("style", function(d,i) {
-                        var returnStyle = (i<20)? "visibility: visible":"visibility: hidden";
+                        var returnStyle = (i<25)? "visibility: visible":"visibility: hidden";
 
                         return returnStyle;
                     });
 
-                /*group.select(".phenotype-name-group")
+                group.select(".phenotype-name-group")
                     .append("line")
                     .attr("x1", -30)
                     .attr("y1", function(d,i) {
                         var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
-                        return y(d.logValue) - (((i%20)*15)+namesTopPos)
+                        return y(d.logValue) - (((i%25)*15)+namesTopPos)
                     })
                     .attr("x2", -(w-xbumperLeft-xbumperRight+45))
                     .attr("y2", function(d, i) {
                         var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
-                        return y(d.logValue) - (((i%20)*15)+namesTopPos)
+                        return y(d.logValue) - (((i%25)*15)+namesTopPos)
                     })
                     .attr("stroke",function(d) {
 
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .7)" : "rgba(200, 200, 200, .3)"
-                        return dotColor ;
-                    })
-                    .attr("shape-rendering","auto");*/
-
-                group.select(".phenotype-name-group")
-                    .append("line")
-                    .attr("x1", -10)
-                    .attr("y1", 0)
-                    .attr("x2", -30)
-                    .attr("y2", function(d, i) {
-                        var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
-                        return y(d.logValue) - (((i%20)*15)+namesTopPos)
-                    })
-                    .attr("stroke",function(d) {
-
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .7)" : "rgba(200, 200, 200, .3)"
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .5)" : (d.logValue >= 4)? "rgba(122, 179, 23, .5)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .7)" : "rgba(200, 200, 200, .3)"
                         return dotColor ;
                     })
                     .attr("shape-rendering","auto");
@@ -1034,21 +1030,41 @@
                 group.select(".phenotype-name-group")
                     .append("line")
                     .attr("x1", -10)
-                    .attr("y1", 0)
-                    .attr("x2", -5)
-                    .attr("y2", 0)
+                    .attr("y1", 5)
+                    .attr("x2", -30)
+                    .attr("y2", function(d, i) {
+                        var namesTopPos = ((h - ybumperBottom ) - (20*15))/2 + ybumperTop;
+                        return y(d.logValue) - (((i%25)*15)+namesTopPos)
+                    })
                     .attr("stroke",function(d) {
 
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .7)" : "rgba(200, 200, 200, .3)"
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .5)" : (d.logValue >= 4)? "rgba(122, 179, 23, .5)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .7)" : "rgba(200, 200, 200, .3)"
+                        return dotColor ;
+                    })
+                    .attr("shape-rendering","auto");
+
+                group.select(".phenotype-name-group")
+                    .append("line")
+                    .attr("x1", -10)
+                    .attr("y1", 5)
+                    .attr("x2", -5)
+                    .attr("y2", 5)
+                    .attr("stroke",function(d) {
+
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .5)" : (d.logValue >= 4)? "rgba(122, 179, 23, .5)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .7)" : "rgba(200, 200, 200, .3)"
                         return dotColor ;
                     })
                     .attr("shape-rendering","auto");
 
                 group.select(".phenotype-name-group")
                     .append("text")
-                    .attr("y", 5)
+                    .attr("y", 10)
                     .text(function(d){ return d.phenotype})
-                    .attr("style","font-size: 10px; text-anchor: start")
+                    .attr("style","font-size: 10px; text-anchor: start;")
+                    .attr("fill", function(d) {
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, 1)" : (d.logValue >= 4)? "rgba(122, 179, 23, 1)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, 1)" : "rgba(200, 200, 200, 1)"
+                        return dotColor ;
+                    })
                     .attr("xp", function(d) {
                         return x(d.sample)
                     })
@@ -1080,7 +1096,6 @@
                     })
                     .on("mouseout", function() {
 
-                        d3.select(this).attr('stroke','rgba(255,255,255,0.0)');
                         //Hide the tooltip
 
                         dimTriangle();
@@ -1111,7 +1126,7 @@
                     .attr("y2", 0)
                     .attr("stroke",function(d) {
 
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .2)" : (d.logValue >= 4)? "rgba(122, 179, 23, .2)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .4)" : "rgba(200, 200, 200, .3)"
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .2)" : (d.logValue >= 4)? "rgba(122, 179, 23, .2)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .4)" : "rgba(200, 200, 200, .3)"
                         return dotColor ;
                     })
                     .attr("shape-rendering","auto");
@@ -1123,12 +1138,12 @@
                     .attr("r", 3)
                     .attr("fill",function(d) {
 
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .7)" : "rgba(200, 200, 200, .3)"
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .4)" : "rgba(200, 200, 200, .3)"
                         return dotColor ;
                     })
                     .attr("stroke",function(d) {
 
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .0)" : (d.logValue >= 4)? "rgba(122, 179, 23, .0)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .0)" : "rgba(200, 200, 200, .0)"
+                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .0)" : (d.logValue >= 4)? "rgba(122, 179, 23, .0)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .0)" : "rgba(200, 200, 200, .0)"
                         return dotColor ;
                     })
                     .attr("stroke-width","10")
@@ -1143,7 +1158,7 @@
 
                         d3.select(this).attr('stroke',function(d) {
 
-                            var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(190, 255, 100, .7)" : "rgba(200, 200, 200, .3)"
+                            var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .7)" : "rgba(200, 200, 200, .3)"
                             return dotColor ;
                         });
 
@@ -1178,6 +1193,28 @@
 
                     });
 
+
+                // add labels
+
+                svg.append("g").attr("transform", "translate(0,"+(h-ybumperBottom)+")")
+                    .attr("class","axis")
+                    .call(d3.svg.axis().orient("bottom").scale(x))
+                    .append("text")
+                    .text("Sample number")
+                    .attr("x",w - xbumperRight)
+                    .attr("y", 50)
+                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:end");
+
+
+                svg.append("g").attr("transform", "translate("+xbumperLeft+",0)")
+                    .attr("class","axis")
+                    .call(d3.svg.axis().orient("left").scale(y))
+                    .append("text")
+                    .text("p-value (-log10)")
+                    .attr("x",-(ybumperTop))
+                    .attr("y",-30 )
+                    .attr("transform","rotate(-90)")
+                    .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:end");
 
 
 

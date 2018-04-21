@@ -53,6 +53,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 },
                 createdRow: function ( row, data, index ) {
+
                     var rowPtr = $(row);
                     var convertedSampleGroup = $(data[0]).attr('convertedSampleGroup');
                     var cells = rowPtr.children();
