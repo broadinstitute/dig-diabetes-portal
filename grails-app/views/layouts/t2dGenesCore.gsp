@@ -360,6 +360,7 @@
                 $("#pvalue-max").val("");
                 $("#sample-min").val("");
                 $("#sample-max").val("");
+                $("#phePlotGroups").val("");
                 filterTraitsTable();
             }
 
@@ -402,7 +403,26 @@
                 $("#pvalue-max").on('input',filterTraitsTable);
                 $("#sample-min").on('input',filterTraitsTable);
                 $("#sample-max").on('input',filterTraitsTable);
-                $("#phePlotGroups").on('input',filterTraitsTable);
+                $("#phePlotGroups").on('input',function() {
+
+                    if( $("#traits_table_filter").val() == "") {
+
+                        $("#traits_table_filter").val($("#phePlotGroups option:selected").val()+", ");
+
+                    } else {
+                        var currentVal = $("#traits_table_filter").val().trim();
+
+                        $("#phePlotGroups").find("option").each(function() {
+                            currentVal = (currentVal.indexOf($(this).attr("value")) >= 0)? currentVal.replace($(this).attr("value"), "") : currentVal;
+                        })
+
+                        var addingGroup = (currentVal.charAt(currentVal.length-1) == ",")? " " + $("#phePlotGroups option:selected").val() : ", " + $("#phePlotGroups option:selected").val();
+
+                        $("#traits_table_filter").val(currentVal + addingGroup);
+                    }
+
+                    filterTraitsTable();
+                });
 
 
 
@@ -476,7 +496,7 @@
 
                         } else {
 
-                            //var phenotypeString = $(this).find("td").eq("0").text().toLowerCase();
+
                             var phenotypeString = $(this).attr("phenotype").toLowerCase();
                             var searchWord = value.trim();
 
@@ -517,6 +537,7 @@
                 phePlotApp();
             }
 
+            /*
             function setColorToPlot(event) {
 
                 var phenotype = $(event.target).text();
@@ -535,6 +556,8 @@
 
 
             }
+
+            */
 
             function showRelatedWords() {
                 var relatedWords = "";
