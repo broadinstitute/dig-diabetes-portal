@@ -1358,8 +1358,8 @@ var refreshSampleDistribution = function (dataSetSel,callback,retrieveSampleSumm
 /***
  * filter our samples and then launch the IAT test
  */
-var immediateFilterAndRun = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier){
-    runBurdenTest(metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier);
+var immediateFilterAndRun = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier,variantSetId){
+    runBurdenTest(metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier,variantSetId);
 };
 
 
@@ -1422,7 +1422,7 @@ var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLow
 
 
 
-var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum,compoundedFilterValues,burdenTestAjaxUrl,variantIdentifier){
+var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum,compoundedFilterValues,burdenTestAjaxUrl,variantIdentifier,variantSetId){
 
     var isCategoricalF = function (stats){
         var isDichotomousTrait = false;
@@ -1461,7 +1461,8 @@ var executeAssociationTest = function (filterValues,covariateValues,propertyName
             compoundedFilterValues: compoundedFilterValues,
             traitFilterSelectedOption: phenotypeToPredict,
             dataset: datasetUse,
-            stratum: stratum
+            stratum: stratum,
+            variantSetId:variantSetId
         },
         async: true
     }).success(
@@ -1986,7 +1987,7 @@ var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDich
  *  run the burden test, then display the results.  We will need to start by extracting
  *  the data fields we need from the DOM.
  */
-var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier){
+var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier,variantSetId){
 
     var runMetaAnalysis = function (){
         var domHolder = $('.strataJar');
@@ -2167,7 +2168,7 @@ var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifie
         var strataPropertyName = stratum[0].strataPropertyName;
         var stratumName = stratum[0].stratumName;
         deferreds.push(executeAssociationTest('{}',collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName,compoundedFilterValues.strataFilters,
-            burdenTestAjaxUrl,variantIdentifier));
+            burdenTestAjaxUrl,variantIdentifier,variantSetId));
 
     });
     $.when.apply($,deferreds).then(function() {

@@ -19,7 +19,14 @@
                                                    class="btn btn-primary btn-lg burden-test-btn vcenter"
                                                    onclick="mpgSoftware.burdenTestShared.immediateFilterAndRun('${createLink(controller: "variantInfo", action: "metadataAjax")}',
                                                    '${createLink(controller: "variantInfo", action: "burdenTestAjax")}',
-                                                   '<%=variantIdentifier%>')">Launch analysis</button>
+                                                   '<%=variantIdentifier%>',
+                                                   {{#variantsSetRefinement}}
+                                                   ''
+                                                   {{/variantsSetRefinement}}
+                                                   {{^variantsSetRefinement}}
+                                                   'K'
+                                                   {{/variantsSetRefinement}}
+                                                   )">Launch analysis</button>
         </div>
 
 
@@ -95,7 +102,7 @@
                                          variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}'
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
                                          getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
                         </select>
                     </div>
@@ -117,7 +124,7 @@
                                          variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}'
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
                                          getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
                      </select>
                 </div>
@@ -140,7 +147,7 @@
                                          variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
                                          retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
                                          variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}'
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
                                          getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
                                 <option value="none">none</option>
                                 <option value="origin">ancestry</option>
@@ -588,10 +595,17 @@ the individual filters themselves. That work is handled later as part of a loop-
 
                                     <div class="col-md-12 col-sm-12 col-xs-12">
                                         <label><g:message code="gene.burdenTesting.label.available_variant_filter"/>:
+                                            {{#variantsSetRefinement}}
                                             <select id= "burdenProteinEffectFilter" class="burdenProteinEffectFilter form-control"
                                             onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters('${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}',
                                             '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
                                             </select>
+                                            {{/variantsSetRefinement}}
+                                            {{^variantsSetRefinement}}
+                                            <select id= "variantSetFilter" class="variantSetFilter form-control">
+                                                <option>Mahajan T2D variant set (243)</option>
+                                            </select>
+                                            {{/variantsSetRefinement}}
                                         </label>
                                     </div>
                                 </div>
@@ -707,7 +721,14 @@ the individual filters themselves. That work is handled later as part of a loop-
         </a>
     </div>
 
-    <div id="collapseBurden" class="accordion-body collapse">
+    <div id="collapseBurden"
+    {{#variantsSetRefinement}}
+    class="accordion-body collapse"
+    {{/variantsSetRefinement}}
+    {{^variantsSetRefinement}}
+    class="accordion-body collapse in"
+    {{/variantsSetRefinement}}
+    >
         <div class="accordion-inner">
             <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
                 <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
