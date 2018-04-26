@@ -194,12 +194,15 @@ mpgSoftware.burdenTestShared = (function () {
         //variantInfoUrl,
         //variantAndDsAjaxUrl,
         //burdenTestVariantSelectionOptionsAjaxUrl){
+                    displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined')||
+                        (displayParameters.grsVariantSet.length===0))?[1]:[];
                     mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
                         displayParameters);
                     mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
                     mpgSoftware.burdenTestShared.storeGrsVariantSet(displayParameters.grsVariantSet);
                     mpgSoftware.burdenTestShared.setPortalTypeWithAncestry(allowStratificationByAncestry);
-                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,urlHolder.sampleMetadataExperimentAjaxUrl, geneName );
+                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,urlHolder.sampleMetadataExperimentAjaxUrl,
+                        geneName, displayParameters.grsVariantSet );
                     mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(urlHolder.sampleMetadataAjaxWithAssumedExperimentUrl,urlHolder,
                         //urlHolder.variantOnlyTypeAheadUrl,
                         //urlHolder.sampleMetadataAjaxUrl,
@@ -283,13 +286,15 @@ mpgSoftware.burdenTestShared = (function () {
      * Retrieve sample metadata only to get the experiment list and insert it in a drop-down.  Seems wasteful...
      * @param dropDownSelector
      */
-    var retrieveExperimentMetadata = function (dropDownSelector,sampleMetadataExperimentAjax, geneName) {
+    var retrieveExperimentMetadata = function (dropDownSelector,sampleMetadataExperimentAjax, geneName,grsVariantSet) {
         var loading = $('#spinner').show();
         $.ajax({
             cache: false,
             type: "post",
             url: sampleMetadataExperimentAjax,
-            data: {isGeneBurden:(geneName.length>0)},
+            data: { isGeneBurden:( (typeof geneName !== 'undefined')  && (geneName.length>0)),
+                isGrsVariantSet:false},
+            //    isGrsVariantSet:( (typeof grsVariantSet !== 'undefined')  && ( grsVariantSet.length>0) )},
             async: true,
             success: function (data) {
                 var experimentDropdown = $(dropDownSelector);
@@ -955,6 +960,7 @@ mpgSoftware.burdenTestShared = (function () {
 //
 //  display the variant selection filtering tools
 //
+
             if (getGeneForGait().length>0){
                 renderData.sectionNumber++;
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));

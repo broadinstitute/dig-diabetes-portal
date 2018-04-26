@@ -279,7 +279,8 @@ class GeneController {
         }
 
         if (userQueryContext.variant) {
-            if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()) {
+            if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()&&
+                    (userQueryContext.startOriginalExtent!=null)) { // we don't investigate RS numbers for positions, at least for now
                 redirect(controller: 'gene', action: 'geneInfo', params: [id              : userQueryContext.originalRequest,
                                                                           startExtent     : userQueryContext.startExpandedExtent,
                                                                           endExtent       : userQueryContext.endExpandedExtent,

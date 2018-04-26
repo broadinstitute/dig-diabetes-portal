@@ -91,6 +91,13 @@ class UserQueryContext {
                         error = true
                     }
                 }
+            } else if (originalRequest.trim().toUpperCase().startsWith('RS')){
+                startOriginalExtent =  null
+                endOriginalExtent = null
+                startExpandedExtent = null
+                endExpandedExtent = null
+                genomicPosition = false
+                variant = true
             }
 
         }

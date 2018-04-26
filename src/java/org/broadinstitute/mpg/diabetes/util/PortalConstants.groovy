@@ -250,6 +250,8 @@ class PortalConstants {
     public class BurdenTest {
         public static final String VARIANT                                  = "VARIANT";
         public static final String GENE                                     = "GENE";
+        public static final String GRS_SPECIFIC                             = "GRS_SPECIFIC";
+
     }
 
 

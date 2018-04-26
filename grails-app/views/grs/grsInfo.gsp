@@ -94,7 +94,7 @@
             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                    'accordionHeaderClass': 'accordion-heading',
                                                                    'modifiedTitle': 'Genetic risk score module',
-                                                                   'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
+                                                                   'modifiedGaitSummary': 'The Genetic Risk Score (GRS) tool takes a defined set of T2D risk-associated variants and allows you to calculate the  p-value for association of this set with different phenotypes, potentially revealing genetic relationships between phenotypes. Start by selecting a dataset and a phenotype to compare, edit the set of variants if desired, and click “Launch” to calculate the p-value.',
                                                                    'allowExperimentChoice': 1,
                                                                    'allowPhenotypeChoice' : 1,
                                                                    'allowStratificationChoice': 1,

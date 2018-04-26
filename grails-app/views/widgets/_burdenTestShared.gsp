@@ -10,7 +10,8 @@ $( document ).ready( function (){
             allowExperimentChoice: ${allowExperimentChoice},
             allowPhenotypeChoice : ${allowPhenotypeChoice},
             allowStratificationChoice: ${allowStratificationChoice},
-            grsVariantSet:'${grsVariantSet}'
+            grsVariantSet:'${grsVariantSet}',
+            modifiedGaitSummary:'${modifiedGaitSummary}'
         },
         '${geneName}',
         true,

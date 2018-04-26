@@ -729,10 +729,14 @@ the individual filters themselves. That work is handled later as part of a loop-
     class="accordion-body collapse in"
     {{/variantsSetRefinement}}
     >
+
         <div class="accordion-inner">
-            <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
-            </div>
+
+            {{#variantsSetRefinement}}
+                <div style="float: right; margin-top: 15px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
+                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
+                </div>
+            {{/variantsSetRefinement}}
 
             <div class="container">
                 <h5>

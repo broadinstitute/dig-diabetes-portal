@@ -154,6 +154,8 @@ class BurdenService {
     public JSONObject convertSampleGroupPropertyListToJson (SampleGroup sampleGroup){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
 
+        if (sampleGroup == null) { return new JSONObject() }
+
         List <String> phenotypeList = []
         List <String> covariateList = []
         List <String> filterList = []
