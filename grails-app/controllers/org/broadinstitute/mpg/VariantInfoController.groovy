@@ -448,7 +448,16 @@ class VariantInfoController {
                 }
             }
             sampleGroupList = tempList;
-        } else if (isGeneBurden) {
+        } else {
+            List<SampleGroup> tempList = new ArrayList<SampleGroup>();
+            for (SampleGroup sampleGroup : sampleGroupList) {
+                if (!sampleGroup.hasMeaning(PortalConstants.BurdenTest.GRS_SPECIFIC)) {
+                    tempList.add(sampleGroup)
+                }
+            }
+            sampleGroupList = tempList;
+        }
+        if (isGeneBurden) {
             List<SampleGroup> tempList = new ArrayList<SampleGroup>();
             for (SampleGroup sampleGroup : sampleGroupList) {
                 if (sampleGroup.hasMeaning(PortalConstants.BurdenTest.GENE)) {
@@ -525,21 +534,22 @@ class VariantInfoController {
      * @return
      */
     def sampleMetadataAjaxWithAssumedExperiment() {
-        String portalType = g.portalTypeString() as String
+        boolean isGrsVariantSet = params.boolean('isGrsVariantSet');
         List<SampleGroup> sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
         JSONObject jsonConversionObject = new JSONObject()
+
+        // if this is not a GRS specific query then exclude data sets that are GRS specific
+        if (!isGrsVariantSet) {
+            List<SampleGroup> tempList = new ArrayList<SampleGroup>();
+            for (SampleGroup sampleGroup : sampleGroupList) {
+                if (!sampleGroup.hasMeaning(PortalConstants.BurdenTest.GRS_SPECIFIC)) {
+                    tempList.add(sampleGroup)
+                }
+            }
+            sampleGroupList = tempList;
+        }
+
         for (SampleGroup sampleGroup in sampleGroupList) {
-
-//                if (sampleGroup.parent) {
-//                    if (portalType=='mi'){
-//                        jsonConversionObject[sampleGroup.systemId] = 'ExSeq_EOMI_mdv91'
-//                    } else {
-//                        jsonConversionObject[sampleGroup.systemId] = "${sampleGroup?.parent?.name}_${sampleGroup?.parent?.version}"
-//                    }
-//                }
-
-
-
             Iterator<String> meaningIterator = sampleGroup?.getMeaningSet().iterator();
             String variantDataSet = null;
             while (meaningIterator.hasNext()) {

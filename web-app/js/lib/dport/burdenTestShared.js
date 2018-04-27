@@ -420,7 +420,7 @@ mpgSoftware.burdenTestShared = (function () {
             cache: false,
             type: "post",
             url: sampleMetadataAjaxWithAssumedExperimentUrl,
-            data: {},
+            data: {isGrsVariantSet:( (typeof displayParameters.variantsSetRefinement !== 'undefined')  && ( displayParameters.variantsSetRefinement.length===0) )},
             async: true,
             success: function (data) {
                 storeSampleMetadata(data);
