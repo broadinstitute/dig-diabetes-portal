@@ -293,8 +293,8 @@ mpgSoftware.burdenTestShared = (function () {
             type: "post",
             url: sampleMetadataExperimentAjax,
             data: { isGeneBurden:( (typeof geneName !== 'undefined')  && (geneName.length>0)),
-                isGrsVariantSet:false},
-            //    isGrsVariantSet:( (typeof grsVariantSet !== 'undefined')  && ( grsVariantSet.length>0) )},
+             //   isGrsVariantSet:false},
+                isGrsVariantSet:( (typeof grsVariantSet !== 'undefined')  && ( grsVariantSet.length>0) )},
             async: true,
             success: function (data) {
                 var experimentDropdown = $(dropDownSelector);

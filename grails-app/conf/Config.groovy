@@ -323,10 +323,10 @@ environments {
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
-          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
-//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
@@ -713,4 +713,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
-
+'
