@@ -99,12 +99,16 @@
     <p><g:message code="informational.data.exptsumm.DC_SP2-2"></g:message></p>
     <p><g:message code="informational.data.exptsumm.DC_SP2-3"></g:message></p>
 
-<h4><g:message code="informational.shared.headers.overview"></g:message></h4>
-<p><g:message code="informational.data.overview.DC_SP2-1"></g:message></p>
-<p><g:message code="informational.data.overview.DC_SP2-2"></g:message></p>
-<p><g:message code="informational.data.overview.DC_SP2-3"></g:message></p>
-<p><g:message code="informational.data.overview.DC_SP2-4"></g:message></p>
+%{--<h4><g:message code="informational.shared.headers.overview"></g:message></h4>--}%
+%{--<p><g:message code="informational.data.overview.DC_SP2-1"></g:message></p>--}%
+%{--<p><g:message code="informational.data.overview.DC_SP2-2"></g:message></p>--}%
+%{--<p><g:message code="informational.data.overview.DC_SP2-3"></g:message></p>--}%
+%{--<p><g:message code="informational.data.overview.DC_SP2-4"></g:message></p>--}%
 
+%{--<h4><g:message code="informational.shared.headers.reports"></g:message></h4>--}%
+
+%{--<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_NUS.pdf" target="_blank">download PDF</a>)</p>--}%
+%{--<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_NUS.pdf" target="_blank">download PDF</a>)</p>--}%
 
 
     <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS data</h4>
