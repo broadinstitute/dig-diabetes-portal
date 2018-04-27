@@ -99,6 +99,13 @@
     <p><g:message code="informational.data.exptsumm.DC_SP2-2"></g:message></p>
     <p><g:message code="informational.data.exptsumm.DC_SP2-3"></g:message></p>
 
+<h4><g:message code="informational.shared.headers.overview"></g:message></h4>
+<p><g:message code="informational.data.overview.DC_SP2-1"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-2"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-3"></g:message></p>
+<p><g:message code="informational.data.overview.DC_SP2-4"></g:message></p>
+
+
 
     <h4>Accessing Diabetic Cohort-Singapore Prospective Study Program GWAS data</h4>
     <p><g:message code="informational.data.accessing.DC_SP2-1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.DC_SP2-2"></g:message></p>
