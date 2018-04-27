@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digAWS02KBV2prodServer
+defaultRestServer = digawsdemoibdKB
 
 
 getRestServerList = [

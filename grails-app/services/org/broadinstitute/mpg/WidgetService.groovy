@@ -653,7 +653,7 @@ class WidgetService {
                         try{
                             pValue = Double.parseDouble(pValueAsString)
                             if (pValue>0){
-                                logPValue = 0-Math.log(pValue)
+                                logPValue = 0-Math.log10(pValue)
                             }
                         }catch(e){
                             log.error("we have a P value that's nonnumeric, which is bad news")
