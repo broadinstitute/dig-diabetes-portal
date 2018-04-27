@@ -389,9 +389,29 @@ class VariantInfoController {
     def sampleMetadataExperimentAjax() {
         List<SampleGroup> sampleGroupList
         boolean isGeneBurden = params.boolean('isGeneBurden');
+        boolean isGrsVariantSet = params.boolean('isGrsVariantSet');
+
         sampleGroupList =  metaDataService.getSampleGroupListForPhenotypeAndVersion("", "", MetaDataService.METADATA_SAMPLE)
 
-        // DIGKB-203: filter out non gene burden test sample groups (EBI)
+        // TODO: we should be able to eliminate this switch when we havean allele specific burden test in place.
+        //       Until then, however, GRS specificity trumps the gene/variant dataset switch
+        if (isGrsVariantSet) {
+            List<SampleGroup> tempList = new ArrayList<SampleGroup>();
+            for (SampleGroup sampleGroup : sampleGroupList) {
+                if (sampleGroup.hasMeaning(PortalConstants.BurdenTest.GRS_SPECIFIC)) {
+                    tempList.add(sampleGroup)
+                }
+            }
+            sampleGroupList = tempList;
+        } else {
+            List<SampleGroup> tempList = new ArrayList<SampleGroup>();
+            for (SampleGroup sampleGroup : sampleGroupList) {
+                if (!sampleGroup.hasMeaning(PortalConstants.BurdenTest.GRS_SPECIFIC)) {
+                    tempList.add(sampleGroup)
+                }
+            }
+            sampleGroupList = tempList;
+        }
         if (isGeneBurden) {
             List<SampleGroup> tempList = new ArrayList<SampleGroup>();
             for (SampleGroup sampleGroup : sampleGroupList) {
