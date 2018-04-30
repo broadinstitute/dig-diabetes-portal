@@ -60,8 +60,7 @@ var mpgSoftware = mpgSoftware || {};
 
         var fillClumpVariants = function (phenotypeNamex, dataset, r2) {
             var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            var loader = $('#rSpinner');
-            loader.show();
+            var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
@@ -69,14 +68,13 @@ var mpgSoftware = mpgSoftware || {};
                 data: {phenotype: phenotypeNamex, dataset: dataset,r2:r2},
                 async: true,
                 success: function (data) {
-                    console.log(data);
-                    data.variants
+                    loading.hide();
 
                     mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
 
                 },
                 error: function (jqXHR, exception) {
-                    loader.hide();
+                    loading.hide();
                     core.errorReporter(jqXHR, exception);
                 }
             }).done(function (data, textStatus, jqXHR) {
@@ -90,7 +88,6 @@ var mpgSoftware = mpgSoftware || {};
 
         var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {
             var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-
             var loading = $('#spinner').show();
             $('[data-toggle="popover"]').popover();
             $.ajax({
@@ -121,7 +118,7 @@ var mpgSoftware = mpgSoftware || {};
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
             if(r2 == 1){
-                var loading = $('#spinner').show();
+
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
@@ -129,7 +126,7 @@ var mpgSoftware = mpgSoftware || {};
                 mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
             }
             else{
-                var loading = $('#spinner').show();
+
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
