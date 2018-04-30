@@ -108,7 +108,7 @@
                                 </g:each>
                                 <g:each in="${portalVersionBean.rangeExamples}">
                                     <g:if test="${!portalVersionBean.regionSpecificVersion}">
-                                        <a class="front-search-example" href='<g:createLink controller="region" action="regionInfo"
+                                        <a class="front-search-example" href='<g:createLink controller="gene" action="findTheRightDataPage"
                                                                                   params="[id:it]"/>'>${it}</a>
                                     </g:if>
                                     <g:else>
