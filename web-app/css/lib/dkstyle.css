@@ -1089,9 +1089,10 @@ a.related-word-red {
 	width: auto;
 	height: auto;
 	max-width: 400px;
-	margin-left: 20px;
+	margin-left: 15px;
+	margin-top: -53px;
 	padding: 15px;
-	background-color: white;
+	background-color: rgba(255,255,255, .85);
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
@@ -1104,6 +1105,17 @@ a.related-word-red {
 
 #phePlotTooltip.hidden {
 	display: none;
+}
+
+#phePlotTooltip .pointer {
+	background-image:url(../images/white_triangle4.png);
+	background-size: 13px 15px;
+	background-position: center;
+	width: 13px;
+	height: 15px;
+	position: absolute;
+	top: 47px;
+	left: -13px;
 }
 
 #phePlotTooltip #value {

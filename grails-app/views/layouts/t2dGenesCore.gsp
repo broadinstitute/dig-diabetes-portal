@@ -658,6 +658,11 @@
 //$("#phePlotGroups")
 
                 ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
+                ($("#phePlotTooltip").find(".pointer").length)? "" : d3.select("#phePlotTooltip").append("div").attr("class","pointer");
+
+                    ;
+
+                //$("#phePlotTooltip").append("<div class='pointer'>&nbsp;</div>");
 
                 var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
                 var pvalueMin = $("#pvalue-min").val();
