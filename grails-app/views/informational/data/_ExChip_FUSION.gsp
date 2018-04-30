@@ -44,7 +44,9 @@
 
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
-<p><g:message code="informational.data.overview.FUSION"></g:message></p>
+<p><g:message code="informational.data.overview.ExChipFUSION1"></g:message></p>
+<p><g:message code="informational.data.overview.ExChipFUSION2"></g:message></p>
+<p><g:message code="informational.data.overview.ExChipFUSION3"></g:message></p>
 
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>

@@ -44,8 +44,9 @@
 
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
-<p><g:message code="informational.data.overview.FUSION"></g:message></p>
-
+<p><g:message code="informational.data.overview.FUSION_Metabochip1"></g:message></p>
+<p><g:message code="informational.data.overview.FUSION_Metabochip2"></g:message></p>
+<p><g:message code="informational.data.overview.FUSION_Metabochip3"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
