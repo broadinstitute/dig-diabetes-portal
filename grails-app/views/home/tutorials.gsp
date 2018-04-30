@@ -136,6 +136,11 @@
             $(".media").attr("href", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf");
             $(".media").find("iframe").attr("src", "https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf");
         });
+
+        $("#SDKPPhenotypeGuidePdf").click(function () {
+            $(".media").attr("href", "https://s3.amazonaws.com/broad-portal-resources/sleep/SDKP_phenotype_reference_guide.pdf");
+            $(".media").find("iframe").attr("src", "https://s3.amazonaws.com/broad-portal-resources/sleep/SDKP_phenotype_reference_guide.pdf");
+        });
         
     });
 
@@ -228,6 +233,16 @@
 
         </g:elseif>
 
+        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+
+            <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="SDKPPhenotypeGuidePdf"><g:message
+                        code="portal.PhenotypeGuide.title"/></a></div>
+
+            </div>
+
+        </g:elseif>
+
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
             <a class="media" href="${links.introTutorial}">PDF File</a>
         </g:if>
@@ -236,6 +251,9 @@
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
             Tutorials will go here.
+        </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+            <a class="media" href="${links.SDKPPhenotypeGuide}">PDF File</a>
         </g:elseif>
         <g:else>
             <a class="media" href="${links.strokeIntroTutorial}">PDF File</a>

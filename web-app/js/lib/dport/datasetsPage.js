@@ -23,6 +23,10 @@ var mpgSoftware = mpgSoftware || {};
                 access = "Early access phase 2";}
             else if (dataTypeName.includes('METSIM')){
                 access = "Early access phase 2";}
+            else if (dataTypeName.includes('FUSION')){
+                access = "Early access phase 1";}
+            //else if (dataTypeName.includes('DCSP2')){
+            //    access = "Early access phase 1";}
             else{
                 access = "Open access";}
             return access;
