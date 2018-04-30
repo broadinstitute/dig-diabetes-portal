@@ -135,7 +135,7 @@ federatedAwsProdKBV2Server = new ServerBean("KB-prod-fed-2016-aws", "http://ec2-
 federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
-digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8090/dccservices/")
+digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
@@ -144,7 +144,6 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-//defaultRestServer = digawsdevnewKB
 defaultRestServer = digawsdemoibdKB
 
 getRestServerList = [
@@ -286,52 +285,54 @@ environments {
 
     }
     production {
-//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 
-//       grails.serverURL = "http://www.type2diabetesgenetics.org"
+
 
 //        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
-//      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
+//       grails.serverURL = "http://www.type2diabetesgenetics.org"
+//      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//        grails.serverURL = "http://cerebrovascularportal.org"
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
-//        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
+     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+
+//      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
+
 //      grails.serverURL = "http://sigmat2dqasrv-env.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2dqasrv2.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddev.elasticbeanstalk.com"
 //        grails.serverURL = "http://sigmat2ddevsrv2.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://type2diabgen-prodsrv1.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetesgenetics.elasticbeanstalk.com"
 
-//      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
+        //      grails.serverURL = "http://cerebrovascularportal.org"             // CDKP (stroke portal) production
+        //      grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"      // CDKP (stroke portal) test site
+//        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"
 
- //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com/"                    // CVDKP (MI portal) test site
+//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
-//      grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
-
-
-//      grails.serverURL = "http://cerebrovascularportal.org"             // stroke portal production for now
-//        grails.ServerURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"        // stroke portal demo for now
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
 
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
-
-//        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
+
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 
-        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
-//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
 
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"             // myocardial infarction portal test for now
+
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 
@@ -339,6 +340,9 @@ environments {
 
 //        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
 //I         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                  // Epilepsy test portal
+
+//         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"
+
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -557,7 +561,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", or "epilepsy".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -586,7 +590,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 '5010306206573083521',
                                                 1,
                                                 0,
-                                                1,
+                                                0,
                                                 1,
                                                 0
 ), // default data set used for a LocusZoom plot
@@ -711,6 +715,41 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0
+                                  ),
+                                  new PortalVersionBean("sleep",
+                                          "Sleep",
+                                          "mdv110",
+                                          "SleepChronotype", // make sure your default phenotype exists in your default data set
+                                          "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
+                                          ["AnteriorCaudate"],
+                                          ["SLEEP AND CIRCADIAN", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_UKBB_mdv110",
+                                          "images/sleep/front_sleep_logo_2018.svg",
+                                          "portal.sleep.header.tagline",
+                                          [],
+                                          ["PAX8"],
+                                          ["rs62158211"],
+                                          ["chr2:113,873,524-114,136,577"],
+                                          "images/sleep/sleep_banner_2018.png",
+                                          "",
+                                          "images/sleep/sleep_menu_logo_2018.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '5414069947481666863',
+                                          1,
+                                          0,
+                                          0,
+                                          1,
+                                          0
                                   )
 ]
+
+
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 

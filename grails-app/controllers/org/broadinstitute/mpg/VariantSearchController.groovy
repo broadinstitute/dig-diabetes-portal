@@ -71,7 +71,12 @@ class VariantSearchController {
         String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup, phenotypeName)
         def result = new JSONObject()
         if ((jsonDescr) && (jsonDescr.length() > 0)) {
-            result = slurper.parseText(jsonDescr)
+            try {
+                result = slurper.parseText(jsonDescr)
+            } catch(e) {
+                print("parse failed")
+            }
+
         }
         render(status: 200, contentType: "application/json") {
             result

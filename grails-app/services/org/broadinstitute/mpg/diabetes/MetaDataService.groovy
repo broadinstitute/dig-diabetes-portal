@@ -668,7 +668,10 @@ class MetaDataService {
             if (phenoName != 'none'){
                 List<SampleGroup> fullListOfSampleGroups = sharedToolsService.listOfTopLevelSampleGroups(phenoName ,"",  technologies)
                 JSONObject jsonList = filterManagementService.convertSampleGroupListToJson(fullListOfSampleGroups, phenoName)
-                mapping[phenoName] = jsonList
+                if (jsonList.size()>0){
+                    mapping[phenoName] = jsonList
+                }
+
             }
         }
 

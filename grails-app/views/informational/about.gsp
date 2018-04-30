@@ -26,6 +26,9 @@
     <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
         <g:render template="./about_epilepsy"/>
     </g:elseif>
+    <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+        <g:render template="./about_sleep"/>
+    </g:elseif>
     <g:else>
         <g:render template="./about_stroke"/>
     </g:else>
