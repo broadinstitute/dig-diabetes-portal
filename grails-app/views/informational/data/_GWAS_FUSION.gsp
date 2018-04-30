@@ -17,7 +17,7 @@
     <table class="table table-condensed table-responsive table-striped">
         <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
-        <tr><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics Study (FUSION)</a>
+        <tr><td>884</td><td>797</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics Study (FUSION)</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
@@ -39,11 +39,15 @@
 <p><g:message code="informational.data.funding.FUSION"></g:message>
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.FUSION"></g:message></p>
+<p><g:message code="informational.data.exptsumm.FUSION1"></g:message></p>
+<p><g:message code="informational.data.exptsumm.FUSION2"></g:message></p>
+<p><g:message code="informational.data.exptsumm.FUSION3"></g:message></p>
 
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
-<p><g:message code="informational.data.overview.FUSION"></g:message></p>
+<p><g:message code="informational.data.overview.GWAS_FUSION1"></g:message></p>
+<p><g:message code="informational.data.overview.GWAS_FUSION2"></g:message></p>
+<p><g:message code="informational.data.overview.GWAS_FUSION3"></g:message></p>
 
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
@@ -54,7 +58,9 @@
 
 
 <h4>Accessing FUSION GWAS data</h4>
-<p><g:message code="informational.data.accessing.FUSION"></g:message></p>
+<p><g:message code="informational.data.accessing.FUSION1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.FUSION2"></g:message></p>
+
+
 
 
 </script>
