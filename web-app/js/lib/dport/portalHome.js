@@ -284,7 +284,7 @@ var mpgSoftware = mpgSoftware || {};
                 if ((typeof rawString !== 'undefined') &&
                     (rawString !==  null )){
                     var substitutedSlash = rawString.replace("/","_");
-                    returnValue = substitutedSlash.replace(/^\s+|\s+$/g, "").match(/^[a-zA-Z0-9_\-:]+$/gi,'');
+                    returnValue = substitutedSlash.replace(/^\s+|\s+$/g, "").replace(/,/g, "").match(/^[a-zA-Z0-9_\-:]+$/gi,'');
                 }
                 return returnValue;
             }

@@ -590,7 +590,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 '5010306206573083521',
                                                 1,
                                                 0,
-                                                0,
+                                                1,
                                                 1,
                                                 0
 ), // default data set used for a LocusZoom plot
@@ -748,8 +748,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   )
 ]
 
-
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 
