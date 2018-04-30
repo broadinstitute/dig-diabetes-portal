@@ -537,27 +537,29 @@ class VariantSearchController {
         JSONObject dataJsonObject
 
         if (userQueryContext.range){
-            //limit=1000  // kludge
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall == 0){
+                log.error(" CRITICAL ERROR: We have no way of doing range query with the old-style API. ")
+            }
+
             dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
                     userQueryContext.startOriginalExtent,
                     userQueryContext.endOriginalExtent,
                     userQueryContext.chromosome,
                     -1,limit,currentVersion)
         }else {
-//            LinkedHashMap genomicPosition = sharedToolsService.getGeneExpandedExtent( geneName,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
-//            if (genomicPosition.is_error){
-//                genomicPosition = sharedToolsService.getVariantExtent(geneName)
-//            }
-//            geneExtentBegin = genomicPosition["startExtent"]
-//            geneExtentEnd = genomicPosition["endExtent"]
-//            geneChromosome = sharedToolsService.parseChromosome(genomicPosition["chrom"])
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall == 0){
+                dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(  phenotypeName,
+                        params.geneToSummarize as String,
+                        -1,limit,currentVersion)
+            } else {
+                dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                        userQueryContext.startExpandedExtent,
+                        userQueryContext.endExpandedExtent,
+                        userQueryContext.chromosome,
+                        -1,limit,currentVersion)
+            }
 
-            //limit=1000  // kludge
-            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
-                    userQueryContext.startExpandedExtent,
-                    userQueryContext.endExpandedExtent,
-                    userQueryContext.chromosome,
-                    -1,limit,currentVersion)
+
         }
 
 

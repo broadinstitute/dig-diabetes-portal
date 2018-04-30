@@ -2219,9 +2219,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-
-
     public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName,
                                                              int  startHere, int pageSize,
                                                              String version ) {
@@ -2244,6 +2241,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
+
 
 
     public JSONObject gatherTopVariantsFromAggregatedTablesByRange( String phenotype,

@@ -266,11 +266,18 @@ class GeneController {
         UserQueryContext userQueryContext = widgetService.generateUserQueryContext(uncharacterizedString)
 
         if (userQueryContext.range){
-            redirect(controller:'gene',action:'geneInfo', params: [id: userQueryContext.originalRequest,
-                                                                   startExtent:userQueryContext.startOriginalExtent,
-                                                                   endExtent:userQueryContext.endOriginalExtent,
-                                                                   chromosomeNumber:userQueryContext.chromosome])
-            return
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall==0){
+                redirect(controller:'region',action:'regionInfo',params: [id: userQueryContext.originalRequest])
+                return
+            } else {
+                redirect(controller:'gene',action:'geneInfo', params: [id: userQueryContext.originalRequest,
+                                                                       startExtent:userQueryContext.startOriginalExtent,
+                                                                       endExtent:userQueryContext.endOriginalExtent,
+                                                                       chromosomeNumber:userQueryContext.chromosome])
+                return
+            }
+
+
         }
 
         if (userQueryContext.gene){

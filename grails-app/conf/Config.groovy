@@ -590,7 +590,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 '5010306206573083521',
                                                 1,
                                                 0,
-                                                1,
+                                                0,
                                                 1,
                                                 0
 ), // default data set used for a LocusZoom plot
@@ -743,7 +743,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,
                                           0,
                                           0,
-                                          1,
+                                          0,
                                           0
                                   )
 ]
