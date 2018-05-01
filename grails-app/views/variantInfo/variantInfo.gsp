@@ -81,7 +81,8 @@
                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    '<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />');
+                    '<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />',
+                    ${PortalVersionBean.getExposePhewasModule()})
 
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,

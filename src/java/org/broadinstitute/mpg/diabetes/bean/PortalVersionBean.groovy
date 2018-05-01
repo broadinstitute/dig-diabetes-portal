@@ -40,6 +40,8 @@ class PortalVersionBean {
     private Integer exposeGrsModule
     private Integer highSpeedGetAggregatedDataCall
     private Integer regionSpecificVersion
+    private Integer exposePhewasModule
+
 
     public PortalVersionBean(String portalType,
                              String portalDescription,
@@ -69,7 +71,8 @@ class PortalVersionBean {
                              Integer geneLevelDataExists,
                              Integer exposeGrsModule,
                              Integer highSpeedGetAggregatedDataCall,
-                             Integer regionSpecificVersion ){
+                             Integer regionSpecificVersion,
+                             Integer exposePhewasModule ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -99,6 +102,7 @@ class PortalVersionBean {
         this.exposeGrsModule = exposeGrsModule
         this.highSpeedGetAggregatedDataCall = highSpeedGetAggregatedDataCall
         this.regionSpecificVersion = regionSpecificVersion
+        this.exposePhewasModule = exposePhewasModule
     }
 
     public String getPortalType() {
@@ -219,6 +223,10 @@ class PortalVersionBean {
         return regionSpecificVersion
     }
 
+    public Integer getExposePhewasModule(){
+        return exposePhewasModule
+    }
+
 
 
     public String toJsonString(){
@@ -250,7 +258,8 @@ class PortalVersionBean {
 "geneLevelDataExists":${getGeneLevelDataExists()},
 "exposeGrsModule": ${getExposeGrsModule()},
 "highSpeedGetAggregatedDataCall": ${getHighSpeedGetAggregatedDataCall()},
-"regionSpecificVersion":${getRegionSpecificVersion()}
+"regionSpecificVersion":${getRegionSpecificVersion()},
+"getExposePhewasModule":${getExposePhewasModule()}
 }""".toString()
     }
 }

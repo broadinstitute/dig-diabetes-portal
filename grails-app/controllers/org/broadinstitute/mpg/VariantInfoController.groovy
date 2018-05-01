@@ -77,7 +77,8 @@ class VariantInfoController {
                             restServer: restServerService.currentRestServer(),
                             lzOptions   : lzOptions,
                             phenotype:phenotype,
-                            igvIntro: igvIntro
+                            igvIntro: igvIntro,
+                            PortalVersionBean:restServerService.retrieveBeanForCurrentPortal()
                     ])
 
         }

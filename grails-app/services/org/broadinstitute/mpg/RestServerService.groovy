@@ -344,12 +344,13 @@ class RestServerService {
                     existingPortalVersionBean.getGeneLevelDataExists(),
                     existingPortalVersionBean.getExposeGrsModule(),
                     existingPortalVersionBean.getHighSpeedGetAggregatedDataCall(),
-                    existingPortalVersionBean.getRegionSpecificVersion()
+                    existingPortalVersionBean.getRegionSpecificVersion(),
+                    existingPortalVersionBean.getExposePhewasModule()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],"","","","","","","","",0,0, 0, 0, 0 )
+                    "", "","","",[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
