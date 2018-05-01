@@ -1003,7 +1003,7 @@
     %{--</ul>--}%
  %{--<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>--}%
     %{--<table class="table table-condensed table-responsive table-striped">--}%
-
+%{--<tr><th colspan="4">Subjects in the GoT2D exome chip analysis subset</th></tr>--}%
         %{--<tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>--}%
         %{--<tr><td>1861</td><td>10882</td><td><a onclick="showSection(event)">Oxford-based UK T2D case-control</a>--}%
 
