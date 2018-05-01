@@ -115,7 +115,7 @@ class GeneManagementServiceIntegrationSpec   extends IntegrationSpec {
     void "test get region specification for gene"() {
         when:
         String geneId = "SLC30A8"
-        String regionSpecificationExpected = "8:117962462-118189003"
+        String regionSpecificationExpected = "chr8:117962462-118189003"
 
         then:
         assert regionSpecificationExpected == this.geneManagementService.getRegionSpecificationForGene(geneId, 0)
