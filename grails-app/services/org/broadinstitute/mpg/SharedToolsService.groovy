@@ -14,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQuery
 import org.broadinstitute.mpg.diabetes.metadata.query.JsNamingQueryTranslator
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.broadinstitute.mpg.people.Role
 import org.broadinstitute.mpg.people.User
 import org.broadinstitute.mpg.people.UserRole
@@ -33,6 +34,8 @@ class SharedToolsService {
     RestServerService restServerService
     MetaDataService metaDataService
     FilterManagementService filterManagementService
+    GeneManagementService geneManagementService
+
     private static final log = LogFactory.getLog(this)
     JSONObject sharedMetadata = null
     LinkedHashMap sharedProcessedMetadata = null
@@ -350,7 +353,7 @@ class SharedToolsService {
             if (rawString.indexOf(':')) {
                 List<String> dividedByColons = rawString.tokenize(":")
                 if (dividedByColons.size() > 1) {
-                    chromosome = dividedByColons[0]
+                    chromosome = parseChromosome(dividedByColons[0])
                     position = dividedByColons[1]
                     canonicalForm = "${chromosome}_${position}"
                 }
@@ -362,8 +365,11 @@ class SharedToolsService {
                     alternate = dividedByColons[3]
                     canonicalForm += "_${alternate}"
                 }
+            } else {
+                canonicalForm = rawString.replaceAll('-', '_')
+                canonicalForm = canonicalForm.replaceAll('/', '_')
             }
-            canonicalForm = rawString.replaceAll('-', '_')
+
         }
         return canonicalForm
     }
@@ -824,17 +830,31 @@ class SharedToolsService {
         return phenotypeHolder
     }
 
+    public String generateRegionString(String chromosomeNumber, Long startExtent, Long endExtent, String geneToStartWith, int expansionSize) {
+        String regionSpecification
+        if ((chromosomeNumber)&&(endExtent>0)) {
+            regionSpecification = "${chromosomeNumber}:${startExtent}-${endExtent}".toString()
+        } else {
+            regionSpecification = geneManagementService?.getRegionSpecificationForGene(geneToStartWith, expansionSize)
+        }
+        return regionSpecification
+    }
+
+
 
     public String parseChromosome(String rawChromosomeString) {
         String returnValue = ""
-        java.util.regex.Matcher chromosome = rawChromosomeString =~ /chr[\dXY]*/
-        if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
-            chromosome = rawChromosomeString =~ /[\dXY]*/
-        }
-        if (chromosome.size() > 0) {
-            java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
-            if (chromosomeString.size() > 0) {
-                returnValue = chromosomeString[0]
+        if (rawChromosomeString != null){
+            String trimmedRwChromosomeString = rawChromosomeString.trim()
+            java.util.regex.Matcher chromosome = trimmedRwChromosomeString =~ /(CHR[\dXY]*)|(chr[\dXY]*)/
+            if (chromosome.size() == 0) {  // let's try to help if the user forgot to specify the chr
+                chromosome = trimmedRwChromosomeString =~ /[\dXY]*/
+            }
+            if (chromosome.size() > 0) {
+                java.util.regex.Matcher chromosomeString = chromosome[0] =~ /[\dXY]+/
+                if (chromosomeString.size() > 0) {
+                    returnValue = chromosomeString[0]
+                }
             }
         }
         return returnValue;
@@ -868,6 +888,70 @@ class SharedToolsService {
         }
         return sb.toString()
     }
+
+    /***
+     * parse a string coming back from the pheWAS front end and break it into the pieces we need
+     * in order to make a call to the KB.  We are expecting something of the form:
+     * "variant eq '10:114758349_CCA/A,TT'"
+     * though the leading and trailing characters should be optional
+     *
+     * @param lzFormatVarId
+     * @return
+     */
+    public LinkedHashMap<String,String> purseVarIdReturnedFromLzCaller(String lzFormatVarId){
+        LinkedHashMap returnValue = [is_error: true]
+
+        if (!lzFormatVarId){
+            return returnValue
+        }
+
+
+        java.util.regex.Matcher variantNameExtractor = (lzFormatVarId =~ /'([^' ]+)'/)
+        if (!(variantNameExtractor.size()>0&&
+                variantNameExtractor[0].size()>1)) {
+            return returnValue
+        }
+
+        String v=variantNameExtractor[0][1]
+        java.util.regex.Matcher chromosomeExtractor = (v =~ /^(.*?):/)
+        if (!(chromosomeExtractor.size()>0&&
+                chromosomeExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["chromosome"] = chromosomeExtractor[0][1]
+        }
+
+        java.util.regex.Matcher positionExtractor = (v =~ /:(.*?)_/)
+        if (!(positionExtractor.size()>0&&
+                positionExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["position"] = positionExtractor[0][1]
+        }
+
+        java.util.regex.Matcher referenceAlleleExtractor = (v =~ /_(.*?)\//)
+        if (!(referenceAlleleExtractor.size()>0&&
+                referenceAlleleExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["referenceAllele"] = referenceAlleleExtractor[0][1]
+        }
+
+        java.util.regex.Matcher alternateAlleleExtractor = (v =~ /\/(.*?)$/)
+        if (!(alternateAlleleExtractor.size()>0&&
+                alternateAlleleExtractor[0].size()>1)) {
+            return returnValue
+        }else {
+            returnValue ["alternateAllele"] = alternateAlleleExtractor[0][1]
+        }
+        returnValue ["is_error"] = false
+
+        return returnValue
+    }
+
+
+
+
 
     /***
      * split up a compound string on the basis of commas.  Turn it into a nice clean list
@@ -1265,28 +1349,60 @@ class SharedToolsService {
     }
 
     public LinkedHashMap getGeneExtent(String geneName) {
-        LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1"]
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1", is_error: true]
         if (geneName) {
             String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
             returnValue.startExtent = gene?.addrStart ?: 0
             returnValue.endExtent = gene?.addrEnd ?: 0
             returnValue.chrom = gene?.chromosome
+            if (gene == null){
+                returnValue.is_error = true
+            } else {
+                returnValue.is_error = false
+            }
+
         }
         return returnValue
     }
 
 
-    public LinkedHashMap getGeneExpandedExtent(String geneName) {
-        LinkedHashMap<String, Integer> returnValue = [startExtent: 0, endExtent: 3000000000]
+    public LinkedHashMap getVariantExtent(String variantName) {
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, chrom: "1", is_error: true]
+        if (variantName) {
+            List<String> variantFields = variantName.split("_")
+            if (variantFields.size()>1){
+                returnValue.chrom = variantFields[0]
+                Integer start = 0
+                try {
+                    start = Integer.parseInt(variantFields[1])
+                } catch(e){}
+                if (start>RestServerService.EXPAND_ON_EITHER_SIDE_OF_GENE){
+                    start -= RestServerService.EXPAND_ON_EITHER_SIDE_OF_GENE
+                } else {
+                    start = 0
+                }
+                returnValue.startExtent = start
+                returnValue.endExtent = start+(2*RestServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+                returnValue.is_error = false
+            }
+        }
+        return returnValue
+    }
+
+
+
+    public LinkedHashMap getGeneExpandedExtent(String geneName,int bufferSpace) {
+        LinkedHashMap returnValue = [startExtent: 0, endExtent: 3000000000, is_error: true]
         if (geneName) {
-            LinkedHashMap<String, Integer> geneExtent = getGeneExtent(geneName)
+            LinkedHashMap geneExtent = getGeneExtent(geneName)
             Integer addrStart = geneExtent.startExtent
             if (addrStart) {
-                returnValue.startExtent = ((addrStart > 100000) ? (addrStart - 100000) : 0)
+                returnValue.startExtent = ((addrStart > bufferSpace) ? (addrStart - bufferSpace) : 0)
             }
-            returnValue.endExtent = geneExtent.endExtent + 100000
+            returnValue.endExtent = geneExtent.endExtent + bufferSpace
             returnValue.chrom = geneExtent.chrom
+            returnValue.is_error = geneExtent.is_error
         }
         return returnValue
     }
@@ -1309,11 +1425,21 @@ class SharedToolsService {
         if (geneName) {
             String geneUpperCase = geneName.toUpperCase()
             Gene gene = Gene.retrieveGene(geneUpperCase)
-            LinkedHashMap<String, Integer> geneExtent = getGeneExpandedExtent(geneName)
+            LinkedHashMap geneExtent = getGeneExpandedExtent(geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
             returnValue = "${gene.chromosome}:${geneExtent.startExtent}-${geneExtent.endExtent}"
         }
         return returnValue
     }
+
+//    public String generateExtentsFromRegionOrGeneName(String geneName) {
+//        String returnValue = ""
+//        if (geneName.indexOf(":")>-1){ // if it has a colon then we will assume that the name is a range
+//            LinkedHashMap codedRange = restServerService.parseARange(geneName)
+//        } else {
+//
+//        }
+//        return returnValue
+//    }
 
 
     public void decodeAFilterList(List<String> encodedOldParameterList, LinkedHashMap<String, String> returnValue) {

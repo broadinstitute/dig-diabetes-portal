@@ -10,7 +10,7 @@
     <r:require modules="burdenTest"/>
     <r:require modules="multiTrack"/>
     <r:require modules="matrix"/>
-
+    <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
 
     <r:layoutResources/>
 
@@ -29,6 +29,9 @@
     <!-- Google fonts -->
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans'>
+
+    %{--Need to call directly or else the images don't come out right--}%
+    <link rel="stylesheet" type="text/css"  src="../../js/lib/locuszoom.css">
 
 </head>
 
@@ -78,7 +81,9 @@
                     '${createLink(controller:"variantInfo", action:"variantInfo")}',
                     '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
                     '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    ${defaultTissues});
+                    '<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />',
+                    ${PortalVersionBean.getExposePhewasModule()})
+
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
@@ -172,7 +177,8 @@
                                                                            'accordionHeaderClass': 'accordion-heading',
                                                                            'allowExperimentChoice': 1,
                                                                            'allowPhenotypeChoice' : 1,
-                                                                           'allowStratificationChoice': 1   ]"/>
+                                                                           'allowStratificationChoice': 1,
+                                                                           'grsVariantSet':''   ]"/>
                     <div class="separator"></div>
                     </g:if>
 

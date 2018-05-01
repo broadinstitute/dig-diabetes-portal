@@ -37,7 +37,10 @@ class PortalVersionBean {
     private String blogId
     private Integer variantAssociationsExists
     private Integer  geneLevelDataExists
-
+    private Integer exposeGrsModule
+    private Integer highSpeedGetAggregatedDataCall
+    private Integer regionSpecificVersion
+    private Integer exposePhewasModule
 
 
     public PortalVersionBean(String portalType,
@@ -65,7 +68,11 @@ class PortalVersionBean {
                              String credibleSetInfoCode,
                              String blogId,
                              Integer variantAssociationsExists,
-                             Integer geneLevelDataExists ){
+                             Integer geneLevelDataExists,
+                             Integer exposeGrsModule,
+                             Integer highSpeedGetAggregatedDataCall,
+                             Integer regionSpecificVersion,
+                             Integer exposePhewasModule ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -92,6 +99,10 @@ class PortalVersionBean {
         this.blogId = blogId
         this.variantAssociationsExists =  variantAssociationsExists
         this.geneLevelDataExists = geneLevelDataExists
+        this.exposeGrsModule = exposeGrsModule
+        this.highSpeedGetAggregatedDataCall = highSpeedGetAggregatedDataCall
+        this.regionSpecificVersion = regionSpecificVersion
+        this.exposePhewasModule = exposePhewasModule
     }
 
     public String getPortalType() {
@@ -200,6 +211,22 @@ class PortalVersionBean {
         return geneLevelDataExists
     }
 
+    public Integer getExposeGrsModule() {
+        return exposeGrsModule
+    }
+
+    public Integer getHighSpeedGetAggregatedDataCall() {
+        return highSpeedGetAggregatedDataCall
+    }
+
+    public Integer getRegionSpecificVersion(){
+        return regionSpecificVersion
+    }
+
+    public Integer getExposePhewasModule(){
+        return exposePhewasModule
+    }
+
 
 
     public String toJsonString(){
@@ -228,7 +255,11 @@ class PortalVersionBean {
 "credibleSetInfoCode":"${getCredibleSetInfoCode()}",
 "blogId":"${getBlogId()}",
 "variantAssociationsExists":${getVariantAssociationsExists()},
-"geneLevelDataExists":${getGeneLevelDataExists()}
+"geneLevelDataExists":${getGeneLevelDataExists()},
+"exposeGrsModule": ${getExposeGrsModule()},
+"highSpeedGetAggregatedDataCall": ${getHighSpeedGetAggregatedDataCall()},
+"regionSpecificVersion":${getRegionSpecificVersion()},
+"getExposePhewasModule":${getExposePhewasModule()}
 }""".toString()
     }
 }

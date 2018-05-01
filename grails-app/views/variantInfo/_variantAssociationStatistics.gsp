@@ -35,6 +35,7 @@
             variantAssociationStrings,
             '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}',
             '${g.defaultPhenotype()}');
+
 </script>
 
 
@@ -48,6 +49,7 @@
     <g:else>
         <h5><g:message code="variant.info.associations.description"/></h5>
     </g:else>
+
     <table>
         <tr>
             <td>

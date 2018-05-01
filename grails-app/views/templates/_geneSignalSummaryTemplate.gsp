@@ -53,19 +53,13 @@
                 </div>
                 {{/genePageWarning}}
 
-                %{--<g:if test="${g.portalTypeString()?.equals('t2d')}">--}%
-                    %{--<div class="col-md-12" style="font-size:13px">--}%
-                        %{--Note: traits from the Oxford Biobank exome chip dataset are not currently included in this analysis.--}%
-                    %{--</div>--}%
-                %{--</g:if>--}%
             </div>
             <div class="row geneWindowDescriptionHolder">
 
                 <div class="col-md-12">
-                <!-- <label style="font-size: 20px; font-weight: 900">VARIANTS ON <em>{{geneName}}</em></label> -->
-                    <div class="geneWindowDescription" style="font-size: 20px; font-weight: 900; font-style:normal;">
-                    <em style="font-weight: 900; ">{{geneName}}</em> is located on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}
-                    </div>
+                    %{--<div class="geneWindowDescription" style="font-size: 20px; font-weight: 900; font-style:normal;">--}%
+                    %{--<em style="font-weight: 900; ">Displaying the region on chromosome {{geneChromosomeMinusChr}} between position {{geneExtentBegin}} and {{geneExtentEnd}}--}%
+                    %{--</div>--}%
                 </div>
 
             </div>
@@ -496,17 +490,25 @@
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">Common variants: {{pName}}</a></li>
-                        <li role="presentation" class="variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">High-impact variants: {{pName}}</a></li>
+                        {{#commonTab}}
+                            <li role="presentation" class="active variantTableLabels commonVariantChooser">
+                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">Common variants: {{pName}}</a>
+                            </li>
+                        {{/commonTab}}
+                        {{#highImpactTab}}
+                            <li role="presentation" class="variantTableLabels highImpacVariantChooser">
+                                <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">High-impact variants: {{pName}}</a>
+                            </li>
+                        {{/highImpactTab}}
                         {{#credibleSetTab}}
-                        <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a></li>
-                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Credible sets: {{pName}}</a></li>--}%
+                            <li role="presentation" class="variantTableLabels credibleSetChooser">
+                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a>
+                           </li>
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
-                        <li role="presentation" class="variantTableLabels credibleSetChooser">
-                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a></li>
-                           %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab">Strongest associations: {{pName}}</a></li>--}%
+                            <li role="presentation" class="variantTableLabels credibleSetChooser">
+                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a>
+                            </li>
                         {{/incredibleSetTab}}
                     </ul>
                 </div>
@@ -514,23 +516,46 @@
             <div id="cDataModalGoesHere"></div>
 
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
-                    <div class="row"   style="border: none">
-                        <div class="col-xs-12">
-                            <div class="variantCategoryHolder">The Common variants tab shows information about variants associated with the selected phenotype whose minor allele frequency (MAF) is greater than 5%.
+                {{#commonTab}}
+                    <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
+                        <div class="row"   style="border: none">
+                            <div class="col-xs-12">
+                                <div class="variantCategoryHolder">
+                                    <div  style="margin: 0 0 -15px 10px">This tab displays variants:
+                                         <div>
+                                            <ul style="margin: 0 0 0 10px">
+                                                 <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
+                                                 <li>associated with {{pname}}</li>
+                                                 <li>and with allele frequency (MAF) is greater than 5%</li>
+                                            </ul>
+                                         </div>
+                                    </div>
 
-                                <div id="commonVariantsLocation"></div>
-                                <div class="browserChooserGoesHere"></div>
-                                <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
-                                <div class="igvGoesHere"></div>
+                                    <div id="commonVariantsLocation"></div>
+                                    <div class="browserChooserGoesHere"></div>
+                                    <div id="locusZoomLocation" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
+                                    <div class="igvGoesHere"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {{/commonTab}}
+                {{#highImpactTab}}
                 <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
-                            <div class="variantCategoryHolder">The High-impact variants tab shows information about variants associated with the selected phenotype that are predicted to cause missense or protein-truncating mutations in the encoded protein. High-impact variants with MAF > 5% will also be shown on the Common variants tab.
+                            <div class="variantCategoryHolder">
+                                <div  style="margin: 0 0 -15px 10px">This tab displays variants:
+                                     <div>
+                                        <ul style="margin: 0 0 0 10px">
+                                             <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
+                                             <li>associated with {{pname}}</li>
+                                             <li>predicted to cause missense or protein-truncating mutations in the encoded protein</li>
+                                        </ul>
+                                     </div>
+                                     Note: high-impact variants with MAF > 5% will also be shown on the Common variants tab.
+                                </div>
+
                                 <div id="highImpactVariantsLocation"></div>
                                 <div id="aggregateVariantsLocation"></div>
                                 <div class="row">
@@ -542,6 +567,7 @@
                         </div>
                     </div>
                 </div>
+                {{/highImpactTab}}
                 {{#credibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
                     <div class="row" style="border: none">
@@ -586,9 +612,9 @@
 
                                     <div class="row clearfix">
                                         {{#selectorInfoExists}}
-                                         <div class="col-sm-6">
+                                         <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetSelectorChoice">Add/remove chromatin states:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
+                                                <label for="credSetSelectorChoice">Select tissues based on overlap with:&nbsp;</label><g:helpText title="tissue.selection.help.header" placement="top" body="tissue.selection.help.text"/>
                                                  <select id="credSetSelectorChoice" multiple="multiple">
                                                     {{#selectorInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>
@@ -596,6 +622,9 @@
                                                 </select>
                                              </span>
 
+                                         </div>
+                                         <div class="col-sm-2" style="margin-top: 10px">
+                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/selectorInfoExists}}
                                          {{^selectorInfoExists}}
@@ -605,7 +634,7 @@
                                          {{#displayInfoExists}}
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                <label for="credSetDisplayChoice">Display tissues:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.header"/>
+                                                <label for="credSetDisplayChoice">Display genomic features:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.text"/>
                                                  <select id="credSetDisplayChoice" multiple="multiple">
                                                     {{#displayInfo}}
                                                     <option {{selected}} value="{{value}}">{{name}}</option>
@@ -613,14 +642,12 @@
                                                 </select>
                                              </span>
                                          </div>
-                                         <div class="col-sm-2">
+                                         <div class="col-sm-2" style="margin-top: 10px">
                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
-                                         <div class="col-sm-2">
-                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
-                                         </div>
+
                                          {{/displayInfoExists}}
                                          %{--<div class="col-sm-2"></div>--}%
                                     </div>
@@ -912,11 +939,14 @@
     {{#chosenStatesForTissueDisplay}}
         <li style="margin: 0 5px 0 5px;border-left:solid  12px {{colorCode}};" val="{{name}}">
             {{#dnase}}
-            <r:img class="currentlanguage" uri="/images/dnase_scale.jpg" alt="Spanish"/>
+            <r:img class="currentlanguage" uri="/images/dnase_scale.jpg" alt="DNase scale"/>
             {{/dnase}}
             {{#h3k27ac}}
-            <r:img class="currentlanguage" uri="/images/h3k27ac_scale.jpg" alt="English"/>
+            <r:img class="currentlanguage" uri="/images/h3k27ac_scale.jpg" alt="H3K27ac scale"/>
             {{/h3k27ac}}
+            {{#tfbf}}
+            <r:img class="currentlanguage" uri="/images/tfbf_scale.jpg" alt="transcription factor binding footprint scale"/>
+            {{/tfbf}}
             &nbsp;{{descr}}
         </li>
     {{/chosenStatesForTissueDisplay}}

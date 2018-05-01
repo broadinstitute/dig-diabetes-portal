@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.Variant
 @Transactional
 class GeneManagementService {
     SqlService sqlService
+    SharedToolsService sharedToolsService
 
     /***
      * Return a list of all the genes that satisfy our partial match criteria. Note that
@@ -342,52 +343,6 @@ class GeneManagementService {
 
     }
 
-    /**
-     * return the region specification for a given gene and given buffer space in bases
-     *
-     * @param geneId
-     * @param bufferSpace
-     * @return
-     */
-    public LinkedHashMap getRegionSpecificationDetailsForGene(String geneId, int bufferSpace) {
-        // local variables
-        LinkedHashMap returnValue =  [:]
-        Gene gene = null
-
-        // get the gene
-        gene = Gene.findByName2(geneId);
-        if (gene != null) {
-            Long startPosition = 0;
-            Long endPosition = 0;
-            String chromosome  = null;
-            startPosition = gene?.addrStart;
-            endPosition = gene?.addrEnd;
-            chromosome = gene?.chromosome
-            // it might be that chromosome number starts with the string 'chr'
-            if ((chromosome)&&
-                    (chromosome.startsWith("chr")) &&
-                    (chromosome.length()>3)){
-                chromosome = chromosome.substring(3)
-            }
-
-            // increment start/end positions of need be
-            if ((bufferSpace != null) && (bufferSpace != 0)) {
-                startPosition = startPosition - bufferSpace;
-                endPosition = endPosition + bufferSpace;
-            }
-
-            returnValue["startPosition"] = startPosition
-            returnValue["endPosition"] = endPosition
-            returnValue["chromosome"] = chromosome
-
-
-        }
-
-        // return
-        return returnValue;
-    }
-
-
 
     public String getRegionSpecificationForGene(String geneId, int bufferSpace) {
         // local variables
@@ -397,12 +352,12 @@ class GeneManagementService {
         String chromosome  = null;
         String regionSpecification = null;
 
-        LinkedHashMap regionSpecificationDetailsForGene = getRegionSpecificationDetailsForGene( geneId,  bufferSpace)
+        LinkedHashMap regionSpecificationDetailsForGene = sharedToolsService.getGeneExpandedExtent( geneId,  bufferSpace)
         // get the gene
 
         if (!regionSpecificationDetailsForGene.isEmpty())
             // create the region specification
-            regionSpecification = regionSpecificationDetailsForGene.chromosome + ":" + regionSpecificationDetailsForGene.startPosition?.toString() + "-" + regionSpecificationDetailsForGene.endPosition?.toString();
+            regionSpecification = regionSpecificationDetailsForGene.chrom + ":" + regionSpecificationDetailsForGene.startExtent?.toString() + "-" + regionSpecificationDetailsForGene.endExtent?.toString();
 
         // return
         return regionSpecification;

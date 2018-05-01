@@ -15,7 +15,9 @@ var mpgSoftware = mpgSoftware || {};
             "1":[0,167.9,888.4,2649.9,9213115], // h3ks2ac
             "2":[0,207.8,389.6,1248.1,854238], // dnase
             "3":[0,0,0,0,0], // parker -- not sorted by value
-            "4":[0,0,0,0,0]  // varshney -- not sorted by value
+            "4":[0,0,0,0,0], // varshney -- not sorted by value
+            "5":[9,10,11,12,13]  // UCSD footprint -- not sorted by value
+
         }
         var DEFAULT_NUMBER_OF_VARIANTS = 10;
         var defaultTissueRegionOverlapMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -23,7 +25,11 @@ var mpgSoftware = mpgSoftware || {};
             'mi':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
             'epilepsy':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
             'ibd':["DNase"]};
-
+        var defaultTissueRegionOverlapDisplayMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'stroke':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'mi':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'epilepsy':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+            'ibd':["DNase"]};
         /***
          *  Choose from among all the tissues we get back from a regions search based on the user's display criteria
          * @param o
@@ -54,7 +60,9 @@ var mpgSoftware = mpgSoftware || {};
         var convertUserChoicesIntoAssayIds = function(selectedValuesAndText) {;
             var assayIds = [];
             _.forEach(selectedValuesAndText,function(oe){
-                if (oe.name==='H3K27ac'){
+                if (oe.name==='UCSD'){
+                    assayIds.push(5);
+                } else if (oe.name==='H3K27ac'){
                     assayIds.push(1);
                 } else if (oe.name==='DNase'){
                     assayIds.push(2);
@@ -72,8 +80,12 @@ var mpgSoftware = mpgSoftware || {};
         var getDisplayAssayIds = function() {
             return convertUserChoicesIntoAssayIds(getDisplayValuesAndText());
         };
-        var getDefaultTissueRegionOverlapMatcher = function (portalType){
-            return defaultTissueRegionOverlapMatcher[portalType];
+        var getDefaultTissueRegionOverlapMatcher = function (portalType,displayNumber){
+            if (displayNumber === 0){
+                return defaultTissueRegionOverlapMatcher[portalType];
+            } else if (displayNumber === 1){
+                return defaultTissueRegionOverlapDisplayMatcher[portalType];
+            }
         };
         var getDevelopingTissueGrid = function (){
             return developingTissueGrid;
@@ -391,10 +403,14 @@ var mpgSoftware = mpgSoftware || {};
                         lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_"+determineCategoricalColorIndex(record.element)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                             ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
-                    } else {
+                    } else if (record.ASSAY_ID === 5) {
                         lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                            ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
+                            ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'>"+record.state+"</td>");
+                    } else {
+                        lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
+                        elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
+                        ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
                     }
                 } else {
                     lineToAdd = ("<td class='tissueTable "+elementName+"'></td>");
@@ -537,6 +553,8 @@ var mpgSoftware = mpgSoftware || {};
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),dnase:1});
                 } else if (oe.name==='H3K27ac') {
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),h3k27ac:1});
+                } else if (oe.name==='UCSD') {
+                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),tfbf:1});
                 } else {
                     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)});
                 }
@@ -604,6 +622,16 @@ var mpgSoftware = mpgSoftware || {};
                 if (setDefaultButton){
                     $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
                 }
+                $('[data-toggle="popover"]').popover({
+                    animation: true,
+                    html: true,
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                });
+                $(".pop-top").popover({placement: 'top'});
+                $(".pop-right").popover({placement: 'right'});
+                $(".pop-bottom").popover({placement: 'bottom'});
+                $(".pop-left").popover({placement: 'left'});
+                $(".pop-auto").popover({placement: 'auto'})
 
             }, function(e) {
                 console.log("My ajax failed");
@@ -676,7 +704,9 @@ var mpgSoftware = mpgSoftware || {};
                 // The logic ultimately employed is this: primaryTissueGrid tells us which tissues to display.  subsidiaryTissueGrid holds any additional tissues that we will display,
                 //  which assumes that that tissue is already a primary tissue.  If
                 primaryTissueGrid = filterTissueGrid(tissueGrid,getSelectorAssayIds()); // DNase drives
-                subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,getDisplayAssayIds(),primaryTissueGrid);
+              //  subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,getDisplayAssayIds(),primaryTissueGrid);
+                subsidiaryTissueGrid = filterSecondaryTissueGrid(tissueGrid,
+                    _.difference(getDisplayAssayIds(),getSelectorAssayIds()),primaryTissueGrid);
             }
 
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
@@ -687,17 +717,22 @@ var mpgSoftware = mpgSoftware || {};
             var countOfTissues = primaryTissueObject.sortedTissues.length;
             var countOfSubsidiaryTissues = subsidiaryTissueObject.sortedTissues.length;
             _.forEach(primaryTissueObject.sortedTissues,function(tissueKey, index){
-                var lineToAdd = "<tr>";
+                var lineToAdd = "";
                 if ( index === 0){
                     lineToAdd += "<td class='credSetOrgLabel' style='vertical-align: middle' rowspan="+(countOfTissues+countOfSubsidiaryTissues)+">tissue</td>"
                 }
-                lineToAdd += "<td>"+tissueKey+"</td>";
+                lineToAdd += "<td  class='credSetTissueLabel'>"+tissueKey+"</td>";
                 _.forEach(sortedVariants,function(variantRec){
                     lineToAdd+=writeOneLineOfTheHeatMap(primaryTissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec)
                 });
                 lineToAdd += '</tr>';
                 var drivingTissueRecordExists = false;
                 if (lineToAdd.indexOf('matchingRegion')>-1){
+                    if (((Object.keys(subsidiaryTissueGrid).length>0))&&(typeof subsidiaryTissueGrid[tissueKey] !== 'undefined')){
+                        lineToAdd = '<tr>'+ lineToAdd;
+                    } else {
+                        lineToAdd = "<tr style='border-bottom: solid 2px #bbb'>"+ lineToAdd;
+                    }
                     $('.credibleSetTableGoesHere tr:last').parent().append(lineToAdd);
                     drivingTissueRecordExists = true;
                 }
@@ -706,7 +741,7 @@ var mpgSoftware = mpgSoftware || {};
                 // do we want to add a follow up lines?
                 if (drivingTissueRecordExists&&(Object.keys(subsidiaryTissueGrid).length>0)){
                     if (typeof subsidiaryTissueGrid[tissueKey] !== 'undefined') {
-                        var lineToAdd = "<tr><td><span  class='subsidiaryClass'>("+tissueKey+")</span></td>";
+                        var lineToAdd = "<tr style='border-bottom: solid 2px #bbb'><td><span  class='subsidiaryClass'>("+tissueKey+")</span></td>";
                         _.forEach(sortedVariants,function(variantRec){
                             lineToAdd+=writeOneLineOfTheHeatMap(subsidiaryTissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,variantRec)
                         });
@@ -727,7 +762,7 @@ var mpgSoftware = mpgSoftware || {};
 
         };
         var setIncludeRecordBasedOnUserChoice = function(assayIdList){
-            //if (assayIdList === '[1,2]') {
+
             if (true) {
                 mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
                     var selectedElements = getSelectedValuesAndText();
@@ -735,21 +770,12 @@ var mpgSoftware = mpgSoftware || {};
                     var retval = false;
                     _.forEach(selectedElements,function(oe){
 
-                        if ((o.ASSAY_ID===1)||(o.ASSAY_ID===2)){
+                        if ((o.ASSAY_ID===1)||(o.ASSAY_ID===2)||(o.ASSAY_ID===5)){
                             retval = true;
                         } else {
                             chosenElementTypes.push(oe.name);
                         }
 
-                        // if ((oe.name==="DNase")&&
-                        //     (o.ASSAY_ID===2)){
-                        //     retval = true;
-                        // } else if ((oe.name==="H3K27ac")&&
-                        //     (o.ASSAY_ID===1)){
-                        //     retval = true;
-                        // } else {
-                        //     chosenElementTypes.push(oe.name);
-                        // }
                     });
                     if (retval) {
                         return true;
@@ -759,17 +785,7 @@ var mpgSoftware = mpgSoftware || {};
 
                 };
             }
-            // else if (assayIdList === '[3]') {
-            //     mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
-            //         console.log("[3] choice function");
-            //         var selectedElements = $('#credSetSelectorChoice option:selected');
-            //         var chosenElementTypes = [];
-            //         _.forEach(selectedElements,function(oe){
-            //             chosenElementTypes.push($(oe).val());
-            //         });
-            //         return ((chosenElementTypes.indexOf(o.element)>-1))
-            //     };
-            // }
+
             return mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
         };
 
@@ -882,9 +898,10 @@ var mpgSoftware = mpgSoftware || {};
                     });
 
 
+                    var chromosome = (additionalParameters.geneChromosome.length>3)?additionalParameters.geneChromosome.substr(3):additionalParameters.geneChromosome;
                     mpgSoftware.geneSignalSummaryMethods.lzOnCredSetTab(additionalParameters,{
                         positioningInformation:{
-                            chromosome:additionalParameters.geneChromosome.substr(3),
+                            chromosome:chromosome,
                             startPosition:getCurrentSequenceExtents().start,
                             endPosition:getCurrentSequenceExtents().end
                         },
@@ -910,14 +927,15 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%',onChange: function() {
                             console.log($('#credSetSelectorChoice').val());
                         }});
-        //            $('#credSetSelectorChoice').multiselect('selectAllOption', false);
-                    $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
+                    $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
                     $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
                         // allSelectedText: 'All Selected',
                         buttonWidth: '60%'});
-               //     $('#credSetDisplayChoice').multiselect('selectAllOption', false);
-                    $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString));
+                    $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
                     $('#toggleVarianceTableLink').click();
+                    // $('#credSetSelectorChoice').on('change', function() {
+                    //     console.log("foo"+$(this).val());
+                    // });
 
                 }
             );

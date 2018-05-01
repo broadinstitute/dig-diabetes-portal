@@ -14,6 +14,7 @@ import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseFlatSearchTr
 import org.broadinstitute.mpg.diabetes.metadata.result.KnowledgeBaseResultParser
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 
@@ -24,6 +25,7 @@ class WidgetService {
     QueryJsonBuilder queryJsonBuilder = QueryJsonBuilder.getQueryJsonBuilder();
     RestServerService restServerService;
     MetaDataService metaDataService
+    SharedToolsService sharedToolsService
     def grailsApplication
 
     // setting variables
@@ -611,6 +613,91 @@ class WidgetService {
 
 
 
+    public JSONObject generatePhewasDataForLz(String varId){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion() )
+        List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("",
+                metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
+        LinkedHashMap <String,String> phenotypeToPhenotypegroupMap = [:]
+        for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
+            if (!phenotypeToPhenotypegroupMap.containsKey(phenotype.name)){ // we are not allowing phenotypes to be in multiple groups
+                phenotypeToPhenotypegroupMap[phenotype.name] = phenotype.group
+            }
+        }
+        // we have a response from the KB.  Let's convert that into the favored LZ format
+        List<String> dataFromQuery = []
+        if ((jsonObject)&&(!jsonObject.is_error)){
+            if (jsonObject.variants){
+                int id = 1
+                for (Map variant in jsonObject.variants){
+                    List<String> singleVariantData = []
+                    String retrievedVarId = ""
+                    List<String> varIdParts = []
+                    String phenotype = ""
+                    String phenotypeDescription = ""
+                    String phenotypeGroup = "unknown phenotype group"
+                    String dataSetDescription = g.message(code: "metadata." + variant.dataset, default: variant.dataset)
+                    SampleGroup sampleGroup = metaDataService.getSampleGroupByName (variant.dataset as String,metaDataService.METADATA_VARIANT)
+                    int subjectNumber = sampleGroup?.getSubjectsNumber()
+                    String pValueAsString = "0"
+                    Double pValue =0d
+                    Double logPValue =0d
+
+                    if (variant."VAR_ID"){retrievedVarId = variant."VAR_ID"}
+                    if (variant."P_VALUE"){pValueAsString = variant."P_VALUE"}
+                    if (variant."phenotype"){phenotype = variant."phenotype"}
+                    phenotypeDescription =  g.message(code: "metadata." + phenotype, default: phenotype)
+                    if (phenotypeToPhenotypegroupMap.containsKey(phenotype)) {
+                        phenotypeGroup = phenotypeToPhenotypegroupMap[phenotype]
+                    }
+                    varIdParts = retrievedVarId.split("_")
+                    if (pValueAsString){
+                        try{
+                            pValue = Double.parseDouble(pValueAsString)
+                            if (pValue>0){
+                                logPValue = 0-Math.log10(pValue)
+                            }
+                        }catch(e){
+                            log.error("we have a P value that's nonnumeric, which is bad news")
+                        }
+                    }
+
+                    singleVariantData<<"\"build\": \"GRCh37\""
+                    singleVariantData<<"\"chromosome\": \"${varIdParts[0]}\""
+                    singleVariantData<<"\"description\": \"${phenotypeDescription}\""
+                    singleVariantData<<"\"id\": \"${id++}\""
+                    singleVariantData<<"\"log_pvalue\": ${logPValue}"
+                    singleVariantData<<"\"position\": ${varIdParts[1]}"
+                    singleVariantData<<"\"ref_allele\": \"${varIdParts[2]}\""
+                    singleVariantData<<"\"score_test_stat\": ${variant.MOST_DEL_SCORE}"
+                    singleVariantData<<"\"study\": \"${dataSetDescription}\""
+                    singleVariantData<<"\"pmid\": \"28566273\""
+                    singleVariantData<<"\"trait\": \"${phenotype}\""
+                    singleVariantData<<"\"trait_group\": \"${phenotypeGroup}\""
+                    singleVariantData<<"\"trait_label\": \"${phenotypeDescription}\""
+                    singleVariantData<<"\"subject_number\": \"${subjectNumber}\""
+                    singleVariantData<<"\"variant\": \"${varIdParts[0]}:${varIdParts[1]}_${varIdParts[2]}/${varIdParts[3]}\""
+
+                    dataFromQuery << "{${singleVariantData.join(",")}}"
+                 }
+            }
+
+        }
+        String returnJson = """{
+            "data": [
+                ${dataFromQuery.join(",")}
+        ],
+            "lastPage": null,
+            "meta": {
+            "build": [
+                    "GRCh37"
+            ]
+        }
+        }""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(returnJson)
+    }
+
 
 
 
@@ -1022,16 +1109,19 @@ class WidgetService {
 
     private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
                                              String phenotype ){
+        JSONObject jsonResultString = new JSONObject()
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
                 MetaDataService.METADATA_VARIANT)
-        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
-        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
-        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-        jsonResultString["dataset"] = dataSetName
-        jsonResultString["phenotype"] = phenotype
-        jsonResultString["propertyName"] = newlyChosenProperty.name
+        if (newlyChosenProperty!=null){
+            LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
+            String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
+                    10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
+            jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
+            jsonResultString["dataset"] = dataSetName
+            jsonResultString["phenotype"] = phenotype
+            jsonResultString["propertyName"] = newlyChosenProperty.name
+        }
         return jsonResultString
     }
 
@@ -1143,6 +1233,13 @@ class WidgetService {
         return jsonResultString;
     }
 
+
+    public generateUserQueryContext(String stringToParse){
+        return UserQueryContext.parseUserQueryContext(stringToParse,restServerService,sharedToolsService)
+    }
+
+
+
     public String getLocusZoomEndpointSelection() {
         return locusZoomEndpointSelection
     }
@@ -1192,17 +1289,25 @@ class WidgetService {
 
         LinkedHashMap<String,HashMap<String,HashMap<String,String>>> aAllPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_VARIANT)
         LinkedHashMap<String,HashMap<String,HashMap<String,String>>> hailPhenotypeDataSetCombos = retrieveAllPhenotypeDataSetCombos(metaDataService.METADATA_HAIL)
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning("","POSTERIOR_PROBABILITY",
+                                                                                                        MetaDataService.METADATA_VARIANT)
             boolean firstTime = true
 
-
+            List<String> sampleGroupIdList = sampleGroupList.collect{SampleGroup sb->sb.systemId}
             for (String phenotype in aAllPhenotypeDataSetCombos.keySet()){
                 HashMap<String,HashMap<String,String>> phenotypeDataKeyMap  = aAllPhenotypeDataSetCombos[phenotype]
                 for (String eachDataset in phenotypeDataKeyMap.keySet()){
                     HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
+                    Boolean suitableForLzDefaultDisplay = true
+
+                    if (sampleGroupIdList.contains(phenotypeDataSetCombo.dataSet)) {
+                        suitableForLzDefaultDisplay = false
+                    }
                     beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
                             dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
                             propertyName:phenotypeDataSetCombo.property,dataType:"static",
-                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: firstTime, suitableForDefaultDisplay: true))
+                            description: g.message(code: "metadata." + phenotype, default: phenotype), defaultSelected: (firstTime&&suitableForLzDefaultDisplay),
+                            suitableForDefaultDisplay: suitableForLzDefaultDisplay))
                 }
                 firstTime = false
             }
@@ -1220,61 +1325,6 @@ class WidgetService {
             }
             firstTime = false
         }
-
-
-            // build the dynamic phenotype list by hand for now.  Clearly we need a metadata call eventually.
-            if (metaDataService.portalTypeFromSession=='t2d') {
-//                beanList.add(new PhenotypeBean(key: "T2D", name: "T2D", description: "Type 2 diabetes", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),
-//                        propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: true, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "BMI_adj_withincohort_invn", name: "BMI", description: "BMI", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "LDL_lipidmeds_divide.7_adjT2D_invn", name: "LDL", description: "LDL cholesterol", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "HDL_adjT2D_invn", name: "HDL", description: "HDL cholesterol", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "logfastingInsulin_adj_invn", name: "FI", description: "Fasting insulin", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "fastingGlucose_adj_invn", name: "FG", description: "Fasting glucose", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "HIP_adjT2D_invn", name: "HIP", description: "Hip circumference", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "WC_adjT2D_invn", name: "WC", description: "Waist circumference", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "WHR_adjT2D_invn", name: "WHR", description: "Waist hip ratio", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "TC_adjT2D_invn", name: "TC", description: "Total cholesterol", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-//                beanList.add(new PhenotypeBean(key: "TG_adjT2D_invn", name: "TG", description: "Triglycerides", dataSet:"hail",
-//                        dataSetReadable: g.message(code: "metadata." + "ExSeq_13k_mdv23", default: "ExSeq_13k_mdv23"),propertyName:"hailProp",dataType:"dynamic",
-//                        defaultSelected: false, suitableForDefaultDisplay: true));
-
-            } else if (metaDataService.portalTypeFromSession=='stroke') {
-/*
-                beanList.add(new PhenotypeBean(key: "ICH_Status", name: "ICH_Status", description: "ICH Status", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: true, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "Lobar_ICH", name: "Lobar_ICH", description: "Lobar ICH", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "Deep_ICH", name: "Deep_ICH", description: "Deep ICH", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",dataType:"dynamic",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-                beanList.add(new PhenotypeBean(key: "History_of_Hypertension", name: "History_of_Hypertension", description: "History of Hypertension", dataSet:"hail",
-                        dataSetReadable: g.message(code: "metadata." + "GWAS_Stroke_mdv70", default: "GWAS_Stroke_mdv70"),propertyName:"hailProp",
-                        defaultSelected: false, suitableForDefaultDisplay: true));
-*/
-            }
 
 
         // return

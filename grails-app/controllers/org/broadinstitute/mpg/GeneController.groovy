@@ -8,6 +8,7 @@ import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.locuszoom.PhenotypeBean
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.core.io.ResourceLocator
 import org.codehaus.groovy.grails.web.json.JSONArray
@@ -76,12 +77,14 @@ class GeneController {
     def geneInfo() {
         String locale = RequestContextUtils.getLocale(request)
         String geneToStartWith = params.id
+        Long startExtent=0L
+        Long endExtent=0L
+        String chromosomeNumber=params.chromosomeNumber
         LinkedHashMap savedCols = params.findAll{ it.key =~ /^savedCol/ }
         LinkedHashMap savedRows = params.findAll{ it.key =~ /^savedRow/ }
         String newVandAColumnName = "custom significance"
         String newVandAColumnPValue
         String newDatasetName
-        String newDatasetRowName = ""
         String phenotype = metaDataService.getDefaultPhenotype()
         String portalType = g.portalTypeString() as String
         String igvIntro = ""
@@ -102,6 +105,12 @@ class GeneController {
             default:
                 break
         }
+        try {
+            startExtent = Long.parseLong(params.startExtent)
+            endExtent = Long.parseLong(params.endExtent)
+        } catch(e){
+          //  e.printStackTrace()
+        }
         defaultTissues = restServerService.retrieveBeanForPortalType(portalType)?.getTissues()
 
         if (params.phenotypeChooser){
@@ -118,16 +127,9 @@ class GeneController {
         if (params.dataSetChooser) {
             newDatasetName =  params.dataSetChooser // data set^ P value property name
         }
-        if (params.newRowName) {
-            newDatasetRowName =  params.newRowName
-        }
         String phenotypeList = this.metaDataService?.urlEncodedListOfPhenotypes();
-        String regionSpecification = null
 
-        // added test for unit test error
-        if (geneToStartWith != null) {
-            regionSpecification = this.geneManagementService?.getRegionSpecificationForGene(geneToStartWith, 100000)
-        }
+        String regionSpecification = sharedToolsService.generateRegionString(chromosomeNumber,  startExtent,  endExtent,  geneToStartWith,  restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE )
 
         List <LinkedHashMap<String,String>> columnInformation = []
         // if we have saved values then use them, otherwise add the defaults
@@ -191,8 +193,8 @@ class GeneController {
             }
         }
 
-
-        if (geneToStartWith)  {
+        if ((geneToStartWith)||
+                ((endExtent>0) && (chromosomeNumber)  ))  {
             String locusZoomDataset = metaDataService.getDefaultDataset()
             JSONArray passDefaultTissues = []
             JSONArray passDefaultTissuesDescriptions = []
@@ -200,13 +202,28 @@ class GeneController {
                 passDefaultTissues.put("'${tissue}'")
                 passDefaultTissuesDescriptions.put("'${g.message(code: "metadata." + tissue, default: tissue)}'")
             }
-            LinkedHashMap geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith)
+            LinkedHashMap geneExtent =[:]
+            if ((chromosomeNumber)&&(endExtent>0)) {
+                geneExtent["startExtent"] = startExtent
+                geneExtent["endExtent"] = endExtent
+                geneExtent["chrom"] = chromosomeNumber
+            } else {
+                geneExtent = sharedToolsService.getGeneExpandedExtent(geneToStartWith,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            }
+
+
             List<String> identifiedGenes = restServerService.retrieveGenesInExtents(
                     [chromosomeSpecified:geneExtent.chrom,
                      beginningExtentSpecified:geneExtent.startExtent,
                      endingExtentSpecified:geneExtent.endExtent])
             String defaultPhenotype = metaDataService.getDefaultPhenotype()
-            String  geneUpperCase =   geneToStartWith.toUpperCase()
+            String  geneUpperCase
+            if (geneToStartWith){
+                geneUpperCase =   geneToStartWith.toUpperCase()
+            } else {
+                geneUpperCase = regionSpecification.toUpperCase()
+            }
+
 
             List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotype,"CREDIBLE_SET_ID")
             render (view: 'geneInfo', model:[show_gwas:sharedToolsService.getSectionToDisplay (SharedToolsService.TypeOfSection.show_gwas),
@@ -233,7 +250,8 @@ class GeneController {
                                              identifiedGenes:identifiedGenes,
                                              assayId: assayId,
                                              sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
-                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning())
+                                             genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning()),
+                                             regionSpecificVersion:restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()
             ] )
         }
     }
@@ -244,60 +262,55 @@ class GeneController {
      */
     def findTheRightDataPage () {
         String uncharacterizedString = params.id
-        // Is our string a region?
-        LinkedHashMap extractedNumbers =  restServerService.extractNumbersWeNeed(uncharacterizedString)
-        if ((extractedNumbers)   &&
-                (extractedNumbers["startExtent"])   &&
-                (extractedNumbers["endExtent"])&&
-                (extractedNumbers["chromosomeNumber"]) ){
-            redirect(controller:'region',action:'regionInfo', params: [id: params.id])
-            return
-        }
-        // It's not a region.  Is our string a gene?
-        String possibleGene = params.id
-        if (possibleGene){
-            possibleGene = possibleGene.trim().toUpperCase()
-        }
-        Gene gene = Gene.retrieveGene(possibleGene)
-        if (gene){
-            redirect(controller:'gene',action:'geneInfo', params: [id: params.id])
-            return
-        }
 
-        // KDUXTD-99: check to see if dbSnpId provided so that it gets past search box filter
-        if (sharedToolsService.getRecognizedStringsOnly()!=0) {
-            // once we have the variant database complete we can use this
-            String inputString = params.id
-            if (sqlService?.isDbSnpIdString(inputString)) {
-                // search for the variant by dbSnpId and if found, return; if not found, drop down to below test (just in case for now)
-                Variant variant = Variant.findByDbSnpId(inputString)
-                if (variant) {
-                    redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
-                    return
-                }
-            }
-        }
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(uncharacterizedString)
 
-        // Is our string a variant?  Build an identifying string and test
-        String canonicalVariant = sharedToolsService.createCanonicalVariantName(params.id)
-        if (sharedToolsService.getRecognizedStringsOnly()!=0){ // once we have the variant database complete we can use this
-            Variant variant = Variant.retrieveVariant(canonicalVariant)
-            if (variant) {
-                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+        if (userQueryContext.range){
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall==0){
+                redirect(controller:'region',action:'regionInfo',params: [id: userQueryContext.originalRequest])
                 return
             } else {
-                redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
+                redirect(controller:'gene',action:'geneInfo', params: [id: userQueryContext.originalRequest,
+                                                                       startExtent:userQueryContext.startOriginalExtent,
+                                                                       endExtent:userQueryContext.endOriginalExtent,
+                                                                       chromosomeNumber:userQueryContext.chromosome])
                 return
             }
-        } else {// for now we don't have to verify of variant's existence
-            redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: canonicalVariant])
+
+
+        }
+
+        if (userQueryContext.gene){
+            redirect(controller:'gene',action:'geneInfo', params: [id: userQueryContext.originalRequest])
             return
         }
-        // this is an error condition -- we should never get here in the code
-        log.error("why did we never finish parsing '${uncharacterizedString}'?")
+
+        if (userQueryContext.variant) {
+            if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()&&
+                    (userQueryContext.startOriginalExtent!=null)) { // we don't investigate RS numbers for positions, at least for now
+                redirect(controller: 'gene', action: 'geneInfo', params: [id              : userQueryContext.originalRequest,
+                                                                          startExtent     : userQueryContext.startExpandedExtent,
+                                                                          endExtent       : userQueryContext.endExpandedExtent,
+                                                                          chromosomeNumber: userQueryContext.chromosome])
+            } else {
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                return
+            }
+        }
+
+
+        if (userQueryContext.genomicPosition) {
+            redirect(controller: 'gene', action: 'geneInfo', params: [id              : userQueryContext.originalRequest,
+                                                                      startExtent     : userQueryContext.startExpandedExtent,
+                                                                      endExtent       : userQueryContext.endExpandedExtent,
+                                                                      chromosomeNumber: userQueryContext.chromosome])
+            return
+         }
+
+        // give up and go home
         redirect(controller: 'home', action: 'portalHome', params: [id: params.id])
         return
-    }
+     }
 
     /***
      * Get the information for the variants and association tables on the gene info page
@@ -389,11 +402,32 @@ class GeneController {
      */
     def geneInfoAjax() {
         String geneToStartWith = params.geneName
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(geneToStartWith)
+
         if (geneToStartWith)      {
             JSONObject jsonObject =  restServerService.retrieveGeneInfoByName (geneToStartWith.trim().toUpperCase())
-            render(status:200, contentType:"application/json") {
-                [geneInfo:jsonObject['gene-info']]
+            if (jsonObject["is_error"]){
+                JSONObject userQueryContextAsJsonObject = userQueryContext.toJSONObject()
+                Map variantPieces = sharedToolsService.getVariantExtent(geneToStartWith)
+                jsonObject = new JSONObject()
+                jsonObject["id"] = geneToStartWith
+                jsonObject["CHROM"] = variantPieces.chrom
+                jsonObject["BEG"] = variantPieces.startExtent
+                jsonObject["END"] = variantPieces.endExtent
+                render(status:200, contentType:"application/json") {
+                    [geneInfo:jsonObject,
+                     userQueryContext:userQueryContextAsJsonObject]
+                }
+                return
+            } else {
+                JSONObject userQueryContextAsJsonObject = userQueryContext.toJSONObject()
+                render(status:200, contentType:"application/json") {
+                    [geneInfo:jsonObject['gene-info'],
+                     userQueryContext:userQueryContextAsJsonObject]
+                }
+                return
             }
+
 
         }
     }
@@ -433,10 +467,12 @@ class GeneController {
         String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
         int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
+        String variantSetId = params.variantSetId
+
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue,
-                dataSet, sampleDataSet, explicitlySelectSamples,portalType);
+                dataSet, sampleDataSet, explicitlySelectSamples,portalType,variantSetId);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}
@@ -615,6 +651,10 @@ class GeneController {
         String chosenBigWigUrl
         if (oneResource){
             chosenBigWigUrl = oneResource.bigwigpath
+        }
+        if (chosenBigWigUrl.startsWith('s3')){  // hack to circumvent bad values in getEpigenomicData.  Fix the darn values, so that everything starts with HTTP and then remove the kludge
+            chosenBigWigUrl = "https://"+chosenBigWigUrl
+            permissions = "private"
         }
         List<String> filteredBigWigUrl = null //youpossibleBigwigAddresses.findAll{String t->t.toUpperCase().contains(tissue_id.toString().toUpperCase())}
 

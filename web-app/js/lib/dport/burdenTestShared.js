@@ -9,6 +9,7 @@ mpgSoftware.burdenTestShared = (function () {
     var minimumNumberOfSamples = 100;
     var portalTypeWithAncestry = true;
     var geneForGaitStr = '';
+    var grsVariantSetStr = '';
     var fillVariantOptionFilterDropDown;
 
 
@@ -34,6 +35,16 @@ mpgSoftware.burdenTestShared = (function () {
 
     var getGeneForGait  = function (){
         return geneForGaitStr;
+    };
+
+
+    var storeGrsVariantSet = function (grsVariantSet){
+        grsVariantSetStr = grsVariantSet;
+    };
+
+
+    var getGrsVariantSet  = function (){
+        return grsVariantSetStr;
     };
 
 
@@ -173,28 +184,33 @@ mpgSoftware.burdenTestShared = (function () {
         geneName,
         allowStratificationByAncestry,
         selectionForDataSetFilter,
-        sampleMetadataExperimentAjaxUrl,
-        sampleMetadataAjaxWithAssumedExperimentUrl,
-        variantOnlyTypeAheadUrl,
-        sampleMetadataAjaxUrl,
-        generateListOfVariantsFromFiltersAjaxUrl,
-        retrieveSampleSummaryUrl,
-        variantInfoUrl,
-        variantAndDsAjaxUrl,
-        burdenTestVariantSelectionOptionsAjaxUrl){
+        urlHolder){
+        //sampleMetadataExperimentAjaxUrl,
+        //sampleMetadataAjaxWithAssumedExperimentUrl,
+        //variantOnlyTypeAheadUrl,
+        //sampleMetadataAjaxUrl,
+        //generateListOfVariantsFromFiltersAjaxUrl,
+        //retrieveSampleSummaryUrl,
+        //variantInfoUrl,
+        //variantAndDsAjaxUrl,
+        //burdenTestVariantSelectionOptionsAjaxUrl){
+                    displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined')||
+                        (displayParameters.grsVariantSet.length===0))?[1]:[];
                     mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
                         displayParameters);
                     mpgSoftware.burdenTestShared.storeGeneForGait(geneName);
+                    mpgSoftware.burdenTestShared.storeGrsVariantSet(displayParameters.grsVariantSet);
                     mpgSoftware.burdenTestShared.setPortalTypeWithAncestry(allowStratificationByAncestry);
-                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,sampleMetadataExperimentAjaxUrl, geneName );
-                    mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(sampleMetadataAjaxWithAssumedExperimentUrl,
-                        variantOnlyTypeAheadUrl,
-                        sampleMetadataAjaxUrl,
-                        generateListOfVariantsFromFiltersAjaxUrl,
-                        retrieveSampleSummaryUrl,
-                        variantInfoUrl,
-                        variantAndDsAjaxUrl,
-                        burdenTestVariantSelectionOptionsAjaxUrl,
+                    mpgSoftware.burdenTestShared.retrieveExperimentMetadata( selectionForDataSetFilter,urlHolder.sampleMetadataExperimentAjaxUrl,
+                        geneName, displayParameters.grsVariantSet );
+                    mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(urlHolder.sampleMetadataAjaxWithAssumedExperimentUrl,urlHolder,
+                        //urlHolder.variantOnlyTypeAheadUrl,
+                        //urlHolder.sampleMetadataAjaxUrl,
+                        //urlHolder.generateListOfVariantsFromFiltersAjaxUrl,
+                        //urlHolder.retrieveSampleSummaryUrl,
+                        //urlHolder.variantInfoUrl,
+                        //urlHolder.variantAndDsAjaxUrl,
+                        //urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,
                         displayParameters);
     };
 
@@ -270,13 +286,15 @@ mpgSoftware.burdenTestShared = (function () {
      * Retrieve sample metadata only to get the experiment list and insert it in a drop-down.  Seems wasteful...
      * @param dropDownSelector
      */
-    var retrieveExperimentMetadata = function (dropDownSelector,sampleMetadataExperimentAjax, geneName) {
+    var retrieveExperimentMetadata = function (dropDownSelector,sampleMetadataExperimentAjax, geneName,grsVariantSet) {
         var loading = $('#spinner').show();
         $.ajax({
             cache: false,
             type: "post",
             url: sampleMetadataExperimentAjax,
-            data: {isGeneBurden:(geneName.length>0)},
+            data: { isGeneBurden:( (typeof geneName !== 'undefined')  && (geneName.length>0)),
+             //   isGrsVariantSet:false},
+                isGrsVariantSet:( (typeof grsVariantSet !== 'undefined')  && ( grsVariantSet.length>0) )},
             async: true,
             success: function (data) {
                 var experimentDropdown = $(dropDownSelector);
@@ -367,20 +385,28 @@ mpgSoftware.burdenTestShared = (function () {
     /***
      *  Use this if you have only one data set, since then we don't need to burden the user with the choice
      */
-    var preloadInteractiveAnalysisData = function (sampleMetadataAjaxWithAssumedExperimentUrl,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
-                                                   generateListOfVariantsFromFiltersAjaxUrl,retrieveSampleSummaryUrl,variantInfoUrl,variantAndDsAjaxUrl,
-                                                   burdenTestVariantSelectionOptionsAjaxUrl,displayParameters) {
+    var preloadInteractiveAnalysisData = function (
+        sampleMetadataAjaxWithAssumedExperimentUrl,urlHolder,
+        //linkToTypeaheadUrl,
+        //sampleMetadataAjaxUrl,
+        //generateListOfVariantsFromFiltersAjaxUrl,
+        //retrieveSampleSummaryUrl,
+        //variantInfoUrl,
+        //variantAndDsAjaxUrl,
+        //burdenTestVariantSelectionOptionsAjaxUrl,
+        displayParameters) {
         $('.caatSpinner').show();
         var dropDownSelector = '#phenotypeFilter';
         var strataChooserMarker = [];
-        var rememberLinkToTypeaheadUrl = linkToTypeaheadUrl;
-        var rememberSampleMetadataAjaxUrl = sampleMetadataAjaxUrl;
-        var rememberGenerateListOfVariantsFromFiltersAjaxUrl = generateListOfVariantsFromFiltersAjaxUrl;
-        var rememberRetrieveSampleSummaryUrl = retrieveSampleSummaryUrl;
-        var rememberVariantInfoUrl = variantInfoUrl;
-        var rememberVariantAndDsAjaxUrl = variantAndDsAjaxUrl;
-        var rememberBurdenTestVariantSelectionOptionsAjaxUrl = burdenTestVariantSelectionOptionsAjaxUrl;
+        //var rememberLinkToTypeaheadUrl = linkToTypeaheadUrl;
+        //var rememberSampleMetadataAjaxUrl = sampleMetadataAjaxUrl;
+        //var rememberGenerateListOfVariantsFromFiltersAjaxUrl = generateListOfVariantsFromFiltersAjaxUrl;
+        //var rememberRetrieveSampleSummaryUrl = retrieveSampleSummaryUrl;
+        //var rememberVariantInfoUrl = variantInfoUrl;
+        //var rememberVariantAndDsAjaxUrl = variantAndDsAjaxUrl;
+        //var rememberBurdenTestVariantSelectionOptionsAjaxUrl = burdenTestVariantSelectionOptionsAjaxUrl;
         var rememberDisplayParameters = displayParameters;
+        var rememberUrlHolder = urlHolder;
         if (portalTypeWithAncestry){
             strataChooserMarker.push(1);
         }
@@ -394,7 +420,7 @@ mpgSoftware.burdenTestShared = (function () {
             cache: false,
             type: "post",
             url: sampleMetadataAjaxWithAssumedExperimentUrl,
-            data: {},
+            data: {isGrsVariantSet:( (typeof displayParameters.variantsSetRefinement !== 'undefined')  && ( displayParameters.variantsSetRefinement.length===0) )},
             async: true,
             success: function (data) {
                 storeSampleMetadata(data);
@@ -420,9 +446,16 @@ mpgSoftware.burdenTestShared = (function () {
                     });
                 }
 
-                refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,rememberLinkToTypeaheadUrl,
-                    rememberSampleMetadataAjaxUrl,rememberGenerateListOfVariantsFromFiltersAjaxUrl,rememberVariantInfoUrl,rememberRetrieveSampleSummaryUrl,
-                    rememberVariantAndDsAjaxUrl, rememberBurdenTestVariantSelectionOptionsAjaxUrl);
+                refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',true,rememberUrlHolder);
+                    //{
+                    //    linkToTypeaheadUrl:rememberLinkToTypeaheadUrl,
+                    //    sampleMetadataAjaxUrl:rememberSampleMetadataAjaxUrl,
+                    //    generateListOfVariantsFromFiltersAjaxUrl:rememberGenerateListOfVariantsFromFiltersAjaxUrl,
+                    //    variantInfoUrl:rememberVariantInfoUrl,
+                    //    retrieveSampleSummaryUrl:rememberRetrieveSampleSummaryUrl,
+                    //    variantAndDsAjaxUrl:rememberVariantAndDsAjaxUrl,
+                    //    burdenTestVariantSelectionOptionsAjaxUrl:rememberBurdenTestVariantSelectionOptionsAjaxUrl
+                    //});
                 // make sections visible or invisible
                 if ((typeof rememberDisplayParameters.allowExperimentChoice !== 'undefined')&&(rememberDisplayParameters.allowExperimentChoice)){
                     $(".chooseExperiment").css('display','block'); } else {$(".chooseExperiment").css('display','none');}
@@ -473,31 +506,35 @@ mpgSoftware.burdenTestShared = (function () {
         }
         $('#stratsTabs').empty();
         var caseControlFiltering = $('#caseControlFiltering').prop('checked');
-        stratifiedSampleAndCovariateSection($(parmHolder.datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
-            parmHolder.linkToTypeaheadUrl,
-            parmHolder.generateListOfVariantsFromFiltersAjaxUrl,
-            parmHolder.variantInfoUrl,
-            parmHolder.retrieveSampleSummaryUrl,
-            parmHolder.variantAndDsAjaxUrl,
-            parmHolder.burdenTestVariantSelectionOptionsAjaxUrl);
+        stratifiedSampleAndCovariateSection($(parmHolder.datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,parmHolder);
+            //parmHolder.linkToTypeaheadUrl,
+            //parmHolder.generateListOfVariantsFromFiltersAjaxUrl,
+            //parmHolder.variantInfoUrl,
+            //parmHolder.retrieveSampleSummaryUrl,
+            //parmHolder.variantAndDsAjaxUrl,
+            //parmHolder.burdenTestVariantSelectionOptionsAjaxUrl);
         displayTestResultsSection(false);
     };
 
 
-    var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator,changeExperiment,linkToTypeaheadUrl,sampleMetadataAjaxUrl,
-                                       generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl, burdenTestVariantSelectionOptionsAjaxUrl) {
+    var refreshGaitDisplay = function (datasetFilter, phenotypeFilter,stratifyDesignation,caseControlDesignator,changeExperiment,
+                                       urlHolder
+                                       //linkToTypeaheadUrl,sampleMetadataAjaxUrl,
+                                       //generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl, burdenTestVariantSelectionOptionsAjaxUrl
+    ) {
         if ((typeof changeExperiment !== 'undefined') &&
             (changeExperiment)){
-            loadExperimentMetadata($(datasetFilter).val(),refreshTopOfGaitDisplay,sampleMetadataAjaxUrl,
+            loadExperimentMetadata($(datasetFilter).val(),refreshTopOfGaitDisplay,urlHolder.sampleMetadataAjaxUrl,
                 {   dropDownPhenoSelector:phenotypeFilter,
                     stratifyDesignation:stratifyDesignation,
-                    linkToTypeaheadUrl:linkToTypeaheadUrl,
-                    sampleMetadataAjaxUrl:sampleMetadataAjaxUrl,
-                    variantInfoUrl:variantInfoUrl,
-                    retrieveSampleSummaryUrl:retrieveSampleSummaryUrl,
-                    generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,
-                    variantAndDsAjaxUrl:variantAndDsAjaxUrl,
-                    burdenTestVariantSelectionOptionsAjaxUrl:burdenTestVariantSelectionOptionsAjaxUrl,
+                    linkToTypeaheadUrl:urlHolder.linkToTypeaheadUrl,
+                    sampleMetadataAjaxUrl:urlHolder.sampleMetadataAjaxUrl,
+                    variantInfoUrl:urlHolder.variantInfoUrl,
+                    retrieveSampleSummaryUrl:urlHolder.retrieveSampleSummaryUrl,
+                    generateListOfVariantsFromFiltersAjaxUrl:urlHolder.generateListOfVariantsFromFiltersAjaxUrl,
+                    variantAndDsAjaxUrl:urlHolder.variantAndDsAjaxUrl,
+                    burdenTestVariantSelectionOptionsAjaxUrl:urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,
+                    getGRSListOfVariantsAjaxUrl:urlHolder.getGRSListOfVariantsAjaxUrl,
                     caseControlDesignator:caseControlDesignator,
                     datasetFilter:datasetFilter
                 });
@@ -505,35 +542,19 @@ mpgSoftware.burdenTestShared = (function () {
         else {
             setValuesInTopOfGaitDisplay( {   dropDownPhenoSelector:phenotypeFilter,
                 stratifyDesignation:stratifyDesignation,
-                linkToTypeaheadUrl:linkToTypeaheadUrl,
-                sampleMetadataAjaxUrl:sampleMetadataAjaxUrl,
-                variantInfoUrl:variantInfoUrl,
-                retrieveSampleSummaryUrl:retrieveSampleSummaryUrl,
-                generateListOfVariantsFromFiltersAjaxUrl:generateListOfVariantsFromFiltersAjaxUrl,
-                variantAndDsAjaxUrl:variantAndDsAjaxUrl,
-                burdenTestVariantSelectionOptionsAjaxUrl:burdenTestVariantSelectionOptionsAjaxUrl,
+                linkToTypeaheadUrl:urlHolder.linkToTypeaheadUrl,
+                sampleMetadataAjaxUrl:urlHolder.sampleMetadataAjaxUrl,
+                variantInfoUrl:urlHolder.variantInfoUrl,
+                retrieveSampleSummaryUrl:urlHolder.retrieveSampleSummaryUrl,
+                generateListOfVariantsFromFiltersAjaxUrl:urlHolder.generateListOfVariantsFromFiltersAjaxUrl,
+                variantAndDsAjaxUrl:urlHolder.variantAndDsAjaxUrl,
+                burdenTestVariantSelectionOptionsAjaxUrl:urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,
+                getGRSListOfVariantsAjaxUrl:urlHolder.getGRSListOfVariantsAjaxUrl,
                 caseControlDesignator:caseControlDesignator,
                 datasetFilter:datasetFilter
             });
         }
-        //var sampleMetadata = getStoredSampleMetadata();
-        //var phenotypeFilterValue = $(phenotypeFilter).val();
-        //var stratifyDesignationValue = $(stratifyDesignation).val();
-        //var convertedPhenotypeNames = convertPhenotypeNames(phenotypeFilterValue); // when phenotypes have been harmonized the step will be unnecessary...
-        //var filterDetails = _.find(sampleMetadata.filters,function(o){return o.name===convertedPhenotypeNames||o.name===phenotypeFilterValue;})
-        //if (typeof filterDetails !== 'undefined'){
-        //    if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
-        //        $(caseControlDesignator).prop('checked', false);
-        //        $(caseControlDesignator).prop('disabled', true);
-        //    } else {
-        //        $(caseControlDesignator).prop('disabled', false);
-        //    }
-        //}
-        //$('#stratsTabs').empty();
-        //var caseControlFiltering = $('#caseControlFiltering').prop('checked');
-        //stratifiedSampleAndCovariateSection($(datasetFilter), phenotypeFilterValue, stratifyDesignationValue,  sampleMetadata.filters, caseControlFiltering,
-        //    linkToTypeaheadUrl,generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,burdenTestVariantSelectionOptionsAjaxUrl);
-        //displayTestResultsSection(false);
+
     };
 
 
@@ -562,8 +583,13 @@ mpgSoftware.burdenTestShared = (function () {
      *  we can use fillCategoricalDropDownBoxes to create plots.
      *
      */
-    var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo, caseControlFiltering,linkToTypeaheadUrl,
-                                                        generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,retrieveSampleSummaryUrl,variantAndDsAjaxUrl,
+    var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo, caseControlFiltering,
+                                                        urlHolder,
+                                                       // linkToTypeaheadUrl,
+                                                       // generateListOfVariantsFromFiltersAjaxUrl,
+                                                       // variantInfoUrl,
+                                                       // retrieveSampleSummaryUrl,
+                                                       // variantAndDsAjaxUrl,
                                                         burdenTestVariantSelectionOptionsAjaxUrl) {
         var stratumName;
         var multipleStrataExist = ((strataProperty !== 'none')&&( typeof strataProperty !== 'undefined'));
@@ -772,11 +798,12 @@ mpgSoftware.burdenTestShared = (function () {
 
 
         // For each strata create the necessary data. Handle the case of a single strata as a special case.
-        var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype){
+        var generateRenderData = function(optionsPerFilter,strataProperty,stratificationProperty, phenotype, specificsAboutFilters, specificsAboutCovariates, modeledPhenotype,grsVariantSet){
 
             var defaultDisplayString  = '';
             var tabDisplayString;
             var displayBurdenVariantSelectorString = (displayBurdenVariantSelector())?[1]:[];
+            var variantsSetRefinement = (( typeof grsVariantSet === 'undefined')||(grsVariantSet.length===0))?[1]:[]; // if we aren't using a GRS variants set then allow the user to modify the set
             if (!multipleStrataExist){
                 defaultDisplayString  = ' active';
                 tabDisplayString  = ' display: none';
@@ -784,6 +811,7 @@ mpgSoftware.burdenTestShared = (function () {
 
             var renderData  = {
                 strataProperty:strataProperty,
+                variantsSetRefinement:variantsSetRefinement,
                 phenotypeProperty:convertPhenotypeNames(phenotype),
                 defaultDisplay : defaultDisplayString,
                 tabDisplay:tabDisplayString,
@@ -913,7 +941,7 @@ mpgSoftware.burdenTestShared = (function () {
             var strataContent1 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
             var strataContent2 = generateStrataContent(optionsPerFilter,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, multipleStrataExist);
             var modeledPhenotypeElements = generateModeledPhenotypeElements(optionsPerFilter, phenotype, caseControlFiltering, [strataContent1,strataContent2] );
-            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements);
+            var renderData = generateRenderData(optionsPerFilter,strataProperty,stratificationProperty, phenotype, sampleMetadata.filters, sampleMetadata.covariates, modeledPhenotypeElements,getGrsVariantSet());
 
 // kludge alert!  Currently we have no way of specifying whether or not a data set can be used for stratification.
 //  For now I will erase the hide the stratification section if it doesn't apply to a data set, but clearly we need to do better
@@ -932,21 +960,40 @@ mpgSoftware.burdenTestShared = (function () {
 //
 //  display the variant selection filtering tools
 //
+
             if (getGeneForGait().length>0){
                 renderData.sectionNumber++;
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
-                mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
-                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters(generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl);
-                $('#addVariant').on( 'click', respondedToAddVariantButtonClick , variantAndDsAjaxUrl,variantInfoUrl);
+                mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
+                mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters( {generateListOfVariantsFromFiltersAjaxUrl:urlHolder.generateListOfVariantsFromFiltersAjaxUrl},
+                                                                                 buildVariantTable,
+                                                                                {variantInfoUrl:urlHolder.variantInfoUrl} );
+                $('#addVariant').on( 'click', respondedToAddVariantButtonClick , urlHolder.variantAndDsAjaxUrl,urlHolder.variantInfoUrl);
                 $('#proposedMultiVariant').typeahead({});
                 $('#proposedVariant').typeahead({
                     source: function (query, process) {
-                        $.get(linkToTypeaheadUrl, {query: query}, function (data) {
+                        $.get(urlHolder.linkToTypeaheadUrl, {query: query}, function (data) {
                             process(data);
                         })
                     }
                 });
-        }
+            } else if (getGrsVariantSet().length>0){
+                renderData.sectionNumber++;
+                $("#chooseVariantFilterSelection").empty().append(Mustache.render( $('#variantFilterSelectionTemplate')[0].innerHTML,renderData));
+                mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,'#burdenProteinEffectFilter');
+                mpgSoftware.burdenTestShared.getGRSListOfVariants( {generateListOfVariantsFromFiltersAjaxUrl:urlHolder.getGRSListOfVariantsAjaxUrl},
+                                                                                buildVariantTable,
+                                                                                {variantInfoUrl:urlHolder.variantInfoUrl} );
+                $('#addVariant').on( 'click', respondedToAddVariantButtonClick , urlHolder.variantAndDsAjaxUrl,urlHolder.variantInfoUrl);
+                $('#proposedMultiVariant').typeahead({});
+                $('#proposedVariant').typeahead({
+                    source: function (query, process) {
+                        $.get(urlHolder.linkToTypeaheadUrl, {query: query}, function (data) {
+                            process(data);
+                        })
+                    }
+                });
+            }
 
 
 
@@ -965,13 +1012,13 @@ mpgSoftware.burdenTestShared = (function () {
             _.forEach(renderData.modeledPhenotype.levels,function(level){
                 $('a[data-toggle="tab"].'+level.name).on('shown.bs.tab', function (e) {
                     var target = $(e.target).text(); // activated tab
-                    displaySampleDistribution('ID',"_"+target,retrieveSampleSummaryUrl,0,level.name);
+                    displaySampleDistribution('ID',"_"+target,urlHolder.retrieveSampleSummaryUrl,0,level.name);
                 });
             });
         } else {
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 var target = $(e.target).text(); // activated tab
-                displaySampleDistribution('ID',"_"+target,retrieveSampleSummaryUrl,0,'');
+                displaySampleDistribution('ID',"_"+target,urlHolder.retrieveSampleSummaryUrl,0,'');
             });
         }
 
@@ -995,7 +1042,7 @@ mpgSoftware.burdenTestShared = (function () {
             // filters should be in place now.  Attach events
             _.forEach(sampleMetadata.filters,function(d){
                 $("#multi_"+stratumName+"_"+d.name).bind("change", function(event, ui){
-                    mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,retrieveSampleSummaryUrl,0)
+                    mpgSoftware.burdenTestShared.displaySampleDistribution(d.name, '.boxWhiskerPlot_'+stratumName,urlHolder.retrieveSampleSummaryUrl,0)
                 });
             });
 
@@ -1317,8 +1364,8 @@ var refreshSampleDistribution = function (dataSetSel,callback,retrieveSampleSumm
 /***
  * filter our samples and then launch the IAT test
  */
-var immediateFilterAndRun = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier){
-    runBurdenTest(metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier);
+var immediateFilterAndRun = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier,variantSetId){
+    runBurdenTest(metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier,variantSetId);
 };
 
 
@@ -1381,7 +1428,7 @@ var printFullResultsSection = function(stats,pValue,beta,oddsRatio,ciLevel,ciLow
 
 
 
-var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum,compoundedFilterValues,burdenTestAjaxUrl,variantIdentifier){
+var executeAssociationTest = function (filterValues,covariateValues,propertyName,stratum,compoundedFilterValues,burdenTestAjaxUrl,variantIdentifier,variantSetId){
 
     var isCategoricalF = function (stats){
         var isDichotomousTrait = false;
@@ -1420,7 +1467,8 @@ var executeAssociationTest = function (filterValues,covariateValues,propertyName
             compoundedFilterValues: compoundedFilterValues,
             traitFilterSelectedOption: phenotypeToPredict,
             dataset: datasetUse,
-            stratum: stratum
+            stratum: stratum,
+            variantSetId:variantSetId
         },
         async: true
     }).success(
@@ -1543,179 +1591,409 @@ var fillInResultsSection = function (stratum,pValue, oddsRatio, stdError, isDich
 
 
 
-var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,trailerFunc){
-
-    var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
-        selectedFilterValueId = 8,
-        selectedMafOption = $('input[name=mafOption]:checked').val(),
-        selectedMafOptionId =  parseInt(selectedMafOption),
-        specifiedMafValue = $('#mafInput').val(),
-        specifiedMafValueId  = parseFloat(specifiedMafValue),
-        burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
-        datasetFilter = $('#datasetFilter').val(),
-        rTrailerFunc = trailerFunc;
-    var dataSet;
-    if (typeof selectedFilterValue !== 'undefined') {
-        selectedFilterValueId =  parseInt(selectedFilterValue);
-    }
-    if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
-        var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
-        dataSet = metadata.conversion[datasetFilter];
 
 
-        $('#rSpinner').show();
-        var promise = $.ajax({
-            cache: false,
-            type: "post",
-            url: generateListOfVariantsFromFiltersAjaxUrl,
-            data: {geneName: getGeneForGait(),
-                filterNum: selectedFilterValueId,
-                burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
-                mafValue: specifiedMafValueId,
-                mafOption: selectedMafOptionId,
-                dataSet: dataSet
-            },
-            async: true
-        });
-        promise.done(
-            function (data) {
-                $('#rSpinner').hide();
-                if ((typeof data !== 'undefined') &&
-                    (data)) {
-                    var variantListHolder = [];
-                    if ((typeof data.results !== 'undefined') &&
-                        (data.results)) {
-                        var variantListHolder = [];
-                        _.forEach(data.results, function (oneVariant) {
-                            var variant = {};
-                            _.forEach(oneVariant.pVals, function (fieldHolder) {
-                                variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
-                            });
-                            variantListHolder.push(variant);
-                        });
-                    }
 
-                    var gaitTable = $('#gaitTable').DataTable(
-                        {
-                            "select": {
-                                style: 'none',
-                                selector: 'td:first-child'
-                            },
-                            dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
-                            "buttons": [
-                                {
-                                    text: 'Select all',
-                                    class: 'gaitButtons',
-                                    action: function () {
-                                        //gaitTable.rows().select();
-                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", true);
-                                    }
-                                },
-                                {
-                                    text: 'Select none',
-                                    class: 'gaitButtons',
-                                    action: function () {
-                                        // gaitTable.rows().deselect();
-                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", false);
-                                    }
-                                },
-                                { extend: "copy", text: "Copy all to clipboard" },
-                                { extend: "csv", text: "Copy all to csv" },
-                                { extend: "pdf", text: "Copy all to pdf" }
-                            ],
-                            "aLengthMenu": [
-                                [10, 50, -1],
-                                [10, 50, "All"]
-                            ],
-                            "bDestroy": true,
-                            "bAutoWidth": false,
-                            "order": [
-                                [ 1, "asc" ]
-                            ],
-                            "columnDefs": [
-                                { "name": "IncludeCheckbox", "targets": [0], "type": "checkBoxGait", "title": "Use?",
-                                    "render": function (data, type, full, meta) {
-                                        if ((data) && (data.indexOf('input') > -1)) {
-                                            return data;
-                                        } else {
-                                            return "<input type='checkbox' id='variant_sel_" + data + "' class='geneGaitVariantSelector' checked>";
-                                        }
-
-                                    },
-                                    "bSortable": false,
-                                    "width": "50px"
-
-                                },
-                                { "name": "VAR_ID", "targets": [1], "type": "allAnchor", "title": "Variant ID",
-                                    "width": "auto"  },
-                                { "name": "DBSNP_ID", "targets": [2], "title": "dbSNP ID",
-                                    "width": "auto"  },
-                                { "name": "CHROM", "targets": [3], "title": "Chrom.",
-                                    "width": "40px"  },
-                                { "name": "POS", "targets": [4], "title": "Position",
-                                    "width": "auto" },
-                                { "name": "MAC", "targets": [5], "title": "MAC",
-                                    "width": "auto" },
-                                { "name": "PolyPhen_PRED", "targets": [6], "title": "Polyphen",
-                                    "width": "auto" },
-                                { "name": "SIFT_PRED", "targets": [7], "title": "SIFT",
-                                    "width": "auto" },
-                                { "name": "Protein_change", "targets": [8], "title": "Protein change",
-                                    "width": "60px"  },
-                                { "name": "Consequence", "targets": [9], "title": "Consequence",
-                                    "width": "100px"  }
-
-                            ],
-                            "sPaginationType": "full_numbers",
-                            "iDisplayLength": 10,
-                            "bFilter": false,
-                            "bLengthChange": true,
-                            "bInfo": true,
-                            "bProcessing": true
-                        }
-                    );
-                    $('#gaitTable').DataTable().clear();
-                    _.forEach(variantListHolder, function (variantRec) {
-                        //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
-                        var arrayOfRows = [];
-                        var variantID = variantRec.VAR_ID;
-                        if ((variantRec.CHROM) && (variantRec.POS)) {
-                            variantID = variantRec.CHROM + ":" + variantRec.POS;
-                        }
-                        arrayOfRows.push(variantRec.VAR_ID);
-                        arrayOfRows.push('<a href="' + variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
-                        var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
-                        arrayOfRows.push(DBSNP_ID);
-                        arrayOfRows.push(variantRec.CHROM);
-                        arrayOfRows.push(variantRec.POS);
-                        var codedMac = variantRec.MAC;
-                        if (typeof codedMac === 'undefined') {
-                            codedMac = '';
-                        }
-                        arrayOfRows.push(codedMac);
-                        arrayOfRows.push((variantRec.PolyPhen_PRED) ? variantRec.PolyPhen_PRED : '');
-                        arrayOfRows.push((variantRec.SIFT_PRED) ? variantRec.SIFT_PRED : '');
-                        var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
-                        arrayOfRows.push(protein_change);
-                        arrayOfRows.push(variantRec.Consequence);
-                        $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+    var buildVariantTable = function (data,parms) {
+        $('#rSpinner').hide();
+        if ((typeof data !== 'undefined') &&
+            (data)) {
+            var variantListHolder = [];
+            if ((typeof data.results !== 'undefined') &&
+                (data.results)) {
+                var variantListHolder = [];
+                _.forEach(data.results, function (oneVariant) {
+                    var variant = {};
+                    _.forEach(oneVariant.pVals, function (fieldHolder) {
+                        variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
                     });
-                    if (typeof rTrailerFunc !== 'undefined') {
-                        rTrailerFunc();
-                    }
-                }
+                    variantListHolder.push(variant);
+                });
             }
-        );
+
+            var gaitTable = $('#gaitTable').DataTable(
+                {
+                    "select": {
+                        style: 'none',
+                        selector: 'td:first-child'
+                    },
+                    dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+                    "buttons": [
+                        {
+                            text: 'Select all',
+                            class: 'gaitButtons',
+                            action: function () {
+                                //gaitTable.rows().select();
+                                $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", true);
+                            }
+                        },
+                        {
+                            text: 'Select none',
+                            class: 'gaitButtons',
+                            action: function () {
+                                // gaitTable.rows().deselect();
+                                $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", false);
+                            }
+                        },
+                        { extend: "copy", text: "Copy all to clipboard" },
+                        { extend: "csv", text: "Copy all to csv" },
+                        { extend: "pdf", text: "Copy all to pdf" }
+                    ],
+                    "aLengthMenu": [
+                        [10, 50, -1],
+                        [10, 50, "All"]
+                    ],
+                    "bDestroy": true,
+                    "bAutoWidth": false,
+                    "order": [
+                        [ 1, "asc" ]
+                    ],
+                    "columnDefs": [
+                        { "name": "IncludeCheckbox", "targets": [0], "type": "checkBoxGait", "title": "Use?",
+                            "render": function (data, type, full, meta) {
+                                if ((data) && (data.indexOf('input') > -1)) {
+                                    return data;
+                                } else {
+                                    return "<input type='checkbox' id='variant_sel_" + data + "' class='geneGaitVariantSelector' checked>";
+                                }
+
+                            },
+                            "bSortable": false,
+                            "width": "50px"
+
+                        },
+                        { "name": "VAR_ID", "targets": [1], "type": "allAnchor", "title": "Variant ID",
+                            "width": "auto"  },
+                        { "name": "DBSNP_ID", "targets": [2], "title": "dbSNP ID",
+                            "width": "auto"  },
+                        { "name": "CHROM", "targets": [3], "title": "Chrom.",
+                            "width": "40px"  },
+                        { "name": "POS", "targets": [4], "title": "Position",
+                            "width": "auto" },
+                        { "name": "MAC", "targets": [5], "title": "MAC",
+                            "width": "auto" },
+                        { "name": "PolyPhen_PRED", "targets": [6], "title": "Polyphen",
+                            "width": "auto" },
+                        { "name": "SIFT_PRED", "targets": [7], "title": "SIFT",
+                            "width": "auto" },
+                        { "name": "Protein_change", "targets": [8], "title": "Protein change",
+                            "width": "60px"  },
+                        { "name": "Consequence", "targets": [9], "title": "Consequence",
+                            "width": "100px"  }
+
+                    ],
+                    "sPaginationType": "full_numbers",
+                    "iDisplayLength": 10,
+                    "bFilter": false,
+                    "bLengthChange": true,
+                    "bInfo": true,
+                    "bProcessing": true
+                }
+            );
+            $('#gaitTable').DataTable().clear();
+            _.forEach(variantListHolder, function (variantRec) {
+                //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
+                var arrayOfRows = [];
+                var variantID = variantRec.VAR_ID;
+                if ((variantRec.CHROM) && (variantRec.POS)) {
+                    variantID = variantRec.CHROM + ":" + variantRec.POS;
+                }
+                arrayOfRows.push(variantRec.VAR_ID);
+                arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
+                var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
+                arrayOfRows.push(DBSNP_ID);
+                arrayOfRows.push(variantRec.CHROM);
+                arrayOfRows.push(variantRec.POS);
+                var codedMac = variantRec.MAC;
+                if (typeof codedMac === 'undefined') {
+                    codedMac = '';
+                }
+                arrayOfRows.push(codedMac);
+                arrayOfRows.push((variantRec.PolyPhen_PRED) ? variantRec.PolyPhen_PRED : '');
+                arrayOfRows.push((variantRec.SIFT_PRED) ? variantRec.SIFT_PRED : '');
+                var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
+                arrayOfRows.push(protein_change);
+                arrayOfRows.push((variantRec.Consequence)?variantRec.Consequence:'');
+                $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+            });
+            if (typeof rTrailerFunc !== 'undefined') {
+                rTrailerFunc();
+            }
+        }
     }
-    promise.fail();
-}
+
+
+
+
+    var generateListOfVariantsFromFilters = function (immediateParams,callBack,parameters){
+
+        var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+            selectedFilterValueId = 8,
+            selectedMafOption = $('input[name=mafOption]:checked').val(),
+            selectedMafOptionId =  parseInt(selectedMafOption),
+            specifiedMafValue = $('#mafInput').val(),
+            specifiedMafValueId  = parseFloat(specifiedMafValue),
+            burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
+            datasetFilter = $('#datasetFilter').val(),
+            rememberCallBack = callBack,
+            rememberParameters = parameters;
+        var dataSet;
+        if (typeof selectedFilterValue !== 'undefined') {
+            selectedFilterValueId =  parseInt(selectedFilterValue);
+        }
+        if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
+            var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+            dataSet = metadata.conversion[datasetFilter];
+
+
+            $('#rSpinner').show();
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                url: immediateParams.generateListOfVariantsFromFiltersAjaxUrl,
+                data: {geneName: getGeneForGait(),
+                    filterNum: selectedFilterValueId,
+                    burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+                    mafValue: specifiedMafValueId,
+                    mafOption: selectedMafOptionId,
+                    dataSet: dataSet
+                },
+                async: true
+            });
+            promise.done(
+                function(data,d){
+                    rememberCallBack(data,rememberParameters);
+                }
+
+            );
+        }
+        promise.fail();
+    }
+
+
+
+
+
+    var getGRSListOfVariants = function (immediateParams,callBack,parameters){
+
+        var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+            selectedFilterValueId = 8,
+            selectedMafOption = $('input[name=mafOption]:checked').val(),
+            selectedMafOptionId =  parseInt(selectedMafOption),
+            specifiedMafValue = $('#mafInput').val(),
+            specifiedMafValueId  = parseFloat(specifiedMafValue),
+            burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
+            datasetFilter = $('#datasetFilter').val(),
+            rememberCallBack = callBack,
+            rememberParameters = parameters;
+        var dataSet;
+        if (typeof selectedFilterValue !== 'undefined') {
+            selectedFilterValueId =  parseInt(selectedFilterValue);
+        }
+        if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
+            var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+            dataSet = metadata.conversion[datasetFilter];
+
+
+            $('#rSpinner').show();
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                url: immediateParams.generateListOfVariantsFromFiltersAjaxUrl,
+                data: {geneName: getGeneForGait(),
+                    filterNum: selectedFilterValueId,
+                    burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+                    mafValue: specifiedMafValueId,
+                    mafOption: selectedMafOptionId,
+                    dataSet: dataSet
+                },
+                async: true
+            });
+            promise.done(
+                function(data,d){
+                    rememberCallBack(data,rememberParameters);
+                }
+
+            );
+        }
+        promise.fail();
+    }
+
+
+
+//var generateListOfVariantsFromFilters = function (generateListOfVariantsFromFiltersAjaxUrl,variantInfoUrl,trailerFunc){
+//
+//    var selectedFilterValue = $('.burdenProteinEffectFilter option:selected').val(),
+//        selectedFilterValueId = 8,
+//        selectedMafOption = $('input[name=mafOption]:checked').val(),
+//        selectedMafOptionId =  parseInt(selectedMafOption),
+//        specifiedMafValue = $('#mafInput').val(),
+//        specifiedMafValueId  = parseFloat(specifiedMafValue),
+//        burdenTraitFilterSelectedOption = $('#phenotypeFilter').val(),
+//        datasetFilter = $('#datasetFilter').val(),
+//        rTrailerFunc = trailerFunc;
+//    var dataSet;
+//    if (typeof selectedFilterValue !== 'undefined') {
+//        selectedFilterValueId =  parseInt(selectedFilterValue);
+//    }
+//    if ((typeof datasetFilter !== 'undefined') && ( datasetFilter !== null )){
+//        var metadata = mpgSoftware.burdenTestShared.getStoredSampleMetadata();
+//        dataSet = metadata.conversion[datasetFilter];
+//
+//
+//        $('#rSpinner').show();
+//        var promise = $.ajax({
+//            cache: false,
+//            type: "post",
+//            url: generateListOfVariantsFromFiltersAjaxUrl,
+//            data: {geneName: getGeneForGait(),
+//                filterNum: selectedFilterValueId,
+//                burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
+//                mafValue: specifiedMafValueId,
+//                mafOption: selectedMafOptionId,
+//                dataSet: dataSet
+//            },
+//            async: true
+//        });
+//        promise.done(
+//            function (data) {
+//                $('#rSpinner').hide();
+//                if ((typeof data !== 'undefined') &&
+//                    (data)) {
+//                    var variantListHolder = [];
+//                    if ((typeof data.results !== 'undefined') &&
+//                        (data.results)) {
+//                        var variantListHolder = [];
+//                        _.forEach(data.results, function (oneVariant) {
+//                            var variant = {};
+//                            _.forEach(oneVariant.pVals, function (fieldHolder) {
+//                                variant[fieldHolder.level.split('^')[0]] = fieldHolder.count;
+//                            });
+//                            variantListHolder.push(variant);
+//                        });
+//                    }
+//
+//                    var gaitTable = $('#gaitTable').DataTable(
+//                        {
+//                            "select": {
+//                                style: 'none',
+//                                selector: 'td:first-child'
+//                            },
+//                            dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+//                            "buttons": [
+//                                {
+//                                    text: 'Select all',
+//                                    class: 'gaitButtons',
+//                                    action: function () {
+//                                        //gaitTable.rows().select();
+//                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", true);
+//                                    }
+//                                },
+//                                {
+//                                    text: 'Select none',
+//                                    class: 'gaitButtons',
+//                                    action: function () {
+//                                        // gaitTable.rows().deselect();
+//                                        $(gaitTable.rows().nodes()).find('td input.geneGaitVariantSelector').prop("checked", false);
+//                                    }
+//                                },
+//                                { extend: "copy", text: "Copy all to clipboard" },
+//                                { extend: "csv", text: "Copy all to csv" },
+//                                { extend: "pdf", text: "Copy all to pdf" }
+//                            ],
+//                            "aLengthMenu": [
+//                                [10, 50, -1],
+//                                [10, 50, "All"]
+//                            ],
+//                            "bDestroy": true,
+//                            "bAutoWidth": false,
+//                            "order": [
+//                                [ 1, "asc" ]
+//                            ],
+//                            "columnDefs": [
+//                                { "name": "IncludeCheckbox", "targets": [0], "type": "checkBoxGait", "title": "Use?",
+//                                    "render": function (data, type, full, meta) {
+//                                        if ((data) && (data.indexOf('input') > -1)) {
+//                                            return data;
+//                                        } else {
+//                                            return "<input type='checkbox' id='variant_sel_" + data + "' class='geneGaitVariantSelector' checked>";
+//                                        }
+//
+//                                    },
+//                                    "bSortable": false,
+//                                    "width": "50px"
+//
+//                                },
+//                                { "name": "VAR_ID", "targets": [1], "type": "allAnchor", "title": "Variant ID",
+//                                    "width": "auto"  },
+//                                { "name": "DBSNP_ID", "targets": [2], "title": "dbSNP ID",
+//                                    "width": "auto"  },
+//                                { "name": "CHROM", "targets": [3], "title": "Chrom.",
+//                                    "width": "40px"  },
+//                                { "name": "POS", "targets": [4], "title": "Position",
+//                                    "width": "auto" },
+//                                { "name": "MAC", "targets": [5], "title": "MAC",
+//                                    "width": "auto" },
+//                                { "name": "PolyPhen_PRED", "targets": [6], "title": "Polyphen",
+//                                    "width": "auto" },
+//                                { "name": "SIFT_PRED", "targets": [7], "title": "SIFT",
+//                                    "width": "auto" },
+//                                { "name": "Protein_change", "targets": [8], "title": "Protein change",
+//                                    "width": "60px"  },
+//                                { "name": "Consequence", "targets": [9], "title": "Consequence",
+//                                    "width": "100px"  }
+//
+//                            ],
+//                            "sPaginationType": "full_numbers",
+//                            "iDisplayLength": 10,
+//                            "bFilter": false,
+//                            "bLengthChange": true,
+//                            "bInfo": true,
+//                            "bProcessing": true
+//                        }
+//                    );
+//                    $('#gaitTable').DataTable().clear();
+//                    _.forEach(variantListHolder, function (variantRec) {
+//                        //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
+//                        var arrayOfRows = [];
+//                        var variantID = variantRec.VAR_ID;
+//                        if ((variantRec.CHROM) && (variantRec.POS)) {
+//                            variantID = variantRec.CHROM + ":" + variantRec.POS;
+//                        }
+//                        arrayOfRows.push(variantRec.VAR_ID);
+//                        arrayOfRows.push('<a href="' + variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
+//                        var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
+//                        arrayOfRows.push(DBSNP_ID);
+//                        arrayOfRows.push(variantRec.CHROM);
+//                        arrayOfRows.push(variantRec.POS);
+//                        var codedMac = variantRec.MAC;
+//                        if (typeof codedMac === 'undefined') {
+//                            codedMac = '';
+//                        }
+//                        arrayOfRows.push(codedMac);
+//                        arrayOfRows.push((variantRec.PolyPhen_PRED) ? variantRec.PolyPhen_PRED : '');
+//                        arrayOfRows.push((variantRec.SIFT_PRED) ? variantRec.SIFT_PRED : '');
+//                        var protein_change = (variantRec.Protein_change) ? variantRec.Protein_change : '';
+//                        arrayOfRows.push(protein_change);
+//                        arrayOfRows.push(variantRec.Consequence);
+//                        $('#gaitTable').dataTable().fnAddData(arrayOfRows);
+//                    });
+//                    if (typeof rTrailerFunc !== 'undefined') {
+//                        rTrailerFunc();
+//                    }
+//                }
+//            }
+//        );
+//    }
+//    promise.fail();
+//}
 
 
 /**
  *  run the burden test, then display the results.  We will need to start by extracting
  *  the data fields we need from the DOM.
  */
-var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier){
+var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifier,variantSetId){
 
     var runMetaAnalysis = function (){
         var domHolder = $('.strataJar');
@@ -1896,7 +2174,7 @@ var runBurdenTest = function (metadataAjaxUrl,burdenTestAjaxUrl,variantIdentifie
         var strataPropertyName = stratum[0].strataPropertyName;
         var stratumName = stratum[0].stratumName;
         deferreds.push(executeAssociationTest('{}',collectingCovariateValues(strataPropertyName,stratumName),strataPropertyName,stratumName,compoundedFilterValues.strataFilters,
-            burdenTestAjaxUrl,variantIdentifier));
+            burdenTestAjaxUrl,variantIdentifier,variantSetId));
 
     });
     $.when.apply($,deferreds).then(function() {
@@ -2565,7 +2843,9 @@ return {
     initializeGaitUi:initializeGaitUi,
     fillVariantOptionFilterDropDown:fillVariantOptionFilterDropDown,
     buildGaitInterface:buildGaitInterface,
-    getStoredSampleMetadata:getStoredSampleMetadata
+    getStoredSampleMetadata:getStoredSampleMetadata,
+    storeGrsVariantSet:storeGrsVariantSet,
+    getGRSListOfVariants:getGRSListOfVariants
 }
 
 }());

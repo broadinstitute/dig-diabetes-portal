@@ -133,18 +133,18 @@
                     traitInfoUrl: "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
                     getLocusZoomUrl: '${createLink(controller:"gene", action:"getLocusZoom")}',
                     retrieveFunctionalDataAjaxUrl: '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                    getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
                     assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},
-                    genePageWarning:"${genePageWarning}"
+                    genePageWarning:"${genePageWarning}",
+                    regionSpecificVersion:${regionSpecificVersion}
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariantsDirectlyByPhenotype(drivingVariables.defaultPhenotype,
                     mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
-//                mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,
-//                    {favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();

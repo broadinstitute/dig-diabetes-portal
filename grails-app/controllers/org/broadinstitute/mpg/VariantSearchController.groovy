@@ -7,6 +7,7 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
+import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
 import org.springframework.web.servlet.support.RequestContextUtils
@@ -19,6 +20,7 @@ class VariantSearchController {
     SearchBuilderService searchBuilderService
     WidgetService widgetService
     EpigenomeService epigenomeService
+    GeneManagementService geneManagementService
     private static final log = LogFactory.getLog(this)
 
     def index() {}
@@ -269,7 +271,7 @@ class VariantSearchController {
         String geneName = params.gene
         String phenotypeName = params.phenotype
         String dataSetName = params.dataset
-        LinkedHashMap extents = sharedToolsService.getGeneExpandedExtent( geneName)
+        LinkedHashMap extents = sharedToolsService.getGeneExpandedExtent( geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
         String chromosome = extents.chrom
         if (chromosome?.startsWith('chr')){
             chromosome = chromosome-'chr'
@@ -469,6 +471,27 @@ class VariantSearchController {
 
     def retrieveTopVariantsAcrossSgs (){
         String portalType = g.portalTypeString() as String
+        UserQueryContext userQueryContext = widgetService.generateUserQueryContext(params.geneToSummarize)
+//        String geneChromosome = sharedToolsService.parseChromosome(params.geneChromosome)
+//        Long geneExtentBegin = 0L
+//        Long geneExtentEnd = 0l
+//        try {
+//            geneExtentBegin = Long.parseLong(params.geneExtentBegin)
+//            geneExtentEnd = Long.parseLong(params.geneExtentEnd)
+//        } catch(e){
+//            ;
+//        }
+//        if ((geneExtentEnd==0L)&&(params.geneToSummarize)&&(params.geneToSummarize.contains(':'))){
+//            LinkedHashMap extractedNumbers =  restServerService.parseARange(params.geneToSummarize)
+//            if (!extractedNumbers.error){
+//                geneChromosome = extractedNumbers.chromosome
+//                geneExtentBegin = extractedNumbers.start
+//                geneExtentEnd = extractedNumbers.end
+//            }
+//
+//        }
+
+
 
         Closure convertDynamicStructToJson = { incoming ->
             List<String> allOptions = []
@@ -513,11 +536,34 @@ class VariantSearchController {
 
         JSONObject dataJsonObject
 
-        dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(phenotypeName,geneName,-1,limit,currentVersion)
+        if (userQueryContext.range){
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall == 0){
+                log.error(" CRITICAL ERROR: We have no way of doing range query with the old-style API. ")
+            }
 
-//        if (dataJsonObject == null){
-//            dataJsonObject = restServerService.gatherTopVariantsAcrossSgs( fullListOfSampleGroups, phenotypeName,geneName, 1f )
-//        }
+            dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                    userQueryContext.startOriginalExtent,
+                    userQueryContext.endOriginalExtent,
+                    userQueryContext.chromosome,
+                    -1,limit,currentVersion)
+        }else {
+            if (restServerService.retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall == 0){
+                dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTables(  phenotypeName,
+                        params.geneToSummarize as String,
+                        -1,limit,currentVersion)
+            } else {
+                dataJsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByRange(  phenotypeName,
+                        userQueryContext.startExpandedExtent,
+                        userQueryContext.endExpandedExtent,
+                        userQueryContext.chromosome,
+                        -1,limit,currentVersion)
+            }
+
+
+        }
+
+
+
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
 
@@ -569,7 +615,8 @@ class VariantSearchController {
              datasetToChoose:slurper.parseText(convertDynamicStructToJson(phenotypeMap)),
              lzOptions:phenotypeMap,
              sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
-             experimentAssays:experimentAssays
+             experimentAssays:experimentAssays,
+             userQueryContext:userQueryContext.toJSONObject()
             ]
         }
 

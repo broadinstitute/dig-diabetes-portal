@@ -42,7 +42,7 @@
     </div>
 </g:if>
 <g:else>
-    <p>
+    <p id="placeForAUniprotSummary">
         <g:helpText title="gene.header.uniprotSummary.help.header" placement="right"
                     body="gene.header.uniprotSummary.help.text"/>
         <span id="uniprotSummaryGoesHere" style="font-size:18px;"></span>

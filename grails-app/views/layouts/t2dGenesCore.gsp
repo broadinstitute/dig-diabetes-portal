@@ -192,6 +192,10 @@
                         setMenuTriangle(".variant-search-btn");
                         break;
 
+                    case "grsinfo":
+                        setMenuTriangle(".grs-btn");
+                        break;
+
                     case "data":
                         setMenuTriangle(".data-btn")
                         break;

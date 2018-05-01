@@ -53,6 +53,9 @@ button.expandoButton:visited {
 
 
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
+
+    <div id="plot"></div>
+
     <div class="accordion-inner" id="traitAssociationInner">
 
     <r:require modules="core"/>
@@ -157,6 +160,9 @@ button.expandoButton:visited {
                 mpgSoftware.widgets.loadAssociationTable();
                 tableNotLoaded = false;
             }
+        });
+        $("#collapseVariantTraitAssociation").on("shown.bs.collapse", function () {
+            mpgSoftware.locusZoom.rescaleSVG('#plot');
         });
         $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
 

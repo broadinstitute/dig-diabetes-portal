@@ -195,6 +195,22 @@ class BootStrap {
             log.info( "ProteinEffect successfully loaded: ${counter}" )
         }
 
+
+        if (restServerService.getGrsVariants().size()) {
+            log.info( "GRS variants already loaded. Total operational number = ${restServerService.getGrsVariants.count()}" )
+        } else {
+            String fileLocation = grailsApplication.mainContext.getResource("/WEB-INF/resources/anuba_t2d_variants.txt").file.toString()
+            log.info( "Actively loading GRS test variants from file = ${fileLocation}" )
+            File file = new File(fileLocation)
+            List<String> varIds = []
+            file.eachLine {
+               varIds << it as String
+            }
+            restServerService.setGrsVariants(varIds)
+            log.info( "GRS variants successfully loaded: ${restServerService.getGrsVariants().size()}" )
+        }
+
+
         // reload the localizations database, so that any updates to the properties files
         // get picked up (the default behavior of the plugin is to assume the database is
         // more current, and thus ignore any changes in the properties files

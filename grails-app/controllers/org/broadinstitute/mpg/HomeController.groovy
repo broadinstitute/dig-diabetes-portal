@@ -135,13 +135,7 @@ class HomeController {
         String portalJsonDescr = restServerService.retrieveBeanForCurrentPortal().toJsonString()
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jsonObject= slurper.parseText(portalJsonDescr)
-//
-//            jsonObject["menuHeader"] = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
-//                    grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).getPath()
-////            String logoCode = grailsApplication.getMainContext().getResource(g.message(code:jsonObject["logoCode"]))
-////            jsonObject.remove("logoCode")
-//            jsonObject["logoCode"] = grailsApplication.getMainContext().getResource(jsonObject["menuHeader"]).servletContext.context.context.path+
-//                    grailsApplication.getMainContext().getResource(jsonObject["logoCode"]).getPath()
+
         render(status:200, contentType:"application/json") {
             jsonObject
         }
