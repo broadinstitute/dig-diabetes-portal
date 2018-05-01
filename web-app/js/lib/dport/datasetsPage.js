@@ -23,6 +23,10 @@ var mpgSoftware = mpgSoftware || {};
                 access = "Early access phase 2";}
             else if (dataTypeName.includes('METSIM')){
                 access = "Early access phase 2";}
+            else if (dataTypeName.includes('FUSION')){
+                access = "Early access phase 1";}
+            //else if (dataTypeName.includes('DCSP2')){
+            //    access = "Early access phase 1";}
             else{
                 access = "Open access";}
             return access;
@@ -75,8 +79,8 @@ var mpgSoftware = mpgSoftware || {};
 
 
             _.forEach(sortedStoredJsonArray, function(kl,vl){
-                regexStr = kl.name.replace(/_mdv[0-9][0-9][0-9]/, "");
-                informationGspFileNames.push("#" + regexStr + '_script');
+               // regexStr = kl.name.replace(/_mdv[0-9][0-9][0-9]/, "");
+                informationGspFileNames.push("#" + kl.name + '_script');
             })
 
             jsonHolder["parents"] = sortedStoredJsonArray;
@@ -228,12 +232,11 @@ var mpgSoftware = mpgSoftware || {};
                         //check if its more than mdv99 then do
                         // eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
                         //else  eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
-                        if((eachKey.name.match(/[0-9 , \.]+/g)[0]) >= 100){
-                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
-                        }
-                        else{
-                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
-                        }
+
+
+                        eachKey.name = eachKey.name.split("_mdv")[0]
+
+
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();
@@ -255,12 +258,10 @@ var mpgSoftware = mpgSoftware || {};
                                 return "red";
                             }
                         };
-                        if((eachKey.name.match(/[0-9 , \.]+/g)[0]) >= 100){
-                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9][0-9]/, "");
-                        }
-                        else{
-                            eachKey.name = eachKey.name.replace(/_mdv[0-9][0-9]/, "");
-                        }
+
+
+                        eachKey.name = eachKey.name.split("_mdv")[0]
+
                         storedJsonArray.push(eachKey);
                         datasetPhenotypesMap[eachKey.name] = eachKey.phenotypes;
                         distinctPhenotypeGroups =  _.chain(eachKey.phenotypes).uniqBy('group').map('group').value();

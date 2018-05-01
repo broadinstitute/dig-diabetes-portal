@@ -35,12 +35,12 @@
 
 </div>
 
-<div class="dk-t2d-blue dk-right-column-buttons-compact btn dk-linkout-btn dk-amp-funded">
-    <div class="tooltip-text"><g:message code="findoutmore.t2dream.descr" default="Explore"/></div>
-    <span>AMP</span>
-    <a target="_blank" href="https://www.t2depigenome.org/region-search/?annotation=HGNC%3A20303&region=<%=geneName%>+(homo+sapiens)&genome=GRCh37">T2DREAM</a>
+%{--<div class="dk-t2d-blue dk-right-column-buttons-compact btn dk-linkout-btn dk-amp-funded">--}%
+    %{--<div class="tooltip-text"><g:message code="findoutmore.t2dream.descr" default="Explore"/></div>--}%
+    %{--<span>AMP</span>--}%
+    %{--<a target="_blank" href="https://www.t2depigenome.org/region-search/?annotation=HGNC%3A20303&region=<%=geneName%>+(homo+sapiens)&genome=GRCh37">Diabetes Epigenome Atlas</a>--}%
 
-</div>
+%{--</div>--}%
 
 <div class="dk-t2d-blue dk-right-column-buttons-compact btn dk-linkout-btn">
     <div class="tooltip-text"><g:message code="findoutmore.UCSC.descr" default="Explore"/></div>

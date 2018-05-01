@@ -22,6 +22,8 @@
 
                 <p style="text-align:justify"><g:message code="informational.about_t2d.ampt2d_sec3"></g:message></p>
 
+                <p style="text-align:justify"><g:message code="informational.about_t2d.ampt2d_sec4"></g:message></p>
+
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_t2d.t2dkp.header"></g:message></h3>
 
                 <p style="text-align:justify"><g:message code="informational.about_t2d.t2dkp_sec1"></g:message></p>

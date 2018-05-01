@@ -473,7 +473,7 @@
                 <p><g:message code='portal.home.funders'/>:</p>
 
                             <a href="http://www.niddk.nih.gov/Pages/default.aspx"><img src="${resource(dir:'images/organizations', file:'nih2.jpg')}" style=""></a>
-                            <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'fnih2.jpg')}" style=""></a>
+                            <a href="http://www.fnih.org"><img src="${resource(dir:'images/organizations', file:'FNIH.jpg')}" style="width: 120px"></a>
                             <a href="http://www.janssen.com"><img src="${resource(dir:'images/organizations', file:'janssen2.jpg')}" style=""></a>
                             <a href="https://www.lilly.com/home.aspx"><img src="${resource(dir:'images/organizations', file:'lilly2.jpg')}" style=""></a>
                             <a href="http://www.merck.com/index.html"><img src="${resource(dir:'images/organizations', file:'merck2.jpg')}" style=""></a>
