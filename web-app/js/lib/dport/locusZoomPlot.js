@@ -935,7 +935,8 @@ var mpgSoftware = mpgSoftware || {};
                 "<strong>P-value:</strong> {{phewas:log_pvalue|logtoscinotation|htmlescape}}<br>",
                 "{{#if phewas:study}}",
                 "<strong>Study:</strong> {{phewas:study|htmlescape}}<br>",
-                "{{/if}}"//,
+                "{{/if}}",
+                "<div class='span12' style='text-align:center'><a href='#' class='center-text' onclick='javascript:openPhePlotTab(\"={{phewas:trait_label|htmlescape}}\")'>Trait drill down</a></div>"
                 //"<strong>Subjects:</strong> {{phewas:subject_number|htmlescape}}<br>"
             ].join("");
             return layout;
