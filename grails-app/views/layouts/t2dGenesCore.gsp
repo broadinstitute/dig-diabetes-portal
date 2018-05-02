@@ -358,8 +358,10 @@
 
             /* traits table */
 
-            function resetPhePlot() {
-                $("#traits_table_filter").val("");
+            function resetPhePlot(PHENOTYPE) {
+
+                var phenotypeName = PHENOTYPE || "";
+                $("#traits_table_filter").val(PHENOTYPE);
                 $("#pvalue-min").val("");
                 $("#pvalue-max").val("");
                 $("#sample-min").val("");
@@ -373,34 +375,32 @@
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
 
-                var inputBox = "<div class='phenotype-searchbox-wrapper'><div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select></div>";
+                var inputBox = "";
                 inputBox += "<div style='display:inline-block; margin-left: 15px; padding-left: 15px; border-left: solid 1px #ddd;'><h5>Filter plot (*1000 for sample)</h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
                 inputBox += "<input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 55px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 55px; padding-left: 10px;' />";
                 inputBox += "<a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div>"
-                inputBox += "<div class='related-words' style='clear: left;'></div></div>";
+                inputBox += "</div>";
                 //inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
                 inputBox += '<div class="traits-svg-wrapper" style=""></div>';
-                inputBox += "<span style='font-size: 12px; margin: 15px 0 10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+
 
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).insertAfter($("#traitsPerVariantTable"));
 
-                $(inputBox).insertBefore($("#traitsPerVariantTable"));
+                $(inputBox).appendTo($("#dkPhePlot"));
+
+                var suggestedToSort = "<div class='phenotype-searchbox-wrapper'><div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select></div><div class='related-words' style='clear: left;'></div>";
+
+                suggestedToSort += ""
+
+                suggestedToSort += "<span style='font-size: 12px; margin: 15px 0 10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+
+                $(suggestedToSort).insertBefore($("#traitsPerVariantTable"));
 
                 $("#traitsPerVariantTable").find("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
                     $("<th>sample</th>").appendTo($(this));
                 });
 
-                // PHENOTYPE FILTER PLACE OLDER INTERACTION
-/*
-                $("#traits_table_filter").focus(function() {
-                    $(this).attr("placeholder", "");
-                });
-
-                $("#traits_table_filter").focusout(function() {
-                    $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
-                });
-                */
 
                 $("#traits_table_filter").on('input',filterTraitsTable);
                 $("#pvalue-min").on('input',filterTraitsTable);
@@ -470,8 +470,8 @@
                     });
                 })
 
-
-                phePlotApp();
+                filterTraitsTable();
+                //phePlotApp();
             }
 
             function unique(list) {
@@ -541,27 +541,6 @@
                 phePlotApp();
             }
 
-            /*
-            function setColorToPlot(event) {
-
-                var phenotype = $(event.target).text();
-                var switchOnOff = $(event.target).attr("switch");
-
-                var color = (switchOnOff == "off")? $(event.target).attr("color"):"rgba(0,0,0, .3)";
-
-                $("#pheSvg").find("svg").each(function() {
-
-                    if($(this).attr("phenotype") == phenotype) {
-                        $(this).find("polygon").attr("style","fill:"+color);
-                    }
-                })
-
-                if (switchOnOff == "off") {$(event.target).attr("switch","on")} else {$(event.target).attr("switch","off")}
-
-
-            }
-
-            */
 
             function showRelatedWords() {
                 var relatedWords = "";
@@ -657,9 +636,24 @@
             }
 
 
+            function openPhePlotTab(PHENOTYPE) {
+
+                $("#traitAssociationInner").find("a.phewas").closest("li").attr("class","")
+                $("#traitAssociationInner").find("a.pheplot").closest("li").attr("class","active")
+
+                $("#traitAssociationInner").find(".plot-tabs").find(".tab-pane").each(function() {
+                    var classSet = ($(this).attr("id") == "pheplot")? "tab-pane fade active in" : "tab-pane fade";
+
+                    $(this).attr("class", classSet);
+                })
+
+                resetPhePlot(PHENOTYPE);
+            }
+
+
             function phePlotApp() {
 
-//$("#phePlotGroups")
+
 
                 ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
                 ($("#phePlotTooltip").find(".pointer").length)? "" : d3.select("#phePlotTooltip").append("div").attr("class","pointer");
