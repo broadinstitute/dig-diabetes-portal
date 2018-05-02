@@ -314,6 +314,8 @@ environments {
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
+//        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
+//
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
