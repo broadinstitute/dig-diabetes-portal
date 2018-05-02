@@ -1160,3 +1160,19 @@ select.minimal:focus {
 	background-repeat: no-repeat;
 	outline: 0;
 }
+
+.phenotype-searchbox-wrapper {
+	padding: 0 10px 10px 10px;
+	background-color: #eee;
+	border-radius: 5px;
+	margin-bottom: 10px;
+}
+
+#traitAssociationInner .tab-pane {
+	padding: 20px;
+	padding-bottom: 5px;
+	border: solid 1px #ddd;
+	border-top: none;
+	border-bottom-left-radius: 5px;
+	border-bottom-right-radius: 5px;
+}

@@ -55,7 +55,7 @@ button.expandoButton:visited {
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
 
     <div class="accordion-inner" id="traitAssociationInner">
-
+    <div class='phenotype-searchbox-wrapper'></div>
         <ul class="nav nav-tabs plot-tabs">
             <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
             <li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>

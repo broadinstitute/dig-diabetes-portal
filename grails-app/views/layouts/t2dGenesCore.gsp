@@ -376,11 +376,11 @@
 
 
                 var inputBox = "";
-                inputBox += "<div style='display:inline-block; margin-left: 15px; padding-left: 15px;'><h5>Filter plot (*1000 for sample)</h5><input id='pvalue-min' style='display: inline-block; width: 80px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; width: 80px; padding-left: 10px;' />";
-                inputBox += "<input id='sample-min' value=''  style='display: inline-block; width: 80px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; width: 80px; padding-left: 10px;' />";
-                inputBox += "<a href='javascript:;' class='btn btn-sm btn-default' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div>"
+                inputBox += "<div style='display:inline-block;'><span style='padding-right: 10px;'>Filter plot (*1000 for sample number)</span><input id='pvalue-min' style='display: inline-block; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; width: 40px; padding-left: 10px;' />";
+                inputBox += "<input id='sample-min' value=''  style='display: inline-block; width: 80px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample number < </span><input id='sample-max' style='display: inline-block; width: 80px; padding-left: 10px;' />";
+                inputBox += "<a href='javascript:;' class='btn btn-sm btn-default' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset plot</a></div>"
                 inputBox += "</div>";
-                //inputBox += "<a onclick='readDataset();' href='javascript:;'class='btn btn-default' style='float: right; margin-bottom: 10px;'>Switch view</a>";
+
                 inputBox += '<div class="traits-svg-wrapper" style=""></div>';
 
 
@@ -388,11 +388,11 @@
 
                 $(inputBox).appendTo($("#dkPhePlot"));
 
-                var suggestedToSort = "<div class='phenotype-searchbox-wrapper'><div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'></div>";
+                var suggestedToFilter = "<div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'>";
 
-                suggestedToSort += ""
+                $(suggestedToFilter).appendTo($(".phenotype-searchbox-wrapper"));
 
-                suggestedToSort += "<span style='font-size: 12px; margin: 15px 0 10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
+                var suggestedToSort = "<span style='font-size: 12px; margin: 15px 0 10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
 
                 $(suggestedToSort).insertBefore($("#traitsPerVariantTable"));
 
@@ -734,7 +734,7 @@
 
                 //console.log(datasetArray);
 
-                w = $("#traitsPerVariantTable").width(), h = 500, xbumperLeft = 50, xbumperRight = 200, ybumperTop = 20, ybumperBottom = 140;
+                w = $("#traitsPerVariantTable").width()-40, h = 450, xbumperLeft = 50, xbumperRight = 200, ybumperTop = 20, ybumperBottom = 140;
 
 
                 $(".traits-svg-wrapper").html("");
@@ -762,41 +762,6 @@
                 })
 
                 phenotypesArray = result;
-
-
-                //add phenotype name buttons above the plot
-                /*
-
-                if ($("#traits_table_filter").val() != "") $(".phenotypes-for-plot").append("<p>Click to apply color to the plot</p>");
-
-                $.each(phenotypesArray, function(index,value){
-                    if($("#traits_table_filter").val() != "") {
-                        if(value != " " || value != null) $(".phenotypes-for-plot").append("<span class='btn btn-default btn-xs' style='margin-right: 5px;'>"+value + "</span>");
-                    }
-
-                });
-
-                */
-
-
-                /*
-
-                var plotColors = ["rgba(255, 0, 0, .75)",
-                    "rgba(204, 102, 0, .75)",
-                    "rgba(204, 153, 0, .75)",
-                    "rgba(153, 204, 0, .75)",
-                    "rgba(0, 153, 0, .75)",
-                    "rgba(0, 204, 153, .75)",
-                    "rgba(0, 153, 255, .75)",
-                    "rgba(102, 102, 255, .75)",
-                    "rgba(153, 51, 255, .75)",
-                    "rgba(255, 0, 255, .75)",
-                    "rgba(255, 153, 102, .75)"];
-
-
-
-                */
-
 
 
                 var x = d3.scale.linear()
@@ -882,13 +847,13 @@
                     .attr("style","fill:rgba(122, 179, 23, .3); text-anchor: end");
 
                 svg.append("text")
-                    .text("Top 20 unique phenotypes")
+                    .text("Dataset with lowest ")
                     .attr("x", w-xbumperRight+ 45)
                     .attr("y", ybumperTop+5)
                     .attr("style","font-size: 12px;");
 
                 svg.append("text")
-                    .text("against p-value")
+                    .text("p-value per trait")
                     .attr("x", w-xbumperRight+ 45)
                     .attr("y", ybumperTop + 20)
                     .attr("style","font-size: 12px;");
@@ -1040,7 +1005,7 @@
 
                 var phenotypeNameLineH = 17;
                 var phenotypeNameNum = 20;
-                var phenotypeNameTop = (h - (phenotypeNameLineH * phenotypeNameNum) - ybumperTop)/2;
+                var phenotypeNameTop = ((h - (phenotypeNameLineH * phenotypeNameNum) - ybumperTop)/2) + 15;
 
                 group.append("g")
                     .attr("class","phenotype-name-group")
