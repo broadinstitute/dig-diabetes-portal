@@ -213,10 +213,37 @@ var mpgSoftware = mpgSoftware || {};
                 retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
                 phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
             };
+            var forestSelector = '#forestPlot';
+            var lzPheForestWASParm = {
+                page:'variantInfo',
+                variantId:variantObject.VAR_ID,
+                positionInfo:positioningInformation,
+                domId1:selector,
+                collapsingDom:collapseDomHolder,
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:phenotypeDescription,
+                phenoPropertyName:propertyName,
+                locusZoomDataset:locusZoomDataset,
+                pageInitialization:true,
+                functionalTrack:null,
+                defaultTissues:null,
+                defaultTissuesDescriptions:null,
+                datasetReadableName:locusZoomReadableDatasetName,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:'junk',
+                geneGetLZ:geneLocusZoomUrl,
+                variantInfoUrl:variantInfoUrl,
+                makeDynamic:makeDynamic,
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+            };
             mpgSoftware.locusZoom.setPageVars(lzPheWASParm,selector);
+            mpgSoftware.locusZoom.setPageVars(lzPheForestWASParm,forestSelector);
+
             if (exposePheWAS) {
                 mpgSoftware.locusZoom.generalizedInitLocusZoom(selector, variantObject.VAR_ID, 2);
-                mpgSoftware.locusZoom.generalizedInitLocusZoom('#forestPlot', variantObject.VAR_ID, 3);
+                mpgSoftware.locusZoom.generalizedInitLocusZoom(forestSelector, variantObject.VAR_ID, 3);
             }
             $('[data-toggle="popover"]').popover();
 
