@@ -49,10 +49,11 @@ var mpgSoftware = mpgSoftware || {};
                         var label0 = $(thead).find('th').eq(0).html();
                         var label1 = $(thead).find('th').eq(1).html();
                         var label2 = $(thead).find('th').eq(2).html();
-          //              $(thead).find('th').eq(2).html( label2+'<div style="font-size:9px">highlight if p < 0.05</div>');
+                        //              $(thead).find('th').eq(2).html( label2+'<div style="font-size:9px">highlight if p < 0.05</div>');
                     }
                 },
                 createdRow: function ( row, data, index ) {
+
                     var rowPtr = $(row);
                     var convertedSampleGroup = $(data[0]).attr('convertedSampleGroup');
                     var cells = rowPtr.children();
@@ -73,6 +74,7 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         }
                     }
+
                     if ($(data[0]).hasClass('indexRow')){
                         var rowsPerPhenotype = parseInt($(data[0]).attr('rowsPerPhenotype'));
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
@@ -80,18 +82,21 @@ var mpgSoftware = mpgSoftware || {};
                         //rowPtr.attr('data-toggle','collapse');
                         //rowPtr.attr('data-target',"."+$(data[0]).attr('phenotypename')+"collapsed");
                         rowPtr.attr('id',$(data[0]).attr('phenotypename'));
+                        rowPtr.attr('dataset',convertedSampleGroup);
+
                         if (rowsPerPhenotype>1) {
-                           // if (convertedSampleGroup.indexOf(':')===-1) {
-                                if ($(data[0]).hasClass('openPhenotype')) { // it phenotype is already been opened, so don't prepare to open it
-                                    $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-minus-sign pull-right' aria-hidden='true' data-target='."+ $(data[0]).attr('phenotypename')+"collapsed' data-toggle='collapse' "+
-                                        "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-snall\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
-                                } else {
-                                    $(rowPtr.children()[1]).append("<div class='glyphicon open-glyphicon pull-right' aria-hidden='true' data-target='."+ $(data[0]).attr('phenotypename')+"collapsed' data-toggle='collapse' "+
-                                        "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-full\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
-                                }
-                           // }
+                            // if (convertedSampleGroup.indexOf(':')===-1) {
+                            if ($(data[0]).hasClass('openPhenotype')) { // it phenotype is already been opened, so don't prepare to open it
+                                $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-minus-sign pull-right' aria-hidden='true' data-target='."+ $(data[0]).attr('phenotypename')+"collapsed' data-toggle='collapse' "+
+                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-snall\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
+                            } else {
+                                $(rowPtr.children()[1]).append("<div class='glyphicon open-glyphicon pull-right' aria-hidden='true' data-target='."+ $(data[0]).attr('phenotypename')+"collapsed' data-toggle='collapse' "+
+                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-full\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
+                            }
+                            // }
                         }
-                     } else {
+                    } else {
+                        rowPtr.attr('dataset',convertedSampleGroup);
                         if (convertedSampleGroup.indexOf(':')===-1) { // non cohort may be collapsed
                             if ($(data[0]).hasClass('openPhenotype')){ // it phenotype is already been opened then don't hide it
                                 rowPtr.attr('class',"collapse in "+$(data[0]).attr('phenotypename')+"collapsed");

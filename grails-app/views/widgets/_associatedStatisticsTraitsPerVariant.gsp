@@ -54,9 +54,22 @@ button.expandoButton:visited {
 
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
 
-    <div id="plot"></div>
-
     <div class="accordion-inner" id="traitAssociationInner">
+    <div class='phenotype-searchbox-wrapper'></div>
+        <ul class="nav nav-tabs plot-tabs">
+            <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
+            <li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>
+        </ul>
+
+        <div class="tab-content plot-tabs">
+            <div id="phewas" class="tab-pane fade in active">
+                <div id="plot"></div>
+            </div>
+            <div id="pheplot" class="tab-pane fade">
+                <div id="dkPhePlot"></div>
+            </div>
+        </div>
+
 
     <r:require modules="core"/>
     <r:require modules="tableViewer,traitInfo"/>
