@@ -468,7 +468,7 @@
 
                 $.each(phenotypeGroupList, function(index, value) {
 
-                    //console.log(value);
+
 
                     $("#phePlotGroups").append('<option value="'+value+'">'+value+'</option>');
 
@@ -483,7 +483,7 @@
                 })
 
                 filterTraitsTable();
-                //phePlotApp();
+
             }
 
             function unique(list) {
@@ -550,8 +550,19 @@
 
                 ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").append(relatedWords) : $(".related-words").html("");
 
-                phePlotApp();
+
+
+                if (showPhePlot == true) {
+                    phePlotApp();
+                } else {
+                    $("#dkPhePlot").css("display","none");
+                    $("#pheplot").css("display","none");
+                    $(".pheplot").closest("li").css("display","none");
+                }
+
             }
+
+            var showPhePlot = true; //turn on/off DK's plot
 
 
             function showRelatedWords() {
@@ -891,6 +902,16 @@
                         .attr("x", w-xbumperRight+ 45)
                         .attr("y", ybumperTop + 35)
                         .attr("style","font-size: 11px;");
+                } else {
+
+                    svg.append("text")
+                        .text("< Back")
+                        .attr("x", w-xbumperRight+ 45)
+                        .attr("y", ybumperTop + 35)
+                        .attr("style","font-size: 12px;")
+                        .on("click", function() {
+                            resetPhePlotAndTable();
+                        });
                 }
 
 
