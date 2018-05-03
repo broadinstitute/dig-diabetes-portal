@@ -356,9 +356,9 @@
                 }
             }
 
-            /* traits table */
+            /* reset traits table */
 
-            function resetPhePlot(PHENOTYPE) {
+            function resetPhePlotAndTable(PHENOTYPE) {
 
                 var phenotypeName = PHENOTYPE || "";
                 $("#traits_table_filter").val(PHENOTYPE);
@@ -370,15 +370,24 @@
                 filterTraitsTable();
             }
 
+            function resetOnlyPhePlot() {
+
+                $("#pvalue-min").val("");
+                $("#pvalue-max").val("");
+                $("#sample-min").val("");
+                $("#sample-max").val("");
+                filterTraitsTable();
+            }
+
             function massageTraitsTable() {
 
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
 
                 var inputBox = "";
-                inputBox += "<div style='display:inline-block;'><span style='padding-right: 10px;'>Filter plot (*1000 for sample number)</span><input id='pvalue-min' style='display: inline-block; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; width: 40px; padding-left: 10px;' />";
-                inputBox += "<input id='sample-min' value=''  style='display: inline-block; width: 80px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample number < </span><input id='sample-max' style='display: inline-block; width: 80px; padding-left: 10px;' />";
-                inputBox += "<a href='javascript:;' class='btn btn-sm btn-default' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset plot</a></div>"
+                inputBox += "<div style='display:inline-block;'><span style='padding-right: 10px;'>Filter plot: </span><input id='pvalue-min' style='display: inline-block; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; width: 40px; padding-left: 10px;' />";
+                inputBox += "<input id='sample-min' value=''  style='display: inline-block; width: 80px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample number(*1000) < </span><input id='sample-max' style='display: inline-block; width: 80px; padding-left: 10px;' />";
+                inputBox += "<a href='javascript:;' class='btn btn-sm btn-default' style='margin: 0 0 0 30px; float: right;' onclick='resetOnlyPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset plot</a></div>"
                 inputBox += "</div>";
 
                 inputBox += '<div class="traits-svg-wrapper" style=""></div>';
@@ -388,7 +397,7 @@
 
                 $(inputBox).appendTo($("#dkPhePlot"));
 
-                var suggestedToFilter = "<div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'>";
+                var suggestedToFilter = "<div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'>";
 
                 $(suggestedToFilter).appendTo($(".phenotype-searchbox-wrapper"));
 
@@ -647,7 +656,7 @@
                     $(this).attr("class", classSet);
                 })
 
-                resetPhePlot(PHENOTYPE);
+                resetPhePlotAndTable(PHENOTYPE);
             }
 
 
@@ -658,7 +667,7 @@
                 ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
                 ($("#phePlotTooltip").find(".pointer").length)? "" : d3.select("#phePlotTooltip").append("div").attr("class","pointer");
 
-                    ;
+
 
                 //$("#phePlotTooltip").append("<div class='pointer'>&nbsp;</div>");
 
@@ -687,6 +696,7 @@
                             eachDataset.oddsRatio = parseFloat($(this).find("td").eq(4).text());
                             eachDataset.maf = $(this).find("td").eq(5).text();
                             eachDataset.sample = parseFloat(parseFloat($(this).find("td").eq(7).text()));
+                            eachDataset.group = $(this).attr("phenotype").split(",")[1];
 
                             traitsTableData.push(eachDataset);
                         }
@@ -734,7 +744,7 @@
 
                 //console.log(datasetArray);
 
-                w = $("#traitsPerVariantTable").width()-40, h = 450, xbumperLeft = 50, xbumperRight = 200, ybumperTop = 20, ybumperBottom = 140;
+                w = $("#traitsPerVariantTable").width()-40, h = 450, xbumperLeft = 50, xbumperRight = 220, ybumperTop = 20, ybumperBottom = 140;
 
 
                 $(".traits-svg-wrapper").html("");
@@ -762,6 +772,8 @@
                 })
 
                 phenotypesArray = result;
+
+                //console.log(phenotypesArray);
 
 
                 var x = d3.scale.linear()
@@ -846,17 +858,29 @@
                     .text("locus-wide significant: 4")
                     .attr("style","fill:rgba(122, 179, 23, .3); text-anchor: end");
 
-                svg.append("text")
-                    .text("Dataset with lowest ")
-                    .attr("x", w-xbumperRight+ 45)
-                    .attr("y", ybumperTop+5)
-                    .attr("style","font-size: 12px;");
+                if(phenotypesArray.length == 1){
+
+                    svg.append("text")
+                        .text("Trait name")
+                        .attr("x", w-xbumperRight+ 45)
+                        .attr("y", ybumperTop+5)
+                        .attr("style","font-size: 13px;");
+
+                } else {
+
+                    svg.append("text")
+                        .text("20 most significant traits ")
+                        .attr("x", w-xbumperRight+ 45)
+                        .attr("y", ybumperTop+5)
+                        .attr("style","font-size: 13px;");
+
+                }
 
                 svg.append("text")
-                    .text("p-value per trait")
+                    .text("(Roll over a trait to highlight datasets)")
                     .attr("x", w-xbumperRight+ 45)
                     .attr("y", ybumperTop + 20)
-                    .attr("style","font-size: 12px;");
+                    .attr("style","font-size: 10px;");
 
 
 
@@ -1073,8 +1097,8 @@
                 group.select(".phenotype-name-group")
                     .append("text")
                     .attr("y", 10)
-                    .text(function(d){ return d.phenotype})
-                    .attr("style","font-size: 12px; text-anchor: start;")
+                    .text(function(d){ return d.phenotype +" ("+d.group+")"})
+                    .attr("style","font-size: 11px; text-anchor: start;")
                     .attr("fill", function(d) {
                         var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, 1)" : (d.logValue >= 4)? "rgba(122, 179, 23, 1)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, 1)" : "rgba(200, 200, 200, 1)"
                         return dotColor ;
