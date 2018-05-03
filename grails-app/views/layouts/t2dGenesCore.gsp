@@ -397,7 +397,7 @@
 
                 $(inputBox).appendTo($("#dkPhePlot"));
 
-                var suggestedToFilter = "<div style='display:inline-block'><h5>Filter phenotypes (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Phenotype groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'>";
+                var suggestedToFilter = "<div style='display:inline-block'><h5>Filter traits (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'>";
 
                 $(suggestedToFilter).appendTo($(".phenotype-searchbox-wrapper"));
 
@@ -861,7 +861,7 @@
                 if(phenotypesArray.length == 1){
 
                     svg.append("text")
-                        .text("Trait name")
+                        .text("p-value | Odds Ratio | MAF")
                         .attr("x", w-xbumperRight+ 45)
                         .attr("y", ybumperTop+5)
                         .attr("style","font-size: 13px;");
@@ -869,7 +869,7 @@
                 } else {
 
                     svg.append("text")
-                        .text("20 most significant traits ")
+                        .text("Most significant traits ")
                         .attr("x", w-xbumperRight+ 45)
                         .attr("y", ybumperTop+5)
                         .attr("style","font-size: 13px;");
@@ -877,10 +877,18 @@
                 }
 
                 svg.append("text")
-                    .text("(Roll over a trait to highlight datasets)")
+                    .text("*Roll over to highlight study")
                     .attr("x", w-xbumperRight+ 45)
                     .attr("y", ybumperTop + 20)
-                    .attr("style","font-size: 10px;");
+                    .attr("style","font-size: 11px;");
+
+                if (phenotypesArray.length != 1 ) {
+                    svg.append("text")
+                        .text("*Click to drill down")
+                        .attr("x", w-xbumperRight+ 45)
+                        .attr("y", ybumperTop + 35)
+                        .attr("style","font-size: 11px;");
+                }
 
 
 
@@ -1022,14 +1030,27 @@
 
 
                 /// add phenotype names
-                group = svg.selectAll("g.phenotypenames")
-                    .data(phenotypesArray)
-                    .enter()
-                    .append("g");
+                if (phenotypesArray.length == 1) {
+
+                    group = svg.selectAll("g.phenotypenames")
+                        .data(traitsTableData)
+                        .enter()
+                        .append("g");
+
+                    console.log(traitsTableData);
+
+                } else {
+
+                    group = svg.selectAll("g.phenotypenames")
+                        .data(phenotypesArray)
+                        .enter()
+                        .append("g");
+
+                }
 
                 var phenotypeNameLineH = 17;
                 var phenotypeNameNum = 20;
-                var phenotypeNameTop = ((h - (phenotypeNameLineH * phenotypeNameNum) - ybumperTop)/2) + 15;
+                var phenotypeNameTop = ((h - (phenotypeNameLineH * phenotypeNameNum) - ybumperTop)/2) + 25;
 
                 group.append("g")
                     .attr("class","phenotype-name-group")
@@ -1097,7 +1118,10 @@
                 group.select(".phenotype-name-group")
                     .append("text")
                     .attr("y", 10)
-                    .text(function(d){ return d.phenotype +" ("+d.group+")"})
+                    .text(function(d){
+                        var returnText = (phenotypesArray.length == 1)? d.pvalue +" | "+ d.oddsRatio  +" | "+ d.maf : d.phenotype +" ("+d.group+")" ;
+                        return returnText;
+                    })
                     .attr("style","font-size: 11px; text-anchor: start;")
                     .attr("fill", function(d) {
                         var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, 1)" : (d.logValue >= 4)? "rgba(122, 179, 23, 1)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, 1)" : "rgba(200, 200, 200, 1)"
@@ -1108,6 +1132,9 @@
                     })
                     .attr("yp", function(d) {
                         return y(d.logValue)
+                    })
+                    .attr("phenotype", function(d){
+                        return d.phenotype;
                     })
                     .on("mouseover", function(d) {
 
@@ -1139,6 +1166,18 @@
                         dimTriangle();
 
                         d3.select("#phePlotTooltip").classed("hidden", true);
+
+                    })
+                    .on("click", function() {
+
+                        if (phenotypesArray.length != 1) {
+                            var phenotypeName = "="+d3.select(this).attr("phenotype");
+
+                            resetPhePlotAndTable(phenotypeName);
+
+                            d3.select("#phePlotTooltip").classed("hidden", true);
+
+                        }
 
                     });
 
@@ -1238,7 +1277,7 @@
                     .attr("class","axis")
                     .call(d3.svg.axis().orient("bottom").scale(x))
                     .append("text")
-                    .text("Sample >")
+                    .text("Sample number >")
                     .attr("x",10)
                     .attr("y", 50)
                     .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:start");
