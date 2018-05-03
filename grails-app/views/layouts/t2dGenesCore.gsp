@@ -20,6 +20,9 @@
         <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
             <title><g:message code="portal.epilepsy.header.title"/> <g:message code="portal.mi.header.title.genetics"/></title>
         </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+            <title><g:message code="portal.sleep.header.title.short"/> <g:message code="portal.sleep.header.title.genetics"/></title>
+        </g:elseif>
         <g:else>
             <title><g:message code="portal.header.title.short"/> <g:message code="portal.header.title.genetics"/></title>
         </g:else>
