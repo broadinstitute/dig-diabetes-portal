@@ -638,7 +638,7 @@
 
                 if(currentVal[currentVal.length -1] == "") currentVal.splice(currentVal.length -1,1);
 
-                console.log(currentVal);
+                //console.log(currentVal);
 
                 if(newKeyword) {
 
@@ -836,41 +836,55 @@
 
 
                 // Draw p-value significance line
-                svg.selectAll("line.gws")
-                    .data(y.ticks(1))
-                    .enter().append("line")
-                    .attr("class", "gws")
-                    .attr("x1", xbumperLeft)
-                    .attr("x2", w-xbumperRight)
-                    .attr("y1", y(8))
-                    .attr("y2", y(8))
-                    .style("stroke", "rgba(0, 102, 51, .1)");
 
-                svg.selectAll("text.gws")
-                    .data(y.ticks(1))
-                    .enter().append("text")
-                    .attr("x", w-xbumperRight)
-                    .attr("y", y(8))
-                    .text("genome-wide significant: 8")
-                    .attr("style","fill:rgba(0, 102, 51, .3); text-anchor: end");
+                console.log(pvalueMin);
 
-                svg.selectAll("line.lws")
-                    .data(y.ticks(1))
-                    .enter().append("line")
-                    .attr("class", "lws")
-                    .attr("x1", xbumperLeft)
-                    .attr("x2", w-xbumperRight)
-                    .attr("y1", y(4))
-                    .attr("y2", y(4))
-                    .style("stroke", "rgba(122, 179, 23, .1)");
+                if(pvalueMin <= 8) {
 
-                svg.selectAll("text.lws")
-                    .data(y.ticks(1))
-                    .enter().append("text")
-                    .attr("x", w-xbumperRight)
-                    .attr("y", y(4))
-                    .text("locus-wide significant: 4")
-                    .attr("style","fill:rgba(122, 179, 23, .3); text-anchor: end");
+                    svg.selectAll("line.gws")
+                        .data(y.ticks(1))
+                        .enter().append("line")
+                        .attr("class", "gws")
+                        .attr("x1", xbumperLeft)
+                        .attr("x2", w-xbumperRight)
+                        .attr("y1", y(8))
+                        .attr("y2", y(8))
+                        .style("stroke", "rgba(0, 102, 51, .1)");
+
+                    svg.selectAll("text.gws")
+                        .data(y.ticks(1))
+                        .enter().append("text")
+                        .attr("x", w-xbumperRight)
+                        .attr("y", y(8))
+                        .text("genome-wide significant: 8")
+                        .attr("style","fill:rgba(0, 102, 51, .3); text-anchor: end");
+
+                }
+
+                if(pvalueMin <= 4) {
+
+                    svg.selectAll("line.lws")
+                        .data(y.ticks(1))
+                        .enter().append("line")
+                        .attr("class", "lws")
+                        .attr("x1", xbumperLeft)
+                        .attr("x2", w-xbumperRight)
+                        .attr("y1", y(4))
+                        .attr("y2", y(4))
+                        .style("stroke", "rgba(122, 179, 23, .1)");
+
+                    svg.selectAll("text.lws")
+                        .data(y.ticks(1))
+                        .enter().append("text")
+                        .attr("x", w-xbumperRight)
+                        .attr("y", y(4))
+                        .text("locus-wide significant: 4")
+                        .attr("style","fill:rgba(122, 179, 23, .3); text-anchor: end");
+
+                }
+
+
+                // draw titles on the right column
 
                 if(phenotypesArray.length == 1){
 
@@ -905,7 +919,7 @@
                 } else {
 
                     svg.append("text")
-                        .text("< Back")
+                        .text('<< Back to the list')
                         .attr("x", w-xbumperRight+ 45)
                         .attr("y", ybumperTop + 35)
                         .attr("style","font-size: 12px;")
@@ -1061,7 +1075,7 @@
                         .enter()
                         .append("g");
 
-                    console.log(traitsTableData);
+                   // console.log(traitsTableData);
 
                 } else {
 
@@ -1312,7 +1326,7 @@
                     .call(d3.svg.axis().orient("left").scale(y))
                     .append("text")
                     .text("p-value (-log10)")
-                    .attr("x",-(y(0)))
+                    .attr("x",-200)
                     .attr("y",-30 )
                     .attr("transform","rotate(-90)")
                     .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:start");
