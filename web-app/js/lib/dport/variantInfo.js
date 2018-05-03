@@ -216,6 +216,7 @@ var mpgSoftware = mpgSoftware || {};
             mpgSoftware.locusZoom.setPageVars(lzPheWASParm,selector);
             if (exposePheWAS) {
                 mpgSoftware.locusZoom.generalizedInitLocusZoom(selector, variantObject.VAR_ID, 2);
+                mpgSoftware.locusZoom.generalizedInitLocusZoom('#forestPlot', variantObject.VAR_ID, 3);
             }
             $('[data-toggle="popover"]').popover();
 
