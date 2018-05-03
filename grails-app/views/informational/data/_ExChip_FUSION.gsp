@@ -14,18 +14,9 @@
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
     <table class="table table-condensed table-responsive table-striped">
-        <tr><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
+        <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
 
-        <tr><td>1,796</td><td>1,689</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics Study (FUSION)</a>
-
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">criteria</td>
-                        <td valign="top">criteria</a></td></tr>
-                </table>
-            </div></td><td>ancestry</td></tr>
+        <tr><td>1,796</td><td>1,689</td><td>Finland-United States Investigation of NIDDM Genetics Study (FUSION)</td><td>European</td></tr>
     </table>
 
     <h4><g:message code="informational.shared.headers.project"></g:message></h4>
@@ -51,9 +42,10 @@
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>Genotype Data Quality Control Report (<a href="" target="_blank">download PDF</a>)</p>
+<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_FUSION.pdf" target="_blank">download PDF</a>)</p>
 
-<p>AMP-DCC Data Analysis Report (<a href="" target="_blank">download PDF</a>)</p>
+<p>AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_DCC_Data_Analysis_Report_FUSION_Phase1.pdf" target="_blank">download PDF</a>)</p>
+
 
 
 <h4>Accessing FUSION exome chip analysis data</h4>
