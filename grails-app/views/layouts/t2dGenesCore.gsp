@@ -1315,7 +1315,7 @@
                     .attr("class","axis")
                     .call(d3.svg.axis().orient("bottom").scale(x))
                     .append("text")
-                    .text("Sample number >")
+                    .text("Sample >")
                     .attr("x",10)
                     .attr("y", 50)
                     .attr("style","font-size: 9pt !important; font-weight: 400;text-anchor:start");
