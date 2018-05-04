@@ -18,9 +18,9 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Roselli_2018_journal"></g:message><br>
-<g:message code="informational.shared.publications.Roselli_2018_journal.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Roselli_2018_journal.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Roselli_2018"></g:message><br>
+<g:message code="informational.shared.publications.Roselli_2018.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Roselli_2018.citation"></g:message> </div>
 </div></p>
 
 
