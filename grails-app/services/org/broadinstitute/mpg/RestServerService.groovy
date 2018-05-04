@@ -2667,7 +2667,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 }
  */
        String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}", "r2": "${r2}",
-                                                    "pagination":{"size":5000,"offset":1},
+                                                    "pagination":{"size":5000,"offset":0},
                                                     "sort": [{"parameter": "P_VALUE"}] } """.toString()
 
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
