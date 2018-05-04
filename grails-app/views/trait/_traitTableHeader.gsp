@@ -35,18 +35,14 @@
 
 <div class="separator"></div>
 
-<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
+<div style = "display:block;">
     <p class= "dk-footnote" style="width:83%;">Dataset</p>
     <span id="traitTableDescription"></span>
     <select  style = " width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
     </select>
 
-</div>
-
-
-<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;" >
-    <p class = "dk-footnote" style="width:83%;">R2 threshold</p>
-    <select style = "width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+  <p class = "dk-footnote" style="width:83%;">R2 threshold</p>
+    <select style = "display:inline-block; width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
         <option value="0.1000001" >0.1 </option>
         <option value="0.2" >0.2 </option>
         <option value="0.4" >0.4 </option>
