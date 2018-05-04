@@ -33,9 +33,10 @@
 
 
 
-<div class="separator"></div>
+
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help2"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help3"></g:message></p>
 <p>&nbsp;</p>
 <div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
     <p class= "dk-footnote" style="width:83%;">Dataset</p>
