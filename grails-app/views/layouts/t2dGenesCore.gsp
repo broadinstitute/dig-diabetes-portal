@@ -188,7 +188,8 @@
                         $(".dk-logo-wrapper").css({"display":"none"});
                         var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
                         $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"solid 1px #ffffff"})
-                        setMenuTriangle(".home-btn")
+                        setMenuTriangle(".home-btn");
+                        addFilterToTraitslist();
                         break;
 
                     case "variantsearchwf":
@@ -231,6 +232,10 @@
 
                 menuHeaderSet();
             });
+
+            function addFilterToTraitslist() {
+
+            }
 
             function setMenuTriangle(SELEVTEDBTN) {$(SELEVTEDBTN).css({"background-image":"url(${resource(dir: 'images', file: 'menu-triangle.svg')})","background-repeat":"no-repeat","background-position":"center bottom","background-size":"18px 9px"})}
 
