@@ -59,7 +59,7 @@ button.expandoButton:visited {
         <g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">
             <ul class="nav nav-tabs plot-tabs">
                 <g:if test="${portalVersionBean.exposePhewasModule}">
-                    <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
+                    <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWAS view</a></li>
                 </g:if>
                 <g:if test="${portalVersionBean.exposeForestPlot}">
                     <li><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>
