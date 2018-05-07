@@ -1768,6 +1768,8 @@ var mpgSoftware = mpgSoftware || {};
                     lzp.panels.phewas.setTitle("Variant " + variantIdString);
                     break;
                 case 3: // pheWAS forestplot
+
+                    //the way I used to do it
                     //var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
                     //    var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
                     //        this.parseInit(init);
@@ -1785,25 +1787,49 @@ var mpgSoftware = mpgSoftware || {};
                     //    var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
                     //    dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
                     //};
-                    //LocusZoom.Data.ForestSource = LocusZoom.Data.Source.extend(function (init) {
+
+                    //  flawed attempt number two
+                    // LocusZoom.Data.ForestSource = LocusZoom.Data.Source.extend(function (init) {
                     //    this.parseInit(init);
-                    //}, 'forest');
-                    LocusZoom.Data.ForestSource.prototype.getURL = function (state, chain, fields) {
-                        var build = this.params.build;
-                        var url = [
-                            this.url,
-                            '?filter=variant eq \'',
-                            encodeURIComponent(state.variant).join('&')
-                        ];
-                        return url.join('');
+                    // }, 'forest');
+                    // LocusZoom.Data.ForestSource.prototype.getURL = function (state, chain, fields) {
+                    //     var build = this.params.build;
+                    //     var url = [
+                    //         this.url,
+                    //         '?filter=variant eq \'',
+                    //         encodeURIComponent(state.variant).join('&')
+                    //     ];
+                    //     return url.join('');
+                    // };
+
+                    //let's try something different
+                    var buildForestSource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
+                       var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
+                           this.parseInit(init);
+                           this.getURL = function (state, chain, fields) {
+                               var url = this.url + "?" +
+                                   "chromosome=" + state.chr + "&" +
+                                   "start=" + state.start + "&" +
+                                   "end=" + state.end + "&" +
+                                   "source=" + tissue + "&" +
+                                   "assay_id=" + assayId + "&" +
+                                   "lzFormat=1";
+                               return url;
+                           };
+                       }, "forestphewas");
+                       var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
+                       ds.add("forestphewas", new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
                     };
+
+
                     newLayout = initLocusZoomForestPlotLayout(convertVarIdToUmichFavoredForm(variantIdString));
-                    ds
-                        .add("forestphewas", ["forest", {
-                            url: pageVars.phewasForestAjaxCallInLzFormatUrl,
-                            params: { build: ["GRCh37"] }
-                        }]);
-                    ;
+                    buildForestSource(ds,pageVars.phewasForestAjaxCallInLzFormatUrl,'rawTissue','phenotype','dom1','assayId');
+                    // ds
+                    //     .add("forestphewas", ["forest", {
+                    //         url: pageVars.phewasForestAjaxCallInLzFormatUrl,
+                    //         params: { build: ["GRCh37"] }
+                    //     }]);
+                    // ;
                     lzp = LocusZoom.populate(selector, ds, newLayout);
                     break;
                 default: // Association plot

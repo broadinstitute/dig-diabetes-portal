@@ -133,7 +133,7 @@ var mpgSoftware = mpgSoftware || {};
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       locusZoomReadableDatasetName,geneLocusZoomUrl,
                                       variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl,phewasForestAjaxCallInLzFormatUrl,
-                                      exposePheWAS) {
+                                      exposePheWAS,exposeForestPlot, exposeTraitDataSetAssociationView) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
@@ -246,8 +246,11 @@ var mpgSoftware = mpgSoftware || {};
 
             if (exposePheWAS) {
                 mpgSoftware.locusZoom.generalizedInitLocusZoom(selector, variantObject.VAR_ID, 2);
+            }
+            if (exposeForestPlot) {
                 mpgSoftware.locusZoom.generalizedInitLocusZoom(forestSelector, variantObject.VAR_ID, 3);
             }
+
             $('[data-toggle="popover"]').popover();
 
             $(".pop-top").popover({placement : 'top'});

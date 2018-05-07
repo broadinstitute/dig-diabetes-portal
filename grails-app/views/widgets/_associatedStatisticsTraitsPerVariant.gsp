@@ -56,11 +56,19 @@ button.expandoButton:visited {
 
     <div class="accordion-inner" id="traitAssociationInner">
     <div class='phenotype-searchbox-wrapper'></div>
-        <ul class="nav nav-tabs plot-tabs">
-            <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
-            <li><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>
-            <li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>
-        </ul>
+        <g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">
+            <ul class="nav nav-tabs plot-tabs">
+                <g:if test="${portalVersionBean.exposePhewasModule}">
+                    <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
+                </g:if>
+                <g:if test="${portalVersionBean.exposeForestPlot}">
+                    <li><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>
+                </g:if>
+                <g:if test="${portalVersionBean.exposeTraitDataSetAssociationView}">
+                    <li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>
+                </g:if>
+            </ul>
+        </g:if>
 
         <div class="tab-content plot-tabs">
             <div id="phewas" class="tab-pane fade in active">

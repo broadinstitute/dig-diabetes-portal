@@ -83,7 +83,9 @@
                         '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
                         '${createLink(controller:"trait", action:"phewasAjaxCallInLzFormat")}',
                         '${createLink(controller:"trait", action:"phewasForestAjaxCallInLzFormat")}',
-                    ${PortalVersionBean.getExposePhewasModule()})
+                        ${portalVersionBean.getExposePhewasModule()},
+                        ${portalVersionBean.getExposeForestPlot()},
+                        ${portalVersionBean.getExposeTraitDataSetAssociationView()})
 
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
