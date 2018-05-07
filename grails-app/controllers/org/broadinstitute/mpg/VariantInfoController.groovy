@@ -78,7 +78,7 @@ class VariantInfoController {
                             lzOptions   : lzOptions,
                             phenotype:phenotype,
                             igvIntro: igvIntro,
-                            PortalVersionBean:restServerService.retrieveBeanForCurrentPortal()
+                            portalVersionBean:restServerService.retrieveBeanForCurrentPortal()
                     ])
 
         }
