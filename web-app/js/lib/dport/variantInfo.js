@@ -132,7 +132,7 @@ var mpgSoftware = mpgSoftware || {};
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       locusZoomReadableDatasetName,geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl,
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl,phewasForestAjaxCallInLzFormatUrl,
                                       exposePheWAS) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
@@ -184,7 +184,8 @@ var mpgSoftware = mpgSoftware || {};
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
                 retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
-                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
             };
 
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
@@ -211,7 +212,8 @@ var mpgSoftware = mpgSoftware || {};
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
                 retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
-                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
             };
             var forestSelector = '#forestPlot';
             var lzPheForestWASParm = {
@@ -236,7 +238,8 @@ var mpgSoftware = mpgSoftware || {};
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
                 retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
-                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
             };
             mpgSoftware.locusZoom.setPageVars(lzPheWASParm,selector);
             mpgSoftware.locusZoom.setPageVars(lzPheForestWASParm,forestSelector);

@@ -37,6 +37,11 @@ class SharedToolsService {
     GeneManagementService geneManagementService
 
     private static final log = LogFactory.getLog(this)
+
+    public static final String CONFIDENCE_LEVEL_90 = "90"
+    public static final String CONFIDENCE_LEVEL_95 = "95"
+    public static final String CONFIDENCE_LEVEL_99 = "99"
+
     JSONObject sharedMetadata = null
     LinkedHashMap sharedProcessedMetadata = null
     Integer forceProcessedMetadataOverride = -1
@@ -402,6 +407,100 @@ class SharedToolsService {
         }
         return collatedValues
     }
+
+    /***
+     * If all goes well you'll end up with a map containing
+     *
+     * {zScore:double,
+     * error: false}
+     *
+     * However, if error is true then the other value is not guaranteed to be present
+     *
+
+     * @param pValue
+     * @return
+     */
+    public LinkedHashMap calculateZScore(Double pValue){
+        LinkedHashMap returnValue = [zScore:null,error:true]
+        if ((pValue!=null) && (!pValue.isNaN() && (pValue<=1)&& (pValue>0))){
+            returnValue["zScore"]  = ((-0.862d) + Math.sqrt(0.743-(2.404*Math.log10(pValue))))
+            returnValue["error"] = false
+        }
+        return returnValue
+    }
+
+    /***
+     * If all goes well you'll end up with a map containing
+     *
+     * {zScore:double,
+     * standardError:double
+     * error: false}
+     *
+     * However, if error is true then none of the other values are guaranteed to be present
+     *
+     * @param pValue
+     * @param effect
+     * @return
+     */
+    public LinkedHashMap calculateStandardError(Double pValue, Double effect){
+        LinkedHashMap returnValue = calculateZScore(pValue)
+        if (!returnValue.error){
+            Double zScore = returnValue["zScore"]
+            if ((effect!=null) && (!effect.isNaN() )  && (zScore != 0)){
+                returnValue["standardError"] = effect/Math.abs(zScore)
+            } else {
+                returnValue["error"] = true
+            }
+        }
+        return returnValue
+    }
+
+    /***
+     * If all goes well you'll end up with a map containing
+     *
+     * {zScore:double,
+     * standardError:double
+     * cLower:double,
+     * cUpper:double
+     * error: false}
+     *
+     * However, if error is true then none of the other values are guaranteed to be present
+     *
+     * @param pValue
+     * @param effect
+     * @param confidenceLevel
+     * @return
+     */
+    public LinkedHashMap calculateConfidenceInterval(Double pValue, Double effect,String confidenceLevel ){
+        LinkedHashMap returnValue = calculateStandardError(pValue,effect)
+        if (!returnValue.error){
+            Double multiplier
+            switch (confidenceLevel){
+                case CONFIDENCE_LEVEL_90:
+                    multiplier = 1.65d
+                    break;
+                case CONFIDENCE_LEVEL_95:
+                    multiplier = 1.96d
+                    break;
+                case CONFIDENCE_LEVEL_99:
+                    multiplier = 2.57d
+                    break;
+                default:
+                    returnValue["error"] = true
+                    break;
+            }
+            if (!returnValue.error){
+                returnValue["cLower"] = effect - (multiplier*effect)
+                returnValue["cUpper"] = effect + (multiplier*effect)
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
 
     /***
      * Control the order in which the columns appear on the screen after a sort.  Here we take the tree

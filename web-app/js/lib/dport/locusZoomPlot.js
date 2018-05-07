@@ -129,7 +129,7 @@ var mpgSoftware = mpgSoftware || {};
             responsive_resize: true,
             panels: [
                 {
-                    id: "phewas",
+                    id: "forestphewas",
                     width: 800,
                     height: 800,
                     proportional_width: 1,
@@ -151,7 +151,7 @@ var mpgSoftware = mpgSoftware || {};
                     ,
                     data_layers: [
                         {
-                            id: "phewaspvalues",
+                            id: "forestphewaspvalues",
                             type: "forest",
                             z_index: 1,
                             point_shape: "square",
@@ -1764,20 +1764,47 @@ var mpgSoftware = mpgSoftware || {};
                             url: pageVars.phewasAjaxCallInLzFormatUrl,
                             params: { build: ["GRCh37"] }
                         }]);
-                    //lzp = LocusZoom.populate("#plot", ds, layout);
                     lzp = LocusZoom.populate(selector, ds, newLayout);
                     lzp.panels.phewas.setTitle("Variant " + variantIdString);
                     break;
                 case 3: // pheWAS forestplot
+                    //var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
+                    //    var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
+                    //        this.parseInit(init);
+                    //        this.getURL = function (state, chain, fields) {
+                    //            var url = this.url + "?" +
+                    //                "chromosome=" + state.chr + "&" +
+                    //                "start=" + state.start + "&" +
+                    //                "end=" + state.end + "&" +
+                    //                "source=" + tissue + "&" +
+                    //                "assay_id=" + assayId + "&" +
+                    //                "lzFormat=1";
+                    //            return url;
+                    //        };
+                    //    }, "BroadT2Dc");
+                    //    var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
+                    //    dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
+                    //};
+                    //LocusZoom.Data.ForestSource = LocusZoom.Data.Source.extend(function (init) {
+                    //    this.parseInit(init);
+                    //}, 'forest');
+                    LocusZoom.Data.ForestSource.prototype.getURL = function (state, chain, fields) {
+                        var build = this.params.build;
+                        var url = [
+                            this.url,
+                            '?filter=variant eq \'',
+                            encodeURIComponent(state.variant).join('&')
+                        ];
+                        return url.join('');
+                    };
                     newLayout = initLocusZoomForestPlotLayout(convertVarIdToUmichFavoredForm(variantIdString));
                     ds
-                        .add("phewas", ["PheWASLZ", {
-                            url: pageVars.phewasAjaxCallInLzFormatUrl,
+                        .add("forestphewas", ["forest", {
+                            url: pageVars.phewasForestAjaxCallInLzFormatUrl,
                             params: { build: ["GRCh37"] }
                         }]);
                     ;
                     lzp = LocusZoom.populate(selector, ds, newLayout);
-                    lzp.panels.phewas.setTitle("Variant " + variantIdString);
                     break;
                 default: // Association plot
                     break;

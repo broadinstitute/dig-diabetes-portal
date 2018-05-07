@@ -701,6 +701,101 @@ class WidgetService {
 
 
 
+    public JSONObject generatePhewasForestDataForLz(String varId){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion() )
+        List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("",
+                metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
+        LinkedHashMap <String,String> phenotypeToPhenotypegroupMap = [:]
+        for (org.broadinstitute.mpg.diabetes.metadata.Phenotype phenotype in phenotypeList){
+            if (!phenotypeToPhenotypegroupMap.containsKey(phenotype.name)){ // we are not allowing phenotypes to be in multiple groups
+                phenotypeToPhenotypegroupMap[phenotype.name] = phenotype.group
+            }
+        }
+        // we have a response from the KB.  Let's convert that into the favored LZ format
+        List<String> dataFromQuery = []
+        if ((jsonObject)&&(!jsonObject.is_error)){
+            if (jsonObject.variants){
+                int id = 1
+                for (Map variant in jsonObject.variants){
+                    List<String> singleVariantData = []
+                    String retrievedVarId = ""
+                    List<String> varIdParts = []
+                    String phenotype = ""
+                    String phenotypeDescription = ""
+                    String phenotypeGroup = "unknown phenotype group"
+                    String dataSetDescription = g.message(code: "metadata." + variant.dataset, default: variant.dataset)
+                    SampleGroup sampleGroup = metaDataService.getSampleGroupByName (variant.dataset as String,metaDataService.METADATA_VARIANT)
+                    int subjectNumber = sampleGroup?.getSubjectsNumber()
+                    String pValueAsString = "0"
+                    String betaAsString = "0"
+                    String standardErrorAsString = "0"
+                    Double pValue =0d
+                    Double logPValue =0d
+                    Double beta =0d
+                    Double standardError =0d
+                    Double ciHigh =0d
+                    Double ciLow =0d
+
+                    if (variant."VAR_ID"){retrievedVarId = variant."VAR_ID"}
+                    if (variant."P_VALUE"){pValueAsString = variant."P_VALUE"}
+                    if (variant."BETA"){betaAsString = variant."BETA"}
+                    if (variant."phenotype"){phenotype = variant."phenotype"}
+                    phenotypeDescription =  g.message(code: "metadata." + phenotype, default: phenotype)
+                    if (phenotypeToPhenotypegroupMap.containsKey(phenotype)) {
+                        phenotypeGroup = phenotypeToPhenotypegroupMap[phenotype]
+                    }
+                    varIdParts = retrievedVarId.split("_")
+                    if (pValueAsString){
+                        try{
+                            pValue = Double.parseDouble(pValueAsString)
+                            if (pValue>0){
+                                logPValue = 0-Math.log10(pValue)
+                            }
+                        }catch(e){
+                            log.error("we have a P value that's nonnumeric, which is bad news")
+                        }
+                    }
+                    if (betaAsString){
+                        try{
+                            beta = Double.parseDouble(betaAsString)
+                        }catch(e){
+                            log.error("we have a beta that's nonnumeric, which is bad news")
+                        }
+                    }
+                    singleVariantData<<"\"phenotype\": \"${phenotypeDescription}\""
+                    singleVariantData<<"\"log_pvalue\": ${logPValue}"
+                    singleVariantData<<"\"beta\": ${beta}"
+                    LinkedHashMap stats = sharedToolsService.calculateConfidenceInterval(pValue,beta,sharedToolsService.CONFIDENCE_LEVEL_95)
+                    if (!stats.error){
+                        singleVariantData<<"\"ci_start\": ${ciLow}"
+                        singleVariantData<<"\"ci_end\": ${ciHigh}"
+                    }
+
+                    dataFromQuery << "{${singleVariantData.join(",")}}"
+                }
+            }
+
+        }
+        String returnJson = """{
+            "data": [
+                ${dataFromQuery.join(",")}
+        ],
+            "lastPage": null,
+            "meta": {
+            "build": [
+                    "GRCh37"
+            ]
+        }
+        }""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(returnJson)
+    }
+
+
+
+
+
     public LinkedHashMap<String, List <List <String>>> retrieveGroupedPhenotypesNames(String technology){
         LinkedHashMap<String, List <List <String>>> returnValue = []
 
