@@ -69,7 +69,6 @@ class TraitController {
 
 
     def phewasAjaxCallInLzFormat() {
-        String phenotype = params["phenotype"]
         String varIdInLzFormat = params["filter"]
         Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
         JSONObject jsonObject = new JSONObject()
@@ -82,6 +81,20 @@ class TraitController {
         return
     }
 
+
+
+    def phewasForestAjaxCallInLzFormat() {
+        String varIdInLzFormat = params["filter"]
+        Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
+        JSONObject jsonObject = new JSONObject()
+        if (!variantPieces.is_error){
+            String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
+                    "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
+            jsonObject = widgetService.generatePhewasForestDataForLz( varId )
+        }
+        render(status: 200, contentType: "application/json") { jsonObject }
+        return
+    }
 
     /**
      * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
