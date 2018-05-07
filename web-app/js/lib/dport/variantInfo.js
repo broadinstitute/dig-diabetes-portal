@@ -37,6 +37,7 @@ var mpgSoftware = mpgSoftware || {};
             $('#populationsHowCommonIs').append(variantTitle);
             $('#exploreSurroundingSequenceTitle').append(variantTitle);
             $('#PheWebLink').attr("href", "http://pheweb.sph.umich.edu:5000/variant/"+varId);
+            $('#T2DREAMLink').attr("href", "https://www.t2depigenome.org/variant-search/?region="+dbsnpId+"&genome=GRCh37");
 
             // load the summary text
             $("#chromosomeNumber").append(chrom);
@@ -131,7 +132,8 @@ var mpgSoftware = mpgSoftware || {};
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       locusZoomReadableDatasetName,geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl) {
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl,phewasForestAjaxCallInLzFormatUrl,
+                                      exposePheWAS,exposeForestPlot, exposeTraitDataSetAssociationView) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
@@ -181,10 +183,73 @@ var mpgSoftware = mpgSoftware || {};
                 geneGetLZ:geneLocusZoomUrl,
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
-                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
             };
-            mpgSoftware.locusZoom.initializeLZPage(lzParm);
 
+            mpgSoftware.locusZoom.initializeLZPage(lzParm);
+            var selector = '#plot';
+            var lzPheWASParm = {
+                page:'variantInfo',
+                variantId:variantObject.VAR_ID,
+                positionInfo:positioningInformation,
+                domId1:selector,
+                collapsingDom:collapseDomHolder,
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:phenotypeDescription,
+                phenoPropertyName:propertyName,
+                locusZoomDataset:locusZoomDataset,
+                pageInitialization:true,
+                functionalTrack:null,
+                defaultTissues:null,
+                defaultTissuesDescriptions:null,
+                datasetReadableName:locusZoomReadableDatasetName,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:'junk',
+                geneGetLZ:geneLocusZoomUrl,
+                variantInfoUrl:variantInfoUrl,
+                makeDynamic:makeDynamic,
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
+            };
+            var forestSelector = '#forestPlot';
+            var lzPheForestWASParm = {
+                page:'variantInfo',
+                variantId:variantObject.VAR_ID,
+                positionInfo:positioningInformation,
+                domId1:selector,
+                collapsingDom:collapseDomHolder,
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:phenotypeDescription,
+                phenoPropertyName:propertyName,
+                locusZoomDataset:locusZoomDataset,
+                pageInitialization:true,
+                functionalTrack:null,
+                defaultTissues:null,
+                defaultTissuesDescriptions:null,
+                datasetReadableName:locusZoomReadableDatasetName,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:'junk',
+                geneGetLZ:geneLocusZoomUrl,
+                variantInfoUrl:variantInfoUrl,
+                makeDynamic:makeDynamic,
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
+            };
+            mpgSoftware.locusZoom.setPageVars(lzPheWASParm,selector);
+            mpgSoftware.locusZoom.setPageVars(lzPheForestWASParm,forestSelector);
+
+            if (exposePheWAS) {
+                mpgSoftware.locusZoom.generalizedInitLocusZoom(selector, variantObject.VAR_ID, 2);
+            }
+            if (exposeForestPlot) {
+                mpgSoftware.locusZoom.generalizedInitLocusZoom(forestSelector, variantObject.VAR_ID, 3);
+            }
 
             $('[data-toggle="popover"]').popover();
 

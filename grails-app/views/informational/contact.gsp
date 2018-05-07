@@ -99,7 +99,7 @@
 
                          <p><a href="https://www.t2depigenome.org/" target="_blank">
 
-                             <img style="width:180px;" src="${resource(dir: 'images/icons', file:'T2DREAM_logo.png')}" />
+                             <img style="width:220px;" src="${resource(dir: 'images/icons', file:'T2DREAM_logo.png')}" />
 
                          </a></p>
 

@@ -1,4 +1,6 @@
 // Place your Spring DSL code here
+
+import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.manager.AuthenticationFailedEventListener
 import org.broadinstitute.mpg.manager.LoggingSecurityEventListener
 import org.broadinstitute.mpg.manager.SuccessfulAuthenticationEventListener
@@ -18,4 +20,8 @@ beans = {
     }
     securityEventListener(LoggingSecurityEventListener){
     }
+//    userQueryContext(org.broadinstitute.mpg.meta.UserQueryContext){bean->
+//        sharedToolsService = ref('sharedToolsService')
+//        restServerService = ref('restServerService')
+//    }
 }

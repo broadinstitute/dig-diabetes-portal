@@ -121,6 +121,25 @@ td.tissueTable.matchingRegion2_1{
 td.tissueTable.matchingRegion2_0{
     background: #33FFFF;
 }
+
+/* ucsd TFBF */
+
+td.tissueTable.matchingRegion5_4{
+    background: #11FF33;
+}
+td.tissueTable.matchingRegion5_3{
+    background: #33FF57;
+}
+td.tissueTable.matchingRegion5_2{
+    background: #75FF33;
+}
+td.tissueTable.matchingRegion5_1{
+    background: #DBFF33;
+}
+td.tissueTable.matchingRegion5_0{
+    background: #FFF933;
+}
+
 th.niceHeadersThatAreLinks{
     text-decoration: underline;
     color: blue;
@@ -150,6 +169,10 @@ th.niceHeadersThatAreLinks{
     color: #9632b8;
 }
 span.subsidiaryClass{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    max-width:120px;
     color:#888888;
 }
 

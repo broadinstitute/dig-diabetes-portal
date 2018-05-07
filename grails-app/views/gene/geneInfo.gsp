@@ -11,6 +11,10 @@
     <r:require module="mustache"/>
     <r:require modules="boxwhisker"/>
     <r:require modules="burdenTest"/>
+    <r:require modules="gnomad"/>
+    %{--Need to call directly or else the images don't come out right--}%
+    <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
+    <script type="text/javascript" src="../../js/lib/gnomadt2d.js"></script>
     <r:layoutResources/>
     <%@ page import="org.broadinstitute.mpg.RestServerService" %>
 
@@ -22,9 +26,7 @@
     <g:set var="restServer" bean="restServerService"/>
 
 
-    <style>
 
-    </style>
 
     <script>
 
@@ -54,7 +56,7 @@
              */
             $('#generalized-go').on('click', function () {
                 var somethingSymbol = $('#generalized-input').val();
-                //alert(somethingSymbol);
+                somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
                 if (somethingSymbol) {
                     goToSelectedItem(somethingSymbol)
                 }
@@ -82,56 +84,75 @@
 <script>
     var loading = $('#spinner').show();
     $(document).ready(function() {
-    $.ajax({
-        cache: false,
-        type: "post",
-        url: '<g:createLink controller="gene" action="geneInfoAjax"/>',
-        data: {geneName: '<%=geneName%>'},
-        async: true
-    }).done(function (data) {
-        mpgSoftware.geneInfo.fillTheGeneFields(data);
-        $('[data-toggle="popover"]').popover({
-            animation: true,
-            html: true,
-            template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
-        });
-        $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
-        var genePageExtent = 100000;
+        var positioningInformation = {};
+        if ('<%=geneName%>'.indexOf(':')>-1){ // this looks like a range, not a gene
+            var rangeList = '<%=geneName%>'.split(':');
+            if (rangeList.length === 2){
+                positioningInformation['chromosome'] = rangeList[0];
+                var genomicPositionList = rangeList[1].split('-');
+                if (genomicPositionList.length === 2){
+                    positioningInformation['startPosition'] = genomicPositionList[0];
+                    positioningInformation['endPosition'] = genomicPositionList[1];
+                }
+            }
 
-        var positioningInformation = {
-            chromosome: data.geneInfo.CHROM,
-            startPosition: data.geneInfo.BEG - genePageExtent,
-            endPosition: data.geneInfo.END + genePageExtent
-        };
-        <g:renderBetaFeaturesDisplayedValue>
-        mpgSoftware.locusZoom.initializeLZPage('geneInfo', null, positioningInformation,
-                "#lz-47","#collapseLZ",'${lzOptions.first().key}','${lzOptions.first().description}','${lzOptions.first().propertyName}','${lzOptions.first().dataSet}','junkGI',
-                '${createLink(controller:"gene", action:"getLocusZoom")}',
-                '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                '${lzOptions.first().dataType}','${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',true);
-        </g:renderBetaFeaturesDisplayedValue>
+            $('#placeForAUniprotSummary').hide();
+            $('div.geneWindowDescription').hide()
+        } else { // this looks like a gene, which means that we need to figure out it's genomic coordinates
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: '<g:createLink controller="gene" action="geneInfoAjax"/>',
+                data: {geneName: '${geneName}'},
+                async: true
+            }).done(function (data) {
+                mpgSoftware.geneInfo.fillTheGeneFields(data); // fills the uniprot summary
+                $('[data-toggle="popover"]').popover({
+                    animation: true,
+                    html: true,
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                });
+                $('span[data-textfield="variantName"]').append(data.geneInfo.ID);
+                var genePageExtent = 100000;
+
+                positioningInformation = {
+                    chromosome: data.geneInfo.CHROM,
+                    startPosition: data.geneInfo.BEG - genePageExtent,
+                    endPosition: data.geneInfo.END + genePageExtent
+                };
+
+                $(".pop-top").popover({placement: 'top'});
+                $(".pop-right").popover({placement: 'right'});
+                $(".pop-bottom").popover({placement: 'bottom'});
+                $(".pop-left").popover({placement: 'left'});
+                $(".pop-auto").popover({placement: 'auto'});
+                loading.hide();
+                //massageLZ();
 
 
-        $(".pop-top").popover({placement: 'top'});
-        $(".pop-right").popover({placement: 'right'});
-        $(".pop-bottom").popover({placement: 'bottom'});
-        $(".pop-left").popover({placement: 'left'});
-        $(".pop-auto").popover({placement: 'auto'});
-        loading.hide();
-        massageLZ();
 
-    }).fail(function (jqXHR, exception) {
-        loading.hide();
-        core.errorReporter(jqXHR, exception);
-    });
+                /**
+                 * Pass the TranscriptViewer component as the first arg
+                 * Pass the props as the second arg, this could be data from
+                 * other parts of your app, such as the current gene user is viewing
+                 * or settings for the component, like whether or not to show gtex values,
+                 * which could be hooked up to an external button of some kind
+                 * the width prop could be set by the parent component width, or page width, e.g.
+                 */
+
+
+
+
+            }).fail(function (jqXHR, exception) {
+                loading.hide();
+                core.errorReporter(jqXHR, exception);
+            });
+        }
 
         // call this inside the ready function because the page is still loading when the the parent
         // ajax calls returns
-
-
         $('#variantPageText').hide();
         $('#genePageText').show();
-
 
     });
     $('#collapseVariantAssociationStatistics').collapse({hide: false})
@@ -315,7 +336,8 @@
                                                                                'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
                                                                                'allowExperimentChoice': 0,
                                                                                'allowPhenotypeChoice' : 1,
-                                                                               'allowStratificationChoice': 1    ]"/>
+                                                                               'allowStratificationChoice': 1,
+                                                                               'grsVariantSet':'']"/>
                     </g:renderBetaFeaturesDisplayedValue>
                     </g:if>
 

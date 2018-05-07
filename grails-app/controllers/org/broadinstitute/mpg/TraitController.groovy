@@ -66,6 +66,36 @@ class TraitController {
         }
     }
 
+
+
+    def phewasAjaxCallInLzFormat() {
+        String varIdInLzFormat = params["filter"]
+        Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
+        JSONObject jsonObject = new JSONObject()
+        if (!variantPieces.is_error){
+            String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
+                    "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
+            jsonObject = widgetService.generatePhewasDataForLz( varId )
+        }
+        render(status: 200, contentType: "application/json") { jsonObject }
+        return
+    }
+
+
+
+    def phewasForestAjaxCallInLzFormat() {
+        String varIdInLzFormat = params["filter"]
+        Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
+        JSONObject jsonObject = new JSONObject()
+        if (!variantPieces.is_error){
+            String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
+                    "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
+            jsonObject = widgetService.generatePhewasForestDataForLz( varId )
+        }
+        render(status: 200, contentType: "application/json") { jsonObject }
+        return
+    }
+
     /**
      * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
      *
@@ -464,7 +494,7 @@ class TraitController {
      */
     def traitVariantCrossByGeneAjax() {
         String geneName = params.geneName
-        LinkedHashMap<String, Integer> geneExtents = sharedToolsService.getGeneExpandedExtent(geneName)
+        LinkedHashMap<String, Integer> geneExtents = sharedToolsService.getGeneExpandedExtent(geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
         JSONObject jsonObject = restServerService.searchForTraitBySpecifiedRegion(geneExtents.chrom as String,
                 geneExtents.startExtent as String,
                 geneExtents.endExtent as String)

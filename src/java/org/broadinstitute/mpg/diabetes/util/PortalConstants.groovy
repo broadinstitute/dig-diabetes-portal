@@ -84,6 +84,9 @@ class PortalConstants {
     public final static String JSON_BURDEN_CI_CALC_KEY                  = "calc_ci";
     public final static String JSON_BURDEN_CI_LEVEL_KEY                 = "ci_level";
     public final static String JSON_BURDEN_DATASET_ID_KEY               = "dataset_id";
+    public final static String JSON_BURDEN_OPERATION_KEY                = "operation"
+    public final static String JSON_BURDEN_OPERATION_SUM_KEY            = "sum"
+    public final static String JSON_BURDEN_OPERATION_MAX_KEY            = "max"
 
     // constants for getData calls
     public final static String OPERATOR_LESS_THAN_EQUALS                 = "LTE";
@@ -247,6 +250,8 @@ class PortalConstants {
     public class BurdenTest {
         public static final String VARIANT                                  = "VARIANT";
         public static final String GENE                                     = "GENE";
+        public static final String GRS_SPECIFIC                             = "GRS";
+
     }
 
 

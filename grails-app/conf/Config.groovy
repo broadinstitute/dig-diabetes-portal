@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = federatedAwsProdKBV2Server
+defaultRestServer = digawsdemoibdKB
 
 getRestServerList = [
         digdevlocalServer,
@@ -287,10 +287,13 @@ environments {
     production {
 
 
-       grails.serverURL = "http://www.type2diabetesgenetics.org"
+
+//        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
+
+//       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -311,6 +314,8 @@ environments {
 //        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
+//        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
+//
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
@@ -318,12 +323,28 @@ environments {
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
 //        grails.serverURL = "http://preeti-test-clone.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
+
+//          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
+
+
 //        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+
+//        grails.serverURL = "http://portaldemo.us-east-1.elasticbeanstalk.com"
+
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 
+
+//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+
+                                        // CVDKP (MI portal) production
+
+//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
+//I         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                  // Epilepsy test portal
+
 //         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"
+
 
 //        grails.serverURL = "http://default-environment-ia3djrq6pi.elasticbeanstalk.com"
 //      grails.serverURL = "http://beacon.broadinstitute.org"
@@ -416,6 +437,7 @@ grails.plugin.springsecurity.interceptUrlMap = [
         '/trait/**':            ['ROLE_USER'],
         '/variant/**':          ['ROLE_USER'],
         '/variantInfo/**':      ['ROLE_USER'],
+        '/grs/**':              ['ROLE_USER'],
         '/variantSearch/retrieveGwasSpecificPhenotypesAjax':    ['permitAll'],
         '/variantSearch/**':    ['ROLE_USER'],
         '/beacon/*':          ['permitAll'],
@@ -569,7 +591,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "",
                                                 '5010306206573083521',
                                                 1,
-                                                0
+                                                0,
+                                                0,
+                                                1,
+                                                0,
+                                                1,0,1
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -596,7 +622,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           '7961982646849648720',
                                           1,
-                                          0
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          0,0,0
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -623,10 +653,15 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           '3944203828206499294',
                                           1,
-                                          0
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          0,0,0
                                   ),
                                   new PortalVersionBean("ibd",
-                                                          "Inflammatory Bowel Disease",
+                                          //"Inflammatory Bowel Disease",
+                                          "Variant to Function",
                                                           "mdv80",
                                                           "IBD",
                                                           "GWAS_IBDGenomics_eu_mdv80",
@@ -635,22 +670,27 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           [],
                                                           "[1,2]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/ibd/ibd_front_logo.svg",
+                                          "images/ibd/ibd_front_logo_WOnT2.png",
                                           "portal.ibd.header.tagline",
                                           [],
                                           ["IL23R"],
-                                          ["rs11209026"],
-                                          ["chr9:20,940,000-21,800,000"],
+                                          ["6_31628397_T_A"],
+                                          ["chr1:67,500,000-67,800,000"],
                                           "images/ibd/front_ibd_bg_2018.png",
                                   "",
-                                          "images/ibd/ibd_header_logo.svg",
+                                         // "images/ibd/ibd_header_logo.svg",
+                                          "images/ibd/v2f-little-logo.png",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
                                           "false",
                                           "",
                                           "",
                                           '7857348124942584918',
                                           1,
-                                          0
+                                          0,
+                                          0,
+                                          1,
+                                          1,
+                                          0,0,0
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -677,7 +717,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           '5414069947481666863',
                                           0,
-                                          1
+                                          1,
+                                          0,
+                                          1,
+                                          0,
+                                          0,0,0
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -704,6 +748,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           '5414069947481666863',
                                           1,
-                                          0
+                                          0,
+                                          0,
+                                          1,
+                                          0,
+                                          0,0,0
                                   )
 ]
+
+

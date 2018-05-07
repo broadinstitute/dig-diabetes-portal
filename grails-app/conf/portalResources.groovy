@@ -4,6 +4,11 @@ modules = {
         resource url: 'js/lib/jstree.min.js'
         resource url: 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js'
     }
+    gnomad{
+//        resource url: 'js/lib/gnomadt2d.js'
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.js'
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.js'
+    }
     datatables {
         dependsOn 'jquery'
         resource url: 'js/lib/datatables/jquery.dataTables.js'
@@ -30,6 +35,14 @@ modules = {
     portalHome {
         resource url: 'js/lib/dport/portalHome.js'
     }
+    grsInfo {
+        dependsOn "core", "mbar", "bootstrapMultiselect", "mustache","burdenTest","boxwhisker"
+
+
+        resource url: 'js/lib/dport/grsInfo.js'
+        resource url: 'css/dport/grsInfo.css'
+    }
+
     regionInfo {
         resource url: 'js/lib/dport/regionInfo.js'
         resource url: 'css/dport/jqDataTables.css'
@@ -215,10 +228,8 @@ modules = {
     locusZoom {
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
         resource url: 'js/lib/locuszoom.vendor.min.js'
-//        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.6/locuszoom.app.js'
-//        resource url: 'https://statgen.github.io/locuszoom/versions/0.5.6/locuszoom.css'
         resource url: 'js/lib/locuszoom.app.js'
-        resource url: 'css/lib/locuszoom.css'
+        //resource url: 'css/lib/locuszoom.css' // some of these functions fail if called in a bundle.  Unfortunately will need to call this directly from each page were LZ is used
         resource url: 'js/lib/gwas-credible-sets.js'
 
         resource url: 'js/lib/dport/locusZoomPlot.js'

@@ -15,13 +15,8 @@ var mpgSoftware = mpgSoftware || {};
         var convertVarIdToUmichFavoredForm =  function (varId){
             // broad form example: 8_118183491_C_T
             // UM form example: 8:118183491_C/T
-            var returnValue = varId;
-            if (( typeof varId !== 'undefined')&&(varId.length>0)){
-                var varIdSplit = varId.split("_");
-                if (varIdSplit.length==4){
-                    returnValue = varIdSplit[0]+":"+varIdSplit[1]+"_"+varIdSplit[2]+"/"+varIdSplit[3];
-                }
-            }
+            var extractedParts = extractParts(varId);
+            var returnValue = extractedParts.chromosome+":"+extractedParts.position+"_"+extractedParts.reference+"/"+extractedParts.alternate;
             return returnValue;
         };
         var convertVarIdToBroadFavoredForm =  function (varId){
@@ -62,17 +57,19 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var weHaveAssociatedAtacSeqInfo = function (label){
-            var retval;
+            var retval = [];
             if (label.indexOf('Adipose')>-1){
-                return 'Adipose';
+               // retval.push({id:'Adipose',src:'Varshney17'});
+                retval.push({id:'TSTFF666780',src:'UCSD-ATAC-seq-2018'});
             } else if (label.indexOf('Islet')>-1){
-                return 'Islet1';
+                retval.push({id:'Islet1',src:'Varshney17'});
             } else if (label.indexOf('SkeletalMuscle')>-1){
-                return 'Skeleta';
+                retval.push({id:'TSTFF760188',src:'UCSD-ATAC-seq-2018'});
+               // retval.push({id:'Skeleta',src:'Varshney17'});
             } else if (label.indexOf('GM12878')>-1){
-                return 'gm12878';
-            } else if (label.indexOf('Adipose')>-1){
-                return 'Adipose';
+                retval.push({id:'gm12878',src:'Varshney17'});
+            } else if (label.indexOf('Liver')>-1){
+                retval.push({id:'TSTFF705759',src:'UCSD-ATAC-seq-2018'});
             }
             return retval;
         }
@@ -125,7 +122,131 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 ]
             }
-        }
+        };
+        LocusZoom.Layouts.add("plot", "forestPlot", {
+                width: 800,
+                height: 800,
+            responsive_resize: true,
+            panels: [
+                {
+                    id: "forestphewas",
+                    width: 800,
+                    height: 800,
+                    proportional_width: 1,
+                    margin: {top: 20, right: 220, bottom: 50, left: 20},
+                    inner_border: "rgba(210, 210, 210, 0.85)",
+                    axes: {
+                        x: {
+                            label: "Beta",
+                            label_offset: 33
+                        },
+                        y2: {
+                            ticks: "y2_ticks"
+                        }
+                    },
+                    legend: {
+                        origin: {x: 30, y: 30},
+                        orientation: "vertical"
+                    }
+                    ,
+                    data_layers: [
+                        {
+                            id: "forestphewaspvalues",
+                            type: "forest",
+                            z_index: 1,
+                            point_shape: "square",
+                            point_size: {
+                                scale_function: "interpolate",
+                                field: "log_pvalue",
+                                parameters: {
+                                    breaks: [0, 10],
+                                    values: [60, 160],
+                                    null_value: 50
+                                }
+                            },
+                            color: {
+                                scale_function: "interpolate",
+                                field: "log_pvalue",
+                                parameters: {
+                                    breaks: [0, 10],
+                                    values: ["#fee8c8","#b30000"],
+                                    null_value: "#B8B8B8"
+                                }
+                            }
+                            ,
+                            legend: [
+                                { label: "-log10 p-value" },
+                                { shape: "square", class: "lz-data_layer-forest", color: "#fdd49e", size: 60, label: "< 2" },
+                                { shape: "square", class: "lz-data_layer-forest", color: "#fdbb84", size: 80, label: "2 - 4" },
+                                { shape: "square", class: "lz-data_layer-forest", color: "#fc8d59", size: 100, label: "4 - 6" },
+                                { shape: "square", class: "lz-data_layer-forest", color: "#ef6548", size: 120, label: "6 - 8" },
+                                { shape: "square", class: "lz-data_layer-forest", color: "#d7301f", size: 140, label: "8 - 10" },
+                                { shape: "square", class: "lz-data_layer-forest", color: "#b30000", size: 160, label: "10+" }
+                            ],
+                            id_field: "phenotype",
+                            fields: ["phenotype", "log_pvalue", "log_pvalue|logtoscinotation", "beta", "ci_start", "ci_end", "y_offset"],
+                            x_axis: {
+                                field: "beta",
+                                floor: -0.2,
+                                ceiling: 0.2
+                            },
+                            y_axis: {
+                                axis: 2,
+                                field: "y_offset",
+                                floor: 0//,
+              //                  ceiling: y_offset
+                            },
+                            confidence_intervals: {
+                                start_field: "ci_start",
+                                end_field: "ci_end"
+                            },
+                            highlighted: {
+                                onmouseover: "on",
+                                onmouseout: "off"
+                            },
+                            selected: {
+                                onclick: "toggle_exclusive",
+                                onshiftclick: "toggle"
+                            },
+                            tooltip: {
+                                closable: true,
+                                show: { or: ["highlighted", "selected"] },
+                                hide: { and: ["unhighlighted", "unselected"] },
+                                html: "<strong>{{phenotype}}</strong><br>"
+                                + "P Value: <strong>{{log_pvalue|logtoscinotation}}</strong><br>"
+                                + "Odds Ratio: <strong>{{beta}}</strong><br>"
+                                + "95% Conf. Interval: <strong>[ {{ci_start}} {{ci_end}} ]</strong>"
+                            }
+                        },
+                        {
+                            id: "zeroline",
+                            type: "orthogonal_line",
+                            z_index: 0,
+                            orientation: "vertical",
+                            offset: 0,
+                            y_axis: {
+                                axis: 2
+                            }
+                        }
+                    ]
+                }
+
+
+            ]
+        });
+
+        LocusZoom.Layouts.add("plot", "abbreviated_phewas", {
+            width: 800,
+            height: 300,
+            min_width: 800,
+            min_height: 300,
+            responsive_resize: true,
+            dashboard: LocusZoom.Layouts.get("dashboard", "standard_plot", { unnamespaced: true } ),
+            panels: [
+                LocusZoom.Layouts.get("panel", "phewas", { unnamespaced: true, proportional_height: 0.90 })
+            ],
+            mouse_guide: false
+        });
 
         LocusZoom.Layouts.add("data_layer", "recomb_rate_filled", {
             namespace: { "recomb": "recomb" },
@@ -540,15 +661,19 @@ var mpgSoftware = mpgSoftware || {};
                             if ((typeof pageVars.getLocusZoomFilledPlotUrl !== 'undefined') &&
                                 (pageVars.getLocusZoomFilledPlotUrl !== 'junk')){
                                 var tissueId = this.parent_panel.id.substr("intervals-".length).split('-')[0];
-                                addLZTissueChromatinAccessibility({
-                                    tissueCode: 'E00'+weHaveAssociatedAtacSeqInfo(tissueId),
-                                    tissueDescriptiveName: 'Reads in '+this.parent_panel.title.text(),
-                                    getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
-                                    phenoTypeName:pageVars.phenoTypeName,
-                                    domId1:pageVars.domId1,
-                                    assayId:'Varshney17'
-                                },pageVars.domId1,pageVars);
-                            }
+                                var recordsForTissue  = weHaveAssociatedAtacSeqInfo(tissueId);
+                                var tissueTitle = this.parent_panel.title.text();
+                                _.forEach(recordsForTissue,function (oneRec){
+                                    addLZTissueChromatinAccessibility({
+                                        tissueCode: 'E00'+oneRec.id,
+                                        tissueDescriptiveName: 'Reads in '+tissueTitle,
+                                        getLocusZoomFilledPlotUrl:pageVars.getLocusZoomFilledPlotUrl,
+                                        phenoTypeName:pageVars.phenoTypeName,
+                                        domId1:pageVars.domId1,
+                                        assayId:oneRec.src
+                                    },pageVars.domId1,pageVars);
+                                });
+                             }
 
                             data_layer.toggleSplitTracks();
                             if (this.scale_timeout){ clearTimeout(this.scale_timeout); }
@@ -721,7 +846,7 @@ var mpgSoftware = mpgSoftware || {};
                         data_layer_id: layerName,
                         position: "right"
                     });
-                    if ((typeof weHaveAssociatedAtacSeqInfo(layerName) !== 'undefined')){
+                    if (weHaveAssociatedAtacSeqInfo(layerName).length>0){
                         l.components.push({
                             type: "toggle_atacData_tracks",
                             data_layer_id: layerName,
@@ -800,7 +925,8 @@ var mpgSoftware = mpgSoftware || {};
 
         var customCurveDataLayer = function (layerName,assayId){
             var stateIdSpec = layerName+":state_id";
-            var color = "#FF0000";
+            var color = "#0000FF";
+            //
             if (assayId==="DNase" || assayId==="Varshney17"){
                 color = "#0000FF";
             }
@@ -901,8 +1027,42 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+        var initLocusZoomPheWASLayout = function(variantForPlot){
+            var mods = {
+                state: {
+                    variant: variantForPlot
+                }
+            };
+            var layout = LocusZoom.Layouts.get("plot", "abbreviated_phewas", mods);
+            layout.panels[0].margin.top = 32;
+            layout.panels[0].data_layers[0].offset = 7.30103; // Higher offset for line of GWAS significance than the default 4.522
+            // Add covariates model button/menu to the plot-level dashboard
+            var phewas_layer = layout.panels[0].data_layers[1];
+            // Tell the layer to also fetch some special fields; otherwise the datasource will hide this info (TODO)
+            phewas_layer.fields.push("phewas:pmid", "phewas:description", "phewas:study");
+            phewas_layer.tooltip.html = [
+                "<strong>Trait:</strong> {{phewas:trait_label|htmlescape}}<br>",
+                "<strong>Trait Category:</strong> {{phewas:trait_group|htmlescape}}<br>",
+                "<strong>P-value:</strong> {{phewas:log_pvalue|logtoscinotation|htmlescape}}<br>",
+                "{{#if phewas:study}}",
+                "<strong>Study:</strong> {{phewas:study|htmlescape}}<br>",
+                "{{/if}}",
+                "<div class='span12' style='text-align:center'><a href='javascript:;' class='center-text' onclick='javascript:openPhePlotTab(\"={{phewas:trait_label|htmlescape}}\")'>Trait drill down</a></div>"
+                //"<strong>Subjects:</strong> {{phewas:subject_number|htmlescape}}<br>"
+            ].join("");
+            return layout;
+        };
 
 
+        var initLocusZoomForestPlotLayout = function(variantForPlot){
+            var mods = {
+                state: {
+                    variant: variantForPlot
+                }
+            };
+            var layout = LocusZoom.Layouts.get("plot", "forestPlot", mods);
+            return layout;
+        };
 
 
 
@@ -1552,35 +1712,145 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+        var initLocusZoom = function(selector, variantIdString) {
+            // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
+            // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
+            var newLayout = initLocusZoomLayout();
+            standardLayout[currentLzPlotKey] = newLayout;
+            if(variantIdString != '') {
+                setNewDefaultLzPlot(selector);
+                standardLayout[currentLzPlotKey].state = {
+                    ldrefvar: variantIdString
+                };
+            }
+            var ds = new LocusZoom.DataSources();
+            ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+                .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+                .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
+                .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+                .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
+                .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+
+            var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
+
+            return {
+                layoutPanels:lzp.layout.panels,
+                locusZoomPlot: lzp,
+                dataSources: ds
+            };
+        };
 
 
-        var initLocusZoom = function(selector, variantIdString,retrieveFunctionalDataAjaxUrl) {
-        // TODO - will need to test that incorrect input format doesn't throw JS exception which stops all JS activity
-        // TODO - need to catch all exceptions to make sure rest of non LZ JS modules on page load properly (scope errors to this module)
-        var newLayout = initLocusZoomLayout();
-        standardLayout[currentLzPlotKey] = newLayout;
-        if(variantIdString != '') {
-            setNewDefaultLzPlot(selector);
-            standardLayout[currentLzPlotKey].state = {
-                ldrefvar: variantIdString
+        var generalizedInitLocusZoom = function(selector, variantIdString, plotType) {
+            var pageVars = getPageVars(selector);
+            var newLayout;
+            var ds = new LocusZoom.DataSources();
+            var lzp;
+            switch (plotType){
+                case 1: // Association plot
+                    newLayout = initLocusZoomLayout();
+                    ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
+                        .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
+                        .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
+                        .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+                        .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
+                        .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
+                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                    break;
+                case 2: // pheWAS plot
+                    newLayout = initLocusZoomPheWASLayout(convertVarIdToUmichFavoredForm(variantIdString));
+                    ds
+                        .add("phewas", ["PheWASLZ", {
+                            url: pageVars.phewasAjaxCallInLzFormatUrl,
+                            params: { build: ["GRCh37"] }
+                        }]);
+                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                    lzp.panels.phewas.setTitle("Variant " + variantIdString);
+                    break;
+                case 3: // pheWAS forestplot
+
+                    //the way I used to do it
+                    //var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
+                    //    var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
+                    //        this.parseInit(init);
+                    //        this.getURL = function (state, chain, fields) {
+                    //            var url = this.url + "?" +
+                    //                "chromosome=" + state.chr + "&" +
+                    //                "start=" + state.start + "&" +
+                    //                "end=" + state.end + "&" +
+                    //                "source=" + tissue + "&" +
+                    //                "assay_id=" + assayId + "&" +
+                    //                "lzFormat=1";
+                    //            return url;
+                    //        };
+                    //    }, "BroadT2Dc");
+                    //    var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
+                    //    dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
+                    //};
+
+                    //  flawed attempt number two
+                    // LocusZoom.Data.ForestSource = LocusZoom.Data.Source.extend(function (init) {
+                    //    this.parseInit(init);
+                    // }, 'forest');
+                    // LocusZoom.Data.ForestSource.prototype.getURL = function (state, chain, fields) {
+                    //     var build = this.params.build;
+                    //     var url = [
+                    //         this.url,
+                    //         '?filter=variant eq \'',
+                    //         encodeURIComponent(state.variant).join('&')
+                    //     ];
+                    //     return url.join('');
+                    // };
+
+                    //let's try something different
+                    var buildForestSource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
+                       var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
+                           this.parseInit(init);
+                           this.getURL = function (state, chain, fields) {
+                               var url = this.url + "?" +
+                                   "chromosome=" + state.chr + "&" +
+                                   "start=" + state.start + "&" +
+                                   "end=" + state.end + "&" +
+                                   "source=" + tissue + "&" +
+                                   "assay_id=" + assayId + "&" +
+                                   "lzFormat=1";
+                               return url;
+                           };
+                       }, "forestphewas");
+                       var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
+                       ds.add("forestphewas", new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
+                    };
+
+
+                    newLayout = initLocusZoomForestPlotLayout(convertVarIdToUmichFavoredForm(variantIdString));
+                    buildForestSource(ds,pageVars.phewasForestAjaxCallInLzFormatUrl,'rawTissue','phenotype','dom1','assayId');
+                    // ds
+                    //     .add("forestphewas", ["forest", {
+                    //         url: pageVars.phewasForestAjaxCallInLzFormatUrl,
+                    //         params: { build: ["GRCh37"] }
+                    //     }]);
+                    // ;
+                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                    break;
+                default: // Association plot
+                    break;
+            }
+
+
+            standardLayout[selector] = newLayout;
+            if(variantIdString != '') {
+                //setNewDefaultLzPlot(selector);
+                standardLayout[selector].state = {
+                    ldrefvar: variantIdString
+                };
+            }
+            locusZoomPlot[selector] = lzp;
+            return {
+                layoutPanels:lzp.layout.panels,
+                locusZoomPlot: lzp,
+                dataSources: ds
             };
         }
-        var ds = new LocusZoom.DataSources();
-        ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
-            .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
-            .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
-            .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
-            .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
-            .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
-
-        var lzp = LocusZoom.populate(selector, ds, standardLayout[currentLzPlotKey]);
-
-        return {
-            layoutPanels:lzp.layout.panels,
-            locusZoomPlot: lzp,
-            dataSources: ds
-        };
-    };
 
 
     var reorderPanels = function(plot){
@@ -1706,7 +1976,7 @@ var mpgSoftware = mpgSoftware || {};
             var getLocusZoomFilledPlotUrl = lzParameters.getLocusZoomFilledPlotUrl;
             var tissueCode = lzParameters.tissueCode;
             var tissueDescriptiveName = lzParameters.tissueDescriptiveName;
-            var phenotypeName = lzParameters.phenotypeName;
+            var phenotypeName = lzParameters.phenoTypeName;
             var domId1 = lzParameters.domId1;
             var assayId = lzParameters.assayId;
             setNewDefaultLzPlot(lzGraphicDomId);
@@ -1718,6 +1988,49 @@ var mpgSoftware = mpgSoftware || {};
            rescaleSVG();
 
         };
+
+
+        var phewasExperiment = function(varId,phewasAjaxCallInLzFormatUrl){
+
+            var variantForPlot = convertVarIdToUmichFavoredForm(varId);
+            var dataSources= new LocusZoom.DataSources();
+            dataSources
+                .add("phewas", ["PheWASLZ", {
+                    url: phewasAjaxCallInLzFormatUrl,
+                    params: { build: ["GRCh37"] }
+                }]);
+            
+            // Define the layout
+            var mods = {
+                state: {
+                    variant: variantForPlot
+                }
+            };
+            var layout = LocusZoom.Layouts.get("plot", "abbreviated_phewas", mods);
+            layout.panels[0].margin.top = 32;
+            layout.panels[0].data_layers[0].offset = 7.30103; // Higher offset for line of GWAS significance than the default 4.522
+
+            // Modify the tooltips for PheWAS result data layer points to contain more data. The fields in this sample
+            //   tooltip are specific to the LZ-Portal API, and are not guaranteed to be in other PheWAS datasources.
+            var phewas_layer = layout.panels[0].data_layers[1];
+            // Tell the layer to also fetch some special fields; otherwise the datasource will hide this info (TODO)
+            phewas_layer.fields.push("phewas:pmid", "phewas:description", "phewas:study");
+            phewas_layer.tooltip.html = [
+                "<strong>Trait:</strong> {{phewas:trait_label|htmlescape}}<br>",
+                "<strong>Trait Category:</strong> {{phewas:trait_group|htmlescape}}<br>",
+                "<strong>P-value:</strong> {{phewas:log_pvalue|logtoscinotation|htmlescape}}<br>",
+                "{{#if phewas:study}}",
+                "<strong>Study:</strong> {{phewas:study|htmlescape}}<br>",
+                "{{/if}}",
+                "<strong>Subjects:</strong> {{phewas:subject_number}}<br>"
+            ].join("");
+            // Generate the plot
+            var plot = LocusZoom.populate("#plot", dataSources, layout);
+            plot.panels.phewas.setTitle("Variant " + variantForPlot);
+        }
+
+
+
 
         var initializeLZPage = function (inParm) {
             setPageVars(inParm,inParm.domId1);
@@ -1754,8 +2067,7 @@ var mpgSoftware = mpgSoftware || {};
             if ((lzVarId.length > 0)||(typeof chromosome !== 'undefined') ) {
 
                 var returned = mpgSoftware.locusZoom.initLocusZoom( lzGraphicDomId,
-                                                                    lzVarId,
-                                                                    inParm.retrieveFunctionalDataAjaxUrl);
+                                                                    lzVarId );
                 locusZoomPlot[currentLzPlotKey] = returned.locusZoomPlot;
                 dataSources[currentLzPlotKey] = returned.dataSources;
 
@@ -1904,7 +2216,11 @@ var mpgSoftware = mpgSoftware || {};
         replaceTissuesWithOverlappingEnhancersFromVarId:replaceTissuesWithOverlappingEnhancersFromVarId,
         replaceTissuesWithOverlappingIbdRegionsVarId:replaceTissuesWithOverlappingIbdRegionsVarId,
         changeCurrentReference:changeCurrentReference,
-        convertVarIdToBroadFavoredForm:convertVarIdToBroadFavoredForm
+        convertVarIdToBroadFavoredForm:convertVarIdToBroadFavoredForm,
+        convertVarIdToUmichFavoredForm:convertVarIdToUmichFavoredForm,
+        phewasExperiment:phewasExperiment,
+        generalizedInitLocusZoom:generalizedInitLocusZoom,
+        setPageVars:setPageVars
     }
 
 }());

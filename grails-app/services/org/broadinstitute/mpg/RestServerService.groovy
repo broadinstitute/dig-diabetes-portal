@@ -61,6 +61,11 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
+    private String  GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
+    private String  GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -77,6 +82,8 @@ class RestServerService {
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
+    //public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
+    public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
     private String EXOMESEQUENCEOR = "OR_FIRTH_FE_IV"
@@ -90,15 +97,15 @@ class RestServerService {
     private String OBSERVED_UNAFFECTED = "OBSU"
     private Integer MAXIMUM_NUMBER_DB_JOINS = 60
     private List<PortalVersionBean> PORTAL_VERSION_BEAN_LIST = []
+    private String UCSD_HACK = "http://t2depigenome-test.org:8080/"
+    private String UCSD_GET_ANNOTATION = "getAnnotationRegion"
 
 
     public static final String HAIL_SERVER_URL_DEV = "http://dig-api-dev.broadinstitute.org/dev/gs/";
     public static final String HAIL_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
     public static final String SAMPLE_SERVER_URL_QA = "http://dig-api-qa.broadinstitute.org/qa/gs/";
 
-
-    private List<ServerBean> burdenServerList;
-    private List<ServerBean> restServerList;
+    private static List <String> grsVariants = []
 
     private ServerBean REST_SERVER = null;
 
@@ -203,6 +210,13 @@ class RestServerService {
             REMEMBER_BASE_URL = BASE_URL
             log.info("NOTE: change to server ${BASE_URL} is complete")
         }
+    }
+
+    public List <String> getGrsVariants(){
+        return grsVariants
+    }
+    public void setGrsVariants(List <String> grsVariants){
+        this.grsVariants = grsVariants
     }
 
     public String getCurrentServer() {
@@ -327,12 +341,16 @@ class RestServerService {
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
-                    existingPortalVersionBean.getGeneLevelDataExists()
+                    existingPortalVersionBean.getGeneLevelDataExists(),
+                    existingPortalVersionBean.getExposeGrsModule(),
+                    existingPortalVersionBean.getHighSpeedGetAggregatedDataCall(),
+                    existingPortalVersionBean.getRegionSpecificVersion(),
+                    existingPortalVersionBean.getExposePhewasModule()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],"","","","","","","","",0,0 )
+                    "", "","","",[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -450,10 +468,7 @@ class RestServerService {
             if ((startExtent < 0) || (endExtent < 0) || (startExtent > endExtent)) {
                 encounteredErrors = true
             }
-            String chromosome = extractedNumbers["chromosomeNumber"]
-            if (chromosome.contains('chr')){
-                chromosome = chromosome-"chr"
-            }
+            String chromosome = sharedToolsService.parseChromosome(extractedNumbers["chromosomeNumber"])
             if (chromosome != 'X' && chromosome != 'x' && chromosome != 'Y' && chromosome != 'y'){
                 Integer chromosomeNumber
                 try {
@@ -758,9 +773,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject postGetHailDataCall(String jsonString) {
         return this.postRestCall(jsonString, this.GET_HAIL_DATA_URL);
     }
-    public JSONObject postGetAggDataCall(String jsonString) {
-        return this.postRestCall(jsonString, this.GET_DATA_AGGREGATION_URL);
-    }
+
 
     public JSONObject postGetHailDataCall(String jsonString, String URL) {
         // TODO - hard code to QA server for now
@@ -2135,10 +2148,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if ((experiment?.technology == 'ExSeq')||(experiment?.technology == 'WGS')){
             queryFilterStrings << "7=${geneName}"
         } else {
-            LinkedHashMap  regionSpecification = geneManagementService?.getRegionSpecificationDetailsForGene(geneName, 100000)
-            queryFilterStrings << "8=${regionSpecification.chromosome}"
-            queryFilterStrings << "9=${regionSpecification.startPosition}"
-            queryFilterStrings << "10=${regionSpecification.endPosition}"
+            LinkedHashMap  regionSpecification = sharedToolsService.getGeneExpandedExtent(geneName,EXPAND_ON_EITHER_SIDE_OF_GENE)
+            queryFilterStrings << "8=${regionSpecification.chrom}"
+            queryFilterStrings << "9=${regionSpecification.startExtent}"
+            queryFilterStrings << "10=${regionSpecification.endExtent}"
         }
 
 
@@ -2196,9 +2209,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-
-
     public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName,
                                                              int  startHere, int pageSize,
                                                              String version ) {
@@ -2221,6 +2231,129 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
+
+
+
+    public JSONObject gatherTopVariantsFromAggregatedTablesByRange( String phenotype,
+                                                                    Long startExtent,
+                                                                    Long endExtent,
+                                                                    String chromosomeNumber,
+                                                                     int  startHere, int pageSize,
+                                                                     String version ) {
+        List<String> specifyRequestList = []
+        Boolean phenotypeQuery = false
+        if (retrieveBeanForCurrentPortal().highSpeedGetAggregatedDataCall){
+
+            if ((version) && (version.length() > 0)) {
+                specifyRequestList << "\"version\":\"${version}\""
+            } else {
+                log.error("ERROR: gatherTopVariantsFromAggregatedTablesByRange. version parameter required")
+            }
+
+            // the following parameter is required byt the API she. Provide some defaults
+            if (pageSize == -1){
+                pageSize = DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
+            }
+            if (startHere == -1){
+                startHere = 0
+            }
+
+            specifyRequestList << "\"pagination\":{\"size\": ${pageSize},\"offset\":${startHere}}"
+
+            List<String> filterList = []
+            if ((phenotype) && (phenotype.length() > 0)) {
+                phenotypeQuery = true
+                filterList <<  "{\"parameter\": \"phenotype\", \"operator\": \"eq\", \"value\": \"${phenotype}\"}"
+            }
+            if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
+                filterList <<  "{\"parameter\": \"chrom\", \"operator\": \"eq\", \"value\": \"${chromosomeNumber}\"}"
+            }
+            if (startExtent != -1) {
+                filterList <<  "{\"parameter\": \"pos\", \"operator\": \"ge\", \"value\": ${startExtent}}"
+            }
+            if (endExtent != -1) {
+                filterList <<  "{\"parameter\": \"pos\", \"operator\": \"le\", \"value\": ${endExtent}}"
+            }
+            specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
+
+            specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
+
+        } else {
+            if ((phenotype) && (phenotype.length() > 0)) {
+                specifyRequestList << "\"phenotype\":\"${phenotype}\""
+            }
+            if (startHere != -1) {
+                specifyRequestList << "\"pageStart\":${startHere}"
+            }
+            if (pageSize != -1) {
+                specifyRequestList << "\"pageSize\":${pageSize}"
+            }
+            if ((chromosomeNumber) && (chromosomeNumber.length() > 0)) {
+                specifyRequestList << "\"chrom\":\"${chromosomeNumber}\""
+            }
+            if (startExtent != -1) {
+                specifyRequestList << "\"start\":${startExtent}"
+            }
+            if (endExtent != -1) {
+                specifyRequestList << "\"end\":${endExtent}"
+            }
+            if ((version) && (version.length() > 0)) {
+                specifyRequestList << "\"version\":\"${version}\""
+            }
+        }
+
+        String restApiGetAggregationAndPoint = GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL
+        if (phenotypeQuery){
+            restApiGetAggregationAndPoint = GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL
+        }
+        return postRestCall("{${specifyRequestList.join(",")}}", restApiGetAggregationAndPoint)
+    }
+
+
+    public JSONObject getUcsdRangeData( List <String> biosampleTermNameList,
+                                        List <String> labTitleList,
+                                        List <String> organSlimList,
+                                        List <String> biosampleTypeList,
+                                        String annotationType,
+                                        String region,
+                                        int  startHere,
+                                        int pageSize,
+                                        String version ) {
+        List<String> specifyRequestList = []
+        String objectJoiner = "\",\""
+        if ((biosampleTermNameList)&&(biosampleTermNameList.size()>0)) {
+            specifyRequestList << "\"biosample_term_name\":[\"${biosampleTermNameList.join(objectJoiner)}\"]"
+        }
+        if ((labTitleList)&&(labTitleList.size()>0)) {
+            specifyRequestList << "\"lab.title\":[\"${labTitleList.join(objectJoiner)}\"]"
+        }
+        if ((organSlimList)&&(organSlimList.size()>0)) {
+            specifyRequestList << "\"organ_slims\":[\"${organSlimList.join(objectJoiner)}\"]"
+        }
+        if ((biosampleTypeList)&&(biosampleTypeList.size()>0)) {
+            specifyRequestList << "\"biosample_type\":[\"${biosampleTypeList.join(objectJoiner)}\"]"
+        }
+        if ((region) && (region.length() > 0)) {
+            specifyRequestList << "\"region\":\"${region}\""
+        }
+        if ((annotationType) && (annotationType.length() > 0)) {
+            specifyRequestList << "\"annotation_type\":\"${annotationType}\""
+        }
+        specifyRequestList << "\"genome\":\"GRCh37\""
+//        if (startHere != -1) {
+//            specifyRequestList << "\"pageStart\":${startHere}"
+//        }
+//        if (pageSize != -1) {
+//            specifyRequestList << "\"pageSize\":${pageSize}"
+//        }
+//        if ((version) && (version.length() > 0)) {
+//            specifyRequestList << "\"version\":\"${version}\""
+//        }
+        return postRestCallBase("{${specifyRequestList.join(",")}}", UCSD_GET_ANNOTATION, UCSD_HACK )
+    }
+
+
+
 
 
     public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd,
@@ -2252,7 +2385,44 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
+    public JSONObject gatherTopVariantsFromAggregatedTablesByVarId( String phenotype,
+                                                                    String varId,
+                                                                    int  startHere, int pageSize,
+                                                                    String version ) {
+        List<String> specifyRequestList = []
 
+        if ((version) && (version.length() > 0)) {
+            specifyRequestList << "\"version\":\"${version}\""
+        } else {
+            specifyRequestList << "\"version\":\"${metaDataService.getDataVersion()}\""
+        }
+
+        // the following parameter is required byt the API she. Provide some defaults
+        if (pageSize == -1){
+            pageSize = DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS
+        }
+        if (startHere == -1){
+            startHere = 0
+        }
+
+        specifyRequestList << "\"pagination\":{\"size\": ${pageSize},\"offset\":${startHere}}"
+
+        List<String> filterList = []
+        if ((phenotype) && (phenotype.length() > 0)) {
+            filterList <<  "{\"parameter\": \"phenotype\", \"operator\": \"eq\", \"value\": \"${phenotype}\"}"
+        }
+        if ((varId) && (varId.length() > 0)) {
+            filterList <<  "{\"parameter\": \"VAR_ID\", \"operator\": \"eq\", \"value\": \"${varId}\"}"
+        }
+
+        specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
+
+        specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
+
+
+
+        return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_PHEWAS_URL)
+    }
 
 
 

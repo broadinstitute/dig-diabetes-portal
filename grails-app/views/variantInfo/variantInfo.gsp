@@ -10,7 +10,7 @@
     <r:require modules="burdenTest"/>
     <r:require modules="multiTrack"/>
     <r:require modules="matrix"/>
-
+    <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
 
     <r:layoutResources/>
 
@@ -29,6 +29,9 @@
     <!-- Google fonts -->
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=PT+Sans:400,700'>
     <link rel="stylesheet" type="text/css" href='//fonts.googleapis.com/css?family=Open+Sans'>
+
+    %{--Need to call directly or else the images don't come out right--}%
+    <link rel="stylesheet" type="text/css"  src="../../js/lib/locuszoom.css">
 
 </head>
 
@@ -69,16 +72,21 @@
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().key}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSetReadable}',
-                    '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
-                    '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    ${defaultTissues});
+                        'stroke',"#lz-47","#collapseLZ",'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().key}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSetReadable}',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
+                        '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                        '${createLink(controller:"trait", action:"phewasAjaxCallInLzFormat")}',
+                        '${createLink(controller:"trait", action:"phewasForestAjaxCallInLzFormat")}',
+                        ${portalVersionBean.getExposePhewasModule()},
+                        ${portalVersionBean.getExposeForestPlot()},
+                        ${portalVersionBean.getExposeTraitDataSetAssociationView()})
+
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
                             {retrieveFunctionalDataAjaxUrl:'${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}'});
@@ -172,7 +180,8 @@
                                                                            'accordionHeaderClass': 'accordion-heading',
                                                                            'allowExperimentChoice': 1,
                                                                            'allowPhenotypeChoice' : 1,
-                                                                           'allowStratificationChoice': 1   ]"/>
+                                                                           'allowStratificationChoice': 1,
+                                                                           'grsVariantSet':''   ]"/>
                     <div class="separator"></div>
                     </g:if>
 

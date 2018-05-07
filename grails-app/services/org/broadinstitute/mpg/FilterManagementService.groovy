@@ -205,15 +205,15 @@ class FilterManagementService {
     public List<String> generateSampleGroupLevelQueries (String geneName, String sampleGroupName, String technology, Float lowerValue, Float higherValue, String propertyName)   {
         List<String> returnValue = []
         if ((technology == "GWAS")||(technology == "WGS")){
-            LinkedHashMap regionSpecificationDetailsForGene = geneManagementService.getRegionSpecificationDetailsForGene(geneName,100000)
-            if (regionSpecificationDetailsForGene.chromosome) {
+            LinkedHashMap regionSpecificationDetailsForGene = sharedToolsService.getGeneExpandedExtent(geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
+            if (regionSpecificationDetailsForGene.chrom) {
                 returnValue << "8=${regionSpecificationDetailsForGene.chromosome}".toString()
             }
             if (regionSpecificationDetailsForGene.startPosition) {
-                returnValue << "9=${regionSpecificationDetailsForGene.startPosition}".toString()
+                returnValue << "9=${regionSpecificationDetailsForGene.startExtent}".toString()
             }
             if (regionSpecificationDetailsForGene.endPosition) {
-                returnValue << "10=${regionSpecificationDetailsForGene.endPosition}".toString()
+                returnValue << "10=${regionSpecificationDetailsForGene.endExtent}".toString()
             }
 
         } else if ((technology == "ExChip")||(technology == "ExSeq")){
