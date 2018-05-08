@@ -55,35 +55,36 @@ button.expandoButton:visited {
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
 
     <div class="accordion-inner" id="traitAssociationInner">
+    <div class='phenotype-searchbox-wrapper'></div>
+        %{--<g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">--}%
+            %{--<ul class="nav nav-tabs plot-tabs">--}%
+                %{--<g:if test="${portalVersionBean.exposePhewasModule}">--}%
+                    %{--<li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWAS view</a></li>--}%
+                %{--</g:if>--}%
+                %{--<g:if test="${portalVersionBean.exposeForestPlot}">--}%
+                    %{--<li><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>--}%
+                %{--</g:if>--}%
+                %{--<g:if test="${portalVersionBean.exposeTraitDataSetAssociationView}">--}%
+                    %{--<li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>--}%
+                %{--</g:if>--}%
+            %{--</ul>--}%
+        %{--</g:if>--}%
 
-        <g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">
-            <ul class="nav nav-tabs plot-tabs">
-                <g:if test="${portalVersionBean.exposePhewasModule}">
-                    <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWAS view</a></li>
-                </g:if>
-                <g:if test="${portalVersionBean.exposeForestPlot}">
-                    <li><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>
-                </g:if>
-                <g:if test="${portalVersionBean.exposeTraitDataSetAssociationView}">
-                    <li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>
-                </g:if>
-            </ul>
-        </g:if>
+        %{--<div class="tab-content plot-tabs">--}%
+            %{--<div id="phewas" class="tab-pane fade in active">--}%
+                %{--<div id="plot"></div>--}%
+            %{--</div>--}%
+            %{--<div id="forestPlotHolder" class="tab-pane fade">--}%
+                %{--<div id="forestPlot"></div>--}%
+            %{--</div>--}%
+            %{--<div id="pheplot" class="tab-pane fade">--}%
+                %{--<div id="dkPhePlot"></div>--}%
+            %{--</div>--}%
+        %{--</div>--}%
 
-        <div class="tab-content plot-tabs">
-            <div id="phewas" class="tab-pane fade in active">
-                <div id="plot"></div>
-            </div>
-            <div id="forestPlotHolder" class="tab-pane fade">
-                <div id="forestPlot"></div>
-            </div>
-            <div id="pheplot" class="tab-pane fade">
-
-            </div>
+        <div id="pheplot">
+            <div id="dkPhePlot"></div>
         </div>
-
-        <div class='phenotype-searchbox-wrapper'></div>
-        <div id="dkPhePlot"></div>
 
     <r:require modules="core"/>
     <r:require modules="tableViewer,traitInfo"/>
@@ -188,7 +189,7 @@ button.expandoButton:visited {
                 tableNotLoaded = false;
             }
         });
-        $("#collapseVariantTraitAssociation").on("shown.bs.collapse", function () {
+        $("#collapseVariantAssociationStatistics").on("shown.bs.collapse", function () {
             mpgSoftware.locusZoom.rescaleSVG('#plot');
         });
         $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));

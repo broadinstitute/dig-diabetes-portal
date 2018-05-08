@@ -262,6 +262,17 @@ var mpgSoftware = mpgSoftware || {};
             loading.hide();
         };
 
+
+
+        var buildTheGreenBoxes = function(primaryBoxes,secondaryBoxes,variantAssociationStrings){
+            fillPrimaryPhenotypeBoxes(primaryBoxes, variantAssociationStrings);
+            fillOtherPhenotypeBoxes(secondaryBoxes, variantAssociationStrings);
+        }
+
+
+
+
+
         /**
          * Fills in all of the associations at a glance boxes. Retrieves all of the data, then decides which
          * phenotype is the primary based on the portal type (as specified by the defaultPhenotype argument).
@@ -380,17 +391,15 @@ var mpgSoftware = mpgSoftware || {};
                 if((typeof defaultPhenotype !== 'undefined')&&
                     (typeof _.find(phenotypeData, {phenotype: defaultPhenotype}) !== 'undefined'))  {
                     // pull out t2d object and display that for primary
-                    var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
-                    fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
                     // everything else is other
+                    var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
                     var everythingElse = _.chain(phenotypeData).reject({phenotype: defaultPhenotype}).sortBy('bestPVal').value();
-                    fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
+                    //buildTheGreenBoxes(t2dData,everythingElse,variantAssociationStrings);
                 }
                 else {
                     // otherwise, the primary phenotype is the one with the smallest p-value
                     var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
-                    fillPrimaryPhenotypeBoxes(_.head(sortedPhenotypeData), variantAssociationStrings);
-                    fillOtherPhenotypeBoxes(_.tail(sortedPhenotypeData), variantAssociationStrings);
+                    //buildTheGreenBoxes(_.head(sortedPhenotypeData),_.tail(sortedPhenotypeData),variantAssociationStrings);
                 }
             });
 
