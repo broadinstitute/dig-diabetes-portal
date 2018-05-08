@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="variantInfo, igv"/>
     <r:require modules="tableViewer,traitInfo"/>
@@ -32,6 +33,7 @@
 
     %{--Need to call directly or else the images don't come out right--}%
     <link rel="stylesheet" type="text/css"  src="../../js/lib/locuszoom.css">
+
 
 </head>
 

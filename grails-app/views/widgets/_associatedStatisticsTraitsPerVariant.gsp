@@ -51,6 +51,16 @@ button.expandoButton:visited {
     </a>
 </div>
 
+<style>
+body {
+    background-color: #FAFAFA;
+    margin: 0px 20px;
+}
+img {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+</style>
 
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
 
@@ -59,10 +69,10 @@ button.expandoButton:visited {
         <g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">
             <ul class="nav nav-tabs plot-tabs">
                 <g:if test="${portalVersionBean.exposePhewasModule}">
-                    <li class="active"><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
+                    <li><a class="phewas" data-toggle="tab" href="#phewas">PheWas view</a></li>
                 </g:if>
                 <g:if test="${portalVersionBean.exposeForestPlot}">
-                    <li><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>
+                    <li class="active"><a data-toggle="tab" href="#forestPlotHolder">PheWAS forest plot</a></li>
                 </g:if>
                 <g:if test="${portalVersionBean.exposeTraitDataSetAssociationView}">
                     <li><a class="pheplot" data-toggle="tab" href="#pheplot">Trait-datasets association view</a></li>
@@ -71,10 +81,10 @@ button.expandoButton:visited {
         </g:if>
 
         <div class="tab-content plot-tabs">
-            <div id="phewas" class="tab-pane fade in active">
+            <div id="phewas" class="tab-pane fade active">
                 <div id="plot"></div>
             </div>
-            <div id="forestPlotHolder" class="tab-pane fade">
+            <div id="forestPlotHolder" class="tab-pane fade in">
                 <div id="forestPlot"></div>
             </div>
             <div id="pheplot" class="tab-pane fade">
@@ -188,6 +198,7 @@ button.expandoButton:visited {
         });
         $("#collapseVariantTraitAssociation").on("shown.bs.collapse", function () {
             mpgSoftware.locusZoom.rescaleSVG('#plot');
+            mpgSoftware.locusZoom.rescaleSVG('#forestPlot');
         });
         $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
 
