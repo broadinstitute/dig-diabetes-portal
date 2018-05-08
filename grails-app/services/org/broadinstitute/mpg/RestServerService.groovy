@@ -2417,6 +2417,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
 
+        specifyRequestList << "\"topVariants\": true"
+
         specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
 
 

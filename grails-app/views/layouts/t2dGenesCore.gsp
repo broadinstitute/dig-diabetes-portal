@@ -410,8 +410,8 @@
 
                 var suggestedToFilter = "<div style='display:inline-block'><h5>Filter traits (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select><a href='javascript:;' class='dt-button buttons-copy buttons-html5' style='margin: 0 0 0 30px; float: right;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset</a></div><div class='related-words' style='clear: left;'>";
 
-                //$(suggestedToFilter).appendTo($(".phenotype-searchbox-wrapper"));
-                $(suggestedToFilter).insertBefore($("div.gwas-table-container"));
+                $(suggestedToFilter).appendTo($(".phenotype-searchbox-wrapper"));
+                //$(suggestedToFilter).insertBefore($("div.gwas-table-container"));
 
                 var suggestedToSort = "<span style='font-size: 12px; margin: 15px 0 10px 0; display: block;'>To sort the table by multi columns, hold shift key and click the head of the secondary column.</span>";
 
