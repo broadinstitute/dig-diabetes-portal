@@ -844,7 +844,7 @@
                         .attr("x2", w-xbumperRight)
                         .attr("y1", y(8))
                         .attr("y2", y(8))
-                        .style("stroke", "rgba(0, 102, 51, .1)");
+                        .style("stroke", "rgba(0, 102, 51, .5)");
 
                     svg.selectAll("text.gws")
                         .data(y.ticks(1))
