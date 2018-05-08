@@ -55,7 +55,7 @@ button.expandoButton:visited {
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
 
     <div class="accordion-inner" id="traitAssociationInner">
-    <div class='phenotype-searchbox-wrapper'></div>
+
         <g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">
             <ul class="nav nav-tabs plot-tabs">
                 <g:if test="${portalVersionBean.exposePhewasModule}">
@@ -78,10 +78,12 @@ button.expandoButton:visited {
                 <div id="forestPlot"></div>
             </div>
             <div id="pheplot" class="tab-pane fade">
-                <div id="dkPhePlot"></div>
+
             </div>
         </div>
 
+        <div class='phenotype-searchbox-wrapper'></div>
+        <div id="dkPhePlot"></div>
 
     <r:require modules="core"/>
     <r:require modules="tableViewer,traitInfo"/>

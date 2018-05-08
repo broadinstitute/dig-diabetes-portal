@@ -1162,10 +1162,17 @@ select.minimal:focus {
 }
 
 .phenotype-searchbox-wrapper {
-	padding: 0 10px 10px 10px;
+	padding: 10px 10px 10px 10px;
 	background-color: #eee;
 	border-radius: 5px;
 	margin-bottom: 10px;
+	min-width: 740px;
+}
+
+.phenotype-searchbox-inner-wrapper {
+	white-space : nowrap;
+	overflow : hidden;
+	min-width: 720px;
 }
 
 #traitAssociationInner .tab-pane {
