@@ -2059,8 +2059,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
-
-
+    
     public JSONObject getGenePrioritizationInformation(String phenotypeName, String dataSetName, String propertyName) {
         JSONObject returnValue
 
@@ -2071,19 +2070,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return returnValue
     }
 
+//       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
+//        JSONObject apiResults = this.getClumpDataRestCall(phenotypeName, dataSetName)
+//
+//        //JSONObject processedapiResults = getChromPos(apiResults);
+//        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
+//        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+//
 
 
-
-
-
-
-
-
-
-
-    public JSONObject getChromPos(JSONObject apiresults){
-        return apiresults
-    }
 
     /***
      * Gather up the data that is used in the Manhattan plot
@@ -2092,23 +2087,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * @param dataSetName
 
      */
-    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName) {
+    public JSONObject getClumpSpecificInformation(String phenotype, String dataSetName,String r2) {
         JSONObject returnValue
         JsonSlurper slurper = new JsonSlurper()
 
-       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName)
+        JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName,r2)
 
-        //JSONObject processedapiResults = getChromPos(apiResults);
         String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
-        //def slurper = new JsonSlurper()
-        //returnValue = slurper.parseText(apiResults)
         return dataJsonObject
     }
-
-
 
 
 
@@ -2696,13 +2685,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-
     public String processInfoFromGetClumpDataCall ( JSONObject apiResults, String additionalDataSetInformation, String topLevelInformation ){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         List<String> crossVariantData = []
         if (!apiResults["is_error"]){
             int numberOfVariants = apiResults.numRecords
+
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
                 List<String> keys2 = []
@@ -2710,12 +2698,29 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 //                    keys2 << (new JSONObject(apiResults.variants[j][i]).keys()).next()
 //                }
 
-                //dataJsonObject.results.pVals.level
 
-                keys = ["P_VALUE","ODDS_RATIO","DBSNP_ID","MAF_PH","CLOSEST_GENE", "VAR_ID", "CHROM", "POS"];
+                /*
+                 int numberOfGenes = apiResults.numRecords
+            def genes = apiResults.genes
+            for (int i = 0; i < numberOfGenes; i++) {
+                String geneName = genes[i].ID
+                Long startPosition = genes[i].BEG
+                Long endPosition = genes[i].END
+                String chromosome = genes[i].CHROM
+                Gene.refresh(geneName, chromosome, startPosition, endPosition)
+                 */
+
+//                dataJsonObject.results.pVals.level
+
+                keys = ["P_VALUE","ODDS_RATIO", "VAR_ID", "R2", "POS", "CHROM", "CLOSEST_GENE"];
                 List<String> variantSpecificList = []
                 for (String key in keys) {
                     ArrayList valueArray = []
+                  //String Chrom =   apiResults.variants[0].VAR_ID.split("_")[0]
+                   // Integer Chrom = Integer.parseInt(apiResults.variants[j].VAR_ID.split("_")[0])
+                    apiResults.variants[j].CHROM = apiResults.variants[j].VAR_ID.split("_")[0].toString()
+                    apiResults.variants[j].POS = Integer.parseInt(apiResults.variants[j].VAR_ID.split("_")[1])
+
                     valueArray.add(apiResults.variants[j][key]);
                     def value = valueArray.findAll { it }[0]
                     if (value instanceof String) {
@@ -2818,11 +2823,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
-    public JSONObject getClumpDataRestCall(String phenotype, String datasetName) {
+    public JSONObject getClumpDataRestCall(String phenotype, String datasetName, String r2) {
 
-       String clumpDataJsonPayloadString = """ {"passback":"abc123","page_start": 0,"page_size": 500,"phenotype": "${phenotype}","dataset": "${datasetName}"} """.toString()
+/*
+
+{   "dataset":"GWAS_AGEN_mdv30",
+    "phenotype":"t2d",
+    "r2":"0.2",
+    "pagination": {"size":5000, "offset":0},
+    "sort": [
+        {"parameter": "P_VALUE"}
+    ]
+}
+ */
+       String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}", "r2": "${r2}",
+                                                    "pagination":{"size":5000,"offset":0},
+                                                    "sort": [{"parameter": "P_VALUE"}] } """.toString()
 
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
+
 
         return VectorDataJson;
     }
