@@ -149,6 +149,7 @@
                             </a>
                         </div>
 
+                        <p><g:message code="variant.PheWAShelp"></g:message></p>
                         <div id="collapseVariantAssociationStatistics" class="accordion-body collapse">
                             <div class="accordion-inner">
                                 <g:render template="variantAssociationStatistics"/>
