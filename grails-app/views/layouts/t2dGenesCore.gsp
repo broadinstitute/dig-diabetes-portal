@@ -396,10 +396,6 @@
 
 
                 var inputBox = "";
-                /*inputBox += "<div style='display:inline-block;'><span style='padding-right: 10px;'>Filter plot: </span><input id='pvalue-min' style='display: inline-block; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value(-log10) < </span><input id='pvalue-max' style='display: inline-block; width: 40px; padding-left: 10px;' />";
-                inputBox += "<input id='sample-min' value=''  style='display: inline-block; width: 80px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample number(*1000) < </span><input id='sample-max' style='display: inline-block; width: 80px; padding-left: 10px;' />";
-                inputBox += "<a href='javascript:;' class='btn btn-sm btn-default' style='margin: 0 0 0 30px; float: right;' onclick='resetOnlyPhePlot()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> Reset plot</a></div>"
-                inputBox += "</div>";*/
 
                 inputBox += '<div class="traits-svg-wrapper" style=""></div>';
 
@@ -804,7 +800,7 @@
 
                 console.log(phenotypesArray);
 
-                w = $("#traitsPerVariantTable").width(), h = 450, xbumperLeft = 50, xbumperRight = 50, ybumperTop = 20, ybumperBottom = 140;
+                w = $("#traitsPerVariantTable").width(), h = 450, xbumperLeft = 50, xbumperRight = 50, ybumperTop = 30, ybumperBottom = 140;
 
 
                 $(".traits-svg-wrapper").html("");
@@ -885,48 +881,13 @@
 
                 // draw titles on the right column
 
-                if(phenotypesArray.length == 1){
+
 
                     svg.append("text")
-                        .text("p-value | Odds Ratio | MAF")
-                        .attr("x", w-xbumperRight+ 45)
-                        .attr("y", ybumperTop+5)
-                        .attr("style","font-size: 13px;");
-
-                } else {
-
-                    svg.append("text")
-                        .text("Most significant traits ")
-                        .attr("x", w-xbumperRight+ 45)
-                        .attr("y", ybumperTop+5)
-                        .attr("style","font-size: 13px;");
-
-                }
-
-                svg.append("text")
-                    .text("*Roll over to highlight study")
-                    .attr("x", w-xbumperRight+ 45)
-                    .attr("y", ybumperTop + 20)
-                    .attr("style","font-size: 11px;");
-
-                if (phenotypesArray.length != 1 ) {
-                    svg.append("text")
-                        .text("*Click to drill down")
-                        .attr("x", w-xbumperRight+ 45)
-                        .attr("y", ybumperTop + 35)
+                        .text("*Roll over to highlight studies *Click a triangle to drill down to one trait view  *Click 'Reset' button to go back to all traits view")
+                        .attr("x", 15)
+                        .attr("y", 15)
                         .attr("style","font-size: 11px;");
-                } else {
-
-                    svg.append("text")
-                        .text('<< Back to the list')
-                        .attr("x", w-xbumperRight+ 45)
-                        .attr("y", ybumperTop + 35)
-                        .attr("style","font-size: 12px;")
-                        .on("click", function() {
-                            resetPhePlotAndTable();
-                        });
-                }
-
 
 
                 // add dataset names
@@ -1014,14 +975,6 @@
                             return "translate("+xposition+","+yposition+")"
                         });
 
-                /*group.select(".dataset-dot-group")
-                    .append("line")
-                    .attr("x1", 0)
-                    .attr("y1", -(h-ybumperBottom+5))
-                    .attr("x2", 0)
-                    .attr("y2", 0)
-                    .attr("stroke","rgba(255,150,150,.2)")
-                    .attr("shape-rendering","auto");*/
 
                 group.select(".dataset-dot-group")
                     .append("circle")
@@ -1096,8 +1049,8 @@
 
                         var namesTopPos = phenotypeNameTop;
 
-                        var xposition = x(d.sample);
-                        var yposition = y(d.logValue);
+                        var xposition = x(d.sample)+10;
+                        var yposition = y(d.logValue)-7;
 
                         return "translate("+xposition+","+yposition+")"
                     })
@@ -1118,155 +1071,18 @@
                     .attr("style","font-size: 11px; text-anchor: start;")
                     .attr("fill", function(d) {
                         var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, 1)" : (d.logValue >= 4)? "rgba(122, 179, 23, 1)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, 1)" : "rgba(200, 200, 200, 1)"
+                        dotColor = "rgba(0, 0, 0, 1)"
                         return dotColor ;
                     })
                     .attr("xp", function(d) {
-                        return x(d.sample)
+                        return x(d.sample);
                     })
                     .attr("yp", function(d) {
-                        return y(d.logValue)
+                        return y(d.logValue);
                     })
                     .attr("phenotype", function(d){
                         return d.phenotype;
-                    })
-                    .on("mouseover", function(d) {
-
-
-                        //Get this bar's x/y values, then augment for the tooltip
-                        var svgPosition = $(pheSvg).position();
-                        var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
-                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top;
-
-                        //Update the tooltip position and value
-                        d3.select("#phePlotTooltip")
-                            .style("left", xPosition + "px")
-                            .style("top", yPosition + "px");
-
-                        var tipValue = d.phenotype +"<br>"+ d.dataset +"<br>p-value: " + d.pvalue +"<br>sample: "+ d.sample+"<br>odds-ratio: "+ d.oddsRatio+"<br>MAF: "+ d.maf;
-
-                        $("#phePlotTooltip").find("#value").html(tipValue).css("font-size: 10px !important");
-
-                        //Show the tooltip
-                        d3.select("#phePlotTooltip").classed("hidden", false);
-
-                        highlightTriangle(d.phenotype);
-
-                    })
-                    .on("mouseout", function() {
-
-                        //Hide the tooltip
-
-                        dimTriangle();
-
-                        d3.select("#phePlotTooltip").classed("hidden", true);
-
-                    })
-                    .on("click", function() {
-
-                        if (phenotypesArray.length != 1) {
-                            var phenotypeName = "="+d3.select(this).attr("phenotype");
-
-                            resetPhePlotAndTable(phenotypeName);
-
-                            d3.select("#phePlotTooltip").classed("hidden", true);
-
-                        }
-
                     });
-
-
-
-
-                /// add phenotype dots
-                /*
-                group = svg.selectAll("g.phenotypedots")
-                    .data(traitsTableData)
-                    .enter()
-                    .append("g");
-
-                group.append("g")
-                    .attr("class","phenotype-dot-group")
-                    .attr("transform", function(d) {
-                        var xposition = w - (xbumperRight - 15);
-                        var yposition = y(d.logValue);
-                        return "translate("+xposition+","+yposition+")"});
-
-                group.select(".phenotype-dot-group")
-                    .append("line")
-                    .attr("x1", 0 )
-                    .attr("y1", 0)
-                    .attr("x2", function(d) { return -(w -xbumperLeft -xbumperRight + 15) })
-                    .attr("y2", 0)
-                    .attr("stroke",function(d) {
-
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .2)" : (d.logValue >= 4)? "rgba(122, 179, 23, .2)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .4)" : "rgba(200, 200, 200, .3)"
-                        return dotColor ;
-                    })
-                    .attr("shape-rendering","auto");
-
-                group.select(".phenotype-dot-group")
-                    .append("circle")
-                    .attr("cx", 0)
-                    .attr("cy", 0)
-                    .attr("r", 3)
-                    .attr("fill",function(d) {
-
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .4)" : "rgba(200, 200, 200, .3)"
-                        return dotColor ;
-                    })
-                    .attr("stroke",function(d) {
-
-                        var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .0)" : (d.logValue >= 4)? "rgba(122, 179, 23, .0)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .0)" : "rgba(200, 200, 200, .0)"
-                        return dotColor ;
-                    })
-                    .attr("stroke-width","10")
-                    .attr("shape-rendering","auto")
-                    .attr("xp", function(d) {
-                        return x(d.sample)
-                    })
-                    .attr("yp", function(d) {
-                        return y(d.logValue)
-                    })
-                    .on("mouseover", function(d) {
-
-                        d3.select(this).attr('stroke',function(d) {
-
-                            var dotColor = (d.logValue >= 8)? "rgba(0, 102, 51, .3)" : (d.logValue >= 4)? "rgba(122, 179, 23, .3)" : (d.logValue >= 0.5)? "rgba(172, 230, 0, .7)" : "rgba(200, 200, 200, .3)"
-                            return dotColor ;
-                        });
-
-                        //Get this bar's x/y values, then augment for the tooltip
-                        var svgPosition = $(pheSvg).position();
-                        var xPosition = parseFloat(d3.select(this).attr("xp")) + svgPosition.left;
-                        var yPosition = parseFloat(d3.select(this).attr("yp")) + svgPosition.top;
-
-                        //Update the tooltip position and value
-                        d3.select("#phePlotTooltip")
-                            .style("left", xPosition + "px")
-                            .style("top", yPosition + "px");
-
-                        var tipValue = d.phenotype +"<br>"+ d.dataset +"<br>p-value: " + d.pvalue +"<br>sample: "+ d.sample+"<br>odds-ratio: "+ d.oddsRatio+"<br>MAF: "+ d.maf;
-
-                        $("#phePlotTooltip").find("#value").html(tipValue).css("font-size: 10px !important");
-
-                        //Show the tooltip
-                        d3.select("#phePlotTooltip").classed("hidden", false);
-
-                        highlightTriangle(d.phenotype);
-
-                    })
-                    .on("mouseout", function() {
-
-                        d3.select(this).attr('stroke','rgba(255,255,255,0.0)');
-                        //Hide the tooltip
-
-                        dimTriangle();
-
-                        d3.select("#phePlotTooltip").classed("hidden", true);
-
-                    });
-
-                    */
 
 
                 // add labels
@@ -1415,23 +1231,6 @@
                     });
 
                 // add phenotype name to the triangles
-
-/*
-                group.select(".triangle-group").append("text")
-                    .attr("x","0")
-                    .attr("y","15")
-                    .attr("class","")
-                    .append('tspan')
-                    .attr('x', "0")
-                    .attr('dy', 5)
-                    .text(function(d, i) {
-                        var textRenderMin = (pvalueMin == 0)? 8 : pvalueMin;
-                        //var phenotypeName = (d.logValue > textRenderMin )? d.phenotype : "";
-                        var phenotypeName = (i < 10 )? d.phenotype : "";
-                        return phenotypeName;
-                    })
-                    .attr("style","fill: #666; font-size: 10px; text-anchor: middle;");
-                    */
 
 
                 function getLogValue(pValue) {
