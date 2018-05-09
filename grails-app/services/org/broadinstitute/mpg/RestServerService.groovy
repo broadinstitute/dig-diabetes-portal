@@ -36,6 +36,7 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
 
+    private Boolean TRY_RESTRICTING_ALL_AGGREGATED_CALLS_TO_TOP_VARIANTS = Boolean.TRUE
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
     private String LOCAL_SERVER = ""
@@ -2277,6 +2278,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 filterList <<  "{\"parameter\": \"pos\", \"operator\": \"le\", \"value\": ${endExtent}}"
             }
             specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
+
+            if (TRY_RESTRICTING_ALL_AGGREGATED_CALLS_TO_TOP_VARIANTS){
+                specifyRequestList << "\"topVariants\": true"
+            } else {
+                specifyRequestList << "\"topVariants\": false"
+            }
+
 
             specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
 
