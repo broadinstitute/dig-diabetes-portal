@@ -345,7 +345,9 @@ class RestServerService {
                     existingPortalVersionBean.getExposeGrsModule(),
                     existingPortalVersionBean.getHighSpeedGetAggregatedDataCall(),
                     existingPortalVersionBean.getRegionSpecificVersion(),
-                    existingPortalVersionBean.getExposePhewasModule()
+                    existingPortalVersionBean.getExposePhewasModule(),
+                    existingPortalVersionBean.getExposeForestPlot(),
+                    existingPortalVersionBean.getExposeTraitDataSetAssociationView()
             )
             removePortalVersion(portalType)
         } else {
@@ -2829,18 +2831,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 /*
 
-{   "dataset":"GWAS_AGEN_mdv30",
+{
+    "dataset":"GWAS_AGEN_mdv30",
     "phenotype":"t2d",
-    "r2":"0.2",
+    "r2":"0.4",
     "pagination": {"size":5000, "offset":0},
-    "sort": [
-        {"parameter": "P_VALUE"}
-    ]
+    "p_valueThreshold":1.0
 }
  */
        String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}", "r2": "${r2}",
-                                                    "pagination":{"size":5000,"offset":0},
-                                                    "sort": [{"parameter": "P_VALUE"}] } """.toString()
+                                                    "pagination":{"size":5000,"offset":0},"p_valueThreshold":1.0 } """.toString()
 
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
 
