@@ -120,6 +120,10 @@
 
 <div class="container content-wrapper">
     <div id="phewas">
+        <div class="text-right">
+              <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
+             <label for="phewasAllDatasets">Include all data sets</label></div>
+        </div>
         <div id="plot"></div>
     </div>
 </div>

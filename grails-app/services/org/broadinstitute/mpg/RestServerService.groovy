@@ -36,6 +36,7 @@ class RestServerService {
     private static final log = LogFactory.getLog(this)
     SqlService sqlService
 
+    private Boolean TRY_RESTRICTING_ALL_AGGREGATED_CALLS_TO_TOP_VARIANTS = Boolean.TRUE
     private String PROD_LOAD_BALANCED_SERVER = ""
     private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
     private String LOCAL_SERVER = ""
@@ -345,7 +346,9 @@ class RestServerService {
                     existingPortalVersionBean.getExposeGrsModule(),
                     existingPortalVersionBean.getHighSpeedGetAggregatedDataCall(),
                     existingPortalVersionBean.getRegionSpecificVersion(),
-                    existingPortalVersionBean.getExposePhewasModule()
+                    existingPortalVersionBean.getExposePhewasModule(),
+                    existingPortalVersionBean.getExposeForestPlot(),
+                    existingPortalVersionBean.getExposeTraitDataSetAssociationView()
             )
             removePortalVersion(portalType)
         } else {
@@ -2276,6 +2279,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             }
             specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
 
+            if (TRY_RESTRICTING_ALL_AGGREGATED_CALLS_TO_TOP_VARIANTS){
+                specifyRequestList << "\"topVariants\": true"
+            } else {
+                specifyRequestList << "\"topVariants\": false"
+            }
+
+
             specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
 
         } else {
@@ -2388,7 +2398,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject gatherTopVariantsFromAggregatedTablesByVarId( String phenotype,
                                                                     String varId,
                                                                     int  startHere, int pageSize,
-                                                                    String version ) {
+                                                                    String version,
+                                                                    Boolean includeAllAssociations ) {
         List<String> specifyRequestList = []
 
         if ((version) && (version.length() > 0)) {
@@ -2417,7 +2428,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
 
-        specifyRequestList << "\"topVariants\": true"
+        if (includeAllAssociations){
+            specifyRequestList << "\"topVariants\": false"
+        } else {
+            specifyRequestList << "\"topVariants\": true"
+        }
+
 
         specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
 
@@ -2829,18 +2845,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 /*
 
-{   "dataset":"GWAS_AGEN_mdv30",
+{
+    "dataset":"GWAS_AGEN_mdv30",
     "phenotype":"t2d",
-    "r2":"0.2",
+    "r2":"0.4",
     "pagination": {"size":5000, "offset":0},
-    "sort": [
-        {"parameter": "P_VALUE"}
-    ]
+    "p_valueThreshold":1.0
 }
  */
        String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}", "r2": "${r2}",
-                                                    "pagination":{"size":5000,"offset":0},
-                                                    "sort": [{"parameter": "P_VALUE"}] } """.toString()
+                                                    "pagination":{"size":5000,"offset":0},"p_valueThreshold":1.0 } """.toString()
 
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
 
