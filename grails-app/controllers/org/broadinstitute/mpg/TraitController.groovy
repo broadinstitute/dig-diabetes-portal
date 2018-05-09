@@ -70,13 +70,19 @@ class TraitController {
 
     def phewasAjaxCallInLzFormat() {
         String varIdInLzFormat = params["filter"]
+        String includeAllVariants = params["includeAllVariants"]
         Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
         JSONObject jsonObject = new JSONObject()
         if (!variantPieces.is_error){
             String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
                     "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
-            jsonObject = widgetService.generatePhewasDataForLz( varId )
+            Boolean includeVariantsAcrossCohorts = false
+            if ((includeAllVariants)&&(includeAllVariants=="true")){
+                includeVariantsAcrossCohorts = true
+            }
+            jsonObject = widgetService.generatePhewasDataForLz( varId, includeVariantsAcrossCohorts )
         }
+        jsonObject.data=jsonObject.data.sort{a,b->a.trait_group<=>b.trait_group ?: a.trait<=>b.trait ?: a.log_pvalue<=>b.log_pvalue}
         render(status: 200, contentType: "application/json") { jsonObject }
         return
     }

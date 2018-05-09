@@ -613,9 +613,9 @@ class WidgetService {
 
 
 
-    public JSONObject generatePhewasDataForLz(String varId){
+    public JSONObject generatePhewasDataForLz(String varId, Boolean includeAllVariants){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion() )
+        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion(), includeAllVariants )
         List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("",
                 metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
         LinkedHashMap <String,String> phenotypeToPhenotypegroupMap = [:]
@@ -703,7 +703,7 @@ class WidgetService {
 
     public JSONObject generatePhewasForestDataForLz(String varId){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion() )
+        JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion(), false )
         List<org.broadinstitute.mpg.diabetes.metadata.Phenotype> phenotypeList = metaDataService.getPhenotypeListByTechnologyAndVersion("",
                 metaDataService.getDataVersion(), MetaDataService.METADATA_VARIANT)
         LinkedHashMap <String,String> phenotypeToPhenotypegroupMap = [:]

@@ -92,6 +92,31 @@ var mpgSoftware = mpgSoftware || {};
             return returnVar;
         };
 
+        LocusZoom.Data.PheWASSource.prototype.getURL = function (state, chain, fields) {
+            var build = this.params.build;
+            var includeAllVariants = this.params.includeAllVariants;
+            if (!build || !Array.isArray(build) || !build.length) {
+                throw [
+                    'Data source',
+                    this.constructor.SOURCE_NAME,
+                    'requires that you specify array of one or more desired genome build names'
+                ].join(' ');
+            }
+            var url = [
+                this.url,
+                '?filter=variant eq \'',
+                encodeURIComponent(state.variant),
+                '\'&format=objects&',
+                build.map(function (item) {
+                    return 'build=' + encodeURIComponent(item);
+                }),
+                    includeAllVariants.map(function (item) {
+                        return '&includeAllVariants=' + encodeURIComponent(item);
+                    }    ).join('&')
+            ];
+            return url.join('');
+        };
+
 
         var customIntervalsToolTip = function (namespace){
             var htmlRef = "{{"+namespace+":state_name}}<br>"+"{{"+namespace+":start}}-"+"{{"+namespace+":end}}";
@@ -1759,10 +1784,19 @@ var mpgSoftware = mpgSoftware || {};
                     break;
                 case 2: // pheWAS plot
                     newLayout = initLocusZoomPheWASLayout(convertVarIdToUmichFavoredForm(variantIdString));
+                    var includeAllDatasets=false;
+                    if ($('#phewasAllDatasets').is(":checked")){
+                        includeAllDatasets=true;
+                    }
+                    var includeAllDatasetsRequest = "false";
+                    if (includeAllDatasets){
+                        includeAllDatasetsRequest = "true";
+                    }
                     ds
                         .add("phewas", ["PheWASLZ", {
                             url: pageVars.phewasAjaxCallInLzFormatUrl,
-                            params: { build: ["GRCh37"] }
+                            params: { build: ["GRCh37"],
+                                includeAllVariants:[includeAllDatasetsRequest]}
                         }]);
                     lzp = LocusZoom.populate(selector, ds, newLayout);
                     lzp.panels.phewas.setTitle("Variant " + variantIdString);
@@ -1991,12 +2025,19 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var phewasExperiment = function(varId,phewasAjaxCallInLzFormatUrl){
-
+            var includeAllDatasets=false;
+            if ($('#phewasAllDatasets').is(":checked")){
+                includeAllDatasets=true;
+            }
+            var urlToFillPhewas = phewasAjaxCallInLzFormatUrl;
+            if (includeAllDatasets){
+                urlToFillPhewas += "?includeAllVariants=true"
+            }
             var variantForPlot = convertVarIdToUmichFavoredForm(varId);
             var dataSources= new LocusZoom.DataSources();
             dataSources
                 .add("phewas", ["PheWASLZ", {
-                    url: phewasAjaxCallInLzFormatUrl,
+                    url: urlToFillPhewas,
                     params: { build: ["GRCh37"] }
                 }]);
             
