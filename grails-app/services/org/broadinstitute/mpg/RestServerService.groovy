@@ -2388,7 +2388,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public JSONObject gatherTopVariantsFromAggregatedTablesByVarId( String phenotype,
                                                                     String varId,
                                                                     int  startHere, int pageSize,
-                                                                    String version ) {
+                                                                    String version,
+                                                                    Boolean includeAllAssociations ) {
         List<String> specifyRequestList = []
 
         if ((version) && (version.length() > 0)) {
@@ -2417,7 +2418,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         specifyRequestList << "\"filters\":[\n${filterList.join(",")}\n]"
 
-        specifyRequestList << "\"topVariants\": true"
+        if (includeAllAssociations){
+            specifyRequestList << "\"topVariants\": false"
+        } else {
+            specifyRequestList << "\"topVariants\": true"
+        }
+
 
         specifyRequestList << "\"sort\": [{ \"parameter\": \"P_VALUE\" }]"
 

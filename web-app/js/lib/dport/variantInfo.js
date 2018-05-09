@@ -143,6 +143,7 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
+            $('#phewasAllDatasets').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#plot', variantObject.VAR_ID , 2);});
 
             setVariantTitleAndSummary(variantObject.VAR_ID,
                                         variantObject.DBSNP_ID,
