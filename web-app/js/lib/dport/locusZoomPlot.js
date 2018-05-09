@@ -1072,7 +1072,7 @@ var mpgSoftware = mpgSoftware || {};
                 "{{#if phewas:study}}",
                 "<strong>Study:</strong> {{phewas:study|htmlescape}}<br>",
                 "{{/if}}",
-                "<div class='span12' style='text-align:center'><a href='javascript:;' class='center-text' onclick='javascript:openPhePlotTab(\"={{phewas:trait_label|htmlescape}}\")'>More details for this trait</a></div>"
+                //"<div class='span12' style='text-align:center'><a href='javascript:;' class='center-text' onclick='javascript:openPhePlotTab(\"={{phewas:trait_label|htmlescape}}\")'>More details for this trait</a></div>"
                 //"<strong>Subjects:</strong> {{phewas:subject_number|htmlescape}}<br>"
             ].join("");
             return layout;
