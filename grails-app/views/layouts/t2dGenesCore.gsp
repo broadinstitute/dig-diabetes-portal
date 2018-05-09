@@ -407,7 +407,7 @@
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).insertAfter($("#traitsPerVariantTable"));
 
                 // traits table filter ui
-                var suggestedToFilter = "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter traits (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select></div>";
+                var suggestedToFilter = "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter plot and table by trait (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select></div>";
 
                 //DK's plot filter ui
                 suggestedToFilter += "<div style='display:inline-block; padding: 0 10px; border-left:solid 1px #ddd;'><h5 style='padding-top: 0;'>Filter plot (p-value: -log10, sample number: *1000) </h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' /><input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 40px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
@@ -884,7 +884,7 @@
 
 
                     svg.append("text")
-                        .text("*Roll over to highlight studies *Click a triangle to drill down to one trait view  *Click 'Reset' button to go back to all traits view")
+                        .text("*Roll over to highlight studies *Click a triangle to drill down to one trait view *Click 'Reset' button to go back to all traits view")
                         .attr("x", 15)
                         .attr("y", 15)
                         .attr("style","font-size: 11px;");
@@ -1198,7 +1198,7 @@
                             .style("left", xPosition + "px")
                             .style("top", yPosition + "px");
 
-                        var tipValue = d.phenotype +"<br>"+ d.dataset +"<br>p-value: " + d.pvalue +"<br>sample: "+ d.sample+"<br>odds-ratio: "+ d.oddsRatio+"<br>MAF: "+ d.maf;
+                        var tipValue = d.phenotype +"<br>"+ d.dataset +"<br>p-value: " + d.pvalue +"<br>samples: "+ d.sample+"<br>odds ratio: "+ d.oddsRatio+"<br>MAF: "+ d.maf;
 
                         $("#phePlotTooltip").find("#value").html(tipValue).css("font-size: 10px !important");
 

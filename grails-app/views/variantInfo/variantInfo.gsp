@@ -149,9 +149,11 @@
                             </a>
                         </div>
 
-                        <p><g:message code="variant.PheWAShelp"></g:message></p>
+
                         <div id="collapseVariantAssociationStatistics" class="accordion-body collapse">
                             <div class="accordion-inner">
+                                <p><g:message code="variant.PheWAShelp1"></g:message></p>
+                                <p><g:message code="variant.PheWAShelp2"></g:message></p>
                                 <g:render template="variantAssociationStatistics"/>
                             </div>
                         </div>
@@ -159,14 +161,14 @@
 
                 <div class="separator"></div>
 
+
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
                           model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
                 <div class="separator"></div>
 
+
                     <g:render template="functionalAnnotation"/>
-
-
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||

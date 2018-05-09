@@ -122,7 +122,7 @@
     <div id="phewas">
         <div class="text-right">
               <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
-             <label for="phewasAllDatasets">Include all data sets</label></div>
+             <label for="phewasAllDatasets">Include all datasets</label></div>
         </div>
         <div id="plot"></div>
     </div>

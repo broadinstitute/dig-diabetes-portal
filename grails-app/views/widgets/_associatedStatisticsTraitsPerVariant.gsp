@@ -51,10 +51,11 @@ button.expandoButton:visited {
     </a>
 </div>
 
-
 <div id="collapseVariantTraitAssociation" class="accordion-body collapse" style="padding: 0 20px;">
 
     <div class="accordion-inner" id="traitAssociationInner">
+
+
     <div class='phenotype-searchbox-wrapper'></div>
         %{--<g:if test="${portalVersionBean.exposePhewasModule||portalVersionBean.exposeForestPlot||portalVersionBean.exposeTraitDataSetAssociationView}">--}%
             %{--<ul class="nav nav-tabs plot-tabs">--}%
@@ -81,7 +82,8 @@ button.expandoButton:visited {
                 %{--<div id="dkPhePlot"></div>--}%
             %{--</div>--}%
         %{--</div>--}%
-
+<p>&nbsp;</p>
+        <p><g:message code="variant.traitTableGraphicHelp1"></g:message></p>
         <div id="pheplot">
             <div id="dkPhePlot"></div>
         </div>
@@ -350,17 +352,17 @@ button.expandoButton:visited {
             </tbody>
         </table>
     </div>
-    <div class="row clearfix">
-        <div class="col-md-2">
-            <div class="pull-left" style="margin: 0 0 0 0">
-                <button id="reviser" class="btn btn-primary pull-left" onclick="reviseTraitsTableRows()">
-                    <g:message code="gene.variantassociations.change.rows" default="Revise rows"/>
-                </button>
-            </div>
+    %{--<div class="row clearfix">--}%
+        %{--<div class="col-md-2">--}%
+            %{--<div class="pull-left" style="margin: 0 0 0 0">--}%
+                %{--<button id="reviser" class="btn btn-primary pull-left" onclick="reviseTraitsTableRows()">--}%
+                    %{--<g:message code="gene.variantassociations.change.rows" default="Revise rows"/>--}%
+                %{--</button>--}%
+            %{--</div>--}%
 
-        </div>
-        <div class="col-md-10"></div>
-    </div>
+        %{--</div>--}%
+        %{--<div class="col-md-10"></div>--}%
+    %{--</div>--}%
 
 
     </div>
