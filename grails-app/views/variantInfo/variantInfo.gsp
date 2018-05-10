@@ -72,17 +72,20 @@
                     "<g:createLink controller='trait' action='traitInfo' />",
                     "<%=restServer%>",
                     variantSummaryText,
-                    'stroke',"#lz-47","#collapseLZ",'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().key}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSetReadable}',
-                    '${createLink(controller:"gene", action:"getLocusZoom")}',
-                    '${createLink(controller:"variantInfo", action:"variantInfo")}',
-                    '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
-                    '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
-                    '<g:createLink controller="trait" action="phewasAjaxCallInLzFormat" />',
-                    ${PortalVersionBean.getExposePhewasModule()})
+                        'stroke',"#lz-47","#collapseLZ",'${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().key}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().description}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().propertyName}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSet}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataSetReadable}',
+                        '${createLink(controller:"gene", action:"getLocusZoom")}',
+                        '${createLink(controller:"variantInfo", action:"variantInfo")}',
+                        '${lzOptions.findAll{it.defaultSelected&&it.dataType=='static'}.first().dataType}',
+                        '${createLink(controller:"variantInfo", action:"retrieveFunctionalDataAjax")}',
+                        '${createLink(controller:"trait", action:"phewasAjaxCallInLzFormat")}',
+                        '${createLink(controller:"trait", action:"phewasForestAjaxCallInLzFormat")}',
+                        ${portalVersionBean.getExposePhewasModule()},
+                        ${portalVersionBean.getExposeForestPlot()},
+                        ${portalVersionBean.getExposeTraitDataSetAssociationView()})
 
                 if ((!data.variant.is_error) && (data.variant.numRecords>0)){
                     mpgSoftware.variantInfo.retrieveFunctionalData(data,mpgSoftware.variantInfo.displayFunctionalData,
@@ -146,8 +149,11 @@
                             </a>
                         </div>
 
+
                         <div id="collapseVariantAssociationStatistics" class="accordion-body collapse">
                             <div class="accordion-inner">
+                                <p><g:message code="variant.PheWAShelp1"></g:message></p>
+                                <p><g:message code="variant.PheWAShelp2"></g:message></p>
                                 <g:render template="variantAssociationStatistics"/>
                             </div>
                         </div>
@@ -155,14 +161,14 @@
 
                 <div class="separator"></div>
 
+
                 <g:render template="/widgets/associatedStatisticsTraitsPerVariant"
                           model="[variantIdentifier: variantToSearch, locale: locale]"/>
 
                 <div class="separator"></div>
 
+
                     <g:render template="functionalAnnotation"/>
-
-
 
 
                 <g:if test="${g.portalTypeString()?.equals('stroke')||

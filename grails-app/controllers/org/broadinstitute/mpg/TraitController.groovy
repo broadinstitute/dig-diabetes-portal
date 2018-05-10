@@ -69,19 +69,38 @@ class TraitController {
 
 
     def phewasAjaxCallInLzFormat() {
-        String phenotype = params["phenotype"]
+        String varIdInLzFormat = params["filter"]
+        String includeAllVariants = params["includeAllVariants"]
+        Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
+        JSONObject jsonObject = new JSONObject()
+        if (!variantPieces.is_error){
+            String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
+                    "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
+            Boolean includeVariantsAcrossCohorts = false
+            if ((includeAllVariants)&&(includeAllVariants=="true")){
+                includeVariantsAcrossCohorts = true
+            }
+            jsonObject = widgetService.generatePhewasDataForLz( varId, includeVariantsAcrossCohorts )
+        }
+        jsonObject.data=jsonObject.data.sort{a,b->a.trait_group<=>b.trait_group ?: a.trait<=>b.trait ?: a.log_pvalue<=>b.log_pvalue}
+        render(status: 200, contentType: "application/json") { jsonObject }
+        return
+    }
+
+
+
+    def phewasForestAjaxCallInLzFormat() {
         String varIdInLzFormat = params["filter"]
         Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
         JSONObject jsonObject = new JSONObject()
         if (!variantPieces.is_error){
             String varId = "${variantPieces.chromosome}_${variantPieces.position}_"+
                     "${variantPieces.referenceAllele}_${variantPieces.alternateAllele}"
-            jsonObject = widgetService.generatePhewasDataForLz( varId )
+            jsonObject = widgetService.generatePhewasForestDataForLz( varId )
         }
         render(status: 200, contentType: "application/json") { jsonObject }
         return
     }
-
 
     /**
      * serves the associatedStatisticsTraitsPerVariant.gsp fragment; should be independent widget
@@ -161,8 +180,9 @@ class TraitController {
 
         String dataSetName = params["dataset"]
 
+        String r2 = params["r2"]
 
-        JSONObject jsonObject = restServerService.getClumpSpecificInformation(phenotype, dataSetName)
+        JSONObject jsonObject = restServerService.getClumpSpecificInformation(phenotype, dataSetName,r2)
         render(status: 200, contentType: "application/json") {
             [variant: jsonObject]
         }

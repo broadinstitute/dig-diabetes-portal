@@ -2845,7 +2845,8 @@ return {
     buildGaitInterface:buildGaitInterface,
     getStoredSampleMetadata:getStoredSampleMetadata,
     storeGrsVariantSet:storeGrsVariantSet,
-    getGRSListOfVariants:getGRSListOfVariants
+    getGRSListOfVariants:getGRSListOfVariants,
+    buildVariantTable:buildVariantTable
 }
 
 }());

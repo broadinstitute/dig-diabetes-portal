@@ -1,5 +1,6 @@
-<h1 class="dk-page-title"><%=phenotypeName%></h1>
-
+<script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
+<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
+<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
 
 
 <script>
@@ -18,6 +19,8 @@
     };
     mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
 
+
+
     $( document ).ready(function() {
 
         mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
@@ -25,28 +28,47 @@
     });
 
 
+
 </script>
 
 
 
-<div class="separator"></div>
 
-<p class="form-group">
-
-    <g:message code="traitTable.messages.results" />
-    <span id="traitTableDescription"></span>:
-    <select id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.pickNewDataSet(this)">
+<p><g:message code="informational.traitTableHeader.help1"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help2"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help3"></g:message></p>
+<p>&nbsp;</p>
+<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
+    <p class= "dk-footnote" style="width:83%;">Dataset</p>
+    <span id="traitTableDescription"></span>
+    <select  style = " width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
     </select>
 
-</p>
+</div>
+
+
+<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;" >
+    <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
+    <select style = "width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+        <option value="0.1000001" >0.1 </option>
+        <option value="0.2" >0.2 </option>
+        <option value="0.4" >0.4 </option>
+        <option value="0.6" >0.6 </option>
+        <option value="0.8" >0.8 </option>
+        <option value="1" selected="selected"> 1 </option>
+    </select>
+
+</div>
+
+
+
+
 <style>
 .mychart {width:100% !important; height:740px !important;}
 </style>
 <div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
 <div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
-
-<input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
 
 
 <table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">
@@ -63,4 +85,3 @@
     <tbody id="traitTableBody">
     </tbody>
 </table>
-%{--<% if (variants.length == 0) { print('<p><em>No variants found</em></p>') } %>--}%

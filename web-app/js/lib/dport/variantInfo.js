@@ -132,8 +132,8 @@ var mpgSoftware = mpgSoftware || {};
         var initializePage = function(data, variantToSearch, traitInfoUrl, restServer, variantSummaryText,portalType,
                                       lzDomHolder,collapseDomHolder,phenotypeName,phenotypeDescription,propertyName,locusZoomDataset,
                                       locusZoomReadableDatasetName,geneLocusZoomUrl,
-                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl,
-                                      exposePheWAS) {
+                                      variantInfoUrl,makeDynamic,retrieveFunctionalDataAjaxUrl,phewasAjaxCallInLzFormatUrl,phewasForestAjaxCallInLzFormatUrl,
+                                      exposePheWAS,exposeForestPlot, exposeTraitDataSetAssociationView) {
             var loading = $('#spinner').show();
             // this call loads the data for the disease burden, 'how common is this variant', and IGV
             // viewer components
@@ -143,6 +143,7 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
+            $('#phewasAllDatasets').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#plot', variantObject.VAR_ID , 2);});
 
             setVariantTitleAndSummary(variantObject.VAR_ID,
                                         variantObject.DBSNP_ID,
@@ -184,7 +185,8 @@ var mpgSoftware = mpgSoftware || {};
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
                 retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
-                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
             };
 
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
@@ -211,12 +213,45 @@ var mpgSoftware = mpgSoftware || {};
                 variantInfoUrl:variantInfoUrl,
                 makeDynamic:makeDynamic,
                 retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
-                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
+            };
+            var forestSelector = '#forestPlot';
+            var lzPheForestWASParm = {
+                page:'variantInfo',
+                variantId:variantObject.VAR_ID,
+                positionInfo:positioningInformation,
+                domId1:selector,
+                collapsingDom:collapseDomHolder,
+                phenoTypeName:phenotypeName,
+                phenoTypeDescription:phenotypeDescription,
+                phenoPropertyName:propertyName,
+                locusZoomDataset:locusZoomDataset,
+                pageInitialization:true,
+                functionalTrack:null,
+                defaultTissues:null,
+                defaultTissuesDescriptions:null,
+                datasetReadableName:locusZoomReadableDatasetName,
+                colorBy:1,
+                positionBy:1,
+                getLocusZoomFilledPlotUrl:'junk',
+                geneGetLZ:geneLocusZoomUrl,
+                variantInfoUrl:variantInfoUrl,
+                makeDynamic:makeDynamic,
+                retrieveFunctionalDataAjaxUrl:retrieveFunctionalDataAjaxUrl,
+                phewasAjaxCallInLzFormatUrl:phewasAjaxCallInLzFormatUrl,
+                phewasForestAjaxCallInLzFormatUrl:phewasForestAjaxCallInLzFormatUrl
             };
             mpgSoftware.locusZoom.setPageVars(lzPheWASParm,selector);
+            mpgSoftware.locusZoom.setPageVars(lzPheForestWASParm,forestSelector);
+
             if (exposePheWAS) {
                 mpgSoftware.locusZoom.generalizedInitLocusZoom(selector, variantObject.VAR_ID, 2);
             }
+            if (exposeForestPlot) {
+                mpgSoftware.locusZoom.generalizedInitLocusZoom(forestSelector, variantObject.VAR_ID, 3);
+            }
+
             $('[data-toggle="popover"]').popover();
 
             $(".pop-top").popover({placement : 'top'});
@@ -227,6 +262,17 @@ var mpgSoftware = mpgSoftware || {};
 
             loading.hide();
         };
+
+
+
+        var buildTheGreenBoxes = function(primaryBoxes,secondaryBoxes,variantAssociationStrings){
+            fillPrimaryPhenotypeBoxes(primaryBoxes, variantAssociationStrings);
+            fillOtherPhenotypeBoxes(secondaryBoxes, variantAssociationStrings);
+        }
+
+
+
+
 
         /**
          * Fills in all of the associations at a glance boxes. Retrieves all of the data, then decides which
@@ -346,17 +392,15 @@ var mpgSoftware = mpgSoftware || {};
                 if((typeof defaultPhenotype !== 'undefined')&&
                     (typeof _.find(phenotypeData, {phenotype: defaultPhenotype}) !== 'undefined'))  {
                     // pull out t2d object and display that for primary
-                    var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
-                    fillPrimaryPhenotypeBoxes(t2dData, variantAssociationStrings);
                     // everything else is other
+                    var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
                     var everythingElse = _.chain(phenotypeData).reject({phenotype: defaultPhenotype}).sortBy('bestPVal').value();
-                    fillOtherPhenotypeBoxes(everythingElse, variantAssociationStrings);
+                    //buildTheGreenBoxes(t2dData,everythingElse,variantAssociationStrings);
                 }
                 else {
                     // otherwise, the primary phenotype is the one with the smallest p-value
                     var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
-                    fillPrimaryPhenotypeBoxes(_.head(sortedPhenotypeData), variantAssociationStrings);
-                    fillOtherPhenotypeBoxes(_.tail(sortedPhenotypeData), variantAssociationStrings);
+                    //buildTheGreenBoxes(_.head(sortedPhenotypeData),_.tail(sortedPhenotypeData),variantAssociationStrings);
                 }
             });
 
