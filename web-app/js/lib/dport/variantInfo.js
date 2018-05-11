@@ -5,6 +5,19 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.variantInfo = (function () {
 
+        var varInfoData = {};
+
+        var storeVarInfoData = function (myVarInfoData){
+            varInfoData = myVarInfoData;
+        };
+
+
+        var getVarInfoData  = function (){
+            return varInfoData;
+        };
+
+
+
         // this defines the maximum places to show after the decimal place the box data
         var precision = 3;
         // the upper breakpoints for p-value significance
@@ -288,6 +301,7 @@ var mpgSoftware = mpgSoftware || {};
             // execute once all are finished
             var arrayOfPromises = [];
 
+
             // store all the retrieved data across the calls so we can process on it later
             var phenotypeData = [];
             // make the ajax call to get the data for each phenotype
@@ -389,18 +403,21 @@ var mpgSoftware = mpgSoftware || {};
                 if(phenotypeData.length == 0) {
                     return;
                 }
-                if((typeof defaultPhenotype !== 'undefined')&&
-                    (typeof _.find(phenotypeData, {phenotype: defaultPhenotype}) !== 'undefined'))  {
-                    // pull out t2d object and display that for primary
-                    // everything else is other
-                    var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
-                    var everythingElse = _.chain(phenotypeData).reject({phenotype: defaultPhenotype}).sortBy('bestPVal').value();
-                    //buildTheGreenBoxes(t2dData,everythingElse,variantAssociationStrings);
-                }
-                else {
-                    // otherwise, the primary phenotype is the one with the smallest p-value
-                    var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
-                    //buildTheGreenBoxes(_.head(sortedPhenotypeData),_.tail(sortedPhenotypeData),variantAssociationStrings);
+                var varInfoData = getVarInfoData();
+                if (varInfoData.exposeGreenBoxes){
+                    if((typeof defaultPhenotype !== 'undefined')&&
+                        (typeof _.find(phenotypeData, {phenotype: defaultPhenotype}) !== 'undefined'))  {
+                        // pull out t2d object and display that for primary
+                        // everything else is other
+                        var t2dData = _.find(phenotypeData, {phenotype: defaultPhenotype});
+                        var everythingElse = _.chain(phenotypeData).reject({phenotype: defaultPhenotype}).sortBy('bestPVal').value();
+                        buildTheGreenBoxes(t2dData,everythingElse,variantAssociationStrings);
+                    }
+                    else {
+                        // otherwise, the primary phenotype is the one with the smallest p-value
+                        var sortedPhenotypeData = _.sortBy(phenotypeData, 'bestPVal');
+                        buildTheGreenBoxes(_.head(sortedPhenotypeData),_.tail(sortedPhenotypeData),variantAssociationStrings);
+                    }
                 }
             });
 
@@ -1502,7 +1519,8 @@ var mpgSoftware = mpgSoftware || {};
             retrieveFunctionalData:retrieveFunctionalData,
             displayFunctionalData:displayFunctionalData,
             displayChosenElements:displayChosenElements,
-            buildAnnotationTable:buildAnnotationTable
+            buildAnnotationTable:buildAnnotationTable,
+            storeVarInfoData:storeVarInfoData
         }
 
 
