@@ -196,7 +196,8 @@
                         $(".dk-logo-wrapper").css({"display":"none"});
                         var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
                         $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"solid 1px #ffffff"})
-                        setMenuTriangle(".home-btn")
+                        setMenuTriangle(".home-btn");
+                        addFilterToTraitslist();
                         break;
 
                     case "variantsearchwf":
@@ -239,6 +240,10 @@
 
                 menuHeaderSet();
             });
+
+            function addFilterToTraitslist() {
+
+            }
 
             function setMenuTriangle(SELEVTEDBTN) {$(SELEVTEDBTN).css({"background-image":"url(${resource(dir: 'images', file: 'menu-triangle.svg')})","background-repeat":"no-repeat","background-position":"center bottom","background-size":"18px 9px"})}
 
@@ -394,27 +399,44 @@
 
                 $(".open-glyphicon").hover(function() { $(this).css({"cursor":"pointer"});});
 
+                if (typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) {
 
-                var inputBox = "";
+                    var inputBox = "";
 
-                inputBox += '<div class="traits-svg-wrapper" style=""></div>';
+                    inputBox += '<div class="traits-svg-wrapper" style=""></div>';
 
-                inputBox += '<div style="font-size: 12px; text-align: center;">Legend: <span style="color:rgba(31,119,180, 1); margin-right: 5px;">&#9679 ANTHROPOMETRIC</span> <span style="color:rgba(255, 127, 14, 1); margin-right: 5px;">&#9679 BLOOD PRESSURE</span> <span style="color:rgba(44, 160, 44, 1); margin-right: 5px;">&#9679 CORONARY ARTERY DISEASE</span> <span style="color:rgba(214, 39, 40, 1); margin-right: 5px;">&#9679 GLYCEMIC</span> <span style="color:rgba(148, 103, 189, 1); margin-right: 5px;">&#9679 LIPIDS</span> <span style="color:rgba(140, 86, 75, 1); margin-right: 5px;">&#9679 PSYCHIATRIC</span> <span style="color:rgba(227, 119, 194, 1); margin-right: 5px;">&#9679 RENAL</span></div>';
+                    inputBox += '<div style="font-size: 12px; text-align: center;">Legend: <span style="color:rgba(31,119,180, 1); margin-right: 5px;">&#9679 ANTHROPOMETRIC</span> <span style="color:rgba(255, 127, 14, 1); margin-right: 5px;">&#9679 BLOOD PRESSURE</span> <span style="color:rgba(44, 160, 44, 1); margin-right: 5px;">&#9679 CORONARY ARTERY DISEASE</span> <span style="color:rgba(214, 39, 40, 1); margin-right: 5px;">&#9679 GLYCEMIC</span> <span style="color:rgba(148, 103, 189, 1); margin-right: 5px;">&#9679 LIPIDS</span> <span style="color:rgba(140, 86, 75, 1); margin-right: 5px;">&#9679 PSYCHIATRIC</span> <span style="color:rgba(227, 119, 194, 1); margin-right: 5px;">&#9679 RENAL</span></div>';
 
-                $(inputBox).appendTo($("#dkPhePlot"));
+                    $(inputBox).appendTo($("#dkPhePlot"));
+
+                }
 
 
                 $("#traitsPerVariantTable_wrapper").find(".dt-buttons").css({"width":"100%","margin-bottom":"15px"}).insertAfter($("#traitsPerVariantTable"));
 
                 // traits table filter ui
-                var suggestedToFilter = "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter plot and table by trait (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select></div>";
 
-                //DK's plot filter ui
-                suggestedToFilter += "<div style='display:inline-block; padding: 0 10px; border-left:solid 1px #ddd;'><h5 style='padding-top: 0;'>Filter plot (p-value: -log10, sample number: *1000) </h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' /><input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 40px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
+                var suggestedToFilter = "";
 
-                // reset button
-                suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='margin-left: 10px;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div><div class='related-words' style='clear: left;'>";
+                if(typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) {
 
+                    suggestedToFilter += "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter plot and table by trait (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select></div>";
+
+                    //DK's plot filter ui
+                    suggestedToFilter += "<div style='display:inline-block; padding: 0 10px; border-left:solid 1px #ddd;'><h5 style='padding-top: 0;'>Filter plot (p-value: -log10, sample number: *1000) </h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' /><input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 40px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
+
+                    // reset button
+                    suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='margin-left: 10px;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div><div class='related-words' style='clear: left;'>";
+
+                } else {
+
+                    suggestedToFilter += "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter plot and table by trait (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''>";
+
+                    // reset button
+                    suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='display:inline-block; margin-left: 10px;' onclick='resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div><div class='related-words' style='clear: left;'></div>";
+
+
+                }
 
                 $(suggestedToFilter).appendTo($(".phenotype-searchbox-wrapper"));
                 //$(suggestedToFilter).insertBefore($("div.gwas-table-container"));
@@ -425,9 +447,9 @@
 
                 $("#traitsPerVariantTable").find("thead").find("tr").each(function() {
                     $(this).find("th").eq("1").insertBefore($(this).find("th").eq("0"));
-                    $("<th>sample</th>").appendTo($(this));
-                });
 
+                    if (typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) $("<th>sample</th>").appendTo($(this));
+                });
 
                 $("#traits_table_filter").on('input',filterTraitsTable);
                 $("#pvalue-min").on('input',filterTraitsTable);
@@ -466,16 +488,25 @@
 
                     var pheName = $(this).find("div.vandaRowHdr").attr("phenotypename");
                     var dtsetName = $(this).find("div.vandaRowHdr").attr("datasetname");
-                    var sampleNum = phenotypeDatasetMapping[pheName][dtsetName].count;
-                    var phenotypeGroup = phenotypeDatasetMapping[pheName][dtsetName].phenotypeGroup;
 
-                    phenotypeGroupList.push(phenotypeGroup)
+                    if (typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) {
 
-                    $(this).attr("phenotype", $(this).find("td").eq("1").text()+","+phenotypeGroup );
+                        var sampleNum = phenotypeDatasetMapping[pheName][dtsetName].count;
+                        var phenotypeGroup = phenotypeDatasetMapping[pheName][dtsetName].phenotypeGroup;
+
+                        phenotypeGroupList.push(phenotypeGroup)
+
+                        $(this).attr("phenotype", $(this).find("td").eq("1").text()+","+phenotypeGroup );
+
+                        $("<td class='sample-size'>"+sampleNum+"</td>").appendTo($(this));
+
+                    } else {
+
+                        $(this).attr("phenotype", $(this).find("td").eq("1").text());
+
+                    }
 
                     $(this).find("td").eq("1").insertBefore($(this).find("td").eq("0"));
-
-                    $("<td class='sample-size'>"+sampleNum+"</td>").appendTo($(this));
 
                 });
 
@@ -514,8 +545,10 @@
 
                 $("#traitsPerVariantTableBody").find("tr").removeClass("hidden-traits-row");
 
-                var searchWords = $("#traits_table_filter").val() + "," + $("#phePlotGroups option:selected").val();
+
+                var searchWords = (typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping)? $("#traits_table_filter").val() + "," + $("#phePlotGroups option:selected").val() : $("#traits_table_filter").val();
                 searchWords = searchWords.toLowerCase().split(",");
+
 
                 var phenotypesArray = [];
 
@@ -529,7 +562,10 @@
 
 
                             var phenotypeString = $(this).attr("phenotype").toLowerCase();
+
                             var searchWord = value.trim();
+
+
 
                             if(searchWord.indexOf("=") >= 0) {
 
@@ -577,7 +613,17 @@
 
             }
 
-            var showPhePlot = true; //turn on/off DK's plot
+
+
+            //turn on/off DK's plot
+            var showPhePlot = true;
+
+
+
+            function isDefined(x) {
+                var undefined;
+                return x !== undefined;
+            }
 
 
             function showRelatedWords() {
