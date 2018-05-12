@@ -43,6 +43,7 @@ class PortalVersionBean {
     private Integer exposePhewasModule
     private Integer exposeForestPlot
     private Integer exposeTraitDataSetAssociationView
+    private Integer exposeGreenBoxes
 
 
     public PortalVersionBean(String portalType,
@@ -76,7 +77,8 @@ class PortalVersionBean {
                              Integer regionSpecificVersion,
                              Integer exposePhewasModule,
                              Integer exposeForestPlot,
-                             Integer exposeTraitDataSetAssociationView ){
+                             Integer exposeTraitDataSetAssociationView,
+                             Integer exposeGreenBoxes ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -109,6 +111,7 @@ class PortalVersionBean {
         this.exposePhewasModule = exposePhewasModule
         this.exposeForestPlot = exposeForestPlot
         this.exposeTraitDataSetAssociationView = exposeTraitDataSetAssociationView
+        this.exposeGreenBoxes = exposeGreenBoxes
     }
 
     public String getPortalType() {
@@ -241,6 +244,11 @@ class PortalVersionBean {
         return exposeTraitDataSetAssociationView
     }
 
+    public Integer getExposeGreenBoxes(){
+        return exposeGreenBoxes
+    }
+
+
 
 
     public String toJsonString(){
@@ -275,7 +283,8 @@ class PortalVersionBean {
 "regionSpecificVersion":${getRegionSpecificVersion()},
 "exposePhewasModule":${getExposePhewasModule()},
 "exposeForestPlot":${getExposeForestPlot()},
-"exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()}
+"exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
+"exposeGreenBoxes":${getExposeGreenBoxes()}
 }""".toString()
     }
 }
