@@ -47,6 +47,26 @@
 
 </script>
 
+<g:if test="${portalVersionBean.getExposePhewasModule()}">
+    <p><g:message code="variant.PheWAShelp1"></g:message></p>
+    <p><g:message code="variant.PheWAShelp2"></g:message></p>
+</g:if>
+
+
+<g:if test="${portalVersionBean.getExposeTraitDataSetAssociationView()}">
+
+</g:if>
+<g:else>
+    <style>
+    .phenotype-searchbox-wrapper {
+        display: none;
+    }
+    #pheplot {
+        display: none;
+    }
+    </style>
+</g:else>
+
 <g:if test="${portalVersionBean.getExposeGreenBoxes()}">
 
 
