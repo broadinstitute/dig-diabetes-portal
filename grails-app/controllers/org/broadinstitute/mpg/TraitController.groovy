@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
@@ -24,13 +25,15 @@ class TraitController {
      */
     def traitInfo() {
         String variantIdentifier = params.getIdentifier()
+        JSONObject phenotypeDatasetMapping = metaDataService.getPhenotypeDatasetMapping()
         // get locale to provide to table-building plugin
         String locale = RequestContextUtils.getLocale(request)
 
         render(view: 'traitsPerVariant',
                 model: [dnSnpId          : variantIdentifier,
                         variantIdentifier: variantIdentifier,
-                        locale           : locale])
+                        locale           : locale,
+                        phenotypeDatasetMapping: (phenotypeDatasetMapping as JSON)])
     }
 
 
