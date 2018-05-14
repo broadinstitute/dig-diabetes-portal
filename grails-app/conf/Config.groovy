@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsdemoibdKB
+defaultRestServer = digawsqanewKB
 
 getRestServerList = [
         digdevlocalServer,
@@ -293,7 +293,7 @@ environments {
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -336,7 +336,7 @@ environments {
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 
 
-//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
+         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
 
                                         // CVDKP (MI portal) production
 
@@ -563,7 +563,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "mi"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -595,7 +595,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0,
                                                 1,
                                                 0,
-                                                1,0,1
+                                                1,0,1,
+                                                0
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -626,11 +627,12 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0
+                                          0,0,0,
+                                          1
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
-                                                          "mdv91",
+                                                          "mdv92",
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["SkeletalMuscle"],
@@ -657,7 +659,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0
+                                          0,0,0,
+                                          1
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -690,7 +693,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           1,
-                                          0,0,0
+                                          0,0,0,
+                                          0
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -721,7 +725,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0
+                                          0,0,0,
+                                          0
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -752,8 +757,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0
+                                          0,0,0,
+                                          0
                                   )
 ]
-
-
