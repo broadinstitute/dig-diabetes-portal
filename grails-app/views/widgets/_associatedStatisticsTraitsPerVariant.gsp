@@ -60,13 +60,10 @@ button.expandoButton:visited {
 
     <div class="accordion-inner" id="traitAssociationInner">
 
-
-    <div class='phenotype-searchbox-wrapper'></div>
-
-<p>&nbsp;</p>
         <g:if test="${portalVersionBean.getExposeTraitDataSetAssociationView()}">
             <p><g:message code="variant.traitTableGraphicHelp1"></g:message></p>
         </g:if>
+    <div class='phenotype-searchbox-wrapper'></div>
 
         <div id="pheplot">
             <div id="dkPhePlot"></div>
@@ -156,7 +153,8 @@ button.expandoButton:visited {
                             //console.log('really, really done');
                         });
 
-                        massageTraitsTable();
+                        mpgSoftware.traitSample.massageTraitsTable();
+                        //mpgSoftware.traitSample.randerTraitSamplePlot();
                         loading.hide();
                     },
                     error: function (jqXHR, exception) {
@@ -275,7 +273,7 @@ button.expandoButton:visited {
                         addMoreValues(data, dataSetGroupCount);
                         loading.hide();
 
-                        massageTraitsTable();
+                        mpgSoftware.traitSample.massageTraitsTable();
                     },
                     error: function (jqXHR, exception) {
                         loading.hide();
