@@ -119,7 +119,7 @@ var mpgSoftware = mpgSoftware || {};
 
                 inputBox += '<div class="traits-svg-wrapper" style=""></div>';
 
-                inputBox += '<div style="font-size: 12px; text-align: center;">Legend: <span style="color:rgba(31,119,180, 1); margin-right: 5px;">&#9679 ANTHROPOMETRIC</span> <span style="color:rgba(255, 127, 14, 1); margin-right: 5px;">&#9679 BLOOD PRESSURE</span> <span style="color:rgba(44, 160, 44, 1); margin-right: 5px;">&#9679 CORONARY ARTERY DISEASE</span> <span style="color:rgba(214, 39, 40, 1); margin-right: 5px;">&#9679 GLYCEMIC</span> <span style="color:rgba(148, 103, 189, 1); margin-right: 5px;">&#9679 LIPIDS</span> <span style="color:rgba(140, 86, 75, 1); margin-right: 5px;">&#9679 PSYCHIATRIC</span> <span style="color:rgba(227, 119, 194, 1); margin-right: 5px;">&#9679 RENAL</span></div>';
+                inputBox += '<div class="traits-class-legend" style="font-size: 12px; text-align: center;"></div>';
 
                 $(inputBox).appendTo($("#dkPhePlot"));
 
@@ -449,6 +449,33 @@ var mpgSoftware = mpgSoftware || {};
             phenotypesArray = result;
 
 
+            var indexColorsArray = ["rgba(31,119,180, 0.5)","rgba(255, 127, 14, 0.5)","rgba(44, 160, 44, 0.5)","rgba(214, 39, 40, 0.5)","rgba(148, 103, 189, 0.5)","rgba(140, 86, 75, 0.5)","rgba(227, 119, 194, 0.5)","rgba(0,0,0,0.2)"];
+
+            var phenotypeGroups = "";
+
+            $.each(traitsTableData, function(index,value){
+                phenotypeGroups += value.group + ",";
+            });
+
+            var phenotypesGroupsArray = phenotypeGroups.split(",");
+
+            phenotypesGroupsArray.splice(-1,1);
+
+            phenotypesGroupsArray = mpgSoftware.traitSample.unique(phenotypesGroupsArray);
+
+            var pheGroupColors = {};
+
+            $(".traits-class-legend").html("Legend: ");
+
+            $.each(phenotypesGroupsArray, function(index,value) {
+
+                pheGroupColors[value] = {color:indexColorsArray[index]};
+                $(".traits-class-legend").append('<span style="color:'+indexColorsArray[index]+';margin-right: 5px;">&#9679 '+value+'</span>');
+
+            })
+            
+
+
             w = $("#traitsPerVariantTable").width(), h = 450, xbumperLeft = 50, xbumperRight = 50, ybumperTop = 30, ybumperBottom = 140;
 
 
@@ -774,44 +801,9 @@ var mpgSoftware = mpgSoftware || {};
 
             group.select(".triangle-group").append('path')
                 .attr('d',arc)
-                .attr('fill',function(d) {
+                .attr('fill',function(d,i) {
 
-                    var triangleColor;
-
-                    switch(d.group) {
-
-                        case 'ANTHROPOMETRIC':
-                            triangleColor = "rgba(31,119,180, 0.5)";
-                            break;
-
-                        case 'BLOOD PRESSURE':
-                            triangleColor = "rgba(255, 127, 14, 0.5)";
-                            break;
-
-                        case 'CORONARY ARTERY DISEASE':
-                            triangleColor = "rgba(44, 160, 44, 0.5)";
-                            break;
-
-                        case 'GLYCEMIC':
-                            triangleColor = "rgba(214, 39, 40, 0.5)";
-                            break;
-
-                        case 'LIPIDS':
-                            triangleColor = "rgba(148, 103, 189, 0.5)";
-                            break;
-
-                        case 'PSYCHIATRIC':
-                            triangleColor = "rgba(140, 86, 75, 0.5)";
-                            break;
-
-                        case 'RENAL':
-                            triangleColor = "rgba(227, 119, 194, 0.5)";
-                            break;
-
-                        default:
-                            triangleColor = "rgba(0,0,0,0.2)";
-
-                    }
+                    var triangleColor = pheGroupColors[d.group].color;
 
                     return triangleColor;
                 })
