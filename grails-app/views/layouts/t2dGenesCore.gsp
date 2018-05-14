@@ -373,24 +373,8 @@
             }
 
 
-
-
-
-
-
-
-
-
-
             //turn on/off DK's plot
             var showPhePlot = true;
-
-
-
-
-
-
-
 
 
             /* GAIT TAB UI */

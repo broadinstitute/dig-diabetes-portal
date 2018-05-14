@@ -154,7 +154,6 @@ button.expandoButton:visited {
                         });
 
                         mpgSoftware.traitSample.massageTraitsTable();
-                        //mpgSoftware.traitSample.randerTraitSamplePlot();
                         loading.hide();
                     },
                     error: function (jqXHR, exception) {

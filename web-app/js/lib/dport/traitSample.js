@@ -292,7 +292,7 @@ var mpgSoftware = mpgSoftware || {};
 
             if (showPhePlot == true) {
 
-                mpgSoftware.traitSample.randerTraitSamplePlot();
+                mpgSoftware.traitSample.renderTraitSamplePlot();
 
             } else {
                 $("#dkPhePlot").css("display","none");
@@ -342,7 +342,7 @@ var mpgSoftware = mpgSoftware || {};
 
         }
 
-        var randerTraitSamplePlot = function() {
+        var renderTraitSamplePlot = function() {
 
             ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
             ($("#phePlotTooltip").find(".pointer").length)? "" : d3.select("#phePlotTooltip").append("div").attr("class","pointer");
@@ -922,7 +922,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         return{
-            randerTraitSamplePlot:randerTraitSamplePlot,
+            renderTraitSamplePlot:renderTraitSamplePlot,
             addPlotFilter:addPlotFilter,
             resetPhePlotAndTable:resetPhePlotAndTable,
             filterTraitsTable:filterTraitsTable,
