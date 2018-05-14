@@ -1,5 +1,3 @@
-<script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
-<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
 
 
