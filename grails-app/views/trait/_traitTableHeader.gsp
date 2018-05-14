@@ -1,5 +1,3 @@
-<script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
-<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
 
 
@@ -38,18 +36,15 @@
 <p><g:message code="informational.traitTableHeader.help2"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help3"></g:message></p>
 <p>&nbsp;</p>
-<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
-    <p class= "dk-footnote" style="width:83%;">Dataset</p>
-    <span id="traitTableDescription"></span>
-    <select  style = " width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+<div style = " height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
+    <p>Dataset</p>
+    %{--<span id="traitTableDescription"></span>--}%
+    <select  style = " width:300px; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
     </select>
 
-</div>
 
-
-<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;" >
-    <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
-    <select style = "width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+    <p>r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" body="r_squared.help.text"/></p>
+    <select style = "width:300px; "id=rthreshold;" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
         <option value="0.1000001" >0.1 </option>
         <option value="0.2" >0.2 </option>
         <option value="0.4" >0.4 </option>
