@@ -5,6 +5,7 @@ import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -1369,6 +1370,28 @@ class WidgetService {
     public List<String> getLocusZoomEndpointList() {
         return locusZoomEndpointList
     }
+
+
+
+    public Boolean sampleDataSuitableForGeneLevelBurdenTestsExists (){
+        List<Experiment> experimentList =  metaDataService.getExperimentByVersionAndTechnology(metaDataService.getDataVersion(),
+                "ExSeq", MetaDataService.METADATA_SAMPLE )
+        Boolean suitableDataExists = false
+        for (Experiment experiment in experimentList){
+            for (SampleGroup sampleGroup in experiment.sampleGroups){
+                if (sampleGroup.hasMeaning("VARIANT")){
+                    suitableDataExists = true
+                }
+            }
+        }
+        return suitableDataExists
+    }
+
+
+
+
+
+
 
     /**
      * returns a list of phenotypes to select from for the LZ plot display

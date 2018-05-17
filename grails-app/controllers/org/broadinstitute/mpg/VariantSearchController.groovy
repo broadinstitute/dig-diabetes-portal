@@ -567,7 +567,7 @@ class VariantSearchController {
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
 
-        if (dataJsonObject.variants) {
+        if (dataJsonObject?.variants) {
             for (Map pval in dataJsonObject.variants){
                 //for (Map pval in result) {
                 if (pval.containsKey("Consequence")){
