@@ -180,6 +180,7 @@ var mpgSoftware = mpgSoftware || {};
                         (  data.datasets !== null )) {
 
                         UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#trait-input', undefined, undefined, homePageVars.defaultPhenotype);
+
                         var availPhenotypes = [];
                         _.forEach($("select#trait-input option"), function (a) {
                             availPhenotypes.push($(a).val());
@@ -189,6 +190,8 @@ var mpgSoftware = mpgSoftware || {};
                         } else if (availPhenotypes.length > 0) {
                             $('#trait-input').val(availPhenotypes[0]);
                         }
+
+                        mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                     }
                 },
                 error: function (jqXHR, exception) {
@@ -392,7 +395,8 @@ var mpgSoftware = mpgSoftware || {};
             setSlideWindows: setSlideWindows,
             setHomePageVariables:setHomePageVariables,
             retrieveGenePhenotypes:retrieveGenePhenotypes,
-            retrievePhenotypes:retrievePhenotypes
+            retrievePhenotypes:retrievePhenotypes,
+            getHomePageVariables:getHomePageVariables
         }
     })();
 })();

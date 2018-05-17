@@ -5,6 +5,7 @@
     <meta name="wot-verification" content="9fd2c3983c1837397ff8"/>
     <r:require modules="core"/>
     <r:require modules="portalHome"/>
+    <r:require modules="traitsFilter"/>
     <r:require module="mustache"/>
     <r:layoutResources/>
 
@@ -86,7 +87,7 @@
 
                 <g:if test="${portalVersionBean.variantAssociationsExists}">
                             %{--only useful if we have variant associations--}%
-                    <div style="padding-bottom:20px; font-weight: 300;">
+                    <div class="gene-search-wrapper" style="padding-bottom:20px; font-weight: 300;">
                         <g:if test="${!portalVersionBean.regionSpecificVersion}">
                             <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
                         </g:if>
@@ -137,7 +138,7 @@
 
                 <g:if test="${portalVersionBean.geneLevelDataExists}">
                 %{--only useful if we have gene-level associations--}%
-                    <div style="padding-bottom:20px; font-weight: 300;">
+                    <div class="gene-search-wrapper" style="padding-bottom:20px; font-weight: 300;">
                         <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
                         <div style="font-size: 14px;">
                             <span><g:message code="site.shared.phrases.examples" />: </span>
@@ -173,20 +174,22 @@
                     </div>
                 </g:if>
                 <g:if test="${!portalVersionBean.regionSpecificVersion}">
-                    <div style="padding-bottom:10px;">
+                    <div style="padding-bottom:10px;" class="variant-finder-wrapper">
                         <h2 style="font-size:20px; font-weight:300;"><g:message code="variant.search.header"/></h2>
                         <p class="dk-footnote" style="width:83%;"><g:message code="variant.search.specifics"/></p>
                         <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">
                             <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px;  margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; margin-right:1%; margin-top: -45px; float:right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                         </a>
                     </div>
-                    <div>
+                    <div class="traits-filter-wrapper">
                         <g:if test="${portalVersionBean.variantAssociationsExists}">
                             <h2 style="font-size:20px; font-weight:300;"><g:message code="trait.search.header" default="View full GWAS results for a phenotype" /></h2>
                             <div class="form-inline" style="padding-top: 10px;">
-                                <select name="" id="trait-input" class="form-control input-sm" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                                <input id="traits-filter" onfocus="mpgSoftware.traitsFilter.filterOnFocus()" oninput="mpgSoftware.traitsFilter.filterTraitsTable('#traits-list-table')" placeholder="Filter phenotypes" type="text" class="form-control input-sm" style="width: 100%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px;">
+
+                                <select name="" id="trait-input" class="form-control input-sm" style="display: none; width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
                                 </select>
-                                <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
+                                <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="display:none; width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                             </div>
                         </g:if>
                         <g:if test="${portalVersionBean.geneLevelDataExists}">

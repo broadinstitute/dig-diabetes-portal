@@ -55,6 +55,9 @@ modules = {
         resource url: 'css/dport/trait.css'
         resource url: 'js/lib/dport/trait.js'
     }
+    traitsFilter {
+        resource url: 'js/lib/dport/traitsFilter.js'
+    }
     sunburst {
         resource url: 'css/dport/sunburst.css'
         resource url: 'js/lib/dport/sunburst.js'
