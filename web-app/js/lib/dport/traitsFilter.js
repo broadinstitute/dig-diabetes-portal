@@ -9,15 +9,13 @@ var mpgSoftware = mpgSoftware || {};
 
         var setTraitsFilter = function (traitsJson,PLACE) {
 
-            //$("#traits-filter").on('input',mpgSoftware.traitsFilter.filterTraitsTable("#traits-list-table"));
-
             var PAGE = PLACE || "default";
 
             var traitsGroups = traitsJson.datasetOrder;
 
             if(PAGE == "home") {
                 $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:23px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></div>');
-                $(".traits-filter-wrapper").append("<div class='related-words' style='clear: left; display:none; max-height:60px; width: 100%; overflow-y:auto; margin-top: 5px'></div><div class='traits-list-table-wrapper' style='display:none;overflow-y:auto;overflow-x:hidden; height:auto; max-height:160px;margin-top: 5px; border: solid 1px #ddd;'><table id='traits-list-table' style='width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
+                $(".traits-filter-wrapper").append("<div class='related-words' style='clear: left; display:none; max-height:60px; width: 99%; overflow-y:auto; margin-top: 5px'></div><div class='traits-list-table-wrapper' style='display:none; width:99%; overflow-y:auto;overflow-x:hidden; height:auto; max-height:160px; margin-top: 5px; border: solid 1px #ddd;'><table id='traits-list-table' style='width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
 
                 $.each(traitsGroups, function(index,value) {
 
@@ -28,6 +26,8 @@ var mpgSoftware = mpgSoftware || {};
                     $("#traits-list-table").find("tbody").append("<tr class='hidden-traits-row1' style='border-bottom: solid 1px #ddd; ' phenotype='"+Traitsvalue[1]+","+traitsGroup+"'><td style='width:50%;padding:5px 10px;'><a href='javascript:;' style='color:#fff; text-decoration: underline;' onclick='mpgSoftware.traitsFilter.launchTraitSearch(event)' phenotype='"+Traitsvalue[0]+"'>"+Traitsvalue[1]+"</a></td><td style='width:50%;border-left: solid 1px #ddd; padding:5px 10px;'>"+ traitsGroup+"</td></tr>");
                 })
             })
+
+            $("#home_spinner").css("display","none");
         }
 
         function setBtnOver(x) {
