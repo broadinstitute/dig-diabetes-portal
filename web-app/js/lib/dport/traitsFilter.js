@@ -15,17 +15,27 @@ var mpgSoftware = mpgSoftware || {};
 
             var traitsGroups = traitsJson.datasetOrder;
 
-            if(PAGE == "home") { $(".traits-filter-wrapper").append("<div class='related-words' style='clear: left; display:none; max-height:60px; overflow-y:auto; margin-top: 5px'></div><div class='traits-list-table-wrapper' style='display:none;overflow-y:auto;overflow-x:hidden; height:auto; max-height:160px;margin-top: 15px; border: solid 1px #ddd;'><table id='traits-list-table' style='width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
+            if(PAGE == "home") {
+                $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:23px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></div>');
+                $(".traits-filter-wrapper").append("<div class='related-words' style='clear: left; display:none; max-height:60px; width: 100%; overflow-y:auto; margin-top: 5px'></div><div class='traits-list-table-wrapper' style='display:none;overflow-y:auto;overflow-x:hidden; height:auto; max-height:160px;margin-top: 5px; border: solid 1px #ddd;'><table id='traits-list-table' style='width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
 
-            $.each(traitsGroups, function(index,value) {
+                $.each(traitsGroups, function(index,value) {
 
                 var traitsGroup = value;
                 var eachTraits = traitsJson.dataset[value];
 
                 $.each(eachTraits, function(TraitsIndex,Traitsvalue) {
-                    $("#traits-list-table").find("tbody").append("<tr class='hidden-traits-row1' style='border-bottom: solid 1px #ddd; ' phenotype='"+Traitsvalue[1]+","+traitsGroup+"'><td style='width:50%;padding:5px 10px;'><a href='javascript:;' onclick='mpgSoftware.traitsFilter.launchTraitSearch(event)' phenotype='"+Traitsvalue[0]+"'>"+Traitsvalue[1]+"</a></td><td style='width:50%;border-left: solid 1px #ddd; padding:5px 10px;'>"+ traitsGroup+"</td></tr>");
+                    $("#traits-list-table").find("tbody").append("<tr class='hidden-traits-row1' style='border-bottom: solid 1px #ddd; ' phenotype='"+Traitsvalue[1]+","+traitsGroup+"'><td style='width:50%;padding:5px 10px;'><a href='javascript:;' style='color:#fff; text-decoration: underline;' onclick='mpgSoftware.traitsFilter.launchTraitSearch(event)' phenotype='"+Traitsvalue[0]+"'>"+Traitsvalue[1]+"</a></td><td style='width:50%;border-left: solid 1px #ddd; padding:5px 10px;'>"+ traitsGroup+"</td></tr>");
                 })
             })
+        }
+
+        function setBtnOver(x) {
+            $(x).css("color","#000");
+        }
+
+        function setBtnOut(x) {
+            $(x).css("color","#666");
         }
 
         var launchTraitSearch = function (event) {
@@ -210,13 +220,31 @@ var mpgSoftware = mpgSoftware || {};
 
         var filterOnFocus = function () {
 
-            $("#traits-filter").val("").attr("placeholder","");
+            $("#traits-filter").attr("placeholder","");
 
             $(".gene-search-wrapper").hide("slow");
             $(".variant-finder-wrapper").hide("slow");
             $(".related-words").show("slow");
             $(".traits-list-table-wrapper").show("slow");
+            $(".traits-search-close-btn").fadeIn("slow");
+            mpgSoftware.traitsFilter.filterTraitsTable("#traits-list-table");
+        }
 
+        var filterOutFocus = function () {
+
+            $("#traits-filter").val("").attr("placeholder","Search for phenotypes");
+
+            $(".gene-search-wrapper").show("slow");
+            $(".variant-finder-wrapper").show("slow");
+            $(".related-words").hide("slow");
+            $(".traits-list-table-wrapper").hide("slow");
+            $(".traits-search-close-btn").fadeOut("slow");
+
+        }
+
+        var clearTraitsSearch = function() {
+            $("#traits-filter").val("");
+            mpgSoftware.traitsFilter.filterTraitsTable("#traits-list-table");
         }
 
         return{
@@ -226,7 +254,11 @@ var mpgSoftware = mpgSoftware || {};
             showRelatedWords:showRelatedWords,
             addToPhenotypeFilter:addToPhenotypeFilter,
             filterOutIllegalCharacters:filterOutIllegalCharacters,
-            launchTraitSearch:launchTraitSearch
+            launchTraitSearch:launchTraitSearch,
+            filterOutFocus:filterOutFocus,
+            setBtnOver:setBtnOver,
+            setBtnOut:setBtnOut,
+            clearTraitsSearch:clearTraitsSearch
         }
     }());
 })();
