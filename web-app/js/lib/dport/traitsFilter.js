@@ -14,7 +14,7 @@ var mpgSoftware = mpgSoftware || {};
             var traitsGroups = traitsJson.datasetOrder;
 
             if(PAGE == "home") {
-                $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:23px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></div>');
+                $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:20px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></div>');
                 $(".traits-filter-wrapper").append("<div class='related-words' style='position:absolute; z-index: 100; top:104px; background-color: #fff; padding: 5px; display:none; width: 93%; box-shadow: 0 3px 5px rgba(0,0,0,.5); border-radius: 5px;'></div><div class='traits-list-table-wrapper' style='display:none; width:93%; overflow-y:auto;overflow-x:hidden; height:auto; max-height:280px; position:absolute; top: 110px;'><table id='traits-list-table' style='border: solid 1px #ddd; width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
 
                 $.each(traitsGroups, function(index,value) {
@@ -213,7 +213,7 @@ var mpgSoftware = mpgSoftware || {};
                 returnText += wordMatch;
             }
 
-            returnText += '<a href="#javascript:;" onclick="mpgSoftware.traitsFilter.hideRelatedWords()" style="position:absolute; bottom:-2px; right:3px; font-size: 16px; color: #666;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a>';
+            returnText += '<a href="javascript:;" onclick="mpgSoftware.traitsFilter.hideRelatedWords()" style="position:absolute; bottom:-2px; right:3px; font-size: 16px; color: #666;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a>';
 
             return returnText;
 
