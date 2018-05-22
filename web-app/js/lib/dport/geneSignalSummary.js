@@ -513,8 +513,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 0);
                 obj['P_VALUEV'] = (val) ? val : 0;
             } else if (key === 'BETA') {
-                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
-                obj['BETAV'] = Math.exp((val) ? val : 0);
+                obj['BETA'] = (val)?UTILS.realNumberFormatter(val):'';
+                  obj['BETAV'] = ((val) ? val : 0);
+                 // obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
+                 // obj['BETAV'] = Math.exp((val) ? val : 0);
             }
             else {
                 obj[key] = (val) ? val : '';

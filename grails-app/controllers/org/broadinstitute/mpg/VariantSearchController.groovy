@@ -563,7 +563,15 @@ class VariantSearchController {
         }
 
 
-
+        List<PhenotypeBean> phenotypeBeanList =  metaDataService.getAllPhenotypesWithName(phenotypeName, metaDataService.METADATA_VARIANT)
+        Boolean convertEffectToOr = false
+        for (PhenotypeBean phenotypeBean in phenotypeBeanList){
+            for (PropertyBean propertyBean in phenotypeBean.properties){
+                if (propertyBean.hasMeaning("ODDS_RATIO")){
+                    convertEffectToOr  = true
+                }
+            }
+        }
 
         List<org.broadinstitute.mpg.locuszoom.PhenotypeBean> phenotypeMap = widgetService.getHailPhenotypeMap()
 
@@ -580,6 +588,13 @@ class VariantSearchController {
                 }
                 if (pval.containsKey("dataset")){
                     pval["dsr"] = g.message(code: "metadata." + pval["dataset"], default: pval["dataset"])
+                }
+                if (pval.containsKey("BETA")&&convertEffectToOr&&(pval["BETA"])){
+                    Double beta = pval["BETA"] as Double
+                    if ((beta!=null)&&(beta!=Double.NaN)){
+                        pval["BETA"] = Math.exp(beta)
+                    }
+
                 }
                 if (pval.containsKey("phenotype")){
                     pval["pname"] = g.message(code: "metadata." + pval["phenotype"], default: pval["phenotype"])

@@ -869,6 +869,15 @@ class MetaDataService {
 
 
 
+    public List<PhenotypeBean> getAllPhenotypesWithName(String phenotypeName, int metadataTree){
+        List<PhenotypeBean> phenotypeList =  retrieveJsonParser(metadataTree).getAllPhenotypesWithName(phenotypeName, sharedToolsService.getCurrentDataVersion (), "")
+        return phenotypeList
+    }
+
+
+
+
+
     public Property getSampleGroupProperty(String sampleGroupName,String propertyName, int metadataTree ){
         Property returnValue
         List<Property> propertyList =  retrieveJsonParser(metadataTree).getSearchablePropertiesForSampleGroupId( sampleGroupName )
