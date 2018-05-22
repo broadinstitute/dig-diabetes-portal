@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<div id="home_spinner" class="dk-loading-wheel center-block" style="">
+<div id="home_spinner" class="dk-loading-wheel center-block" style="color:#fff;">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
 <script>

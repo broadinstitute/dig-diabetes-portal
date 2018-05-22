@@ -15,7 +15,7 @@ var mpgSoftware = mpgSoftware || {};
 
             if(PAGE == "home") {
                 $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:23px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span></div>');
-                $(".traits-filter-wrapper").append("<div class='related-words' style='clear: left; display:none; max-height:60px; width: 99%; overflow-y:auto; margin-top: 5px'></div><div class='traits-list-table-wrapper' style='display:none; width:99%; overflow-y:auto;overflow-x:hidden; height:auto; max-height:160px; margin-top: 5px; border: solid 1px #ddd;'><table id='traits-list-table' style='width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
+                $(".traits-filter-wrapper").append("<div class='related-words' style='position:absolute; z-index: 100; top:104px; background-color: #fff; padding: 5px; display:none; width: 93%; box-shadow: 0 3px 5px rgba(0,0,0,.5); border-radius: 5px;'></div><div class='traits-list-table-wrapper' style='display:none; width:93%; overflow-y:auto;overflow-x:hidden; height:auto; max-height:280px; position:absolute; top: 110px;'><table id='traits-list-table' style='border: solid 1px #ddd; width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
 
                 $.each(traitsGroups, function(index,value) {
 
@@ -64,17 +64,27 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         var filterTraitsTable = function (TARGETTABLE) {
-            console.log($("#traits-filter").val());
+            //console.log($("#traits-filter").val());
 
 
                 $(TARGETTABLE).find("tr").removeClass("hidden-traits-row");
 
 
                 var searchWords = $("#traits-filter").val();
-                searchWords = searchWords.toLowerCase().split(",");
+
+                var fstChr = searchWords.charAt(0);
+
+
+                if (searchWords == "") {
+                    $(".related-words").hide("fast");
+                } else {
+
+                    searchWords = searchWords.toLowerCase().split(",");
 
 
                 var phenotypesArray = [];
+
+                var hasEql = false;
 
                 $.each(searchWords, function(index,value){
 
@@ -90,8 +100,9 @@ var mpgSoftware = mpgSoftware || {};
                             var searchWord = value.trim();
 
 
-
                             if(searchWord.indexOf("=") >= 0) {
+
+                                hasEql = true;
 
                                 searchWord = searchWord.substring(1);
                                 phenotypeString = phenotypeString.split(",");
@@ -120,11 +131,27 @@ var mpgSoftware = mpgSoftware || {};
 
                 });
 
+                    (hasEql == true)? $(".related-words").hide("fast"):  $(".related-words").show("fast");
+
+                }
+
 
                 var relatedWords = mpgSoftware.traitsFilter.showRelatedWords();
 
                 ( $("#traits-filter").val() != "" )? $(".related-words").html("").append(relatedWords) : $(".related-words").html("");
 
+            var  visibleTr = 0;
+
+            $(TARGETTABLE).find("tr").each(function() {
+
+                if ($(this).hasClass("hidden-traits-row")) {
+
+                } else {
+                    visibleTr ++;
+                }
+            });
+
+            if(visibleTr < 7) $(".related-words").hide("slow");
 
         }
 
@@ -186,6 +213,7 @@ var mpgSoftware = mpgSoftware || {};
                 returnText += wordMatch;
             }
 
+            returnText += '<a href="#javascript:;" onclick="mpgSoftware.traitsFilter.hideRelatedWords()" style="position:absolute; bottom:-2px; right:3px; font-size: 16px; color: #666;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a>';
 
             return returnText;
 
@@ -224,10 +252,14 @@ var mpgSoftware = mpgSoftware || {};
 
             $(".gene-search-wrapper").hide("slow");
             $(".variant-finder-wrapper").hide("slow");
-            $(".related-words").show("slow");
+            //$(".related-words").show("slow");
             $(".traits-list-table-wrapper").show("slow");
             $(".traits-search-close-btn").fadeIn("slow");
             mpgSoftware.traitsFilter.filterTraitsTable("#traits-list-table");
+        }
+
+        var hideRelatedWords = function() {
+            $(".related-words").hide("fast");
         }
 
         var filterOutFocus = function () {
@@ -258,7 +290,8 @@ var mpgSoftware = mpgSoftware || {};
             filterOutFocus:filterOutFocus,
             setBtnOver:setBtnOver,
             setBtnOut:setBtnOut,
-            clearTraitsSearch:clearTraitsSearch
+            clearTraitsSearch:clearTraitsSearch,
+            hideRelatedWords:hideRelatedWords
         }
     }());
 })();
