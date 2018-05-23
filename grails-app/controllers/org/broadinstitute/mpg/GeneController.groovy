@@ -250,9 +250,9 @@ class GeneController {
                                              identifiedGenes:identifiedGenes,
                                              assayId: assayId,
                                              sampleLevelSequencingDataExists: widgetService.sampleDataSuitableForGeneLevelBurdenTestsExists (),
-                                             //sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
                                              genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning()),
-                                             regionSpecificVersion:restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()
+                                             regionSpecificVersion:restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion(),
+                                             portalVersionBean:restServerService.retrieveBeanForCurrentPortal()
             ] )
         }
     }
