@@ -1226,6 +1226,7 @@ var collectingFilterValues = function (additionalKey,additionalValue,alternateVa
     }
     var sampleMetadata = getStoredSampleMetadata();
     var optionsPerFilter = generateOptionsPerFilter(sampleMetadata.filters) ;
+    var typePerFilter = generateTypePerFilter (sampleMetadata.filters) ;
     _.forEach( extractFilters(searchValue,modeledPropertyInstanceRaw), function(filterObject){
         var oneFilter = [];
         var lastFilterParms = [];
@@ -1233,7 +1234,7 @@ var collectingFilterValues = function (additionalKey,additionalValue,alternateVa
         _.forEach( filterObject, function(value, key){
             if (typeof value !== 'undefined'){
                 if (key==="cat"){
-                    oneFilter.push("\""+key+"\": \""+value+"\"");
+                    //oneFilter.push("\""+key+"\": \""+value+"\"");
                 }else{
                     var divider = value.indexOf('_');
                     if (divider>-1){
@@ -1250,7 +1251,14 @@ var collectingFilterValues = function (additionalKey,additionalValue,alternateVa
                 }
             }
         });
+
         var optionForFilter = optionsPerFilter[lastFilterName];
+        var typeForFilter = typePerFilter[lastFilterName];
+        if (typeForFilter==='INTEGER'){
+            oneFilter.push("\"cat\": \"2\"");
+        } else if (typeForFilter==='STRING'){
+            oneFilter.push("\"cat\": \"1\"");
+        }
         var numberOfFilterOptions = ((lastFilterParms)?lastFilterParms:[]);
         if (!((optionForFilter)&&
             ((optionForFilter.length==numberOfFilterOptions.length)||
@@ -1270,6 +1278,7 @@ var collectingFilterValues = function (additionalKey,additionalValue,alternateVa
         if (divider>-1){
             convertedAdditionalKey = additionalKey.substr(divider+1);
         }
+
         filterStrings.push("{\"name\": \""+convertedAdditionalKey+"\","+
             "\"parm\": \""+additionalValue+"\","+
             "\"cmp\": \"3\",\"cat\": \"1\"}");
@@ -2544,6 +2553,17 @@ var generateOptionsPerFilter = function (filterInfo) {
 };
 
 
+
+
+var generateTypePerFilter = function (filterInfo) {
+    var typePerFilter = {};
+    _.forEach(filterInfo,function(oneFilter){
+        if (typeof oneFilter.levels !== 'undefined') {
+            typePerFilter[oneFilter.name] = oneFilter.type;
+        }
+    });
+    return typePerFilter;
+};
 
 
 
