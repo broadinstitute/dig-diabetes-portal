@@ -290,7 +290,7 @@ environments {
 
 //        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
-       grails.serverURL = "http://www.type2diabetesgenetics.org"
+//       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
@@ -310,8 +310,8 @@ environments {
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
-//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) test site
-//        grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
+        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) test site
+ //       grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
@@ -559,7 +559,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "als"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -723,6 +723,39 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,0,0,
                                           0
+                                  )
+                                  ,
+                                  new PortalVersionBean("als",
+                                          "ALS",
+                                          "mdv60",
+                                          "ALS", // make sure your default phenotype exists in your default data set
+                                          "GWAS_ALS2018_mdv60",// used to pick a default data set for a gene query
+                                          [""],// no tissue for ALS portal
+                                          ["NEUROLOGICAL"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "images/epilepsy/front_epilepsy_logo_2018.svg",
+                                          "portal.epilepsy.header.tagline",
+                                          [],
+                                          ["CDKL5"],
+                                          [],
+                                          ["chr14:35,907,000-36,400,000"],
+                                          "images/epilepsy/front_epilepsy_bg_2018.png",
+                                          "",
+                                          "images/epilepsy/epilepsy_header_logo.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '5414069947481666863',
+                                          0,
+                                          1,
+                                          0,
+                                          1,
+                                          0,
+                                          0,0,0,
+                                          0
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -757,3 +790,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
+
+
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
