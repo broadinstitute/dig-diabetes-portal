@@ -3,6 +3,7 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core, crossMap,traitInfo"/>
+    <r:require modules="traitSample"/>
     <r:layoutResources/>
 </head>
 
