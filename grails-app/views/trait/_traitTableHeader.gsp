@@ -35,8 +35,8 @@
 
 
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
-<p><g:message code="informational.traitTableHeader.help2"></g:message></p>
-<p><g:message code="informational.traitTableHeader.help3"></g:message></p>
+%{--<p><g:message code="informational.traitTableHeader.help2"></g:message></p>--}%
+%{--<p><g:message code="informational.traitTableHeader.help3"></g:message></p>--}%
 <p>&nbsp;</p>
 <div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
     <p class= "dk-footnote" style="width:83%;">Dataset</p>
@@ -47,7 +47,7 @@
 </div>
 
 
-<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;" >
+<div style = "display:none; width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;" >
     <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
     <select style = "width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
         <option value="0.1000001" >0.1 </option>
