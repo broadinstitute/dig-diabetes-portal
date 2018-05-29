@@ -526,7 +526,7 @@
                                             <ul style="margin: 0 0 0 10px">
                                                  <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
                                                  <li>associated with {{pname}}</li>
-                                                 <li>and with allele frequency (MAF) greater than 5%</li>
+                                                 <li>with allele frequency (MAF) greater than 5%</li>
                                             </ul>
                                          </div>
                                     </div>
