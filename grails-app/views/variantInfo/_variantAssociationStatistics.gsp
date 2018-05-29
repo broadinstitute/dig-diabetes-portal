@@ -48,7 +48,9 @@
 </script>
 
 <g:if test="${portalVersionBean.getExposePhewasModule()}">
-    <p><g:message code="variant.PheWAShelp1"></g:message></p>
+    <p><g:message code="variant.PheWAShelp1a"></g:message>
+        %{--<g:message code="variant.PheWAShelp1b"></g:message>--}%
+    </p>
     <p><g:message code="variant.PheWAShelp2"></g:message></p>
 </g:if>
 
