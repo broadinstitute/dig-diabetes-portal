@@ -3,7 +3,12 @@
     dbSnpId: for the snp id, if provided (from the trait info page)
     openOnLoad: if accordion closed at start
 -->
-
+<script>
+    var phenotypeDatasetMapping = {};
+    <g:applyCodec encodeAs="none">
+    phenotypeDatasetMapping = ${phenotypeDatasetMapping};
+    </g:applyCodec>
+</script>
 <style>
 tr.collapse.in {
     display: table-row;

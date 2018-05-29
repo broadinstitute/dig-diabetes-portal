@@ -513,8 +513,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 0);
                 obj['P_VALUEV'] = (val) ? val : 0;
             } else if (key === 'BETA') {
-                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
-                obj['BETAV'] = Math.exp((val) ? val : 0);
+                obj['BETA'] = (val)?UTILS.realNumberFormatter(val):'';
+                  obj['BETAV'] = ((val) ? val : 0);
+                 // obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
+                 // obj['BETAV'] = Math.exp((val) ? val : 0);
             }
             else {
                 obj[key] = (val) ? val : '';
@@ -978,6 +980,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
     var refreshTopVariants = function ( callBack, params ) {
+        loading.show();
         var rememberCallBack = callBack;
         var rememberParams = params;
         var propertiesToIncludeQuoted = [];
@@ -1014,6 +1017,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             async: true,
             success: function (data) {
                 rememberCallBack(data,rememberParams);
+                loading.show();
             },
             error: function (jqXHR, exception) {
                 core.errorReporter(jqXHR, exception);
@@ -1172,7 +1176,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildNewCredibleSetPresentation = function (){
-        var loading = $('#rSpinner');
+        loading.show();
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         var additionalData = signalSummarySectionVariables;
         var sampleGroupsWithCredibleSetNames = mpgSoftware.regionInfo.getSampleGroupsWithCredibleSetNames();
@@ -1211,7 +1215,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutCredibleSetPresentation = function (data,additionalData){
-        var loading = $('#rSpinner');
+        loading.show();
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
             mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
@@ -1247,7 +1251,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var buildOutIncredibleSetPresentation = function (data,additionalData){
-        var loading = $('#rSpinner');
+        loading.show();
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
         //     mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
@@ -1284,6 +1288,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
     var refreshTopVariantsDirectlyByPhenotype = function (phenotypeName, callBack, parameter) {
+        loading.show();
         var rememberCallBack = callBack;
         var rememberParameter = parameter;
         var coreVariables = getSignalSummarySectionVariables();
@@ -1491,14 +1496,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var selectorInfo = [];
         var displayInfo = [];
         if (additionalParameters.portalTypeString==='ibd'){
-            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
             selectorInfo = getParkerData(selectorInfo,[]);
-            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
+            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
             displayInfo = getParkerData(displayInfo,[]);
         } else {
-            //selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
-            //selectorInfo = getParkerData(selectorInfo,[]);
-            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
         }
 
 

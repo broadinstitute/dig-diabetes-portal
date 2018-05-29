@@ -144,7 +144,7 @@ digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-20
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
 // this will be your default
-defaultRestServer = digawsqanewKB
+defaultRestServer = digawsprodmiKB
 
 getRestServerList = [
         digdevlocalServer,
@@ -335,10 +335,6 @@ environments {
 
 //        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 
-
-//         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
-
-                                        // CVDKP (MI portal) production
 
 //        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
 //I         grails.serverURL = "http://epilepsytest.us-east-1.elasticbeanstalk.com"                  // Epilepsy test portal
@@ -571,6 +567,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         "mdv31",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
+                                                        ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                                        ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
                                                         ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CORONARY ARTERY DISEASE", "BLOOD PRESSURE"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
@@ -603,6 +601,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "mdv70",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
+                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
                                                           ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
@@ -635,6 +635,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "mdv92",
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
+                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["SkeletalMuscle"],
                                                           ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
                                                           [],
@@ -667,7 +669,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "Variant to Function",
                                                           "mdv80",
                                                           "IBD",
-                                                          "GWAS_IBDGenomics_eu_mdv80",
+                                                            "GWAS_IBDGenomics_eu_mdv80",
+                                                          ["DNase"],
+                                                          ["DNase"],
                                                           ["E071","E106","E088","E085"],
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
@@ -701,6 +705,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "mdv100",
                                           "GGE", // make sure your default phenotype exists in your default data set
                                           "ExSeq_Epi25k_mdv100",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["AnteriorCaudate"],
                                           ["PSYCHIATRIC"], // most important phenotype group name
                                           [],
@@ -733,6 +739,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "mdv110",
                                           "SleepChronotype", // make sure your default phenotype exists in your default data set
                                           "GWAS_UKBB_mdv110",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["AnteriorCaudate"],
                                           ["SLEEP AND CIRCADIAN", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
@@ -761,4 +769,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
-

@@ -23,6 +23,7 @@ class TraitControllerUnitSpec extends Specification {
     void "don't crash if you receive no parameters with a traitInfo"() {
         given:
         controller.sharedToolsService = Mock(SharedToolsService)
+        controller.metaDataService = Mock(MetaDataService)
 
         when:
         controller.traitInfo()
@@ -36,6 +37,7 @@ class TraitControllerUnitSpec extends Specification {
     void "test traitInfo"() {
         given:
         controller.sharedToolsService = Mock(SharedToolsService)
+        controller.metaDataService = Mock(MetaDataService)
 
         when:
         params.id = 'rs560887'

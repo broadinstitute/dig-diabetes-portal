@@ -1,5 +1,3 @@
-<script src="https://unpkg.com/react@15.6.1/dist/react.js"></script>
-<script src="https://unpkg.com/react-dom@15.6.1/dist/react-dom.js"></script>
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
 
 
@@ -35,21 +33,20 @@
 
 
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
-%{--<p><g:message code="informational.traitTableHeader.help2"></g:message></p>--}%
-%{--<p><g:message code="informational.traitTableHeader.help3"></g:message></p>--}%
+<p><g:message code="informational.traitTableHeader.help2"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help3"></g:message></p>
 <p>&nbsp;</p>
-<div style = "width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;">
+<div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Dataset</p>
     <span id="traitTableDescription"></span>
-    <select  style = " width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
     </select>
-
 </div>
 
 
-<div style = "display:none; width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 5px; margin:0; font-size: 16px; padding-bottom: 100px;" >
+<div style = "width: auto;" >
     <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
-    <select style = "width:600px; width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
+    <select style = "width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(this)">
         <option value="0.1000001" >0.1 </option>
         <option value="0.2" >0.2 </option>
         <option value="0.4" >0.4 </option>
@@ -66,8 +63,8 @@
 <style>
 .mychart {width:100% !important; height:740px !important;}
 </style>
-<div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
-<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
+<div style="text-align: right; clear: left">Scroll to zoom. Roll over dots for variant information.</div>
+<div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px; clear:left;"></div>
 
 
 

@@ -82,11 +82,11 @@ var mpgSoftware = mpgSoftware || {};
         var getDisplayAssayIds = function() {
             return convertUserChoicesIntoAssayIds(getDisplayValuesAndText());
         };
-        var getDefaultTissueRegionOverlapMatcher = function (portalType,displayNumber){
+        var getDefaultTissueRegionOverlapMatcher = function (additionalParameters,displayNumber){
             if (displayNumber === 0){
-                return defaultTissueRegionOverlapMatcher[portalType];
+                return additionalParameters.tissueRegionOverlapMatcher ;
             } else if (displayNumber === 1){
-                return defaultTissueRegionOverlapDisplayMatcher[portalType];
+                return  additionalParameters.tissueRegionOverlapDisplayMatcher
             }
         };
         var getDevelopingTissueGrid = function (){
@@ -929,11 +929,11 @@ var mpgSoftware = mpgSoftware || {};
                         buttonWidth: '60%',onChange: function() {
                             console.log($('#credSetSelectorChoice').val());
                         }});
-                    $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+                    $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
                     $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
                         // allSelectedText: 'All Selected',
                         buttonWidth: '60%'});
-                    $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
+                    $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
                     $('#toggleVarianceTableLink').click();
                     // $('#credSetSelectorChoice').on('change', function() {
                     //     console.log("foo"+$(this).val());
