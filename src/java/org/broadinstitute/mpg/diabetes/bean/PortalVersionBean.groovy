@@ -16,6 +16,8 @@ class PortalVersionBean {
     private String mdvName
     private String phenotype
     private String dataSet
+    List<String> tissueRegionOverlapMatcher
+    List<String> tissueRegionOverlapDisplayMatcher
     private List<String> tissues
     private List<String> orderedPhenotypeGroupNames
     private List<String> excludeFromLZ
@@ -51,6 +53,8 @@ class PortalVersionBean {
                              String mdvName,
                              String phenotype,
                              String dataSet,
+                             List<String> tissueRegionOverlapMatcher,
+                             List<String> tissueRegionOverlapDisplayMatcher,
                              List<String> tissues,
                              List<String> orderedPhenotypeGroupNames,
                              List<String> excludeFromLZ,
@@ -84,6 +88,8 @@ class PortalVersionBean {
         this.mdvName = mdvName;
         this.phenotype = phenotype;
         this.dataSet = dataSet
+        this.tissueRegionOverlapMatcher = tissueRegionOverlapMatcher
+        this.tissueRegionOverlapDisplayMatcher = tissueRegionOverlapDisplayMatcher
         this.tissues = tissues
         this.epigeneticAssays = epigeneticAssays
         this.orderedPhenotypeGroupNames = orderedPhenotypeGroupNames
@@ -132,6 +138,14 @@ class PortalVersionBean {
 
     public String getDataSet() {
         return dataSet
+    }
+
+    public List<String> getTissueRegionOverlapMatcher() {
+        return tissueRegionOverlapMatcher
+    }
+
+    public List<String> getTissueRegionOverlapDisplayMatcher() {
+        return tissueRegionOverlapDisplayMatcher
     }
 
     public List<String> getTissues() {
@@ -257,6 +271,8 @@ class PortalVersionBean {
 "mdvName":"${getMdvName()}",
 "phenotype":"${getPhenotype()}",
 "dataSet":"${getDataSet()}",
+"tissueRegionOverlapMatcher":"${getTissueRegionOverlapMatcher().toString()}",
+"tissueRegionOverlapDisplayMatcher":"${getTissueRegionOverlapDisplayMatcher().toString()}",
 "tissues":"${getTissues().toString()}",
 "orderedPhenotypeGroupNames":"${getOrderedPhenotypeGroupNames().toString()}",
 "excludeFromLZ":"${getExcludeFromLZ().toString()}",
