@@ -148,7 +148,7 @@
 
 <p><g:message code="informational.data.project.70KforT2D"></g:message></p>
 
-<h4>Experiment summary</h4>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.70KforT2D"></g:message></p>
 
 

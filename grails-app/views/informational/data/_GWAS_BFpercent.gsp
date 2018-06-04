@@ -84,23 +84,19 @@
 <tr><td>3413</td><td>2223</td><td>The Whitehall II study (Whitehall)</td><td>European</td><td>Metabochip</td></tr>
 </table>
 
-<h4><g:message code="informational.shared.headers.project"></g:message></h4>
 
 
-<p><g:message code="informational.data.project.70KforT2D"></g:message></p>
-
-<h4>Experiment summary</h4>
-<p><g:message code="informational.data.exptsumm.70KforT2D"></g:message></p>
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.BFpercent"></g:message></p>
 
 
-<h4>Accessing 70KforT2D GWAS data</h4>
+<h4>Accessing Body fat percentage GWAS data</h4>
 
-<p><g:message code="informational.data.accessing.70KforT2D"></g:message></p>
+    <p><g:message code="informational.data.accessing.BFpercent1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.BFpercent2"></g:message></p>
 
 
-<h4>External Links to 70KforT2D GWAS data</h4>
-<p><g:message code="informational.data.download.70KforT2D"></g:message></p>
-<p><g:message code="informational.data.external.70KforT2D1"></g:message></p>
-<p><g:message code="informational.data.external.70KforT2D2"></g:message></p>
+
+
+
 
 </script>
