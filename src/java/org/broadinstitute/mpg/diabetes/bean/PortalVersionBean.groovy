@@ -46,6 +46,7 @@ class PortalVersionBean {
     private Integer exposeForestPlot
     private Integer exposeTraitDataSetAssociationView
     private Integer exposeGreenBoxes
+    private Integer utilizeBiallelicGait
 
 
     public PortalVersionBean(String portalType,
@@ -82,7 +83,8 @@ class PortalVersionBean {
                              Integer exposePhewasModule,
                              Integer exposeForestPlot,
                              Integer exposeTraitDataSetAssociationView,
-                             Integer exposeGreenBoxes ){
+                             Integer exposeGreenBoxes,
+                             Integer utilizeBiallelicGait){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -118,6 +120,7 @@ class PortalVersionBean {
         this.exposeForestPlot = exposeForestPlot
         this.exposeTraitDataSetAssociationView = exposeTraitDataSetAssociationView
         this.exposeGreenBoxes = exposeGreenBoxes
+        this.utilizeBiallelicGait = utilizeBiallelicGait
     }
 
     public String getPortalType() {
@@ -262,6 +265,12 @@ class PortalVersionBean {
         return exposeGreenBoxes
     }
 
+    public Integer getUtilizeBiallelicGait(){
+        return utilizeBiallelicGait
+    }
+
+
+
 
 
 
@@ -300,7 +309,8 @@ class PortalVersionBean {
 "exposePhewasModule":${getExposePhewasModule()},
 "exposeForestPlot":${getExposeForestPlot()},
 "exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
-"exposeGreenBoxes":${getExposeGreenBoxes()}
+"exposeGreenBoxes":${getExposeGreenBoxes()},
+"utilizeBiallelicGait":${getUtilizeBiallelicGait()}
 }""".toString()
     }
 }

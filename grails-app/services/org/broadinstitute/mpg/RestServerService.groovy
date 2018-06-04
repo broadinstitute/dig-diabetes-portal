@@ -75,6 +75,7 @@ class RestServerService {
     private String GET_BIG_WIG_DATA = "getBigWigData"
     private String GET_CLUMP_DATA = "getClumpData"
     private String GET_EPIGENETIC_POSSIBLE_DATA = "getEpigenomicData"
+    private String GET_MULTI_ALLELIC_HACK = "getAggregatedData/multiAllelicHack"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -351,12 +352,13 @@ class RestServerService {
                     existingPortalVersionBean.getExposePhewasModule(),
                     existingPortalVersionBean.getExposeForestPlot(),
                     existingPortalVersionBean.getExposeTraitDataSetAssociationView(),
-                    existingPortalVersionBean.getExposeGreenBoxes()
+                    existingPortalVersionBean.getExposeGreenBoxes(),
+                    existingPortalVersionBean.getUtilizeBiallelicGait()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0 )
+                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -727,6 +729,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_EPIGENETIC_POSSIBLE_DATA, currentRestServer() );
         return tempObject;
     }
+
+    public JSONObject postMultiAllelicHackRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_MULTI_ALLELIC_HACK, currentRestServer() );
+        return tempObject;
+    }
+
 
 
     /**
