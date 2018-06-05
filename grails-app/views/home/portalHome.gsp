@@ -6,6 +6,7 @@
     <r:require modules="core"/>
     <r:require modules="portalHome"/>
     <r:require module="mustache"/>
+    <r:require module="traitFilter"/>
     <r:layoutResources/>
 
 </head>
