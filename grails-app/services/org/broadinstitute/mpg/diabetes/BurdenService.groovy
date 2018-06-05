@@ -381,8 +381,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
             // filter the larger json object based on the variants that passed the above
-            jsonObject.variants = jsonObject.variants.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
-            jsonObject.numRecords = jsonObject.variants.size()
+            jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
+            jsonObject.numRecords = jsonObject.variants?.size()
 
             // get the list of variants back
             retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "", MetaDataService.METADATA_VARIANT )
