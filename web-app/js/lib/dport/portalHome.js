@@ -190,7 +190,7 @@ var mpgSoftware = mpgSoftware || {};
                         } else if (availPhenotypes.length > 0) {
                             $('#trait-input').val(availPhenotypes[0]);
                         }
-
+console.log(data);
                         mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                     }
                 },

@@ -10,6 +10,7 @@
     <r:require modules="burdenTest"/>
     <r:require modules="multiTrack"/>
     <r:require modules="matrix"/>
+    <r:require modules="traitSample"/>
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
 
     <r:layoutResources/>

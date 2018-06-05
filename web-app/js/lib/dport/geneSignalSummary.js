@@ -513,8 +513,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 obj['P_VALUE'] = UTILS.realNumberFormatter((val) ? val : 0);
                 obj['P_VALUEV'] = (val) ? val : 0;
             } else if (key === 'BETA') {
-                obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
-                obj['BETAV'] = Math.exp((val) ? val : 0);
+                obj['BETA'] = (val)?UTILS.realNumberFormatter(val):'';
+                  obj['BETAV'] = ((val) ? val : 0);
+                 // obj['BETA'] = UTILS.realNumberFormatter(Math.exp((val) ? val : 0));
+                 // obj['BETAV'] = Math.exp((val) ? val : 0);
             }
             else {
                 obj[key] = (val) ? val : '';
@@ -1494,14 +1496,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var selectorInfo = [];
         var displayInfo = [];
         if (additionalParameters.portalTypeString==='ibd'){
-            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
             selectorInfo = getParkerData(selectorInfo,[]);
-            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
+            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
             displayInfo = getParkerData(displayInfo,[]);
         } else {
-            //selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
-            //selectorInfo = getParkerData(selectorInfo,[]);
-            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
         }
 
 

@@ -5,6 +5,7 @@ import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.json.builder.LocusZoomJsonBuilder
+import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
@@ -89,17 +90,17 @@ class WidgetService {
             case "ORBLOCK":
             case "ANDBLOCK": break;
             case "INTEGER":
-//                if (propertyValue?.length() < 1) {
-//                    generateFilter = false
-//                } else { // currently we can only send in one value.
-//                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
-//                    if (listOfSelectedValues.size() > 1) {
-//                        generateFilter = false
-//                    } else {
-//                        propertyValue = "${propertyValue}"
-//                    }
-//                }
-//                break;
+                if (propertyValue?.length() < 1) {
+                    generateFilter = false
+                } else { // currently we can only send in one value.
+                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
+                    if (listOfSelectedValues.size() > 1) {
+                        generateFilter = false
+                    } else {
+                        propertyValue = "${propertyValue}"
+                    }
+                }
+                break;
             case "STRING":
                 if (propertyValue?.length() < 1) {
                     generateFilter = false
@@ -232,7 +233,7 @@ class WidgetService {
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, true, existingFilterList)
             } else if (filterParameter ==~ /\].+\,.+\[/) {  // this could be a extremes filter
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, false, existingFilterList)
-            } else if ((filterParameter ==~ /.+\,.+/)&&(map.cat=="1")) {  // Has at least one comma and the filter is categorical.  Maybe there are multiple elements that need to be simultaneously selected
+            } else if ((filterParameter ==~ /.+\,.+/)&&((map.cat=="1")||(map.cat=="2"))) {  // Has at least one comma and the filter is categorical.  Maybe there are multiple elements that need to be simultaneously selected
                 existingFilterList = convertMultipleCategoricalsIntoFilterList(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)
             } else {
                 existingFilterList = addSingleFilter(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)
@@ -1369,6 +1370,28 @@ class WidgetService {
     public List<String> getLocusZoomEndpointList() {
         return locusZoomEndpointList
     }
+
+
+
+    public Boolean sampleDataSuitableForGeneLevelBurdenTestsExists (){
+        List<Experiment> experimentList =  metaDataService.getExperimentByVersionAndTechnology(metaDataService.getDataVersion(),
+                "ExSeq", MetaDataService.METADATA_SAMPLE )
+        Boolean suitableDataExists = false
+        for (Experiment experiment in experimentList){
+            for (SampleGroup sampleGroup in experiment.sampleGroups){
+                if (sampleGroup.hasMeaning("VARIANT")){
+                    suitableDataExists = true
+                }
+            }
+        }
+        return suitableDataExists
+    }
+
+
+
+
+
+
 
     /**
      * returns a list of phenotypes to select from for the LZ plot display
