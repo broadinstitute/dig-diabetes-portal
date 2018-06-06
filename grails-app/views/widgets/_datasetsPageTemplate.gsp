@@ -65,11 +65,12 @@
 <g:render template="./data/GWAS_MetaStroke" />
 <g:render template="./data/GWAS_HPTxNCGM" />
 <g:render template="./data/GWAS_VHIR" />
-<g:render template="./data/GWAS_DIAMANTE_GRS" />
 <g:render template="./data/GWAS_GiantUKBB" />
 <g:render template="./data/GWAS_BFpercent" />
 <g:render template="./data/GWAS_EGGC" />
 <g:render template="./data/GWAS_HRgene" />
+<g:render template="./data/GWAS_AGEN_ea" />
+<g:render template="./data/GWAS_DCSP2_ea" />
 
 
 
