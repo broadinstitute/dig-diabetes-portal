@@ -138,7 +138,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         filterList << """{"parameter": "most_del_score", "operator": "${operand}", "value": ${mostDelScore}}""".toString()
 
         // super hack
-        filterList << """{"parameter": "p_value", "operator": "lt", "value": "0.01"}""".toString()
+        //filterList << """{"parameter": "p_value", "operator": "lt", "value": "0.01"}""".toString()
 
         if (geneString){
             filterList << """{"parameter": "gene", "operator": "eq", "value": "${geneString}"}""".toString()
@@ -381,7 +381,12 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
             // filter the larger json object based on the variants that passed the above
-            jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
+            if (restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                jsonObject.variants = jsonObject.variants?.findAll{Map v->return burdenVariantList.contains(v["VAR_ID"])}
+            } else {
+                jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
+            }
+
             jsonObject.numRecords = jsonObject.variants?.size()
 
             // get the list of variants back

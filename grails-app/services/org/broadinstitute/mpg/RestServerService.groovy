@@ -353,12 +353,13 @@ class RestServerService {
                     existingPortalVersionBean.getExposeForestPlot(),
                     existingPortalVersionBean.getExposeTraitDataSetAssociationView(),
                     existingPortalVersionBean.getExposeGreenBoxes(),
-                    existingPortalVersionBean.getUtilizeBiallelicGait()
+                    existingPortalVersionBean.getUtilizeBiallelicGait(),
+                    existingPortalVersionBean.getUtilizeUcsdData()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0 )
+                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -2390,6 +2391,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         restApiParameterList << "\"chrom\": \"${chromosome}\""
         restApiParameterList << "\"start_pos\": ${startPosition}"
         restApiParameterList << "\"end_pos\": ${endPosition}"
+        if (retrieveBeanForCurrentPortal().getUtilizeUcsdData()){
+            restApiParameterList << "\"host\": \"ucsd\""
+        }
         if (source){
             restApiParameterList << "\"source\": \"${source}\""
         }
@@ -2652,13 +2656,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
-                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
-                    keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+                if (!retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                    for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
+                        keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+                    }
+                }
+                def valueToLoopOver
+                if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
+                }else {
+                    valueToLoopOver = keys
                 }
                 List<String> variantSpecificList = []
-                for (String key in keys) {
-                    ArrayList valueArray = apiResults.variants[j][key]
-                    def value = valueArray.findAll { it }[0]
+                for (def key in valueToLoopOver) {
+                    def value
+                    if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                        value = apiResults.variants[j][key]
+                    } else {
+                        ArrayList valueArray = apiResults.variants[j][key]
+                        value = valueArray.findAll { it }[0]
+                    }
                     if (value instanceof String) {
                         String stringValue = value as String
                         variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
