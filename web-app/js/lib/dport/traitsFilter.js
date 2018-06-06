@@ -15,19 +15,36 @@ var mpgSoftware = mpgSoftware || {};
 
             var traitsGroups = traitsJson.datasetOrder;
 
-            if(PAGE == "home") {
-                $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:20px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></div>');
-                $(".traits-filter-wrapper").append("<div class='related-words' style='position:absolute; z-index: 100; top:104px; background-color: #fff; padding: 5px; display:none; width: 93%; box-shadow: 0 3px 5px rgba(0,0,0,.5); border-radius: 5px;'></div><div class='traits-list-table-wrapper' style='display:none; width:93%; overflow-y:auto;overflow-x:hidden; height:auto; max-height:280px; position:absolute; top: 110px;'><table id='traits-list-table' style='border: solid 1px #ddd; width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
+            var totalTraits = 0;
+
+            var minTraitsNum = 30;
+
+            $.each(traitsGroups, function(index,value) {
+                var traitsGroup = value;
+                var eachTraits = traitsJson.dataset[value].length;
+                totalTraits += eachTraits;
+            });
+
+            if(totalTraits <= minTraitsNum) {
+
+                $(".traits-filter-ui").hide("slow");
+                $(".traits-select-ui").show("slow");
+
+            } else {
+                if(PAGE == "home") {
+                    $(".traits-filter-wrapper").append('<div class="traits-search-close-btn" onclick="mpgSoftware.traitsFilter.filterOutFocus()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" style="font-size:20px; position: absolute; top:-20px; right:-20px;display:none; color: #666;"><span class="glyphicon glyphicon-remove-sign" aria-hidden="true"></span></div>');
+                    $(".traits-filter-wrapper").append("<div class='related-words' style='position:absolute; z-index: 100; top:104px; background-color: #fff; padding: 5px; display:none; width: 93%; box-shadow: 0 3px 5px rgba(0,0,0,.5); border-radius: 5px;'></div><div class='traits-list-table-wrapper' style='display:none; width:93%; overflow-y:auto;overflow-x:hidden; height:auto; max-height:280px; position:absolute; top: 110px;'><table id='traits-list-table' style='border: solid 1px #ddd; width: 100%; font-size: 14px; '><tbody></tbody></table></div>")}
 
                 $.each(traitsGroups, function(index,value) {
 
-                var traitsGroup = value;
-                var eachTraits = traitsJson.dataset[value];
+                    var traitsGroup = value;
+                    var eachTraits = traitsJson.dataset[value];
 
-                $.each(eachTraits, function(TraitsIndex,Traitsvalue) {
-                    $("#traits-list-table").find("tbody").append("<tr class='hidden-traits-row1' style='border-bottom: solid 1px #ddd; ' phenotype='"+Traitsvalue[1]+","+traitsGroup+"'><td style='width:50%;padding:5px 10px;'><a href='javascript:;' style='color:#fff; text-decoration: underline;' onclick='mpgSoftware.traitsFilter.launchTraitSearch(event)' phenotype='"+Traitsvalue[0]+"'>"+Traitsvalue[1]+"</a></td><td style='width:50%;border-left: solid 1px #ddd; padding:5px 10px;'>"+ traitsGroup+"</td></tr>");
+                    $.each(eachTraits, function(TraitsIndex,Traitsvalue) {
+                        $("#traits-list-table").find("tbody").append("<tr class='hidden-traits-row1' style='border-bottom: solid 1px #ddd; ' phenotype='"+Traitsvalue[1]+","+traitsGroup+"'><td style='width:50%;padding:5px 10px;'><a href='javascript:;' style='color:#fff; text-decoration: underline;' onclick='mpgSoftware.traitsFilter.launchTraitSearch(event)' phenotype='"+Traitsvalue[0]+"'>"+Traitsvalue[1]+"</a></td><td style='width:50%;border-left: solid 1px #ddd; padding:5px 10px;'>"+ traitsGroup+"</td></tr>");
+                    })
                 })
-            })
+            }
 
             $("#home_spinner").css("display","none");
         }
