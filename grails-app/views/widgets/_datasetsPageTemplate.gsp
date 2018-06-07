@@ -71,7 +71,6 @@
 <g:render template="./data/GWAS_HRgene" />
 <g:render template="./data/GWAS_AGEN_ea" />
 <g:render template="./data/GWAS_DCSP2_ea" />
-<g:render template="./data/GWAS_DIAMANTE_GRS" />
 <g:render template="./data/ExSeq_52k" />
 
 
