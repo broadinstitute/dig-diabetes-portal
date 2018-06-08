@@ -292,7 +292,51 @@ var mpgSoftware = mpgSoftware || {};
 
             if (showPhePlot == true) {
 
-                mpgSoftware.traitSample.renderTraitSamplePlot();
+                var plotLook = [];
+
+
+                plotLook.yMin = $("#pvalue-min").val();
+                plotLook.yMax = ($("#pvalue-max").val() == "")? 1000000 : $("#pvalue-max").val();
+                plotLook.xMin = $("#sample-min").val()*1000;
+                plotLook.xMax = ($("#sample-max").val() == "" || $("#sample-max").val() == 0)? 10000000000000 : $("#sample-max").val()*1000;
+                plotLook.height = 450;
+                plotLook.leftBumper = 50;
+                plotLook.rightBumper = 50;
+                plotLook.topBumper = 30;
+                plotLook.bottomBumper = 140;
+                plotLook.plotWrapper = ".traits-svg-wrapper";
+                plotLook.filterExist = true;
+
+                var plotData = [];
+
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                    if($(this).hasClass("hidden-traits-row")) {
+
+                    } else {
+
+                        if(mpgSoftware.traitSample.getLogValue($(this).find("td").eq(2).text()) < plotLook.yMax && mpgSoftware.traitSample.getLogValue($(this).find("td").eq(2).text()) > plotLook.yMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) > plotLook.xMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) < plotLook.xMax) {
+
+                            var eachDataset = {};
+                            eachDataset.dataset = $(this).attr("dataset");
+                            eachDataset.phenotype = $(this).find("td").eq(0).text();
+                            eachDataset.logValue = mpgSoftware.traitSample.getLogValue($(this).find("td").eq(2).text());
+                            eachDataset.pvalue = $(this).find("td").eq(2).text();
+                            eachDataset.effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
+                            eachDataset.oddsRatio = parseFloat($(this).find("td").eq(4).text());
+                            eachDataset.maf = $(this).find("td").eq(5).text();
+                            eachDataset.sample = parseFloat(parseFloat($(this).find("td").eq(7).text()));
+                            eachDataset.group = $(this).attr("phenotype").split(",")[1];
+
+                            plotData.push(eachDataset);
+                        }
+                    }
+                });
+
+
+                //mpgSoftware.traitSample.renderTraitSamplePlot(plotData, pvalueMin,pvalueMax,sampleMin,sampleMax,plotWrapper);
+
+                mpgSoftware.traitSample.renderTraitSamplePlot(plotData, plotLook);
 
             } else {
                 $("#dkPhePlot").css("display","none");
@@ -303,14 +347,39 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        var resetPhePlotAndTable = function(PHENOTYPE) {
+         var getLogValue = function(pValue) {
+            var logValue;
+            if(pValue != ""){
+                if (pValue.indexOf("e") >= 0) {
+
+                    var pValues = pValue.split("e-");
+                    var num1 = pValues[0];
+                    var num2 = Math.pow(10, parseFloat(pValues[1]));
+                    var num3 = num1/num2;
+                    logValue = -Math.log10(num3);
+
+                    //console.log(num1 +" : "+ num2 +" : "+ num3 +" : "+ logValue)
+                } else {
+                    logValue = -Math.log10(pValue);
+                }
+            } else {
+                logValue = 0;
+            }
+
+            return logValue;
+        }
+
+        var resetPhePlotAndTable = function(PHENOTYPE,DATASET) {
 
             var phenotypeName = PHENOTYPE || "";
+            var datasetMin = DATASET-(DATASET*0.01) || "";
+            var datasetMax = DATASET+(DATASET*0.01) || "";
+
             $("#traits_table_filter").val(PHENOTYPE);
             $("#pvalue-min").val("");
             $("#pvalue-max").val("");
-            $("#sample-min").val("");
-            $("#sample-max").val("");
+            $("#sample-min").val(datasetMin);
+            $("#sample-max").val(datasetMax);
             $("#phePlotGroups").val("");
             mpgSoftware.traitSample.filterTraitsTable();
         }
@@ -342,46 +411,30 @@ var mpgSoftware = mpgSoftware || {};
 
         }
 
-        var renderTraitSamplePlot = function() {
+
+
+        var renderTraitSamplePlot = function(PLOTDATA,PLOTLOOK) {
+
+            var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
+
+            var yMin = PLOTLOOK.yMin;
+            var yMax = PLOTLOOK.yMax;
+            var xMin = PLOTLOOK.xMin;
+            var xMax = PLOTLOOK.xMax;
+            var plotWrapper = PLOTLOOK.plotWrapper;
+
+            w = $(plotWrapper).width(), h = PLOTLOOK.height, xbumperLeft = PLOTLOOK.leftBumper, xbumperRight = PLOTLOOK.rightBumper, ybumperTop = PLOTLOOK.topBumper, ybumperBottom = PLOTLOOK.bottomBumper;
+
+            console.log(PLOTLOOK.filterExist);
+
 
             ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
             ($("#phePlotTooltip").find(".pointer").length)? "" : d3.select("#phePlotTooltip").append("div").attr("class","pointer");
 
 
-            var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
-            var pvalueMin = $("#pvalue-min").val();
-            var pvalueMax = ($("#pvalue-max").val() == "")? 1000000 : $("#pvalue-max").val();
-            var sampleMin = $("#sample-min").val()*1000;
-            var sampleMax = ($("#sample-max").val() == "" || $("#sample-max").val() == 0)? 10000000000000 : $("#sample-max").val()*1000;
 
-            var traitsTableData = [];
 
-            $("#traitsPerVariantTableBody").find("tr").each(function() {
-
-                if($(this).hasClass("hidden-traits-row")) {
-
-                } else {
-
-                    if(getLogValue($(this).find("td").eq(2).text()) < pvalueMax && getLogValue($(this).find("td").eq(2).text()) > pvalueMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) > sampleMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) < sampleMax) {
-
-                        var eachDataset = {};
-                        eachDataset.dataset = $(this).attr("dataset");
-                        eachDataset.phenotype = $(this).find("td").eq(0).text();
-                        eachDataset.logValue = getLogValue($(this).find("td").eq(2).text());
-                        eachDataset.pvalue = $(this).find("td").eq(2).text();
-                        eachDataset.effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
-                        eachDataset.oddsRatio = parseFloat($(this).find("td").eq(4).text());
-                        eachDataset.maf = $(this).find("td").eq(5).text();
-                        eachDataset.sample = parseFloat(parseFloat($(this).find("td").eq(7).text()));
-                        eachDataset.group = $(this).attr("phenotype").split(",")[1];
-
-                        traitsTableData.push(eachDataset);
-                    }
-                }
-
-            });
-
-            traitsTableData = traitsTableData.sort(function (a, b) {
+            var traitsTableData = PLOTDATA.sort(function (a, b) {
                 return  b.logValue - a.logValue ;
             });
 
@@ -476,30 +529,26 @@ var mpgSoftware = mpgSoftware || {};
             
 
 
-            w = $("#traitsPerVariantTable").width(), h = 450, xbumperLeft = 50, xbumperRight = 50, ybumperTop = 30, ybumperBottom = 140;
 
 
-            $(".traits-svg-wrapper").html("");
 
-            $(".traits-svg-wrapper").append('<div class="phenotypes-for-plot" style="margin: 5px 0 5px 0;"></div>');
-
-
+            $(plotWrapper).html("");
 
             //console.log(phenotypesArray);
 
 
             var x = d3.scale.linear()
-                .domain([sampleMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.02])
+                .domain([xMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.02])
                 .range([xbumperLeft, w-xbumperRight]);
 
             var y = d3.scale.linear()
-                .domain([pvalueMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.02])
+                .domain([yMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.02])
                 .range([h-ybumperBottom, ybumperTop]);
 
             arc = d3.svg.symbol().type('triangle-up').size(60);
 
 
-            svg = d3.select(".traits-svg-wrapper").append("svg")
+            svg = d3.select(plotWrapper).append("svg")
                 .attr("width", w)
                 .attr("height",h)
                 .attr("style","border:solid 1px #ddd;")
@@ -508,9 +557,9 @@ var mpgSoftware = mpgSoftware || {};
 
             // Draw p-value significance line
 
-            console.log(pvalueMin);
+            //console.log(yMin);
 
-            if(pvalueMin <= 8) {
+            if(yMin <= 8) {
 
                 svg.selectAll("line.gws")
                     .data(y.ticks(1))
@@ -532,7 +581,7 @@ var mpgSoftware = mpgSoftware || {};
 
             }
 
-            if(pvalueMin <= 4) {
+            if(yMin <= 4) {
 
                 svg.selectAll("line.lws")
                     .data(y.ticks(1))
@@ -634,7 +683,14 @@ var mpgSoftware = mpgSoftware || {};
 
                     //Hide the tooltip
                     d3.select("#phePlotTooltip").classed("hidden", true);
-                });;
+                })
+                .on("click", function(d) {
+
+                        mpgSoftware.traitSample.resetPhePlotAndTable("",d.sample/1000);
+
+                        d3.select("#phePlotTooltip").classed("hidden", true);
+
+                });
 
             /// add dataset dots
             group = svg.selectAll("g.datasetdots")
@@ -863,7 +919,7 @@ var mpgSoftware = mpgSoftware || {};
                     if (phenotypesArray.length != 1) {
                         var phenotypeName = "="+d3.select(this).attr("phenotype-name");
 
-                        mpgSoftware.traitSample.resetPhePlotAndTable(phenotypeName);
+                        mpgSoftware.traitSample.resetPhePlotAndTable(phenotypeName,);
 
                         d3.select("#phePlotTooltip").classed("hidden", true);
 
@@ -873,28 +929,6 @@ var mpgSoftware = mpgSoftware || {};
 
             // add phenotype name to the triangles
 
-
-            function getLogValue(pValue) {
-                var logValue;
-                if(pValue != ""){
-                    if (pValue.indexOf("e") >= 0) {
-
-                        var pValues = pValue.split("e-");
-                        var num1 = pValues[0];
-                        var num2 = Math.pow(10, parseFloat(pValues[1]));
-                        var num3 = num1/num2;
-                        logValue = -Math.log10(num3);
-
-                        //console.log(num1 +" : "+ num2 +" : "+ num3 +" : "+ logValue)
-                    } else {
-                        logValue = -Math.log10(pValue);
-                    }
-                } else {
-                    logValue = 0;
-                }
-
-                return logValue;
-            }
 
             function highlightTriangle(PNAME) {
 
@@ -921,7 +955,8 @@ var mpgSoftware = mpgSoftware || {};
             massageTraitsTable:massageTraitsTable,
             addToPhenotypeFilter:addToPhenotypeFilter,
             showRelatedWords:showRelatedWords,
-            unique:unique
+            unique:unique,
+            getLogValue:getLogValue
         }
     }());
 })();
