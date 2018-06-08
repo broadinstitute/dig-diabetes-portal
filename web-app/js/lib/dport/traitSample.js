@@ -748,6 +748,13 @@ var mpgSoftware = mpgSoftware || {};
                     d3.select("#phePlotTooltip").classed("hidden", true);
                     d3.select(this).attr('stroke','rgba(255,0,0,0.0)');
 
+                })
+                .on("click", function(d) {
+
+                    mpgSoftware.traitSample.resetPhePlotAndTable("",d.sample/1000);
+
+                    d3.select("#phePlotTooltip").classed("hidden", true);
+
                 });
 
 
