@@ -1,6 +1,8 @@
-<script class="panel-body" id="ExSeq_19k_script" type="x-tmpl-mustache">
-<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
-<p><g:message code="informational.data.overlaps.19K"></g:message></p>
+<script class="panel-body" id="ExSeq_52k_script" type="x-tmpl-mustache">
+    <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.overlaps.52K"></g:message></p>
+
+
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
@@ -478,7 +480,7 @@
         </div></td><td>European</td></tr>
 </table>
 
-<h4><g:message code="informational.shared.headers.project"></g:message></h4>
+<h4><g:message code="informational.shared.headers.project"></g:message>s</h4>
 
 <h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
 
@@ -502,12 +504,11 @@
 
 <p><g:message code="informational.data.project.LuCamp"></g:message></p>
 <p>&nbsp;</p>
-<h4>Overview of analysis</h4>
+<h4><g:message code="informational.shared.headers.overview"></g:message></h4>
 <p><g:message code="informational.data.overview.19K"></g:message></p>
 <p>&nbsp;</p>
-<h4>Accessing 19K exome sequence analysis data</h4>
-<p><g:message code="informational.data.accessing.19K"></g:message></p>
+<h4>Accessing 52K exome sequence analysis data</h4>
+    <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
+
 
 </script>
-
-
