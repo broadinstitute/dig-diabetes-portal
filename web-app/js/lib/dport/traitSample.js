@@ -372,8 +372,8 @@ var mpgSoftware = mpgSoftware || {};
         var resetPhePlotAndTable = function(PHENOTYPE,DATASET) {
 
             var phenotypeName = PHENOTYPE || "";
-            var datasetMin = DATASET-(DATASET*0.01) || "";
-            var datasetMax = DATASET+(DATASET*0.01) || "";
+            var datasetMin = DATASET-(DATASET*0.001) || "";
+            var datasetMax = DATASET+(DATASET*0.001) || "";
 
             $("#traits_table_filter").val(PHENOTYPE);
             $("#pvalue-min").val("");
@@ -538,11 +538,11 @@ var mpgSoftware = mpgSoftware || {};
 
 
             var x = d3.scale.linear()
-                .domain([xMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.02])
+                .domain([xMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.001])
                 .range([xbumperLeft, w-xbumperRight]);
 
             var y = d3.scale.linear()
-                .domain([yMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.02])
+                .domain([yMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.001])
                 .range([h-ybumperBottom, ybumperTop]);
 
             arc = d3.svg.symbol().type('triangle-up').size(60);
