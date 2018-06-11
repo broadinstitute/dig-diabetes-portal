@@ -62,7 +62,7 @@ var mpgSoftware = mpgSoftware || {};
                 $.each(searchWords, function(index,value) {
                     var searchWord = value.trim().toLowerCase();
 
-                    if( searchWord != "" ){
+                    if( searchWord != "" && wordsByWeight[x].word.length > 1 ){
                         if (comparingWord.indexOf(searchWord) >= 0) {
                             wordMatch = "<a class='related-word-red' href='javascript:;' onclick='mpgSoftware.traitSample.addToPhenotypeFilter(event)'>" + wordsByWeight[x].word + "</a>";
                         } else {
@@ -502,7 +502,7 @@ var mpgSoftware = mpgSoftware || {};
             phenotypesArray = result;
 
 
-            var indexColorsArray = ["rgba(31,119,180, 0.5)","rgba(255, 127, 14, 0.5)","rgba(44, 160, 44, 0.5)","rgba(214, 39, 40, 0.5)","rgba(148, 103, 189, 0.5)","rgba(140, 86, 75, 0.5)","rgba(227, 119, 194, 0.5)","rgba(0,0,0,0.2)"];
+            var indexColorsArray = ["rgba(237,32,36, 0.5)","rgba(71,143,205, 0.5)","rgba(248,153,29, 0.5)","rgba(163,205,57, 0.5)","rgba(238,60,150, 0.5)","rgba(58,82,164, 0.5)","rgba(110,204,221, 0.5)","rgba(185,82,159,0.5)","rgba(13,154,72,0.5)","rgba(255,205,5,0.5)","rgba(153,27,30,0.5)","rgba(147,39,143,0.5)"];
 
             var phenotypeGroups = "";
 
