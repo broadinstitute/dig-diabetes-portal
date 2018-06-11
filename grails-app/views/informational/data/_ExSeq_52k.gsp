@@ -650,7 +650,69 @@
             </table>
         </div></td><td>South Asian</td></tr>
 
+<tr><td>T2D-GENES</td><td>882</td><td>836</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
 
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Cases were participants who had either prior history of type 2 diabetes, fasting glucose levels of greater than 125, or HbA1C levels of greater than 6.5%</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Controls were participants who had no prior history of type-2 diabetes, had normal glucose levels or HbA1c levels &lt; 6.0%</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>South Asian</td></tr>
+
+
+
+<tr><td>ProDIGY</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Treatment Options for Type 2 Diabetes in Adolescents and Youth (TODAY)</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Medical record documentation of diabetes by ADA criteria, except that for individuals diagnosed with elevated 2 Hour glucose on an OGTT only</li>
+                            <li>HbA1c &gt; 6</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>n/a</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>Mixed</td></tr>
+
+
+<tr><td>ProDIGY</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">SEARCH for Diabetes in Youth (SEARCH)</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Provider diagnosis of T2D</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>n/a</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>Mixed</td></tr>
 
 
 
@@ -659,7 +721,7 @@
 
 <h4><g:message code="informational.shared.headers.project"></g:message>s</h4>
 
-<h5><b>Exome Sequencing project (ESP)</b></h5>
+<h5><b>Exome Sequencing project (ESP) <small><a href="https://esp.gs.washington.edu/drupal/" target="_blank">Learn more ></a></small></b></h5>
 <p><g:message code="informational.project.descr.ESP"></g:message></p>
 <p>&nbsp;</p>
 
@@ -672,7 +734,7 @@
 <p><g:message code="informational.data.project.LuCamp"></g:message></p>
 <p>&nbsp;</p>
 
-<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
+<h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA T2D) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
 </b></h5>
 <p><g:message code="informational.project.descr.SIGMA"></g:message></p>
 <p>&nbsp;</p>
@@ -686,7 +748,9 @@
 
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
-<p><g:message code="informational.data.overview.19K"></g:message></p>
+<p><g:message code="informational.data.overview.52K-1"></g:message></p>
+<p><g:message code="informational.data.overview.52K-2"></g:message></p>
+<p><g:message code="informational.data.overview.52K-3"></g:message></p>
 <p>&nbsp;</p>
 
 <h4>Accessing 52K exome sequence analysis data</h4>
