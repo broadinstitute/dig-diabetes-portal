@@ -509,22 +509,20 @@ mpgSoftware.burdenTestShared = (function () {
             return o.name === convertedPhenotypeNames || o.name === phenotypeFilterValue;
         })
         if (typeof filterDetails !== 'undefined') {
-            if (filterDetails.type === 'FLOAT') { // no case control switches in a real valued phenotype
+            if (filterDetails.type === 'STRING') { // no case control switches in a real valued phenotype
+                $(parmHolder.caseControlDesignator).prop('disabled', false);
+            } else {
                 $(parmHolder.caseControlDesignator).prop('checked', false);
                 $(parmHolder.caseControlDesignator).prop('disabled', true);
-            } else {
-                $(parmHolder.caseControlDesignator).prop('disabled', false);
             }
+        }else {  // if it's a phenotype we haven't seen before then default to hiding the case control box
+                // I think this arises due to a mismatch between the sample metadata and the metadata, but it's common enough to correct for
+            $(parmHolder.caseControlDesignator).prop('checked', false);
+            $(parmHolder.caseControlDesignator).prop('disabled', true);
         }
         $('#stratsTabs').empty();
         var caseControlFiltering = $('#caseControlFiltering').prop('checked');
         stratifiedSampleAndCovariateSection($(parmHolder.datasetFilter), phenotypeFilterValue, stratifyDesignationValue, sampleMetadata.filters, caseControlFiltering, parmHolder);
-        //parmHolder.linkToTypeaheadUrl,
-        //parmHolder.generateListOfVariantsFromFiltersAjaxUrl,
-        //parmHolder.variantInfoUrl,
-        //parmHolder.retrieveSampleSummaryUrl,
-        //parmHolder.variantAndDsAjaxUrl,
-        //parmHolder.burdenTestVariantSelectionOptionsAjaxUrl);
         displayTestResultsSection(false);
     };
 
