@@ -6,6 +6,12 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
+<g:message code="informational.shared.publications.Abecasis_2018_submitted"></g:message><br>
+<g:message code="informational.shared.publications.Abecasis_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Abecasis_2018_submitted.citation"></g:message> </div>
+</div></p>
+
+<p><div class="paper">
 <g:message code="informational.shared.publications.Flannick_2017_SciData"></g:message><br>
 <g:message code="informational.shared.publications.Flannick_2017_SciData.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
 <div class="citation"><g:message code="informational.shared.publications.Flannick_2017_SciData.citation"></g:message> </div>
@@ -412,7 +418,7 @@
                         <ul>
                             <li>fasting plasma glucose &lt; 5.6 mmol/l</li>
                             <li>2 h post-OGTT plasma glucose &lt; 7.8 mmol/l</li>
-                            <li>BMI &lt; 27.5 kg/m2></li>
+                            <li>BMI &lt; 27.5 kg/m2</li>
                         <li>blood pressure &lt; 140/90 mmHg</li>
                             <ul>
                     </td></tr>
@@ -653,31 +659,36 @@
 
 <h4><g:message code="informational.shared.headers.project"></g:message>s</h4>
 
-<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
-
-<p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
-
+<h5><b>Exome Sequencing project (ESP)</b></h5>
+<p><g:message code="informational.project.descr.ESP"></g:message></p>
 <p>&nbsp;</p>
 
 <h5><b>Genetics of Type 2 Diabetes (GoT2D) <small><a href="http://www.type2diabetesgenetics.org/projects/got2d" target="_blank">Learn more ></a></small></b></h5>
-
 <p><g:message code="informational.project.descr.GoT2D"></g:message></p>
+<p>&nbsp;</p>
 
+<h5><b>Lubeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention and Care (LuCamp) <small><a href="http://www.lucamp.org/" target="_blank">Learn more ></a></small>
+</b></h5>
+<p><g:message code="informational.data.project.LuCamp"></g:message></p>
 <p>&nbsp;</p>
 
 <h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
 </b></h5>
 <p><g:message code="informational.project.descr.SIGMA"></g:message></p>
-
 <p>&nbsp;</p>
-<h5><b>Lubeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention and Care (LuCamp) <small><a href="http://www.lucamp.org/" target="_blank">Learn more ></a></small>
-</b></h5>
 
-<p><g:message code="informational.data.project.LuCamp"></g:message></p>
+<h5><b>Type 2 Diabetes Genetic Exploration by Next-Generation Sequencing in Ethnic Samples (T2D-GENES) <small><a href="http://www.type2diabetesgenetics.org/projects/t2dGenes" target="_blank">Learn more ></a></small></b></h5>
+<p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
 <p>&nbsp;</p>
+
+
+
+
+
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
 <p><g:message code="informational.data.overview.19K"></g:message></p>
 <p>&nbsp;</p>
+
 <h4>Accessing 52K exome sequence analysis data</h4>
     <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
 
