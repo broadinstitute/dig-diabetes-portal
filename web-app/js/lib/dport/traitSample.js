@@ -609,7 +609,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
             svg.append("text")
-                .text("*Roll over to highlight studies *Click a triangle to drill down to one trait view *Click 'Reset' button to go back to all traits view")
+                .text("*Roll over to highlight studies *Click a triangle for single trait view *Click dataset name for dataset view *Click 'Reset' button to go back to all traits view")
                 .attr("x", 15)
                 .attr("y", 15)
                 .attr("style","font-size: 11px;");
@@ -766,7 +766,6 @@ var mpgSoftware = mpgSoftware || {};
                     .enter()
                     .append("g");
 
-                // console.log(traitsTableData);
 
             } else {
 
@@ -776,6 +775,8 @@ var mpgSoftware = mpgSoftware || {};
                     .append("g");
 
             }
+
+
 
 
             var phenotypeNameLineH = 17;
@@ -790,6 +791,8 @@ var mpgSoftware = mpgSoftware || {};
 
                     var xposition = x(d.sample)+10;
                     var yposition = y(d.logValue)-7;
+
+                    //if(i > 0) console.log(y(phenotypesArray[i-1].logValue) - y(phenotypesArray[i].logValue));
 
                     return "translate("+xposition+","+yposition+")"
                 })
