@@ -1130,7 +1130,7 @@ mpgSoftware.burdenTestShared = (function () {
                 $("#chooseVariantFilterSelection").empty().append(Mustache.render($('#variantFilterSelectionTemplate')[0].innerHTML, renderData));
                 mpgSoftware.burdenTestShared.fillVariantOptionFilterDropDown(urlHolder.burdenTestVariantSelectionOptionsAjaxUrl, '#burdenProteinEffectFilter');
                 mpgSoftware.burdenTestShared.getGRSListOfVariants({generateListOfVariantsFromFiltersAjaxUrl: urlHolder.getGRSListOfVariantsAjaxUrl},
-                   we help you we have a swifter buildVariantTable,
+                    buildVariantTable,
                     {variantInfoUrl: urlHolder.variantInfoUrl});
                 $('#addVariant').on('click', mpgSoftware.burdenTestShared.respondedToAddVariantButtonClick, urlHolder.variantAndDsAjaxUrl, urlHolder.variantInfoUrl);
                 $('#proposedMultiVariant').typeahead({});

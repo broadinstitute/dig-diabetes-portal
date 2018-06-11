@@ -164,13 +164,14 @@
                                 <input id="caseControlFiltering" type="checkbox" name="caseControlFiltering"
                                        value="caseControlFiltering"
                                         onchange="mpgSoftware.burdenTestShared.refreshGaitDisplay ('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering',false,
-                                         '${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
-                                         '${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
-                                         '${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
-                                         '${createLink(controller: "variantInfo", action: "variantInfo")}',
-                                         '${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
-                                         '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
-                                         '${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}')">
+                                         {linkToTypeaheadUrl:'${createLink(controller:"gene", action:"variantOnlyTypeAhead")}',
+                                         sampleMetadataAjaxUrl:'${createLink(controller: "VariantInfo", action: "sampleMetadataAjax")}',
+                                         generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: "gene", action: "generateListOfVariantsFromFiltersAjax")}',
+                                         variantInfoUrl:'${createLink(controller: "variantInfo", action: "variantInfo")}',
+                                         retrieveSampleSummaryUrl:'${createLink(controller: "variantInfo", action: "retrieveSampleSummary")}',
+                                         variantAndDsAjaxUrl:'${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                         burdenTestVariantSelectionOptionsAjaxUrl:'${createLink(controller: "gene", action: "burdenTestVariantSelectionOptionsAjax")}',
+                                         getGRSListOfVariantsAjaxUrl:'${createLink(controller:"grs",action: "getGRSListOfVariantsAjax")}'})">
                                         <label style="padding-left:0">Filter cases and controls separately</label>
                                 </input>
                         </div>
