@@ -64,11 +64,21 @@ class UserQueryContext {
         // maybe it's a variant?
         if (!gene){
             List<String> variantFields = originalRequest.split(":")
+            Boolean likelyVariant = false
             if (variantFields.size()>1){
+                likelyVariant = true
+            } else { // support an alternative format without a comma
+                variantFields = originalRequest.split("_")
+                if (variantFields.size() == 4){
+                    likelyVariant = true
+                    variantFields[1] =  "${variantFields[1]}_${variantFields[2]}_${variantFields[3]}"
+                }
+            }
+            if (likelyVariant){
                 chromosome = sharedToolsService.parseChromosome(variantFields[0])
                 String canonicalVariant = sharedToolsService.createCanonicalVariantName(originalRequest)
-                Variant variant = Variant.retrieveVariant(canonicalVariant)
-                if (variant) {
+                Variant storedVariant = Variant.retrieveVariant(canonicalVariant)
+                if (storedVariant) {
                     interpretedRequest = variant.varId
                     startOriginalExtent = variant.position
                     endOriginalExtent = variant.position
@@ -86,7 +96,7 @@ class UserQueryContext {
                         startExpandedExtent = ((position > expandBy) ?
                                 (position - expandBy) : 0)
                         endExpandedExtent = position + expandBy
-                        genomicPosition = true
+                        variant = true
                     } catch(e){
                         error = true
                     }

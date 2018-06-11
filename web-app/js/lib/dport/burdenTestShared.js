@@ -6,6 +6,7 @@ var mpgSoftware = mpgSoftware || {};
 mpgSoftware.burdenTestShared = (function () {
     var loading = $('#rSpinner');
     var storedSampleMetadata;
+    var storedMetadata;
     var minimumNumberOfSamples = 100;
     var portalTypeWithAncestry = true;
     var geneForGaitStr = '';
@@ -24,6 +25,16 @@ mpgSoftware.burdenTestShared = (function () {
 
     var setPortalTypeWithAncestry = function (portalTypeWithAncestryBoolean) {
         portalTypeWithAncestry = portalTypeWithAncestryBoolean;
+    };
+
+
+    var storeMetadata = function (metadata) {
+        storedMetadata = metadata;
+    };
+
+
+    var getMetadata = function () {
+        return storedMetadata;
     };
 
 
@@ -585,6 +596,7 @@ mpgSoftware.burdenTestShared = (function () {
 
     var respondedToAddVariantButtonClick = function (variantAndDsAjaxUrl, variantInfoUrl) {
         var proposedVariant = $('#proposedVariant').val();
+        var metadata = getStoredSampleMetadata();
         var rememberVariantInfoUrl = variantInfoUrl;
         if (proposedVariant.length < 1) {
             proposedVariant = $('#proposedMultiVariant').val();
@@ -599,13 +611,6 @@ mpgSoftware.burdenTestShared = (function () {
         var duplicateVariants = [];
         var datasetFilter = $('#datasetFilter').val();
         var dataSet = metadata.conversion[datasetFilter];
-        //if (datasetFilter.substring(0,'samples_17k_'.length)==='samples_17k_'){
-        //    dataSet = 'ExSeq'+datasetFilter.substring('samples'.length);
-        //} else if (datasetFilter.substring(0,'samples_stroke_'.length)==='samples_stroke_'){
-        //    dataSet = 'GWAS_Stroke_mdv70';
-        //}else {
-        //    dataSet = 'ExChip_CAMP_mdv23';
-        //}
         _.forEach(allVariants, function (oneVariantRaw) {
             var oneVariant = oneVariantRaw.trim();
             if (oneVariant.length > 0) {

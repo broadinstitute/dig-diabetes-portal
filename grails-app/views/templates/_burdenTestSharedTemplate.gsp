@@ -679,7 +679,10 @@ the individual filters themselves. That work is handled later as part of a loop-
                                                 <textarea style="display: none" type="text" class="form-control" cols=20 rows=4 id="proposedMultiVariant"/>
                                             </div>
                                             <div class="col-md-1 col-sm-1 col-xs-4">
-                                                <button id="addVariant" class="btn btn-secondary">
+                                                <button id="addVariant" class="btn btn-secondary"
+                                                onclick="mpgSoftware.burdenTestShared.respondedToAddVariantButtonClick(
+                                                '${createLink(controller: "variantInfo", action: "variantAndDsAjax")}',
+                                                '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">
                                                     Add
                                                 </button>
                                             </div>

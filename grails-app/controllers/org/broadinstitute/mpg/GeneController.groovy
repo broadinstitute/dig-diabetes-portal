@@ -294,8 +294,10 @@ class GeneController {
                                                                           startExtent     : userQueryContext.startExpandedExtent,
                                                                           endExtent       : userQueryContext.endExpandedExtent,
                                                                           chromosomeNumber: userQueryContext.chromosome])
+                return
             } else {
-                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                String proposedVariantName = (params.id).replaceAll(':', '_') // we can't pass through any colons to the URL
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: proposedVariantName])
                 return
             }
         }
