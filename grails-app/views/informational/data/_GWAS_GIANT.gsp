@@ -5,7 +5,11 @@
 
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-
+               <p><div class="paper">
+<g:message code="informational.shared.publications.Shungin_2015_Nature"></g:message><br>
+<g:message code="informational.shared.publications.Shungin_2015_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Shungin_2015_Nature.citation"></g:message> </div>
+</div></p>
 
                <p><div class="paper">
 <g:message code="informational.shared.publications.Yang_2012_Nature"></g:message><br>
@@ -23,8 +27,14 @@
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
-<li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
+<li><g:message code="informational.shared.traits.BMI"></g:message></li>
 <li><g:message code="informational.shared.traits.height"></g:message></li>
+<li><g:message code="informational.shared.traits.hip_circumference"></g:message></li>
+<li><g:message code="informational.shared.traits.hip_circumference_adjBMI"></g:message></li>
+<li><g:message code="informational.shared.traits.waist_circumference"></g:message></li>
+<li><g:message code="informational.shared.traits.waist_circumference_adjBMI"></g:message></li>
+<li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
+<li><g:message code="informational.shared.traits.WHRadjBMI"></g:message></li>
 </ul>
 
 
@@ -40,5 +50,6 @@
 </p>
 
 <h4>Accessing GIANT GWAS data</h4>
-<p><g:message code="informational.data.accessing.GIANT"></g:message></p>
+    <p><g:message code="informational.data.accessing.GIANT1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.GIANT2"></g:message></p>
+
 </script>

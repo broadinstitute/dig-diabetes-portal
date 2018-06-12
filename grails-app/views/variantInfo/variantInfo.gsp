@@ -10,6 +10,7 @@
     <r:require modules="burdenTest"/>
     <r:require modules="multiTrack"/>
     <r:require modules="matrix"/>
+    <r:require modules="traitSample"/>
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
 
     <r:layoutResources/>
@@ -230,24 +231,24 @@
 
                     <div class="separator"></div>
 
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionVariant"
-                               href="#collapseIgv">
-                                <h2><strong><g:message code="variant.igvBrowser.title"
-                                                       default="Explore with IGV"/></strong></h2>
-                            </a>
-                        </div>
+                    %{--<div class="accordion-group">--}%
+                        %{--<div class="accordion-heading">--}%
+                            %{--<a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordionVariant"--}%
+                               %{--href="#collapseIgv">--}%
+                                %{--<h2><strong><g:message code="variant.igvBrowser.title"--}%
+                                                       %{--default="Explore with IGV"/></strong></h2>--}%
+                            %{--</a>--}%
+                        %{--</div>--}%
 
-                        <div id="collapseIgv" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <div class="igvGoesHere"></div>
-                                <g:render template="../templates/igvBrowserTemplate"/>
-                            </div>
-                        </div>
-                    </div>
+                        %{--<div id="collapseIgv" class="accordion-body collapse">--}%
+                            %{--<div class="accordion-inner">--}%
+                                %{--<div class="igvGoesHere"></div>--}%
+                                %{--<g:render template="../templates/igvBrowserTemplate"/>--}%
+                            %{--</div>--}%
+                        %{--</div>--}%
+                    %{--</div>--}%
 
-                    <div class="separator"></div>
+                    %{--<div class="separator"></div>--}%
 
 <!--
 
@@ -290,33 +291,33 @@
     </div>
 
 </div>
-<script>
-    $('#accordionVariant').on('shown.bs.collapse', function (e) {
-        if (e.target.id === "collapseIgv") {
-            var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();
+%{--<script>--}%
+    %{--$('#accordionVariant').on('shown.bs.collapse', function (e) {--}%
+        %{--if (e.target.id === "collapseIgv") {--}%
+            %{--var igvParms = mpgSoftware.variantInfo.retrieveVariantPosition();--}%
 
-           igvLauncher.setUpIgv(igvParms.locus,
-                    '.igvGoesHere',
-                    "<g:message code='controls.shared.igv.tracks.recomb_rate' />",
-                    "<g:message code='controls.shared.igv.tracks.genes' />",
-                    "${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",
-                    "${createLink(controller:'trait', action:'getData', absolute:'false')}",
-                    "${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",
-                    "${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",
-                    '${igvIntro}');
-        } else if (e.target.id === "collapseFunctionalData") {
-            $("#functionalDataTableGoesHere").DataTable().draw();
-        }
+           %{--igvLauncher.setUpIgv(igvParms.locus,--}%
+                    %{--'.igvGoesHere',--}%
+                    %{--"<g:message code='controls.shared.igv.tracks.recomb_rate' />",--}%
+                    %{--"<g:message code='controls.shared.igv.tracks.genes' />",--}%
+                    %{--"${createLink(controller: 'trait', action: 'retrievePotentialIgvTracks')}",--}%
+                    %{--"${createLink(controller:'trait', action:'getData', absolute:'false')}",--}%
+                    %{--"${createLink(controller:'variantInfo', action:'variantInfo', absolute:'true')}",--}%
+                    %{--"${createLink(controller:'trait', action:'traitInfo', absolute:'true')}",--}%
+                    %{--'${igvIntro}');--}%
+        %{--} else if (e.target.id === "collapseFunctionalData") {--}%
+            %{--$("#functionalDataTableGoesHere").DataTable().draw();--}%
+        %{--}--}%
 
-    });
-    $('#accordionVariant').on('show.bs.collapse', function (e) {
-        if (e.target.id === "collapseIgv") {
+    %{--});--}%
+    %{--$('#accordionVariant').on('show.bs.collapse', function (e) {--}%
+        %{--if (e.target.id === "collapseIgv") {--}%
 
-        }
-    });
+        %{--}--}%
+    %{--});--}%
 
-    $('#collapseVariantAssociationStatistics').collapse({hide: false})
-</script>
+    %{--$('#collapseVariantAssociationStatistics').collapse({hide: false})--}%
+%{--</script>--}%
 
 </body>
 </html>

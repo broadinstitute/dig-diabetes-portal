@@ -237,6 +237,9 @@ modules = {
     media {
         resource url: 'https://malsup.github.com/jquery.media.js'
     }
+    traitSample {
+        resource url: 'js/lib/dport/traitSample.js'
+    }
 
 }
 

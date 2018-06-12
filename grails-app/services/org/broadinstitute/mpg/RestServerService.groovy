@@ -351,12 +351,13 @@ class RestServerService {
                     existingPortalVersionBean.getExposePhewasModule(),
                     existingPortalVersionBean.getExposeForestPlot(),
                     existingPortalVersionBean.getExposeTraitDataSetAssociationView(),
-                    existingPortalVersionBean.getExposeGreenBoxes()
+                    existingPortalVersionBean.getExposeGreenBoxes(),
+                    existingPortalVersionBean.getVariantTakesYouToGenePage()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0 )
+                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
