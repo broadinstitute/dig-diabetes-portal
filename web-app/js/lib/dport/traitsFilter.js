@@ -17,7 +17,7 @@ var mpgSoftware = mpgSoftware || {};
 
             var totalTraits = 0;
 
-            var minTraitsNum = 30;
+            var minTraitsNum = 20;
 
             $.each(traitsGroups, function(index,value) {
                 var traitsGroup = value;
@@ -59,10 +59,9 @@ var mpgSoftware = mpgSoftware || {};
 
         var launchTraitSearch = function (event) {
             var TRAIT = $(event.target).attr("phenotype");
-            var homePageVars = mpgSoftware.homePage.getHomePageVariables();
+            var homePageVars = "${createLink(controller:'trait',action:'traitSearch')}";
 
             var trait_val = mpgSoftware.traitsFilter.filterOutIllegalCharacters(TRAIT);
-            console.log(TRAIT);
 
             var significance = 0.0005;
             if (trait_val == "" || significance == 0) {
