@@ -748,6 +748,35 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,
                                           0,
                                           0,0,0,
+                                          0
+                                  )
+                                  ,
+                                  new PortalVersionBean("als",
+                                          "ALS",
+                                          "mdv60",
+                                          "ALS", // make sure your default phenotype exists in your default data set
+                                          "GWAS_ALS2018_mdv60",// used to pick a default data set for a gene query
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
+                                          ["AnteriorCaudate"],
+                                          ["PSYCHIATRIC"], // most important phenotype group name
+                                          [],
+                                          "[1,2]",
+                                          "GWAS_IBDGenomics_eu_mdv80",
+                                          "images/als/front_als_logo_2018.svg",
+                                          "portal.epilepsy.header.tagline",
+                                          [],
+                                          ["CDKL5"],
+                                          [],
+                                          ["chr14:35,907,000-36,400,000"],
+                                          "images/als/front_als_banner_2018.png",
+                                          "",
+                                          "images/als/als_header_logo.svg",
+                                          "images/menu_bg_2017_5.png",
+                                          "false",
+                                          "",
+                                          "",
+                                          '5414069947481666863',
                                           0,
                                           0
                                   )
