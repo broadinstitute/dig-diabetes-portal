@@ -728,15 +728,15 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           [],
                                           "[1,2]",
                                           "GWAS_IBDGenomics_eu_mdv80",
-                                          "images/epilepsy/front_epilepsy_logo_2018.svg",
+                                          "images/als/front_als_logo_2018.svg",
                                           "portal.epilepsy.header.tagline",
                                           [],
                                           ["SOD1"],
                                           [],
                                           ["chr14:35,907,000-36,400,000"],
-                                          "images/epilepsy/front_epilepsy_bg_2018.png",
+                                          "images/als/front_als_banner_2018.png",
                                           "",
-                                          "images/epilepsy/epilepsy_header_logo.svg",
+                                          "images/als/als_header_logo.svg",
                                           "images/menu_bg_2017_5.png",
                                           "false",
                                           "",
@@ -750,9 +750,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,0,0,
                                           0,
                                           0
-                                  )
-                                  ,
-
+                                  ),
 
                                   new PortalVersionBean("sleep",
                                           "Sleep",
