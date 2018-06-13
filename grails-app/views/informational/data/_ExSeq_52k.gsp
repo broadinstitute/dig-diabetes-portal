@@ -271,9 +271,112 @@
             </table>
         </div></td><td>East Asian</td></tr>
 
+<tr><td>GoT2D</td><td>1,289</td><td>1,251</td><td><a onclick="showSection(event)">Multiple cohorts</a>
+
+        <div style="display: none;" class="cohortDetail">
+        <h5>Finland-United States Investigation of NIDDM Genetics (FUSION) Study</h5>
+            <table border="1">
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Unrelated cases selected from FUSION families and stage 2 replication</li>
+                            <li>Samples met 1999 World Health Organization (WHO) criteria of fasting plasma glucose &ge; 7.0 mmol/l or postload glucose during an OGTT &ge; 11.1 mmol/l, by report of diabetes medication use, or based on medical record review</li>
+                            <li>Prioritized FUSION families with &ge; 2 first-degree relatives with T2D; BMI &ge; 18.5kg/m2; case with GWAS data or earliest age at onset, if no GWAS data available</li>
+                            <li>Prioritized FUSION stage 2 replication set with Metabochip data; BMI &ge; 18.5kg/m2; earliest age of onset; age of onset &ge; 35</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Unrelated controls with normal glucose tolerance (NGT) based on WHO (1999) definitions: fasting plasma glucose <6.1 mM and 2 hour postload glucose during an OGTT &gt; 7.8 mM</li>
+                            <li>Frequency matched to cases by birth province; BMI &ge; 18.5kg/m2; age &le; 80</li>
+                            <li>Within each birth province, prioritized samples from stage 2 replication with highest values for age + 2*BMI</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
 
 
-<tr><td>T2D-GENES</td><td>494</td><td>476</td><td><a onclick="showSection(event)">Metabolic Syndrome in Men Study (METSIM)</a>
+
+&nbsp;
+
+
+
+<h5>Malmö-Botnia Study</h5>
+
+            <table border="1">
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>A liability score was generated (Guey LT et al. 2011) which measures risk to T2D in the context of three known risk factors (age at onset, BMI, and gender) in 27,500 individuals drawn from three prospective cohorts: the Malmö Preventive Project, the Scania Diabetes Registry, and the Botnia Study; only BMI and gender used to construct scores for Scania and Botnia studies</li>
+                            <li>Eligible cases limited to individuals between 35 and 60 years of age and with a BMI between 20 and 35</li>
+                            <li>To match for ethnicity, 250 Botnia cases with the most extreme liability scores were selected, while 125 cases were selected from each of the Scania and Malmö studies</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Controls selected from the extreme of a liability score distribution, based upon gender, age and BMI at last follow-up visit; only BMI and gender used to construct scores for Malmö study</li>
+                            <li>Eligible controls limited to individuals above 35 years of age at follow-up and with a BMI between 20 and 40</li>
+                            <li>To match for ethnicity, equal numbers of controls were selected from the Botnia and Malmö studies</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+
+
+&nbsp;
+<h5>UK Type 2 Diabetes Genetics Consortium (UKT2D)</h5>
+            <table border="1">
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Cases drawn from the Wellcome Trust Case Control Consortium (WTCCC)</li>
+                            <li>Female samples with age of diagnosis &ge; 66 years or BMI &ge; 32kg/m2 excluded; male samples with age of diagnosis &ge; 62 years or BMI &ge; 31kg/m2 excluded</li>
+                            <li>Remaining samples were ranked by age and BMI, and the two ranks multiplied. 356 samples with the lowest values for this rank multiplier were selected for initial inclusion in the study</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Unrelated samples selected as controls from the Twins UK study</li>
+                            <li>A twin pair was considered for selection if there was no recorded family history of diabetes, neither twin was ever recorded as impaired glucose tolerant (defined as fasting glucose &gt;6.1mmol/L in any reading), there were available quantitative trait and genetic (GWAs) data, and no evidence of admixture in MDS analysis of GWAs data</li>
+                            <li>From set of qualifying twin pairs, the best control twin was selected from each pair with the lowest ratio of fasting glucose level to BMI across all readings, and further prioritization of the qualifying unrelated samples involved selecting samples that had the lowest fasting glucose to (BMI * age) ratios</li>
+                            <li>Top two principal components were used to perform pairwise sample matching between cases and possible controls, and the best control for each case was selected</li>
+                        </ul>
+                    </td></tr>
+            </table>
+
+
+&nbsp;
+<h5>KORAgen Study Helmholtz zentrum München (KORA)</h5>
+            <table border="1">
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Samples drawn from KORA F3 and F4</li>
+                            <li>Diabetic status validated by doctor or by medication use</li>
+                            <li>Cases have &ge; 1 first degree relative with type 2 diabetes (self-reported)</li>
+                            <li>Cases have either BMI &le; 30 and age of onset &lt; 65, or BMI &le; 33 and age of onset &le; 60</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Controls selected from KORA F4</li>
+                            <li>All controls are normal glucose tolerant: fasting glucose level &lt; 6.1 mmol/l and two hour glucose level after oral glucose tolerance test &lt; 7.8 mmol/l</li>
+                            <li>Controls are either &gt; 60 years of age with BMI &gt; 32 or over 65 years of age with BMI &gt; 31</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>European</td></tr>
+
+<tr><td>T2D-GENES</td><td>478</td><td>498</td><td><a onclick="showSection(event)">Metabolic Syndrome in Men Study (METSIM)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -302,7 +405,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>359</td><td>373</td><td><a onclick="showSection(event)">Ashkenazi</a>
+<tr><td>T2D-GENES</td><td>506</td><td>360</td><td><a onclick="showSection(event)">Ashkenazi</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -332,7 +435,7 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>LuCAMP</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Lundbeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention, and Care</a>
+<tr><td>LuCAMP</td><td>992</td><td>985</td><td><a onclick="showSection(event)">Lundbeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention, and Care</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -355,7 +458,7 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>T2D-GENES</td><td>941</td><td>945</td><td><a onclick="showSection(event)">Genetics of Diabetes and Audit Research Tayside Study (GoDARTS)</a>
+<tr><td>T2D-GENES</td><td>949</td><td>943</td><td><a onclick="showSection(event)">Genetics of Diabetes and Audit Research Tayside Study (GoDARTS)</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -374,7 +477,7 @@
         </div></td><td>European</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>584</td><td>389</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a>
+<tr><td>T2D-GENES</td><td>390</td><td>589</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -390,9 +493,10 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Mexico City Diabetes Study (MCDS)</a>
+<tr><td>SIGMA T2D</td><td>5,181</td><td>5,416</td><td><a onclick="showSection(event)">Multiple cohorts</a>
 
         <div style="display: none;" class="cohortDetail">
+        <h5>Mexico City Diabetes Study (MCDS)</h5>
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
@@ -410,10 +514,10 @@
                     </td></tr>
 
             </table>
-        </div></td><td>Latino</td></tr>
+        &nbsp;
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Multiethnic Cohort (MEC)</a>
-        <div style="display: none;" class="cohortDetail">
+<h5>Multiethnic Cohort (MEC)</h5>
+
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
@@ -431,16 +535,20 @@
                     </td></tr>
 
             </table>
-        </div></td><td>Latino</td></tr>
+        &nbsp;
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Diabetes in Mexico Study (DMS)</a>
+<h5>Diabetes in Mexico Study (DMS)</h5>
 
-        <div style="display: none;" class="cohortDetail">
+
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
-                        &nbsp;
+                        <ul>
+<li>Age &ge;18 years</li>
+<li>previous T2D diagnosis or fasting glucose levels above 125 mg/dL</li>
+<li>excluded individuals with fasting glycemia between 100-125 mg/dL</li>
+</ul>
                     </td>
                     <td valign="top">
                         <ul>
@@ -449,16 +557,17 @@
                         </ul>
                     </td></tr>
             </table>
-        </div></td><td>Latino</td></tr>
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
 
-        <div style="display: none;" class="cohortDetail">
+<h5>UNAM/INCMNSZ Diabetes Study (UIDS)</h5>
+
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
-                        &nbsp;                    </td>
+                        <ul><li>ADA criteria: fasting plasma glucose values &ge;126 mg/dL, current treatment with a hypoglycemic agent, or casual glucose values &ge;200 mg/dL</li>
+                        </ul>
+                   </td>
                     <td valign="top">
                         <ul>
                             <li>Age &ge;45 years</li>
@@ -470,7 +579,7 @@
             </table>
         </div></td><td>Latino</td></tr>
 
-<tr><td>T2D-GENES & SIGMA T2D</td><td>1,281</td><td>1,035</td><td><a onclick="showSection(event)">Starr County, Texas</a>
+<tr><td>T2D-GENES & SIGMA T2D</td><td>1,719</td><td>1,703</td><td><a onclick="showSection(event)">Starr County, Texas</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -496,7 +605,7 @@
             </table>
         </div></td><td>Hispanic</td></tr>
 
-<tr><td>T2D-GENES</td><td>202</td><td>243</td><td><a onclick="showSection(event)">San Antonio Mexican American Family Studies: San Antonio Family Heart Study, San Antonio Family Diabetes/Gallbladder Study, Veterans Administration Genetic Epidemiology Study, and Family Investigation of Nephropathy and Diabetes Study - San Antonio Component</a>
+<tr><td>T2D-GENES</td><td>243</td><td>202</td><td><a onclick="showSection(event)">San Antonio Mexican American Family Studies: San Antonio Family Heart Study, San Antonio Family Diabetes/Gallbladder Study, Veterans Administration Genetic Epidemiology Study, and Family Investigation of Nephropathy and Diabetes Study - San Antonio Component</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -530,7 +639,7 @@
         </div></td><td>Hispanic</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>1,458</td><td>1,586</td><td><a onclick="showSection(event)">Singapore Indian Eye Study</a>
+<tr><td>T2D-GENES</td><td>1,589</td><td>1,459</td><td><a onclick="showSection(event)">Singapore Indian Eye Study</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -555,7 +664,7 @@
         </div></td><td>South Asian</td></tr>
 
 
-                <tr><td>T2D-GENES</td><td>599</td><td>600</td><td><a onclick="showSection(event)">London Life Sciences Population (LOLIPOP)</a>
+                <tr><td>T2D-GENES</td><td>529</td><td>537</td><td><a onclick="showSection(event)">London Life Sciences Population (LOLIPOP)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -580,7 +689,7 @@
             </table>
         </div></td><td>South Asian</td></tr>
 
-<tr><td>T2D-GENES</td><td>882</td><td>836</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
+<tr><td>T2D-GENES</td><td>854</td><td>890</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -599,53 +708,6 @@
 
             </table>
         </div></td><td>South Asian</td></tr>
-
-
-
-<tr><td>ProDIGY</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Treatment Options for Type 2 Diabetes in Adolescents and Youth (TODAY)</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Medical record documentation of diabetes by ADA criteria, except that for individuals diagnosed with elevated 2 Hour glucose on an OGTT only</li>
-                            <li>HbA1c &gt; 6</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>n/a</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>Mixed</td></tr>
-
-
-<tr><td>ProDIGY</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">SEARCH for Diabetes in Youth (SEARCH)</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Provider diagnosis of T2D</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>n/a</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>Mixed</td></tr>
-
-
-
 
 </table>
 
