@@ -45,7 +45,7 @@
 <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
 
-<tr><td>T2D-GENES</td><td>531</td><td>522</td><td><a onclick="showSection(event)">Wake Forest School of Medicine Study</a>
+<tr><td>T2D-GENES</td><td>522</td><td>531</td><td><a onclick="showSection(event)">Wake Forest School of Medicine Study</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -72,7 +72,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>513</td><td>476</td><td><a onclick="showSection(event)">Jackson Heart Study</a>
+<tr><td>T2D-GENES</td><td>476</td><td>513</td><td><a onclick="showSection(event)">Jackson Heart Study</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -99,7 +99,7 @@
         </div></td><td>African American</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>1,233</td><td>1,285</td><td><a onclick="showSection(event)">BioMe Biobank Program (BioMe)</a>
+<tr><td>T2D-GENES</td><td>1,291</td><td>1,242</td><td><a onclick="showSection(event)">BioMe Biobank Program (BioMe)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -120,7 +120,7 @@
         </div></td><td>African American</td></tr>
 
 
-<tr><td>ESP</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Exome Sequencing Project (ESP)</a>
+<tr><td>ESP</td><td>467</td><td>1,374</td><td><a onclick="showSection(event)">Exome Sequencing Project (ESP)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -144,9 +144,35 @@
                     </td></tr>
 
             </table>
-        </div></td><td>Mixed (African American, European)</td></tr>
+        </div></td><td>African American</td></tr>
 
-<tr><td>T2D-GENES</td><td>1,576</td><td>1,470</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study and Singapore Prospective Study Program</a>
+        <tr><td>ESP</td><td>389</td><td>2,842</td><td><a onclick="showSection(event)">Exome Sequencing Project (ESP)</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>ARIC: Self report of Type 2 Diabetes</li>
+                            <li>CARDIA: Self report of Type 2 Diabetes</li>
+                            <li>CHS:  ADA definition</li>
+                            <li>Framingham:  Self report of Type 2 Diabetes</li>
+                            <li>JHS: Type 2 Diabetes Status defined using ADA 2004</li>
+                            <li>MESA:  Exam 1 Diabetes mellitus using 2003 ADA</li>
+                            <li>WHI: Self report of Type 2 Diabetes</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Not a case</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>European</td></tr>
+
+<tr><td>T2D-GENES</td><td>1,471</td><td>1,582</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study and Singapore Prospective Study Program</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -172,7 +198,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>567</td><td>529</td><td><a onclick="showSection(event)">Korea Association Research Project (KARE)</a>
+<tr><td>T2D-GENES</td><td>529</td><td>567</td><td><a onclick="showSection(event)">Korea Association Research Project (KARE)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -202,7 +228,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>474</td><td>443</td><td><a onclick="showSection(event)">Korea SNUH</a>
+<tr><td>T2D-GENES</td><td>444</td><td>474</td><td><a onclick="showSection(event)">Korea SNUH</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -226,7 +252,7 @@
         </div></td><td>East Asian</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>481</td><td>479</td><td><a onclick="showSection(event)">Research Studies in Hong Kong</a>
+<tr><td>T2D-GENES</td><td>483</td><td>482</td><td><a onclick="showSection(event)">Research Studies in Hong Kong</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -245,103 +271,7 @@
             </table>
         </div></td><td>East Asian</td></tr>
 
-<tr><td>GoT2D</td><td>1,326</td><td>1,331</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
 
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Unrelated cases selected from FUSION families and stage 2 replication</li>
-                            <li>Samples met 1999 World Health Organization (WHO) criteria of fasting plasma glucose &ge; 7.0 mmol/l or postload glucose during an OGTT &ge; 11.1 mmol/l, by report of diabetes medication use, or based on medical record review</li>
-                            <li>Prioritized FUSION families with &ge; 2 first-degree relatives with T2D; BMI &ge; 18.5kg/m2; case with GWAS data or earliest age at onset, if no GWAS data available</li>
-                            <li>Prioritized FUSION stage 2 replication set with Metabochip data; BMI &ge; 18.5kg/m2; earliest age of onset; age of onset &ge; 35</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>Unrelated controls with normal glucose tolerance (NGT) based on WHO (1999) definitions: fasting plasma glucose <6.1 mM and 2 hour postload glucose during an OGTT &gt; 7.8 mM</li>
-                            <li>Frequency matched to cases by birth province; BMI &ge; 18.5kg/m2; age &le; 80</li>
-                            <li>Within each birth province, prioritized samples from stage 2 replication with highest values for age + 2*BMI</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>European</td></tr>
-
-<tr><td>GoT2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Malmö-Botnia Study</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>A liability score was generated (Guey LT et al. 2011) which measures risk to T2D in the context of three known risk factors (age at onset, BMI, and gender) in 27,500 individuals drawn from three prospective cohorts: the Malmö Preventive Project, the Scania Diabetes Registry, and the Botnia Study; only BMI and gender used to construct scores for Scania and Botnia studies</li>
-                            <li>Eligible cases limited to individuals between 35 and 60 years of age and with a BMI between 20 and 35</li>
-                            <li>To match for ethnicity, 250 Botnia cases with the most extreme liability scores were selected, while 125 cases were selected from each of the Scania and Malmö studies</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>Controls selected from the extreme of a liability score distribution, based upon gender, age and BMI at last follow-up visit; only BMI and gender used to construct scores for Malmö study</li>
-                            <li>Eligible controls limited to individuals above 35 years of age at follow-up and with a BMI between 20 and 40</li>
-                            <li>To match for ethnicity, equal numbers of controls were selected from the Botnia and Malmö studies</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>European</td></tr>
-
-<tr><td>GoT2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">UK Type 2 Diabetes Genetics Consortium (UKT2D)</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Cases drawn from the Wellcome Trust Case Control Consortium (WTCCC)</li>
-                            <li>Female samples with age of diagnosis &ge; 66 years or BMI &ge; 32kg/m2 excluded; male samples with age of diagnosis &ge; 62 years or BMI &ge; 31kg/m2 excluded</li>
-                            <li>Remaining samples were ranked by age and BMI, and the two ranks multiplied. 356 samples with the lowest values for this rank multiplier were selected for initial inclusion in the study</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>Unrelated samples selected as controls from the Twins UK study</li>
-                            <li>A twin pair was considered for selection if there was no recorded family history of diabetes, neither twin was ever recorded as impaired glucose tolerant (defined as fasting glucose &gt;6.1mmol/L in any reading), there were available quantitative trait and genetic (GWAs) data, and no evidence of admixture in MDS analysis of GWAs data</li>
-                            <li>From set of qualifying twin pairs, the best control twin was selected from each pair with the lowest ratio of fasting glucose level to BMI across all readings, and further prioritization of the qualifying unrelated samples involved selecting samples that had the lowest fasting glucose to (BMI * age) ratios</li>
-                            <li>Top two principal components were used to perform pairwise sample matching between cases and possible controls, and the best control for each case was selected</li>
-                        </ul>
-                    </td></tr>
-            </table>
-        </div></td><td>European</td></tr>
-
-<tr><td>GoT2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">KORAgen Study Helmholtz zentrum München (KORA)</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Samples drawn from KORA F3 and F4</li>
-                            <li>Diabetic status validated by doctor or by medication use</li>
-                            <li>Cases have &ge; 1 first degree relative with type 2 diabetes (self-reported)</li>
-                            <li>Cases have either BMI &le; 30 and age of onset &lt; 65, or BMI &le; 33 and age of onset &le; 60</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>Controls selected from KORA F4</li>
-                            <li>All controls are normal glucose tolerant: fasting glucose level &lt; 6.1 mmol/l and two hour glucose level after oral glucose tolerance test &lt; 7.8 mmol/l</li>
-                            <li>Controls are either &gt; 60 years of age with BMI &gt; 32 or over 65 years of age with BMI &gt; 31</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>European</td></tr>
 
 <tr><td>T2D-GENES</td><td>494</td><td>476</td><td><a onclick="showSection(event)">Metabolic Syndrome in Men Study (METSIM)</a>
 
