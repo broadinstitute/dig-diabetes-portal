@@ -75,6 +75,7 @@ class RestServerService {
     private String GET_BIG_WIG_DATA = "getBigWigData"
     private String GET_CLUMP_DATA = "getClumpData"
     private String GET_EPIGENETIC_POSSIBLE_DATA = "getEpigenomicData"
+    private String GET_MULTI_ALLELIC_HACK = "getAggregatedData/multiAllelicHack"
     private String DBT_URL = ""
     private String EXPERIMENTAL_URL = ""
     public static String TECHNOLOGY_GWAS = "GWAS"
@@ -83,6 +84,8 @@ class RestServerService {
     public static String TECHNOLOGY_WGS_CHIP = "WGS"
     public static String EXOMESEQUENCEPVALUE = "P_FIRTH_FE_IV"
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
+    public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_GETDATA = 5000
+
     //public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     private String DEFAULTPHENOTYPE = "T2D"
@@ -352,12 +355,14 @@ class RestServerService {
                     existingPortalVersionBean.getExposeForestPlot(),
                     existingPortalVersionBean.getExposeTraitDataSetAssociationView(),
                     existingPortalVersionBean.getExposeGreenBoxes(),
-                    existingPortalVersionBean.getVariantTakesYouToGenePage()
+                    existingPortalVersionBean.getVariantTakesYouToGenePage(),
+                    existingPortalVersionBean.getUtilizeBiallelicGait(),
+                    existingPortalVersionBean.getUtilizeUcsdData()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0 )
+                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -728,6 +733,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject tempObject = this.postRestCallBase(jsonString, GET_EPIGENETIC_POSSIBLE_DATA, currentRestServer() );
         return tempObject;
     }
+
+    public JSONObject postMultiAllelicHackRestCall(String jsonString) {
+        JSONObject tempObject = this.postRestCallBase(jsonString, GET_MULTI_ALLELIC_HACK, currentRestServer() );
+        return tempObject;
+    }
+
 
 
     /**
@@ -2371,7 +2382,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject gatherRegionInformation( String chromosome,int startPosition,int endPosition, int pageStart, int pageEnd,
-                                               String source,int assayId, String assayIdListInStringForm) {
+                                               String source, String assayIdListInStringForm) {
         int revisedPageStart = 0;
         int revisedPageEnd = 1000;
         if (pageStart > 0){revisedPageStart = pageStart}
@@ -2383,13 +2394,14 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         restApiParameterList << "\"chrom\": \"${chromosome}\""
         restApiParameterList << "\"start_pos\": ${startPosition}"
         restApiParameterList << "\"end_pos\": ${endPosition}"
+        if (retrieveBeanForCurrentPortal().getUtilizeUcsdData()){
+            restApiParameterList << "\"host\": \"ucsd\""
+        }
         if (source){
             restApiParameterList << "\"source\": \"${source}\""
         }
         if ((assayIdListInStringForm) ){
             restApiParameterList << "\"assay_id\": ${assayIdListInStringForm}"
-        } else if ((assayId) && (assayId>-1)){
-            restApiParameterList << "\"assay_id\": [${assayId}]"
         }
         String specifyRequest = "{${restApiParameterList.join(",")}}"
         return postRestCall(specifyRequest, GET_REGION_URL)
@@ -2645,13 +2657,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
-                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
-                    keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+                if (!retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                    for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
+                        keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+                    }
+                }
+                def valueToLoopOver
+                if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
+                }else {
+                    valueToLoopOver = keys
                 }
                 List<String> variantSpecificList = []
-                for (String key in keys) {
-                    ArrayList valueArray = apiResults.variants[j][key]
-                    def value = valueArray.findAll { it }[0]
+                for (def key in valueToLoopOver) {
+                    def value
+                    if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                        value = apiResults.variants[j][key]
+                    } else {
+                        ArrayList valueArray = apiResults.variants[j][key]
+                        value = valueArray.findAll { it }[0]
+                    }
                     if (value instanceof String) {
                         String stringValue = value as String
                         variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"
