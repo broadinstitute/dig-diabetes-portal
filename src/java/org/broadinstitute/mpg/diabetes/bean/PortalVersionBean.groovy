@@ -16,6 +16,8 @@ class PortalVersionBean {
     private String mdvName
     private String phenotype
     private String dataSet
+    List<String> tissueRegionOverlapMatcher
+    List<String> tissueRegionOverlapDisplayMatcher
     private List<String> tissues
     private List<String> orderedPhenotypeGroupNames
     private List<String> excludeFromLZ
@@ -44,6 +46,7 @@ class PortalVersionBean {
     private Integer exposeForestPlot
     private Integer exposeTraitDataSetAssociationView
     private Integer exposeGreenBoxes
+    private Integer variantTakesYouToGenePage
 
 
     public PortalVersionBean(String portalType,
@@ -51,6 +54,8 @@ class PortalVersionBean {
                              String mdvName,
                              String phenotype,
                              String dataSet,
+                             List<String> tissueRegionOverlapMatcher,
+                             List<String> tissueRegionOverlapDisplayMatcher,
                              List<String> tissues,
                              List<String> orderedPhenotypeGroupNames,
                              List<String> excludeFromLZ,
@@ -78,12 +83,15 @@ class PortalVersionBean {
                              Integer exposePhewasModule,
                              Integer exposeForestPlot,
                              Integer exposeTraitDataSetAssociationView,
-                             Integer exposeGreenBoxes ){
+                             Integer exposeGreenBoxes,
+                             Integer variantTakesYouToGenePage ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
         this.phenotype = phenotype;
         this.dataSet = dataSet
+        this.tissueRegionOverlapMatcher = tissueRegionOverlapMatcher
+        this.tissueRegionOverlapDisplayMatcher = tissueRegionOverlapDisplayMatcher
         this.tissues = tissues
         this.epigeneticAssays = epigeneticAssays
         this.orderedPhenotypeGroupNames = orderedPhenotypeGroupNames
@@ -112,6 +120,7 @@ class PortalVersionBean {
         this.exposeForestPlot = exposeForestPlot
         this.exposeTraitDataSetAssociationView = exposeTraitDataSetAssociationView
         this.exposeGreenBoxes = exposeGreenBoxes
+        this.variantTakesYouToGenePage = variantTakesYouToGenePage
     }
 
     public String getPortalType() {
@@ -132,6 +141,14 @@ class PortalVersionBean {
 
     public String getDataSet() {
         return dataSet
+    }
+
+    public List<String> getTissueRegionOverlapMatcher() {
+        return tissueRegionOverlapMatcher
+    }
+
+    public List<String> getTissueRegionOverlapDisplayMatcher() {
+        return tissueRegionOverlapDisplayMatcher
     }
 
     public List<String> getTissues() {
@@ -248,6 +265,10 @@ class PortalVersionBean {
         return exposeGreenBoxes
     }
 
+    public Integer getVariantTakesYouToGenePage(){
+        return variantTakesYouToGenePage
+    }
+
 
 
 
@@ -257,6 +278,8 @@ class PortalVersionBean {
 "mdvName":"${getMdvName()}",
 "phenotype":"${getPhenotype()}",
 "dataSet":"${getDataSet()}",
+"tissueRegionOverlapMatcher":"${getTissueRegionOverlapMatcher().toString()}",
+"tissueRegionOverlapDisplayMatcher":"${getTissueRegionOverlapDisplayMatcher().toString()}",
 "tissues":"${getTissues().toString()}",
 "orderedPhenotypeGroupNames":"${getOrderedPhenotypeGroupNames().toString()}",
 "excludeFromLZ":"${getExcludeFromLZ().toString()}",
@@ -284,7 +307,8 @@ class PortalVersionBean {
 "exposePhewasModule":${getExposePhewasModule()},
 "exposeForestPlot":${getExposeForestPlot()},
 "exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
-"exposeGreenBoxes":${getExposeGreenBoxes()}
+"exposeGreenBoxes":${getExposeGreenBoxes()},
+"variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()}
 }""".toString()
     }
 }

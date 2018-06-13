@@ -250,9 +250,9 @@ class GeneController {
                                              identifiedGenes:identifiedGenes,
                                              assayId: assayId,
                                              sampleLevelSequencingDataExists: widgetService.sampleDataSuitableForGeneLevelBurdenTestsExists (),
-                                             //sampleLevelSequencingDataExists: restServerService.retrieveBeanForCurrentPortal().getSampleLevelSequencingDataExists(),
                                              genePageWarning:g.message(code: restServerService.retrieveBeanForCurrentPortal().getGenePageWarning(), default:restServerService.retrieveBeanForCurrentPortal().getGenePageWarning()),
-                                             regionSpecificVersion:restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()
+                                             regionSpecificVersion:restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion(),
+                                             portalVersionBean:restServerService.retrieveBeanForCurrentPortal()
             ] )
         }
     }
@@ -288,13 +288,16 @@ class GeneController {
 
         if (userQueryContext.variant) {
             if (restServerService.retrieveBeanForCurrentPortal().getRegionSpecificVersion()&&
-                    (userQueryContext.startOriginalExtent!=null)) { // we don't investigate RS numbers for positions, at least for now
+                restServerService.retrieveBeanForCurrentPortal().getVariantTakesYouToGenePage() &&
+                (userQueryContext.startOriginalExtent!=null)) { // we don't investigate RS numbers for positions, at least for now
                 redirect(controller: 'gene', action: 'geneInfo', params: [id              : userQueryContext.originalRequest,
                                                                           startExtent     : userQueryContext.startExpandedExtent,
                                                                           endExtent       : userQueryContext.endExpandedExtent,
                                                                           chromosomeNumber: userQueryContext.chromosome])
+                return
             } else {
-                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: params.id])
+                String proposedVariantName = (params.id).replaceAll(':', '_') // we can't pass through any colons to the URL
+                redirect(controller: 'variantInfo', action: 'variantInfo', params: [id: proposedVariantName])
                 return
             }
         }

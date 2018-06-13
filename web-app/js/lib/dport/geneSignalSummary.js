@@ -1496,14 +1496,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var selectorInfo = [];
         var displayInfo = [];
         if (additionalParameters.portalTypeString==='ibd'){
-            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
             selectorInfo = getParkerData(selectorInfo,[]);
-            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,1));
+            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
             displayInfo = getParkerData(displayInfo,[]);
         } else {
-            //selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
-            //selectorInfo = getParkerData(selectorInfo,[]);
-            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters.portalTypeString,0));
+            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
         }
 
 

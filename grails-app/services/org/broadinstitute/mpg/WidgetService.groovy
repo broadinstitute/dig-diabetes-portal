@@ -90,17 +90,17 @@ class WidgetService {
             case "ORBLOCK":
             case "ANDBLOCK": break;
             case "INTEGER":
-//                if (propertyValue?.length() < 1) {
-//                    generateFilter = false
-//                } else { // currently we can only send in one value.
-//                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
-//                    if (listOfSelectedValues.size() > 1) {
-//                        generateFilter = false
-//                    } else {
-//                        propertyValue = "${propertyValue}"
-//                    }
-//                }
-//                break;
+                if (propertyValue?.length() < 1) {
+                    generateFilter = false
+                } else { // currently we can only send in one value.
+                    List<String> listOfSelectedValues = propertyValue.tokenize(",")
+                    if (listOfSelectedValues.size() > 1) {
+                        generateFilter = false
+                    } else {
+                        propertyValue = "${propertyValue}"
+                    }
+                }
+                break;
             case "STRING":
                 if (propertyValue?.length() < 1) {
                     generateFilter = false
@@ -233,7 +233,7 @@ class WidgetService {
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, true, existingFilterList)
             } else if (filterParameter ==~ /\].+\,.+\[/) {  // this could be a extremes filter
                 existingFilterList = addCompoundFilter(map.cat, map.name, filterParameter, dataset, false, existingFilterList)
-            } else if ((filterParameter ==~ /.+\,.+/)&&(map.cat=="1")) {  // Has at least one comma and the filter is categorical.  Maybe there are multiple elements that need to be simultaneously selected
+            } else if ((filterParameter ==~ /.+\,.+/)&&((map.cat=="1")||(map.cat=="2"))) {  // Has at least one comma and the filter is categorical.  Maybe there are multiple elements that need to be simultaneously selected
                 existingFilterList = convertMultipleCategoricalsIntoFilterList(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)
             } else {
                 existingFilterList = addSingleFilter(map.cat, map.cmp, map.name, filterParameter, dataset, existingFilterList)

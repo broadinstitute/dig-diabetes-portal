@@ -203,7 +203,7 @@
 
                     <button id="generalized-go" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
                     <input id="generalized-input" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
-                    <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene</div>
+                    <div style="padding:10px 15px 0 0; text-align: right; float: right; ">Look for another gene or region</div>
 
                 </div>
 

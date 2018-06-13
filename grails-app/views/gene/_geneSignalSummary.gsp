@@ -139,7 +139,9 @@
                     assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},
                     genePageWarning:"${genePageWarning}",
-                    regionSpecificVersion:${regionSpecificVersion}
+                    regionSpecificVersion:${regionSpecificVersion},
+                    tissueRegionOverlapMatcher:"${portalVersionBean.getTissueRegionOverlapMatcher().join(",")}".split(","),
+                    tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(",")
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
