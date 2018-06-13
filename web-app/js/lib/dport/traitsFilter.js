@@ -7,6 +7,16 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.traitsFilter = (function () {
 
+        var homePageVariables;
+
+        var setHomePageVariables = function(incomingHomePageVariables){
+            homePageVariables = incomingHomePageVariables;
+        };
+
+        var getHomePageVariables = function(){
+            return homePageVariables;
+        };
+
 
 
         var setTraitsFilter = function (traitsJson,PLACE) {
@@ -59,7 +69,10 @@ var mpgSoftware = mpgSoftware || {};
 
         var launchTraitSearch = function (event) {
             var TRAIT = $(event.target).attr("phenotype");
-            var homePageVars = "${createLink(controller:'trait',action:'traitSearch')}";
+            var homePageVars = getHomePageVariables();
+
+            //var traitSerchUrl = SEARCHURL;
+            //console.log(serchUrl);
 
             var trait_val = mpgSoftware.traitsFilter.filterOutIllegalCharacters(TRAIT);
 
@@ -309,7 +322,8 @@ var mpgSoftware = mpgSoftware || {};
             setBtnOver:setBtnOver,
             setBtnOut:setBtnOut,
             clearTraitsSearch:clearTraitsSearch,
-            hideRelatedWords:hideRelatedWords
+            hideRelatedWords:hideRelatedWords,
+            setHomePageVariables:setHomePageVariables
         }
     }());
 })();

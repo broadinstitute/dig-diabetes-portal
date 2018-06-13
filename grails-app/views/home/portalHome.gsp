@@ -9,6 +9,7 @@
     <r:require module="mustache"/>
     <r:layoutResources/>
 
+
 </head>
 
 <body>
@@ -43,6 +44,13 @@
                 "findEveryVariantForAGeneUrl": "${createLink(controller:'variantSearch', action:'findEveryVariantForAGene')}"
             }
         );
+
+        mpgSoftware.traitsFilter.setHomePageVariables(
+            {
+                "traitSearchUrl":"${createLink(controller:'trait',action:'traitSearch')}"
+            }
+        );
+
         $(document).ready(function(){
             mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
             mpgSoftware.homePage.setSlideWindows();
