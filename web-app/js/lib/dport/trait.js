@@ -88,10 +88,10 @@ var mpgSoftware = mpgSoftware || {};
                             // if (convertedSampleGroup.indexOf(':')===-1) {
                             if ($(data[0]).hasClass('openPhenotype')) { // it phenotype is already been opened, so don't prepare to open it
                                 $(rowPtr.children()[1]).append("<div class='glyphicon glyphicon-minus-sign pull-right' aria-hidden='true' data-target='."+ $(data[0]).attr('phenotypename')+"collapsed' data-toggle='collapse' "+
-                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-snall\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
+                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='mpgSoftware.associationStatistics.respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-snall\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
                             } else {
                                 $(rowPtr.children()[1]).append("<div class='glyphicon open-glyphicon pull-right' aria-hidden='true' data-target='."+ $(data[0]).attr('phenotypename')+"collapsed' data-toggle='collapse' "+
-                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-full\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
+                                    "data-placement='right' title='Click to open additional associations for "+convertedSampleGroup+" across other data sets' onclick='mpgSoftware.associationStatistics.respondToPlusSignClick(this)'><span class=\"glyphicon glyphicon-resize-full\" aria-hidden=\"true\" style=\"-webkit-transform: rotate(-45deg); transform: rotate(-45deg)\"></span></div>");
                             }
                             // }
                         }
