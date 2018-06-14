@@ -52,7 +52,8 @@ var mpgSoftware = mpgSoftware || {};
 
             var returnText = "";
 
-            var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+            var searchWords = [];
+            if($("#traits_table_filter").length) searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
 
             for (var x = 0; x < wordsByWeight.length; x++) {
 
@@ -74,6 +75,11 @@ var mpgSoftware = mpgSoftware || {};
                 returnText += wordMatch;
             }
 
+            if($("#traits_table_filter").length) {
+                var searchWord = $("#traits_table_filter").val().trim();
+
+                if(searchWord.indexOf("=") >= 0) returnText = "";
+            }
 
             return returnText;
 
@@ -285,10 +291,11 @@ var mpgSoftware = mpgSoftware || {};
 
 
             var relatedWords = mpgSoftware.traitSample.showRelatedWords();
-            relatedWords += '<a href="javascript:;" onclick="$(this).parent().hide()" style="position:absolute; bottom:-2px; right:3px; font-size: 16px; color: #666;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a></div>';
+            if(relatedWords !="") relatedWords += '<a href="javascript:;" onclick="$(this).parent().hide()" style="position:absolute; bottom:-2px; right:3px; font-size: 16px; color: #666;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a></div>';
 
             ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").css({"box-shadow":"rgba(0,0,0,0.5) 0px 3px 5px","max-width":$(".related-words").parent().width()}).append(relatedWords).show("slow") : $(".related-words").html("").hide("slow");
 
+            if(relatedWords =="") $(".related-words").hide();
 
 
             if (showPhePlot == true) {
@@ -761,7 +768,12 @@ var mpgSoftware = mpgSoftware || {};
 
 
             /// add phenotype names
+
+            var topPhenotypesArray = [];
+
             if (phenotypesArray.length == 1) {
+
+                topPhenotypesArray = phenotypesArray;
 
                 group = svg.selectAll("g.phenotypenames")
                     .data(traitsTableData)
@@ -771,15 +783,17 @@ var mpgSoftware = mpgSoftware || {};
 
             } else {
 
+                topPhenotypesArray = [];
+
+                $.each(phenotypesArray,function(index, value) {
+                    if(value.logValue >= 8) topPhenotypesArray.push(phenotypesArray[index]);
+                })
+
                 group = svg.selectAll("g.phenotypenames")
-                    .data(phenotypesArray)
+                    .data(topPhenotypesArray)
                     .enter()
                     .append("g");
-
             }
-
-
-
 
             var phenotypeNameLineH = 17;
             var phenotypeNameNum = 20;
@@ -794,8 +808,6 @@ var mpgSoftware = mpgSoftware || {};
                     var xposition = x(d.sample)+10;
                     var yposition = y(d.logValue)-7;
 
-                    //if(i > 0) console.log(y(phenotypesArray[i-1].logValue) - y(phenotypesArray[i].logValue));
-
                     return "translate("+xposition+","+yposition+")"
                 })
                 .attr("style", function(d,i) {
@@ -809,7 +821,7 @@ var mpgSoftware = mpgSoftware || {};
                 .append("text")
                 .attr("y", 10)
                 .text(function(d){
-                    var returnText = (phenotypesArray.length == 1)? "" : d.phenotype ;
+                    var returnText = (topPhenotypesArray.length == 1)? "" : d.phenotype ;
                     return returnText;
                 })
                 .attr("style","font-size: 11px; text-anchor: start;")
