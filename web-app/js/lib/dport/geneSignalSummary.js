@@ -1328,6 +1328,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     };
     var initialPageSetUp = function (drivingVariables) {
+        // let us also initialized the region info metadata at this point
+        mpgSoftware.regionInfo.initializeRegionInfoModule (drivingVariables);
         $("#tableHeaderHolder").empty().append(
             Mustache.render($('#genePageHeaderTemplate')[0].innerHTML, drivingVariables));
     }

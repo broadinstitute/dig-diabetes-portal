@@ -3,7 +3,9 @@ package org.broadinstitute.mpg
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
+import groovy.json.*
 
 class RegionInfoController {
     RestServerService restServerService
@@ -81,6 +83,56 @@ class RegionInfoController {
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
     }
+
+
+
+
+    def availableAssayIdsJson() {
+        JSONArray jsonReturn;
+        ArrayList assayInformation = [
+                [assayID: 0, name: "none", quantile: [0,0,0,0,0], selectionOptions: [[value:"none",name:"none", map: 0] ] ],
+                [assayID: 1, name: "h3k27ac", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"h3k27ac",name:"H3K27ac", map: 0] ] ],
+                [assayID: 2, name: "dnase", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"dnase",name:"DNase", map: 0] ] ],
+                [assayID: 3, name: "parker", quantile: [0,0,0,0,0], selectionOptions:
+                        [            [value:"1_Active_TSS",name:"Active transcription start site", map: 1],
+                                     [value:"2_Weak_TSS",name:"Weak transcription start site", map: 2],
+                                     [value:"3_Flanking_TSS",name:"Flanking transcription start site", map:3 ],
+                                     [value:"5_Strong_transcription",name:"Strong transcription", map: 5],
+                                     [value:"6_Weak_transcription",name:"Weak transcription", map: 6],
+                                     [value:"8_Genic_enhancer",name:"Genic enhancer", map: 8],
+                                     [value:"9_Active_enhancer_1",name:"Active enhancer 1", map: 9],
+                                     [value:"10_Active_enhancer_2",name:"Active enhancer 2", map: 9],
+                                     [value:"11_Weak_enhancer",name:"Weak enhancer", map: 11],
+                                     [value:"14_Bivalent/poised_TSS",name:"Bivalent/poised transcription start site", map: 4],
+                                     [value:"16_Repressed_polycomb",name:"Repressed polycomb", map: 16],
+                                     [value:"17_Weak_repressed_polycomb",name:"Weak repressed polycomb", map: 17],
+                                     [value:"18_Quiescent/low_signal",name:"Quiescent/low signal", map: 18]] ],
+                [assayID: 4, name: "varshney", quantile: [0,0,0,0,0], selectionOptions:
+                        [            [value:"1_Active_TSS",name:"Active transcription start site", map: 1],
+                                     [value:"2_Weak_TSS",name:"Weak transcription start site", map: 2],
+                                     [value:"3_Flanking_TSS",name:"Flanking transcription start site", map:3 ],
+                                     [value:"5_Strong_transcription",name:"Strong transcription", map: 5],
+                                     [value:"6_Weak_transcription",name:"Weak transcription", map: 6],
+                                     [value:"8_Genic_enhancer",name:"Genic enhancer", map: 8],
+                                     [value:"9_Active_enhancer_1",name:"Active enhancer 1", map: 9],
+                                     [value:"10_Active_enhancer_2",name:"Active enhancer 2", map: 9],
+                                     [value:"11_Weak_enhancer",name:"Weak enhancer", map: 11],
+                                     [value:"14_Bivalent/poised_TSS",name:"Bivalent/poised transcription start site", map: 4],
+                                     [value:"16_Repressed_polycomb",name:"Repressed polycomb", map: 16],
+                                     [value:"17_Weak_repressed_polycomb",name:"Weak repressed polycomb", map: 17],
+                                     [value:"18_Quiescent/low_signal",name:"Quiescent/low signal", map: 18]] ],
+                [assayID: 5, name: "not used", quantile: [9,10,11,12,13], selectionOptions: [[value:"none",name:"none", map: 0]] ]
+        ]
+
+        String proposedJsonString = new JsonBuilder( assayInformation ).toPrettyString()
+        def slurper = new JsonSlurper()
+        jsonReturn =  slurper.parseText(proposedJsonString);
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
 
 
 
