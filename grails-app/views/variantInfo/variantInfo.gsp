@@ -99,6 +99,10 @@
             core.errorReporter(jqXHR, errorThrown)
         });
     });
+
+    $(window).resize(function() {
+        mpgSoftware.traitSample.filterTraitsTable();
+    })
 </script>
 
 
