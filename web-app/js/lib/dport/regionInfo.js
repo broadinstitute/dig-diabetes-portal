@@ -401,16 +401,17 @@ var mpgSoftware = mpgSoftware || {};
                 if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
                     quantileArray = createQuantilesArray(record.ASSAY_ID);
                     var elementName = record.source_trans;
-                    if (record.ASSAY_ID === 3){
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_"+determineCategoricalColorIndex(record.element)+" "+
+                    var provideDefaultForAssayId = (typeof record.ASSAY_ID === 'undefined') ? 3 : record.ASSAY_ID;
+                    if  (provideDefaultForAssayId === 3){
+                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_"+determineCategoricalColorIndex(record.element)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                             ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
-                    } else if (record.ASSAY_ID === 5) {
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
+                    } else if (provideDefaultForAssayId === 5) {
+                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                             ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'>"+record.state+"</td>");
                     } else {
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+record.ASSAY_ID + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
+                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
                         elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                         ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
                     }
@@ -423,6 +424,8 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var createQuantilesArray = function(assayId){
+            // let's make assay ID==3 the default
+            if ((typeof assayId === 'undefined') ) { assayId = 3;}
             var boundariesForThisAssay = precalculatedQuantileBoundaries[assayId];
             var quantileArray = [];
             for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
@@ -451,7 +454,7 @@ var mpgSoftware = mpgSoftware || {};
                 var variantsToKeep = {};
                 _.forEach(Object.keys(incomingTissueGrid[tissueKey]),function(variantPos){
                     var variantRecord = incomingTissueGrid[tissueKey][variantPos];
-                    if (assayIdArray.includes(variantRecord.ASSAY_ID)){
+                    if (((typeof variantRecord.ASSAY_ID === 'undefined') ) || (assayIdArray.includes(variantRecord.ASSAY_ID))){
                         variantsToKeep[variantPos]=variantRecord;
                     }
                 });

@@ -308,14 +308,15 @@ class VariantInfoController {
         elementMapper["18_Quiescent/low_signal"] = [name:"Quiescent low signal",state_id:13]
 
         List requestedAssays = []
-        if (params.assayIdList){
-            String assayIdStringContents = ((params.assayIdList as String) - "]") - "["
+        String assayIdListWithDefaults = ((params.assayIdList=="[undefined]")||(params.assayIdList==null)) ? "[3]" : params.assayIdList
+        if (assayIdListWithDefaults){
+            String assayIdStringContents = (assayIdListWithDefaults - "]") - "["
             requestedAssays = assayIdStringContents.split(",")
         }
         if (!requestedAssays.contains("5")){
             dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
-                    source, 3, params.assayIdList )
-        } else {
+                    source, assayIdListWithDefaults )
+        } else { // this is a temporary hack to call directly to UCSD.  Should be removed.
             dataJsonObject = restServerService.getUcsdRangeData([],[],[],[],"binding footprints",
             "chr${chromosome}:${startPos}-${endPos}", pageStart, pageEnd,source)
         }

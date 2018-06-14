@@ -54,6 +54,7 @@ modules = {
     traitInfo {
         resource url: 'css/dport/trait.css'
         resource url: 'js/lib/dport/trait.js'
+        resource url: 'js/lib/dport/associationStatistics.js'
     }
     sunburst {
         resource url: 'css/dport/sunburst.css'
@@ -135,6 +136,7 @@ modules = {
         resource url: 'js/lib/dport/variantInfo.js'
         resource url: 'js/lib/dport/barchart.js'
         resource url: 'js/lib/dport/igvLaunch.js'
+        resource url: 'js/lib/dport/associationStatistics.js'
     }
     variantWF {
         //dependsOn "portalHome"

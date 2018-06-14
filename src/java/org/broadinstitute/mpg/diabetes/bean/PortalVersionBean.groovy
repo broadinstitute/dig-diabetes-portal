@@ -46,6 +46,9 @@ class PortalVersionBean {
     private Integer exposeForestPlot
     private Integer exposeTraitDataSetAssociationView
     private Integer exposeGreenBoxes
+    private Integer variantTakesYouToGenePage
+    private Integer utilizeBiallelicGait
+    private Integer utilizeUcsdData
 
 
     public PortalVersionBean(String portalType,
@@ -82,7 +85,10 @@ class PortalVersionBean {
                              Integer exposePhewasModule,
                              Integer exposeForestPlot,
                              Integer exposeTraitDataSetAssociationView,
-                             Integer exposeGreenBoxes ){
+                             Integer exposeGreenBoxes,
+                             Integer variantTakesYouToGenePage,
+                             Integer utilizeBiallelicGait,
+                             Integer utilizeUcsdData){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -118,6 +124,9 @@ class PortalVersionBean {
         this.exposeForestPlot = exposeForestPlot
         this.exposeTraitDataSetAssociationView = exposeTraitDataSetAssociationView
         this.exposeGreenBoxes = exposeGreenBoxes
+        this.variantTakesYouToGenePage = variantTakesYouToGenePage
+        this.utilizeBiallelicGait = utilizeBiallelicGait
+        this.utilizeUcsdData = utilizeUcsdData
     }
 
     public String getPortalType() {
@@ -262,6 +271,19 @@ class PortalVersionBean {
         return exposeGreenBoxes
     }
 
+    public Integer getVariantTakesYouToGenePage(){
+        return variantTakesYouToGenePage
+    }
+
+    public Integer getUtilizeBiallelicGait(){
+        return utilizeBiallelicGait
+    }
+
+    public Integer getUtilizeUcsdData(){
+        return utilizeUcsdData
+    }
+
+
 
 
 
@@ -300,7 +322,10 @@ class PortalVersionBean {
 "exposePhewasModule":${getExposePhewasModule()},
 "exposeForestPlot":${getExposeForestPlot()},
 "exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
-"exposeGreenBoxes":${getExposeGreenBoxes()}
+"exposeGreenBoxes":${getExposeGreenBoxes()},
+"variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()},
+"utilizeBiallelicGait":${getUtilizeBiallelicGait()},
+"utilizeUcsdData":${getUtilizeUcsdData()}
 }""".toString()
     }
 }

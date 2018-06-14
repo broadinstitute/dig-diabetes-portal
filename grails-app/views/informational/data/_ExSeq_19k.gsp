@@ -303,7 +303,7 @@
 
             </table>
         </div></td><td>European</td></tr>
-    <tr><td>GoT2D</td><td>97</td><td>90</td><td><a onclick="showSection(event)">KORAgen Study Helmholtz zentrum München (KORA</a>)
+    <tr><td>GoT2D</td><td>97</td><td>90</td><td><a onclick="showSection(event)">KORAgen Study Helmholtz zentrum München (KORA)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -462,7 +462,7 @@
                         Cases had all of the following:
                         <ul>
                             <li>diagnosis of type 2 diabetes </li>
-                            <li>BMI &gt; 27.5 kg/m<sub>2</sub></li>
+                            <li>BMI &gt; 27.5 kg/m2</li>
                             <li>hypertension (systolic/diastolic BP &gt; 140/90 mmHg or use of antihypertensive medication)</li>
                         </ul>
                     </td>
@@ -470,8 +470,8 @@
                         Controls had all of the following:<ul>
                             <li>fasting plasma glucose &lt; 5.6 mmol/l</li>
                             <li>2 h post-OGTT plasma glucose &lt; 7.8 mmol/l</li>
-                            <li>BMI &lt; 27.5 kg/m<sub>2</sub></li>
-                        <li>blood pressure &lt; 40/90 mmHg</li>
+                            <li>BMI &lt; 27.5 kg/m2</li>
+                        <li>blood pressure &lt; 140/90 mmHg</li>
                             <ul>
                     </td></tr>
             </table>
