@@ -12,9 +12,17 @@ var mpgSoftware = mpgSoftware || {};
         var storeAssayInformation = function (incomingAssayInformation) {
             assayInformation = incomingAssayInformation;
         };
-
-        var getAssayInformation = function () {
+        var getAssayMetadata = function () {
+            if (typeof assayInformation === 'undefined') {
+                console.log ("Assay metadata appears to be absent. Page failure imminent.");
+            }
             return assayInformation;
+        };
+        var getAssayInformation = function () {
+            return getAssayMetadata ().assays;
+        };
+        var getTissueInformation = function () {
+            return getAssayMetadata ().issues;
         };
 
         var initializeRegionInfoModule = function (drivingVariables){
@@ -91,18 +99,7 @@ var mpgSoftware = mpgSoftware || {};
                 if (typeof elementForAssay !== 'undefined') {
                     assayIds.push(elementForAssay.assayID);
                 }
-                // if (oe.name==='UCSD'){
-                //     assayIds.push(5);
-                // } else if (oe.name==='H3K27ac'){
-                //     assayIds.push(1);
-                // } else if (oe.name==='DNase'){
-                //     assayIds.push(2);
-                // } else {
-                //     if (!assayIds.includes(3)){
-                //         assayIds.push(3);
-                //     }
-                // }
-            });
+             });
             return assayIds;
         };
         var getSelectorAssayIds = function() {
@@ -987,7 +984,8 @@ var mpgSoftware = mpgSoftware || {};
             getDefaultTissueRegionOverlapMatcher:getDefaultTissueRegionOverlapMatcher,
             getSelectorAssayIds:getSelectorAssayIds,
             specificHeaderToBeActiveByVarId:specificHeaderToBeActiveByVarId,
-            initializeRegionInfoModule:initializeRegionInfoModule
+            initializeRegionInfoModule:initializeRegionInfoModule,
+            retrieveDesiredAssay:retrieveDesiredAssay
         }
 
     })();
