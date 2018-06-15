@@ -747,7 +747,7 @@ the individual filters themselves. That work is handled later as part of a loop-
             {{/variantsSetRefinement}}
 
             <div class="container">
-                <h5>
+            <h5>
                     {{#modifiedGaitSummary}}
                         {{modifiedGaitSummary}}
                     {{/modifiedGaitSummary}}

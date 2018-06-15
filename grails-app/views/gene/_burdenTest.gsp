@@ -466,6 +466,7 @@ $( document ).ready( function (){
 
 
 <div class="container">
+
     <h3><g:message code="gene.burdenTesting.prepare_run"/> <%=geneName%>.</h3>
 
     <div class="row burden-test-wrapper-options">

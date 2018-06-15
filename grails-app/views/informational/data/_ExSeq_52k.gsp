@@ -6,9 +6,9 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Abecasis_2018_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Abecasis_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Abecasis_2018_submitted.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Flannick_2018_submitted"></g:message><br>
+<g:message code="informational.shared.publications.Flannick_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Flannick_2018_submitted.citation"></g:message> </div>
 </div></p>
 
 <p><div class="paper">
@@ -709,6 +709,47 @@
             </table>
         </div></td><td>South Asian</td></tr>
 
+<tr><td>ProDIGY</td><td>3,097</td><td>0</td><td><a onclick="showSection(event)">Treatment Options for Type 2 Diabetes in Adolescents and Youth (TODAY)</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Medical record documentation of diabetes by ADA criteria, except that for individuals diagnosed with elevated 2 Hour glucose on an OGTT only</li>
+                            <li>HbA1c &gt; 6</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>n/a</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>Mixed</td></tr>
+
+
+<tr><td>ProDIGY</td><td>553</td><td>0</td><td><a onclick="showSection(event)">SEARCH for Diabetes in Youth (SEARCH)</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>Provider diagnosis of T2D</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>n/a</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>Mixed</td></tr>
 </table>
 
 <h4><g:message code="informational.shared.headers.project"></g:message>s</h4>

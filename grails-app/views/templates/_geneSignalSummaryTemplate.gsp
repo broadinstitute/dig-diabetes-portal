@@ -360,6 +360,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <h4>The custom burden test allows secure, interactive analysis based on the individual-level data in the AMP T2D-GENES exome sequence analysis dataset, comprised of 20,791 type 2 diabetes cases and 24,440 controls from five ancestries.</h4>
+
                         </script>
 
 

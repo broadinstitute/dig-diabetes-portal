@@ -23,6 +23,8 @@ var mpgSoftware = mpgSoftware || {};
                 access = "Early access phase 1";}
             else if (dataTypeName.includes('DCSP2')){
                 access = "Early access phase 1";}
+            else if (dataTypeName.includes('52k')){
+                access = "Early access phase 1 - NEW DATASET";}
             else{
                 access = "Open access";}
             return access;
