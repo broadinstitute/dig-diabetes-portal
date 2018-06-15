@@ -87,7 +87,7 @@ var mpgSoftware = mpgSoftware || {};
             var assayIds = [];
             var assayInformation = getAssayInformation();
             _.forEach(selectedValuesAndText,function(oe){
-                var elementForAssay = _.find (assayInformation, function (o){return (_.findIndex (o.selectionOptions,function (p){return p.name===oe.name})>-1)});
+                var elementForAssay = _.find (assayInformation, function (o){return (_.findIndex (o.selectionOptions,function (p){return p.value===oe.name})>-1)});
                 if (typeof elementForAssay !== 'undefined') {
                     assayIds.push(elementForAssay.assayID);
                 }
@@ -571,7 +571,7 @@ var mpgSoftware = mpgSoftware || {};
             var chosenElementTypes = [];
             var assayInformation = getAssayInformation();
             _.forEach(selectedElements,function(oe){
-                var elementForAssay = _.find (assayInformation, function (o){return (_.findIndex (o.selectionOptions,function (p){return p.name===oe.name})>-1)});
+                var elementForAssay = _.find (assayInformation, function (o){return (_.findIndex (o.selectionOptions,function (p){return p.value===oe.name})>-1)});
                 if (typeof elementForAssay !== 'undefined') {
                     var chosenElementType = {name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)};
                     chosenElementType [elementForAssay.name] = 1

@@ -91,8 +91,8 @@ class RegionInfoController {
         JSONArray jsonReturn;
         ArrayList assayInformation = [
                 [assayID: 0, name: "none", quantile: [0,0,0,0,0], selectionOptions: [[value:"none",name:"none", map: 0] ] ],
-                [assayID: 1, name: "h3k27ac", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"h3k27ac",name:"H3K27ac", map: 0] ] ],
-                [assayID: 2, name: "dnase", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"dnase",name:"DNase", map: 0] ] ],
+                [assayID: 1, name: "h3k27ac", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"H3K27ac",name:"h3k27ac", map: 0] ] ],
+                [assayID: 2, name: "dnase", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"DNase",name:"dnase", map: 0] ] ],
                 [assayID: 3, name: "parker", quantile: [0,0,0,0,0], selectionOptions:
                         [            [value:"1_Active_TSS",name:"Active transcription start site", map: 1],
                                      [value:"2_Weak_TSS",name:"Weak transcription start site", map: 2],
