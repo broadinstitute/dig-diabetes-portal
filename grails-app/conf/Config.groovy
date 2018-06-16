@@ -129,6 +129,7 @@ if (grails.config.locations.isEmpty()){
 }
 
 digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
+digdevlocalFederatedServer = new ServerBean("KB-dev-localhost-federated", "http://localhost:8090/dccservices/distributed/")
 digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
 federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
@@ -148,10 +149,10 @@ federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-
 
 // this will be your default
 defaultRestServer = digawsqanewKB_fed
-defaultRestServer = digawsdevnewKB
 
 getRestServerList = [
         digdevlocalServer,
+        digdevlocalFederatedServer,
         digAWSKBV2prodServer,
 //        digAWS02KBV2prodServer,
         federatedAwsProdKBV2Server,
@@ -296,13 +297,10 @@ environments {
 
 //        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
-<<<<<<< HEAD
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
-=======
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://variant2function.org"
-        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
->>>>>>> origin/master
+//        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
