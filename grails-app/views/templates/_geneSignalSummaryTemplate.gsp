@@ -847,6 +847,18 @@
     <tbody>
     {{#const}}
 
+        {{#annotation}}
+            <tr>
+                {{#annotationSection}}
+                    <td class="{{primaryRowClass}} {{secondaryRowClass}}" rowspan={{rowsPerSection}}>{{sectionName}}</td>
+                {{/annotationSection}}
+                <td class="{{rowClass}}">{{rowName}}</td>
+                {{#annotationRecord}}
+                    <td class="credcell {{descr}}">{{val}}</td>
+                {{/annotationRecord}}
+            </tr>
+        {{/annotation}}
+
         <tr>
             <td class="credcellpval credSetOrgLabel" rowspan=5>annotation</td>
             <td class="credSetConstLabel">Coding</td>
@@ -856,7 +868,6 @@
         </tr>
 
         <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credSetConstLabel">Splice site</td>
             {{#spliceSite}}
             <td class="credcell {{descr}}">{{val}}</td>
@@ -864,7 +875,6 @@
         </tr>
 
         <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credSetConstLabel">UTR</td>
             {{#utr}}
             <td class="credcell {{descr}}">{{val}}</td>
@@ -872,7 +882,6 @@
         </tr>
 
         <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credSetConstLabel">Promoter</td>
             {{#promoter}}
             <td class="credcell {{descr}}">{{val}}</td>
@@ -880,7 +889,6 @@
         </tr>
 
         <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
             <td class="credcellpval credSetConstLabel">TF binding motif</td>
             {{#tfBindingMotif}}
             <td class="credcellmotif {{descr}}">{{val}}</td>

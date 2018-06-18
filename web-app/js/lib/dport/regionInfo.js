@@ -22,7 +22,10 @@ var mpgSoftware = mpgSoftware || {};
             return getAssayMetadata ().assays;
         };
         var getTissueInformation = function () {
-            return getAssayMetadata ().issues;
+            return getAssayMetadata ().tissues;
+        };
+        var getAnnotationInformation = function () {
+            return getAssayMetadata ().annotations;
         };
 
         var initializeRegionInfoModule = function (drivingVariables){
@@ -152,6 +155,8 @@ var mpgSoftware = mpgSoftware || {};
                                     },
                                     pValue: []
                                 },
+                                annotation:[],
+
                                 cellTypeSpecs: [
                                 ]};
             if (typeof data !== 'undefined'){

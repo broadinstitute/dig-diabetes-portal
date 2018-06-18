@@ -141,10 +141,20 @@ class RegionInfoController {
                                    [value: 30, name:"StomachSmoothMuscle",description:"stomach smooth muscle"],
                                    [value: 31, name:"SubstantiaNigra",description:"brain substantia nigra"]
                 ]
+        ArrayList annotationInformation = [
+                                    [annotationID: 1, value: 'coding', name: "Coding", description: "coding", type: "BINARY", sort_order: 1, group: "annotation" ],
+                                    [annotationID: 2, value: 'spliceSite', name: "Splice site", description: "splice site", type: "BINARY", sort_order: 2, group: "annotation" ],
+                                    [annotationID: 3, value: 'utr', name: "UTR", description: "untranslated region", type: "BINARY", sort_order: 3, group: "annotation"  ],
+                                    [annotationID: 4, value: 'promoter', name: "Promoter", description: "promoter", type: "BINARY", sort_order: 4, group: "annotation"  ],
+                                    [annotationID: 5, value: 'tfBindingMotif', name: "TF binding motif", description: "TF binding motif", type: "STRING", sort_order: 5, group: "annotation"  ],
+                                    [annotationID: 6, value: 'posteriorProbability', name: "Posterior probability", description: "Posterior probability", type: "REAL", sort_order: 6, group: "association" ],
+                                    [annotationID: 7, value: 'pValue', name: "P value", description: "P value", type: "REAL", sort_order: 7, group: "association" ]
+                ]
 
 
         String proposedJsonString = new JsonBuilder( [ assays: assayInformation,
-                                                       tissues: tissueInformation ]).toPrettyString()
+                                                       tissues: tissueInformation,
+                                                       annotations: annotationInformation ]).toPrettyString()
         def slurper = new JsonSlurper()
         jsonReturn =  slurper.parseText(proposedJsonString);
 
