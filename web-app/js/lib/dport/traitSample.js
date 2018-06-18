@@ -943,7 +943,7 @@ var mpgSoftware = mpgSoftware || {};
                     if (phenotypesArray.length != 1) {
                         var phenotypeName = "="+d3.select(this).attr("phenotype-name");
 
-                        mpgSoftware.traitSample.resetPhePlotAndTable(phenotypeName,);
+                        mpgSoftware.traitSample.resetPhePlotAndTable(phenotypeName,"");
 
                         d3.select("#phePlotTooltip").classed("hidden", true);
 

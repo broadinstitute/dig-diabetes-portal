@@ -268,109 +268,7 @@
                 }
             }
 
-            /* LocusZoom UI */
-            function massageLZ() {
 
-                if($("#dk_lz_phenotype_list").hasClass("list-allset")) {
-
-                } else {
-                    var lzPhenotypes = [];
-
-                    $("#dk_lz_phenotype_list").find("li").each(function() {
-                        var lzPhenotype = $(this).text();
-                        var lzExist = 0;
-                        $.each(lzPhenotypes, function(key, value) {
-                            (lzPhenotype == value)? lzExist = 1 : "";
-                        });
-
-                        (lzExist == 0)? lzPhenotypes.push(lzPhenotype) : "";
-                    });
-
-                    lzPhenotypes.sort(function(s1, s2){
-                        var l=s1.toLowerCase(), m=s2.toLowerCase();
-                        return l===m?0:l>m?1:-1;
-                    });
-
-                    var lzPhenotypeListContent = "<div><label style='display:block; margin-left: 20px;'>Filter phenotypes</label><input id='phenotype_search' type='text' name='search' style='margin: 0 20px 10px 20px; width: 250px;' placeholder='Filter phenotypes (keyword, keyword)'></div>";
-
-                    $.each(lzPhenotypes, function(key, value) {
-                        lzPhenotypeListContent += "<li><a href='javascript:;' onclick='setLZDatasets(event);showLZlist(event);'>"+value+"</a></li>";
-                    });
-
-                    $("#dk_lz_phenotype_list").html(lzPhenotypeListContent);
-
-                    $(".lz-list").each(function() {
-                        if ($(this).find("ul").find("li").length == 0){
-
-                            $(this).css("opacity","0.5");
-                            $(this).find("ul").remove();
-                        }
-                    });
-
-                    $("#phenotype_search").focus(function() {
-                        $(this).attr("placeholder", "");
-                    });
-
-                    $("#phenotype_search").focusout(function() {
-                        $(this).attr("placeholder", "Filter phenotypes (keyword, keyword)");
-                    });
-
-                    $("#phenotype_search").on('input',function() {
-
-                        $("#dk_lz_phenotype_list").find("li").removeClass("hidden-phenotype");
-
-                        var searchWords = $("#phenotype_search").val().toLowerCase().split(",");
-
-                        $.each(searchWords, function(index,value){
-
-
-                            $("#dk_lz_phenotype_list").find("a").each(function() {
-
-                                if($(this).closest("li").hasClass("hidden-phenotype")){
-
-                                } else {
-
-                                    var phenotypeString = $(this).text().toLowerCase();
-                                    var searchWord = value.trim();
-
-                                    if(phenotypeString.indexOf(searchWord) >= 0) {
-                                        $(this).closest("li").removeClass("hidden-phenotype");
-                                    } else {
-                                        $(this).closest("li").addClass("hidden-phenotype");
-                                    }
-
-                                }
-                            })
-                        });
-
-
-                    });
-
-                    $("#dk_lz_phenotype_list").addClass("list-allset")
-
-                }
-
-            }
-
-            function setLZDatasets(event) {
-
-                $(event.target).closest(".col-md-12").find(".selected-phenotype").text("(Phenotype: " + $(event.target).text()+")");
-
-                var phenotypeName = $.trim($(event.target).text());
-
-                $("span.dk-lz-dataset").each(function() {
-                    var trimmedPName = $.trim($(this).text());
-
-                    (trimmedPName == phenotypeName)? $(this).closest("li").css("display","block") : $(this).closest("li").css("display","none");
-                })
-            }
-
-            function showLZlist(event) {
-
-                if($(event.target).closest(".lz-list").find("ul").find("li").length != 0) {
-                    ($(event.target).closest(".lz-list").hasClass("open"))? $(event.target).closest(".lz-list").removeClass("open") : $(event.target).closest(".lz-list").addClass("open");
-                }
-            }
 
 
             //turn on/off DK's plot
@@ -493,7 +391,7 @@
             $( window ).load( function() {
 
                 /* massage LocusZoom UI */
-                massageLZ();
+                //if(mpgSoftware.traitsFilter) mpgSoftware.traitsFilter.massageLZ();
 
             });
 
