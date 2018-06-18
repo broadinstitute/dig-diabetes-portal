@@ -188,6 +188,23 @@ var mpgSoftware = mpgSoftware || {};
                     if (typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined'){
                         if ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY)) {
                             renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
+                            var recordIndex = _.findIndex (renderData.annotation, function(o){return o.value==='posteriorProbability'});
+                            if (recordIndex === -1){
+                                var metadataIndex = _.findIndex(getAnnotationInformation(),function (o){return o.value==='posteriorProbability'});
+                                if (metadataIndex === -1){
+                                    log.console('missing annotation metadata record');
+                                } else {
+                                    var annotationRecord = {annotationSection:[],
+                                        rowName: o.name,
+                                        sort_order: o.sort_order,
+                                        annotationRecord:
+                                    }
+                                    renderData.annotation.push({});
+                                }
+                            }
+                            if (renderData.annotation){
+
+                            }
                         }
                     }
                     if ((typeof v.extractedP_VALUE !== 'undefined')&&
