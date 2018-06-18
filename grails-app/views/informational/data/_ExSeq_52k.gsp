@@ -786,7 +786,7 @@
 <p><g:message code="informational.data.overview.52K-3"></g:message></p>
 <p>&nbsp;</p>
 
-<h4>Accessing AMP T2D-GENES exome sequence analysis data</h4>
+<h4>Accessing 45K exome sequence analysis data</h4>
     <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
 
 
