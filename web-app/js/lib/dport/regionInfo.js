@@ -135,7 +135,53 @@ var mpgSoftware = mpgSoftware || {};
         var getCurrentSequenceExtents = function (){
             return {start: parseInt($('input.credSetStartPos').val()),
                     end:parseInt($('input.credSetEndPos').val())};
-        }
+        };
+
+        var insertAnnotation = function (renderData, fieldId, valueToInsert){
+            var metadataRecord;
+            var recordType;
+            var recordIndex = _.findIndex (renderData.annotation, function(o){return o.value===fieldId});
+            if (recordIndex === -1){
+                var metadataIndex = _.findIndex(getAnnotationInformation(),function (o){return o.value===fieldId});
+                if (metadataIndex === -1){
+                    console.log('missing annotation metadata record');
+                } else {
+                    metadataRecord = getAnnotationInformation()[metadataIndex];
+                    recordType = metadataRecord.type;
+                    var annotationRecord = {annotationSection:[{
+                        sectionName: metadataRecord.name,
+                        primaryRowClass:'credcellpval',
+                        secondaryRowClass:'credSetOrgLabel'
+                    }],
+                        rowName: metadataRecord.name,
+                        value:metadataRecord.value,
+                        sort_order: metadataRecord.sort_order,
+                        type:  recordType,
+                        annotationRecord:[]
+                    };
+                    renderData.annotation.push(annotationRecord);
+                    recordIndex = _.findIndex (renderData.annotation, function(o){return o.value===fieldId});
+                    if (recordIndex === -1){
+                        console.log(' unexpected inconsistency');
+                        return;
+                    }
+
+                }
+            }
+            recordType = renderData.annotation[recordIndex].type;
+            if (recordType === "BINARY"){
+                var classToInsert = 'absent';
+                if (valueToInsert){
+                    classToInsert = 'present';
+                }
+                renderData.annotation[recordIndex].annotationRecord.push({val:'',descr:classToInsert});
+            } else if (recordType === "COMPOUND"){
+                renderData.annotation[recordIndex].annotationRecord.push(valueToInsert);
+            } else if (recordType === "REAL") {
+                renderData.annotation[recordIndex].annotationRecord.push({val:UTILS.realNumberFormatter(valueToInsert)});
+            }
+            return renderData;
+        };
 
         var buildRenderData = function (data,additionalParameters){
             var renderData = {  variants: [],
@@ -187,66 +233,57 @@ var mpgSoftware = mpgSoftware || {};
 
                     if (typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined'){
                         if ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY)) {
-                            renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
-                            var recordIndex = _.findIndex (renderData.annotation, function(o){return o.value==='posteriorProbability'});
-                            if (recordIndex === -1){
-                                var metadataIndex = _.findIndex(getAnnotationInformation(),function (o){return o.value==='posteriorProbability'});
-                                if (metadataIndex === -1){
-                                    log.console('missing annotation metadata record');
-                                } else {
-                                    var annotationRecord = {annotationSection:[],
-                                        rowName: o.name,
-                                        sort_order: o.sort_order,
-                                        annotationRecord:
-                                    }
-                                    renderData.annotation.push({});
-                                }
-                            }
-                            if (renderData.annotation){
-
-                            }
+                            //renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
+                            insertAnnotation(renderData,'posteriorProbability',v.extractedPOSTERIOR_PROBABILITY);
                         }
                     }
                     if ((typeof v.extractedP_VALUE !== 'undefined')&&
                         ($.isNumeric(v.extractedP_VALUE))) {
-                        renderData.const.pValue.push({val:UTILS.realNumberFormatter(v.extractedP_VALUE)});
+                        //renderData.const.pValue.push({val:UTILS.realNumberFormatter(v.extractedP_VALUE)});
+                        insertAnnotation(renderData,'pValue',v.extractedP_VALUE);
                     }
-                    renderData.const.pValue.push();
+                    //renderData.const.pValue.push();
                     if (typeof v.VAR_ID !== 'undefined') {
                         renderData.variants.push({name:v.VAR_ID, details:v, assayIdList: additionalParameters.assayIdList});
                     }
                     if (typeof v.MOST_DEL_SCORE !== 'undefined') {
-                        if ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)){
-                            renderData.const.coding.push({val:'',descr:'present'});
-                        } else {
-                            renderData.const.coding.push({val:'',descr:'absent'});
-                        }
+                        // if ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)){
+                        //     renderData.const.coding.push({val:'',descr:'present'});
+                        // } else {
+                        //     renderData.const.coding.push({val:'',descr:'absent'});
+                        // }
+                        insertAnnotation(renderData,'coding', ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)) );
                     }
                     if (typeof v.MOTIF_NAME !== 'undefined') {
-                        if (v.MOTIF_NAME === null) {
-                            renderData.const.tfBindingMotif.push({val:'',descr:'absent'});
-                        } else {
-                            renderData.const.tfBindingMotif.push({val:v.MOTIF_NAME,descr:'present'});
-                        }
-
+                        // if (v.MOTIF_NAME === null) {
+                        //     renderData.const.tfBindingMotif.push({val:'',descr:'absent'});
+                        // } else {
+                        //     renderData.const.tfBindingMotif.push({val:v.MOTIF_NAME,descr:'present'});
+                        // }
+                        insertAnnotation(renderData,'tfBindingMotif', (v.MOTIF_NAME === null) ?
+                            {val:'',descr:'absent'}:
+                            {val:v.MOTIF_NAME,descr:'present'});
                     }
                     if (typeof v.Consequence !== 'undefined'){
-                        if (v.Consequence.indexOf('splice')>-1){
-                            renderData.const.spliceSite.push({val:'',descr:'present'});
-                        } else {
-                            renderData.const.spliceSite.push({val:'',descr:'absent'});
-                        }
-                        if (v.Consequence.indexOf('UTR')>-1){
-                            renderData.const.utr.push({val:'',descr:'present'});
-                        } else {
-                            renderData.const.utr.push({val:'',descr:'absent'});
-                        }
-                        if (v.Consequence.indexOf('promoter')>-1){
-                            renderData.const.promoter.push({val:'',descr:'present'});
-                        } else {
-                            renderData.const.promoter.push({val:'',descr:'absent'});
-                        }
-                        renderData.const.CTCFmotif.push({val:'',descr:'absent'});
+                        // if (v.Consequence.indexOf('splice')>-1){
+                        //     renderData.const.spliceSite.push({val:'',descr:'present'});
+                        // } else {
+                        //     renderData.const.spliceSite.push({val:'',descr:'absent'});
+                        // }
+                        insertAnnotation(renderData,'spliceSite', (v.Consequence.indexOf('splice')>-1));
+                        // if (v.Consequence.indexOf('UTR')>-1){
+                        //     renderData.const.utr.push({val:'',descr:'present'});
+                        // } else {
+                        //     renderData.const.utr.push({val:'',descr:'absent'});
+                        // }
+                        insertAnnotation(renderData,'utr', (v.Consequence.indexOf('UTR')>-1));
+                        // if (v.Consequence.indexOf('promoter')>-1){
+                        //     renderData.const.promoter.push({val:'',descr:'present'});
+                        // } else {
+                        //     renderData.const.promoter.push({val:'',descr:'absent'});
+                        // }
+                        insertAnnotation(renderData,'promoter', (v.Consequence.indexOf('promoter')>-1));
+                        //renderData.const.CTCFmotif.push({val:'',descr:'absent'});
                     }
                 });
             }
@@ -292,21 +329,23 @@ var mpgSoftware = mpgSoftware || {};
 
 
             _.forEach(arrayOfIndexesToInclude, function (i){
-
-
-                newRenderData.variants.push(oldRenderData.variants[i]);
-                newRenderData.const.coding.push(oldRenderData.const.coding[i]);
-                newRenderData.const.spliceSite.push(oldRenderData.const.spliceSite[i]);
-                newRenderData.const.utr.push(oldRenderData.const.utr[i]);
-                newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
-                if (typeof oldRenderData.const.tfBindingMotif[i]!=='undefined') {// sometimes we don't have these
-                    newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
-                }
-                newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
-                if (typeof oldRenderData.const.posteriorProbability[i]!=='undefined'){// sometimes we don't have these
-                    newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
-                }
-                newRenderData.const.pValue.push(oldRenderData.const.pValue[i]);
+                newRenderData.annotation = [];
+                _.forEach(oldRenderData.annotation,function (val,ind){
+                    newRenderData.annotation.push (val);
+                });
+                // newRenderData.variants.push(oldRenderData.variants[i]);
+                // newRenderData.const.coding.push(oldRenderData.const.coding[i]);
+                // newRenderData.const.spliceSite.push(oldRenderData.const.spliceSite[i]);
+                // newRenderData.const.utr.push(oldRenderData.const.utr[i]);
+                // newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
+                // if (typeof oldRenderData.const.tfBindingMotif[i]!=='undefined') {// sometimes we don't have these
+                //     newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
+                // }
+                // newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
+                // if (typeof oldRenderData.const.posteriorProbability[i]!=='undefined'){// sometimes we don't have these
+                //     newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
+                // }
+                // newRenderData.const.pValue.push(oldRenderData.const.pValue[i]);
 
              });
 

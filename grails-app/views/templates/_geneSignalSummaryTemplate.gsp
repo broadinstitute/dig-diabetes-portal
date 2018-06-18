@@ -859,63 +859,63 @@
             </tr>
         {{/annotation}}
 
-        <tr>
-            <td class="credcellpval credSetOrgLabel" rowspan=5>annotation</td>
-            <td class="credSetConstLabel">Coding</td>
-        {{#coding}}
-            <td class="credcell {{descr}}">{{val}}</td>
-        {{/coding}}
-        </tr>
+        %{--<tr>--}%
+            %{--<td class="credcellpval credSetOrgLabel" rowspan=5>annotation</td>--}%
+            %{--<td class="credSetConstLabel">Coding</td>--}%
+        %{--{{#coding}}--}%
+            %{--<td class="credcell {{descr}}">{{val}}</td>--}%
+        %{--{{/coding}}--}%
+        %{--</tr>--}%
 
-        <tr>
-            <td class="credSetConstLabel">Splice site</td>
-            {{#spliceSite}}
-            <td class="credcell {{descr}}">{{val}}</td>
-            {{/spliceSite}}
-        </tr>
+        %{--<tr>--}%
+            %{--<td class="credSetConstLabel">Splice site</td>--}%
+            %{--{{#spliceSite}}--}%
+            %{--<td class="credcell {{descr}}">{{val}}</td>--}%
+            %{--{{/spliceSite}}--}%
+        %{--</tr>--}%
 
-        <tr>
-            <td class="credSetConstLabel">UTR</td>
-            {{#utr}}
-            <td class="credcell {{descr}}">{{val}}</td>
-            {{/utr}}
-        </tr>
+        %{--<tr>--}%
+            %{--<td class="credSetConstLabel">UTR</td>--}%
+            %{--{{#utr}}--}%
+            %{--<td class="credcell {{descr}}">{{val}}</td>--}%
+            %{--{{/utr}}--}%
+        %{--</tr>--}%
 
-        <tr>
-            <td class="credSetConstLabel">Promoter</td>
-            {{#promoter}}
-            <td class="credcell {{descr}}">{{val}}</td>
-            {{/promoter}}
-        </tr>
+        %{--<tr>--}%
+            %{--<td class="credSetConstLabel">Promoter</td>--}%
+            %{--{{#promoter}}--}%
+            %{--<td class="credcell {{descr}}">{{val}}</td>--}%
+            %{--{{/promoter}}--}%
+        %{--</tr>--}%
 
-        <tr>
-            <td class="credcellpval credSetConstLabel">TF binding motif</td>
-            {{#tfBindingMotif}}
-            <td class="credcellmotif {{descr}}">{{val}}</td>
-            {{/tfBindingMotif}}
-        </tr>
+        %{--<tr>--}%
+            %{--<td class="credcellpval credSetConstLabel">TF binding motif</td>--}%
+            %{--{{#tfBindingMotif}}--}%
+            %{--<td class="credcellmotif {{descr}}">{{val}}</td>--}%
+            %{--{{/tfBindingMotif}}--}%
+        %{--</tr>--}%
 
-        {{#posteriorProbabilityExists}}
-        <tr>
-            <td class="credcellpval credSetOrgLabel" rowspan=2>association</td>
-            <td class="credSetConstLabel">Posterior probability</td>
-            {{/posteriorProbabilityExists}}
-            {{#posteriorProbability}}
-            <td class="{{descr}}">{{val}}</td>
-            {{/posteriorProbability}}
-       {{#posteriorProbabilityExists}}
-        </tr>
-        {{/posteriorProbabilityExists}}
+        %{--{{#posteriorProbabilityExists}}--}%
+        %{--<tr>--}%
+            %{--<td class="credcellpval credSetOrgLabel" rowspan=2>association</td>--}%
+            %{--<td class="credSetConstLabel">Posterior probability</td>--}%
+            %{--{{/posteriorProbabilityExists}}--}%
+            %{--{{#posteriorProbability}}--}%
+            %{--<td class="{{descr}}">{{val}}</td>--}%
+            %{--{{/posteriorProbability}}--}%
+       %{--{{#posteriorProbabilityExists}}--}%
+        %{--</tr>--}%
+        %{--{{/posteriorProbabilityExists}}--}%
 
-        <tr>
-            {{^posteriorProbabilityExists}}
-            <td class="credcellpval credSetOrgLabel">association</td>
-            {{/posteriorProbabilityExists}}
-            <td class="credcellpval credSetConstLabel">P value</td>
-            {{#pValue}}
-            <td class="credcellpval {{descr}}">{{val}}</td>
-            {{/pValue}}
-        </tr>
+        %{--<tr>--}%
+            %{--{{^posteriorProbabilityExists}}--}%
+            %{--<td class="credcellpval credSetOrgLabel">association</td>--}%
+            %{--{{/posteriorProbabilityExists}}--}%
+            %{--<td class="credcellpval credSetConstLabel">P value</td>--}%
+            %{--{{#pValue}}--}%
+            %{--<td class="credcellpval {{descr}}">{{val}}</td>--}%
+            %{--{{/pValue}}--}%
+        %{--</tr>--}%
 
 
 
