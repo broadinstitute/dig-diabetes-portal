@@ -137,7 +137,48 @@ var mpgSoftware = mpgSoftware || {};
                     end:parseInt($('input.credSetEndPos').val())};
         };
 
-        var insertAnnotation = function (renderData, fieldId, valueToInsert){
+        var insertAnnotation = function (renderData, fieldId, valueToInsert,relatedFieldExists){
+            var mapTableCellClasses = function (metadataRecord){
+                var returnValue = {
+                                    rowName: metadataRecord.name
+                                    };
+                if (fieldId === 'coding'){
+                    returnValue ['annotationSection']= {
+                        sectionName: metadataRecord.group,
+                        primaryRowClass:'credcellpval',
+                        secondaryRowClass:'credSetOrgLabel',
+                        rowsPerSection: _.filter (getAnnotationInformation (), {'group':metadataRecord.group}).length
+                    };
+                    returnValue ['rowClass'] = 'credSetConstLabel';
+                } else if (fieldId === 'spliceSite'){
+                    returnValue ['rowClass'] = 'credSetConstLabel';
+                } else if (fieldId === 'utr'){
+                    returnValue ['rowClass'] = 'credSetConstLabel';
+                } else if (fieldId === 'promoter'){
+                    returnValue ['rowClass'] = 'credSetConstLabel';
+                } else if (fieldId === 'tfBindingMotif'){
+                    returnValue ['rowClass'] = 'credcellpval credSetConstLabel';
+                }else if (fieldId === 'posteriorProbability'){
+                    returnValue ['annotationSection']= {
+                        sectionName: metadataRecord.group,
+                        primaryRowClass:'credcellpval',
+                        secondaryRowClass:'credSetOrgLabel',
+                        rowsPerSection: _.filter (getAnnotationInformation (), {'group':metadataRecord.group}).length
+                    };
+                    returnValue ['rowClass'] = 'credSetConstLabel';
+                }else if (fieldId === 'pValue'){
+                    if (!relatedFieldExists){
+                        returnValue ['annotationSection']= {
+                            sectionName: metadataRecord.group,
+                            primaryRowClass:'credcellpval',
+                            secondaryRowClass:'credSetOrgLabel',
+                            rowsPerSection: 1
+                        };
+                    }
+                    returnValue ['rowClass'] = 'credcellpval credSetConstLabel';
+                }
+                return returnValue;
+            };
             var metadataRecord;
             var recordType;
             var recordIndex = _.findIndex (renderData.annotation, function(o){return o.value===fieldId});
@@ -148,18 +189,20 @@ var mpgSoftware = mpgSoftware || {};
                 } else {
                     metadataRecord = getAnnotationInformation()[metadataIndex];
                     recordType = metadataRecord.type;
-                    var annotationRecord = {annotationSection:[{
-                        sectionName: metadataRecord.name,
-                        primaryRowClass:'credcellpval',
-                        secondaryRowClass:'credSetOrgLabel'
-                    }],
+                    var annotationRecord = {annotationSection:[],
                         rowName: metadataRecord.name,
                         value:metadataRecord.value,
                         sort_order: metadataRecord.sort_order,
                         type:  recordType,
                         annotationRecord:[]
                     };
+                    var displaySpecifications = mapTableCellClasses (metadataRecord);
+                    if (typeof displaySpecifications.annotationSection !== 'undefined'){
+                        annotationRecord.annotationSection.push(displaySpecifications.annotationSection);
+                    }
+                    annotationRecord['rowClass'] = displaySpecifications.rowClass;
                     renderData.annotation.push(annotationRecord);
+
                     recordIndex = _.findIndex (renderData.annotation, function(o){return o.value===fieldId});
                     if (recordIndex === -1){
                         console.log(' unexpected inconsistency');
@@ -187,19 +230,6 @@ var mpgSoftware = mpgSoftware || {};
             var renderData = {  variants: [],
                                 credibleSetInfoCode:data.credibleSetInfoCode,
                                 const:{
-                                    coding:[],
-                                    spliceSite:[],
-                                    utr:[],
-                                    promoter:[],
-                                    CTCFmotif:[],
-                                    posteriorProbability: [],
-                                    tfBindingMotif: [],
-                                    posteriorProbabilityExists: function(){
-                                        var posteriorProbabilityIndicator = [];
-                                        if (Object.keys(this.posteriorProbability).length > 0) {posteriorProbabilityIndicator.push(1)}
-                                        return posteriorProbabilityIndicator;
-                                    },
-                                    pValue: []
                                 },
                                 annotation:[],
 
@@ -231,60 +261,35 @@ var mpgSoftware = mpgSoftware || {};
                     });
                     v['extractedP_VALUE'] = pValue;
 
-                    if (typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined'){
-                        if ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY)) {
-                            //renderData.const.posteriorProbability.push({val:UTILS.realNumberFormatter(v.extractedPOSTERIOR_PROBABILITY)});
-                            insertAnnotation(renderData,'posteriorProbability',v.extractedPOSTERIOR_PROBABILITY);
-                        }
-                    }
-                    if ((typeof v.extractedP_VALUE !== 'undefined')&&
-                        ($.isNumeric(v.extractedP_VALUE))) {
-                        //renderData.const.pValue.push({val:UTILS.realNumberFormatter(v.extractedP_VALUE)});
-                        insertAnnotation(renderData,'pValue',v.extractedP_VALUE);
-                    }
                     //renderData.const.pValue.push();
                     if (typeof v.VAR_ID !== 'undefined') {
                         renderData.variants.push({name:v.VAR_ID, details:v, assayIdList: additionalParameters.assayIdList});
                     }
                     if (typeof v.MOST_DEL_SCORE !== 'undefined') {
-                        // if ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)){
-                        //     renderData.const.coding.push({val:'',descr:'present'});
-                        // } else {
-                        //     renderData.const.coding.push({val:'',descr:'absent'});
-                        // }
-                        insertAnnotation(renderData,'coding', ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)) );
-                    }
-                    if (typeof v.MOTIF_NAME !== 'undefined') {
-                        // if (v.MOTIF_NAME === null) {
-                        //     renderData.const.tfBindingMotif.push({val:'',descr:'absent'});
-                        // } else {
-                        //     renderData.const.tfBindingMotif.push({val:v.MOTIF_NAME,descr:'present'});
-                        // }
-                        insertAnnotation(renderData,'tfBindingMotif', (v.MOTIF_NAME === null) ?
-                            {val:'',descr:'absent'}:
-                            {val:v.MOTIF_NAME,descr:'present'});
+                        insertAnnotation(renderData,'coding', ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)), false );
                     }
                     if (typeof v.Consequence !== 'undefined'){
-                        // if (v.Consequence.indexOf('splice')>-1){
-                        //     renderData.const.spliceSite.push({val:'',descr:'present'});
-                        // } else {
-                        //     renderData.const.spliceSite.push({val:'',descr:'absent'});
-                        // }
-                        insertAnnotation(renderData,'spliceSite', (v.Consequence.indexOf('splice')>-1));
-                        // if (v.Consequence.indexOf('UTR')>-1){
-                        //     renderData.const.utr.push({val:'',descr:'present'});
-                        // } else {
-                        //     renderData.const.utr.push({val:'',descr:'absent'});
-                        // }
-                        insertAnnotation(renderData,'utr', (v.Consequence.indexOf('UTR')>-1));
-                        // if (v.Consequence.indexOf('promoter')>-1){
-                        //     renderData.const.promoter.push({val:'',descr:'present'});
-                        // } else {
-                        //     renderData.const.promoter.push({val:'',descr:'absent'});
-                        // }
-                        insertAnnotation(renderData,'promoter', (v.Consequence.indexOf('promoter')>-1));
-                        //renderData.const.CTCFmotif.push({val:'',descr:'absent'});
+                        insertAnnotation(renderData,'spliceSite', (v.Consequence.indexOf('splice')>-1), false );
+                        insertAnnotation(renderData,'utr', (v.Consequence.indexOf('UTR')>-1), false );
+                        insertAnnotation(renderData,'promoter', (v.Consequence.indexOf('promoter')>-1), false );
                     }
+                    if (typeof v.MOTIF_NAME !== 'undefined') {
+                        insertAnnotation(renderData,'tfBindingMotif', (v.MOTIF_NAME === null) ?
+                            {val:'',descr:'absent'}:
+                            {val:v.MOTIF_NAME,descr:'present'}, false );
+                    }
+                    var posteriorProbabilitiesExist = false;
+                    if ((typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined') &&
+                        ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY))) {
+                            posteriorProbabilitiesExist = true;
+                            insertAnnotation(renderData,'posteriorProbability',v.extractedPOSTERIOR_PROBABILITY, false);
+
+                    }
+                    if ((typeof v.extractedP_VALUE !== 'undefined')&&
+                        ($.isNumeric(v.extractedP_VALUE))) {
+                        insertAnnotation(renderData,'pValue',v.extractedP_VALUE,posteriorProbabilitiesExist);
+                    }
+
                 });
             }
 
@@ -294,18 +299,6 @@ var mpgSoftware = mpgSoftware || {};
         var filterRenderData = function (oldRenderData,assayIdList,variantsToInclude){
             var newRenderData = {  variants: [],
                 const:{
-                    coding:[],
-                    spliceSite:[],
-                    utr:[],
-                    promoter:[],
-                    CTCFmotif:[],
-                    tfBindingMotif:[],
-                    posteriorProbability: [],
-                    posteriorProbabilityExists: function(){
-                        var posteriorProbabilityIndicator = [];
-                        if (Object.keys(this.posteriorProbability).length > 0) {posteriorProbabilityIndicator.push(1)}
-                        return posteriorProbabilityIndicator;
-                    },                    pValue: []
                 },
                 cellTypeSpecs: [
                 ]
@@ -326,28 +319,28 @@ var mpgSoftware = mpgSoftware || {};
                 });
             }
 
-
-
-            _.forEach(arrayOfIndexesToInclude, function (i){
-                newRenderData.annotation = [];
-                _.forEach(oldRenderData.annotation,function (val,ind){
-                    newRenderData.annotation.push (val);
+            newRenderData.annotation = [];
+            _.forEach(oldRenderData.annotation,function (val,ind){
+                var newAnnotation = {};
+                newAnnotation["annotationRecord"] = [];
+                newAnnotation["annotationSection"] = [];
+                if (oldRenderData.annotation[ind].annotationSection.length>0) {
+                    newAnnotation["annotationSection"].push (oldRenderData.annotation[ind].annotationSection[0]);
+                }
+                newAnnotation["rowClass"] = oldRenderData.annotation[ind].rowClass;
+                newAnnotation["rowName"] = oldRenderData.annotation[ind].rowName;
+                newAnnotation["sort_order"] = oldRenderData.annotation[ind].sort_order;
+                newAnnotation["type"] = oldRenderData.annotation[ind].type;
+                newAnnotation["value"] = oldRenderData.annotation[ind].value;
+                _.forEach(arrayOfIndexesToInclude, function (i) {
+                    newAnnotation.annotationRecord.push(oldRenderData.annotation[ind].annotationRecord[i]);
                 });
-                // newRenderData.variants.push(oldRenderData.variants[i]);
-                // newRenderData.const.coding.push(oldRenderData.const.coding[i]);
-                // newRenderData.const.spliceSite.push(oldRenderData.const.spliceSite[i]);
-                // newRenderData.const.utr.push(oldRenderData.const.utr[i]);
-                // newRenderData.const.promoter.push(oldRenderData.const.promoter[i]);
-                // if (typeof oldRenderData.const.tfBindingMotif[i]!=='undefined') {// sometimes we don't have these
-                //     newRenderData.const.tfBindingMotif.push(oldRenderData.const.tfBindingMotif[i]);
-                // }
-                // newRenderData.const.CTCFmotif.push(oldRenderData.const.CTCFmotif[i]);
-                // if (typeof oldRenderData.const.posteriorProbability[i]!=='undefined'){// sometimes we don't have these
-                //     newRenderData.const.posteriorProbability.push(oldRenderData.const.posteriorProbability[i]);
-                // }
-                // newRenderData.const.pValue.push(oldRenderData.const.pValue[i]);
+                newRenderData.annotation.push (newAnnotation);
+            });
+            _.forEach(arrayOfIndexesToInclude, function (i) {
+                 newRenderData.variants.push(oldRenderData.variants[i]);
+            });
 
-             });
 
             return newRenderData;
         };
