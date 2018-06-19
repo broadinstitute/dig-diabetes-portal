@@ -729,7 +729,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "[1,2]",
                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/als/front_als_logo_2018.svg",
-                                          "portal.epilepsy.header.tagline",
+                                          "portal.ALS.header.tagline",
                                           [],
                                           ["SOD1"],
                                           [],
