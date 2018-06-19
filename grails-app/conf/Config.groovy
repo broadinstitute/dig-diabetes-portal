@@ -320,8 +320,12 @@ environments {
 //        grails.serverURL = "http://strokeprodnew.us-east-1.elasticbeanstalk.com"
 
 //         grails.serverURL = "http://broadcvdi.org"                                             // CVDKP (MI portal) production
-        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) test site
- //       grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
+
+//        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"// CVDKP (MI portal) test site
+
+        grails.serverURL = "http://alsportal.us-east-1.elasticbeanstalk.com"
+
+        //       grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
