@@ -299,7 +299,7 @@ environments {
 
 
 //        grails.serverURL = "http://variant2function.org"
-        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
@@ -733,7 +733,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "[1,2]",
                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/als/front_als_logo_2018.svg",
-                                          "portal.epilepsy.header.tagline",
+                                          "portal.als.header.tagline",
                                           [],
                                           ["SOD1"],
                                           [],
@@ -792,3 +792,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
+
+
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
