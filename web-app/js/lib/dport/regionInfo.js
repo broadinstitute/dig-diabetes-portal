@@ -261,7 +261,6 @@ var mpgSoftware = mpgSoftware || {};
                     });
                     v['extractedP_VALUE'] = pValue;
 
-                    //renderData.const.pValue.push();
                     if (typeof v.VAR_ID !== 'undefined') {
                         renderData.variants.push({name:v.VAR_ID, details:v, assayIdList: additionalParameters.assayIdList});
                     }
@@ -470,8 +469,10 @@ var mpgSoftware = mpgSoftware || {};
             return returnVal;
         }
 
+        // let's return an array of elements which we can eventually feed to mustache
         var writeOneLineOfTheHeatMap = function(tissueGrid,tissueKey,quantileArray,variantRec){
             var lineToAdd ="";
+            var arrayToBuild = [];
             if ((typeof variantRec !== 'undefined')&&
                 (typeof variantRec.details !== 'undefined')&&
                 (typeof variantRec.details.POS !== 'undefined')){
@@ -483,19 +484,20 @@ var mpgSoftware = mpgSoftware || {};
                     var elementName = record.source_trans;
                     var provideDefaultForAssayId = (typeof record.ASSAY_ID === 'undefined') ? 3 : record.ASSAY_ID;
                     if  (provideDefaultForAssayId === 3){
+                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineCategoricalColorIndex(record.element)),
+                                        title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans )});
                         lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_"+determineCategoricalColorIndex(record.element)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                             ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
-                    } else if (provideDefaultForAssayId === 5) {
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
-                            elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                            ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'>"+record.state+"</td>");
                     } else {
+                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
+                            title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) )});
                         lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
                         elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                         ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
                     }
                 } else {
+                    arrayToBuild.push({});
                     lineToAdd = ("<td class='tissueTable "+elementName+"'></td>");
 
                 }

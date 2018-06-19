@@ -905,3 +905,12 @@
 
 </script>
 
+<script id="credibleSetHeatMapElementTemplate"  type="x-tmpl-mustache">
+{{#cellsPerLine}}
+%{--<td class='tissueTable matchingRegion{{defaultForAssayId}}_{{colorIndex}} {{elementName}}"'--}%
+          %{--data-toggle='tooltip' title='chromosome:{{chromosome}}, position:{{positionString}}, tissue:{{tissue}}'></td>--}%
+<td class='tissueTable {{matchingRegion}}'
+          data-toggle='tooltip' title='{{title}}'></td>
+{{/cellsPerLine}}
+</script>
+
