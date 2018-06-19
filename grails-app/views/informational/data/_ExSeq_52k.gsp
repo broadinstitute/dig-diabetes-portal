@@ -1,6 +1,10 @@
 <script class="panel-body" id="ExSeq_52k_script" type="x-tmpl-mustache">
+<img src="${resource(dir: 'images', file: 'organizations/AMP_T2D-GENES.png')}" style="width: 200px; margin-left: 20px;" align="left" >
     <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 <p><g:message code="informational.data.overlaps.52K"></g:message></p>
+<br/>
+<br/>
+<br/>
 
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
