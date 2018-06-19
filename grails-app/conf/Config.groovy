@@ -571,8 +571,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-        ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot
- //       ["islet of Langerhans","liver","adipocyte"],  // tissues to display beneath a LocusZoom plot
+        ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot -- use these for the DCC
+ //       ["islet of Langerhans","liver","adipocyte"],  // tissues to display beneath a LocusZoom plot -- use these for UCSD
                                                         ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CORONARY ARTERY DISEASE", "BLOOD PRESSURE"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search

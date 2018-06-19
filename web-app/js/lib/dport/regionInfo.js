@@ -7,31 +7,63 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.regionInfo = (function () {
 
-        var assayExtremes = {"1":{minimum:127,maximum:9213115},
-            "2":{minimum:83,maximum:854238}};
-        var numberOfQuantiles =4;
-        var precalculatedQuantileBoundaries = {
-            "0":[0,0,0,0,0], // provide a default in case no tissues are chosen
-            "1":[0,167.9,888.4,2649.9,9213115], // h3ks2ac
-            "2":[0,207.8,389.6,1248.1,854238], // dnase
-            "3":[0,0,0,0,0], // parker -- not sorted by value
-            "4":[0,0,0,0,0], // varshney -- not sorted by value
-            "5":[9,10,11,12,13]  // UCSD footprint -- not sorted by value
+        var assayInformation = {};
 
-        }
+        var storeAssayInformation = function (incomingAssayInformation) {
+            assayInformation = incomingAssayInformation;
+        };
+        var getAssayMetadata = function () {
+            if (typeof assayInformation === 'undefined') {
+                console.log ("Assay metadata appears to be absent. Page failure imminent.");
+            }
+            return assayInformation;
+        };
+        var getAssayInformation = function () {
+            return getAssayMetadata ().assays;
+        };
+        var getTissueInformation = function () {
+            return getAssayMetadata ().issues;
+        };
+
+        var initializeRegionInfoModule = function (drivingVariables){
+            var promise = $.ajax({
+                cache: false,
+                type: "post",
+                url: drivingVariables.availableAssayIdsJsonUrl,
+                data: {},
+                async: true
+            });
+            promise.done(
+                function (data) {
+                    storeAssayInformation (data);
+                });
+            promise.fail(
+                function (){
+                    console.log ("We were unable to obtain the assay info metadata. The credible set tab will fail soon");
+                }
+            );
+        };
+
+        var retrieveDesiredAssay = function (assayId){
+            var returnValue = {};
+            var desiredAssay = _.findIndex(getAssayInformation (),{'assayID':assayId});
+            if (desiredAssay === -1){
+                console.log ("Caller requested assay ID =" + assayId+ ", for which we have no record. The credible set tab will fail soon");
+            }else {
+                returnValue = getAssayInformation () [desiredAssay];
+            }
+            return returnValue;
+        };
+
+
+        var retrieveQuantileBoundaries = function (assayId){
+            return retrieveDesiredAssay (assayId).quantile;
+        };
+
+
+
         var DEFAULT_NUMBER_OF_VARIANTS = 10;
-        var defaultTissueRegionOverlapMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'stroke':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'mi':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'epilepsy':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'sleep':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'ibd':["DNase"]};
-        var defaultTissueRegionOverlapDisplayMatcher = {'t2d':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'stroke':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'mi':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'epilepsy':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'sleep':["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
-            'ibd':["DNase"]};
+
         /***
          *  Choose from among all the tissues we get back from a regions search based on the user's display criteria
          * @param o
@@ -61,19 +93,13 @@ var mpgSoftware = mpgSoftware || {};
         };
         var convertUserChoicesIntoAssayIds = function(selectedValuesAndText) {;
             var assayIds = [];
+            var assayInformation = getAssayInformation();
             _.forEach(selectedValuesAndText,function(oe){
-                if (oe.name==='UCSD'){
-                    assayIds.push(5);
-                } else if (oe.name==='H3K27ac'){
-                    assayIds.push(1);
-                } else if (oe.name==='DNase'){
-                    assayIds.push(2);
-                } else {
-                    if (!assayIds.includes(3)){
-                        assayIds.push(3);
-                    }
+                var elementForAssay = _.find (assayInformation, function (o){return (_.findIndex (o.selectionOptions,function (p){return p.value===oe.name})>-1)});
+                if (typeof elementForAssay !== 'undefined') {
+                    assayIds.push(elementForAssay.assayID);
                 }
-            });
+             });
             return assayIds;
         };
         var getSelectorAssayIds = function() {
@@ -426,27 +452,14 @@ var mpgSoftware = mpgSoftware || {};
         var createQuantilesArray = function(assayId){
             // let's make assay ID==3 the default
             if ((typeof assayId === 'undefined') ) { assayId = 3;}
-            var boundariesForThisAssay = precalculatedQuantileBoundaries[assayId];
+            var boundariesForThisAssay = retrieveQuantileBoundaries(assayId);
             var quantileArray = [];
-            for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
+            for ( var i = 0 ; i < boundariesForThisAssay.length ; i++ ){
                 quantileArray.push({min:boundariesForThisAssay[i],max:boundariesForThisAssay[i+1]});
             }
             return quantileArray;
         };
-        // this next routine only makes sense if we have already gone through and calculated the maximum and minimum over the entire set of available values
-        var createStaticQuantileArray = function( assayId ){
-            var quantileArray = [];
-            if ((assayId) &&
-                (typeof assayExtremes[""+assayId] !== 'undefined') ){
-                var maximumValue = assayExtremes[""+assayId].maximum;
-                var minimumValue = assayExtremes[""+assayId].minimum;
-                var widthOfOneQuintile = (maximumValue-minimumValue)/numberOfQuantiles;
-                for ( var i = 0 ; i < numberOfQuantiles ; i++ ){
-                    quantileArray.push({min:minimumValue+(widthOfOneQuintile*i),max:minimumValue+(widthOfOneQuintile*(i+1))});
-                }
-            }
-            return quantileArray;
-        }
+
         var filterTissueGrid = function(incomingTissueGrid,assayIdArray){
             var retVal = {};
             // convert assay id into a real array
@@ -553,16 +566,23 @@ var mpgSoftware = mpgSoftware || {};
         var appendLegendInfo = function() {
             var selectedElements = _.unionBy(getSelectedValuesAndText(),getDisplayValuesAndText(), 'name');
             var chosenElementTypes = [];
+            var assayInformation = getAssayInformation();
             _.forEach(selectedElements,function(oe){
-                if (oe.name==='DNase') {
-                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),dnase:1});
-                } else if (oe.name==='H3K27ac') {
-                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),h3k27ac:1});
-                } else if (oe.name==='UCSD') {
-                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),tfbf:1});
-                } else {
-                    chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)});
+                var elementForAssay = _.find (assayInformation, function (o){return (_.findIndex (o.selectionOptions,function (p){return p.value===oe.name})>-1)});
+                if (typeof elementForAssay !== 'undefined') {
+                    var chosenElementType = {name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)};
+                    chosenElementType [elementForAssay.name] = 1
+                    chosenElementTypes.push(chosenElementType);
                 }
+                // if (oe.name==='DNase') {
+                //     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),dnase:1});
+                // } else if (oe.name==='H3K27ac') {
+                //     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),h3k27ac:1});
+                // } else if (oe.name==='UCSD') {
+                //     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name),tfbf:1});
+                // } else {
+                //     chosenElementTypes.push({name:oe.name,descr:oe.text,colorCode:colorMapper (oe.name)});
+                // }
             });
             return chosenElementTypes;
         };
@@ -963,7 +983,9 @@ var mpgSoftware = mpgSoftware || {};
             setIncludeRecordBasedOnUserChoice:setIncludeRecordBasedOnUserChoice,
             getDefaultTissueRegionOverlapMatcher:getDefaultTissueRegionOverlapMatcher,
             getSelectorAssayIds:getSelectorAssayIds,
-            specificHeaderToBeActiveByVarId:specificHeaderToBeActiveByVarId
+            specificHeaderToBeActiveByVarId:specificHeaderToBeActiveByVarId,
+            initializeRegionInfoModule:initializeRegionInfoModule,
+            retrieveDesiredAssay:retrieveDesiredAssay
         }
 
     })();
