@@ -144,6 +144,7 @@ ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2
 ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
 digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
 digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
@@ -163,6 +164,7 @@ getRestServerList = [
 //        digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
+        digawsqanewKB_fed_dedicated,
 //        digawsprodmiKB,
 //        digawsprodstrokeKB,
 //        digawsdemoibdKB
