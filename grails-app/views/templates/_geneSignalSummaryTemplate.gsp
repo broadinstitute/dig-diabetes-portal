@@ -905,6 +905,21 @@
 
 </script>
 
+<script id="credibleSetHeatMapTemplate"  type="x-tmpl-mustache">
+{{#tissueSpecificRow}}
+    <tr style='{{rowDecoration}}'>
+    {{#createSpanningCell}}
+        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>tissue</td>
+    {{/createSpanningCell}}
+    <td  class='{{tissueDescriptionClass}}'>{{tissueName}}</td>
+    {{#cellsPerLine}}
+    <td class='tissueTable {{matchingRegion}}'
+              data-toggle='tooltip' title='{{title}}'></td>
+    {{/cellsPerLine}}
+    </tr>
+{{/tissueSpecificRow}}
+</script>
+
 <script id="credibleSetHeatMapElementTemplate"  type="x-tmpl-mustache">
 {{#cellsPerLine}}
 %{--<td class='tissueTable matchingRegion{{defaultForAssayId}}_{{colorIndex}} {{elementName}}"'--}%
