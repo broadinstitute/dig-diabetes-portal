@@ -485,21 +485,15 @@ var mpgSoftware = mpgSoftware || {};
                     var provideDefaultForAssayId = (typeof record.ANNOTATION === 'undefined') ? 3 : record.ANNOTATION;
                     if  (provideDefaultForAssayId === 3){
                         arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineCategoricalColorIndex(record.ELEMENT)),
-                                        title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans )});
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_"+determineCategoricalColorIndex(record.ELEMENT)+" "+
-                            elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                            ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
+                                        title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans ),
+                                        annotation:record.ANNOTATION});
                     } else {
                         arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
-                            title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) )});
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_" +determineColorIndex(record.VALUE,quantileArray)+" "+
-                        elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
-                        ", position:"+ positionString +", tissue:"+ record.source_trans +", value:"+ UTILS.realNumberFormatter(record.VALUE) +"'></td>");
+                            title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) ),
+                            annotation:record.ANNOTATION});
                     }
                 } else {
-                    arrayToBuild.push({});
-                    lineToAdd = ("<td class='tissueTable "+elementName+"'></td>");
-
+                    arrayToBuild.push({annotation:0});
                 }
             }
             //return lineToAdd;
@@ -695,7 +689,8 @@ var mpgSoftware = mpgSoftware || {};
 
                 //displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton );
                 _.forEach(getSelectorAssayIds(), function (assayId){
-                    displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                    //displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                    displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
                 });
 
                 // do we have any credible set buttons?  If so then it is now safe to turn them on
@@ -851,9 +846,69 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var aggregateAcrossTissues = function (renderData,assayName,sortedVariants){
-          //  var aggregatedStructure =
-            return renderData;
+            var aggregatedRenderData = {assaySpecificRow:[]};
+            var aggregatedRow = {assayName:'unknown'};
+            var aggregatedCells = [];
+            var finalAggregation = [];
+            _.forEach(renderData.tissueSpecificRow, function(row, index){
+                if (index === 0) {
+                    aggregatedRow ['rowDecoration'] = row['rowDecoration'];
+                    aggregatedRow ['rowSpan'] = 1;
+                    aggregatedRow ['tissueDescriptionClass'] = row['tissueDescriptionClass'];
+
+                    _.forEach(row.cellsPerLine, function (singleCell,i){
+                        if ((aggregatedRow ['assayName'] === 'unknown')  && (singleCell.annotation!==0)){
+                            aggregatedRow ['assayName'] = retrieveDesiredAssay (singleCell.annotation).name;
+                        }
+                        aggregatedCells.push([singleCell]);
+                    });
+                } else {
+                    _.forEach(row.cellsPerLine, function (singleCell,i){
+                        aggregatedCells[i].push(singleCell);
+                    });
+                }
+            });
+            _.forEach(aggregatedCells, function(arrayOfCells){
+                var objectHolder = {};
+                var tissueCount = 0;
+                _.forEach(arrayOfCells, function (cell){
+                    if(cell.annotation !== 0){
+                        tissueCount++;
+                        objectHolder = {matchingRegion:cell.matchingRegion,
+                                        title:cell.title};
+                    }
+                });
+                objectHolder['tissueCount'] = tissueCount;
+                finalAggregation.push(objectHolder);
+            });
+            aggregatedRenderData.cellsPerLine = finalAggregation;
+            aggregatedRenderData.assaySpecificRow = aggregatedRow;
+            return aggregatedRenderData;
         };
+
+
+        var displayAggregatedDataPerAssayId = function(tissueGrid, sortedVariants, assayIdArray, setDefaultButton ){
+
+            var subsidiaryTissueGrid = {tissueGrid:[],sortedTissues:[]};
+            var primaryTissueGrid = filterTissueGrid(tissueGrid,assayIdArray);
+
+            var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
+
+            var tissueSpecificDataStructure = generateDataStructureForTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueGrid, sortedVariants );
+            var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayName',sortedVariants);
+
+            $('.credibleSetTableGoesHere tr:last').parent().append(
+                Mustache.render( $('#heatMapAggregatedAcrossTissueTemplate')[0].innerHTML,aggregatedAcrossTissue));
+
+            if (setDefaultButton){
+                if ($('.credibleSetChooserButton').length > 1){
+                    $($('.credibleSetChooserButton')[0]).click();
+                }
+            }
+
+
+        };
+
 
         var displayAParticularCredibleSetPerAssayId = function(tissueGrid, sortedVariants, assayIdArray, setDefaultButton ){
 
@@ -863,7 +918,7 @@ var mpgSoftware = mpgSoftware || {};
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
 
             var tissueSpecificDataStructure = generateDataStructureForTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueGrid, sortedVariants );
-            var aggregatedAcrossTissue =
+            var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayName',sortedVariants);
 
             $('.credibleSetTableGoesHere tr:last').parent().append(
                 Mustache.render( $('#credibleSetHeatMapTemplate')[0].innerHTML,tissueSpecificDataStructure));
@@ -882,28 +937,30 @@ var mpgSoftware = mpgSoftware || {};
 
         var setIncludeRecordBasedOnUserChoice = function(assayIdList){
 
-            if (true) {
-                mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
-                    var selectedElements = getSelectedValuesAndText();
-                    var chosenElementTypes = [];
-                    var retval = false;
-                    _.forEach(selectedElements,function(oe){
-
-                        if ((o.ANNOTATION===1)||(o.ANNOTATION===2)||(o.ANNOTATION===5)){
-                            retval = true;
-                        } else {
-                            chosenElementTypes.push(oe.name);
-                        }
-
-                    });
-                    if (retval) {
-                        return true;
+            mpgSoftware.regionInfo.includeRecordBasedOnUserChoice = function(o) {
+                var selectedElements = getSelectedValuesAndText();
+                var assayInformation = getAssayInformation();
+                var chosenElementTypes = [];
+                var retval = false;
+                _.forEach(selectedElements,function(oe){
+                    var assay = _.find(assayInformation,{'assayID':o.ANNOTATION});
+                    if (typeof assay === 'undefined') {
+                        retval = false;
                     } else {
-                        return ((chosenElementTypes.indexOf(o.ELEMENT)>-1));
+                        if (assay.selectionOptions.length>1){// it's a categorical type
+                            chosenElementTypes.push(oe.name);
+                        } else { // it's not categorical
+                            retval = true;
+                        }
                     }
+                });
+                if (retval) {
+                    return true;
+                } else {
+                    return ((chosenElementTypes.indexOf(o.ELEMENT)>-1));
+                }
 
-                };
-            }
+            };
 
             return mpgSoftware.regionInfo.includeRecordBasedOnUserChoice;
         };

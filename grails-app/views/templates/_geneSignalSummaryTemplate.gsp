@@ -920,18 +920,18 @@
 {{/tissueSpecificRow}}
 </script>
 <script id="heatMapAggregatedAcrossTissueTemplate"  type="x-tmpl-mustache">
-{{#tissueSpecificRow}}
+{{#assaySpecificRow}}
     <tr style='{{rowDecoration}}'>
-    {{#createSpanningCell}}
-        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>assay</td>
-    {{/createSpanningCell}}
-    <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
+
+        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}></td>
+
+    <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}}'
               data-toggle='tooltip' title='{{title}}'></td>
     {{/cellsPerLine}}
     </tr>
-{{/tissueSpecificRow}}
+{{/assaySpecificRow}}
 </script>
 
 <script id="credibleSetHeatMapElementTemplate"  type="x-tmpl-mustache">

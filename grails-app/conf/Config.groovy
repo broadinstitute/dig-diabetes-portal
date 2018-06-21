@@ -561,7 +561,7 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
@@ -688,7 +688,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["E071","E106","E088","E085"],
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
-                                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
+//                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
+                                          "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18,19]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/ibd/ibd_front_logo_WOnT2.png",
                                           "portal.ibd.header.tagline",
