@@ -1,4 +1,28 @@
 <style>
+/* Popover */
+.popover {
+    border: 2px dotted red;
+}
+
+/* Popover Header */
+.popover-title {
+    background-color: #73AD21;
+    color: #FFFFFF;
+    font-size: 28px;
+    text-align:center;
+}
+
+/* Popover Body */
+.popover-content {
+    background-color: #DDDDDD;
+    color: #000099;
+    padding: 25px;
+}
+
+/* Popover Arrow */
+.arrow {
+    border-right-color: red !important;
+}
 </style>
 <div id="tableHeaderHolder"></div>
 

@@ -486,11 +486,11 @@ var mpgSoftware = mpgSoftware || {};
                     if  (provideDefaultForAssayId === 3){
                         arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineCategoricalColorIndex(record.ELEMENT)),
                                         title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans ),
-                                        annotation:record.ANNOTATION});
+                                        annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE});
                     } else {
                         arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
                             title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) ),
-                            annotation:record.ANNOTATION});
+                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE});
                     }
                 } else {
                     arrayToBuild.push({annotation:0});
@@ -686,12 +686,15 @@ var mpgSoftware = mpgSoftware || {};
                 $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
                 $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
 
+                if (getSelectorAssayIds().length===1){
+                    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton );
+                } else {
+                    _.forEach(getSelectorAssayIds(), function (assayId){
+                        //displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                        displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                    });
+                }
 
-                //displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton );
-                _.forEach(getSelectorAssayIds(), function (assayId){
-                    //displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
-                    displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
-                });
 
                 // do we have any credible set buttons?  If so then it is now safe to turn them on
                 var credSetChoices = $('li.credibleSetChooserButton');
@@ -871,14 +874,28 @@ var mpgSoftware = mpgSoftware || {};
             _.forEach(aggregatedCells, function(arrayOfCells){
                 var objectHolder = {};
                 var tissueCount = 0;
+                var allObjects = [];
+                var allGenes = [];
                 _.forEach(arrayOfCells, function (cell){
                     if(cell.annotation !== 0){
                         tissueCount++;
+                        allObjects.push (cell);
+                         if((typeof cell.gene !== 'undefined')&&(cell.gene!==null)&&(cell.gene!=='')) {
+                             allGenes.push(cell.gene);
+                         }
                         objectHolder = {matchingRegion:cell.matchingRegion,
-                                        title:cell.title};
+                            title:cell.title};
+                        if (allGenes.length>0){
+                            objectHolder ['genes'] = allGenes.join(',');
+                        }
                     }
                 });
-                objectHolder['tissueCount'] = tissueCount;
+                if (allGenes.length>0){
+                    objectHolder['geneCount'] = allGenes.length;
+                }
+                if (tissueCount>0) {
+                    objectHolder['tissueCount'] = tissueCount;
+                }
                 finalAggregation.push(objectHolder);
             });
             aggregatedRenderData.cellsPerLine = finalAggregation;

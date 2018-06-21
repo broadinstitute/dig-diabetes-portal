@@ -928,7 +928,8 @@
     <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}}'
-              data-toggle='tooltip' title='{{title}}'></td>
+              data-toggle='tooltip' title='{{title}}{{genes}}'><span data-toggle="popover" data-content="S{{genes}}" class='geneCountDisplay'>{{geneCount}}</span>/
+              <span data-toggle="popover" data-content="Some content inside the popover" class='tissueCountDisplay'>{{tissueCount}}</span></td>
     {{/cellsPerLine}}
     </tr>
 {{/assaySpecificRow}}
