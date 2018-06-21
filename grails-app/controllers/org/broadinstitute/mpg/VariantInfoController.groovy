@@ -347,11 +347,11 @@ class VariantInfoController {
                 rootData["value"].push(pval["VALUE"])
                 rootData["public_id"].push(null)
                 rootData["strand"].push(null)
-                String individualAssayIdString = pval["ASSAY_ID"]
+                String individualAssayIdString = pval["ANNOTATION"]
                 int individualAssayId = (individualAssayIdString) ? Integer.parseInt(individualAssayIdString) : 3
 
                 // map the Parker chromatin state information by hand
-                String element = pval["element"]
+                String element = pval["ELEMENT"]
                 LinkedHashMap map = elementMapper[element]
                 String elementTrans = g.message(code: "metadata." + element, default: element)
 
@@ -368,11 +368,11 @@ class VariantInfoController {
                     dataJsonObject['region_end'] = endPos;
                     for (Map pval in dataJsonObject.variants){
 
-                        if (pval.containsKey("element")){
-                            pval["element_trans"] = g.message(code: "metadata." + pval["element"], default: pval["element"])
+                        if (pval.containsKey("ELEMENT")){
+                            pval["element_trans"] = g.message(code: "metadata." + pval["ELEMENT"], default: pval["ELEMENT"])
                         }
-                        if (pval.containsKey("source")){
-                            pval["source_trans"] = g.message(code: "metadata." + pval["source"], default: pval["source"])
+                        if (pval.containsKey("SOURCE")){
+                            pval["source_trans"] = g.message(code: "metadata." + pval["SOURCE"], default: pval["SOURCE"])
                         }
                         pval["assayName"] = assayName
 

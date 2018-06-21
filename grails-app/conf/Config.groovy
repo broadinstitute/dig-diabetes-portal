@@ -688,7 +688,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["E071","E106","E088","E085"],
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
-                                                          "[1,2]",
+                                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/ibd/ibd_front_logo_WOnT2.png",
                                           "portal.ibd.header.tagline",

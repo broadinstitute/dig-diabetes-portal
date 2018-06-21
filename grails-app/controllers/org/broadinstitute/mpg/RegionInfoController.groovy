@@ -106,8 +106,43 @@ class RegionInfoController {
                                      [value:"14_Bivalent/poised_TSS",name:"Bivalent/poised transcription start site", map: 4],
                                      [value:"16_Repressed_polycomb",name:"Repressed polycomb", map: 16],
                                      [value:"17_Weak_repressed_polycomb",name:"Weak repressed polycomb", map: 17],
-                                     [value:"18_Quiescent/low_signal",name:"Quiescent/low signal", map: 18]] ]
+                                     [value:"18_Quiescent/low_signal",name:"Quiescent/low signal", map: 18]] ],
+                [assayID: 4, name: "ATACSEQ", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"ATAC-Seq peak",name:"ATAC-Seq peak", map: 0] ] ],
+                [assayID: 5, name: "TFBS", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Transcription factor binding sites",name:"Transcription factor binding sites", map: 0] ] ],
+                [assayID: 6, name: "ENHANCER", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Enhancer",name:"Enhancer", map: 0] ] ],
+                [assayID: 7, name: "SEGWAY", quantile: [0,0,0,0,0], selectionOptions:
+                        [            [value:"CTCF",name:"Active transcription start site", map: 1],
+                                     [value:"Coding",name:"Weak transcription start site", map: 2],
+                                     [value:"Enhancer",name:"Flanking transcription start site", map:3 ],
+                                     [value:"Intron",name:"Strong transcription", map: 5],
+                                     [value:"NA",name:"Weak transcription", map: 6],
+                                     [value:"Promoter",name:"Genic enhancer", map: 8],
+                                     [value:"PromoterFlanking",name:"Active enhancer 1", map: 9],
+                                     [value:"Repressed",name:"Active enhancer 2", map: 9],
+                                     [value:"TSS",name:"Weak enhancer", map: 11],
+                                     [value:"Transcribed",name:"Bivalent/poised transcription start site", map: 4],
+                                     [value:"UTR_3",name:"Repressed polycomb", map: 16],
+                                     [value:"UTR_5",name:"Weak repressed polycomb", map: 17],
+                                     [value:"WeakEnhancer",name:"Quiescent/low signal", map: 18]] ],
+                [assayID: 8, name: "CHROMHMM_SEGWAY", quantile: [0,0,0,0,0], selectionOptions:
+                        [            [value:"Bivalent",name:"Active transcription start site", map: 1],
+                                     [value:"ConstitutiveHet",name:"Weak transcription start site", map: 2],
+                                     [value:"Enhancer",name:"Flanking transcription start site", map:3 ],
+                                     [value:"FacultativeHet",name:"Strong transcription", map: 5],
+                                     [value:"LowConfidence",name:"Weak transcription", map: 6],
+                                     [value:"Promoter",name:"Genic enhancer", map: 8],
+                                     [value:"Quiescent",name:"Active enhancer 1", map: 9],
+                                     [value:"RegPermissive",name:"Active enhancer 2", map: 9],
+                                     [value:"Transcribed",name:"Weak enhancer", map: 11]] ],
+                [assayID: 9, name: "H3KME1", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"ATAC-Seq peak",name:"ATAC-Seq peak", map: 0] ] ],
+                [assayID: 10, name: "H3KME3", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Transcription factor binding sites",name:"Transcription factor binding sites", map: 0] ] ],
+                [assayID: 11, name: "H3K9AC", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Enhancer",name:"Enhancer", map: 0] ] ],
+                [assayID: 12, name: "SUPER_ENHANCER", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"ATAC-Seq peak",name:"ATAC-Seq peak", map: 0] ] ],
+                [assayID: 13, name: "UCSC", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Transcription factor binding sites",name:"Transcription factor binding sites", map: 0] ] ],
+                [assayID: 14, name: "H3K27AC_QTL", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Enhancer",name:"Enhancer", map: 0] ] ]
+
         ]
+
         ArrayList tissueInformation = [
                                    [value: 1, name:"Adipose",description:"adipose tissue"],
                                    [value: 2, name:"AnteriorCaudate",description:"brain anterior caudate"],

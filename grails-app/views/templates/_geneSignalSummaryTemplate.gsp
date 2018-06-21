@@ -911,7 +911,21 @@
     {{#createSpanningCell}}
         <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>tissue</td>
     {{/createSpanningCell}}
-    <td  class='{{tissueDescriptionClass}}'>{{tissueName}}</td>
+    <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
+    {{#cellsPerLine}}
+    <td class='tissueTable {{matchingRegion}}'
+              data-toggle='tooltip' title='{{title}}'></td>
+    {{/cellsPerLine}}
+    </tr>
+{{/tissueSpecificRow}}
+</script>
+<script id="heatMapAggregatedAcrossTissueTemplate"  type="x-tmpl-mustache">
+{{#tissueSpecificRow}}
+    <tr style='{{rowDecoration}}'>
+    {{#createSpanningCell}}
+        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>assay</td>
+    {{/createSpanningCell}}
+    <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}}'
               data-toggle='tooltip' title='{{title}}'></td>
