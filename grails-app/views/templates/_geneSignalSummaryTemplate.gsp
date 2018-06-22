@@ -924,8 +924,8 @@
     <tr style='{{rowDecoration}}'>
 
         <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>
-        %{--<button type="button" class="btn btn-info btn-sm" onclick="alert('f')">display tissues</button>--}%
-        <button type="button" class="btn btn-info btn-sm" onclick="$('tr.tissueHider_{{annotationId}}').show();">display tissues</button>
+        <button type="button" class="btn btn-info btn-sm tissueDisplay_{{annotationId}}" onclick="mpgSoftware.regionInfo.displayTissuesForAnnotation({{annotationId}})">display tissues</button>
+        <button type="button" style="display:none" class="btn btn-info btn-sm tissueHide_{{annotationId}}" onclick="mpgSoftware.regionInfo.hideTissuesForAnnotation({{annotationId}})">hide tissues</button>
         </td>
 
     <td  class='{{tissueDescriptionClass}}  aggregateHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>

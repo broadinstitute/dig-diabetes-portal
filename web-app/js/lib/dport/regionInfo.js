@@ -851,6 +851,16 @@ var mpgSoftware = mpgSoftware || {};
 
 
         };
+        var displayTissuesForAnnotation = function (annotationId){
+            $('tr.tissueHider_'+annotationId).show();
+            $('button.tissueHide_'+annotationId).show();
+            $('button.tissueDisplay_'+annotationId).hide();
+        };
+        var hideTissuesForAnnotation = function (annotationId){
+            $('tr.tissueHider_'+annotationId).hide();
+            $('button.tissueHide_'+annotationId).hide();
+            $('button.tissueDisplay_'+annotationId).show();
+        };
 
         var aggregateAcrossTissues = function (renderData,assayName,annotationId){
             var aggregatedRenderData = {assaySpecificRow:[]};
@@ -1174,8 +1184,11 @@ var mpgSoftware = mpgSoftware || {};
             getSelectorAssayIds:getSelectorAssayIds,
             specificHeaderToBeActiveByVarId:specificHeaderToBeActiveByVarId,
             initializeRegionInfoModule:initializeRegionInfoModule,
-            retrieveDesiredAssay:retrieveDesiredAssay
-        }
+            retrieveDesiredAssay:retrieveDesiredAssay,
+            displayTissuesForAnnotation: displayTissuesForAnnotation,
+            hideTissuesForAnnotation: hideTissuesForAnnotation
+
+    }
 
     })();
 
