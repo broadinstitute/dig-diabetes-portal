@@ -907,13 +907,13 @@
 
 <script id="credibleSetHeatMapTemplate"  type="x-tmpl-mustache">
 {{#tissueSpecificRow}}
-    <tr style='{{rowDecoration}}'>
+    <tr style='{{rowDecoration}}' class='tissueHider_{{annotationId}}'>
     {{#createSpanningCell}}
         <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>tissue</td>
     {{/createSpanningCell}}
-    <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
+    <td  class='{{tissueDescriptionClass}} tissueHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
     {{#cellsPerLine}}
-    <td class='tissueTable {{matchingRegion}}'
+    <td class='tissueTable {{matchingRegion}} tissueHider_{{annotationId}}'
               data-toggle='tooltip' title='{{title}}'></td>
     {{/cellsPerLine}}
     </tr>
@@ -923,13 +923,16 @@
 {{#assaySpecificRow}}
     <tr style='{{rowDecoration}}'>
 
-        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}></td>
+        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>
+        %{--<button type="button" class="btn btn-info btn-sm" onclick="alert('f')">display tissues</button>--}%
+        <button type="button" class="btn btn-info btn-sm" onclick="$('tr.tissueHider_{{annotationId}}').show();">display tissues</button>
+        </td>
 
-    <td  class='{{tissueDescriptionClass}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>
+    <td  class='{{tissueDescriptionClass}}  aggregateHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}}'
-              data-toggle='tooltip' title='{{title}}{{genes}}'><span data-toggle="popover" data-content="S{{genes}}" class='geneCountDisplay'>{{geneCount}}</span>/
-              <span data-toggle="popover" data-content="Some content inside the popover" class='tissueCountDisplay'>{{tissueCount}}</span></td>
+              data-toggle='tooltip' title='{{title}}{{genes}}'><span data-toggle="popover" data-content="{{genes}}" class='geneCountDisplay'>{{geneCount}}</span>/
+              <span data-toggle="popover" data-content="{{tissues}}" class='tissueCountDisplay'>{{tissueCount}}</span></td>
     {{/cellsPerLine}}
     </tr>
 {{/assaySpecificRow}}
