@@ -7,6 +7,8 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.regionInfo = (function () {
 
+        var AGGREGATE_ACROSS_TISSUES = true;
+
         var assayInformation = {};
 
         var storeAssayInformation = function (incomingAssayInformation) {
@@ -381,8 +383,9 @@ var mpgSoftware = mpgSoftware || {};
                                     }
                                     var tissueRow = tissueGrid[record.source_trans];
                                     if(typeof tissueRow[''+data.variants.region_start] === 'undefined') {
-                                        tissueRow[''+data.variants.region_start] = record;
+                                        tissueRow[''+data.variants.region_start] = [];
                                     }
+                                    tissueRow[''+data.variants.region_start].push(record);
                                 }
                             });
                         }
@@ -477,41 +480,43 @@ var mpgSoftware = mpgSoftware || {};
                 (typeof variantRec.details !== 'undefined')&&
                 (typeof variantRec.details.POS !== 'undefined')){
                 var positionString = ""+variantRec.details.POS;
-                var record = tissueGrid[tissueKey][positionString];
-                var worthIncluding = false;
-                if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
-                    quantileArray = createQuantilesArray(record.ANNOTATION);
-                    var elementName = record.source_trans;
-                    var provideDefaultForAssayId = (typeof record.ANNOTATION === 'undefined') ? 3 : record.ANNOTATION;
-                    if  (provideDefaultForAssayId === 3){
-                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineCategoricalColorIndex(record.ELEMENT)),
-                                        title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans ),
-                                        annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
-                                        tissue:record.source_trans});
-                    } else if ((provideDefaultForAssayId === 1) || (provideDefaultForAssayId === 2)){
-                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
-                            title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) ),
-                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
-                            tissue:record.source_trans});
+                _.forEach(tissueGrid[tissueKey][positionString],function(record){
+                    var worthIncluding = false;
+                    if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
+                        quantileArray = createQuantilesArray(record.ANNOTATION);
+                        var elementName = record.source_trans;
+                        var provideDefaultForAssayId = (typeof record.ANNOTATION === 'undefined') ? 3 : record.ANNOTATION;
+                        if  (provideDefaultForAssayId === 3){
+                            arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineCategoricalColorIndex(record.ELEMENT)),
+                                title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans ),
+                                annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                                tissue:record.source_trans});
+                        } else if ((provideDefaultForAssayId === 1) || (provideDefaultForAssayId === 2)){
+                            arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
+                                title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) ),
+                                annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                                tissue:record.source_trans});
+                        }
+                        else {
+                            var displayableContent = '';
+                            if (record.GENE!==null){displayableContent = record.GENE};
+                            if ((record.ELEMENT!==null) && (displayableContent.length===0)){displayableContent = record.ELEMENT};
+                            if ((record.EXPERIMENT!==null) && (displayableContent.length===0)){displayableContent = record.EXPERIMENT};
+                            var allInfo = [];
+                            allInfo.push('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans);
+                            if (record.VALUE!==null){allInfo.push( 'value:'+ UTILS.realNumberFormatter(record.VALUE))};
+                            if (record.EXPERIMENT!==null){allInfo.push( 'experiment:'+ record.EXPERIMENT)};
+                            if (record.GENE!==null){allInfo.push( 'gene:'+ record.GENE)};
+                            arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
+                                title:allInfo.join(",<br/>"),
+                                annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                                tissue:record.source_trans,displayableContent:displayableContent});
+                        }
+                    } else {
+                        arrayToBuild.push({annotation:0});
                     }
-                    else {
-                        var displayableContent = '';
-                        if (record.GENE!==null){displayableContent = record.GENE};
-                        if ((record.ELEMENT!==null) && (displayableContent.length===0)){displayableContent = record.ELEMENT};
-                        if ((record.EXPERIMENT!==null) && (displayableContent.length===0)){displayableContent = record.EXPERIMENT};
-                        var allInfo = [];
-                        allInfo.push('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans);
-                        if (record.VALUE!==null){allInfo.push( 'value:'+ UTILS.realNumberFormatter(record.VALUE))};
-                        if (record.EXPERIMENT!==null){allInfo.push( 'experiment:'+ record.EXPERIMENT)};
-                        if (record.GENE!==null){allInfo.push( 'gene:'+ record.GENE)};
-                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
-                            title:allInfo.join(",<br/>"),
-                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
-                            tissue:record.source_trans,displayableContent:displayableContent});
-                    }
-                } else {
-                    arrayToBuild.push({annotation:0});
-                }
+
+                });
             }
             //return lineToAdd;
             return arrayToBuild[0];
@@ -534,9 +539,14 @@ var mpgSoftware = mpgSoftware || {};
             _.forEach(Object.keys(incomingTissueGrid),function(tissueKey){
                 var variantsToKeep = {};
                 _.forEach(Object.keys(incomingTissueGrid[tissueKey]),function(variantPos){
-                    var variantRecord = incomingTissueGrid[tissueKey][variantPos];
-                    if (((typeof variantRecord.ANNOTATION === 'undefined') ) || (assayIdArray.includes(variantRecord.ANNOTATION))){
-                        variantsToKeep[variantPos]=variantRecord;
+                    var variantsWorthKeeping = [];
+                    _.forEach(incomingTissueGrid[tissueKey][variantPos],function(variantRecord){
+                        if (((typeof variantRecord.ANNOTATION === 'undefined') ) || (assayIdArray.includes(variantRecord.ANNOTATION))){
+                            variantsWorthKeeping.push(variantRecord);
+                        }
+                    });
+                    if (variantsWorthKeeping.length>0){
+                        variantsToKeep[variantPos]=variantsWorthKeeping;
                     }
                 });
                 if (Object.keys(variantsToKeep).length>0){
@@ -572,29 +582,37 @@ var mpgSoftware = mpgSoftware || {};
         var extractValuesForTissueDisplay = function (tissueGrid){
             var sortableTissueArray = [];
             _.forEach(Object.keys(tissueGrid),function(tissueKey){
-                sortableTissueArray.push(tissueGrid[tissueKey]);
+                _.forEach(tissueGrid[tissueKey],function(variantTissueMatch){sortableTissueArray.push(variantTissueMatch);});
+                //sortableTissueArray.push(tissueGrid[tissueKey]);
             });
             var everySingleValue = [];
             var assayId = 0; // we require that there be no more than one assay ID and the entire array
             var sortedArrayOfArrays = _.sortBy(sortableTissueArray, function(objArray){
+                // TODO -- need to look acreoss all variants!
                 var bestVariantPerTissue = _.sortBy(objArray, function(singleVariant){
                     var oneValue = singleVariant.VALUE;
                     assayId = singleVariant.ANNOTATION;
                     everySingleValue.push(oneValue);
                     return oneValue;
                 })[0];
+                // var bestVariantPerTissue = _.sortBy(objArray, function(singleVariant){
+                //     var oneValue = singleVariant.VALUE;
+                //     assayId = singleVariant.ANNOTATION;
+                //     everySingleValue.push(oneValue);
+                //     return oneValue;
+                // })[0];
                 return  (typeof bestVariantPerTissue !== 'undefined') ? bestVariantPerTissue.VALUE : 0;
             });
 
             return {
-                sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){
+                sortedTissues: _.uniq(_.map(sortedArrayOfArrays, function(oneRec){
                     var assString = ""
                     var rec = oneRec[Object.keys(oneRec)[0]];
                     if (typeof rec !== 'undefined') {
                         assString = rec.source_trans;
                     }
                     return assString;
-                }),
+                })),
                 tissueGrid: tissueGrid,
                 quantileArray: createQuantilesArray(assayId)
             };
@@ -707,8 +725,13 @@ var mpgSoftware = mpgSoftware || {};
                 //    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,getSelectorAssayIds()[0] );
                 //} else {
                     _.forEach(getSelectorAssayIds(), function (assayId){
-                        //displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
-                        displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                        if (AGGREGATE_ACROSS_TISSUES){
+                            displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                        } else {
+                            displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                        }
+
+
                     });
                 //}
 
