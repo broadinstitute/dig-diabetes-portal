@@ -375,11 +375,12 @@ var mpgSoftware = mpgSoftware || {};
                             (typeof data.variants.region_start !== 'undefined')&&
                             (typeof data.variants.variants !== 'undefined')) {
                             _.forEach(data.variants.variants, function (record){
+                                var assaySpecificTissueDesignation = record.source_trans + "_"+record.ANNOTATION;
                                 if (includeRecord(record)){
-                                    if(typeof tissueGrid[record.source_trans] === 'undefined') {
-                                        tissueGrid[record.source_trans] = {};
+                                    if(typeof tissueGrid[assaySpecificTissueDesignation] === 'undefined') {
+                                        tissueGrid[assaySpecificTissueDesignation] = {};
                                     }
-                                    var tissueRow = tissueGrid[record.source_trans];
+                                    var tissueRow = tissueGrid[assaySpecificTissueDesignation];
                                     if(typeof tissueRow[''+data.variants.region_start] === 'undefined') {
                                         tissueRow[''+data.variants.region_start] = record;
                                     }
@@ -470,7 +471,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         // let's return an array of elements which we can eventually feed to mustache
-        var writeOneLineOfTheHeatMap = function(tissueGrid,tissueKey,quantileArray,variantRec){
+        var writeOneCellOfTheHeatMap = function(tissueGrid,tissueKey,quantileArray,variantRec){
             var lineToAdd ="";
             var arrayToBuild = [];
             if ((typeof variantRec !== 'undefined')&&
@@ -590,8 +591,9 @@ var mpgSoftware = mpgSoftware || {};
                 sortedTissues: _.map(sortedArrayOfArrays, function(oneRec){
                     var assString = ""
                     var rec = oneRec[Object.keys(oneRec)[0]];
+                    var assaySpecificTissueName = rec.source_trans + "_"+rec.ANNOTATION;
                     if (typeof rec !== 'undefined') {
-                        assString = rec.source_trans;
+                        assString = assaySpecificTissueName;
                     }
                     return assString;
                 }),
@@ -792,12 +794,12 @@ var mpgSoftware = mpgSoftware || {};
                 if ( index === 0){
                     rowDataStructure.rowSpan = primaryTissueObject.sortedTissues.length+subsidiaryTissueObject.sortedTissues.length;
                 }
-                rowDataStructure.tissueName = tissueKey;
+                rowDataStructure.tissueName = tissueKey.replace(/_\d+/g,'');
                 rowDataStructure.tissueDescriptionClass = 'credSetTissueLabel';
                 rowDataStructure.cellsPerLine = [];
                 rowDataStructure.annotationId = annotationId;
                 _.forEach(sortedVariants,function(variantRec){
-                    rowDataStructure.cellsPerLine.push(writeOneLineOfTheHeatMap(primaryTissueObject.tissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec));
+                    rowDataStructure.cellsPerLine.push(writeOneCellOfTheHeatMap(primaryTissueObject.tissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec));
                 });
                 var drivingTissueRecordExists = false;
                 if (rowDataStructure.cellsPerLine.length > 0){
@@ -815,11 +817,11 @@ var mpgSoftware = mpgSoftware || {};
                     if (typeof subsidiaryTissueObject.tissueGrid[tissueKey] !== 'undefined') {
                         followUpRowDataStructure.rowDecoration = 'border-bottom: solid 2px #bbb';
                         followUpRowDataStructure.tissueDescriptionClass = 'subsidiaryClass';
-                        followUpRowDataStructure.tissueName = "("+tissueKey+")";
+                        followUpRowDataStructure.tissueName = "("+tissueKey.replace(/_\d+/g,'')+")";
                         followUpRowDataStructure.cellsPerLine = [];
                         followUpRowDataStructure.annotationId = annotationId;
                         _.forEach(sortedVariants,function(variantRec){
-                            followUpRowDataStructure.cellsPerLine.push (writeOneLineOfTheHeatMap(subsidiaryTissueObject.tissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,variantRec));
+                            followUpRowDataStructure.cellsPerLine.push (writeOneCellOfTheHeatMap(subsidiaryTissueObject.tissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,variantRec));
                         });
                         tissueSpecificHeatMapDataStructure.tissueSpecificRow.push (followUpRowDataStructure);
                     }
@@ -912,6 +914,8 @@ var mpgSoftware = mpgSoftware || {};
                 var allObjects = [];
                 var allGenes = [];
                 var allTissues = [];
+                var uniqueGenes = [];
+                var uniqueTissues = [];
                 _.forEach(arrayOfCells, function (cell){
                     if(cell.annotation !== 0){
                         tissueCount++;
@@ -924,28 +928,30 @@ var mpgSoftware = mpgSoftware || {};
                         }
                         objectHolder = {matchingRegion:'informationIsPresent',
                             title:cell.title};
-                        if (allGenes.length>0){
+                        uniqueGenes = _.uniq(allGenes);
+                        uniqueTissues = _.uniq(allTissues);
+                        if (uniqueGenes.length>0){
                             var geneTitle = 'Gene';
-                            if (allGenes.length>1){geneTitle+='s'};
-                            objectHolder ['genes'] = '<span style="text-decoration: underline">'+geneTitle+'</span><br/>'+allGenes.join(',<br/>');
+                            if (uniqueGenes.length>1){geneTitle+='s'};
+                            objectHolder ['genes'] = '<span style="text-decoration: underline">'+geneTitle+'</span><br/>'+uniqueGenes.join(',<br/>');
                         }
-                        if (allTissues.length>0){
+                        if (uniqueTissues.length>0){
                             var tissueTitle = 'Tissue';
-                            if (allTissues.length>1){tissueTitle+='s'};
-                            objectHolder ['tissues'] = '<span style="text-decoration: underline">'+tissueTitle+'</span><br/>'+allTissues.join(',<br/>');
+                            if (uniqueTissues.length>1){tissueTitle+='s'};
+                            objectHolder ['tissues'] = '<span style="text-decoration: underline">'+tissueTitle+'</span><br/>'+uniqueTissues.join(',<br/>');
                         }
 
                     }
                 });
-                if ((allGenes.length>0)||(tissueCount>0)){
-                    objectHolder['countDivider'] = ' ';
+                if ((uniqueGenes.length>0)&&(uniqueTissues.length>0)){
+                    objectHolder['countDivider'] = '\r';
                 }
 
-                if (allGenes.length>0){
-                    objectHolder['geneCount'] = allGenes.length;
+                if (uniqueGenes.length>0){
+                    objectHolder['geneCount'] = "G:"+uniqueGenes.length;
                 }
                 if (tissueCount>0) {
-                    objectHolder['tissueCount'] = "("+tissueCount+")";
+                    objectHolder['tissueCount'] = "T:"+uniqueTissues.length;
                 }
                 finalAggregation.push(objectHolder);
             });

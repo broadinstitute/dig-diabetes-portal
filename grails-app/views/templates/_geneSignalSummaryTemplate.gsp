@@ -911,7 +911,7 @@
     {{#createSpanningCell}}
         <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>tissue</td>
     {{/createSpanningCell}}
-    <td  class='{{tissueDescriptionClass}} tissueHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
+    <td  class='{{tissueDescriptionClass}} tissueHider_{{annotationId}}' title='{{tissueName}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}} tissueHider_{{annotationId}}'
               data-toggle='tooltip' data-content="{{title}}" title='{{title}}'>
