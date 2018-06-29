@@ -914,7 +914,8 @@
     <td  class='{{tissueDescriptionClass}} tissueHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}} tissueHider_{{annotationId}}'
-              data-toggle='tooltip' title='{{title}}'></td>
+              data-toggle='tooltip' data-content="{{title}}" title='{{title}}'>
+              <span data-toggle="popover" data-content="{{title}}">{{displayableContent}}</span></td>
     {{/cellsPerLine}}
     </tr>
 {{/tissueSpecificRow}}
@@ -924,14 +925,15 @@
     <tr style='{{rowDecoration}}'>
 
         <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>
-        <button type="button" class="btn btn-info btn-sm tissueDisplay_{{annotationId}}" onclick="mpgSoftware.regionInfo.displayTissuesForAnnotation({{annotationId}})">display tissues</button>
+        <button type="button" class="btn btn-info btn-sm tissueDisplay_{{annotationId}} {{expandTissues}}" onclick="mpgSoftware.regionInfo.displayTissuesForAnnotation({{annotationId}})">display tissues</button>
         <button type="button" style="display:none" class="btn btn-info btn-sm tissueHide_{{annotationId}}" onclick="mpgSoftware.regionInfo.hideTissuesForAnnotation({{annotationId}})">hide tissues</button>
         </td>
 
     <td  class='{{tissueDescriptionClass}}  aggregateHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>
     {{#cellsPerLine}}
     <td class='tissueTable {{matchingRegion}}'
-              data-toggle='tooltip' title='{{title}}{{genes}}'><span data-toggle="popover" data-content="{{genes}}" class='geneCountDisplay'>{{geneCount}}</span>/
+              data-toggle='tooltip' title='{{title}}{{genes}}'><span data-toggle="popover" data-content="{{genes}}" class='geneCountDisplay'>{{geneCount}}</span>
+              {{countDivider}}
               <span data-toggle="popover" data-content="{{tissues}}" class='tissueCountDisplay'>{{tissueCount}}</span></td>
     {{/cellsPerLine}}
     </tr>

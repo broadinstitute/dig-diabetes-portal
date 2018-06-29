@@ -23,6 +23,11 @@
 .arrow {
     border-right-color: red !important;
 }
+td.tissueTable.informationIsPresent{
+    background: #54FF5E;
+;
+}
+
 </style>
 <div id="tableHeaderHolder"></div>
 

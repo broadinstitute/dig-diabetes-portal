@@ -488,11 +488,26 @@ var mpgSoftware = mpgSoftware || {};
                                         title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans ),
                                         annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
                                         tissue:record.source_trans});
-                    } else {
+                    } else if ((provideDefaultForAssayId === 1) || (provideDefaultForAssayId === 2)){
                         arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
                             title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) ),
                             annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
                             tissue:record.source_trans});
+                    }
+                    else {
+                        var displayableContent = '';
+                        if (record.GENE!==null){displayableContent = record.GENE};
+                        if ((record.ELEMENT!==null) && (displayableContent.length===0)){displayableContent = record.ELEMENT};
+                        if ((record.EXPERIMENT!==null) && (displayableContent.length===0)){displayableContent = record.EXPERIMENT};
+                        var allInfo = [];
+                        allInfo.push('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans);
+                        if (record.VALUE!==null){allInfo.push( 'value:'+ UTILS.realNumberFormatter(record.VALUE))};
+                        if (record.EXPERIMENT!==null){allInfo.push( 'experiment:'+ record.EXPERIMENT)};
+                        if (record.GENE!==null){allInfo.push( 'gene:'+ record.GENE)};
+                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
+                            title:allInfo.join(",<br/>"),
+                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                            tissue:record.source_trans,displayableContent:displayableContent});
                     }
                 } else {
                     arrayToBuild.push({annotation:0});
@@ -863,8 +878,9 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var aggregateAcrossTissues = function (renderData,assayName,annotationId){
+            var assayName = retrieveDesiredAssay (annotationId).name;
             var aggregatedRenderData = {assaySpecificRow:[]};
-            var aggregatedRow = {assayName:'unknown'};
+            var aggregatedRow = {assayName:assayName,expandTissues:'disable'};
             var aggregatedCells = [];
             var finalAggregation = [];
             _.forEach(renderData.tissueSpecificRow, function(row, index){
@@ -873,9 +889,13 @@ var mpgSoftware = mpgSoftware || {};
                     aggregatedRow ['rowDecoration'] = row['rowDecoration'];
                     aggregatedRow ['rowSpan'] = 1;
                     aggregatedRow ['tissueDescriptionClass'] = row['tissueDescriptionClass'];
+                    if (row.cellsPerLine.length>0){
+                        aggregatedRow ['expandTissues'] = '';
+                    }
+
 
                     _.forEach(row.cellsPerLine, function (singleCell,i){
-                        if ((aggregatedRow ['assayName'] === 'unknown')  && (singleCell.annotation!==0)){
+                        if ((aggregatedRow ['assayName'] === assayName)  && (singleCell.annotation!==0)){
                             aggregatedRow ['assayName'] = retrieveDesiredAssay (singleCell.annotation).name;
                         }
                         aggregatedCells.push([singleCell]);
@@ -902,7 +922,7 @@ var mpgSoftware = mpgSoftware || {};
                         if((typeof cell.tissue !== 'undefined')&&(cell.tissue!==null)&&(cell.tissue!=='')) {
                             allTissues.push(cell.tissue);
                         }
-                        objectHolder = {matchingRegion:cell.matchingRegion,
+                        objectHolder = {matchingRegion:'informationIsPresent',
                             title:cell.title};
                         if (allGenes.length>0){
                             var geneTitle = 'Gene';
@@ -917,11 +937,15 @@ var mpgSoftware = mpgSoftware || {};
 
                     }
                 });
+                if ((allGenes.length>0)||(tissueCount>0)){
+                    objectHolder['countDivider'] = ' ';
+                }
+
                 if (allGenes.length>0){
                     objectHolder['geneCount'] = allGenes.length;
                 }
                 if (tissueCount>0) {
-                    objectHolder['tissueCount'] = tissueCount;
+                    objectHolder['tissueCount'] = "("+tissueCount+")";
                 }
                 finalAggregation.push(objectHolder);
             });
@@ -939,7 +963,7 @@ var mpgSoftware = mpgSoftware || {};
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
 
             var tissueSpecificDataStructure = generateDataStructureForTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueGrid, sortedVariants, assayIdArray[0] );
-            var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayName',assayIdArray[0]);
+            var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayname',assayIdArray[0]);
 
 
             $('.credibleSetTableGoesHere tr:last').parent().append(

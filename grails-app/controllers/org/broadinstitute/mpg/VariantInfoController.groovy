@@ -313,10 +313,10 @@ class VariantInfoController {
             String assayIdStringContents = (assayIdListWithDefaults - "]") - "["
             requestedAssays = assayIdStringContents.split(",")
         }
-        if (!requestedAssays.contains("5")){
-            dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
-                    source, assayIdListWithDefaults )
-        }
+
+        dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
+                source, assayIdListWithDefaults )
+
 
 
 
