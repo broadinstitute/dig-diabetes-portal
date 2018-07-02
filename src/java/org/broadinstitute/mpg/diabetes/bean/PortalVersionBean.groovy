@@ -25,6 +25,7 @@ class PortalVersionBean {
     private String lzDataset
     private String frontLogo
     private String tagline
+    private String tabLabel
     private List<String> alternateLanguages
     private List<String> geneExamples
     private List<String> variantExamples
@@ -65,6 +66,7 @@ class PortalVersionBean {
                              String lzDataset,
                              String frontLogo,
                              String tagline,
+                             String tabLabel,
                              List<String> alternateLanguages,
                              List<String> geneExamples,
                              List<String> variantExamples,
@@ -103,6 +105,7 @@ class PortalVersionBean {
         this.lzDataset = lzDataset
         this.frontLogo = frontLogo
         this.tagline = tagline
+        this.tabLabel = tabLabel
         this.alternateLanguages = alternateLanguages
         this.geneExamples = geneExamples
         this.variantExamples = variantExamples
@@ -184,6 +187,10 @@ class PortalVersionBean {
 
     public String getTagline() {
         return tagline
+    }
+
+    public String getTabLabel() {
+        return tabLabel
     }
 
     public List<String> getAlternateLanguages() {
@@ -302,6 +309,7 @@ class PortalVersionBean {
 "lzDataset":"${getLzDataset()}",
 "frontLogo":"${getFrontLogo()}",
 "tagline":"${getTagline()}",
+"tabLabel":"${getTabLabel()}",
 "alternateLanguages":"${getAlternateLanguages().toString()}",
 "geneExamples":"${getGeneExamples().toString()}",
 "variantExamples":"${getVariantExamples().toString()}",

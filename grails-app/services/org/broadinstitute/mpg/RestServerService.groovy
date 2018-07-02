@@ -336,6 +336,7 @@ class RestServerService {
                     existingPortalVersionBean.getExcludeFromLZ(),
                     existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset(),
                     existingPortalVersionBean.getFrontLogo(), existingPortalVersionBean.getTagline(),
+                    existingPortalVersionBean.getTabLabel(),
                     existingPortalVersionBean.getAlternateLanguages(),existingPortalVersionBean.getGeneExamples(),
                     existingPortalVersionBean.getVariantExamples(),existingPortalVersionBean.getRangeExamples(),
                     existingPortalVersionBean.getBackgroundGraphic(),
@@ -362,7 +363,7 @@ class RestServerService {
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0 )
+                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
