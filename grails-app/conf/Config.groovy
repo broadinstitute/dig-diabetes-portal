@@ -129,38 +129,47 @@ if (grails.config.locations.isEmpty()){
 }
 
 digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
-digAWSKBV2prodServer = new ServerBean("KB-prod-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digdevlocalFederatedServer = new ServerBean("KB-dev-localhost-federated", "http://localhost:8090/dccservices/distributed/")
 digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
-federatedAwsProdKBV2Server = new ServerBean("KB-prod-fed-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
-digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
-digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.compute-1.amazonaws.com:8090/dccservices/")
 digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
+ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/")
+ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
+digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+digawsqanewKB_fed = new ServerBean("QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsqanewKB_fed
 
 getRestServerList = [
         digdevlocalServer,
+        digdevlocalFederatedServer,
         digAWSKBV2prodServer,
-        digAWS02KBV2prodServer,
+//        digAWS02KBV2prodServer,
         federatedAwsProdKBV2Server,
-        federatedAwsStageKBV2Server,
-        toddTestServer,
-        digdevmarcin,
-        digawsdevnewKB,
-        digawsdevnewKB_fed,
+//        federatedAwsStageKBV2Server,
+//        toddTestServer,
+//        digdevmarcin,
+//        digawsdevnewKB,
+//        digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
-        digawsprodmiKB,
-        digawsprodstrokeKB,
-        digawsdemoibdKB
+        digawsqanewKB_fed_dedicated,
+//        digawsprodmiKB,
+//        digawsprodstrokeKB,
+//        digawsdemoibdKB
+        ebiKB1,
+        ebiKB2
 ]
 
 
@@ -290,8 +299,10 @@ environments {
 
 //        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
+//       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
         grails.serverURL = "http://variant2function.org"
+
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
 //      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
@@ -594,7 +605,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 '5010306206573083521',
                                                 1,
                                                 0,
-                                                0,
+                                                1,
                                                 1,
                                                 0,
                                                 1,0,1,
@@ -798,8 +809,4 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
-
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'
 

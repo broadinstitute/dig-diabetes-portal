@@ -1,0 +1,13 @@
+20180522
+commit 55a2959655c4403343631e4d67eaaabd36ac4840 (HEAD -> md_test_federated, origin/md_test_federated)
+Author: mduby <mduby@broadinstitute.org>
+Date:   Fri Jun 1 14:48:01 2018 -0400
+
+    config changes for the test federated portal
+
+commit 93e8b5045a84f17cf7aa25a42c733206023745a3 (tag: tag_180522_93e8b_2309, origin/master, origin/HEAD, master)
+Author: Ben Alexander <balexand@broadinstitute.org>
+Date:   Tue May 22 15:04:27 2018 -0400
+
+    workaround beta/OR confusion on the the gene ppage.
+
