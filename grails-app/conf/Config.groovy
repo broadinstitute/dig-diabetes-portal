@@ -149,7 +149,7 @@ digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90
 federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
 // this will be your default
-defaultRestServer = digawsqanewKB_fed
+defaultRestServer = digawsdevnewKB
 
 getRestServerList = [
         digdevlocalServer,
@@ -160,7 +160,7 @@ getRestServerList = [
 //        federatedAwsStageKBV2Server,
 //        toddTestServer,
 //        digdevmarcin,
-//        digawsdevnewKB,
+        digawsdevnewKB,
 //        digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
@@ -695,15 +695,15 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           //"Inflammatory Bowel Disease",
                                           "Variant to Function",
                                                           "mdv80",
-                                                          "IBD",
+                                                          "CD",// another option would be "IBD"
                                                             "GWAS_IBDGenomics_eu_mdv80",
-                                                          ["DNase"],
-                                                          ["DNase"],
+                                                          ["DNase","Enhancer-gene link"],
+                                                          ["DNase","Enhancer-gene link"],
                                                           ["E071","E106","E088","E085"],
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
 //                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
-                                          "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18,19]",
+                                          "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/ibd/ibd_front_logo_WOnT2.png",
                                           "portal.ibd.header.tagline",

@@ -204,6 +204,54 @@ class RegionInfoController {
 
 
 
+    def retrieveListOfGenesInARange() {
+        Long startPos = 0L
+        Long endPos = 0L
+        String chromosome = ""
+        boolean looksOkay = true
+
+        if (params.startPos) {
+            try {
+                startPos = Double.parseDouble(params.startPos).longValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveListOfGenesInARange:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPos = Double.parseDouble(params.endPos).longValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveListOfGenesInARange:failed to convert endPos value=${params.startPos}")
+            }
+        }
+        if (!params.chromosome) {
+            looksOkay = false
+        }
+
+        Map geneSearchResults
+
+        if (looksOkay){
+            geneSearchResults = Gene.retrieveListOfGenesInARange( startPos,  endPos, chromosome)
+        } else {
+            geneSearchResults = [is_error: true, error_message: "calling parameter problem"]
+        }
+
+
+        String proposedJsonString = new JsonBuilder( geneSearchResults ).toPrettyString()
+        def slurper = new JsonSlurper()
+        JSONObject jsonReturn =  slurper.parseText(proposedJsonString);
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
 
 
 }

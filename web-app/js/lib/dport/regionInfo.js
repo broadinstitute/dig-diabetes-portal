@@ -705,14 +705,15 @@ var mpgSoftware = mpgSoftware || {};
                 $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
                 $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
 
-                //if (getSelectorAssayIds().length===1){
-                //    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,getSelectorAssayIds()[0] );
-                //} else {
-                    _.forEach(getSelectorAssayIds(), function (assayId){
+                var uniqueAssayIds = _.uniq(getSelectorAssayIds());
+                if (uniqueAssayIds.length===1){
+                    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,uniqueAssayIds[0] );
+                } else {
+                    _.forEach(uniqueAssayIds, function (assayId){
                         //displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
                         displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
                     });
-                //}
+                }
 
 
                 // do we have any credible set buttons?  If so then it is now safe to turn them on
