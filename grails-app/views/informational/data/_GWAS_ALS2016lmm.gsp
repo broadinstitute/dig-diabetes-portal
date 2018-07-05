@@ -913,7 +913,7 @@ Cases	Controls	Cohort	Ancestry
 
 <h4>Accessing ALS GWAS 2016 LMM data</h4>
 
-<p><g:message code="informational.data.accessing.ALS2016_GWAS_LMM1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.ALS2016_GWAS_LMM2"></g:message></p>
+<p><g:message code="informational.data.accessing.ALS2016_GWAS_LMM"></g:message></p>
 
 </div>
 
