@@ -63,6 +63,59 @@ class BurdenService {
 
 
 
+private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelectionOptionId){
+    int mostDelScore
+    switch (variantSelectionOptionId){
+        case PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING:
+            mostDelScore = 1;
+            break;
+        case PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE:
+            mostDelScore = 2;
+            break;
+        case PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING:
+            mostDelScore = 3;
+            break;
+        case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
+        case PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT: // filter locally
+        case PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD:  // filter locally
+        case PortalConstants.BURDEN_VARIANT_OPTION_NS:  // filter locally
+        case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
+            mostDelScore = 5;
+            break;
+        default:
+            mostDelScore = 5;
+            break;
+    }
+    return mostDelScore
+}
+
+
+    private String interpretDeleteriousnessParameterToGenerateOperator (int variantSelectionOptionId){
+        String operand = PortalConstants.OPERATOR_LESS_THAN_EQUALS;
+        switch (variantSelectionOptionId){
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING:
+                operand = PortalConstants.OPERATOR_EQUALS;
+                break;
+            default:
+                break;
+        }
+        return operand
+    }
+
+    private String interpretDeleteriousnessParameterToGenerateHackOperator (int variantSelectionOptionId){
+        String operand = "le";
+        switch (variantSelectionOptionId){
+            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING:
+                operand = PortalConstants.OPERATOR_EQUALS;
+                break;
+            default:
+                break;
+        }
+        return operand
+    }
+
+
+
 
     /**
      * method to get the variants from the getData call
@@ -72,37 +125,59 @@ class BurdenService {
      * @param mostDelScore
      * @return
      */
-    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
+    protected JSONObject getBiallelicVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
         // local variables
         String jsonString = "";
         JSONObject resultJson;
-        int mostDelScore = 2;
-        String operand = PortalConstants.OPERATOR_LESS_THAN_EQUALS;
+        int mostDelScore = interpretDeleteriousnessParameterToGenerateMds (variantSelectionOptionId)
+        String operand = interpretDeleteriousnessParameterToGenerateHackOperator (variantSelectionOptionId)
 
-        // set the most del score based on the variant filtering option given
-        // TODO - possibly combine this and polyphen/sift filtering into one method for clarity
-        switch (variantSelectionOptionId){
-            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_PROTEIN_TRUNCATING:
-                mostDelScore = 1;
-                operand = PortalConstants.OPERATOR_EQUALS;
-                break;
-            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_MISSENSE:
-                mostDelScore = 2;
-                break;
-            case PortalConstants.BURDEN_VARIANT_OPTION_ALL_CODING:
-                mostDelScore = 3;
-                break;
-            case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
-            case PortalConstants.BURDEN_VARIANT_OPTION_NS_STRICT: // filter locally
-            case PortalConstants.BURDEN_VARIANT_OPTION_NS_BROAD:  // filter locally
-            case PortalConstants.BURDEN_VARIANT_OPTION_NS:  // filter locally
-            case PortalConstants.BURDEN_VARIANT_OPTION_ALL:
-                mostDelScore = 5;
-                break;
-            default:
-                mostDelScore = 5;
-                break;
+        dataSet = "ExSeq_52k_mdv55"
+        List <String> filterList = []
+
+        filterList << """{"parameter": "most_del_score", "operator": "${operand}", "value": ${mostDelScore}}""".toString()
+
+        // super hack
+        //filterList << """{"parameter": "p_value", "operator": "lt", "value": "0.01"}""".toString()
+
+        if (geneString){
+            filterList << """{"parameter": "gene", "operator": "eq", "value": "${geneString}"}""".toString()
         }
+
+        // get the json string to send to the getData call
+        try {
+            jsonString = """{   "version": "mdv32",
+                "dataset": "${dataSet}",
+                "phenotype": "T2D",
+                "filters": [
+                ${filterList.join(",")}
+            ]
+            }""".toString ()
+
+
+        } catch (PortalException exception) {
+            log.error("Got json building error for getData payload creation: " + exception.getMessage());
+        }
+
+        // call the post REST call
+        resultJson = this.restServerService.postMultiAllelicHackRestCall(jsonString);
+
+        // return the result
+        return resultJson;
+    }
+
+
+
+
+
+
+
+    protected JSONObject getMultiallelicVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
+        // local variables
+        String jsonString = "";
+        JSONObject resultJson;
+        int mostDelScore = interpretDeleteriousnessParameterToGenerateMds (variantSelectionOptionId)
+        String operand = interpretDeleteriousnessParameterToGenerateOperator (variantSelectionOptionId)
 
         Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC",MetaDataService.METADATA_VARIANT)
         List<Property> additionalProperties = []
@@ -127,6 +202,35 @@ class BurdenService {
 
         // return the result
         return resultJson;
+    }
+
+
+
+
+
+
+
+
+
+    /**
+     * based on a configuration value determine whether we should pull variance from our traditional multiallelics store, or else decide that
+     * we should attempt to pull back there biallele at counterparts
+     *
+     * @param sampleGroup
+     * @param geneString
+     * @param mostDelScore
+     * @return
+     */
+    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
+        JSONObject returnValue
+
+        if ( restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait ){
+            returnValue = getBiallelicVariantsForGene ( geneString,  variantSelectionOptionId,  additionalQueryFilterList,  dataSet)
+        }else{
+            returnValue = getMultiallelicVariantsForGene ( geneString,  variantSelectionOptionId,  additionalQueryFilterList,  dataSet)
+        }
+
+        return returnValue
     }
 
 
@@ -277,8 +381,13 @@ class BurdenService {
             log.info("got filtered variant list of size: " + burdenVariantList.size());
 
             // filter the larger json object based on the variants that passed the above
-            jsonObject.variants = jsonObject.variants.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
-            jsonObject.numRecords = jsonObject.variants.size()
+            if (restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                jsonObject.variants = jsonObject.variants?.findAll{Map v->return burdenVariantList.contains(v["VAR_ID"])}
+            } else {
+                jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
+            }
+
+            jsonObject.numRecords = jsonObject.variants?.size()
 
             // get the list of variants back
             retval = restServerService.processInfoFromGetDataCall ( jsonObject, "\"d\":1", "", MetaDataService.METADATA_VARIANT )

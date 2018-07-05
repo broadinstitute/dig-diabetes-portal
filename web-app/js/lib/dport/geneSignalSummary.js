@@ -1328,6 +1328,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     };
     var initialPageSetUp = function (drivingVariables) {
+        // let us also initialized the region info metadata at this point
+        mpgSoftware.regionInfo.initializeRegionInfoModule (drivingVariables);
         $("#tableHeaderHolder").empty().append(
             Mustache.render($('#genePageHeaderTemplate')[0].innerHTML, drivingVariables));
     }
@@ -1404,8 +1406,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var returnValues =  [
             {value:"DNase",name:"DNase"},
             {value:"H3K27ac",name:"H3K27ac"}
-            // ,
-            // {value:"UCSD",name:"TF binding footprint"}
         ];
         _.forEach(returnValues,function(o){
             o["selected"] = (defaultSelected.findIndex(function(w){return w===o.value})>-1)?"selected":"";
@@ -1495,14 +1495,34 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
         var selectorInfo = [];
         var displayInfo = [];
-        if (additionalParameters.portalTypeString==='ibd'){
-            selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
-            selectorInfo = getParkerData(selectorInfo,[]);
-            displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
-            displayInfo = getParkerData(displayInfo,[]);
-        } else {
-            selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
+        var epigeneticAssaysString = additionalParameters.epigeneticAssays;
+        if (epigeneticAssaysString.length > 0){
+            var epigeneticAssays = _.map(epigeneticAssaysString.replace(new RegExp(/[\[\]']+/g),"").split (','),function (str){return parseInt(str)});
+            _.forEach(epigeneticAssays, function (singleAssay){
+                var assayRecord = mpgSoftware.regionInfo.retrieveDesiredAssay (singleAssay);
+                _.forEach(assayRecord.selectionOptions, function (selectionOption){
+                    selectorInfo.push ({value:selectionOption.value,name:selectionOption.name});
+                    displayInfo.push ({value:selectionOption.value,name:selectionOption.name});
+                });
+            });
+            _.forEach(selectorInfo,function(o){
+                o["selected"] = (mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0).
+                findIndex(function(w){return w===o.value})>-1)?"selected":"";
+            });
+            _.forEach(displayInfo,function(o){
+                o["selected"] = (mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1).
+                findIndex(function(w){return w===o.value})>-1)?"selected":"";
+            });
         }
+
+        // if (additionalParameters.portalTypeString==='ibd'){
+        //     selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
+        //     selectorInfo = getParkerData(selectorInfo,[]);
+        //     displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
+        //     displayInfo = getParkerData(displayInfo,[]);
+        // } else {
+        //     selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
+        // }
 
 
         var credibleSetTab = [];

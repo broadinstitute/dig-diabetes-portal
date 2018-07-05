@@ -6,9 +6,9 @@
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">
-<g:message code="informational.shared.publications.Abecasis_2018_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Abecasis_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Abecasis_2018_submitted.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Flannick_2018_submitted"></g:message><br>
+<g:message code="informational.shared.publications.Flannick_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Flannick_2018_submitted.citation"></g:message> </div>
 </div></p>
 
 <p><div class="paper">
@@ -45,7 +45,7 @@
 <tr><th>Project</th><th>Cases</th><th>Controls</th><th>Cohort <small>(Click to view selection criteria for cases and controls)</small></th><th>Ancestry</th></tr>
 
 
-<tr><td>T2D-GENES</td><td>531</td><td>522</td><td><a onclick="showSection(event)">Wake Forest School of Medicine Study</a>
+<tr><td>T2D-GENES</td><td>522</td><td>531</td><td><a onclick="showSection(event)">Wake Forest School of Medicine Study</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -72,7 +72,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>513</td><td>476</td><td><a onclick="showSection(event)">Jackson Heart Study</a>
+<tr><td>T2D-GENES</td><td>476</td><td>513</td><td><a onclick="showSection(event)">Jackson Heart Study</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -99,7 +99,7 @@
         </div></td><td>African American</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>1,233</td><td>1,285</td><td><a onclick="showSection(event)">BioMe Biobank Program (BioMe)</a>
+<tr><td>T2D-GENES</td><td>1,291</td><td>1,242</td><td><a onclick="showSection(event)">BioMe Biobank Program (BioMe)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -120,7 +120,7 @@
         </div></td><td>African American</td></tr>
 
 
-<tr><td>ESP</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Exome Sequencing Project (ESP)</a>
+<tr><td>ESP</td><td>467</td><td>1,374</td><td><a onclick="showSection(event)">Exome Sequencing Project (ESP)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -144,9 +144,35 @@
                     </td></tr>
 
             </table>
-        </div></td><td>Mixed (African American, European)</td></tr>
+        </div></td><td>African American</td></tr>
 
-<tr><td>T2D-GENES</td><td>1,576</td><td>1,470</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study and Singapore Prospective Study Program</a>
+        <tr><td>ESP</td><td>389</td><td>2,842</td><td><a onclick="showSection(event)">Exome Sequencing Project (ESP)</a>
+
+        <div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>ARIC: Self report of Type 2 Diabetes</li>
+                            <li>CARDIA: Self report of Type 2 Diabetes</li>
+                            <li>CHS:  ADA definition</li>
+                            <li>Framingham:  Self report of Type 2 Diabetes</li>
+                            <li>JHS: Type 2 Diabetes Status defined using ADA 2004</li>
+                            <li>MESA:  Exam 1 Diabetes mellitus using 2003 ADA</li>
+                            <li>WHI: Self report of Type 2 Diabetes</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>Not a case</li>
+                        </ul>
+                    </td></tr>
+
+            </table>
+        </div></td><td>European</td></tr>
+
+<tr><td>T2D-GENES</td><td>1,471</td><td>1,582</td><td><a onclick="showSection(event)">Singapore Diabetes Cohort Study and Singapore Prospective Study Program</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -172,7 +198,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>567</td><td>529</td><td><a onclick="showSection(event)">Korea Association Research Project (KARE)</a>
+<tr><td>T2D-GENES</td><td>529</td><td>567</td><td><a onclick="showSection(event)">Korea Association Research Project (KARE)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -202,7 +228,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>474</td><td>443</td><td><a onclick="showSection(event)">Korea SNUH</a>
+<tr><td>T2D-GENES</td><td>444</td><td>474</td><td><a onclick="showSection(event)">Korea SNUH</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -226,7 +252,7 @@
         </div></td><td>East Asian</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>481</td><td>479</td><td><a onclick="showSection(event)">Research Studies in Hong Kong</a>
+<tr><td>T2D-GENES</td><td>483</td><td>482</td><td><a onclick="showSection(event)">Research Studies in Hong Kong</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -245,11 +271,13 @@
             </table>
         </div></td><td>East Asian</td></tr>
 
-<tr><td>GoT2D</td><td>1,326</td><td>1,331</td><td><a onclick="showSection(event)">Finland-United States Investigation of NIDDM Genetics (FUSION) Study</a>
+<tr><td>GoT2D</td><td>1,289</td><td>1,251</td><td><a onclick="showSection(event)">Multiple cohorts</a>
 
         <div style="display: none;" class="cohortDetail">
+        <h5>Finland-United States Investigation of NIDDM Genetics (FUSION) Study</h5>
             <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
                         <ul>
@@ -268,13 +296,18 @@
                     </td></tr>
 
             </table>
-        </div></td><td>European</td></tr>
 
-<tr><td>GoT2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Malmö-Botnia Study</a>
 
-        <div style="display: none;" class="cohortDetail">
+
+&nbsp;
+
+
+
+<h5>Malmö-Botnia Study</h5>
+
             <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
                         <ul>
@@ -292,13 +325,13 @@
                     </td></tr>
 
             </table>
-        </div></td><td>European</td></tr>
 
-<tr><td>GoT2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">UK Type 2 Diabetes Genetics Consortium (UKT2D)</a>
 
-        <div style="display: none;" class="cohortDetail">
+&nbsp;
+<h5>UK Type 2 Diabetes Genetics Consortium (UKT2D)</h5>
             <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
                         <ul>
@@ -316,13 +349,13 @@
                         </ul>
                     </td></tr>
             </table>
-        </div></td><td>European</td></tr>
 
-<tr><td>GoT2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">KORAgen Study Helmholtz zentrum München (KORA)</a>
 
-        <div style="display: none;" class="cohortDetail">
+&nbsp;
+<h5>KORAgen Study Helmholtz zentrum München (KORA)</h5>
             <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+
+<tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
                         <ul>
@@ -343,7 +376,7 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>T2D-GENES</td><td>494</td><td>476</td><td><a onclick="showSection(event)">Metabolic Syndrome in Men Study (METSIM)</a>
+<tr><td>T2D-GENES</td><td>478</td><td>498</td><td><a onclick="showSection(event)">Metabolic Syndrome in Men Study (METSIM)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -372,7 +405,7 @@
 
 
 
-<tr><td>T2D-GENES</td><td>359</td><td>373</td><td><a onclick="showSection(event)">Ashkenazi</a>
+<tr><td>T2D-GENES</td><td>506</td><td>360</td><td><a onclick="showSection(event)">Ashkenazi</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -402,7 +435,7 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>LuCAMP</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Lundbeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention, and Care</a>
+<tr><td>LuCAMP</td><td>992</td><td>985</td><td><a onclick="showSection(event)">Lundbeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention, and Care</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -425,7 +458,7 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>T2D-GENES</td><td>941</td><td>945</td><td><a onclick="showSection(event)">Genetics of Diabetes and Audit Research Tayside Study (GoDARTS)</a>
+<tr><td>T2D-GENES</td><td>949</td><td>943</td><td><a onclick="showSection(event)">Genetics of Diabetes and Audit Research Tayside Study (GoDARTS)</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -444,7 +477,7 @@
         </div></td><td>European</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>584</td><td>389</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a>
+<tr><td>T2D-GENES</td><td>390</td><td>589</td><td><a onclick="showSection(event)">Framingham Heart Study (FHS)</a>
         <div style="display: none;" class="cohortDetail">
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
@@ -460,9 +493,10 @@
             </table>
         </div></td><td>European</td></tr>
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Mexico City Diabetes Study (MCDS)</a>
+<tr><td>SIGMA T2D</td><td>5,181</td><td>5,416</td><td><a onclick="showSection(event)">Multiple cohorts</a>
 
         <div style="display: none;" class="cohortDetail">
+        <h5>Mexico City Diabetes Study (MCDS)</h5>
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
@@ -480,10 +514,10 @@
                     </td></tr>
 
             </table>
-        </div></td><td>Latino</td></tr>
+        &nbsp;
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Multiethnic Cohort (MEC)</a>
-        <div style="display: none;" class="cohortDetail">
+<h5>Multiethnic Cohort (MEC)</h5>
+
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
@@ -501,16 +535,20 @@
                     </td></tr>
 
             </table>
-        </div></td><td>Latino</td></tr>
+        &nbsp;
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Diabetes in Mexico Study (DMS)</a>
+<h5>Diabetes in Mexico Study (DMS)</h5>
 
-        <div style="display: none;" class="cohortDetail">
+
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
-                        &nbsp;
+                        <ul>
+<li>Age &ge;18 years</li>
+<li>previous T2D diagnosis or fasting glucose levels above 125 mg/dL</li>
+<li>excluded individuals with fasting glycemia between 100-125 mg/dL</li>
+</ul>
                     </td>
                     <td valign="top">
                         <ul>
@@ -519,16 +557,17 @@
                         </ul>
                     </td></tr>
             </table>
-        </div></td><td>Latino</td></tr>
 
-<tr><td>SIGMA T2D</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">UNAM/INCMNSZ Diabetes Study (UIDS)</a>
 
-        <div style="display: none;" class="cohortDetail">
+<h5>UNAM/INCMNSZ Diabetes Study (UIDS)</h5>
+
             <table border="1">
                 <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                 <tr>
                     <td valign="top">
-                        &nbsp;                    </td>
+                        <ul><li>ADA criteria: fasting plasma glucose values &ge;126 mg/dL, current treatment with a hypoglycemic agent, or casual glucose values &ge;200 mg/dL</li>
+                        </ul>
+                   </td>
                     <td valign="top">
                         <ul>
                             <li>Age &ge;45 years</li>
@@ -540,7 +579,7 @@
             </table>
         </div></td><td>Latino</td></tr>
 
-<tr><td>T2D-GENES & SIGMA T2D</td><td>1,281</td><td>1,035</td><td><a onclick="showSection(event)">Starr County, Texas</a>
+<tr><td>T2D-GENES & SIGMA T2D</td><td>1,719</td><td>1,703</td><td><a onclick="showSection(event)">Starr County, Texas</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -566,7 +605,7 @@
             </table>
         </div></td><td>Hispanic</td></tr>
 
-<tr><td>T2D-GENES</td><td>202</td><td>243</td><td><a onclick="showSection(event)">San Antonio Mexican American Family Studies: San Antonio Family Heart Study, San Antonio Family Diabetes/Gallbladder Study, Veterans Administration Genetic Epidemiology Study, and Family Investigation of Nephropathy and Diabetes Study - San Antonio Component</a>
+<tr><td>T2D-GENES</td><td>243</td><td>202</td><td><a onclick="showSection(event)">San Antonio Mexican American Family Studies: San Antonio Family Heart Study, San Antonio Family Diabetes/Gallbladder Study, Veterans Administration Genetic Epidemiology Study, and Family Investigation of Nephropathy and Diabetes Study - San Antonio Component</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -600,7 +639,7 @@
         </div></td><td>Hispanic</td></tr>
 
 
-<tr><td>T2D-GENES</td><td>1,458</td><td>1,586</td><td><a onclick="showSection(event)">Singapore Indian Eye Study</a>
+<tr><td>T2D-GENES</td><td>1,589</td><td>1,459</td><td><a onclick="showSection(event)">Singapore Indian Eye Study</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -625,7 +664,7 @@
         </div></td><td>South Asian</td></tr>
 
 
-                <tr><td>T2D-GENES</td><td>599</td><td>600</td><td><a onclick="showSection(event)">London Life Sciences Population (LOLIPOP)</a>
+                <tr><td>T2D-GENES</td><td>529</td><td>537</td><td><a onclick="showSection(event)">London Life Sciences Population (LOLIPOP)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -650,7 +689,7 @@
             </table>
         </div></td><td>South Asian</td></tr>
 
-<tr><td>T2D-GENES</td><td>882</td><td>836</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
+<tr><td>T2D-GENES</td><td>854</td><td>890</td><td><a onclick="showSection(event)">Pakistan Genomic Resource (PGR)</a>
 
         <div style="display: none;" class="cohortDetail">
             <table border="1">
@@ -669,53 +708,6 @@
 
             </table>
         </div></td><td>South Asian</td></tr>
-
-
-
-<tr><td>ProDIGY</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">Treatment Options for Type 2 Diabetes in Adolescents and Youth (TODAY)</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Medical record documentation of diabetes by ADA criteria, except that for individuals diagnosed with elevated 2 Hour glucose on an OGTT only</li>
-                            <li>HbA1c &gt; 6</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>n/a</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>Mixed</td></tr>
-
-
-<tr><td>ProDIGY</td><td>nnn</td><td>nnn</td><td><a onclick="showSection(event)">SEARCH for Diabetes in Youth (SEARCH)</a>
-
-        <div style="display: none;" class="cohortDetail">
-            <table border="1">
-                <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                <tr>
-                    <td valign="top">
-                        <ul>
-                            <li>Provider diagnosis of T2D</li>
-                        </ul>
-                    </td>
-                    <td valign="top">
-                        <ul>
-                            <li>n/a</li>
-                        </ul>
-                    </td></tr>
-
-            </table>
-        </div></td><td>Mixed</td></tr>
-
-
-
 
 </table>
 
@@ -753,7 +745,7 @@
 <p><g:message code="informational.data.overview.52K-3"></g:message></p>
 <p>&nbsp;</p>
 
-<h4>Accessing 52K exome sequence analysis data</h4>
+<h4>Accessing AMP T2D-GENES exome sequence analysis data</h4>
     <p><g:message code="informational.data.accessing.52K1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.52K2"></g:message></p>
 
 

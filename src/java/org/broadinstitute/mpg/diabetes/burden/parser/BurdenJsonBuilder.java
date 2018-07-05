@@ -277,9 +277,15 @@ public class BurdenJsonBuilder {
             // get the array under the variants object
             if ((tempArray != null) && (tempArray.size() > 0)) {
                 for (int i = 0; i < tempArray.size(); i++) {
-                    tempArray2 = (JSONArray)tempArray.get(i);
                     VariantBean variant = new VariantBean();
-                    Map<String, Object> map = this.getHashMapOfJsonArray(tempArray2);
+                    Map map;
+                    if(tempArray.get(i).getClass().getSimpleName ().equals("JSONObject")){
+                        map = (Map)tempArray.get(i);
+                    }else {
+                        tempArray2 = (JSONArray)tempArray.get(i);
+                        map = this.getHashMapOfJsonArray(tempArray2);
+                    }
+                    //TODO can I make this simple branch here, or do I have to do something more elaborate?
                     variant.setVariantId((String)map.get(PortalConstants.JSON_VARIANT_ID_KEY));
                     variant.setChromosome((String) map.get(PortalConstants.JSON_VARIANT_CHROMOSOME_KEY));
                     if (map.get("MAF") != null) {

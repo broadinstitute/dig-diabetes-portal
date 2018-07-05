@@ -1859,8 +1859,8 @@ mpgSoftware.burdenTestShared = (function () {
                 arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
                 var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
                 arrayOfRows.push(DBSNP_ID);
-                arrayOfRows.push(variantRec.CHROM);
-                arrayOfRows.push(variantRec.POS);
+                arrayOfRows.push((variantRec.CHROM)?variantRec.CHROM:variantRec.VAR_ID.split("_")[0]);
+                arrayOfRows.push((variantRec.POS)?variantRec.POS:variantRec.VAR_ID.split("_")[1]);
                 var codedMac = variantRec.MAC;
                 if (typeof codedMac === 'undefined') {
                     codedMac = '';
