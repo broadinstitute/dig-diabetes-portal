@@ -385,14 +385,8 @@ class VariantInfoController {
                 dataJsonObject
             }
         } else {
-            if (!requestedAssays.contains("5")) {
-                render(status: 200, contentType: "application/json") {
-                    [variants: dataJsonObject]
-                }
-            } else {
-                render(status: 200, contentType: "application/json") {
-                    [variants: dataJsonObject]
-                }
+            render(status: 200, contentType: "application/json") {
+                [variants: dataJsonObject]
             }
 
         }

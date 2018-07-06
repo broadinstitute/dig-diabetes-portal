@@ -784,6 +784,112 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
+
+
+
+        var buildANearbyGeneHeatMap = function (drivingVariables,setDefaultButton){
+            drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
+            $(".credibleSetTableGoesHere").empty().append(
+                Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
+            );
+            var additionalParameters = $.data($('#dataHolderForCredibleSets')[0],'additionalParameters');
+            var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
+            var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
+            setDevelopingTissueGrid({});
+            var assayIdArrays = _.union(getSelectorAssayIds(),getDisplayAssayIds()) ;
+            var assayIdArrayAsString = "["+assayIdArrays.join(",")+"]";
+            //var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
+            var promises = oneCallbackForEachGene(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
+
+            $.when.apply($, promises).then(function(schemas) {
+                var tissueGrid = getDevelopingTissueGrid();
+
+                //  we need to remember some of these data
+                $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
+                $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
+
+                var uniqueAssayIds = _.uniq(getSelectorAssayIds());
+                if (uniqueAssayIds.length===1){
+                    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,uniqueAssayIds[0] );
+                } else {
+                    _.forEach(uniqueAssayIds, function (assayId){
+                        //displayAParticularCredibleSetPerAssayId (tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                        displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                    });
+                }
+
+
+                // do we have any credible set buttons?  If so then it is now safe to turn them on
+                var credSetChoices = $('li.credibleSetChooserButton');
+                _.forEach(credSetChoices,function(credSetButton){
+                    var credSetButtonObj = $(credSetButton);
+                    credSetButtonObj.attr('onclick',credSetButtonObj.attr('toBeOnClick'));
+                });
+                if (setDefaultButton){
+                    $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
+                }
+                $('[data-toggle="popover"]').popover({
+                    animation: true,
+                    html: true,
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                });
+                $(".pop-top").popover({placement: 'top'});
+                $(".pop-right").popover({placement: 'right'});
+                $(".pop-bottom").popover({placement: 'bottom'});
+                $(".pop-left").popover({placement: 'left'});
+                $(".pop-auto").popover({placement: 'auto'})
+
+            }, function(e) {
+                console.log("My ajax failed");
+            });
+            $('.credibleSetTableGoesHere td.tissueTable').popover({
+                html : true,
+                title: function() {
+                    //return $(this).parent().find('.head').html();
+                    console.log('title');
+                    return "foo";
+                },
+                content: function() {
+                    //return $(this).parent().find('.content').html();
+                    return "fii";
+                },
+                container: 'body',
+                placement: 'bottom',
+                trigger: 'hover'
+            });
+            $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
+                html : true,
+                title: function() {
+                    var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+
+                        '<div onclick="mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps()" class="close">&times;</div>';
+                    return var_id;
+                },
+                content: function() {
+                    var retString = "";
+                    retString +=
+                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Chromosome:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('chrom')+"</scan>"+
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Position:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('position')+"</scan></div>"+
+                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan>"+
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Effect Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defeffa')+"</scan></div>"+
+                        "<div class='credSetLine'><span class='fakelink' onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
+                        $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\",\""+assayIdList+"\")' href='#'>"+
+                        "Click to display tissues with overlapping regions below the LocusZoom plot</span></div>";
+                    return retString;
+                },
+                container: 'body',
+                placement: 'bottom',
+                trigger: 'focus click'
+            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
+
+            //.on("click", function(){
+            //    $(this).parents(".popover").popover('hide');
+            //});
+        };
+
+
+
+
+
         //  Generate a mustache-ready data structure which holds everything that will go into the tissue specific portion of the
         //   heat map.
         var generateDataStructureForTissueSpecificHeatMap = function(primaryTissueObject, subsidiaryTissueObject, sortedVariants, annotationId ){
