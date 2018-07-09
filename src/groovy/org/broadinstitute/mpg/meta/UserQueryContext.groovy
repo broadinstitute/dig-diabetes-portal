@@ -79,12 +79,12 @@ class UserQueryContext {
                 String canonicalVariant = sharedToolsService.createCanonicalVariantName(originalRequest)
                 Variant storedVariant = Variant.retrieveVariant(canonicalVariant)
                 if (storedVariant) {
-                    interpretedRequest = variant.varId
-                    startOriginalExtent = variant.position
-                    endOriginalExtent = variant.position
-                    startExpandedExtent = ((variant.position > expandBy) ?
-                            (variant.position - expandBy) : 0)
-                    endExpandedExtent = variant.position + expandBy
+                    interpretedRequest = storedVariant?.varId
+                    startOriginalExtent = storedVariant?.position
+                    endOriginalExtent = storedVariant?.position
+                    startExpandedExtent = ((storedVariant?.position > expandBy) ?
+                            (storedVariant?.position - expandBy) : 0)
+                    endExpandedExtent = storedVariant?.position + expandBy
                     variant = true
                 } else if (!variantFields[1].contains("-")){ // as long as we're sure it isn't a range
                     // treat like a position, since we don't know this variant
