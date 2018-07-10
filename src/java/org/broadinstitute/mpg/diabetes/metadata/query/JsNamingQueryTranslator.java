@@ -345,7 +345,9 @@ public class JsNamingQueryTranslator {
                     Property propertyForFilter = null;
                     String requestedPhenotype = null;
                     if (lineNumberString.equals(this.QUERY_PROTEIN_EFFECT_LINE_NUMBER)) {
-                        propertyForFilter = this.jsonParser.findPropertyByName(propertyString);
+                        // default to common property if more than one found with the same name
+                        propertyForFilter = this.jsonParser.findPropertyByName(propertyString, true, false);
+
                     } else {
                         propertyForFilter = this.jsonParser.getPropertyFromJavaScriptNamingScheme(propertyString);
                         // when the user has requested a sample group, we need to remember which phenotype they are asking about
