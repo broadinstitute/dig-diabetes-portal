@@ -144,12 +144,15 @@ digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-2
 
 ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/")
 ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
+
 digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+
 digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
-digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+digawsqanewKB_fed_dedicated_EBIv1 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB1", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccservices/distributed/")
 
 
 // this will be your default
@@ -168,7 +171,8 @@ getRestServerList = [
 //        digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
-        digawsqanewKB_fed_dedicated,
+        digawsqanewKB_fed_dedicated_EBIv1,
+        digawsqanewKB_fed_dedicated_EBIv2,
 //        digawsprodmiKB,
 //        digawsprodstrokeKB,
 //        digawsdemoibdKB
@@ -333,7 +337,7 @@ environments {
 //        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
 //
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
-//        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
 
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
@@ -349,7 +353,7 @@ environments {
 
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
-        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
+//        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 
 
 //        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
