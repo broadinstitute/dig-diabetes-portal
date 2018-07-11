@@ -889,6 +889,49 @@ public class JsonParser {
     }
 
 
+    /**
+     * find the first property by its name
+     *
+     * @param propertyName
+     * @return
+     * @throws PortalException
+     */
+    public Property findPropertyByName(String propertyName, boolean defaultToCommonProperty, boolean throwErrorIfMoreThanOne) throws PortalException {
+        List<Property> propertyList;
+        Property property = null;
+
+        // create the visitor and traverse from root
+        PropertyListByNameFinderVisitor propertyVisitor = new PropertyListByNameFinderVisitor(propertyName);
+        this.getMetaDataRoot().acceptVisitor(propertyVisitor);
+
+        // get the property
+        propertyList = propertyVisitor.getPropertyList();
+
+        // get the property you want
+        if (throwErrorIfMoreThanOne && (propertyList.size() > 1)) {
+            throw new PortalException(("Got more than one property: " + propertyList.size() + " for propperty name: " + propertyName));
+
+        } else {
+            // return first hit if no preference (like methhod below)
+            if (propertyList.size() > 0) {
+                property = propertyList.get(0);
+            }
+
+            // check if need common property if it is there
+            if (defaultToCommonProperty) {
+                for (Property prop : propertyList) {
+                    if (PortalConstants.TYPE_COMMON_PROPERTY_KEY.equals(prop.getPropertyType())) {
+                        property = prop;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // return
+        return property;
+    }
+
 
 
     /**
