@@ -78,10 +78,11 @@
 <div id="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <h1 class="dk-page-title">Data</h1>
-            </div>
+
                 <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                    <div class="col-md-12">
+                        <h1 class="dk-page-title">Data</h1>
+                    </div>
                     <div class="col-md-12">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.title" default="about the data"/></p>
                     </div>
@@ -89,15 +90,28 @@
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <div class="col-md-12">
+                        <h1 class="dk-page-title">Polygenic Risk Scores</h1>
+                        <p>text about PRS</p>
+                    </div>
+                    <div class="col-md-12">
+                        <h1 class="dk-page-title">Datasets</h1>
+                    </div>
+                    <div class="col-md-12">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
                     </div>
                 </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                 <div class="col-md-12">
+                    <h1 class="dk-page-title">Data</h1>
+                </div>
+                <div class="col-md-12">
                     <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.epi.descr" default="about the data"/></p>
                 </div>
             </g:elseif>
                 <g:else>
+                    <div class="col-md-12">
+                        <h1 class="dk-page-title">Data</h1>
+                    </div>
                     <div class="col-md-9">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title2" default="about the data"/></p>
