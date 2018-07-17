@@ -90,11 +90,19 @@
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <div class="col-md-12">
-                        <h1 class="dk-page-title">Polygenic Risk Scores</h1>
-                        <p>text about PRS</p>
+                        <h1 class="dk-page-title">Polygenic Risk Score Variant Weights</h1>
+                        <p><g:message code="informational.about.PRS"></g:message></p>
+                    <p><div class="paper">
+                    <g:message code="informational.shared.publications.Khera_2018_NatGenet"></g:message><br>
+                    <g:message code="informational.shared.publications.Khera_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+                    <div class="citation"><g:message code="informational.shared.publications.Khera_2018_NatGenet.citation"></g:message> </div>
+                </div></p>
+                    <p><a href="" target="_blank">Atrial fibrillation</a> | <a href="" target="_blank">Breast cancer</a> | <a href="" target="_blank">Coronary artery disease</a> | <a href="" target="_blank">Inflammatory bowel disease</a> | <a href="" target="_blank"><a href="" target="_blank">Type 2 diabetes</a>
+                    </p>
+</table>
                     </div>
                     <div class="col-md-12">
-                        <h1 class="dk-page-title">Datasets</h1>
+                        <h1 class="dk-page-title">Genetic Association Datasets</h1>
                     </div>
                     <div class="col-md-12">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
