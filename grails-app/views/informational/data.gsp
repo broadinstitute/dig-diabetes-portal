@@ -97,11 +97,11 @@
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet.citation"></g:message>
                 </p>
-                    <p style="font-weight: 300; font-size: 15px;"><a href="" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="" target="_blank">Breast cancer (253 KB)</a> | <a href="" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="" target="_blank">Type 2 diabetes (305.6 MB)</a>
+                    <p style="font-weight: 300; font-size: 15px;"><a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
                     </p>
 </table>
                     </div>
-                   
+
                     <div class="col-md-12">
                         <h1 class="dk-page-title">Genetic Association Datasets</h1>
                     </div>
