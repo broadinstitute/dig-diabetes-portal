@@ -1227,6 +1227,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: credibleSetDataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
                 sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);

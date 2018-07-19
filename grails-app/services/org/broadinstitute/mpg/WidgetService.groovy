@@ -1181,30 +1181,8 @@ class WidgetService {
 
 
 
-
-
-
-
-//    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
-//                                                   String dataset, String phenotype, String propertyName) {
-//
-//        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
-//
-//        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-//                2000, "verbose", metaDataService);
-//
-//        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-//
-//
-//
-//        // return
-//        return jsonResultString;
-//    }
-
-
-
-    private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
-                                             String phenotype ){
+    public JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
+                                             String phenotype, int maxNumberOfRecords ){
         JSONObject jsonResultString = new JSONObject()
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
@@ -1212,7 +1190,7 @@ class WidgetService {
         if (newlyChosenProperty!=null){
             LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
             String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                    10, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
+                    maxNumberOfRecords, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             jsonResultString["dataset"] = dataSetName
             jsonResultString["phenotype"] = phenotype
@@ -1244,11 +1222,11 @@ class WidgetService {
                 jsonResultString["phenotype"] = phenotype
                 jsonResultString["propertyName"] = propertyName
             } else {   // We didn't have any variants in this region.  Search a different data set
-                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, 10 )
             }
 
         } else {  // We didn't have any credible set data set for this phenotype. Let's go straight to the alternate data set
-            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, 10 )
         }
 
 

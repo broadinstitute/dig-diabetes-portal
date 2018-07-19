@@ -87,6 +87,71 @@ class RegionInfoController {
 
 
 
+
+    def fillGeneComparisonTable() {
+        JSONObject jsonReturn;
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
+        String phenotype = params.phenotype;
+        String dataSet = params.dataSet
+        String dataType = params.datatype
+        String propertyName = params.propertyName
+
+
+        Long startLong;
+        Long endLong;
+
+        String errorJsonString = "{\"data\": {}, \"error\": true}";
+        def slurper = new JsonSlurper()
+
+        // if have all the information, call the widget service
+        try {
+            startLong = Long.parseLong(startString);
+            endLong = Long.parseLong(endString);
+
+            if (chromosome != null) {
+
+                Map mapContainingGeneList = Gene.retrieveListOfGenesInARange( startLong, endLong,  chromosome )
+                Map returnInformation = [:]
+                if ((mapContainingGeneList!=null)&&
+                        (!mapContainingGeneList.is_error)){
+                    jsonReturn = new JSONObject()
+                    JSONArray supplementedGenes = new JSONArray()
+                    for (Map gene in mapContainingGeneList.listOfGenes){
+                        String geneJsonObject = new JsonBuilder(gene).toPrettyString()
+                        JSONObject jsonForGene =  slurper.parseText(geneJsonObject)
+                        jsonForGene["annotations"] = widgetService.buildTheIncredibleSet((gene.chromosome-"chr") as String, gene.addrStart as int, gene.addrEnd  as int, phenotype, 1000 )
+                        supplementedGenes.add(jsonForGene)
+                    }
+                    jsonReturn["error"] = false
+                    jsonReturn["data"] = supplementedGenes
+                    jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
+                }
+            } else {
+                jsonReturn = slurper.parse(errorJsonString);
+            }
+            
+
+            // log end
+            Date endTime = new Date();
+
+        } catch (NumberFormatException exception) {
+            log.error("got incorrect parameters for LZ call: " + params);
+            jsonReturn =  slurper.parse(errorJsonString);
+        }
+        jsonReturn.datasetReadable = g.message(code: "metadata." + jsonReturn.dataset, default: jsonReturn.dataset)
+        jsonReturn.phenotypeReadable = g.message(code: "metadata." + jsonReturn.phenotype, default: jsonReturn.phenotype)
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
+
     def availableAssayIdsJson() {
         JSONObject jsonReturn;
         ArrayList assayInformation = [

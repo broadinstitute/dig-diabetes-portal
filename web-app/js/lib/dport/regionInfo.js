@@ -1151,6 +1151,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
+            var rememberVars = vars;
             setIncludeRecordBasedOnUserChoice(additionalParameters.assayIdList);
             var currentSequenceExtents = getCurrentSequenceExtents();
             if (!isNaN(currentSequenceExtents.start)){vars.start=currentSequenceExtents.start}
@@ -1164,6 +1165,18 @@ var mpgSoftware = mpgSoftware || {};
             });
             promise.done(
                 function (data) {
+
+                    var subPromise = $.ajax({
+                        cache: false,
+                        type: "post",
+                        url: rememberVars.fillGeneComparisonTableUrl,
+                        data: rememberVars,
+                        async: true
+                    });
+                    subPromise.done(function(subdata){
+                        console.log(subdata);
+                        alert("subdata");
+                    });
 
 
                     var extractAllCredibleSetNames = function (drivingVariables){
