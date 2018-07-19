@@ -279,7 +279,15 @@ class VariantSearchController {
 
         List <String> filtersForQuery = []
         if (chromosome!=null){
+            String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
+            String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
             filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+            filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACU_PH","value":"0","comparator":">"}]""".toString()
+
+            // filtersForQuery << """{"gene":"${geneName}","comparator":"="}""".toString()
+
         }
         if ((dataSetName!=null) && (phenotypeName!=null)){
             org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotypeName,dataSetName,
@@ -1220,9 +1228,9 @@ class VariantSearchController {
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
 
         if (requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
-            // if there are no specified properties, default to these
+            // if there are no specified properties, dFefault to these
             requestForAdditionalProperties =
-                    ["common-common-CLOSEST_GENE",
+                    ["common-common-GENE",
                      "common-common-VAR_ID",
                      "common-common-DBSNP_ID",
                      "common-common-Protein_change",
