@@ -909,11 +909,11 @@ Cases	Controls	Cohort	Ancestry
 
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.ALS2016_GWAS_LMM"></g:message></p>
+<p><g:message code="informational.data.exptsumm.ALS2016_GWAS"></g:message></p>
 
-<h4>Accessing ALS GWAS 2016 LMM data</h4>
+%{--<h4>Accessing ALS GWAS 2016 LMM data</h4>--}%
 
-<p><g:message code="informational.data.accessing.ALS2016_GWAS_LMM"></g:message></p>
+%{--<p><g:message code="informational.data.accessing.ALS2016_GWAS"></g:message></p>--}%
 
 </div>
 
