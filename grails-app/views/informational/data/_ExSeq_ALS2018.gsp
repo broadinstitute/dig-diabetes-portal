@@ -18,9 +18,9 @@
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.ALS2018_ExSeq"></g:message></p>
 
-<h4>Accessing ALS exome case-control 2018 data</h4>
+%{--<h4>Accessing ALS exome case-control 2018 data</h4>--}%
 
-<p><g:message code="informational.data.accessing.ALS2018_ExSeq"></g:message></p>
+%{--<p><g:message code="informational.data.accessing.ALS2018_ExSeq"></g:message></p>--}%
 
 </div>
 
