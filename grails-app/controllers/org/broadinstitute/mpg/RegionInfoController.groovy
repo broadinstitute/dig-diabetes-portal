@@ -131,7 +131,7 @@ class RegionInfoController {
             } else {
                 jsonReturn = slurper.parse(errorJsonString);
             }
-            
+
 
             // log end
             Date endTime = new Date();

@@ -226,6 +226,107 @@ var mpgSoftware = mpgSoftware || {};
             return renderData;
         };
 
+
+
+
+        var buildRenderDataForGenes = function (data,additionalParameters){
+            var renderData = {  variants: [],
+                credibleSetInfoCode:data.credibleSetInfoCode,
+                const:{
+                },
+                annotation:[],
+
+                cellTypeSpecs: [
+                ]};
+            if (typeof data !== 'undefined'){
+                var eachColumn = [];
+                _.forEach(data.data, function (gene){
+                    var geneRecord = {};
+                    var allVariants = _.flatten([{}, gene.annotations.variants]);
+                    var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
+                    var minimumPValue = 1;
+                    var minimumPosteriorPValue = 1;
+                    var variants = [];
+                    var codingVariants = [];
+                    var spliceSiteVariants = [];
+                    var utrVariants = [];
+                    var tfBindingVariants = [];
+                    var promoterVariants = [];
+                    _.forEach(flattendVariants.sort(function (a, b) {return a.POS - b.POS;}), function (v){ // need to aggregate variance into something meaningful for the gene
+                        _.forEach(v.P_VALUE, function (csvalue){
+                            _.forEach(csvalue,function (currentPValue){
+                                if (currentPValue<minimumPValue){
+                                    minimumPValue=currentPValue;
+                                }
+
+                            })
+                        });
+                        _.forEach(v.POSTERIOR_PROBABILITY, function (csvalue){
+                            _.forEach(csvalue,function (currentPValue){
+                                if (currentPValue<minimumPosteriorPValue){
+                                    minimumPosteriorPValue=currentPValue;
+                                }
+
+                            })
+                        });
+                        if (typeof v.VAR_ID !== 'undefined') {
+                            variants.push({name:v.VAR_ID, details:v, assayIdList: additionalParameters.assayIdList});
+                        }
+                        if (typeof v.MOST_DEL_SCORE !== 'undefined') {
+                            if ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4)){
+                                codingVariants.push (v.VAR_ID);
+                            }
+                        }
+                        if (typeof v.Consequence !== 'undefined'){
+                            if (v.Consequence.indexOf('splice')>-1){
+                                spliceSiteVariants.push (v.VAR_ID);
+                            }
+                            if (v.Consequence.indexOf('utr')>-1){
+                                utrVariants.push (v.VAR_ID);
+                            }
+                            if (v.Consequence.indexOf('promoter')>-1){
+                                promoterVariants.push (v.VAR_ID);
+                            }
+                        }
+                        if (typeof v.MOTIF_NAME !== 'undefined') {
+                            tfBindingVariants.push((v.MOTIF_NAME === null) ?
+                                {val:'',descr:'absent'}:
+                                {val:v.MOTIF_NAME,descr:'present'});
+                        }
+
+                    });
+                    insertAnnotation(renderData,'coding', codingVariants.length>0, false );
+                    insertAnnotation(renderData,'spliceSite', (spliceSiteVariants.length>0), false );
+                    insertAnnotation(renderData,'utr', (utrVariants.length>0), false );
+                    insertAnnotation(renderData,'promoter', (promoterVariants.length>0), false );
+                    insertAnnotation(renderData,'tfBindingMotif', (tfBindingVariants.length>0), false );
+                    var posteriorProbabilitiesExist = false;
+                    if (minimumPosteriorPValue<1) {
+                        posteriorProbabilitiesExist = true;
+                        insertAnnotation(renderData,'posteriorProbability',minimumPosteriorPValue, false);
+
+                    }
+                    if (minimumPValue<1) {
+                        insertAnnotation(renderData,'pValue',minimumPValue,posteriorProbabilitiesExist);
+                    }
+                    geneRecord['addrStart'] = gene.addrStart;
+                    geneRecord['addrEnd'] = gene.addrEnd;
+                    geneRecord['chromosome'] = gene.chromosome;
+                    geneRecord['name'] = gene.name1;
+                    eachColumn.push(geneRecord);
+                });
+            }
+            renderData['columns'] = eachColumn;
+
+            return renderData;
+        };
+
+
+
+
+
+
+
         var buildRenderData = function (data,additionalParameters){
             var renderData = {  variants: [],
                                 credibleSetInfoCode:data.credibleSetInfoCode,
@@ -1151,32 +1252,38 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var fillRegionInfoTable = function(vars,additionalParameters) {
-            var rememberVars = vars;
             setIncludeRecordBasedOnUserChoice(additionalParameters.assayIdList);
             var currentSequenceExtents = getCurrentSequenceExtents();
+            var geneTablePresentation = false;
+            var urlForDataRecall = vars.fillCredibleSetTableUrl;
+            if ((typeof vars.geneTable !== 'undefined')  &&
+                (vars.geneTable)){
+                urlForDataRecall = vars.fillGeneComparisonTableUrl;
+                geneTablePresentation = true;
+            }
             if (!isNaN(currentSequenceExtents.start)){vars.start=currentSequenceExtents.start}
             if (!isNaN(currentSequenceExtents.end)){vars.end=currentSequenceExtents.end}
             var promise = $.ajax({
                 cache: false,
                 type: "post",
-                url: vars.fillCredibleSetTableUrl,
+                url: urlForDataRecall,
                 data: vars,
                 async: true
             });
             promise.done(
                 function (data) {
 
-                    var subPromise = $.ajax({
-                        cache: false,
-                        type: "post",
-                        url: rememberVars.fillGeneComparisonTableUrl,
-                        data: rememberVars,
-                        async: true
-                    });
-                    subPromise.done(function(subdata){
-                        console.log(subdata);
-                        alert("subdata");
-                    });
+                    // var subPromise = $.ajax({
+                    //     cache: false,
+                    //     type: "post",
+                    //     url: rememberVars.fillGeneComparisonTableUrl,
+                    //     data: rememberVars,
+                    //     async: true
+                    // });
+                    // subPromise.done(function(subdata){
+                    //     console.log(subdata);
+                    //     alert("subdata");
+                    // });
 
 
                     var extractAllCredibleSetNames = function (drivingVariables){
@@ -1205,8 +1312,12 @@ var mpgSoftware = mpgSoftware || {};
 
                     //var assayIdList = $("select.variantIntersectionChoiceSelect").find(":selected").val();
                     var assayIdList = additionalParameters.assayIdList;
-
-                    var drivingVariables = buildRenderData(data,additionalParameters);
+                    var drivingVariables;
+                    if (geneTablePresentation){
+                        drivingVariables = buildRenderDataForGenes(data,additionalParameters);
+                    } else {
+                        drivingVariables = buildRenderData(data,additionalParameters);
+                    }
                     var allCredibleSets = extractAllCredibleSetNames (drivingVariables);
                     if (allCredibleSets.length > 0){
 

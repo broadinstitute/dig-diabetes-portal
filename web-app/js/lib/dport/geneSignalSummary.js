@@ -1189,7 +1189,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: credibleSetDataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
-                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames
+                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+                geneTable: true
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1228,7 +1229,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 dataSet: credibleSetDataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
                 fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
-                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
+                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames,
+                geneTable: false
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1266,7 +1268,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: '',
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
-                sampleGroupsWithCredibleSetNames:fakeCredibleSetNames
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
+                sampleGroupsWithCredibleSetNames:fakeCredibleSetNames,
+                geneTable: true
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
