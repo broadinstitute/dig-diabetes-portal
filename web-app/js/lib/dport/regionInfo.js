@@ -94,7 +94,7 @@ var mpgSoftware = mpgSoftware || {};
             });
             return selectedValuesAndText;
         };
-        var convertUserChoicesIntoAssayIds = function(selectedValuesAndText) {;
+        var convertUserChoicesIntoAssayIds = function(selectedValuesAndText) {
             var assayIds = [];
             var assayInformation = getAssayInformation();
             _.forEach(selectedValuesAndText,function(oe){
@@ -500,6 +500,63 @@ var mpgSoftware = mpgSoftware || {};
             return promiseArray;
         }
 
+
+
+        var oneCallbackForEachGene = function(genes,
+                                                 additionalData,
+                                                 includeRecord,
+                                                 assayIdList){
+            var promiseArray = [];
+            _.forEach(genes,function (gene){
+                var chromosome = (gene.chromosome.indexOf('chr')>-1)?gene.chromosome.substr(3):gene.chromosome;
+                promiseArray.push(
+                    $.ajax({
+                        cache: false,
+                        type: "post",
+                        url: additionalData.retrieveFunctionalDataAjaxUrl,
+                        data: {
+                            chromosome: chromosome,
+                            startPos: ""+gene.addrStart,
+                            endPos: ""+gene.addrEnd,
+                            lzFormat:0,
+                            assayIdList:""+assayIdList
+                        },
+                        async: true
+                    }).done(function (data, textStatus, jqXHR) {
+                        var tissueGrid = getDevelopingTissueGrid();
+                        if ((typeof data !== 'undefined') &&
+                            (typeof data.variants !== 'undefined') &&
+                            (typeof data.variants.region_start !== 'undefined')&&
+                            (typeof data.variants.variants !== 'undefined')) {
+                            _.forEach(data.variants.variants, function (record){
+                                var assaySpecificTissueDesignation = record.source_trans + "_"+record.ANNOTATION;
+                                if (includeRecord(record)){
+                                    if(typeof tissueGrid[assaySpecificTissueDesignation] === 'undefined') {
+                                        tissueGrid[assaySpecificTissueDesignation] = {};
+                                    }
+                                    var tissueRow = tissueGrid[assaySpecificTissueDesignation];
+                                    if(typeof tissueRow[''+data.variants.region_start] === 'undefined') {
+                                        tissueRow[''+data.variants.region_start] = record;
+                                    }
+                                }
+                            });
+                        }
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, errorThrown)
+                    })
+                );
+
+
+            });
+            return promiseArray;
+        }
+
+
+
+
+
         var redisplayTheCredibleSetHeatMap = function(){
             var variantsToInclude =[];
             var headers = $('#overlapTable th');
@@ -618,6 +675,57 @@ var mpgSoftware = mpgSoftware || {};
             //return lineToAdd;
             return arrayToBuild[0];
         };
+
+
+        var writeOneCellOfTheGeneBasedHeatMap = function(tissueGrid,tissueKey,quantileArray,variantRec){
+            var lineToAdd ="";
+            var arrayToBuild = [];
+            if ((typeof variantRec !== 'undefined')&&
+                (typeof variantRec.addrStart !== 'undefined')){
+                var positionString = ""+variantRec.addrStart;
+                var record = tissueGrid[tissueKey][positionString];
+                var worthIncluding = false;
+                if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
+                    quantileArray = createQuantilesArray(record.ANNOTATION);
+                    var elementName = record.source_trans;
+                    var provideDefaultForAssayId = (typeof record.ANNOTATION === 'undefined') ? 3 : record.ANNOTATION;
+                    if  (provideDefaultForAssayId === 3){
+                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineCategoricalColorIndex(record.ELEMENT)),
+                            title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans ),
+                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                            tissue:record.source_trans});
+                    } else if ((provideDefaultForAssayId === 1) || (provideDefaultForAssayId === 2)){
+                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
+                            title:('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans+', value:'+ UTILS.realNumberFormatter(record.VALUE) ),
+                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                            tissue:record.source_trans});
+                    }
+                    else {
+                        var displayableContent = '';
+                        if (record.GENE!==null){displayableContent = record.GENE};
+                        if ((record.ELEMENT!==null) && (displayableContent.length===0)){displayableContent = record.ELEMENT};
+                        if ((record.EXPERIMENT!==null) && (displayableContent.length===0)){displayableContent = record.EXPERIMENT};
+                        var allInfo = [];
+                        allInfo.push('chromosome:'+ record.CHROM +', position:'+ positionString +', tissue:'+ record.source_trans);
+                        if (record.VALUE!==null){allInfo.push( 'value:'+ UTILS.realNumberFormatter(record.VALUE))};
+                        if (record.EXPERIMENT!==null){allInfo.push( 'experiment:'+ record.EXPERIMENT)};
+                        if (record.GENE!==null){allInfo.push( 'gene:'+ record.GENE)};
+                        arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
+                            title:allInfo.join(",<br/>"),
+                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
+                            tissue:record.source_trans,displayableContent:displayableContent});
+                    }
+                } else {
+                    arrayToBuild.push({annotation:0});
+                }
+            }
+            //return lineToAdd;
+            return arrayToBuild[0];
+        };
+
+
+
+
 
         var createQuantilesArray = function(assayId){
             // let's make assay ID==3 the default
@@ -785,6 +893,111 @@ var mpgSoftware = mpgSoftware || {};
             });
 
         };
+
+
+        var buildTheGeneHeatMap = function (drivingVariables,setDefaultButton){
+            drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
+            $(".credibleSetTableGoesHere").empty().append(
+                Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
+            );
+            var additionalParameters = $.data($('#dataHolderForCredibleSets')[0],'additionalParameters');
+            var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
+
+            setDevelopingTissueGrid({});
+            var assayIdArrays = _.union(getSelectorAssayIds(),getDisplayAssayIds()) ;
+            var assayIdArrayAsString = "["+assayIdArrays.join(",")+"]";
+            var promises = oneCallbackForEachGene(drivingVariables.columns, additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
+
+            $.when.apply($, promises).then(function(schemas) {
+                var tissueGrid = getDevelopingTissueGrid();
+
+                //  we need to remember some of these data
+                $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
+                $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
+
+                var uniqueAssayIds = _.uniq(getSelectorAssayIds());
+                if (uniqueAssayIds.length===1){
+                    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,uniqueAssayIds[0] );
+                } else {
+                    _.forEach(uniqueAssayIds, function (assayId){
+                        displayAggregatedGenesPerAssayId(tissueGrid, drivingVariables.columns, [assayId], setDefaultButton );
+                       // displayAggregatedDataPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton );
+                    });
+                }
+
+
+                // do we have any credible set buttons?  If so then it is now safe to turn them on
+                var credSetChoices = $('li.credibleSetChooserButton');
+                _.forEach(credSetChoices,function(credSetButton){
+                    var credSetButtonObj = $(credSetButton);
+                    credSetButtonObj.attr('onclick',credSetButtonObj.attr('toBeOnClick'));
+                });
+                if (setDefaultButton){
+                    $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
+                }
+                $('[data-toggle="popover"]').popover({
+                    animation: true,
+                    html: true,
+                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
+                });
+                $(".pop-top").popover({placement: 'top'});
+                $(".pop-right").popover({placement: 'right'});
+                $(".pop-bottom").popover({placement: 'bottom'});
+                $(".pop-left").popover({placement: 'left'});
+                $(".pop-auto").popover({placement: 'auto'})
+
+            }, function(e) {
+                console.log("My ajax failed");
+            });
+            $('.credibleSetTableGoesHere td.tissueTable').popover({
+                html : true,
+                title: function() {
+                    //return $(this).parent().find('.head').html();
+                    console.log('title');
+                    return "foo";
+                },
+                content: function() {
+                    //return $(this).parent().find('.content').html();
+                    return "fii";
+                },
+                container: 'body',
+                placement: 'bottom',
+                trigger: 'hover'
+            });
+            $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
+                html : true,
+                title: function() {
+                    var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+
+                        '<div onclick="mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps()" class="close">&times;</div>';
+                    return var_id;
+                },
+                content: function() {
+                    var retString = "";
+                    retString +=
+                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Chromosome:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('chrom')+"</scan>"+
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Position:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('position')+"</scan></div>"+
+                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan>"+
+                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Effect Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defeffa')+"</scan></div>"+
+                        "<div class='credSetLine'><span class='fakelink' onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
+                        $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\",\""+assayIdList+"\")' href='#'>"+
+                        "Click to display tissues with overlapping regions below the LocusZoom plot</span></div>";
+                    return retString;
+                },
+                container: 'body',
+                placement: 'bottom',
+                trigger: 'focus click'
+            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
+
+        };
+
+
+
+
+
+
+
+
+
 
         var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
             drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
@@ -1044,6 +1257,62 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
+
+        // the algorithm which aggregates the information across regions within a single tissue for a single assay
+        // must be defined below
+        var generateDataStructureForGeneBasedTissueSpecificHeatMap = function (primaryTissueObject, subsidiaryTissueObject, sortedGenes, annotationId){
+            var tissueSpecificHeatMapDataStructure = { tissueSpecificRow: [] };
+            _.forEach(primaryTissueObject.sortedTissues,function(tissueKey, index){
+                var rowDataStructure = {    rowSpan:0,
+                    createSpanningCell: function () {return (this.rowSpan > 0);}
+                };
+                if ( index === 0){
+                    rowDataStructure.rowSpan = primaryTissueObject.sortedTissues.length+subsidiaryTissueObject.sortedTissues.length;
+                }
+                rowDataStructure.tissueName = tissueKey.replace(/_\d+/g,'');
+                rowDataStructure.tissueDescriptionClass = 'credSetTissueLabel';
+                rowDataStructure.cellsPerLine = [];
+                rowDataStructure.annotationId = annotationId;
+                _.forEach(sortedGenes,function(variantRec){
+                    rowDataStructure.cellsPerLine.push(writeOneCellOfTheGeneBasedHeatMap(primaryTissueObject.tissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec));
+                });
+                var drivingTissueRecordExists = false;
+                if (rowDataStructure.cellsPerLine.length > 0){
+                    if (!(((Object.keys(subsidiaryTissueObject.tissueGrid).length>0))&&(typeof subsidiaryTissueObject.tissueGrid[tissueKey] !== 'undefined'))){
+                        rowDataStructure.rowDecoration  = 'border-bottom: solid 2px #bbb';
+                    }
+                    tissueSpecificHeatMapDataStructure.tissueSpecificRow.push (rowDataStructure);
+                    drivingTissueRecordExists = true;
+                }
+
+                var followUpRowDataStructure = {    rowSpan:0,
+                    createSpanningCell: function () {return (this.rowSpan > 0)}};
+                // do we want to add a follow up lines?
+                if (drivingTissueRecordExists&&(Object.keys(subsidiaryTissueObject.tissueGrid).length>0)){
+                    if (typeof subsidiaryTissueObject.tissueGrid[tissueKey] !== 'undefined') {
+                        followUpRowDataStructure.rowDecoration = 'border-bottom: solid 2px #bbb';
+                        followUpRowDataStructure.tissueDescriptionClass = 'subsidiaryClass';
+                        followUpRowDataStructure.tissueName = "("+tissueKey.replace(/_\d+/g,'')+")";
+                        followUpRowDataStructure.cellsPerLine = [];
+                        followUpRowDataStructure.annotationId = annotationId;
+                        _.forEach(sortedVariants,function(variantRec){
+                            followUpRowDataStructure.cellsPerLine.push (writeOneCellOfTheGeneBasedHeatMap(subsidiaryTissueObject.tissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,sortedGenes));
+                        });
+                        tissueSpecificHeatMapDataStructure.tissueSpecificRow.push (followUpRowDataStructure);
+                    }
+                }
+
+
+            });
+
+            return tissueSpecificHeatMapDataStructure;
+
+        };
+
+
+
+
+
         //   At this point we have built a grid of all the tissues, and we have a sorted list of all the variants, and now we need to go through
         //   and map from tissues to variants and come up with something we can display as a heat map.
         var displayAParticularCredibleSet = function(tissueGrid, dataVariants, setDefaultButton, annotationId ){
@@ -1195,19 +1464,22 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
-
-        var displayAParticularCredibleSetPerAssayId = function(tissueGrid, sortedVariants, assayIdArray, setDefaultButton ){
+        var displayAggregatedGenesPerAssayId = function(tissueGrid, sortedGenes, assayIdArray, setDefaultButton ){
 
             var subsidiaryTissueGrid = {tissueGrid:[],sortedTissues:[]};
             var primaryTissueGrid = filterTissueGrid(tissueGrid,assayIdArray);
 
             var primaryTissueObject = extractValuesForTissueDisplay(primaryTissueGrid);
 
-            var tissueSpecificDataStructure = generateDataStructureForTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueGrid, sortedVariants, assayIdArray[0]  );
-            var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayName',assayIdArray[0]);
+            var tissueSpecificDataStructure = generateDataStructureForGeneBasedTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueGrid, sortedGenes, assayIdArray[0] );
+            var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayname',assayIdArray[0]);
+
 
             $('.credibleSetTableGoesHere tr:last').parent().append(
+                Mustache.render( $('#heatMapAggregatedAcrossTissueTemplate')[0].innerHTML,aggregatedAcrossTissue));
+            $('.credibleSetTableGoesHere tr:last').parent().append(
                 Mustache.render( $('#credibleSetHeatMapTemplate')[0].innerHTML,tissueSpecificDataStructure));
+            $('tr.tissueHider_'+assayIdArray[0]).hide();
 
             if (setDefaultButton){
                 if ($('.credibleSetChooserButton').length > 1){
@@ -1272,19 +1544,6 @@ var mpgSoftware = mpgSoftware || {};
             });
             promise.done(
                 function (data) {
-
-                    // var subPromise = $.ajax({
-                    //     cache: false,
-                    //     type: "post",
-                    //     url: rememberVars.fillGeneComparisonTableUrl,
-                    //     data: rememberVars,
-                    //     async: true
-                    // });
-                    // subPromise.done(function(subdata){
-                    //     console.log(subdata);
-                    //     alert("subdata");
-                    // });
-
 
                     var extractAllCredibleSetNames = function (drivingVariables){
                         var returnValues = [];
@@ -1356,7 +1615,7 @@ var mpgSoftware = mpgSoftware || {};
                         maximumNumberOfResults = DEFAULT_NUMBER_OF_VARIANTS;
                     }
 
-                    // What we need is a listing of all of the variance inside each credible set which we can pass to LZ
+                    // What we need is a listing of all of the variants inside each credible set which we can pass to LZ
                     var variantToCredSetMap = _.map(drivingVariables.variants,function(v,k){return {"VAR_ID":v.details.VAR_ID,
                         "CREDIBLE_SET_ID":( (typeof v.details.CREDIBLE_SET_ID === 'undefined')?'none':v.details.CREDIBLE_SET_ID)}});
                     var credSetToVariants = {};
@@ -1402,11 +1661,13 @@ var mpgSoftware = mpgSoftware || {};
                         credSetToVariants:sortedByKey
                     });
 
+                    if (geneTablePresentation){
+                        buildTheGeneHeatMap(drivingVariables,true);
+                    } else {
+                        buildTheCredibleSetHeatMap(drivingVariables,true);
+                    }
 
-                    buildTheCredibleSetHeatMap(drivingVariables,true);
-                    // if (Object.keys(allCredibleSets).length > 1){
-                    //     $($('.credibleSetChooserButton')[0]).click();
-                    // }
+
                     $('#credSetSelectorChoice').multiselect({includeSelectAllOption: true,
                         allSelectedText: 'All Selected',
                         buttonWidth: '60%',onChange: function() {
@@ -1414,13 +1675,10 @@ var mpgSoftware = mpgSoftware || {};
                         }});
                     $('#credSetSelectorChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
                     $('#credSetDisplayChoice').multiselect({includeSelectAllOption: true,
-                        // allSelectedText: 'All Selected',
                         buttonWidth: '60%'});
                     $('#credSetDisplayChoice').val(mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
                     $('#toggleVarianceTableLink').click();
-                    // $('#credSetSelectorChoice').on('change', function() {
-                    //     console.log("foo"+$(this).val());
-                    // });
+
 
                 }
             );
