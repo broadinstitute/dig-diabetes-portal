@@ -677,7 +677,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var writeOneCellOfTheGeneBasedHeatMap = function(tissueGrid,tissueKey,quantileArray,variantRec){
+        var writeOneCellOfTheGeneBasedHeatMap = function(tissueGrid,tissueKey,quantileArray,variantRec,recordsToAggregate){
             var lineToAdd ="";
             var arrayToBuild = [];
             if ((typeof variantRec !== 'undefined')&&
@@ -701,6 +701,11 @@ var mpgSoftware = mpgSoftware || {};
                             tissue:record.source_trans});
                     }
                     else {
+                        var listOfElementsToDisplayInACell = '';
+                        var uniqueRecords = [];
+                        _.forEach(recordsToAggregate, function (recordValue,recordNameToAggregate){
+
+                        });
                         var displayableContent = '';
                         if (record.GENE!==null){displayableContent = record.GENE};
                         if ((record.ELEMENT!==null) && (displayableContent.length===0)){displayableContent = record.ELEMENT};
@@ -1274,7 +1279,11 @@ var mpgSoftware = mpgSoftware || {};
                 rowDataStructure.cellsPerLine = [];
                 rowDataStructure.annotationId = annotationId;
                 _.forEach(sortedGenes,function(variantRec){
-                    rowDataStructure.cellsPerLine.push(writeOneCellOfTheGeneBasedHeatMap(primaryTissueObject.tissueGrid,tissueKey,primaryTissueObject.quantileArray,variantRec));
+                    rowDataStructure.cellsPerLine.push(writeOneCellOfTheGeneBasedHeatMap(   primaryTissueObject.tissueGrid,
+                                                                                            tissueKey,
+                                                                                            primaryTissueObject.quantileArray,
+                                                                                            variantRec,
+                                                                                            primaryTissueObject.tissueGrid[tissueKey] ));
                 });
                 var drivingTissueRecordExists = false;
                 if (rowDataStructure.cellsPerLine.length > 0){
@@ -1296,7 +1305,11 @@ var mpgSoftware = mpgSoftware || {};
                         followUpRowDataStructure.cellsPerLine = [];
                         followUpRowDataStructure.annotationId = annotationId;
                         _.forEach(sortedVariants,function(variantRec){
-                            followUpRowDataStructure.cellsPerLine.push (writeOneCellOfTheGeneBasedHeatMap(subsidiaryTissueObject.tissueGrid,tissueKey,subsidiaryTissueObject.quantileArray,sortedGenes));
+                            followUpRowDataStructure.cellsPerLine.push (writeOneCellOfTheGeneBasedHeatMap(  subsidiaryTissueObject.tissueGrid,
+                                                                                                            tissueKey,
+                                                                                                            subsidiaryTissueObject.quantileArray,
+                                                                                                            sortedGenes,
+                                                                                                            primaryTissueObject.tissueGrid[tissueKey] ));
                         });
                         tissueSpecificHeatMapDataStructure.tissueSpecificRow.push (followUpRowDataStructure);
                     }

@@ -145,7 +145,12 @@ th.niceHeadersThatAreLinks{
     color: blue;
     text-align: left;
     cursor: pointer;
-
+}
+th.niceHeadersThatAreGeneLinks{
+    text-decoration: underline;
+    color: blue;
+    text-align: left;
+    cursor: pointer;
 }
 #overlapTable tr {
     height:1.5em;
@@ -162,7 +167,22 @@ th.niceHeadersThatAreLinks{
     transform: rotate(-60deg);
     max-width: 2px;
     font-weight: normal;
+    font-size: 20px;
     text-align: left;
+}
+.credibleSetTableGoesHere th.niceHeadersThatAreGeneLinks{
+    background: white;
+    transform-origin: left;
+    -webkit-transform: rotate(-60deg);
+    transform: rotate(-60deg);
+    max-width: 2px;
+    font-weight: normal;
+    font-size: 20px;
+    text-align: left;
+}
+.credibleSetTableGoesHere th.niceHeadersThatAreGeneLinks.active{
+    font-weight: bold;
+    color: #9632b8;
 }
 .credibleSetTableGoesHere th.niceHeadersThatAreLinks.active{
     font-weight: bold;

@@ -843,7 +843,7 @@
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}" varid="{{details.CHROM}}:{{details.POS}}_{{details.Reference_Allele}}/{{details.Effect_Allele}}" data-toggle="popover">{{details.CHROM}}:{{details.POS}}_{{details.Reference_Allele}}/{{details.Effect_Allele}}</th>
             {{/variants}}
             {{#columns}}
-                <th class="niceHeadersThatAreLinks headersWithVarIds" style="background:rgba(0,0,0,0)"
+                <th class="niceHeadersThatAreGeneLinks headersWithVarIds" style="background:rgba(0,0,0,0)"
                 chromosome="{{chromosome}}" addrStart="{{addrStart}}" addrEnd="{{addrEnd}}"
                 data-toggle="popover">{{name}}</th>
             {{/columns}}
