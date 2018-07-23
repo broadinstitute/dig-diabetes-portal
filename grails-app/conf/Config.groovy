@@ -337,7 +337,7 @@ environments {
 //        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
 //
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
-        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
+//        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
 
 
 //        grails.serverURL = "http://gpad4-dcf.broadinstitute.org:8080"             // distributed portal dev for now
@@ -353,7 +353,7 @@ environments {
 
 //          grails.serverURL = "http://ibdqa.us-east-1.elasticbeanstalk.com"
 
-//        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
+        grails.serverURL = "http://testdistributed.us-east-1.elasticbeanstalk.com"             // distributed test portal dev for now
 
 
 //        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"                    // CVDKP (MI portal) demo
@@ -660,7 +660,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
-                                                          "mdv92",
+                                                          "mdv93",
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -689,8 +689,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0,
-                                          1,
+                                          1,0,1,
+                                          0,
                                           0,
                                           0,
                                           0
