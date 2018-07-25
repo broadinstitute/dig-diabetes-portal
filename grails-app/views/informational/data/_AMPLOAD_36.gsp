@@ -64,6 +64,4 @@
     <h4>Accessing Hoorn Diabetes Care System GWAS data</h4>
     <p><g:message code="informational.data.accessing.Hoornstudies1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.Hoornstudies2"></g:message></p>
 
-
-
 </script>
