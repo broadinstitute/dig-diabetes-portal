@@ -76,7 +76,7 @@ class GeneController {
      */
     def geneInfo() {
         String locale = RequestContextUtils.getLocale(request)
-        String geneToStartWith = params.id
+        String geneToStartWith = params.id?.trim()
         Long startExtent=0L
         Long endExtent=0L
         String chromosomeNumber=params.chromosomeNumber

@@ -221,7 +221,7 @@ var mpgSoftware = mpgSoftware || {};
             } else if (recordType === "COMPOUND"){
                 renderData.annotation[recordIndex].annotationRecord.push(valueToInsert);
             } else if (recordType === "REAL") {
-                renderData.annotation[recordIndex].annotationRecord.push({val:UTILS.realNumberFormatter(valueToInsert)});
+                renderData.annotation[recordIndex].annotationRecord.push({val:UTILS.realNumberFormatter(valueToInsert,1)});
             }
             return renderData;
         };
@@ -702,10 +702,49 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     else {
                         var listOfElementsToDisplayInACell = '';
-                        var uniqueRecords = [];
-                        _.forEach(recordsToAggregate, function (recordValue,recordNameToAggregate){
-
+                        var listOfElementsValues = [];
+                        var valueArray = _.map(recordsToAggregate,function(v,k){return v;});
+                        var uniqueRecords = _.uniqWith(valueArray,function(x,y){return (x.EXPERIMENT===y.EXPERIMENT&&x.ELEMENT===y.ELEMENT&&x.SOURCE===y.SOURCE)});
+                        _.forEach(uniqueRecords, function (recordValue){
+                            listOfElementsValues.push (recordValue);
                         });
+                        var uniqueRecordsByExperiment = _.uniqWith(valueArray,function(x,y){return (x.EXPERIMENT===y.EXPERIMENT)});
+                        if (uniqueRecordsByExperiment.length > 1){
+                            _.forEach(uniqueRecords, function (recordValue){
+                                listOfElementsValues.push (recordValue);
+                            });
+                        } else if (uniqueRecordsByExperiment.length > 0) {
+                            listOfElementsToDisplayInACell+=uniqueRecordsByExperiment[0].EXPERIMENT;
+                            if (uniqueRecords.length>1) {
+                                listOfElementsToDisplayInACell += '(';
+                            } else {
+                                listOfElementsToDisplayInACell += ' ';
+                            }
+                            _.forEach(uniqueRecords, function (recordValue){
+                                listOfElementsValues.push (recordValue);
+                                if (recordValue.ELEMENT!==null){
+                                    listOfElementsToDisplayInACell += recordValue.ELEMENT;
+                                }
+                                // if (recordValue.SOURCE!=='NA'){
+                                //     listOfElementsToDisplayInACell += ','+recordValue.SOURCE;
+                                // }
+                            });
+                            if (uniqueRecords.length>1) {
+                                listOfElementsToDisplayInACell += ')';
+                            }
+
+
+
+                        }
+                        var uniqueRecordsByElement = _.uniqWith(valueArray,function(x,y){return (x.ELEMENT===y.ELEMENT)});
+
+                        // listOfElementsToDisplayInACell += recordValue.EXPERIMENT;
+                        // if (recordValue.ELEMENT!==null){
+                        //     listOfElementsToDisplayInACell += ','+recordValue.ELEMENT;
+                        // }
+                        // if (recordValue.SOURCE!=='NA'){
+                        //     listOfElementsToDisplayInACell += ','+recordValue.SOURCE;
+                        // }
                         var displayableContent = '';
                         if (record.GENE!==null){displayableContent = record.GENE};
                         if ((record.ELEMENT!==null) && (displayableContent.length===0)){displayableContent = record.ELEMENT};
@@ -717,8 +756,12 @@ var mpgSoftware = mpgSoftware || {};
                         if (record.GENE!==null){allInfo.push( 'gene:'+ record.GENE)};
                         arrayToBuild.push({matchingRegion:('matchingRegion'+provideDefaultForAssayId +'_'+determineColorIndex(record.VALUE,quantileArray)),
                             title:allInfo.join(",<br/>"),
-                            annotation:record.ANNOTATION, experiment:record.EXPERIMENT, gene:record.GENE, value:record.VALUE,
-                            tissue:record.source_trans,displayableContent:displayableContent});
+                            annotation:record.ANNOTATION,
+                            experiment:record.EXPERIMENT,
+                            gene:record.GENE,
+                            value:record.VALUE,
+                            tissue:record.source_trans,
+                            displayableContent:listOfElementsToDisplayInACell});
                     }
                 } else {
                     arrayToBuild.push({annotation:0});

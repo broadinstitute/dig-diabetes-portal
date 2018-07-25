@@ -1201,7 +1201,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             if ((drivingVariables["allGenes"].length>0)&&
                 (drivingVariables["allGenes"][0].length>0)) {
                 drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
-                    return {'name': o}
+                    return {'name': o.trim()}
                 });
             }
             $(".matchedGenesGoHere").empty().append(
@@ -1230,7 +1230,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
                 fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
                 sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames,
-                geneTable: false
+                geneTable: true
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1270,7 +1270,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
                 fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
                 sampleGroupsWithCredibleSetNames:fakeCredibleSetNames,
-                geneTable: true
+                geneTable: false
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;

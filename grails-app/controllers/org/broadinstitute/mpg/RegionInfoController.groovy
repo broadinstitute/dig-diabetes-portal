@@ -206,7 +206,7 @@ class RegionInfoController {
                 [assayID: 13, name: "UCSC annotation", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"UCSC annotation",name:"UCSC annotation", map: 0] ] ],
                 [assayID: 14, name: "H3K27AC_QTL", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"H3K27ac QTL",name:"H3K27ac QTL", map: 0] ] ],
                 [assayID: 15, name: "DNASE_QTL", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"DNase QTL",name:"DNase QTL", map: 0] ] ],
-                [assayID: 16, name: "ATACSEQ_QTL", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"ATAC-SEQ QTL",name:"ATAC-SEQ QTL", map: 0] ] ],
+                [assayID: 16, name: "ATACSeq_QTL", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"ATACSeq_QTL",name:"ATACSeq_QTL", map: 0] ] ],
                 [assayID: 17, name: "Enhancer-gene link", quantile: [0,167.9,888.4,2649.9,9213115], selectionOptions: [ [value:"Enhancer-gene link",name:"Enhancer-gene link", map: 0] ] ],
                 [assayID: 18, name: "PROMOTER", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"Promoter pred",name:"Promoter pred", map: 0] ] ],
                 [assayID: 19, name: "eQTL", quantile: [0,207.8,389.6,1248.1,854238], selectionOptions: [ [value:"eQTL",name:"eQTL", map: 0] ] ]

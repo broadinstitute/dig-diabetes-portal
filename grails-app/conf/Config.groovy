@@ -697,8 +697,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "mdv80",
                                                           "CD",// another option would be "IBD"
                                                             "GWAS_IBDGenomics_eu_mdv80",
-                                                          ["UCSC annotation","ATAC-SEQ QTL","Enhancer-gene link"],
-                                                          ["UCSC annotation","ATAC-SEQ QTL","Enhancer-gene link"],
+                                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
+                                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
                                                           ["E071","E106","E088","E085"],
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
@@ -809,4 +809,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
-
