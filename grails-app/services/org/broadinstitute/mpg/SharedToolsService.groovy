@@ -852,9 +852,10 @@ class SharedToolsService {
                         List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
                         int sampleGroupCount = 0
                         for (SampleGroup sampleGroup in sampleGroupList) {
+                            int oldLengthOfStringBuffer = sb.length()
                             recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
                             sampleGroupCount++
-                            if (sampleGroupCount < sampleGroupList.size()) {
+                            if ((sampleGroupCount < sampleGroupList.size()) && (sb.length()>oldLengthOfStringBuffer)) {
                                 sb << ","
                             }
                         }
@@ -882,9 +883,10 @@ class SharedToolsService {
                         List<SampleGroup> sampleGroupList = sampleGroupBean.getSampleGroups()
                         int sampleGroupCount = 0
                         for (SampleGroup sampleGroup in sampleGroupList) {
+                            int oldLengthOfStringBuffer = sb.length()
                             recursivelyDescendSampleGroupsHierarchically(sampleGroup, phenotypeName, sb)
                             sampleGroupCount++
-                            if (sampleGroupCount < sampleGroupList.size()) {
+                            if ((sampleGroupCount < sampleGroupList.size()) && (sb.length()>oldLengthOfStringBuffer)) {
                                 sb << ","
                             }
                         }

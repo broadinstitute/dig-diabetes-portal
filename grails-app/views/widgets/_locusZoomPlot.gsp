@@ -55,7 +55,7 @@
             <div class="col-md-12">
                 <div style="float:left; margin-right: 25px;" class="lz-list">
                     <span style="padding: 1px; background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
-                    <a href="javascript:;" onclick="showLZlist(event);" >Phenotypes <b class="caret"></b></a>
+                    <a href="javascript:;" onclick="mpgSoftware.traitsFilter.showLZlist(event);" >Phenotypes <b class="caret"></b></a>
                     <ul id="dk_lz_phenotype_list">
                         <g:each in="${lzOptions?.findAll{it.dataType=='dynamic' || it.dataType=='static'}}">
                             <li><a href="javascript:;">

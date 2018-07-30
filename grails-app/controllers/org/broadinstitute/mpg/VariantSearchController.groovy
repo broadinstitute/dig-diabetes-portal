@@ -68,13 +68,13 @@ class VariantSearchController {
                 g.message(code: "metadata." + it.systemId, default: it.systemId)
             }
         }
-        String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup, phenotypeName)
+        String jsonDescr = sharedToolsService.packageSampleGroupsHierarchicallyForJsTree(sampleGroup, phenotypeName).toString().replaceAll(/},\]/,"}]")
         def result = new JSONObject()
         if ((jsonDescr) && (jsonDescr.length() > 0)) {
             try {
                 result = slurper.parseText(jsonDescr)
             } catch(e) {
-                print("parse failed")
+                println("parse failed in retrieveJSTreeAjax")
             }
 
         }
