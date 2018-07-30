@@ -52,7 +52,8 @@ var mpgSoftware = mpgSoftware || {};
 
             var returnText = "";
 
-            var searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
+            var searchWords = [];
+            if($("#traits_table_filter").length) searchWords = $("#traits_table_filter").val().toLowerCase().split(",");
 
             for (var x = 0; x < wordsByWeight.length; x++) {
 
@@ -62,7 +63,7 @@ var mpgSoftware = mpgSoftware || {};
                 $.each(searchWords, function(index,value) {
                     var searchWord = value.trim().toLowerCase();
 
-                    if( searchWord != "" ){
+                    if( searchWord != "" && wordsByWeight[x].word.length > 1 ){
                         if (comparingWord.indexOf(searchWord) >= 0) {
                             wordMatch = "<a class='related-word-red' href='javascript:;' onclick='mpgSoftware.traitSample.addToPhenotypeFilter(event)'>" + wordsByWeight[x].word + "</a>";
                         } else {
@@ -74,6 +75,11 @@ var mpgSoftware = mpgSoftware || {};
                 returnText += wordMatch;
             }
 
+            if($("#traits_table_filter").length) {
+                var searchWord = $("#traits_table_filter").val().trim();
+
+                if(searchWord.indexOf("=") >= 0) returnText = "";
+            }
 
             return returnText;
 
@@ -285,14 +291,60 @@ var mpgSoftware = mpgSoftware || {};
 
 
             var relatedWords = mpgSoftware.traitSample.showRelatedWords();
+            if(relatedWords !="") relatedWords += '<a href="javascript:;" onclick="$(this).parent().hide()" style="position:absolute; bottom:-2px; right:3px; font-size: 16px; color: #666;"><span class="glyphicon glyphicon-resize-small" aria-hidden="true"></span></a></div>';
 
-            ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").append(relatedWords) : $(".related-words").html("");
+            ( $("#traits_table_filter").val() != "" )? $(".related-words").html("").css({"box-shadow":"rgba(0,0,0,0.5) 0px 3px 5px","max-width":$(".related-words").parent().width()}).append(relatedWords).show("slow") : $(".related-words").html("").hide("slow");
 
+            if(relatedWords =="") $(".related-words").hide();
 
 
             if (showPhePlot == true) {
 
-                mpgSoftware.traitSample.renderTraitSamplePlot();
+                var plotLook = [];
+
+
+                plotLook.yMin = $("#pvalue-min").val();
+                plotLook.yMax = ($("#pvalue-max").val() == "")? 1000000 : $("#pvalue-max").val();
+                plotLook.xMin = $("#sample-min").val()*1000;
+                plotLook.xMax = ($("#sample-max").val() == "" || $("#sample-max").val() == 0)? 10000000000000 : $("#sample-max").val()*1000;
+                plotLook.height = 450;
+                plotLook.leftBumper = 50;
+                plotLook.rightBumper = 50;
+                plotLook.topBumper = 30;
+                plotLook.bottomBumper = 140;
+                plotLook.plotWrapper = ".traits-svg-wrapper";
+                plotLook.filterExist = true;
+
+                var plotData = [];
+
+                $("#traitsPerVariantTableBody").find("tr").each(function() {
+
+                    if($(this).hasClass("hidden-traits-row")) {
+
+                    } else {
+
+                        if(mpgSoftware.traitSample.getLogValue($(this).find("td").eq(2).text()) < plotLook.yMax && mpgSoftware.traitSample.getLogValue($(this).find("td").eq(2).text()) > plotLook.yMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) > plotLook.xMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) < plotLook.xMax) {
+
+                            var eachDataset = {};
+                            eachDataset.dataset = $(this).attr("dataset");
+                            eachDataset.phenotype = $(this).find("td").eq(0).text();
+                            eachDataset.logValue = mpgSoftware.traitSample.getLogValue($(this).find("td").eq(2).text());
+                            eachDataset.pvalue = $(this).find("td").eq(2).text();
+                            eachDataset.effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
+                            eachDataset.oddsRatio = parseFloat($(this).find("td").eq(4).text());
+                            eachDataset.maf = $(this).find("td").eq(5).text();
+                            eachDataset.sample = parseFloat(parseFloat($(this).find("td").eq(7).text()));
+                            eachDataset.group = $(this).attr("phenotype").split(",")[1];
+
+                            plotData.push(eachDataset);
+                        }
+                    }
+                });
+
+
+                //mpgSoftware.traitSample.renderTraitSamplePlot(plotData, pvalueMin,pvalueMax,sampleMin,sampleMax,plotWrapper);
+
+                mpgSoftware.traitSample.renderTraitSamplePlot(plotData, plotLook);
 
             } else {
                 $("#dkPhePlot").css("display","none");
@@ -303,14 +355,39 @@ var mpgSoftware = mpgSoftware || {};
         }
 
 
-        var resetPhePlotAndTable = function(PHENOTYPE) {
+         var getLogValue = function(pValue) {
+            var logValue;
+            if(pValue != ""){
+                if (pValue.indexOf("e") >= 0) {
+
+                    var pValues = pValue.split("e-");
+                    var num1 = pValues[0];
+                    var num2 = Math.pow(10, parseFloat(pValues[1]));
+                    var num3 = num1/num2;
+                    logValue = -Math.log10(num3);
+
+                    //console.log(num1 +" : "+ num2 +" : "+ num3 +" : "+ logValue)
+                } else {
+                    logValue = -Math.log10(pValue);
+                }
+            } else {
+                logValue = 0;
+            }
+
+            return logValue;
+        }
+
+        var resetPhePlotAndTable = function(PHENOTYPE,DATASET) {
 
             var phenotypeName = PHENOTYPE || "";
+            var datasetMin = DATASET-(DATASET*0.001) || "";
+            var datasetMax = DATASET+(DATASET*0.001) || "";
+
             $("#traits_table_filter").val(PHENOTYPE);
             $("#pvalue-min").val("");
             $("#pvalue-max").val("");
-            $("#sample-min").val("");
-            $("#sample-max").val("");
+            $("#sample-min").val(datasetMin);
+            $("#sample-max").val(datasetMax);
             $("#phePlotGroups").val("");
             mpgSoftware.traitSample.filterTraitsTable();
         }
@@ -320,20 +397,21 @@ var mpgSoftware = mpgSoftware || {};
 
             if(typeof phenotypeDatasetMapping != 'undefined' && phenotypeDatasetMapping) {
 
-                suggestedToFilter += "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter plot and table by trait (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select></div>";
+                suggestedToFilter += "<div class='phenotype-searchbox-inner-wrapper'><div class='col-md-6'><h5>Filter plot and table (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 200px; height: 35px; padding-left: 10px;' placeholder='' value=''><select id='phePlotGroups' class='minimal' style='margin: 0 0 0 15px;'><option value=''>Trait groups - all</option></select></div>";
 
                 //DK's plot filter ui
-                suggestedToFilter += "<div style='display:inline-block; padding: 0 10px; border-left:solid 1px #ddd;'><h5 style='padding-top: 0;'>Filter plot (p-value: -log10, sample number: *1000) </h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' /><input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 40px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
+                suggestedToFilter += "<div class='col-md-6' style='border-left:solid 1px #ddd;'><h5 style='padding-top: 0;'>Filter plot (p-value: -log10, sample number: *1000) </h5><input id='pvalue-min' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' value='' /><span style='display: inline-block; padding: 0 5px'> < p-value < </span><input id='pvalue-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' /><input id='sample-min' value=''  style='display: inline-block; height: 35px; width: 40px; padding-left: 10px; margin-left: 25px;' /><span style='display: inline-block; padding: 0 5px'>< sample < </span><input id='sample-max' style='display: inline-block; height: 35px; width: 40px; padding-left: 10px;' />";
 
                 // reset button
-                suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='margin-left: 10px;' onclick='mpgSoftware.traitSample.resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div><div class='related-words' style='clear: left;'>";
+                suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='margin-left: 10px;' onclick='mpgSoftware.traitSample.resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div>"
+                suggestedToFilter += "<div class='related-words' style='position: absolute; padding: 10px; border-radius: 5px; background-color:#fff;'></div>";
 
             } else {
 
-                suggestedToFilter += "<div class='phenotype-searchbox-inner-wrapper'><div style='display:inline-block; padding-right: 10px; float: left;'><h5>Filter plot and table by trait (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''>";
+                suggestedToFilter += "<div class='phenotype-searchbox-inner-wrapper'><div class='col-md-12'><h5>Filter plot and table (ex: bmi, glycemic; '=phenotype' for exact match)</h5><input id='traits_table_filter' type='text' name='search' style='display: inline-block; width: 400px; height: 35px; padding-left: 10px;' placeholder='' value=''>";
 
                 // reset button
-                suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='display:inline-block; margin-left: 10px;' onclick='mpgSoftware.traitSample.resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div><div class='related-words' style='clear: left;'></div>";
+                suggestedToFilter += "<a href='javascript:;' class='btn btn-primary' style='display:inline-block; margin-left: 10px;' onclick='mpgSoftware.traitSample.resetPhePlotAndTable()'><span class='glyphicon glyphicon-refresh' aria-hidden='true'></span> reset</a></div></div><div class='related-words' style='position: absolute; padding: 10px; border-radius: 5px; background-color:#fff;'></div>";
 
 
             }
@@ -342,46 +420,30 @@ var mpgSoftware = mpgSoftware || {};
 
         }
 
-        var renderTraitSamplePlot = function() {
+
+
+        var renderTraitSamplePlot = function(PLOTDATA,PLOTLOOK) {
+
+            var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
+
+            var yMin = PLOTLOOK.yMin;
+            var yMax = PLOTLOOK.yMax;
+            var xMin = PLOTLOOK.xMin;
+            var xMax = PLOTLOOK.xMax;
+            var plotWrapper = PLOTLOOK.plotWrapper;
+
+            w = $(plotWrapper).width(), h = PLOTLOOK.height, xbumperLeft = PLOTLOOK.leftBumper, xbumperRight = PLOTLOOK.rightBumper, ybumperTop = PLOTLOOK.topBumper, ybumperBottom = PLOTLOOK.bottomBumper;
+
+            console.log(PLOTLOOK.filterExist);
+
 
             ($("#phePlotTooltip").length)? "":d3.select("body").append("div").attr("id","phePlotTooltip").attr("class","hidden").append("span").attr("id","value");
             ($("#phePlotTooltip").find(".pointer").length)? "" : d3.select("#phePlotTooltip").append("div").attr("class","pointer");
 
 
-            var svg,circles,group,group1,texts,w,h,xunit,yunit,xbumperLeft,xbumperRight,ybumperTop,ybumperBottom,arc;
-            var pvalueMin = $("#pvalue-min").val();
-            var pvalueMax = ($("#pvalue-max").val() == "")? 1000000 : $("#pvalue-max").val();
-            var sampleMin = $("#sample-min").val()*1000;
-            var sampleMax = ($("#sample-max").val() == "" || $("#sample-max").val() == 0)? 10000000000000 : $("#sample-max").val()*1000;
 
-            var traitsTableData = [];
 
-            $("#traitsPerVariantTableBody").find("tr").each(function() {
-
-                if($(this).hasClass("hidden-traits-row")) {
-
-                } else {
-
-                    if(getLogValue($(this).find("td").eq(2).text()) < pvalueMax && getLogValue($(this).find("td").eq(2).text()) > pvalueMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) > sampleMin && parseFloat(parseFloat($(this).find("td").eq(7).text())) < sampleMax) {
-
-                        var eachDataset = {};
-                        eachDataset.dataset = $(this).attr("dataset");
-                        eachDataset.phenotype = $(this).find("td").eq(0).text();
-                        eachDataset.logValue = getLogValue($(this).find("td").eq(2).text());
-                        eachDataset.pvalue = $(this).find("td").eq(2).text();
-                        eachDataset.effectDirection = ($(this).find("td").eq(3).html().indexOf("up") >= 0)? "up":($(this).find("td").eq(3).html().indexOf("down") >= 0)?"down":"";
-                        eachDataset.oddsRatio = parseFloat($(this).find("td").eq(4).text());
-                        eachDataset.maf = $(this).find("td").eq(5).text();
-                        eachDataset.sample = parseFloat(parseFloat($(this).find("td").eq(7).text()));
-                        eachDataset.group = $(this).attr("phenotype").split(",")[1];
-
-                        traitsTableData.push(eachDataset);
-                    }
-                }
-
-            });
-
-            traitsTableData = traitsTableData.sort(function (a, b) {
+            var traitsTableData = PLOTDATA.sort(function (a, b) {
                 return  b.logValue - a.logValue ;
             });
 
@@ -449,7 +511,7 @@ var mpgSoftware = mpgSoftware || {};
             phenotypesArray = result;
 
 
-            var indexColorsArray = ["rgba(31,119,180, 0.5)","rgba(255, 127, 14, 0.5)","rgba(44, 160, 44, 0.5)","rgba(214, 39, 40, 0.5)","rgba(148, 103, 189, 0.5)","rgba(140, 86, 75, 0.5)","rgba(227, 119, 194, 0.5)","rgba(0,0,0,0.2)"];
+            var indexColorsArray = ["rgba(237,32,36, 0.5)","rgba(71,143,205, 0.5)","rgba(248,153,29, 0.5)","rgba(163,205,57, 0.5)","rgba(238,60,150, 0.5)","rgba(58,82,164, 0.5)","rgba(110,204,221, 0.5)","rgba(185,82,159,0.5)","rgba(13,154,72,0.5)","rgba(255,205,5,0.5)","rgba(153,27,30,0.5)","rgba(147,39,143,0.5)"];
 
             var phenotypeGroups = "";
 
@@ -476,30 +538,26 @@ var mpgSoftware = mpgSoftware || {};
             
 
 
-            w = $("#traitsPerVariantTable").width(), h = 450, xbumperLeft = 50, xbumperRight = 50, ybumperTop = 30, ybumperBottom = 140;
 
 
-            $(".traits-svg-wrapper").html("");
 
-            $(".traits-svg-wrapper").append('<div class="phenotypes-for-plot" style="margin: 5px 0 5px 0;"></div>');
-
-
+            $(plotWrapper).html("");
 
             //console.log(phenotypesArray);
 
 
             var x = d3.scale.linear()
-                .domain([sampleMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.02])
+                .domain([xMin, d3.max(traitsTableData, function(d) { return d.sample }) * 1.001])
                 .range([xbumperLeft, w-xbumperRight]);
 
             var y = d3.scale.linear()
-                .domain([pvalueMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.02])
+                .domain([yMin, d3.max(traitsTableData, function(d) { return d.logValue }) * 1.001])
                 .range([h-ybumperBottom, ybumperTop]);
 
             arc = d3.svg.symbol().type('triangle-up').size(60);
 
 
-            svg = d3.select(".traits-svg-wrapper").append("svg")
+            svg = d3.select(plotWrapper).append("svg")
                 .attr("width", w)
                 .attr("height",h)
                 .attr("style","border:solid 1px #ddd;")
@@ -508,9 +566,9 @@ var mpgSoftware = mpgSoftware || {};
 
             // Draw p-value significance line
 
-            console.log(pvalueMin);
+            //console.log(yMin);
 
-            if(pvalueMin <= 8) {
+            if(yMin <= 8) {
 
                 svg.selectAll("line.gws")
                     .data(y.ticks(1))
@@ -532,7 +590,7 @@ var mpgSoftware = mpgSoftware || {};
 
             }
 
-            if(pvalueMin <= 4) {
+            if(yMin <= 4) {
 
                 svg.selectAll("line.lws")
                     .data(y.ticks(1))
@@ -560,7 +618,7 @@ var mpgSoftware = mpgSoftware || {};
 
 
             svg.append("text")
-                .text("*Roll over to highlight studies *Click a triangle to drill down to one trait view *Click 'Reset' button to go back to all traits view")
+                .text("*Roll over to highlight studies *Click a triangle for single trait view *Click dataset name for dataset view *Click 'Reset' button to go back to all traits view")
                 .attr("x", 15)
                 .attr("y", 15)
                 .attr("style","font-size: 11px;");
@@ -634,7 +692,14 @@ var mpgSoftware = mpgSoftware || {};
 
                     //Hide the tooltip
                     d3.select("#phePlotTooltip").classed("hidden", true);
-                });;
+                })
+                .on("click", function(d) {
+
+                        mpgSoftware.traitSample.resetPhePlotAndTable("",d.sample/1000);
+
+                        d3.select("#phePlotTooltip").classed("hidden", true);
+
+                });
 
             /// add dataset dots
             group = svg.selectAll("g.datasetdots")
@@ -692,28 +757,43 @@ var mpgSoftware = mpgSoftware || {};
                     d3.select("#phePlotTooltip").classed("hidden", true);
                     d3.select(this).attr('stroke','rgba(255,0,0,0.0)');
 
+                })
+                .on("click", function(d) {
+
+                    mpgSoftware.traitSample.resetPhePlotAndTable("",d.sample/1000);
+
+                    d3.select("#phePlotTooltip").classed("hidden", true);
+
                 });
 
 
             /// add phenotype names
+
+            var topPhenotypesArray = [];
+
             if (phenotypesArray.length == 1) {
+
+                topPhenotypesArray = phenotypesArray;
 
                 group = svg.selectAll("g.phenotypenames")
                     .data(traitsTableData)
                     .enter()
                     .append("g");
 
-                // console.log(traitsTableData);
 
             } else {
 
+                topPhenotypesArray = [];
+
+                $.each(phenotypesArray,function(index, value) {
+                    if(value.logValue >= 8) topPhenotypesArray.push(phenotypesArray[index]);
+                })
+
                 group = svg.selectAll("g.phenotypenames")
-                    .data(phenotypesArray)
+                    .data(topPhenotypesArray)
                     .enter()
                     .append("g");
-
             }
-
 
             var phenotypeNameLineH = 17;
             var phenotypeNameNum = 20;
@@ -741,7 +821,7 @@ var mpgSoftware = mpgSoftware || {};
                 .append("text")
                 .attr("y", 10)
                 .text(function(d){
-                    var returnText = (phenotypesArray.length == 1)? "" : d.phenotype ;
+                    var returnText = (topPhenotypesArray.length == 1)? "" : d.phenotype ;
                     return returnText;
                 })
                 .attr("style","font-size: 11px; text-anchor: start;")
@@ -863,7 +943,7 @@ var mpgSoftware = mpgSoftware || {};
                     if (phenotypesArray.length != 1) {
                         var phenotypeName = "="+d3.select(this).attr("phenotype-name");
 
-                        mpgSoftware.traitSample.resetPhePlotAndTable(phenotypeName);
+                        mpgSoftware.traitSample.resetPhePlotAndTable(phenotypeName,"");
 
                         d3.select("#phePlotTooltip").classed("hidden", true);
 
@@ -873,28 +953,6 @@ var mpgSoftware = mpgSoftware || {};
 
             // add phenotype name to the triangles
 
-
-            function getLogValue(pValue) {
-                var logValue;
-                if(pValue != ""){
-                    if (pValue.indexOf("e") >= 0) {
-
-                        var pValues = pValue.split("e-");
-                        var num1 = pValues[0];
-                        var num2 = Math.pow(10, parseFloat(pValues[1]));
-                        var num3 = num1/num2;
-                        logValue = -Math.log10(num3);
-
-                        //console.log(num1 +" : "+ num2 +" : "+ num3 +" : "+ logValue)
-                    } else {
-                        logValue = -Math.log10(pValue);
-                    }
-                } else {
-                    logValue = 0;
-                }
-
-                return logValue;
-            }
 
             function highlightTriangle(PNAME) {
 
@@ -921,7 +979,8 @@ var mpgSoftware = mpgSoftware || {};
             massageTraitsTable:massageTraitsTable,
             addToPhenotypeFilter:addToPhenotypeFilter,
             showRelatedWords:showRelatedWords,
-            unique:unique
+            unique:unique,
+            getLogValue:getLogValue
         }
     }());
 })();

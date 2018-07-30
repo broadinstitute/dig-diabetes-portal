@@ -190,6 +190,10 @@ var mpgSoftware = mpgSoftware || {};
                             $('#trait-input').val(availPhenotypes[0]);
                         }
                     }
+
+                    console.log(data)
+
+                    mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();

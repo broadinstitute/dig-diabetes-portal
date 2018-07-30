@@ -221,7 +221,11 @@ var mpgSoftware = mpgSoftware || {};
             } else if (recordType === "COMPOUND"){
                 renderData.annotation[recordIndex].annotationRecord.push(valueToInsert);
             } else if (recordType === "REAL") {
-                renderData.annotation[recordIndex].annotationRecord.push({val:UTILS.realNumberFormatter(valueToInsert,1)});
+                var digitsOfPrecision = 1;
+                if (renderData.annotation[recordIndex].value==="posteriorProbability"){
+                    digitsOfPrecision = 2;
+                }
+                renderData.annotation[recordIndex].annotationRecord.push({val:UTILS.realNumberFormatter(valueToInsert,digitsOfPrecision)});
             }
             return renderData;
         };
@@ -245,7 +249,7 @@ var mpgSoftware = mpgSoftware || {};
                     var allVariants = _.flatten([{}, gene.annotations.variants]);
                     var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                     var minimumPValue = 1;
-                    var minimumPosteriorPValue = 1;
+                    var maximumPosteriorPValue = 0;
                     var variants = [];
                     var codingVariants = [];
                     var spliceSiteVariants = [];
@@ -263,8 +267,8 @@ var mpgSoftware = mpgSoftware || {};
                         });
                         _.forEach(v.POSTERIOR_PROBABILITY, function (csvalue){
                             _.forEach(csvalue,function (currentPValue){
-                                if (currentPValue<minimumPosteriorPValue){
-                                    minimumPosteriorPValue=currentPValue;
+                                if (currentPValue > maximumPosteriorPValue){
+                                    maximumPosteriorPValue=currentPValue;
                                 }
 
                             })
@@ -301,9 +305,9 @@ var mpgSoftware = mpgSoftware || {};
                     insertAnnotation(renderData,'promoter', (promoterVariants.length>0), false );
                     insertAnnotation(renderData,'tfBindingMotif', (tfBindingVariants.length>0), false );
                     var posteriorProbabilitiesExist = false;
-                    if (minimumPosteriorPValue<1) {
+                    if (maximumPosteriorPValue>0) {
                         posteriorProbabilitiesExist = true;
-                        insertAnnotation(renderData,'posteriorProbability',minimumPosteriorPValue, false);
+                        insertAnnotation(renderData,'posteriorProbability',maximumPosteriorPValue, false);
 
                     }
                     if (minimumPValue<1) {

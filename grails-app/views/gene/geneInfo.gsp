@@ -11,6 +11,7 @@
     <r:require module="mustache"/>
     <r:require modules="boxwhisker"/>
     <r:require modules="burdenTest"/>
+    <r:require modules="traitsFilter"/>
     <r:require modules="gnomad"/>
     %{--Need to call directly or else the images don't come out right--}%
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
@@ -127,7 +128,6 @@
                 $(".pop-left").popover({placement: 'left'});
                 $(".pop-auto").popover({placement: 'auto'});
                 loading.hide();
-                //massageLZ();
 
 
 

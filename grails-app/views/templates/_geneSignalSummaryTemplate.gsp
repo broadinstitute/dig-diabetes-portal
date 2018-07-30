@@ -93,7 +93,7 @@
 
             <div class="lz-list col-md-2" style="padding: 10px 10px">
                 <span style="padding: 1px;background-color: #1184e8;font-size: 12px;color: #fff;width: 20px;display: inline-block;border-radius: 14px;text-align: center;margin-right: 5px;">1</span>
-                <a href="javascript:;" onclick="massageLZ(); showLZlist(event);"> Phenotype <b class="caret"></b></a>
+                <a href="javascript:;" onclick="mpgSoftware.traitsFilter.massageLZ(); mpgSoftware.traitsFilter.showLZlist(event);"> Phenotype <b class="caret"></b></a>
 
                 <ul id="dk_lz_phenotype_list">
 
@@ -492,22 +492,22 @@
                     <ul class="nav nav-tabs" role="tablist">
                         {{#commonTab}}
                             <li role="presentation" class="active variantTableLabels commonVariantChooser">
-                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">Common variants: {{pName}}</a>
+                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Common variants: {{pName}}</a>
                             </li>
                         {{/commonTab}}
                         {{#highImpactTab}}
                             <li role="presentation" class="variantTableLabels highImpacVariantChooser">
-                                <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">High-impact variants: {{pName}}</a>
+                                <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
                             </li>
                         {{/highImpactTab}}
                         {{#credibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a>
+                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
                            </li>
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="massageLZ();">{{pName}}</a>
+                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
                             </li>
                         {{/incredibleSetTab}}
                     </ul>

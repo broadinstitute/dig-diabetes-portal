@@ -1621,15 +1621,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 additionalParameters.geneName,
                 true,
                 '#datasetFilter',additionalParameters);
-                //additionalParameters.sampleMetadataExperimentAjaxUrl,
-                //additionalParameters.sampleMetadataAjaxWithAssumedExperimentUrl,
-                //additionalParameters.variantOnlyTypeAheadUrl,
-                //additionalParameters.sampleMetadataAjaxUrl,
-                //additionalParameters.generateListOfVariantsFromFiltersAjaxUrl,
-                //additionalParameters.retrieveSampleSummaryUrl,
-                //additionalParameters.variantInfoUrl,
-                //additionalParameters.variantAndDsAjaxUrl,
-                //additionalParameters.burdenTestVariantSelectionOptionsAjaxUrl);
         }
 
 

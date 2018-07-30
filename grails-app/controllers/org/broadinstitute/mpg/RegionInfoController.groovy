@@ -121,9 +121,26 @@ class RegionInfoController {
                     for (Map gene in mapContainingGeneList.listOfGenes){
                         String geneJsonObject = new JsonBuilder(gene).toPrettyString()
                         JSONObject jsonForGene =  slurper.parseText(geneJsonObject)
-                        jsonForGene["annotations"] = widgetService.buildTheIncredibleSet((gene.chromosome-"chr") as String, gene.addrStart as int, gene.addrEnd  as int, phenotype, 1000 )
+                        if (dataSet!=''){ // dynamically get the property name for static datasets
+                            Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSet,
+                                    propertyName,MetaDataService.METADATA_VARIANT)
+                            propertyName = property.name
+                        }
+                        jsonForGene["annotations"] = widgetService.getCredibleOrAlternativeSetInformation(  (gene.chromosome-"chr") as String,
+                                                                                                            gene.addrStart as int,
+                                                                                                            gene.addrEnd  as int,
+                                                                                                            dataSet,
+                                                                                                            phenotype,
+                                                                                                            propertyName);
+                        //jsonForGene["annotations"] = widgetService.buildTheIncredibleSet((gene.chromosome-"chr") as String, gene.addrStart as int, gene.addrEnd  as int, phenotype, 1000 )
                         supplementedGenes.add(jsonForGene)
                     }
+                    jsonReturn["phenotype"] = phenotype
+                    jsonReturn["propertyName"] = propertyName
+                    jsonReturn["dataset"] = dataSet
+                    jsonReturn["datasetReadable"] = g.message(code: "metadata." + dataSet, default: dataSet)
+                    jsonReturn["numRecords"] = 1000
+
                     jsonReturn["error"] = false
                     jsonReturn["data"] = supplementedGenes
                     jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
