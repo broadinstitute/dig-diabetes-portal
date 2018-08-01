@@ -72,7 +72,7 @@
 <g:render template="./data/GWAS_AGEN_ea" />
 <g:render template="./data/GWAS_DCSP2_ea" />
 <g:render template="./data/ExSeq_52k" />
-
+<g:render template="./data/AMPLOAD_36" />
 
 
 <script id="metaData2" type="x-tmpl-mustache">
