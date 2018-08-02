@@ -47,9 +47,11 @@ class PortalVersionBean {
     private Integer exposeForestPlot
     private Integer exposeTraitDataSetAssociationView
     private Integer exposeGreenBoxes
+    private Integer exposeGeneComparisonTable
     private Integer variantTakesYouToGenePage
     private Integer utilizeBiallelicGait
     private Integer utilizeUcsdData
+
 
 
     public PortalVersionBean(String portalType,
@@ -88,6 +90,7 @@ class PortalVersionBean {
                              Integer exposeForestPlot,
                              Integer exposeTraitDataSetAssociationView,
                              Integer exposeGreenBoxes,
+                             Integer exposeGeneComparisonTable,
                              Integer variantTakesYouToGenePage,
                              Integer utilizeBiallelicGait,
                              Integer utilizeUcsdData){
@@ -127,6 +130,7 @@ class PortalVersionBean {
         this.exposeForestPlot = exposeForestPlot
         this.exposeTraitDataSetAssociationView = exposeTraitDataSetAssociationView
         this.exposeGreenBoxes = exposeGreenBoxes
+        this.exposeGeneComparisonTable = exposeGeneComparisonTable
         this.variantTakesYouToGenePage = variantTakesYouToGenePage
         this.utilizeBiallelicGait = utilizeBiallelicGait
         this.utilizeUcsdData = utilizeUcsdData
@@ -278,6 +282,10 @@ class PortalVersionBean {
         return exposeGreenBoxes
     }
 
+    public Integer getExposeGeneComparisonTable(){
+        return exposeGeneComparisonTable
+    }
+
     public Integer getVariantTakesYouToGenePage(){
         return variantTakesYouToGenePage
     }
@@ -331,6 +339,7 @@ class PortalVersionBean {
 "exposeForestPlot":${getExposeForestPlot()},
 "exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
 "exposeGreenBoxes":${getExposeGreenBoxes()},
+"exposeGeneComparisonTable": ${getExposeGeneComparisonTable()},
 "variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()},
 "utilizeBiallelicGait":${getUtilizeBiallelicGait()},
 "utilizeUcsdData":${getUtilizeUcsdData()}

@@ -173,7 +173,8 @@ td.tissueTable.informationIsPresent{
                     regionSpecificVersion:${regionSpecificVersion},
                     epigeneticAssays:"${portalVersionBean.getEpigeneticAssays()}",
                     tissueRegionOverlapMatcher:"${portalVersionBean.getTissueRegionOverlapMatcher().join(",")}".split(","),
-                    tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(",")
+                    tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(","),
+                    exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);

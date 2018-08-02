@@ -1190,8 +1190,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 dataSet: credibleSetDataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
                 sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
                 geneTable: true
             };
+            additionalData.assayIdList = mpgSoftware.regionInfo.getSelectorAssayIds();
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
             var drivingVariables = {};
@@ -1485,8 +1487,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             }
         }
 
-        // var useIgvNotLz = additionalParameters.preferIgv;
-        //var useIgvNotLz = ($('input[name=genomeBrowser]:checked').val() === '2');
         var useIgvNotLz = false; // remove option for now
         var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData(data, 0.05, additionalParameters);
         var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
@@ -1519,16 +1519,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 findIndex(function(w){return w===o.value})>-1)?"selected":"";
             });
         }
-
-        // if (additionalParameters.portalTypeString==='ibd'){
-        //     selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
-        //     selectorInfo = getParkerData(selectorInfo,[]);
-        //     displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
-        //     displayInfo = getParkerData(displayInfo,[]);
-        // } else {
-        //     selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
-        // }
-
 
         var credibleSetTab = [];
         var incredibleSetTab = [];
@@ -1819,7 +1809,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         lzOnCredSetTab:lzOnCredSetTab,
         getSingleBestPhenotypeAndLaunchInterface:getSingleBestPhenotypeAndLaunchInterface,
         getSingleBestNonFavoredPhenotypeAndLaunchInterface:getSingleBestNonFavoredPhenotypeAndLaunchInterface,
-        refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype
+        refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
+        getSignalSummarySectionVariables:getSignalSummarySectionVariables
     }
 
 }());

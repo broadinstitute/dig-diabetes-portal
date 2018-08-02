@@ -868,24 +868,6 @@
 
     {{/const}}
 
-    {{#cellTypeSpecs}}
-
-        <tr>
-            <td></td>
-            <td>{{name}} DHS</td>
-            {{#DHS}}
-            <td>{{val}}</td>
-            {{/DHS}}
-        </tr>
-        <tr>
-            <td></td>
-            <td>{{name}} H3K27AC</td>
-            {{#K27}}
-            <td>{{val}}</td>
-            {{/K27}}
-        </tr>
-
-    {{/cellTypeSpecs}}
     </tbody>
 </table>
 <div class="heatmaplegend">
@@ -926,6 +908,7 @@
     </tr>
 {{/tissueSpecificRow}}
 </script>
+
 <script id="heatMapAggregatedAcrossTissueTemplate"  type="x-tmpl-mustache">
 {{#assaySpecificRow}}
     <tr style='{{rowDecoration}}'>
@@ -946,12 +929,5 @@
 {{/assaySpecificRow}}
 </script>
 
-<script id="credibleSetHeatMapElementTemplate"  type="x-tmpl-mustache">
-{{#cellsPerLine}}
-%{--<td class='tissueTable matchingRegion{{defaultForAssayId}}_{{colorIndex}} {{elementName}}"'--}%
-          %{--data-toggle='tooltip' title='chromosome:{{chromosome}}, position:{{positionString}}, tissue:{{tissue}}'></td>--}%
-<td class='tissueTable {{matchingRegion}}'
-          data-toggle='tooltip' title='{{title}}'></td>
-{{/cellsPerLine}}
-</script>
+
 

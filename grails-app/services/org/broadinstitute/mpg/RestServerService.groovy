@@ -356,6 +356,7 @@ class RestServerService {
                     existingPortalVersionBean.getExposeForestPlot(),
                     existingPortalVersionBean.getExposeTraitDataSetAssociationView(),
                     existingPortalVersionBean.getExposeGreenBoxes(),
+                    existingPortalVersionBean.getExposeGeneComparisonTable(),
                     existingPortalVersionBean.getVariantTakesYouToGenePage(),
                     existingPortalVersionBean.getUtilizeBiallelicGait(),
                     existingPortalVersionBean.getUtilizeUcsdData()
@@ -363,7 +364,7 @@ class RestServerService {
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
