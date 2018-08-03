@@ -982,7 +982,7 @@ var mpgSoftware = mpgSoftware || {};
 
         /***
          * Build a heat map.  It might be for genes or variants, depending on the methods that get passed in
-         * 
+         *
          * @param drivingVariables
          * @param setDefaultButton
          * @param entitySpecifics
@@ -1019,10 +1019,16 @@ var mpgSoftware = mpgSoftware || {};
 
                 var uniqueAssayIds = _.uniq(getSelectorAssayIds());
                 if (uniqueAssayIds.length===1){
-                    displayAParticularCredibleSet(tissueGrid, entitySpecifics.variants, setDefaultButton,uniqueAssayIds[0] );
+                    displayAParticularCredibleSet(tissueGrid, entitySpecifics.variants, setDefaultButton,uniqueAssayIds[0], entitySpecifics.credibleSetTableGoesHere );
                 } else {
                     _.forEach(uniqueAssayIds, function (assayId){
-                        displayAggregatedInformationPerAssayId(tissueGrid, entitySpecifics.variants, [assayId], setDefaultButton, generateDataStructureForAllTissueSpecificHeatMap, entitySpecifics.writeCellOfHeatMap );
+                        displayAggregatedInformationPerAssayId(tissueGrid,
+                            entitySpecifics.variants,
+                            [assayId],
+                            setDefaultButton,
+                            generateDataStructureForAllTissueSpecificHeatMap,
+                            entitySpecifics.writeCellOfHeatMap,
+                            entitySpecifics.credibleSetTableGoesHere );
                     });
                 }
 
@@ -1153,7 +1159,7 @@ var mpgSoftware = mpgSoftware || {};
 
         //   At this point we have built a grid of all the tissues, and we have a sorted list of all the variants, and now we need to go through
         //   and map from tissues to variants and come up with something we can display as a heat map.
-        var displayAParticularCredibleSet = function(tissueGrid, dataVariants, setDefaultButton, annotationId ){
+        var displayAParticularCredibleSet = function(tissueGrid, dataVariants, setDefaultButton, annotationId, credibleSetTableGoesHere ){
 
             // In some cases we may have one primary tissue grid that drives the display, and a subsidiary tissue grid that is displayed only if
             // the primary tissue is displayed
@@ -1172,7 +1178,7 @@ var mpgSoftware = mpgSoftware || {};
 
             var tissueSpecificDataStructure = generateDataStructureForAllTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueObject, dataVariants, annotationId, writeOneCellOfTheHeatMap );
 
-            $('.credibleSetTableGoesHere tr:last').parent().append(
+            $(credibleSetTableGoesHere+' tr:last').parent().append(
                 Mustache.render( $('#credibleSetHeatMapTemplate')[0].innerHTML,tissueSpecificDataStructure));
 
             if (setDefaultButton){
@@ -1277,7 +1283,13 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var displayAggregatedInformationPerAssayId = function(tissueGrid, sortedData, assayIdArray, setDefaultButton, functionToGenerateDataStructure, functionToDisplayHeatMapCell ){
+        var displayAggregatedInformationPerAssayId = function(tissueGrid,
+                                                              sortedData,
+                                                              assayIdArray,
+                                                              setDefaultButton,
+                                                              functionToGenerateDataStructure,
+                                                              functionToDisplayHeatMapCell,
+                                                              credibleSetTableGoesHere ){
 
             var subsidiaryTissueGrid = {tissueGrid:[],sortedTissues:[]};
             var primaryTissueGrid = filterTissueGrid(tissueGrid,assayIdArray);
@@ -1288,9 +1300,9 @@ var mpgSoftware = mpgSoftware || {};
             var aggregatedAcrossTissue = aggregateAcrossTissues(tissueSpecificDataStructure,'assayname',assayIdArray[0]);
 
 
-            $('.credibleSetTableGoesHere tr:last').parent().append(
+            $(credibleSetTableGoesHere+' tr:last').parent().append(
                 Mustache.render( $('#heatMapAggregatedAcrossTissueTemplate')[0].innerHTML,aggregatedAcrossTissue));
-            $('.credibleSetTableGoesHere tr:last').parent().append(
+            $(credibleSetTableGoesHere+' tr:last').parent().append(
                 Mustache.render( $('#credibleSetHeatMapTemplate')[0].innerHTML,tissueSpecificDataStructure));
             $('tr.tissueHider_'+assayIdArray[0]).hide();
 

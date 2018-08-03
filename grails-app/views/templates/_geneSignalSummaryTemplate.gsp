@@ -655,6 +655,7 @@
                                 <p>&nbsp;</p>
                                 %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
                                 <div class="credibleSetTableGoesHere"></div>
+                                <div class="credGeneTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
@@ -745,6 +746,7 @@
                                 %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
 
                                 <div class="credibleSetTableGoesHere"></div>
+                                <div class="credGeneTableGoesHere"></div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
