@@ -598,7 +598,16 @@ var mpgSoftware = mpgSoftware || {};
                 //if (assayIdList==='[1,2]') { assayIdList = '[1,2,3]' }
                 $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
                 var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
-                buildTheCredibleSetHeatMap(filteredRenderData,false);
+                //buildTheCredibleSetHeatMap(filteredRenderData,false);
+                var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
+                buildTheEntityHeatMap(  filteredRenderData,
+                                        false,
+                                        {   callBackForEachElement:oneCallbackForEachVariant,
+                                            elements:allDataVariants,
+                                            variants:filteredRenderData.variants,
+                                            writeCellOfHeatMap:writeOneCellOfTheHeatMap,
+                                            credibleSetTableGoesHere:".credibleSetTableGoesHere" } );
+
             }
             return;
         }
@@ -618,7 +627,15 @@ var mpgSoftware = mpgSoftware || {};
             var allRenderData = $.data($('#dataHolderForCredibleSets')[0],'allRenderData');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
             var filteredRenderData = filterRenderData(allRenderData,assayIdList,variantsToInclude);
-            buildTheCredibleSetHeatMap(filteredRenderData,false);
+            //buildTheCredibleSetHeatMap(filteredRenderData,false);
+            var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
+            buildTheEntityHeatMap(  filteredRenderData,
+                                    false,
+                                    {   callBackForEachElement:oneCallbackForEachVariant,
+                                        elements:allDataVariants,
+                                        variants:filteredRenderData.variants,
+                                        writeCellOfHeatMap:writeOneCellOfTheHeatMap,
+                                        credibleSetTableGoesHere:".credibleSetTableGoesHere" } );
         };
         var determineColorIndex = function (val,quantileArray){
             var index = 0;
@@ -963,144 +980,49 @@ var mpgSoftware = mpgSoftware || {};
         };
 
 
-        var buildTheGeneHeatMap = function (drivingVariables,setDefaultButton){
-            drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
-            $(".credibleSetTableGoesHere").empty().append(
-                Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
-            );
-            var additionalParameters = $.data($('#dataHolderForCredibleSets')[0],'additionalParameters');
-            var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
-
-            setDevelopingTissueGrid({});
-            var assayIdArrays = _.union(getSelectorAssayIds(),getDisplayAssayIds()) ;
-            var assayIdArrayAsString = "["+assayIdArrays.join(",")+"]";
-            var promises = oneCallbackForEachGene(drivingVariables.columns, additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
-
-            $.when.apply($, promises).then(function(schemas) {
-                var tissueGrid = getDevelopingTissueGrid();
-
-                //  we need to remember some of these data
-                $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
-                $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
-
-                var uniqueAssayIds = _.uniq(getSelectorAssayIds());
-                if (uniqueAssayIds.length===1){
-                    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,uniqueAssayIds[0] );
-                } else {
-                    _.forEach(uniqueAssayIds, function (assayId){
-                        displayAggregatedInformationPerAssayId(tissueGrid, drivingVariables.columns, [assayId], setDefaultButton, generateDataStructureForAllTissueSpecificHeatMap, writeOneCellOfTheGeneBasedHeatMap );
-                    });
-                }
-
-
-                // do we have any credible set buttons?  If so then it is now safe to turn them on
-                var credSetChoices = $('li.credibleSetChooserButton');
-                _.forEach(credSetChoices,function(credSetButton){
-                    var credSetButtonObj = $(credSetButton);
-                    credSetButtonObj.attr('onclick',credSetButtonObj.attr('toBeOnClick'));
-                });
-                if (setDefaultButton){
-                    $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
-                }
-                $('[data-toggle="popover"]').popover({
-                    animation: true,
-                    html: true,
-                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
-                });
-                $(".pop-top").popover({placement: 'top'});
-                $(".pop-right").popover({placement: 'right'});
-                $(".pop-bottom").popover({placement: 'bottom'});
-                $(".pop-left").popover({placement: 'left'});
-                $(".pop-auto").popover({placement: 'auto'})
-
-            }, function(e) {
-                console.log("My ajax failed");
-            });
-            $('.credibleSetTableGoesHere td.tissueTable').popover({
-                html : true,
-                title: function() {
-                    //return $(this).parent().find('.head').html();
-                    console.log('title');
-                    return "foo";
-                },
-                content: function() {
-                    //return $(this).parent().find('.content').html();
-                    return "fii";
-                },
-                container: 'body',
-                placement: 'bottom',
-                trigger: 'hover'
-            });
-            $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
-                html : true,
-                title: function() {
-                    var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+
-                        '<div onclick="mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps()" class="close">&times;</div>';
-                    return var_id;
-                },
-                content: function() {
-                    var retString = "";
-                    retString +=
-                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Chromosome:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('chrom')+"</scan>"+
-                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Position:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('position')+"</scan></div>"+
-                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan>"+
-                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Effect Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defeffa')+"</scan></div>"+
-                        "<div class='credSetLine'><span class='fakelink' onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
-                        $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\",\""+assayIdList+"\")' href='#'>"+
-                        "Click to display tissues with overlapping regions below the LocusZoom plot</span></div>";
-                    return retString;
-                },
-                container: 'body',
-                placement: 'bottom',
-                trigger: 'focus click'
-            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
-
-        };
-
-
-
-
-
-
-
+        /***
+         * Build a heat map.  It might be for genes or variants, depending on the methods that get passed in
+         * 
+         * @param drivingVariables
+         * @param setDefaultButton
+         * @param entitySpecifics
+         */
         var buildTheEntityHeatMap = function (drivingVariables,
                                               setDefaultButton,
                                               entitySpecifics
                                               /***
                                                * entitySpecifics.callBackForEachElement
                                                * entitySpecifics.elements
+                                               * entitySpecifics.variants
                                                * entitySpecifics.writeCellOfHeatMap
+                                               * entitySpecifics.credibleSetTableGoesHere
                                                */
         ){
             drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
-            $(".credibleSetTableGoesHere").empty().append(
+            $(entitySpecifics.credibleSetTableGoesHere).empty().append(
                 Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
             );
             var additionalParameters = $.data($('#dataHolderForCredibleSets')[0],'additionalParameters');
             var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
-            var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
+
             setDevelopingTissueGrid({});
             var assayIdArrays = _.union(getSelectorAssayIds(),getDisplayAssayIds()) ;
             var assayIdArrayAsString = "["+assayIdArrays.join(",")+"]";
-            var promises = entitySpecifics.callBackForEachElement(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
-            //var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
+            var promises = entitySpecifics.callBackForEachElement(entitySpecifics.elements,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
 
             $.when.apply($, promises).then(function(schemas) {
                 var tissueGrid = getDevelopingTissueGrid();
 
                 //  we need to remember some of these data
                 $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
-                $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',entitySpecifics.elements);
-                //$.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
+                $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',entitySpecifics.variants);
 
                 var uniqueAssayIds = _.uniq(getSelectorAssayIds());
                 if (uniqueAssayIds.length===1){
-                    displayAParticularCredibleSet(tissueGrid, entitySpecifics.elements, setDefaultButton,uniqueAssayIds[0] );
-                    //displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,uniqueAssayIds[0] );
+                    displayAParticularCredibleSet(tissueGrid, entitySpecifics.variants, setDefaultButton,uniqueAssayIds[0] );
                 } else {
                     _.forEach(uniqueAssayIds, function (assayId){
-                        displayAggregatedInformationPerAssayId(tissueGrid, entitySpecifics.elements, [assayId], setDefaultButton, generateDataStructureForAllTissueSpecificHeatMap, entitySpecifics.writeCellOfHeatMap );
-                        //displayAggregatedInformationPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton, generateDataStructureForAllTissueSpecificHeatMap, writeOneCellOfTheHeatMap );
+                        displayAggregatedInformationPerAssayId(tissueGrid, entitySpecifics.variants, [assayId], setDefaultButton, generateDataStructureForAllTissueSpecificHeatMap, entitySpecifics.writeCellOfHeatMap );
                     });
                 }
 
@@ -1128,7 +1050,7 @@ var mpgSoftware = mpgSoftware || {};
             }, function(e) {
                 console.log("My ajax failed");
             });
-            $('.credibleSetTableGoesHere td.tissueTable').popover({
+            $(entitySpecifics.credibleSetTableGoesHere+' td.tissueTable').popover({
                 html : true,
                 title: function() {
                     //return $(this).parent().find('.head').html();
@@ -1143,7 +1065,7 @@ var mpgSoftware = mpgSoftware || {};
                 placement: 'bottom',
                 trigger: 'hover'
             });
-            $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
+            $(entitySpecifics.credibleSetTableGoesHere+' th.niceHeadersThatAreLinks ').popover({
                 html : true,
                 title: function() {
                     var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+
@@ -1168,110 +1090,6 @@ var mpgSoftware = mpgSoftware || {};
             }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
 
         };
-
-
-
-
-
-
-
-
-
-
-        var buildTheCredibleSetHeatMap = function (drivingVariables,setDefaultButton){
-            drivingVariables['chosenStatesForTissueDisplay']=appendLegendInfo();
-            $(".credibleSetTableGoesHere").empty().append(
-                Mustache.render( $('#credibleSetTableTemplate')[0].innerHTML,drivingVariables)
-            );
-            var additionalParameters = $.data($('#dataHolderForCredibleSets')[0],'additionalParameters');
-            var assayIdList = $.data($('#dataHolderForCredibleSets')[0],'assayIdList');
-            var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
-            setDevelopingTissueGrid({});
-            var assayIdArrays = _.union(getSelectorAssayIds(),getDisplayAssayIds()) ;
-            var assayIdArrayAsString = "["+assayIdArrays.join(",")+"]";
-            var promises = oneCallbackForEachVariant(allDataVariants,additionalParameters,setIncludeRecordBasedOnUserChoice(assayIdList),assayIdArrayAsString);
-
-            $.when.apply($, promises).then(function(schemas) {
-                var tissueGrid = getDevelopingTissueGrid();
-
-                //  we need to remember some of these data
-                $.data($('#dataHolderForCredibleSets')[0],'tissueGrid',tissueGrid);
-                $.data($('#dataHolderForCredibleSets')[0],'sortedVariants',drivingVariables.variants);
-
-                var uniqueAssayIds = _.uniq(getSelectorAssayIds());
-                if (uniqueAssayIds.length===1){
-                    displayAParticularCredibleSet(tissueGrid, drivingVariables.variants, setDefaultButton,uniqueAssayIds[0] );
-                } else {
-                    _.forEach(uniqueAssayIds, function (assayId){
-                        displayAggregatedInformationPerAssayId(tissueGrid, drivingVariables.variants, [assayId], setDefaultButton, generateDataStructureForAllTissueSpecificHeatMap, writeOneCellOfTheHeatMap );
-                    });
-                }
-
-
-                // do we have any credible set buttons?  If so then it is now safe to turn them on
-                var credSetChoices = $('li.credibleSetChooserButton');
-                _.forEach(credSetChoices,function(credSetButton){
-                    var credSetButtonObj = $(credSetButton);
-                    credSetButtonObj.attr('onclick',credSetButtonObj.attr('toBeOnClick'));
-                });
-                if (setDefaultButton){
-                    $($('div.credibleSetNameHolder>ul.nav>li')[0]).click();
-                }
-                $('[data-toggle="popover"]').popover({
-                    animation: true,
-                    html: true,
-                    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h5 class="popover-title"></h5><div class="popover-content"></div></div>'
-                });
-                $(".pop-top").popover({placement: 'top'});
-                $(".pop-right").popover({placement: 'right'});
-                $(".pop-bottom").popover({placement: 'bottom'});
-                $(".pop-left").popover({placement: 'left'});
-                $(".pop-auto").popover({placement: 'auto'})
-
-            }, function(e) {
-                console.log("My ajax failed");
-            });
-            $('.credibleSetTableGoesHere td.tissueTable').popover({
-                html : true,
-                title: function() {
-                    //return $(this).parent().find('.head').html();
-                    console.log('title');
-                    return "foo";
-                },
-                content: function() {
-                    //return $(this).parent().find('.content').html();
-                    return "fii";
-                },
-                container: 'body',
-                placement: 'bottom',
-                trigger: 'hover'
-            });
-            $('.credibleSetTableGoesHere th.niceHeadersThatAreLinks ').popover({
-                html : true,
-                title: function() {
-                    var var_id = $(this).attr('chrom')+":"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+
-                    '<div onclick="mpgSoftware.regionInfo.removeAllCredSetHeaderPopUps()" class="close">&times;</div>';
-                    return var_id;
-                },
-                content: function() {
-                    var retString = "";
-                    retString +=
-                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Chromosome:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('chrom')+"</scan>"+
-                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Position:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('position')+"</scan></div>"+
-                        "<div class='credSetLine'><scan class='credSetPopUpTitle'>Reference Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defrefa')+"</scan>"+
-                        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<scan class='credSetPopUpTitle'>Effect Allele:&nbsp;</scan><scan class='credSetPopUpValue'>"+$(this).attr('defeffa')+"</scan></div>"+
-                        "<div class='credSetLine'><span class='fakelink' onclick='mpgSoftware.locusZoom.replaceTissuesWithOverlappingEnhancersFromVarId(\""+
-                        $(this).attr('chrom')+"_"+$(this).attr('position')+"_"+$(this).attr('defrefa')+"_"+$(this).attr('defeffa')+"\",\"#lz-lzCredSet\",\""+assayIdList+"\")' href='#'>"+
-                        "Click to display tissues with overlapping regions below the LocusZoom plot</span></div>";
-                    return retString;
-                },
-                container: 'body',
-                placement: 'bottom',
-                trigger: 'focus click'
-            }).on('show.bs.popover', removeAllCredSetHeaderPopUps );
-
-        };
-
 
 
 
@@ -1656,9 +1474,25 @@ var mpgSoftware = mpgSoftware || {};
                     });
 
                     if (geneTablePresentation){
-                        buildTheGeneHeatMap(drivingVariables,true);
+                        //buildTheGeneHeatMap(drivingVariables,true);
+                        buildTheEntityHeatMap(  drivingVariables,
+                                                true,
+                                                {   callBackForEachElement:oneCallbackForEachGene,
+                                                    elements:drivingVariables.columns,
+                                                    variants:drivingVariables.columns,
+                                                    writeCellOfHeatMap:writeOneCellOfTheGeneBasedHeatMap,
+                                                    credibleSetTableGoesHere:".credibleSetTableGoesHere"});
+
                     } else {
-                        buildTheCredibleSetHeatMap(drivingVariables,true);
+                        //buildTheCredibleSetHeatMap(drivingVariables,true);
+                        var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
+                        buildTheEntityHeatMap(  drivingVariables,
+                            true,
+                            {   callBackForEachElement:oneCallbackForEachVariant,
+                                elements:allDataVariants,
+                                variants:drivingVariables.variants,
+                                writeCellOfHeatMap:writeOneCellOfTheHeatMap,
+                                credibleSetTableGoesHere:".credibleSetTableGoesHere"} );
                     }
 
 
