@@ -1621,11 +1621,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         var alwaysShowTheCredibleSetTab = true;
 
-        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
+        // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
             buildOutCredibleSetPresentation(data, additionalParameters);
-        } else if (alwaysShowTheCredibleSetTab){
+        // } else if (alwaysShowTheCredibleSetTab){
             buildOutIncredibleSetPresentation(data, additionalParameters);
-        }
+        // }
 
         if (displayCommonTab.length>0){
             mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);

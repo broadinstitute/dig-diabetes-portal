@@ -1486,17 +1486,15 @@ var mpgSoftware = mpgSoftware || {};
                     });
 
                     if (geneTablePresentation){
-                        //buildTheGeneHeatMap(drivingVariables,true);
                         buildTheEntityHeatMap(  drivingVariables,
                                                 true,
                                                 {   callBackForEachElement:oneCallbackForEachGene,
                                                     elements:drivingVariables.columns,
                                                     variants:drivingVariables.columns,
                                                     writeCellOfHeatMap:writeOneCellOfTheGeneBasedHeatMap,
-                                                    credibleSetTableGoesHere:".credibleSetTableGoesHere"});
+                                                    credibleSetTableGoesHere:".credGeneTableGoesHere"});
 
                     } else {
-                        //buildTheCredibleSetHeatMap(drivingVariables,true);
                         var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
                         buildTheEntityHeatMap(  drivingVariables,
                             true,

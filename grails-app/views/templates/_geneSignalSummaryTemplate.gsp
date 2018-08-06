@@ -653,9 +653,18 @@
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
-                                %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
-                                <div class="credibleSetTableGoesHere"></div>
-                                <div class="credGeneTableGoesHere"></div>
+                                <ul class="nav nav-pills referenceSummaryTable" role="tablist">
+                                  <li class="active"><a href="#tableGeneTableTab" role="tab" data-toggle="tab">gene table</a></li>
+                                  <li><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
+                                </ul>
+                                <div class="referenceSummaryTable tab-content">
+                                    <div class="tab-pane active referenceSummaryTableContent" id="tableGeneTableTab">
+                                        <div class="credGeneTableGoesHere"></div>
+                                    </div>
+                                    <div class="tab-pane referenceSummaryTableContent" id="tableVariantTableTab">
+                                        <div class="credibleSetTableGoesHere"></div>
+                                    </div>
+                                </div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
@@ -743,10 +752,18 @@
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
-                                %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
-
-                                <div class="credibleSetTableGoesHere"></div>
-                                <div class="credGeneTableGoesHere"></div>
+                                <ul class="nav nav-tabs referenceSummaryTable" role="tablist">
+                                  <li class="active"><a href="#tableGeneTableTab" role="tab" data-toggle="tab">gene table</a></li>
+                                  <li><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
+                                </ul>
+                                <div class="referenceSummaryTable tab-content">
+                                    <div class="tab-pane" id="tableGeneTableTab">
+                                        <div class="credibleSetTableGoesHere"></div>
+                                    </div>
+                                    <div class="tab-pane" id="tableVariantTableTab">
+                                        <div class="credGeneTableGoesHere"></div>
+                                    </div>
+                                </div>
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
