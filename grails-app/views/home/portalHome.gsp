@@ -429,7 +429,7 @@
                         <g:if test="${g.portalTypeString()?.equals('mi')}">
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
-                                    <a href="mailto:help@cvdgenetics.org">
+                                    <a href="mailto:cvdgenetics@gmail.com">
                                         <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
                                     </a>
                                 </p>
