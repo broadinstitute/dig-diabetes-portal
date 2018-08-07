@@ -1400,13 +1400,14 @@ var mpgSoftware = mpgSoftware || {};
                         drivingVariables = buildRenderDataForGenes(data,additionalParameters);
                     } else {
                         drivingVariables = buildRenderData(data,additionalParameters);
+                        $.data($('#dataHolderForCredibleSets')[0],'allRenderData',drivingVariables);
                     }
                     var allCredibleSets = extractAllCredibleSetNames (drivingVariables);
                     if (allCredibleSets.length > 0){
 
                         if (allCredibleSets[0].credibleSetId===""){
-                            var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                            $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +oldTabName);
+                            //var oldTabName = $('a[href=#credibleSetTabHolder]').text();
+                            $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +additionalParameters.pname);
                         } else {
                             $(".credibleSetChooserGoesHere").empty().append(
                                 Mustache.render( $('#organizeCredibleSetChooserTemplate')[0].innerHTML,{allCredibleSets:allCredibleSets,
@@ -1416,14 +1417,14 @@ var mpgSoftware = mpgSoftware || {};
                                         return credibleSetPresenceIndicator;
                                     }})
                             );
-                            var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                            $('a[href=#credibleSetTabHolder]').text("Credible sets: " +oldTabName);
+                           // var oldTabName = $('a[href=#credibleSetTabHolder]').text();
+                            $('a[href=#credibleSetTabHolder]').text("Credible sets: " +additionalParameters.pname);
                         }
                     } else {
                         var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                        $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +oldTabName);
+                        $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +additionalParameters.pname);
                     }
-                    $.data($('#dataHolderForCredibleSets')[0],'allRenderData',drivingVariables);
+
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);
                     $.data($('#dataHolderForCredibleSets')[0],'additionalParameters',additionalParameters);
                     $.data($('#dataHolderForCredibleSets')[0],'dataVariants',data.variants);
@@ -1487,7 +1488,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     if (geneTablePresentation){
                         buildTheEntityHeatMap(  drivingVariables,
-                                                true,
+                                                false,
                                                 {   callBackForEachElement:oneCallbackForEachGene,
                                                     elements:drivingVariables.columns,
                                                     variants:drivingVariables.columns,
@@ -1497,7 +1498,7 @@ var mpgSoftware = mpgSoftware || {};
                     } else {
                         var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
                         buildTheEntityHeatMap(  drivingVariables,
-                            true,
+                            false,
                             {   callBackForEachElement:oneCallbackForEachVariant,
                                 elements:allDataVariants,
                                 variants:drivingVariables.variants,

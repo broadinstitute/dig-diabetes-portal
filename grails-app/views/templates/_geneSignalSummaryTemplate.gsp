@@ -757,11 +757,11 @@
                                   <li><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
                                 </ul>
                                 <div class="referenceSummaryTable tab-content">
-                                    <div class="tab-pane" id="tableGeneTableTab">
-                                        <div class="credibleSetTableGoesHere"></div>
+                                    <div class="tab-pane active" id="tableGeneTableTab">
+                                        <div class="credGeneTableGoesHere"></div>
                                     </div>
                                     <div class="tab-pane" id="tableVariantTableTab">
-                                        <div class="credGeneTableGoesHere"></div>
+                                        <div class="credibleSetTableGoesHere"></div>
                                     </div>
                                 </div>
                                 <div id="allVariantsLocation" class="in"></div>

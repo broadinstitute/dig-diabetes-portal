@@ -1216,6 +1216,57 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
 
+    var buildOutSetPresentation = function (data,additionalData,createGeneTable){
+        loading.show();
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        var sampleGroupsWithCredibleSetNames = ['data.sampleGroupsWithCredibleSetNames'];
+        var dataSet = '';
+        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+            sampleGroupsWithCredibleSetNames = data.sampleGroupsWithCredibleSetNames;
+            dataSet = sampleGroupsWithCredibleSetNames[0];
+                mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(sampleGroupsWithCredibleSetNames);
+        }
+        //if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+        //    mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
+            var credibleSetDataSet = sampleGroupsWithCredibleSetNames;
+            var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
+                start: signalSummarySectionVariables.geneExtentBegin,
+                end: signalSummarySectionVariables.geneExtentEnd,
+                phenotype: additionalData.phenotype,
+                propertyName: 'POSTERIOR_PROBABILITY',
+                dataSet: dataSet,
+                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
+                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+                geneTable: createGeneTable
+            };
+            mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
+            var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
+            var drivingVariables = {};
+            drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
+            drivingVariables["namedGeneArray"] = [];
+            drivingVariables["supressTitle"] = [1];
+            if ((drivingVariables["allGenes"].length>0)&&
+                (drivingVariables["allGenes"][0].length>0)) {
+                drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
+                    return {'name': o}
+                });
+            }
+            $(".matchedGenesGoHere").empty().append(
+                Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
+            );
+
+        //}
+        loading.hide();
+    };
+
+
+
+
+
+
+
+
 
     var buildOutCredibleSetPresentation = function (data,additionalData){
         loading.show();
@@ -1622,9 +1673,20 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var alwaysShowTheCredibleSetTab = true;
 
         // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
-            buildOutCredibleSetPresentation(data, additionalParameters);
+
+
+        var geneTableFirst = true;
+        if (incredibleSetTab.length>0){
+            geneTableFirst = false;
+        }
+        buildOutSetPresentation (data, additionalParameters, geneTableFirst);
+        buildOutSetPresentation (data, additionalParameters, !geneTableFirst);
+
+
+
+        //    buildOutCredibleSetPresentation(data, additionalParameters);
         // } else if (alwaysShowTheCredibleSetTab){
-            buildOutIncredibleSetPresentation(data, additionalParameters);
+        //    buildOutIncredibleSetPresentation(data, additionalParameters);
         // }
 
         if (displayCommonTab.length>0){
