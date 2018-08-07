@@ -64,27 +64,7 @@
 
     <div class="container" style="color:#fff;">
         <div class="row" style="padding-top:40px;">
-            <div class="col-md-6 portal-front-banner static-content" portal="${g.portalTypeString()}" file="portal_front_banner.html" style="color:#fff; font-weight:300;">
-
-            </div>
-
-            <div class="col-md-6 portal-front-banner" portal="${g.portalTypeString()}" file="portal_front_banner.html" style="color:#fff; font-weight:300;">
-                <img src="${resource(file:g.message(code: portalVersionBean.frontLogo, default:portalVersionBean.frontLogo)) }" style="width:500px; margin-top: 30px;" />
-                <p style="padding-top:10px;">
-                    <g:each in="${portalVersionBean.alternateLanguages}">
-                        <g:if test="${it.equals('English')}">
-                            <a href='<g:createLink controller="home" action="index" params="[lang:'en']"/>' style="color:#ffffff; text-decoration: none;">
-                                <g:message code="portal.language.setting.setEnglish" default="In English" /></a> |
-                        </g:if >
-                        <g:elseif test="${it.equals('Spanish')}">
-                            <a href='<g:createLink controller="home" action="index" params="[lang:'es']"/>' style="color:#ffffff; text-decoration: none;">
-                                <g:message code="portal.language.setting.setSpanish" default="En Español" /></a>
-                        </g:elseif>
-                    </g:each>
-                </p>
-                <p style="padding-top:10px; font-size:25px; font-weight: 300 !important;">
-                    <g:message code="${portalVersionBean.tagline}" /></p>
-            </div>
+            <div class="col-md-6 portal-front-banner static-content" portal="${g.portalTypeString()}" file="portal_front_banner.html" style="color:#fff; font-weight:300;"></div>
 
             <g:if test="${!portalVersionBean.regionSpecificVersion}">
                 <div class="col-md-5 col-md-offset-1 dk-front-search-wrapper">
