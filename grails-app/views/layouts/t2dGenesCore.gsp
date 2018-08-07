@@ -385,6 +385,25 @@
                 document.execCommand('copy');
             }
 
+            $(document).ready(function() {
+
+                var server = "prod";
+
+
+                var prefix = (server == "prod")? 'https://raw.githubusercontent.com/broadinstitute/dpg_static_content/master/contents/':(server == "qa")?'':'';
+
+                $(".static-content").each(function() {
+
+                    var portal = $(this).attr("portal");
+                    portal = (portal != "")? portal+"_" : "default"+"_";
+                    var targetFile = $(this).attr("file");
+                    $(this).load(prefix+portal+targetFile+'?cb=' + (new Date().getTime()));
+
+                    console.log(prefix+portal+targetFile+'?cb=' + (new Date().getTime()));
+                })
+            });
+
+            //<div class="static-content" portal="${g.portalTypeString()}" file="about_portal">${g.portalTypeString()}</div>
 
             /* copy URL function end */
 
