@@ -1216,24 +1216,21 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
 
-    var buildOutSetPresentation = function (data,additionalData,createGeneTable){
+    var buildOutSetPresentation = function (data,additionalData,createGeneTable, propertyToRequest){
         loading.show();
         var signalSummarySectionVariables = getSignalSummarySectionVariables();
         var sampleGroupsWithCredibleSetNames = ['data.sampleGroupsWithCredibleSetNames'];
-        var dataSet = '';
-        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
+        var dataSet = additionalData.ds;
+        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){ // use cred sets if avail
             sampleGroupsWithCredibleSetNames = data.sampleGroupsWithCredibleSetNames;
             dataSet = sampleGroupsWithCredibleSetNames[0];
                 mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(sampleGroupsWithCredibleSetNames);
         }
-        //if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){
-        //    mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(data.sampleGroupsWithCredibleSetNames);  // save, in case we need this information later
-            var credibleSetDataSet = sampleGroupsWithCredibleSetNames;
             var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
                 start: signalSummarySectionVariables.geneExtentBegin,
                 end: signalSummarySectionVariables.geneExtentEnd,
                 phenotype: additionalData.phenotype,
-                propertyName: 'POSTERIOR_PROBABILITY',
+                propertyName: propertyToRequest,
                 dataSet: dataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
                 fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
@@ -1675,12 +1672,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
 
 
-        var geneTableFirst = true;
+        var weHaveAnIncredibleSet = true;
+        var propertyToRequest = 'POSTERIOR_PROBABILITY';
         if (incredibleSetTab.length>0){
-            geneTableFirst = false;
+            weHaveAnIncredibleSet = false;
+            propertyToRequest = 'P_VALUE';
         }
-        buildOutSetPresentation (data, additionalParameters, geneTableFirst);
-        buildOutSetPresentation (data, additionalParameters, !geneTableFirst);
+        buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
+        buildOutSetPresentation (data, additionalParameters, true, propertyToRequest);
 
 
 
