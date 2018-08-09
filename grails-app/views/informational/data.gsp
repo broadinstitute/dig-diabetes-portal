@@ -77,60 +77,11 @@
 
 <div id="main">
     <div class="container">
-        <div class="row">
-
-                <g:if test="${g.portalTypeString()?.equals('t2d')}">
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Data</h1>
-                    </div>
-                    <div class="col-md-12">
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.title" default="about the data"/></p>
-                    </div>
-
-                </g:if>
-                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Polygenic Risk Score Variant Weights</h1>
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS"></g:message></p>
-                    <p style="font-weight: 300; font-size: 15px;">
-                    <g:message code="informational.shared.publications.Khera_2018_NatGenet"></g:message><br>
-                    <g:message code="informational.shared.publications.Khera_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>
-                    <g:message code="informational.shared.publications.Khera_2018_NatGenet.citation"></g:message>
-                </p>
-                    <p style="font-weight: 300; font-size: 15px;"><a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
-                    </p>
-</table>
-                    </div>
-
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Genetic Association Datasets</h1>
-                    </div>
-                    <div class="col-md-12">
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
-                    </div>
-                </g:elseif>
-            <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
-                <div class="col-md-12">
-                    <h1 class="dk-page-title">Data</h1>
-                </div>
-                <div class="col-md-12">
-                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.epi.descr" default="about the data"/></p>
-                </div>
-            </g:elseif>
-                <g:else>
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Data</h1>
-                    </div>
-                    <div class="col-md-9">
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title1" default="about the data"/></p>
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.stroke.title2" default="about the data"/></p>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="dk-go-button dk-t2d-yellow dk-right-column-buttons"><a target="_blank" href="http://cerebrovascularportal.org/informational/downloads">Visit download page</a></div>
-                    </div>
-                </g:else>
-            </div>
+        <div class="static-content row" portal="${g.portalTypeString()}" file="data_page_top.html">
+            ${g.portalTypeString()}
         </div>
+
+    </div>
     </div>
         <div class="container">
             <g:renderBetaFeaturesDisplayedValue>

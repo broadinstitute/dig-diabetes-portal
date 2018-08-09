@@ -220,39 +220,8 @@
                     <div class="col-md-5 col-md-offset-1" style="margin-top:30px;">
                         <h3 style="font-weight:700; font-size:30px; font-family:'Oswald'; color:#000000; text-align: left; margin-top: 10px;"><g:message code="portal.home.news_headline" default="What's new" />&nbsp;<span style="color:#4eadcd; vertical-align: 5px;" class="glyphicon glyphicon-comment" aria-hidden="true"></span></h3>
                         <ul id="newsFeedHolder" class="dk-news-items gallery-fade"></ul>
-                        <g:if test="${g.portalTypeString()?.equals('mi')}">
-                            <div style="position:absolute; top: 25px; right:-40px; ">
-                                <p style="margin-bottom:3px;">
-                                    <a href="mailto:help@cvdgenetics.org">
-                                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
-                                    </a>
-                                </p>
-                            </div>
 
-                        </g:if>
-
-                        <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
-                            <div style="position:absolute; top: 25px; right:-40px; ">
-                                <p style="margin-bottom:3px;">
-                                    <a href="https://goo.gl/forms/EcXR6Kv2P4Ifdmtl1" target="_blank">
-                                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
-                                    </a>
-                                </p>
-                            </div>
-
-                        </g:elseif>
-
-                        <g:else>
-                            <div style="position:absolute; top: 25px; right:-40px; ">
-                                <p style="margin-bottom:3px;">
-                                    <a href="https://docs.google.com/a/broadinstitute.org/forms/d/1bncgNMw89nmqukMPc7xIourH-Wu7Vpc4xJ6Uh4RSECI/viewform" target="_blank">
-                                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
-                                    </a>
-                                </p>
-                                <p style="margin-bottom:3px;"><a href="https://twitter.com/T2DKP" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'twitter_icn.svg')}" /></a></p>
-                                <p><a href="https://www.linkedin.com/groups/8505761" target="_blank"><img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'linkedin_icn.svg')}" /></a></p>
-                            </div>
-                        </g:else>
+                        <div class="static-content" portal="${g.portalTypeString()}" file="connect.html" style="position:absolute; top: 25px; right:-40px; ">${g.portalTypeString()}</div>
 
                         <div class="static-content" portal="${g.portalTypeString()}" file="about_project.html">${g.portalTypeString()}</div>
 

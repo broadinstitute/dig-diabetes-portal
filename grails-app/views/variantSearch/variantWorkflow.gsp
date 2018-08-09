@@ -100,22 +100,8 @@
     <div class="container">
 
         <div class="variantWF-container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="dk-page-title"><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
-                </div>
-            <div class="col-md-9">
-                <h5 class="dk-under-header"><g:message code="variantSearch.workflow.header.find_variants"/></h5>
-
-                <g:if test="${g.portalTypeString()?.equals('t2d')}"><h5 class="dk-under-header"><g:message code="variantSearch.workflow.header.tutorial"/></h5></g:if>
-            </div>
-                <div class="col-md-3" style="padding-top:15px;">
-                    <g:if test="${g.portalTypeString()?.equals('t2d')}"><div class="dk-t2d-green dk-tutorial-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a></div>
-                        <div class="dk-t2d-green dk-reference-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Phenotype_reference_guide.pdf" target="_blank">Phenotype Reference Guide</a></div></g:if>
-                    <g:elseif test="${g.portalTypeString()?.equals('stroke')}"><div class="dk-stroke-green dk-tutorial-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/stroke/tutorials/Cerebrovascular_VF_Tutorial.pdf" target="_blank">Variant Finder tutorial</a></div></g:elseif>
-                    <g:else><div class="dk-stroke-green dk-tutorial-button dk-right-column-buttons"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/CVDKP_VF_Tutorial.pdf" target="_blank">Variant Finder tutorial</a></div></g:else>
-
-                </div>
+            <div class="row static-content" portal="${g.portalTypeString()}" file="variant_finder_top.html">
+                ${g.portalTypeString()}
             </div>
 
             <!-- tabs -->

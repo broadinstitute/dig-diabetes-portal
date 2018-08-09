@@ -15,25 +15,11 @@
 
 
 <body>
-
-<div id="main">
-    <g:if test="${g.portalTypeString()?.equals('t2d')}">
-        <g:render template="./about_t2d"/>
-    </g:if>
-    <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-        <g:render template="./about_mi"/>
-    </g:elseif>
-    <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
-        <g:render template="./about_epilepsy"/>
-    </g:elseif>
-    <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
-        <g:render template="./about_sleep"/>
-    </g:elseif>
-    <g:else>
-        <g:render template="./about_stroke"/>
-    </g:else>
-</div>
-
+    <div id="main">
+        <div class="static-content" portal="${g.portalTypeString()}" file="about_page.html">
+            ${g.portalTypeString()}
+        </div>
+    </div>
 </body>
 </html>
 
