@@ -160,6 +160,14 @@ th.niceHeadersThatAreGeneLinks{
 #overlapTable td {
     padding: 1px 0 0 0;
 }
+.credibleSetTableGoesHere {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
 .credibleSetTableGoesHere th.niceHeadersThatAreLinks{
     background: white;
     transform-origin: left;
@@ -186,6 +194,14 @@ th.niceHeadersThatAreGeneLinks{
 .credibleSetTableGoesHere th.niceHeadersThatAreLinks.active{
     font-weight: bold;
     color: #9632b8;
+}
+.credGeneTableGoesHere {
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 .credGeneTableGoesHere th.niceHeadersThatAreLinks{
     background: white;

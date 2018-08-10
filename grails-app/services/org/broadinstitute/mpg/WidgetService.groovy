@@ -39,11 +39,12 @@ class WidgetService {
     private final Integer MAXIMUM_RANGE_FOR_HAIL = 600000
 
     // constants for now
-    private final String dataSetKey = "ExSeq_17k_mdv2";
     private final String phenotypeKey = "T2D";
-    private final String propertyKey = "P_FIRTH_FE_IV";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
     private final int NUMBER_OF_DISTRIBUTION_BINS = 24
+    private final int NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE = 10
+    private final int NUMBER_OF_VARIANTS_IN_GENE_TABLE = 400
+
 
     private String singleFilter(String categorical, //
                                 String comparator,
@@ -1203,10 +1204,12 @@ class WidgetService {
 
 
     public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
-                                                              String dataset, String phenotype, String propertyName ) {
+                                                              String dataset, String phenotype, String propertyName,
+                                                              Boolean calledInGeneQuery ) {
         LocusZoomJsonBuilder locusZoomJsonBuilder
         String jsonGetDataString
         JSONObject jsonResultString
+        int maximumNumberOfRecords = NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
              jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
@@ -1215,18 +1218,25 @@ class WidgetService {
             if ((jsonResultString) &&
                     (!jsonResultString.is_error) &&
                     (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
+                if ((calledInGeneQuery)||("POSTERIOR_PROBABILITY"==propertyName)){ // the logic is this: if a part of a gene table then we want to get lots of variants to consider
+                    // If we are just looking at the top 10 associations then that's all we need, so limit the call to that many points.
+                    //  However, if we are pulling back variants and looking at a credible set then in fact we want to get lots of points so that we can get the whole of the credible set.
+                    //  This is all a workaround until we can have a call that allows us to ask the question this way: find me every variant in the range that is associated with a credible set,
+                    //   and then find me every variant in each of those credible sets.
+                    maximumNumberOfRecords = NUMBER_OF_VARIANTS_IN_GENE_TABLE
+                }
                 jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                        300, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
+                        maximumNumberOfRecords, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
                 jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
                 jsonResultString["dataset"] = dataset
                 jsonResultString["phenotype"] = phenotype
                 jsonResultString["propertyName"] = propertyName
             } else {   // We didn't have any variants in this region.  Search a different data set
-                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, 10 )
+                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, maximumNumberOfRecords )
             }
 
         } else {  // We didn't have any credible set data set for this phenotype. Let's go straight to the alternate data set
-            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, 10 )
+            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, maximumNumberOfRecords )
         }
 
 

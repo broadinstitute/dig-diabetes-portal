@@ -329,16 +329,19 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var buildRenderData = function (data,additionalParameters){
+        var buildRenderData = function (data,additionalParameters,maxSize){
             var renderData = {  variants: [],
                                 credibleSetInfoCode:data.credibleSetInfoCode,
                                 const:{
                                 },
                                 annotation:[]};
             if (typeof data !== 'undefined'){
+                if ((typeof maxSize === 'undefined') || (maxSize === -1) ){
+                    maxSize = 1000000; // no practical limit
+                }
                 var allVariants = _.flatten([{}, data.variants]);
                 var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
-                _.forEach(flattendVariants.sort(function (a, b) {return a.POS - b.POS;}), function (v){
+                _.forEach(_.take(flattendVariants.sort(function (a, b) {return a.POS - b.POS;}),maxSize), function (v){
                     var posteriorProbability = "";
                     _.forEach(v.POSTERIOR_PROBABILITY, function (ppvalue){
                         _.forEach(ppvalue,function (phenotype){
@@ -1437,7 +1440,7 @@ var mpgSoftware = mpgSoftware || {};
                     } else {
                         propertyMeaning = 'P_VALUE';
                         positionBy = 1;
-                        maximumNumberOfResults = DEFAULT_NUMBER_OF_VARIANTS;
+                        maximumNumberOfResults = 10;
                     }
 
                     // What we need is a listing of all of the variants inside each credible set which we can pass to LZ
@@ -1497,11 +1500,18 @@ var mpgSoftware = mpgSoftware || {};
 
                     } else {
                         var allDataVariants = $.data($('#dataHolderForCredibleSets')[0],'dataVariants',allDataVariants);
+
+                        var sortedVars = drivingVariables.variants.sort(function(a,b){return a.details.extractedP_VALUE-b.details.extractedP_VALUE;});
+                        var truncedVars = _.take(sortedVars,100000);
+                        var topVarIds = _.map(truncedVars,function(va){return va.name});
+                        var filteredElements = _.filter(allDataVariants,function(oo){return topVarIds.indexOf(oo[0]['VAR_ID'])>-1})
+
                         buildTheEntityHeatMap(  drivingVariables,
                             false,
                             {   callBackForEachElement:oneCallbackForEachVariant,
-                                elements:allDataVariants,
-                                variants:drivingVariables.variants,
+                                elements:filteredElements,
+                                variants:truncedVars,
+                               // variants:drivingVariables.variants,
                                 writeCellOfHeatMap:writeOneCellOfTheHeatMap,
                                 credibleSetTableGoesHere:".credibleSetTableGoesHere"} );
                     }

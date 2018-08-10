@@ -607,7 +607,7 @@
                                 <p>&nbsp;</p>
                                 <div><p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></div>
                                 <p>&nbsp;</p>
-                                <div class="credibleSetChooserGoesHere"></div>
+
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
@@ -662,6 +662,7 @@
                                         <div class="credGeneTableGoesHere"></div>
                                     </div>
                                     <div class="tab-pane referenceSummaryTableContent" id="tableVariantTableTab">
+                                        <div class="credibleSetChooserGoesHere"></div>
                                         <div class="credibleSetTableGoesHere"></div>
                                     </div>
                                 </div>
@@ -707,7 +708,7 @@
                                 <p>&nbsp;</p>
                                 <div><p><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p></div>
                                 <p>&nbsp;</p>
-                                <div class="credibleSetChooserGoesHere"></div>
+
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
@@ -761,6 +762,7 @@
                                         <div class="credGeneTableGoesHere"></div>
                                     </div>
                                     <div class="tab-pane" id="tableVariantTableTab">
+                                        <div class="credibleSetChooserGoesHere"></div>
                                         <div class="credibleSetTableGoesHere"></div>
                                     </div>
                                 </div>

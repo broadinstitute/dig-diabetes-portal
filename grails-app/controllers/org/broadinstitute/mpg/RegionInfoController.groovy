@@ -62,7 +62,7 @@ class RegionInfoController {
                                                 propertyName,MetaDataService.METADATA_VARIANT)
                     propertyName = property.name
                 }
-                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
+                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, false);
                 jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
             } else {
                 jsonReturn = slurper.parse(errorJsonString);
@@ -131,7 +131,8 @@ class RegionInfoController {
                                                                                                             gene.addrEnd  as int,
                                                                                                             dataSet,
                                                                                                             phenotype,
-                                                                                                            propertyName);
+                                                                                                            propertyName,
+                                                                                                            true );
                         //jsonForGene["annotations"] = widgetService.buildTheIncredibleSet((gene.chromosome-"chr") as String, gene.addrStart as int, gene.addrEnd  as int, phenotype, 1000 )
                         supplementedGenes.add(jsonForGene)
                     }
