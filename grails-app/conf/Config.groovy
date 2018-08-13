@@ -616,7 +616,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0,
                                                 0,
                                                 0,
-                                                0
+                                                0,0
 
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
@@ -656,7 +656,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                             0,
-                                            0
+                                            0,0
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -691,6 +691,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,
                                           0,
                                           1,0,1,
+                                          0,
                                           0,
                                           0,
                                           0,
@@ -737,7 +738,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,
                                           1,
                                           0,
-                                          0
+                                          0,
+                                          1
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -772,6 +774,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           1,
                                           0,
                                           0,0,0,
+                                          0,
                                           0,
                                           0,
                                           0,
@@ -815,6 +818,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          0
+                                          0,0
                                   )
 ]

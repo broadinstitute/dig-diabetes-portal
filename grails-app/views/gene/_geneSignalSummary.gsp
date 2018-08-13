@@ -167,6 +167,7 @@ td.tissueTable.informationIsPresent{
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
                     fillGeneComparisonTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillGeneComparisonTable")}',
                     availableAssayIdsJsonUrl: '${g.createLink(controller: "RegionInfo", action: "availableAssayIdsJson")}',
+                    calculateGeneRankingUrl: '${g.createLink(controller: "RegionInfo", action: "calculateGeneRanking")}',
                     assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},
                     genePageWarning:"${genePageWarning}",
@@ -174,7 +175,8 @@ td.tissueTable.informationIsPresent{
                     epigeneticAssays:"${portalVersionBean.getEpigeneticAssays()}",
                     tissueRegionOverlapMatcher:"${portalVersionBean.getTissueRegionOverlapMatcher().join(",")}".split(","),
                     tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(","),
-                    exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}"
+                    exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}",
+                    exposePredictedGeneAssociations:"${portalVersionBean.getExposePredictedGeneAssociations()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
@@ -182,6 +184,8 @@ td.tissueTable.informationIsPresent{
                     mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
+                mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
+                    {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
             };
 

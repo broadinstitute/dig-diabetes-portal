@@ -1007,9 +1007,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["geneExtentBegin"] =params.geneExtentBegin;
         callingObj ["geneExtentEnd"] = params.geneExtentEnd;
 
-
-
-                $.ajax({
+        $.ajax({
             cache: false,
             type: "post",
             url: params.retrieveTopVariantsAcrossSgsUrl,
@@ -1025,6 +1023,47 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
 
     };
+
+
+var processGeneRankingData = function (data,params) {
+
+}
+
+
+
+    var processGeneRankingInfo = function ( callBack, params ) {
+        loading.show();
+
+        var rememberCallBack = callBack;
+        var rememberParams = params;
+
+        var callingObj = {
+            geneToSummarize:signalSummarySectionVariables.geneName
+        };
+        callingObj ["geneChromosome"] = params.geneChromosome;
+        callingObj ["geneExtentBegin"] =params.geneExtentBegin;
+        callingObj ["geneExtentEnd"] = params.geneExtentEnd;
+
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: params.calculateGeneRankingUrl,
+            data: callingObj,
+            async: true,
+            success: function (data) {
+                rememberCallBack(data,rememberParams);
+                loading.show();
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    };
+
+
+
+
 
     var updateCommonTable = function (data,additionalParameters) {
         var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05, additionalParameters);
@@ -1871,7 +1910,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         getSingleBestPhenotypeAndLaunchInterface:getSingleBestPhenotypeAndLaunchInterface,
         getSingleBestNonFavoredPhenotypeAndLaunchInterface:getSingleBestNonFavoredPhenotypeAndLaunchInterface,
         refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
-        getSignalSummarySectionVariables:getSignalSummarySectionVariables
+        getSignalSummarySectionVariables:getSignalSummarySectionVariables,
+        processGeneRankingInfo: processGeneRankingInfo,
+        processGeneRankingData:processGeneRankingData
     }
 
 }());

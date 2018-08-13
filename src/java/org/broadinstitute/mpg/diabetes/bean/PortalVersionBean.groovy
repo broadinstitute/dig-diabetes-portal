@@ -51,6 +51,7 @@ class PortalVersionBean {
     private Integer variantTakesYouToGenePage
     private Integer utilizeBiallelicGait
     private Integer utilizeUcsdData
+    private Integer exposePredictedGeneAssociations
 
 
 
@@ -93,7 +94,8 @@ class PortalVersionBean {
                              Integer exposeGeneComparisonTable,
                              Integer variantTakesYouToGenePage,
                              Integer utilizeBiallelicGait,
-                             Integer utilizeUcsdData){
+                             Integer utilizeUcsdData,
+                             Integer exposePredictedGeneAssociations ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -134,6 +136,7 @@ class PortalVersionBean {
         this.variantTakesYouToGenePage = variantTakesYouToGenePage
         this.utilizeBiallelicGait = utilizeBiallelicGait
         this.utilizeUcsdData = utilizeUcsdData
+        this.exposePredictedGeneAssociations = exposePredictedGeneAssociations
     }
 
     public String getPortalType() {
@@ -298,6 +301,11 @@ class PortalVersionBean {
         return utilizeUcsdData
     }
 
+    public Integer getExposePredictedGeneAssociations(){
+        return exposePredictedGeneAssociations
+    }
+
+
 
 
 
@@ -342,7 +350,8 @@ class PortalVersionBean {
 "exposeGeneComparisonTable": ${getExposeGeneComparisonTable()},
 "variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()},
 "utilizeBiallelicGait":${getUtilizeBiallelicGait()},
-"utilizeUcsdData":${getUtilizeUcsdData()}
+"utilizeUcsdData":${getUtilizeUcsdData()},
+"exposePredictedGeneAssociations":${getExposePredictedGeneAssociations()}
 }""".toString()
     }
 }
