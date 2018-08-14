@@ -41,6 +41,8 @@
     $(document).ready(function () {
         // load the phenotypes in the phenotype-dependent tab
         mpgSoftware.variantWF.retrievePhenotypes('${g.portalTypeString()}');
+
+        console.log('${g.portalTypeString()}');
         // load the datasets in the phenotype-independent tab
         mpgSoftware.variantWF.retrievePhenotypeIndependentDatasets('${g.portalTypeString()}');
         $('#geneInput').typeahead({
