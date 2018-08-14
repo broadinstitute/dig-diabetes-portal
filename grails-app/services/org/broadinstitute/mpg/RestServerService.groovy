@@ -67,6 +67,8 @@ class RestServerService {
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
     private String  GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
     private String  GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String  GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
+    private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -222,76 +224,76 @@ class RestServerService {
     public void setGrsVariants(List <String> grsVariants){
         this.grsVariants = grsVariants
     }
-
-    public String getCurrentServer() {
-        return (BASE_URL ?: "none")
-    }
-
-
-    public void resetCurrentRestServer(){
-        BASE_URL = REMEMBER_BASE_URL
-    }
-
-    public void explicitlySetRestServer(String newRestServer){
-        BASE_URL = newRestServer
-    }
-
-
-    public void goWithTheProdLoadBalancedServer() {
-        pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheQaLoadBalancedServer() {
-        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
-    }
-
-
-        public void goWithTheDev01Server() {
-            pickADifferentRestServer(DEV_01_SERVER )
-        }
-
-        public void goWithTheDev02Server() {
-            pickADifferentRestServer(DEV_02_SERVER)
-        }
-
-        public void goWithTheProd01Server() {
-            pickADifferentRestServer(PROD_01_SERVER )
-        }
-
-        public void goWithTheProd02Server() {
-            pickADifferentRestServer(PROD_02_SERVER)
-        }
-
-    public void goWithTheDevLoadBalancedServer() {
-        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheAws01RestServer() {
-        pickADifferentRestServer(AWS01_REST_SERVER)
-    }
-
-    public void goWithTheAws02RestServer() {
-        pickADifferentRestServer(AWS02_REST_SERVER)
-    }
-
-    public void goWithTheAws01NewCodeRestServer() {
-        pickADifferentRestServer(AWS01_NEW_CODE_REST_SERVER)
-    }
-    public void goWithTheAws02NewCodeRestServer() {
-        pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
-    }
-
-    public void goWithProdLoadBalancedBroadServer() {
-        pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
-    }
-    public void goWithLocalServer() {
-        pickADifferentRestServer(LOCAL_SERVER)
-    }
-
-
-    public void goWithTheDevServer() {
-        pickADifferentRestServer(DEV_REST_SERVER)
-    }
+//
+//    public String getCurrentServer() {
+//        return (BASE_URL ?: "none")
+//    }
+//
+//
+//    public void resetCurrentRestServer(){
+//        BASE_URL = REMEMBER_BASE_URL
+//    }
+//
+//    public void explicitlySetRestServer(String newRestServer){
+//        BASE_URL = newRestServer
+//    }
+//
+//
+//    public void goWithTheProdLoadBalancedServer() {
+//        pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
+//    }
+//
+//    public void goWithTheQaLoadBalancedServer() {
+//        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+//    }
+//
+//
+//        public void goWithTheDev01Server() {
+//            pickADifferentRestServer(DEV_01_SERVER )
+//        }
+//
+//        public void goWithTheDev02Server() {
+//            pickADifferentRestServer(DEV_02_SERVER)
+//        }
+//
+//        public void goWithTheProd01Server() {
+//            pickADifferentRestServer(PROD_01_SERVER )
+//        }
+//
+//        public void goWithTheProd02Server() {
+//            pickADifferentRestServer(PROD_02_SERVER)
+//        }
+//
+//    public void goWithTheDevLoadBalancedServer() {
+//        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
+//    }
+//
+//    public void goWithTheAws01RestServer() {
+//        pickADifferentRestServer(AWS01_REST_SERVER)
+//    }
+//
+//    public void goWithTheAws02RestServer() {
+//        pickADifferentRestServer(AWS02_REST_SERVER)
+//    }
+//
+//    public void goWithTheAws01NewCodeRestServer() {
+//        pickADifferentRestServer(AWS01_NEW_CODE_REST_SERVER)
+//    }
+//    public void goWithTheAws02NewCodeRestServer() {
+//        pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
+//    }
+//
+//    public void goWithProdLoadBalancedBroadServer() {
+//        pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
+//    }
+//    public void goWithLocalServer() {
+//        pickADifferentRestServer(LOCAL_SERVER)
+//    }
+//
+//
+//    public void goWithTheDevServer() {
+//        pickADifferentRestServer(DEV_REST_SERVER)
+//    }
 
     public String currentRestServer() {
         return this.REST_SERVER.url;
@@ -2464,7 +2466,37 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-        public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
+
+
+    public Map gatherBottomLineVariantsPerGene( String gene ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        String combinedCommonNameUrl = GET_BOTTOM_LINE_VARIANTS_URL +"?id=" +gene
+
+        String  retrieveGeneIdJsonAsString = getRestCall(combinedCommonNameUrl)
+
+        List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
+        String geneId = retrieveGeneIdArray[0]["GEN_ID"] as String
+
+        String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" +geneId
+
+        String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedEnsemblNameUrl)
+
+        List retrieveTissueExpressionArray =   slurper.parseText(retrieveTissueExpressionInformationJsonAsString)  as List
+
+        return retrieveTissueExpressionArray[0]
+
+    }
+
+
+
+
+
+
+
+
+
+    public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject dataJsonObject
         List variants = []

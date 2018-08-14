@@ -216,6 +216,9 @@ class RegionInfoController {
                                                        geneInformation: geneInformation ]).toPrettyString()
 
         jsonReturn =  slurper.parseText(proposedJsonString);
+        Map map = restServerService.gatherBottomLineVariantsPerGene("SLC30A8")
+
+        jsonReturn =  slurper.parseText(proposedJsonString);
 
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
