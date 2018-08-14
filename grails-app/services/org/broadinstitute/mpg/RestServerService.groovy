@@ -37,21 +37,7 @@ class RestServerService {
     SqlService sqlService
 
     private Boolean TRY_RESTRICTING_ALL_AGGREGATED_CALLS_TO_TOP_VARIANTS = Boolean.TRUE
-    private String PROD_LOAD_BALANCED_SERVER = ""
-    private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
     private String LOCAL_SERVER = ""
-    private String TODD_SERVER = ""
-    private String QA_LOAD_BALANCED_SERVER = ""
-    private String DEV_LOAD_BALANCED_SERVER = ""
-    private String DEV_01_SERVER = ""
-    private String DEV_02_SERVER = ""
-    private String PROD_01_SERVER = ""
-    private String PROD_02_SERVER = ""
-    private String AWS01_REST_SERVER = ""
-    private String AWS02_REST_SERVER = ""
-    private String AWS01_NEW_CODE_REST_SERVER = ""
-    private String AWS02_NEW_CODE_REST_SERVER = ""
-    private String DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String REMEMBER_BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
@@ -69,6 +55,7 @@ class RestServerService {
     private String  GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String  GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
     private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
+    private String  GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -88,7 +75,6 @@ class RestServerService {
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_GETDATA = 5000
 
-    //public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
@@ -2488,6 +2474,21 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     }
 
+
+
+
+    public Map gatherBottomLinePhenotypesVariantsPerRange( String chromosome, Integer startPosition, Integer endPosition ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        String combinedRangeAndUrl = "${GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL}?chrom=${chromosome}&start=${startPosition}&end=${endPosition}"
+
+        String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedRangeAndUrl)
+
+        Map bottomLinePhenotypes =   slurper.parseText(retrieveTissueExpressionInformationJsonAsString)  as Map
+
+        return bottomLinePhenotypes
+
+    }
 
 
 

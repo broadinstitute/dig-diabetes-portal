@@ -1244,7 +1244,68 @@ class WidgetService {
         return jsonResultString;
     }
 
+    /***
+     * Decide how many phenotypes oil well further explore. Assign a weight to each one.
+     *
+     * Format of mapFromApiCall:
+     * {
+     data: [
+            ... // arrays to match each of the fields described in the header
+     ],
+     header: ["DBSNP_ID",
+     "GENE",
+     "CHROM",
+     "POS",
+     "Reference_allele",
+     "Effect_allele",
+     "VAR_ID",
+     "PHENOTYPE",
+     "P_VALUE",
+     "BETA",
+     "EFFECT",
+     "DATASET" ] }
+     *
+     *
+     * Format of example return list of records:
+     * [ {phenoName:'T2D',phenoWeight: 0.8 },
+     *   {phenoName:'BMI',phenoWeight: 0.2 } ]
+     *
+     *  For now let's use a super simple algorithm: provide a maximum value threshold for association strength, and then count the
+     *  number of signals we see for each phenotype with a variant that meets the threshold.
+     *
+     * @param mapFromApiCall
+     * @param parametersForAlgorithm
+     * @return
+     */
+    public List determinePhenotypeWeightsAndCutOff( Map mapFromApiCall,
+                                                    Map parametersForAlgorithm ) {
+        List returnValue = []
+        float maximumAssociationValue = parametersForAlgorithm.maximumAssociationValue
+        int phenotypeIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^PHENOTYPE/ } )
+        int pValueIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^P_VALUE/ } )
+        if ((phenotypeIndex > -1) && (pValueIndex > -1)){
+            int numberOfRecords = mapFromApiCall["data"][phenotypeIndex].size ()
+            float recordsExceedingThreshold = 0.0
+            Map countingPhenotypeSignals = [:]
+            for ( int i = 0 ; i < numberOfRecords ; i++ ){
+                if ( mapFromApiCall["data"][pValueIndex][i]  < maximumAssociationValue ) {
+                    recordsExceedingThreshold += 1
+                    String phenotypeToFlag =  mapFromApiCall["data"][phenotypeIndex][i]
+                    if (countingPhenotypeSignals.containsKey(phenotypeToFlag)){
+                        countingPhenotypeSignals[phenotypeToFlag] += 1.0
+                    } else {
+                        countingPhenotypeSignals[phenotypeToFlag] = 0.0
+                    }
+                }
+            }
+            if (recordsExceedingThreshold > 0)
+            countingPhenotypeSignals.sort { a, b -> a.value <=> b.value }.each{
+                k, v -> returnValue << [phenoName:"${k}",phenoWeight:"${v/recordsExceedingThreshold}"]
+            }
 
+        }
+        return returnValue
+    }
 
 
 
