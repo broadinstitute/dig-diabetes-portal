@@ -1651,7 +1651,7 @@ var processGeneRankingData = function (data,params) {
         }
 
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
-            {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab}));
+            {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
 
