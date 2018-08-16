@@ -1,4 +1,25 @@
 <script class="panel-body" id="GWAS_MEGASTROKE_script" type="x-tmpl-mustache">
+
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+
+<p><div class="paper">
+<g:message code="informational.shared.publications.Malik_2018_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Malik_2018_NatGenet.author"></g:message>
+<g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Malik_2018_NatGenet.citation"></g:message> </div>
+</div></p>
+
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
+
+
+
+
+
+
+
+
+
+
     <h6 style="color:#ccc;">Data set phenotypes</h6>
     <ul>
         <li>All stroke</li>
