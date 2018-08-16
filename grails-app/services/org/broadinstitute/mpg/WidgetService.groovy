@@ -1277,19 +1277,26 @@ class WidgetService {
      * @param parametersForAlgorithm
      * @return
      */
-    public List determinePhenotypeWeightsAndCutOff( Map mapFromApiCall,
+    public Map determinePhenotypeWeightsAndCutOff( Map mapFromApiCall,
                                                     Map parametersForAlgorithm ) {
-        List returnValue = []
+        Map returnValue = [ genefullCalculatedGraph: [],
+                            geneInformation: [] ]
+        List nonUniqueGenesWithIdentifiedVariants = []
         float maximumAssociationValue = parametersForAlgorithm.maximumAssociationValue
         int phenotypeIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^PHENOTYPE/ } )
         int pValueIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^P_VALUE/ } )
+        int geneIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^GENE/ } )
         if ((phenotypeIndex > -1) && (pValueIndex > -1)){
             int numberOfRecords = mapFromApiCall["data"][phenotypeIndex].size ()
+            if (mapFromApiCall["data"][geneIndex]!=null){
+                nonUniqueGenesWithIdentifiedVariants << mapFromApiCall["data"][geneIndex]
+            }
             float recordsExceedingThreshold = 0.0
             Map countingPhenotypeSignals = [:]
             for ( int i = 0 ; i < numberOfRecords ; i++ ){
                 if ( mapFromApiCall["data"][pValueIndex][i]  < maximumAssociationValue ) {
                     recordsExceedingThreshold += 1
+
                     String phenotypeToFlag =  mapFromApiCall["data"][phenotypeIndex][i]
                     if (countingPhenotypeSignals.containsKey(phenotypeToFlag)){
                         countingPhenotypeSignals[phenotypeToFlag] += 1.0
@@ -1300,10 +1307,11 @@ class WidgetService {
             }
             if (recordsExceedingThreshold > 0)
             countingPhenotypeSignals.sort { a, b -> a.value <=> b.value }.each{
-                k, v -> returnValue << [phenoName:"${k}",phenoWeight:"${v/recordsExceedingThreshold}"]
+                k, v -> returnValue.genefullCalculatedGraph << [phenoName:"${k}",phenoWeight:"${v/recordsExceedingThreshold}"]
             }
 
         }
+        returnValue["geneInformation"] = nonUniqueGenesWithIdentifiedVariants.unique()
         return returnValue
     }
 
@@ -1320,19 +1328,52 @@ class WidgetService {
      * @param parametersForAlgorithm
      * @return
      */
-    public List <Map> gatherTheTissuesAssociatedWithEachPhenotype( List phenotypesAndWeights,
+    public Map gatherTheTissuesAssociatedWithEachPhenotype( Map phenotypesWeightsAndGenes,
                                                             Map parametersForAlgorithm ){
-        List <Map> returnValue = []
         int loopCounter = 0
+        List phenotypesAndWeights = phenotypesWeightsAndGenes.genefullCalculatedGraph
         for (Map onePhenotypeRecord in phenotypesAndWeights){
+            
             Map developingRecord = [phenotypeId: loopCounter++, phenoName: onePhenotypeRecord.phenoName, phenoWeight:onePhenotypeRecord.phenoWeight]
             developingRecord["tissues"]  =   [   [name:"adipose", description:'adipose tissue', tissueWeight: 0.7 ],
                                                  [name:"muscle", description:'skeletal muscle', tissueWeight: 0.2 ]
                                                 ]
-            returnValue << developingRecord
+            phenotypesWeightsAndGenes << developingRecord
         }
-        return returnValue
+        return phenotypesWeightsAndGenes
     }
+
+
+
+    public Map gatherExpressionDataForEachGene( Map phenotypesWeightsAndGenes,
+                                                                   Map parametersForAlgorithm ){
+        List genesInRegion = phenotypesWeightsAndGenes.geneInformation
+        Map temporaryGeneInformationHolder = []
+        for (String geneName in genesInRegion){
+            Map expressionDataForGene = restServerService.gatherBottomLineVariantsPerGene( geneName )
+            temporaryGeneInformationHolder[geneName] = expressionDataForGene
+        }
+        phenotypesWeightsAndGenes['geneInformation'] = temporaryGeneInformationHolder
+        return phenotypesWeightsAndGenes
+    }
+
+
+    public Map buildFinalDataStructureBeforeTransmission( Map phenotypesWeightsAndGenes,
+                                                            Map parametersForAlgorithm ){
+        List genesInRegion = phenotypesWeightsAndGenes.geneInformation
+        Map temporaryGeneInformationHolder = []
+        for (String geneName in genesInRegion){
+            Map expressionDataForGene = restServerService.gatherBottomLineVariantsPerGene( geneName )
+            temporaryGeneInformationHolder[geneName] = expressionDataForGene
+        }
+        phenotypesWeightsAndGenes['geneInformation'] = temporaryGeneInformationHolder
+        return phenotypesWeightsAndGenes
+    }
+
+
+
+
+
 
 
     /**

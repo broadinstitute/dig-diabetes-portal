@@ -212,18 +212,26 @@ class RegionInfoController {
                 [geneId: 53, geneName: "TCF7L2", geneDescr: "Transcription factor 7-like 2", combinedWeight: 0.1],
                 [geneId: 63, geneName: "PPARG", geneDescr: "Peroxisome proliferator-activated receptor gamma ", combinedWeight: 0.1]
         ]
-        String proposedJsonString = new JsonBuilder( [ genefullCalculatedGraph: genefullCalculatedGraph,
-                                                       geneInformation: geneInformation ]).toPrettyString()
-
-        jsonReturn =  slurper.parseText(proposedJsonString);
-        Map map = restServerService.gatherBottomLineVariantsPerGene("SLC30A8")
+//        String proposedJsonString = new JsonBuilder( [ genefullCalculatedGraph: genefullCalculatedGraph,
+//                                                       geneInformation: geneInformation ]).toPrettyString()
+//
+//        jsonReturn =  slurper.parseText(proposedJsonString);
+        //Map map = restServerService.gatherBottomLineVariantsPerGene("SLC30A8")
 
 
 
         Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange("8", 2000, 1000000 )
-        List phenotypesAndWeights =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:0.0001])
+        Map phenotypesWeightsAndGenes =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:0.0001])
 
-        List <Map>  phenotypesAndTissues =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesAndWeights, [maximumAssociationValue:0.0001])
+        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:1])
+
+        Map dataReadyForCalculation =  widgetService.gatherExpressionDataForEachGene( phenotypesWeightsAndGenes, [maximumAssociationValue:0.0001] )
+
+        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [maximumAssociationValue:0.0001] )
+
+        String proposedJsonString = new JsonBuilder( finalFormData ).toPrettyString()
+
+        jsonReturn =  slurper.parseText(proposedJsonString)
 
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
