@@ -135,6 +135,7 @@ federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
+digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
@@ -152,7 +153,7 @@ digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90
 federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsdevWorkflowKB
 
 getRestServerList = [
         digdevlocalServer,
@@ -166,6 +167,7 @@ getRestServerList = [
         digawsdevnewKB,
 //        digawsdevnewKB_fed,
         digawsqanewKB,
+        digawsdevWorkflowKB,
         digawsqanewKB_fed,
         digawsqanewKB_fed_dedicated,
 //        digawsprodmiKB,

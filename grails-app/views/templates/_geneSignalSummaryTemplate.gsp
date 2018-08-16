@@ -510,6 +510,12 @@
                                <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
                             </li>
                         {{/incredibleSetTab}}
+                        {{#genePrioritizationTab}}
+                            <li role="presentation" class="variantTableLabels genePrioritizationChooser">
+                               <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
+                            </li>
+                        {{/genePrioritizationTab}}
+
                     </ul>
                 </div>
             </div>
@@ -671,6 +677,7 @@
                         </div>
                     </div>
                 </div>
+                </div>
                 {{/credibleSetTab}}
                 {{#incredibleSetTab}}
                 <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
@@ -771,9 +778,22 @@
                         </div>
                     </div>
                 </div>
+            </div>
                 {{/incredibleSetTab}}
 
+                {{#genePrioritizationTab}}
+                <div role="tabpanel" class="tab-pane genePrioritizationChooser" id="genePrioritizationTabHolder">
+                    <div class="row" style="border: none">
+                        <div class="col-sm-12">
+                             <h1>gene prioritization table</h1>
+                        </div>
+                    </div>
+                </div>
+                {{/genePrioritizationTab}}
+
+
             </div>
+
 </script>
 
 <script id="organizeCredibleSetChooserTemplate"  type="x-tmpl-mustache">
