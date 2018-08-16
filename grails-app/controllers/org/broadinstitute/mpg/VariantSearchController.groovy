@@ -283,15 +283,16 @@ class VariantSearchController {
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
             filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
             filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
+            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"AC","value":"0","comparator":">"}""".toString()
 //            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACU_PH","value":"0","comparator":">"}]""".toString()
+         //   filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACU_PH","value":"0","comparator":">"}]""".toString()
 
             // filtersForQuery << """{"gene":"${geneName}","comparator":"="}""".toString()
 
         }
         if ((dataSetName!=null) && (phenotypeName!=null)){
             org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotypeName,dataSetName,
-                    "ACA_PH",MetaDataService.METADATA_VARIANT)
+                    "AC",MetaDataService.METADATA_VARIANT)
             if (property){
                 filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
             }
@@ -301,9 +302,9 @@ class VariantSearchController {
             String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
             org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
-                    "ACA_PH",MetaDataService.METADATA_VARIANT)
-            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
-                    "ACU_PH",MetaDataService.METADATA_VARIANT)
+                    "AC",MetaDataService.METADATA_VARIANT)
+//            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
+//                    "ACU_PH",MetaDataService.METADATA_VARIANT)
             if (property1 && property2){
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
@@ -986,7 +987,7 @@ class VariantSearchController {
      * This function collects and returns the data to populate the search results table. It
      * expects data formatted by the Datatables function.
      */
-    def variantSearchAndResultColumnsData() {
+    def variantSearchAndResFultColumnsData() {
         String filtersRaw = params['filters']
         String propertiesRaw = params['properties']
         JSONArray columns = (new JsonSlurper().parseText(params.columns)) as JSONArray;
