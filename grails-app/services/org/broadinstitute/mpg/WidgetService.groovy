@@ -1307,6 +1307,32 @@ class WidgetService {
         return returnValue
     }
 
+    /***
+     * This information should be supplied through the LD regression call, and should return in the set of tissues rated by the algorithm
+     * as being most significantly associated with a particular phenotype.  Create a data structure which passes back the tissues on a
+     * per phenotype basis.
+     *
+     * For now we will simulate the result, always returning the same tissues, until the real API call has been implemented.
+     *
+     *
+     *
+     * @param phenotypesAndWeights
+     * @param parametersForAlgorithm
+     * @return
+     */
+    public List <Map> gatherTheTissuesAssociatedWithEachPhenotype( List phenotypesAndWeights,
+                                                            Map parametersForAlgorithm ){
+        List <Map> returnValue = []
+        int loopCounter = 0
+        for (Map onePhenotypeRecord in phenotypesAndWeights){
+            Map developingRecord = [phenotypeId: loopCounter++, phenoName: onePhenotypeRecord.phenoName, phenoWeight:onePhenotypeRecord.phenoWeight]
+            developingRecord["tissues"]  =   [   [name:"adipose", description:'adipose tissue', tissueWeight: 0.7 ],
+                                                 [name:"muscle", description:'skeletal muscle', tissueWeight: 0.2 ]
+                                                ]
+            returnValue << developingRecord
+        }
+        return returnValue
+    }
 
 
     /**

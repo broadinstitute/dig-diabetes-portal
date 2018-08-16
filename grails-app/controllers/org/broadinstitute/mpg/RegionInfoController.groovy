@@ -218,10 +218,12 @@ class RegionInfoController {
         jsonReturn =  slurper.parseText(proposedJsonString);
         Map map = restServerService.gatherBottomLineVariantsPerGene("SLC30A8")
 
-        jsonReturn =  slurper.parseText(proposedJsonString);
+
 
         Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange("8", 2000, 1000000 )
         List phenotypesAndWeights =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:0.0001])
+
+        List <Map>  phenotypesAndTissues =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesAndWeights, [maximumAssociationValue:0.0001])
 
         render(status: 200, contentType: "application/json") {jsonReturn}
         return
