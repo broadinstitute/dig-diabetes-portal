@@ -17,16 +17,17 @@
     border-color: red !important;
 }
 
-.dk-variant-search-builder-ui {
-    padding-bottom: 10px;
+.dk-variant-search-builder-ui, .dk-submit-btn-wrapper {
+    padding: 0 0 10px 0 !important;
 }
+
 
 #missense-options.form-control {
     padding-right: 5px;
 }
 
 .additionalInputGroup {
-    padding: 30px 0;
+    padding: 0;
 }
 
 .additionalInputGroup:first-of-type {
@@ -34,10 +35,30 @@
 }
 
 #dependent h5, #independent h5 {
-    padding: 10px 0 25px 0;
+    /*padding: 10px 0 25px 0;*/
 }
 </style>
 <script>
+
+    var adjustPullout = function() {
+        var pulloutHeight = $(".variant-finder-pullout").height();
+
+        $(".variant-finder-pullout-content").css({"height":pulloutHeight-20 +"px"})
+    }
+
+    var openClosePullout = function() {
+        console.log($(".variant-finder-pullout").attr("openfilter"));
+       if ($(".variant-finder-pullout").attr("openfilter") == "close"){
+           $(".variant-finder-pullout").css({"left":"-1px"}).attr("openfilter","open").find("span").attr("class","glyphicon glyphicon-menu-left");
+       } else {
+           $(".variant-finder-pullout").css({"left":"-350px"}).attr("openfilter","close").find("span").attr("class","glyphicon glyphicon-menu-right");
+       }
+    }
+
+    $(window).resize(function() {
+        adjustPullout();
+    })
+
     $(document).ready(function () {
         // load the phenotypes in the phenotype-dependent tab
         mpgSoftware.variantWF.retrievePhenotypes('${g.portalTypeString()}');
@@ -58,18 +79,32 @@
                 mpgSoftware.variantWF.initializePage(encodedFilters);
             }
         }
+
+//DK- added to open/close other options.
+
+        $(".other-options-opener").click(function() {
+            ($(this).text() == "▶ Additional options")? $(this).html("&#x25BC; Additional options"):$(this).html("&#x25B6; Additional options");
+
+            $(".other-options").slideToggle("200", "swing",function() {
+
+            });
+        })
+
+        adjustPullout();
+
+        openClosePullout();
+
     });
 
 </script>
 
 <div id="rowTemplate" type="x-tmpl-mustache" style="display: none;">
     {{ #row }}
-    <div class="row">
-        <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
-            {{ translatedName }}
+        <div class="col-md-12 dk-variant-search-builder-title">
+            {{ translatedName }} <span style="font-size:11px;">({{ helpText }})</span>
         </div>
 
-        <div class="col-md-5 col-sm-5 col-xs-5 dk-variant-search-builder-ui">
+        <div class="col-md-12 dk-variant-search-builder-ui">
             <div class="col-md-3 col-sm-3 col-xs-3">
                 <select class="form-control" data-selectfor="{{ propName }}" data-category="{{ category }}">
                     <option>&lt;</option>
@@ -86,11 +121,6 @@
                        mpgSoftware.firstResponders.validatePropertyInput(this)">
             </div>
         </div>
-
-        <div class="col-md-4 col-sm-4 col-xs-4 dk-variant-search-builder-description">
-            {{ helpText }}
-        </div>
-    </div>
     {{ /row }}
 </div>
 
@@ -100,7 +130,6 @@
     <div class="container">
 
         <div class="variantWF-container">
-            <div class="row">
                 <div class="col-md-12">
                     <h1 class="dk-page-title"><g:message code="variantSearch.workflow.header.title" default="Variant Finder"/></h1>
                 </div>
@@ -188,24 +217,55 @@
                 </div>
             </script>
         </div>
-    </div>
 </div>
 
 </div>
 <style>
     .variant-finder-pullout {
-        padding: 20px 30px;
-        border: solid 1px #999;
         width: 350px;
         height:98%;
         position: fixed;
         top:1%;
-        left: -1px;
-        background-color: rgba(255,255,255,.9);
+        left: -350px;
+        background-color: rgba(255,255,255,1);
         z-index: 10000;
-        overflow-y: auto;
         border-top-right-radius: 10px;
         border-bottom-right-radius: 10px;
+        box-shadow: 5px 5px 5px rgba(0,0,0, .25);
+        -webkit-transition: left 500ms; /* Safari */
+        transition: left 500ms;
+    }
+
+    .variant-finder-puller {
+        display: table;
+        position: absolute;
+        right: -50px;
+        background-color: #eee;
+        color: #fff;
+        border: solid 1px #eee;
+        border-left: none;
+        width: 50px;
+        height: 100px;
+        text-align: left;
+        top:150px;
+        box-shadow: 5px 5px 5px rgba(0,0,0, .25);
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+    }
+
+    .variant-finder-puller div {
+        display: table-cell;
+        vertical-align: middle;
+        padding-left: 7px;
+        font-size: 25px;
+    }
+
+    .variant-finder-pullout-content {
+        margin: 10px 0 0 10px;
+        width:328px;
+        padding:10px 20px;
+        overflow-x: hidden;
+        overflow-y: auto;
     }
 
     .variant-finder-pullout h4 {
@@ -213,67 +273,40 @@
     }
 </style>
 
-<div class="variant-finder-pullout">
-    <h4>Select phenotypes</h4>
+<div class="variant-finder-pullout" openfilter="close">
+    <div class="variant-finder-puller"><div><a href="javascript:;" onclick="openClosePullout();"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></div></div>
+    <div class="container variant-finder-pullout-content">
+    <h3 style="font-size: 18px;">Search Filter</h3>
 
     <div class="dk-variant-search-builder">
-        <div style="padding: 10px 0;">
-            <!--<h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></h5>-->
 
-            <div class="">
-                <div class="dk-variant-search-builder-title">
-                    <g:message code="searchBuilder.traitOrDisease.prompt"
-                               default="Trait or disease of interest"/>
-                </div>
+        <!--<h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></h5>-->
 
-                <div class="dk-variant-search-builder-ui">
-                    <select id="phenotype" class="form-control" disabled
+        <div class="dk-variant-search-builder-ui">
+            <label><g:message code="searchBuilder.traitOrDisease.prompt" default="Trait or disease of interest"/></label>
+            <select id="phenotype" class="form-control" disabled
                             onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')" onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')"></select>
-                </div>
-<!--
-                <div class="dk-variant-search-builder-description">
-                    <g:message code="variantSearch.wfRequest.phenotype.help.text"
-                               default="Choose a phenotype to act as the basis of a search"/>
-                </div> -->
-            </div>
-
-            <div id="datasetChooserDependent" class="">
-                <div class="dk-variant-search-builder-title">
-                    <g:message code="searchBuilder.dataset.prompt" default="Data set"/>
-                </div>
-
-                <div class="dk-variant-search-builder-ui">
-                    <select id="datasetDependent" class="form-control" disabled
-                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetDependent')"></select>
-                </div>
-
-         <!--       <div class="dk-variant-search-builder-description">
-                    <g:message code="variantSearch.wfRequest.dataSet.help.text"
-                               default="Choose a data set from which variants may be found"/>
-                </div> -->
-            </div>
-
-            <div id="datasetChooserCohortDependent" class="" style="display: none;">
-                <div class="dk-variant-search-builder-title">
-                    <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>
-                </div>
-
-                <div class="dk-variant-search-builder-ui">
-                    <select id="datasetCohortDependent" class="form-control"
-                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetCohortDependent')"></select>
-                </div>
-
-                <div class="dk-variant-search-builder-description">
-                    <g:message code="variantSearch.wfRequest.dataSetCohort.help.text"
-                               default="Optional"/>
-                </div>
-            </div>
-
-            <div id="dependentRowTarget"></div>
-
         </div>
 
-        <div class="row dk-submit-btn-wrapper">
+        <div  id="datasetChooserDependent" class="dk-variant-search-builder-ui">
+            <label><g:message code="searchBuilder.dataset.prompt" default="Data set"/></label>
+            <select id="datasetDependent" class="form-control" disabled
+                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetDependent')"></select>
+        </div>
+
+        <div id="datasetChooserCohortDependent" class="dk-variant-search-builder-ui" style="display: none;">
+            <label class="dk-variant-search-builder-title">
+                <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>: <g:message code="variantSearch.wfRequest.dataSetCohort.help.text"
+                                                                                                          default="Optional"/>
+            </label>
+            <select id="datasetCohortDependent" class="form-control"
+                            onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetCohortDependent')"></select>
+        </div>
+
+        <div id="dependentRowTarget"></div>
+
+
+        <div class="dk-submit-btn-wrapper">
             <button id="buildSearchRequestDependent"
                     class="btn btn-sm btn-primary dk-search-btn-inactive"
                     onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('dependent')" disabled>
@@ -284,14 +317,14 @@
 
     </div>
 
+    <div class="well" style="padding:10px;">
+    <h4 style="padding: 0; margin:0;"><a href="javascript:;" class="other-options-opener">&#9654; Additional options</a></h4>
 
-    <h4>Additional options</h4>
-
-    <div style="padding: 10px 0;" class="dk-variant-search-builder">
+    <div style="padding: 10px 0; display: none;" class="dk-variant-search-builder other-options">
         <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>
 
-        <div id="datasetChooserIndependent" class="row additionalInputGroup">
-            <div class="col-md-12 col-sm-12 col-xs-12 dk-variant-search-builder-ui">
+        <div id="datasetChooserIndependent" class="additionalInputGroup dk-variant-search-builder-ui">
+            <div class="dk-variant-search-builder-ui">
 
                 <label><g:message code="searchBuilder.dataset.prompt" default="Data set"/>
                     <small style="color: #aaa;">(<g:message code="variantSearch.wfRequest.dataSet.help.text"
@@ -301,7 +334,7 @@
                         onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetIndependent')"></select>
             </div>
 
-            <div id="datasetChooserCohortIndependent" class="row" style="display: none;">
+            <div id="datasetChooserCohortIndependent" style="display: none;">
                 <div class="dk-variant-search-builder-title">
                     <g:message code="searchBuilder.dataset.cohortPrompt" default="Data set"/>
                 </div>
@@ -321,8 +354,7 @@
             <div id="independentRowTarget"></div>
         </div>
 
-        <div class="row additionalInputGroup">
-            <div class="col-md-12 col-sm-12 col-xs-12 ">
+        <div class="additionalInputGroup dk-variant-search-builder-ui">
                 <label><g:message code="variantSearch.workflow.tab.phenotypeIndependent.genomicLocation"
                                   default="Genomic location of variants" />
                 </label>
@@ -357,11 +389,9 @@
                                ">
                     </div>
                 </div>
-            </div>
         </div>
 
-        <div class="row additionalInputGroup">
-            <div class="col-md-12 col-sm-12 col-xs-12 ">
+        <div class="additionalInputGroup dk-variant-search-builder-ui">
                 <label><g:message code="variantSearch.workflow.tab.phenotypeIndependent.proteinEffect"
                                   default="Predicted effect of the variants on proteins" />
                 </label>
@@ -375,6 +405,7 @@
                         <g:message code="variantSearch.proteinEffectRestrictions.allEffects"
                                    default="all effects"/>
                     </label>
+                    <br/>
 
                     <label class="radio-inline">
                         <input type="radio" name="predictedEffects"
@@ -392,6 +423,7 @@
                         <g:message code="variantSearch.proteinEffectRestrictions.missense"
                                    default="missense"/>
                     </label>
+                    <br/>
 
                     <label class="radio-inline">
                         <input type="radio" name="predictedEffects"
@@ -412,11 +444,9 @@
                     </label>
 
                 </div>
-            </div>
 
-            <div id="missense-options"
-                 class="form-inline col-md-12 col-sm-12 col-xs-12 "
-                 style="display: none">
+
+            <div id="missense-options" class="form-inline" style="display: none">
                 <div class="form-group form-group-sm">
                     <select id="polyphenSelect"
                             name="${PortalConstants.JSON_VARIANT_POLYPHEN_PRED_KEY}"
@@ -480,8 +510,7 @@
         </div>
 
 
-        <div class="row additionalInputGroup">
-            <div class="col-md-12 col-sm-12 col-xs-12 text-right">
+        <div class="additionalInputGroup dk-submit-btn-wrapper">
                 <button id="buildSearchRequestIndependent"
                         class="btn btn-sm btn-primary dk-search-btn-inactive"
                         onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('independent')"
@@ -489,8 +518,9 @@
                     <g:message code="variantSearch.spec.actions.build_req"
                                default="Build search request"/>
                 </button>
-            </div>
         </div>
+    </div>
+    </div>
     </div>
 </div>
 </body>
