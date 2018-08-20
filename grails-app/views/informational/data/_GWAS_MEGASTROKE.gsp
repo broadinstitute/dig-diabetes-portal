@@ -24,12 +24,12 @@
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
  <table class="table table-condensed table-responsive table-striped">
-        <th>Cohort</th><th>PI</th><th>Cases - any stroke</th><th>Cases - any ischemic stroke</th><th>Cases - large artery stroke</th><th>Cases - cardioembolic stroke</th><th>Cases - small vessel stroke</th><th>Controls</th><tr><th>Ancestry</th></tr>
+        <th>Cohort</th><th>Cases - any stroke</th><th>Cases - any ischemic stroke</th><th>Cases - large artery stroke</th><th>Cases - cardioembolic stroke</th><th>Cases - small vessel stroke</th><th>Controls</th><th>Ancestry</th></tr>
 
 <tr><td>CHARGE</td><td>4,348</td><td>3,028</td><td>&nbsp;</td><td>602</td><td>&nbsp;</td><td>80,613</td><td>European</td></tr>
 <tr><td>METASTROKE</td><td>10,307</td><td>10,307</td><td>1,817</td><td>1,859</td><td>1,349</td><td>19,326</td><td>European</td></tr>
 <tr><td>SIGN</td><td>7,743</td><td>7,743</td><td>1,253</td><td>2,135</td><td>1,534</td><td>17,970</td><td>European</td></tr>
-<tr><td>DECODE</td><<td>5,520</td><td>4,483</td><td>512</td><td>1,346</td><td>615</td><td>255,213<sup>1</sup></td><td>European</td></tr>
+<tr><td>DECODE<sup>1</sup></td><td>5,520</td><td>4,483</td><td>512</td><td>1,346</td><td>615</td><td>255,213<sup>1</sup></td><td>European</td></tr>
 <tr><td>EPIC-CVD</td><td>4,347</td><td>2,226</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>7,897</td><td>European</td></tr>
 <tr><td>Young Lacunar DNA</td><td>1,403</td><td>1,268</td><td>&nbsp;</td><td>&nbsp;</td><td>1,012</td><td>970</td><td>European</td></tr>
 <tr><td>SIFAP</td><td>981</td><td>981</td><td>184</td><td>170</td><td>104</td><td>1,824</td><td>European</td></tr>
@@ -55,10 +55,21 @@
 <tr><td>INTERSTROKE AFR<sup>2</sup></td><td>&nbsp;</td><td>&nbsp;</td><td>32</td><td>46</td><td>44</td><td>231</td><td>African American</td></tr>
 <tr><td>INTERSTROKE ASN</td><td>365</td><td>222</td><td>34</td><td>31</td><td>134</td><td>333</td><td>Asian</td></tr>
 <tr><td>INTERSTROKE LAT</td><td>865</td><td>555</td><td>41</td><td>99</td><td>86</td><td>692</td><td>Hispanic</td></tr>
+<tr><td colspan="8"><sup>1</sup>Included differently sized control sets for stroke subtypes. (LAS:146,392 controls, CE:204,570 controls, SVD:192,662 controls)</td></tr>
+<tr><td colspan="8"><sup>2</sup>subsamples of COMPASS</td></tr>
 
 
     </table>
 
+<h4><g:message code="informational.shared.headers.project"></g:message></h4>
+<p><g:message code="informational.data.project.MEGASTROKE"></g:message></p>
+
+<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.MEGASTROKE"></g:message></p>
+
+<h4>Accessing MEGASTROKE GWAS data</h4>
+
+   <p><g:message code="informational.data.accessing.MEGASTROKE1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.MEGASTROKE2"></g:message></p>
 
 </script>
 
