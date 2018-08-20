@@ -2,7 +2,7 @@
         <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
     <p>Download URL: <a href="https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files" target="_blank">https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files</a><br/>
-
+<p><i><g:message code="informational.data.version.GIANT_UKBB"></g:message></i></p>
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
                   <p><div class="paper">
