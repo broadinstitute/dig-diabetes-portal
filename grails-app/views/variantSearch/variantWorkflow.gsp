@@ -7,6 +7,7 @@
     <r:require module="core"/>
     <r:require module="variantWF"/>
     <r:require module="mustache"/>
+    <r:require modules="traitsFilter"/>
 
     <r:layoutResources/>
 </head>
@@ -49,9 +50,9 @@
     var openClosePullout = function() {
         console.log($(".variant-finder-pullout").attr("openfilter"));
        if ($(".variant-finder-pullout").attr("openfilter") == "close"){
-           $(".variant-finder-pullout").css({"left":"-1px"}).attr("openfilter","open").find("span").attr("class","glyphicon glyphicon-menu-left");
+           $(".variant-finder-pullout").css({"left":"-1px"}).attr("openfilter","open").find(".variant-finder-pullout-puller").find("span").attr("class","glyphicon glyphicon-menu-left");
        } else {
-           $(".variant-finder-pullout").css({"left":"-350px"}).attr("openfilter","close").find("span").attr("class","glyphicon glyphicon-menu-right");
+           $(".variant-finder-pullout").css({"left":"-350px"}).attr("openfilter","close").find(".variant-finder-pullout-puller").find("span").attr("class","glyphicon glyphicon-menu-right");
        }
     }
 
