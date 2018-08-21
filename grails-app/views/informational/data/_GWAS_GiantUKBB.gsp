@@ -6,9 +6,9 @@
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
                   <p><div class="paper">
-<g:message code="informational.shared.publications.Yengo_2018_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Yengo_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Yengo_2018_submitted.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Yengo_2018_HumMolGenet"></g:message><br>
+<g:message code="informational.shared.publications.Yengo_2018_HumMolGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Yengo_2018_HumMolGenet.citation"></g:message> </div>
 </div></p>
 
 
