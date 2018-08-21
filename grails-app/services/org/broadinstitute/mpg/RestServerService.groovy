@@ -56,6 +56,7 @@ class RestServerService {
     private String  GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
     private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
     private String  GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
+    private String  GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2489,6 +2490,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return bottomLinePhenotypes
 
     }
+
+
+
+
+    public List determineTissueAssociationPerPhenotype( String phenotype ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        String combinedPhenotypeAndUrl = "${GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL}?id=${phenotype}"
+
+        String  rawTissueWeightPerPhenotype = getRestCall(combinedPhenotypeAndUrl)
+
+        List tissueWeightPerPhenotype =   slurper.parseText(rawTissueWeightPerPhenotype)  as List
+
+        return tissueWeightPerPhenotype
+
+    }
+
+
 
 
 

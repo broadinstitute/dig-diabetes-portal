@@ -1289,7 +1289,7 @@ class WidgetService {
         if ((phenotypeIndex > -1) && (pValueIndex > -1)){
             int numberOfRecords = mapFromApiCall["data"][phenotypeIndex].size ()
             if (mapFromApiCall["data"][geneIndex]!=null){
-                nonUniqueGenesWithIdentifiedVariants << mapFromApiCall["data"][geneIndex]
+                nonUniqueGenesWithIdentifiedVariants << mapFromApiCall["data"][geneIndex]?.findAll{it!=null}
             }
             float recordsExceedingThreshold = 0.0
             Map countingPhenotypeSignals = [:]
@@ -1311,7 +1311,7 @@ class WidgetService {
             }
 
         }
-        returnValue["geneInformation"] = nonUniqueGenesWithIdentifiedVariants.unique()
+        returnValue["geneInformation"] = (nonUniqueGenesWithIdentifiedVariants.size()>0) ? nonUniqueGenesWithIdentifiedVariants[0].unique() : []
         return returnValue
     }
 
@@ -1333,12 +1333,19 @@ class WidgetService {
         int loopCounter = 0
         List phenotypesAndWeights = phenotypesWeightsAndGenes.genefullCalculatedGraph
         for (Map onePhenotypeRecord in phenotypesAndWeights){
-            
-            Map developingRecord = [phenotypeId: loopCounter++, phenoName: onePhenotypeRecord.phenoName, phenoWeight:onePhenotypeRecord.phenoWeight]
-            developingRecord["tissues"]  =   [   [name:"adipose", description:'adipose tissue', tissueWeight: 0.7 ],
-                                                 [name:"muscle", description:'skeletal muscle', tissueWeight: 0.2 ]
-                                                ]
-            phenotypesWeightsAndGenes << developingRecord
+
+            List tissueWeightPerPhenotype = restServerService.determineTissueAssociationPerPhenotype(onePhenotypeRecord.phenoName)
+            if ((tissueWeightPerPhenotype)&&(tissueWeightPerPhenotype.size()>0)){
+                onePhenotypeRecord["tissues"]  =  tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
+            } else {
+                onePhenotypeRecord["tissues"]  = []
+            }
+            //List<Map> filteredTissueWeightPerPhenotype = tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
+//            for ()
+           // Map developingRecord = [phenotypeId: loopCounter++, phenoName: onePhenotypeRecord.phenoName, phenoWeight:onePhenotypeRecord.phenoWeight]
+
+            //onePhenotypeRecord["tissues"]  =  filteredTissueWeightPerPhenotype
+           // phenotypesWeightsAndGenes << developingRecord
         }
         return phenotypesWeightsAndGenes
     }
@@ -1348,7 +1355,7 @@ class WidgetService {
     public Map gatherExpressionDataForEachGene( Map phenotypesWeightsAndGenes,
                                                                    Map parametersForAlgorithm ){
         List genesInRegion = phenotypesWeightsAndGenes.geneInformation
-        Map temporaryGeneInformationHolder = []
+        Map temporaryGeneInformationHolder = [:]
         for (String geneName in genesInRegion){
             Map expressionDataForGene = restServerService.gatherBottomLineVariantsPerGene( geneName )
             temporaryGeneInformationHolder[geneName] = expressionDataForGene
@@ -1360,13 +1367,40 @@ class WidgetService {
 
     public Map buildFinalDataStructureBeforeTransmission( Map phenotypesWeightsAndGenes,
                                                             Map parametersForAlgorithm ){
-        List genesInRegion = phenotypesWeightsAndGenes.geneInformation
-        Map temporaryGeneInformationHolder = []
+        List genesInRegion = phenotypesWeightsAndGenes.geneInformation.keySet()  as List
+        Map invertedGeneExpression = [:]
+        Map geneInformation = [:]
+        int geneId = 1
         for (String geneName in genesInRegion){
-            Map expressionDataForGene = restServerService.gatherBottomLineVariantsPerGene( geneName )
-            temporaryGeneInformationHolder[geneName] = expressionDataForGene
+            Map geneExpressionMapping = phenotypesWeightsAndGenes.geneInformation[geneName]
+            geneExpressionMapping.each{ k, v ->
+                if (!invertedGeneExpression.containsKey(k)){
+                    invertedGeneExpression[k] = []
+                }
+                invertedGeneExpression[k] << ['geneName':geneName,'geneWeight':v]
+                if (!geneInformation.containsKey(v)){
+                    geneInformation[geneName] = ['geneId':geneId++,'geneName':geneName, 'combinedWeight': 0.0]
+                }
+            }
         }
-        phenotypesWeightsAndGenes['geneInformation'] = temporaryGeneInformationHolder
+
+        List phenotypeRecords= phenotypesWeightsAndGenes["genefullCalculatedGraph"]
+        for (Map phenotypeRecord in phenotypeRecords){
+            if ((phenotypeRecord['tissues'])&& ((phenotypeRecord['tissues'].size()>0))){
+                List tissueRecords = phenotypeRecord['tissues']
+                for (Map tissueRecord in tissueRecords){
+                    String tissueName = tissueRecord["tissue"]
+                    if (invertedGeneExpression.containsKey(tissueName)){
+                        tissueRecord['genes'] = invertedGeneExpression[tissueName]
+                        for (Map recPerGene in invertedGeneExpression[tissueName]){
+                            geneInformation[recPerGene['geneName']]['combinedWeight'] += (recPerGene['geneWeight']*tissueRecord["weight"])
+                        }
+                    }
+                }
+            }
+        }
+        phenotypesWeightsAndGenes['geneInformation'] = geneInformation.values()
+        //phenotypesWeightsAndGenes['geneInformation'] = temporaryGeneInformationHolder
         return phenotypesWeightsAndGenes
     }
 
