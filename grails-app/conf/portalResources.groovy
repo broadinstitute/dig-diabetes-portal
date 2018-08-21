@@ -209,7 +209,6 @@ modules = {
         resource url: 'js/lib/lodash.min.js'
 
 
-
     }
     igvNarrow {  // IGV on a page with core
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
@@ -243,6 +242,11 @@ modules = {
         resource url: 'js/lib/dport/traitSample.js'
     }
     traitsFilter {
+
+        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css'
+
+        resource url: 'js/lib/bootstrap-select.js'
+
         resource url: 'js/lib/dport/traitsFilter.js'
     }
 

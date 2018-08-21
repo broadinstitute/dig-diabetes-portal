@@ -50,9 +50,9 @@
     var openClosePullout = function() {
         console.log($(".variant-finder-pullout").attr("openfilter"));
        if ($(".variant-finder-pullout").attr("openfilter") == "close"){
-           $(".variant-finder-pullout").css({"left":"-1px"}).attr("openfilter","open").find(".variant-finder-pullout-puller").find("span").attr("class","glyphicon glyphicon-menu-left");
+           $(".variant-finder-pullout").css({"left":"-1px"}).attr("openfilter","open").find(".variant-finder-puller").find("span").attr("class","glyphicon glyphicon-menu-left");
        } else {
-           $(".variant-finder-pullout").css({"left":"-350px"}).attr("openfilter","close").find(".variant-finder-pullout-puller").find("span").attr("class","glyphicon glyphicon-menu-right");
+           $(".variant-finder-pullout").css({"left":"-350px"}).attr("openfilter","close").find(".variant-finder-puller").find("span").attr("class","glyphicon glyphicon-menu-right");
        }
     }
 
@@ -102,7 +102,7 @@
 <div id="rowTemplate" type="x-tmpl-mustache" style="display: none;">
     {{ #row }}
         <div class="col-md-12 dk-variant-search-builder-title">
-            {{ translatedName }} <span style="font-size:11px;">({{ helpText }})</span>
+            {{ translatedName }} <span style="font-size:11px; color:#999;">{{ helpText }}</span>
         </div>
 
         <div class="col-md-12 dk-variant-search-builder-ui">
@@ -224,8 +224,9 @@
 <style>
     .variant-finder-pullout {
         width: 350px;
-        height:98%;
-        position: fixed;
+        height:auto;
+        min-height: 98%;
+        position: absolute;
         top:1%;
         left: -350px;
         background-color: rgba(255,255,255,1);
@@ -235,6 +236,7 @@
         box-shadow: 5px 5px 5px rgba(0,0,0, .25);
         -webkit-transition: left 500ms; /* Safari */
         transition: left 500ms;
+        padding: 0px 20px;
     }
 
     .variant-finder-puller {
@@ -257,6 +259,7 @@
     .variant-finder-puller div {
         display: table-cell;
         vertical-align: middle;
+        padding-top: 5px;
         padding-left: 7px;
         font-size: 25px;
     }
@@ -265,8 +268,6 @@
         margin: 10px 0 0 10px;
         width:328px;
         padding:10px 20px;
-        overflow-x: hidden;
-        overflow-y: auto;
     }
 
     .variant-finder-pullout h4 {
@@ -276,7 +277,7 @@
 
 <div class="variant-finder-pullout" openfilter="close">
     <div class="variant-finder-puller"><div><a href="javascript:;" onclick="openClosePullout();"><span class="glyphicon glyphicon-menu-right" aria-hidden="true"></span></a></div></div>
-    <div class="container variant-finder-pullout-content">
+
     <h3 style="font-size: 18px;">Search Filter</h3>
 
     <div class="dk-variant-search-builder">
@@ -285,10 +286,11 @@
 
         <div class="dk-variant-search-builder-ui">
             <label><g:message code="searchBuilder.traitOrDisease.prompt" default="Trait or disease of interest"/></label>
-            <select id="phenotype" class="form-control" disabled
+            <select id="phenotype" class="form-control selectpicker" data-live-search="true" disabled
                             onchange="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')" onclick="mpgSoftware.firstResponders.respondToPhenotypeSelection('${g.portalTypeString()}')"></select>
         </div>
 
+        <!-- For the newer version of variant finder dataset list will be gone or optional -->
         <div  id="datasetChooserDependent" class="dk-variant-search-builder-ui">
             <label><g:message code="searchBuilder.dataset.prompt" default="Data set"/></label>
             <select id="datasetDependent" class="form-control" disabled
@@ -331,7 +333,7 @@
                     <small style="color: #aaa;">(<g:message code="variantSearch.wfRequest.dataSet.help.text"
                                                             default="Choose a data set from which variants may be found"/>)
                     </small></label>
-                <select id="datasetIndependent" class="form-control" style="width: 90%"
+                <select id="datasetIndependent" class="form-control"
                         onchange="mpgSoftware.firstResponders.respondToDataSetSelection('datasetIndependent')"></select>
             </div>
 
@@ -379,7 +381,7 @@
                     </div>
 
                     <div class="form-inline">
-                        <input id="chromosomeInput" type="text" class="form-control" style="width: 90%"
+                        <input id="chromosomeInput" type="text" class="form-control" style="width: 100%"
                                placeholder="Region chromosome:start-stop (e.g. 9:21940000-22190000)"
                                data-type="advancedFilterInput"
                                data-prop="chromosome" data-translatedname="chromosome"
@@ -521,7 +523,7 @@
                 </button>
         </div>
     </div>
-    </div>
+
     </div>
 </div>
 </body>
