@@ -12,13 +12,12 @@
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
     <ul>
-        <li>All stroke</li>
-        <ul><li>Ischemic stroke</li>
-        <ul><li>Large artery stroke</li>
-            <li>Cardioembolic stroke</li>
-            <li>Small vessel disease</li>
-        </ul>
-        </ul>
+        <li><g:message code="informational.shared.traits.anyStroke"></g:message></li>
+        <li><g:message code="informational.shared.traits.ischemic_stroke"></g:message></li>
+        <li><g:message code="informational.shared.traits.toast_Large_artery_atherosclerosis"></g:message></li>
+            <li><g:message code="informational.shared.traits.toast_Cardio-aortic_embolism"></g:message></li>
+            <li><g:message code="informational.shared.traits.toast_Small_artery_occlusion"></g:message></li>
+
     </ul>
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
