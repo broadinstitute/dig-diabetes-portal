@@ -1377,10 +1377,10 @@ class WidgetService {
                 if (!invertedGeneExpression.containsKey(k)){
                     invertedGeneExpression[k] = []
                 }
-                invertedGeneExpression[k] << ['geneName':geneName,'geneWeight':v]
-                if (!geneInformation.containsKey(v)){
-                    geneInformation[geneName] = ['geneId':geneId++,'geneName':geneName, 'combinedWeight': 0.0]
+                if (!geneInformation.containsKey(geneName)){
+                    geneInformation[geneName] = ['geneId': geneId++,'geneName':geneName, 'combinedWeight': 0.0, tissues:[]]
                 }
+                invertedGeneExpression[k] << ['geneName':geneName,'geneWeight':v, 'geneId': geneInformation[geneName].geneId ]
             }
         }
 
@@ -1393,6 +1393,7 @@ class WidgetService {
                     if (invertedGeneExpression.containsKey(tissueName)){
                         tissueRecord['genes'] = invertedGeneExpression[tissueName]
                         for (Map recPerGene in invertedGeneExpression[tissueName]){
+                            geneInformation[recPerGene['geneName']]['tissues'] << ['tissue':tissueName,'tissueWeight':tissueRecord["weight"] ]
                             geneInformation[recPerGene['geneName']]['combinedWeight'] += (recPerGene['geneWeight']*tissueRecord["weight"])
                         }
                     }

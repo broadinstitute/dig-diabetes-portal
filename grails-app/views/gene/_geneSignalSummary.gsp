@@ -184,8 +184,8 @@ td.tissueTable.informationIsPresent{
                     mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
-                mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
-                    {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl});
+//                mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
+//                    {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
             };
 

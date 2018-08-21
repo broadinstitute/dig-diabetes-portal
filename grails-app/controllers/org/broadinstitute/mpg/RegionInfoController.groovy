@@ -169,6 +169,35 @@ class RegionInfoController {
     def calculateGeneRanking() {
         def slurper = new JsonSlurper()
         JSONObject jsonReturn
+        String chromosome = params.chromosome; // ex "22"
+        String startString = params.start; // ex "29737203"
+        String endString = params.end; // ex "29937203"
+        String maximumAssociationString = params.maximumAssociation; // ex ".0001"
+        String minimumWeightString = params.minimumWeight; // ex "1"
+        int startPosition =  0
+        int endPosition =  0
+        float maximumAssociation = 0.0
+        float minimumWeight = 0.0
+        try{
+            startPosition = Integer.parseInt(startString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+        try{
+            endPosition = Integer.parseInt(endString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+        try{
+            maximumAssociation = Float.parseFloat(maximumAssociationString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+        try{
+            minimumWeight = Float.parseFloat(minimumWeightString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
 
         ArrayList genefullCalculatedGraph = [
                 [
@@ -212,18 +241,11 @@ class RegionInfoController {
                 [geneId: 53, geneName: "TCF7L2", geneDescr: "Transcription factor 7-like 2", combinedWeight: 0.1],
                 [geneId: 63, geneName: "PPARG", geneDescr: "Peroxisome proliferator-activated receptor gamma ", combinedWeight: 0.1]
         ]
-//        String proposedJsonString = new JsonBuilder( [ genefullCalculatedGraph: genefullCalculatedGraph,
-//                                                       geneInformation: geneInformation ]).toPrettyString()
-//
-//        jsonReturn =  slurper.parseText(proposedJsonString);
-        //Map map = restServerService.gatherBottomLineVariantsPerGene("SLC30A8")
 
+        Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange(chromosome, startPosition, endPosition )
+        Map phenotypesWeightsAndGenes =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:maximumAssociation])
 
-
-        Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange("8", 2000, 1000000 )
-        Map phenotypesWeightsAndGenes =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:0.0001])
-
-        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:1])
+        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:minimumWeight])
 
         Map dataReadyForCalculation =  widgetService.gatherExpressionDataForEachGene( phenotypesWeightsAndGenes, [maximumAssociationValue:0.0001] )
 

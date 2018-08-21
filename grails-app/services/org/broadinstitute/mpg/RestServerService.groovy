@@ -2458,20 +2458,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public Map gatherBottomLineVariantsPerGene( String gene ) {
         JsonSlurper slurper = new JsonSlurper()
 
+        Map retval = [:]
+
         String combinedCommonNameUrl = GET_BOTTOM_LINE_VARIANTS_URL +"?id=" +gene
 
         String  retrieveGeneIdJsonAsString = getRestCall(combinedCommonNameUrl)
 
         List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
-        String geneId = retrieveGeneIdArray[0]["GEN_ID"] as String
+        if (retrieveGeneIdArray[0]){
+            String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" +(retrieveGeneIdArray[0]["GEN_ID"] as String)
 
-        String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" +geneId
+            String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedEnsemblNameUrl)
 
-        String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedEnsemblNameUrl)
+            List retrieveTissueExpressionArray =   slurper.parseText(retrieveTissueExpressionInformationJsonAsString)  as List
 
-        List retrieveTissueExpressionArray =   slurper.parseText(retrieveTissueExpressionInformationJsonAsString)  as List
+            retval =  retrieveTissueExpressionArray[0]
+        }
+        return retval
 
-        return retrieveTissueExpressionArray[0]
+
 
     }
 

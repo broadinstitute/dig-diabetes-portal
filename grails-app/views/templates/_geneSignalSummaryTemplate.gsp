@@ -785,7 +785,16 @@
                 <div role="tabpanel" class="tab-pane genePrioritizationChooser" id="genePrioritizationTabHolder">
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
-                             <h1>gene prioritization table</h1>
+                            <div class="row" style="border: none">
+                                <div class="col-sm-6">
+                                    <h3>gene prioritization table</h3>
+                                </div>
+                                <div class="col-sm-6"></div>
+                             </div>
+                             <div class="row" style="border: none">
+                                <div id="rankedGeneTableGoesHere">
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
@@ -970,5 +979,20 @@
 {{/assaySpecificRow}}
 </script>
 
+<script id="rankedGeneTable"  type="x-tmpl-mustache">
+<tr>
+    <td>gene name</td>
+</tr>
+{{#geneInformation}}
+    <tr>
+
+        <td>
+        {{geneName}}
+        </td>
+
+
+    </tr>
+{{/geneInformation}}
+</script>
 
 
