@@ -1000,7 +1000,7 @@ class VariantSearchController {
      * This function collects and returns the data to populate the search results table. It
      * expects data formatted by the Datatables function.
      */
-    def variantSearchAndResFultColumnsData() {
+    def variantSearchAndResultColumnsData() {
         String filtersRaw = params['filters']
         String propertiesRaw = params['properties']
         JSONArray columns = (new JsonSlurper().parseText(params.columns)) as JSONArray;
