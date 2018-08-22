@@ -823,11 +823,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
     var displayInterestingPhenotypes = function (data,params) {
         var drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
-        mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
-            {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
-                geneExtentBegin:drivingVariables.geneExtentBegin,
-                geneExtentEnd:drivingVariables.geneExtentEnd,
-                geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
+        //mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
+        //    {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
+        //        geneExtentBegin:drivingVariables.geneExtentBegin,
+        //        geneExtentEnd:drivingVariables.geneExtentEnd,
+        //        geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
 
 
 
@@ -1439,6 +1439,8 @@ var processGeneRankingData = function (data,params) {
         mpgSoftware.regionInfo.initializeRegionInfoModule (drivingVariables);
         $("#tableHeaderHolder").empty().append(
             Mustache.render($('#genePageHeaderTemplate')[0].innerHTML, drivingVariables));
+        $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryOutline')[0].innerHTML,
+            {}));
     }
     var refreshTopVariantsByPhenotype = function (sel, callBack) {
         var phenotypeName = sel.value;
@@ -1639,7 +1641,7 @@ var processGeneRankingData = function (data,params) {
             incredibleSetTab.push(dropDownRenderInfo);
         }
 
-        $('#collapseExample div.wellPlace').empty();
+       // $('#collapseExample div.wellPlace').empty();
 
         var regionSpecificVersion = additionalParameters.regionSpecificVersion;
         var displayCommonTab = [{chromosome:additionalParameters.geneChromosomeMinusChr,
@@ -1663,8 +1665,41 @@ var processGeneRankingData = function (data,params) {
 
         }
 
-        $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
+        //$("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
+        //    {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+
+        //$("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryOutline')[0].innerHTML,
+        //    {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+        $("#organizeSignalSummaryHeaderGoesHere").empty().append(Mustache.render($('#organizeSignalSummaryHeader')[0].innerHTML,
             {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+        $("#commonVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCommon')[0].innerHTML,
+            {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+        $("#highImpactVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryHighImpact')[0].innerHTML,
+            {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+        if (credibleSetTab.length>0){
+            $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCredibleSet')[0].innerHTML,
+                {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+        }
+        if (incredibleSetTab.length>0){
+            $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryIncredibleSet')[0].innerHTML,
+                {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+        }
+        //$("#genePrioritizationTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryGenePrioritization')[0].innerHTML,
+        //    {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab,genePrioritizationTab:[1]}));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
 
