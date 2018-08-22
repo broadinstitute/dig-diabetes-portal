@@ -139,6 +139,8 @@
                         <div class="dk-variant-search-builder">
                             <div style="padding: 10px 0;">
 
+
+
                             <g:if test="${g.portalTypeString()?.equals('t2d')}">
                                 <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.t2d.text"></g:message></h5></g:if>
                             <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
@@ -147,7 +149,6 @@
                                     <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.mi.text"/></h5></g:elseif>
                                 <g:else>
                                     <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.generic.text"/></h5></g:else>
-                                </div>
 
                                 <div class="row">
                                     <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
