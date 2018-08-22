@@ -170,6 +170,7 @@ class RegionInfoController {
         def slurper = new JsonSlurper()
         JSONObject jsonReturn
         String chromosome = params.chromosome; // ex "22"
+        String phenotype = params.phenotype
         String startString = params.start; // ex "29737203"
         String endString = params.end; // ex "29937203"
         String maximumAssociationString = params.maximumAssociation; // ex ".0001"
@@ -242,15 +243,30 @@ class RegionInfoController {
                 [geneId: 63, geneName: "PPARG", geneDescr: "Peroxisome proliferator-activated receptor gamma ", combinedWeight: 0.1]
         ]
 
+        // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
+        //  of the current range, and pull out all of the phenotypes that match those variants
         Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange(chromosome, startPosition, endPosition )
+
+        // now throw out every variant that doesn't reach our P value cut off, and consider whatever's left over to be our list of phenotypes.
+        //  Use that same list of variants to come up with a list of genes that we will pay attention to
         Map phenotypesWeightsAndGenes =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:maximumAssociation])
 
-        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:minimumWeight])
+        // Now for each phenotype, generate a list of tissues.  We will filter the list of tissues and require that each one have a weight
+        //   greater than our threshold cut off
+        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:minimumWeight, phenotype: phenotype])
 
-        Map dataReadyForCalculation =  widgetService.gatherExpressionDataForEachGene( phenotypesWeightsAndGenes, [maximumAssociationValue:0.0001] )
+        // Now for every gene gather the expression data
+        Map dataReadyForCalculation =  widgetService.gatherExpressionDataForEachGene( phenotypesWeightsAndGenes, [:] )
 
-        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [maximumAssociationValue:0.0001] )
+        // Now sum across the tree we've built
+        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [:] )
 
+        // create our final data structure, and send it down to the browser
+        finalFormData["maximumAssociation"] = maximumAssociation
+        finalFormData["minimumWeight"] = minimumWeight
+        finalFormData["phenotype"] = phenotype
+        finalFormData["startPosition"] = startPosition
+        finalFormData["endPosition"] = endPosition
         String proposedJsonString = new JsonBuilder( finalFormData ).toPrettyString()
 
         jsonReturn =  slurper.parseText(proposedJsonString)

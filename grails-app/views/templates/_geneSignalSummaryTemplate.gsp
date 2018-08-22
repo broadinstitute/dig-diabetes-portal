@@ -496,9 +496,12 @@
                         <div class="col-sm-12">
                             <div class="row" style="border: none">
                                 <div class="col-sm-6">
-                                    <h3>gene prioritization table</h3>
+                                    %{--<h4>gene prioritization table</h4>--}%
                                 </div>
-                                <div class="col-sm-6"></div>
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-3">
+                                    <button class="btn" onclick="mpgSoftware.geneSignalSummaryMethods.selfContainedGeneRanking()">Refresh</button>
+                                </div>
                              </div>
                              <div class="row" style="border: none">
                                 <div id="rankedGeneTableGoesHere">
@@ -1340,21 +1343,108 @@
     </tr>
 {{/assaySpecificRow}}
 </script>
+<style>
+table.genePrioritization {
+    border: 1px solid black;
+}
+th.genePrioritization {
+    font-family: 	Arial, Verdana, sans-serif;
+    text-decoration: underline;
+    font-size:	18px;
+}
+td.genePrioritization {
+    font-family: 	Arial, Verdana, sans-serif;
+    color:		#0000FF;
+    font-size:	16px;
+}
+span.genePrioritization {
+    padding-right: 5px;
+}
+</style>
+
 
 <script id="rankedGeneTable"  type="x-tmpl-mustache">
+<div class="row">
+    <div class="col-md-3 text-right">p-value cutoff for phenotype < &nbsp;
+    </div>
+    <div class="col-md-3">
+    <input class="phenotypeParameter" type="text" value="{{maximumAssociation}}"></input>
+    </div>
+    <div class="col-md-6"></div>
+</div>
+<div class="row">
+    <div class="col-md-3 text-right">LDSR weight >  &nbsp;
+    </div>
+    <div class="col-md-3">
+    <input class="ldsrParameter" type="text" value="{{minimumWeight}}"></input>
+    </div>
+    <div class="col-md-6"></div>
+</div>
+<div class="row">
+    <div class="col-md-3 text-right">phenotype restriction &nbsp;
+    </div>
+    <div class="col-md-3">
+    <input class="phenotypeLimitationParameter" type="text" value="{{phenotype}}"></input>
+    </div>
+
+
+
+    <div class="col-md-2 text-left"> <input class="startPosition" type="text" value="{{startPosition}}"></input>
+    </div>
+    <div class="col-md-2 text-center">range</div>
+    <div class="col-md-2 text-right">
+    <input class="endPosition" type="text" value="{{endPosition}}"></input>
+    </div>
+
+
+</div>
+
+    %{--</div>--}%
+%{--</div>--}%
+%{--<div class="row">--}%
+    %{--<div class="col-md-6 text-right">--}%
+      %{--<hr style="margin-bottom:5px !important; margin-top:5px !important; width: 100%" />--}%
+    %{--</div>--}%
+    %{--<div class="col-md-6"></div>--}%
+%{--</div>--}%
+
+%{--<div class="row">--}%
+    %{--<div class="col-md-2 text-left"> <input class="startPosition" type="text" value="{{startPosition}}"></input>--}%
+    %{--</div>--}%
+    %{--<div class="col-md-2 text-center">range</div>--}%
+    %{--<div class="col-md-2">--}%
+    %{--<input class="endPosition" type="text" value="{{endPosition}}"></input>--}%
+    %{--</div>--}%
+%{--</div>--}%
+
+<div style="margin-top:20px"></div>
+
+<table style="width:100%" class="genePrioritization">
 <tr>
-    <td>gene name</td>
+    <th class="genePrioritization">gene name</th>
+    <th class="genePrioritization">calculated weight</th>
+    <th class="genePrioritization">tissues</th>
 </tr>
 {{#geneInformation}}
     <tr>
 
-        <td>
+        <td class="genePrioritization">
         {{geneName}}
         </td>
-
+        <td class="genePrioritization">
+        {{combinedWeight}}
+        </td>
+       <td class="genePrioritization">
+        {{#tissues}}
+            <span class="genePrioritization">
+           {{tissue}}
+           </span>
+        {{/tissues}}
+        </td>
 
     </tr>
 {{/geneInformation}}
+<table>
 </script>
 
 

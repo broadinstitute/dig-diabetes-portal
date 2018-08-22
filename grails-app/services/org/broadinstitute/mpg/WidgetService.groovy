@@ -1334,18 +1334,21 @@ class WidgetService {
         List phenotypesAndWeights = phenotypesWeightsAndGenes.genefullCalculatedGraph
         for (Map onePhenotypeRecord in phenotypesAndWeights){
 
-            List tissueWeightPerPhenotype = restServerService.determineTissueAssociationPerPhenotype(onePhenotypeRecord.phenoName)
-            if ((tissueWeightPerPhenotype)&&(tissueWeightPerPhenotype.size()>0)){
-                onePhenotypeRecord["tissues"]  =  tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
-            } else {
-                onePhenotypeRecord["tissues"]  = []
+            Boolean processRecord = false
+            if (!parametersForAlgorithm.phenotype)  {
+                processRecord = true
+            } else if ((parametersForAlgorithm.phenotype)&&(parametersForAlgorithm.phenotype==onePhenotypeRecord.phenoName)) {
+                processRecord = true
             }
-            //List<Map> filteredTissueWeightPerPhenotype = tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
-//            for ()
-           // Map developingRecord = [phenotypeId: loopCounter++, phenoName: onePhenotypeRecord.phenoName, phenoWeight:onePhenotypeRecord.phenoWeight]
+            if (processRecord){
+                List tissueWeightPerPhenotype = restServerService.determineTissueAssociationPerPhenotype(onePhenotypeRecord.phenoName)
+                if ((tissueWeightPerPhenotype)&&(tissueWeightPerPhenotype.size()>0)){
+                    onePhenotypeRecord["tissues"]  =  tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
+                } else {
+                    onePhenotypeRecord["tissues"]  = []
+                }
+            }
 
-            //onePhenotypeRecord["tissues"]  =  filteredTissueWeightPerPhenotype
-           // phenotypesWeightsAndGenes << developingRecord
         }
         return phenotypesWeightsAndGenes
     }

@@ -821,16 +821,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var phenoName = $('.phenotypeStrength.chosenPhenotype').text();
         launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
     };
+
     var displayInterestingPhenotypes = function (data,params) {
         var drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
-        //mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
-        //    {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
-        //        geneExtentBegin:drivingVariables.geneExtentBegin,
-        //        geneExtentEnd:drivingVariables.geneExtentEnd,
-        //        geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
-
-
-
         var renderData = buildRenderData(data, 0.05, params);
         var signalLevel = assessSignalSignificance(renderData);
         var acceptableDatasetObjs =_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==='false'});
@@ -1034,11 +1027,32 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
-var processGeneRankingData = function (data,params) {
 
-    $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
+    var selfContainedGeneRanking = function(){
+        var drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
+        var ldsrWeigth = $('input.ldsrParameter').val();
+        var phenotypeWeigth = $('input.phenotypeParameter').val();
+        var phenotypeRestriction = $('input.phenotypeLimitationParameter').val();
+        var startPosition = $('input.startPosition').val();
+        var endPosition = $('input.endPosition').val();
+        var adjustedStartingPosition = (startPosition) ? startPosition : drivingVariables.geneExtentBegin;
+        var adjustedEndingPosition = (endPosition) ? endPosition : drivingVariables.geneExtentEnd;
 
-}
+        mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
+            {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
+                geneExtentBegin:adjustedStartingPosition,
+                geneExtentEnd:adjustedEndingPosition,
+                geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome,
+                maximumAssociation:phenotypeWeigth,
+                minimumWeight:ldsrWeigth,
+            phenotype: phenotypeRestriction});
+    }
+
+
+
+    var processGeneRankingData = function (data,params) {
+        $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
+    }
 
 
 
@@ -1054,8 +1068,9 @@ var processGeneRankingData = function (data,params) {
         callingObj ["chromosome"] = params.geneChromosome;
         callingObj ["start"] =params.geneExtentBegin;
         callingObj ["end"] = params.geneExtentEnd;
-        callingObj ["maximumAssociation"] = ".0001";
-        callingObj ["minimumWeight"] = "1";
+        callingObj ["maximumAssociation"] = (params.maximumAssociation)?params.maximumAssociation:".0001";
+        callingObj ["minimumWeight"] = (params.minimumWeight)?params.minimumWeight:"1";
+        callingObj ["phenotype"] = params.phenotype;
 
         $.ajax({
             cache: false,
@@ -1960,7 +1975,8 @@ var processGeneRankingData = function (data,params) {
         refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
         getSignalSummarySectionVariables:getSignalSummarySectionVariables,
         processGeneRankingInfo: processGeneRankingInfo,
-        processGeneRankingData:processGeneRankingData
+        processGeneRankingData:processGeneRankingData,
+        selfContainedGeneRanking: selfContainedGeneRanking
     }
 
 }());

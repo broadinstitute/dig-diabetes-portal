@@ -189,9 +189,6 @@ td.tissueTable.informationIsPresent{
                             geneExtentBegin:drivingVariables.geneExtentBegin,
                             geneExtentEnd:drivingVariables.geneExtentEnd,
                             geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
-
-//                mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
-//                    {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl});
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
             };
 
