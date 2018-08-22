@@ -1345,7 +1345,7 @@
 </script>
 <style>
 table.genePrioritization {
-    border: 1px solid black;
+    /*border: 1px solid black;*/
 }
 th.genePrioritization {
     font-family: 	Arial, Verdana, sans-serif;
@@ -1399,23 +1399,7 @@ span.genePrioritization {
 
 </div>
 
-    %{--</div>--}%
-%{--</div>--}%
-%{--<div class="row">--}%
-    %{--<div class="col-md-6 text-right">--}%
-      %{--<hr style="margin-bottom:5px !important; margin-top:5px !important; width: 100%" />--}%
-    %{--</div>--}%
-    %{--<div class="col-md-6"></div>--}%
-%{--</div>--}%
 
-%{--<div class="row">--}%
-    %{--<div class="col-md-2 text-left"> <input class="startPosition" type="text" value="{{startPosition}}"></input>--}%
-    %{--</div>--}%
-    %{--<div class="col-md-2 text-center">range</div>--}%
-    %{--<div class="col-md-2">--}%
-    %{--<input class="endPosition" type="text" value="{{endPosition}}"></input>--}%
-    %{--</div>--}%
-%{--</div>--}%
 
 <div style="margin-top:20px"></div>
 

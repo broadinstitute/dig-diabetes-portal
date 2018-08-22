@@ -1051,6 +1051,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 
     var processGeneRankingData = function (data,params) {
+        data.geneInformation = _.map(data.geneInformation.sort(function(a,b){return b.combinedWeight-a.combinedWeight}),function(o){o.combinedWeight=UTILS.realNumberFormatter(o.combinedWeight);return o;})
         $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
     }
 
