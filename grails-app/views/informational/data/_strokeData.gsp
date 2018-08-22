@@ -41,6 +41,7 @@
 <g:render template="./data/GWAS_HPTxNCGM" />
 <g:render template="./data/GWAS_VHIR" />
 <g:render template="./data/GWAS_DIAGRAMimputed" />
+<g:render template="./data/GWAS_DIAGRAMimputed_eu" />
 
 
 <style type="text/css" class="init">
