@@ -271,6 +271,8 @@ class VariantSearchController {
         String geneName = params.gene
         String phenotypeName = params.phenotype
         String dataSetName = params.dataset
+
+
         LinkedHashMap extents = sharedToolsService.getGeneExpandedExtent( geneName,restServerService.EXPAND_ON_EITHER_SIDE_OF_GENE)
         String chromosome = extents.chrom
         if (chromosome?.startsWith('chr')){
@@ -281,38 +283,49 @@ class VariantSearchController {
         if (chromosome!=null){
             String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
-            filtersForQuery << """{"value":"${chromosome}:${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
-            filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
-            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"AC","value":"0","comparator":">"}""".toString()
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
-         //   filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACU_PH","value":"0","comparator":">"}]""".toString()
 
-            // filtersForQuery << """{"gene":"${geneName}","comparator":"="}""".toString()
+            //filtersForQuery << """{"value":"${chromosome}, "pos":${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
+
+            filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
+//
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"AC","value":"0","comparator":">"}""".toString()
+//
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
+//
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACU_PH","value":"0","comparator":">"}]""".toString()
+
+
 
         }
         if ((dataSetName!=null) && (phenotypeName!=null)){
-            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotypeName,dataSetName,
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
                     "AC",MetaDataService.METADATA_VARIANT)
             if (property){
-                filtersForQuery << """{"phenotype":"${phenotypeName}","dataset":"${dataSetName}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
+                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
             }
 
         } else {
-            // let's provide a default data set
+
             String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
-            org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
-                    "AC",MetaDataService.METADATA_VARIANT)
-//            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
-//                    "ACU_PH",MetaDataService.METADATA_VARIANT)
-            if (property1 && property2){
+
+            org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
+                    "ACA_PH", MetaDataService.METADATA_VARIANT)
+            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
+                    "ACU_PH", MetaDataService.METADATA_VARIANT)
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_mdv60",
+                    "AC", MetaDataService.METADATA_VARIANT)
+
+            if (property1 && property2) {
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
+            } else {
+                if (property) {
+                    filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
+                }
             }
-
-
-
         }
+
         if (filtersForQuery.size()>0) {
             if ((geneName!=null)&& (geneName.length()>0)){
                 forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]", specificGene:"${geneName}"]
