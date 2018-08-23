@@ -31,22 +31,22 @@
 <tr><td>7,580</td><td>Framingham Heart Study (FHS)</td><td>European</td></tr>
 <tr><td>355</td><td>Genes for Cerebral Hemorrhage on Anticoagulation (GOCHA)</td><td>European</td></tr>
 <tr><td>1,755</td><td>Genetic Regulation of Arterial Pressure in Humans in the Community (GRAPHIC)</td><td>European</td></tr>
-<tr><td>9,168</td><td>Generation Scotland: Scottish Family Health Study (GS:SFHS)</td><td>      European</td></tr>
+<tr><td>9,168</td><td>Generation Scotland: Scottish Family Health Study (GS:SFHS)</td><td>European</td></tr>
 <tr><td>5,836</td><td>INTER99</td><td>European</td></tr>
 <tr><td>2,220</td><td>Jackson Heart Study (JHS)</td><td>African American</td></tr>
 <tr><td>2,617</td><td>Cooperative Health Research in the Region Augsburg (KORA)</td><td>European</td></tr>
 <tr><td>293</td><td>CROATIA-Korcula (KORCULA)</td><td>European</td></tr>
 <tr><td>1,934</td><td>LifeLines Cohort Study (LifeLines)</td><td>European</td></tr>
-<tr><td>1,565</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>     African American</td></tr>
-<tr><td>2,455</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>     European</td></tr>
-<tr><td>5,782</td><td>The Netherlands Epidemiology of Obesity (NEO)</td><td>    European</td></tr>
-<tr><td>2,358</td><td>Rotterdam Study (RS)</td><td>     European</td></tr>
-<tr><td>6,493</td><td>Study of Health in Pomerania (SHIP)</td><td>      European</td></tr>
-<tr><td>465</td><td>TwinsUK Registry (TwinsUK)</td><td> European</td></tr>
-<tr><td>1,735</td><td>Utrecht Health Project (UHP)</td><td>     European</td></tr>
-<tr><td>1,658</td><td>Women’s Health Initiative (WHI)</td><td>  African American</td></tr>
-<tr><td>13,252</td><td>Women’s Health Initiative (WHI)</td><td> European</td></tr>
-<tr><td>1,846</td><td>Young Finns Study (YFS)</td><td>  European</td></tr>
+<tr><td>1,565</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>African American</td></tr>
+<tr><td>2,455</td><td>Multi-Ethnic Study of Atherosclerosis (MESA)</td><td>European</td></tr>
+<tr><td>5,782</td><td>The Netherlands Epidemiology of Obesity (NEO)</td><td>European</td></tr>
+<tr><td>2,358</td><td>Rotterdam Study (RS)</td><td>European</td></tr>
+<tr><td>6,493</td><td>Study of Health in Pomerania (SHIP)</td><td>European</td></tr>
+<tr><td>465</td><td>TwinsUK Registry (TwinsUK)</td><td>European</td></tr>
+<tr><td>1,735</td><td>Utrecht Health Project (UHP)</td><td>European</td></tr>
+<tr><td>1,658</td><td>Women’s Health Initiative (WHI)</td><td>African American</td></tr>
+<tr><td>13,252</td><td>Women’s Health Initiative (WHI)</td><td>European</td></tr>
+<tr><td>1,846</td><td>Young Finns Study (YFS)</td><td>European</td></tr>
 
 </table>
 
