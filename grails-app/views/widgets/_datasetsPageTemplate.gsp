@@ -74,8 +74,8 @@
 <g:render template="./data/GWAS_DCSP2_ea" />
 <g:render template="./data/ExSeq_52k" />
 <g:render template="./data/AMPLOAD_36" />
-<g:render template="./data/ExChip_CHARGE_eu" />
-<g:render template="./data/ExChip_CHARGE_aa" />
+<g:render template="./data/ExChip_CHARGE-1_eu" />
+<g:render template="./data/ExChip_CHARGE-2_aa" />
 <g:render template="./data/GWAS_AAGILE" />
 
 
