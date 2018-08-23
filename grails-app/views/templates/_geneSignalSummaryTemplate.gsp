@@ -1402,7 +1402,7 @@ span.genePrioritization {
 
 
 <div style="margin-top:20px"></div>
-
+<h5>LEDGE ranked genes</h5>
 <table style="width:100%" class="genePrioritization">
 <tr>
     <th class="genePrioritization">gene name</th>
@@ -1421,7 +1421,7 @@ span.genePrioritization {
        <td class="genePrioritization">
         {{#tissues}}
             <span class="genePrioritization">
-           {{tissue}}
+
            </span>
         {{/tissues}}
         </td>
@@ -1429,6 +1429,19 @@ span.genePrioritization {
     </tr>
 {{/geneInformation}}
 <table>
+
+
+<h5>tree</h5>
+<div class="row">
+    {{#genefullCalculatedGraph}}
+        <div>
+        {{phenoName}}
+        {{#tissues}}
+            t={{tissue}}
+        {{/tissues}}
+        </div>
+    {{/genefullCalculatedGraph}}
+</div>
 </script>
 
 
