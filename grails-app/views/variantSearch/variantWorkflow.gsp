@@ -218,7 +218,22 @@
 
                 <div role="tabpanel" class="tab-pane" id="independent">
                     <div style="padding: 10px 0;" class="dk-variant-search-builder">
-                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>
+
+
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependentT2D.text"/></h5>
+</g:if>
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependentStroke.text"/></h5>
+</g:if>
+<g:if test="${g.portalTypeString()?.equals('mi')}">
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependentMI.text"/></h5>
+
+</g:if>
+
+
+
+
 
                         <div id="datasetChooserIndependent" class="row additionalInputGroup">
                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 dk-variant-search-builder-ui">
