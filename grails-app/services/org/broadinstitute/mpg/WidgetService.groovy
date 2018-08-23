@@ -1394,7 +1394,7 @@ class WidgetService {
                 for (Map tissueRecord in tissueRecords){
                     String tissueName = tissueRecord["tissue"]
                     if (invertedGeneExpression.containsKey(tissueName)){
-                        tissueRecord['genes'] = invertedGeneExpression[tissueName]
+                        tissueRecord['genes'] = invertedGeneExpression[tissueName].findAll{it.geneWeight>0.0}
                         for (Map recPerGene in invertedGeneExpression[tissueName]){
                             geneInformation[recPerGene['geneName']]['tissues'] << ['tissue':tissueName,'tissueWeight':tissueRecord["weight"] ]
                             geneInformation[recPerGene['geneName']]['combinedWeight'] += (recPerGene['geneWeight']*tissueRecord["weight"])

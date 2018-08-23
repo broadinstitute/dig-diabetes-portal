@@ -1360,6 +1360,10 @@ td.genePrioritization {
 span.genePrioritization {
     padding-right: 5px;
 }
+.tooltip-inner {
+    max-width: 350px;
+    width: 350px;
+}
 </style>
 
 
@@ -1401,47 +1405,77 @@ span.genePrioritization {
 
 
 
-<div style="margin-top:20px"></div>
-<h5>LEDGE ranked genes</h5>
-<table style="width:100%" class="genePrioritization">
-<tr>
-    <th class="genePrioritization">gene name</th>
-    <th class="genePrioritization">calculated weight</th>
-    <th class="genePrioritization">tissues</th>
-</tr>
-{{#geneInformation}}
-    <tr>
+<div style="margin-top:20px;"></div>
+<div clas="row" style="margin-top:30px">
+<div class="col-md-12 text-left">
+<h4>LEDGE ranked genes</h4>
+</div>
+</div>
 
-        <td class="genePrioritization">
-        {{geneName}}
-        </td>
-        <td class="genePrioritization">
-        {{combinedWeight}}
-        </td>
-       <td class="genePrioritization">
-        {{#tissues}}
-            <span class="genePrioritization">
+<div clas="row">
+    <div class="col-md-offset-2 col-md-8 text-left">
+        <table style="width:100%" class="genePrioritization" style="border: solid 2px black">
+        <tr>
+            <th class="genePrioritization">gene name</th>
+            <th class="genePrioritization">calculated weight</th>
+                %{--<th class="genePrioritization">calculated weight</th>--}%
 
-           </span>
-        {{/tissues}}
-        </td>
+        </tr>
+        {{#geneInformation}}
+            <tr>
 
-    </tr>
-{{/geneInformation}}
-<table>
+                <td class="genePrioritization">
+                {{geneName}}
+                </td>
+                <td class="genePrioritization">
+                {{combinedWeight}}
+                </td>
+               %{--<td class="genePrioritization">--}%
+                %{--{{#tissues}}--}%
+                    %{--<span class="genePrioritization">--}%
+                        %{--{{tissue}}--}%
+                   %{--</span>--}%
+                %{--{{/tissues}}--}%
+                %{--</td>--}%
 
+            </tr>
+        {{/geneInformation}}
+        </table>
+        <div class="col-md-2"></div>
+    </div>
+</div>
 
-<h5>tree</h5>
-<div class="row">
+<div clas="row">
+<div class="col-md-12 text-left"  style="margin-top:50px">
+<h4>Phenotype weighting</h4>
+</div>
+</div>
+
+<div class="row" style="margin-top:20px">
+    <div class="col-md-offset-2 col-md-10 text-left">
     {{#genefullCalculatedGraph}}
-        <div>
-        {{phenoName}}
-        {{#tissues}}
-            t={{tissue}}
-        {{/tissues}}
+         <div class="btn-group-vertical">
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary genePrioritizationPhenotype dropdown-toggle  btn-group-vertical" data-toggle="dropdown" data-placement="right">
+                {{phenoName}}&nbsp;&nbsp;<input type="text" class="genePrioritizationPhenotype coefficient" phenotype="{{phenoName}}" value="1" style="width: 28px">
+                </button>
+                <div class="dropdown-menu">
+                    {{#tissues}}
+                    <a type="button" class="btn btn-secondary genePrioritizationPhenotype" data-toggle="tooltip" data-placement="right" href="#"
+                        title="{{#genes}}{{geneName}}&nbsp;{{/genes}}">
+                        {{tissue}}&nbsp;({{weight}})
+                        </a>
+
+                    {{/tissues}}
+                </div>
+            </div>
         </div>
     {{/genefullCalculatedGraph}}
+    </div>
 </div>
+
+
+
 </script>
 
 

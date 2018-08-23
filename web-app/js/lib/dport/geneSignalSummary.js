@@ -1053,6 +1053,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     var processGeneRankingData = function (data,params) {
         data.geneInformation = _.map(data.geneInformation.sort(function(a,b){return b.combinedWeight-a.combinedWeight}),function(o){o.combinedWeight=UTILS.realNumberFormatter(o.combinedWeight);return o;})
         $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
+        $("button.dropdown-toggle").dropdown();
+        $('a.genePrioritizationPhenotype').tooltip({ overflow: 'auto' })
     }
 
 
@@ -1071,6 +1073,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["end"] = params.geneExtentEnd;
         callingObj ["maximumAssociation"] = (params.maximumAssociation)?params.maximumAssociation:".0001";
         callingObj ["minimumWeight"] = (params.minimumWeight)?params.minimumWeight:"1";
+        callingObj ["phenotypeCoefficients"] = []
         callingObj ["phenotype"] = params.phenotype;
 
         $.ajax({
