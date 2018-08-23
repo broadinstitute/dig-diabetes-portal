@@ -1073,7 +1073,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["end"] = params.geneExtentEnd;
         callingObj ["maximumAssociation"] = (params.maximumAssociation)?params.maximumAssociation:".0001";
         callingObj ["minimumWeight"] = (params.minimumWeight)?params.minimumWeight:"1";
-        callingObj ["phenotypeCoefficients"] = []
+        callingObj ["phenotypeCoefficients"] = JSON.stringify([{phenotypeName:'T2D',phenotypeCoefficient:1.0},{phenotypeName:'FG',phenotypeCoefficient:1.2}]);
         callingObj ["phenotype"] = params.phenotype;
 
         $.ajax({

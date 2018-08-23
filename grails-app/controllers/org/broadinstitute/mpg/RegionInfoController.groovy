@@ -179,6 +179,16 @@ class RegionInfoController {
         int endPosition =  0
         float maximumAssociation = 0.0
         float minimumWeight = 0.0
+        JSONArray arrayOfPhenotypeCoefficients
+        Map phenotypeCoefficientMap = [:]
+        try{
+            arrayOfPhenotypeCoefficients = slurper.parseText(params.phenotypeCoefficients as String)
+            for(JSONObject jsonObject in arrayOfPhenotypeCoefficients){
+                phenotypeCoefficientMap[jsonObject.phenotypeName] = jsonObject.phenotypeCoefficient
+            }
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
         try{
             startPosition = Integer.parseInt(startString)
         } catch ( Exception e ) {
@@ -200,48 +210,6 @@ class RegionInfoController {
             e.printStackTrace()
         }
 
-        ArrayList genefullCalculatedGraph = [
-                [
-                    phenotypeId: 0, phenoName: "T2D", phenoDescr: "type 2 diabetes", phenoWeight: 0.8,
-                         tissues:   [   [name:"liver", description:'liver', tissueWeight: 0.7,
-                                                 genes:[
-                                                    [geneId: 33, geneWeight: 0.5],
-                                                    [geneId: 43, geneWeight: 0.3 ],
-                                                    [geneId: 53, geneWeight: 0.2]
-                                                 ] ],
-                                        [name:"islet", description:'islets of Langerhans', tissueWeight: 0.2,
-                                               genes:[
-                                                       [geneId: 33, geneWeight: 0.5],
-                                                       [geneId: 43, geneWeight: 0.3 ],
-                                                       [geneId: 53, geneWeight: 0.2]
-                                               ]
-                                        ]
-                                    ]
-                ],
-                [
-                    phenotypeId: 1, phenoName: "BMI", phenoDescr: "body mass index", phenoWeight: 0.2,
-                        tissues:    [   [name:"adipose", description:'adipose tissue', tissueWeight: 0.7,
-                                               genes:[
-                                                       [geneId: 33, geneWeight: 0.5],
-                                                       [geneId: 43, geneWeight: 0.3 ],
-                                                       [geneId: 53, geneWeight: 0.2]
-                                               ] ],
-                                    [name:"muscle", description:'skeletal muscle', tissueWeight: 0.2,
-                                               genes:[
-                                                       [geneId: 33, geneWeight: 0.5],
-                                                       [geneId: 43, geneWeight: 0.3 ],
-                                                       [geneId: 53, geneWeight: 0.2]
-                                               ]
-                                    ]
-                        ]
-                ]
-        ]
-        ArrayList geneInformation = [
-                [geneId: 33, geneName: "SLC30A8", geneDescr: "Solute carrier family 30, member 8", combinedWeight: 0.6],
-                [geneId: 43, geneName: "MTNR1B", geneDescr: "Melatonin receptor 1B", combinedWeight: 0.2],
-                [geneId: 53, geneName: "TCF7L2", geneDescr: "Transcription factor 7-like 2", combinedWeight: 0.1],
-                [geneId: 63, geneName: "PPARG", geneDescr: "Peroxisome proliferator-activated receptor gamma ", combinedWeight: 0.1]
-        ]
 
         // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
         //  of the current range, and pull out all of the phenotypes that match those variants
