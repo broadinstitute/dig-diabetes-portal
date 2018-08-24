@@ -4,6 +4,7 @@
 
 <g:render template="./data/GWAS_SIGN"/>
 <g:render template="./data/GWAS_Stroke"/>
+<g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_UKBB" />
 <g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
 <g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
