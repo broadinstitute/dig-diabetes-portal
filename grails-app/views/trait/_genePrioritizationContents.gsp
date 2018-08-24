@@ -27,19 +27,26 @@
 
 
 
-<div class="separator"></div>
+<!--<div class="separator"></div>-->
 
-<p class="form-group">
+<div class="form-group row">
 
-    <g:message code="traitTable.messages.results" />
-    <span id="traitTableDescription"></span>:
-    <select id="phenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
-    </select>
+    <!--<h3><g:message code="traitTable.messages.results" /></h3>
+    <span id="traitTableDescription"></span>-->
 
-    <select id="subphenotypeDropdownIdentifier" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
-    </select>
+    <div class="col-md-6">
+        <label>Dataset: </label><select id="phenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
+        </select>
+    </div>
+    <div class="col-md-6">
+        <label>Variants: </label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
+        </select>
+    </div>
 
-</p>
+
+
+</div>
+
 <style>
 .mychart {width:100% !important; height:740px !important;}
 </style>

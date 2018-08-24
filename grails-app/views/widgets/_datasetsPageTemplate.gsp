@@ -56,6 +56,7 @@
 <g:render template="./data/ExSeq_RSNG" />
 <g:render template="./data/GWAS_DCSP2" />
 <g:render template="./data/GWAS_DIAGRAMimputed" />
+<g:render template="./data/GWAS_DIAGRAMimputed_eu" />
 <g:render template="./data/GWAS_AFHRC" />
 <g:render template="./data/ExChip_ExTexT2D" />
 <g:render template="./data/ExChip_FUSION" />
@@ -73,6 +74,15 @@
 <g:render template="./data/GWAS_DCSP2_ea" />
 <g:render template="./data/ExSeq_52k" />
 <g:render template="./data/AMPLOAD_36" />
+<g:render template="./data/ExChip_CHARGE-1_eu" />
+<g:render template="./data/ExChip_CHARGE-2_aa" />
+<g:render template="./data/GWAS_AAGILE" />
+<g:render template="./data/AMPLOAD_7_illumina_mdv1" />
+<g:render template="./data/AMPLOAD_7_broad_mdv1" />
+<g:render template="./data/AMPLOAD_7_affymetrix_mdv1" />
+<g:render template="./data/AMPLOAD_7_metabo_mdv1" />
+<g:render template="./data/AMPLOAD_7_exome_mdv1" />
+
 
 
 <script id="metaData2" type="x-tmpl-mustache">

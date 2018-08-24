@@ -61,9 +61,7 @@
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.Hoornstudies"></g:message></p>
 
-    <h4>Accessing Hoorn Diabetes Care System GWAS data</h4>
+    <h4>Accessing Hoorn DCS data</h4>
     <p><g:message code="informational.data.accessing.Hoornstudies1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.Hoornstudies2"></g:message></p>
-
-
 
 </script>

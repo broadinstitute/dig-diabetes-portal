@@ -11,6 +11,7 @@
     <r:require modules="multiTrack"/>
     <r:require modules="matrix"/>
     <r:require modules="traitSample"/>
+    <r:require modules="traitsFilter"/>
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
 
     <r:layoutResources/>
@@ -99,6 +100,17 @@
             core.errorReporter(jqXHR, errorThrown)
         });
     });
+
+    $(window).load( function() {
+
+        /* massage LocusZoom UI */
+        if(mpgSoftware.traitsFilter) mpgSoftware.traitsFilter.massageLZ();
+
+    });
+
+    $(window).resize(function() {
+        mpgSoftware.traitSample.filterTraitsTable();
+    })
 </script>
 
 

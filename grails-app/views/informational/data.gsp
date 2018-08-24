@@ -99,6 +99,7 @@
                 </p>
                     <p style="font-weight: 300; font-size: 15px;"><a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
                     </p>
+                    <p><i><g:message code="informational.mi.prsinfo"></g:message></i></p>
 </table>
                     </div>
 

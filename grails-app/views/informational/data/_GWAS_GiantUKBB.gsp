@@ -2,13 +2,13 @@
         <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 
     <p>Download URL: <a href="https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files" target="_blank">https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files</a><br/>
-
+<p><i><g:message code="informational.data.version.GIANT_UKBB"></g:message></i></p>
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
                   <p><div class="paper">
-<g:message code="informational.shared.publications.Yengo_2018_submitted"></g:message><br>
-<g:message code="informational.shared.publications.Yengo_2018_submitted.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Yengo_2018_submitted.citation"></g:message> </div>
+<g:message code="informational.shared.publications.Yengo_2018_HumMolGenet"></g:message><br>
+<g:message code="informational.shared.publications.Yengo_2018_HumMolGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Yengo_2018_HumMolGenet.citation"></g:message> </div>
 </div></p>
 
 

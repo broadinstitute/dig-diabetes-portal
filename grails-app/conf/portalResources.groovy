@@ -242,6 +242,9 @@ modules = {
     traitSample {
         resource url: 'js/lib/dport/traitSample.js'
     }
+    traitsFilter {
+        resource url: 'js/lib/dport/traitsFilter.js'
+    }
 
 }
 

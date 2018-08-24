@@ -85,7 +85,7 @@ button.expandoButton:visited {
         <g:if test="${portalVersionBean.getExposeTraitDataSetAssociationView()}">
             <p><g:message code="variant.traitTableGraphicHelp1"></g:message></p>
         </g:if>
-    <div class='phenotype-searchbox-wrapper'></div>
+    <div class='phenotype-searchbox-wrapper row'></div>
 
         <div id="pheplot">
 

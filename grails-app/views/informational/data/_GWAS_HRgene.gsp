@@ -43,10 +43,10 @@
 <tr><td>898</td><td>353</td><td>CROATIA-Korcula (Korcula)</td><td>European</td></tr> <tr><td>3367</td><td>3363</td><td>LifeLines Study (LifeLines)</td><td>European</td></tr> <tr><td>2684</td><td>1869</td><td>London Life Sciences Prospective Population Cohort (Lolipop Cohort)</td><td>South Asian</td></tr>
 <tr><td>6,557</td><td>4,699</td><td>London Life Sciences Prospective Population Study (Lolipop)</td><td>South Asian</td></tr>
 <tr><td>1,832</td><td>551</td><td>Nijmegen Biomedical Study (NBS)</td><td>European</td></tr>
-<tr><td>4,772</td><td>4,594</td><td>Northern Finland Birth Cohort 1966 (NFBC-1966)</td><td>European</td></tr> <tr><td>2287</td><td>1889</td><td>Nurses’ Health Study (NHS Cancer)</td><td>European</td></tr>
-<tr><td>1,146</td><td>1,020</td><td>Nurses’ Health Study (NHS CHD)</td><td>European</td></tr>
-<tr><td>504</td><td>457</td><td>Nurses’ Health Study (NHS Kidney stone disease)</td><td>European</td></tr>
-<tr><td>3,286</td><td>2,878</td><td>Nurses’ Health Study (NHS type 2 diabetes)</td><td>European</td></tr>
+<tr><td>4,772</td><td>4,594</td><td>Northern Finland Birth Cohort 1966 (NFBC-1966)</td><td>European</td></tr> <tr><td>2287</td><td>1889</td><td>Nurses' Health Study (NHS Cancer)</td><td>European</td></tr>
+<tr><td>1,146</td><td>1,020</td><td>Nurses' Health Study (NHS CHD)</td><td>European</td></tr>
+<tr><td>504</td><td>457</td><td>Nurses' Health Study (NHS Kidney stone disease)</td><td>European</td></tr>
+<tr><td>3,286</td><td>2,878</td><td>Nurses' Health Study (NHS type 2 diabetes)</td><td>European</td></tr>
 <tr><td>656</td><td>591</td><td>Northern Swedish Population Health Study 2006 (NSPHS06)</td><td>European</td></tr>
 <tr><td>8,592</td><td>3,791</td><td>Prevention of Renal and Vascular End-stage Disease (PREVEND)</td><td>European</td></tr>
 <tr><td>499</td><td>396</td><td>CROATIA-Split (Split)</td><td>European</td></tr>
