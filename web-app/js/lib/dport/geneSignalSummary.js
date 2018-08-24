@@ -1037,6 +1037,17 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var endPosition = $('input.endPosition').val();
         var adjustedStartingPosition = (startPosition) ? startPosition : drivingVariables.geneExtentBegin;
         var adjustedEndingPosition = (endPosition) ? endPosition : drivingVariables.geneExtentEnd;
+        var phenotypeCoefficientsHolder = $('input.genePrioritizationPhenotype.coefficient');
+        var phenotypeCoefficientMap = [];
+        _.forEach(phenotypeCoefficientsHolder,function (phenotypeCoefficientHolder){
+            var phenotypeCoefficientDomObject = $(phenotypeCoefficientHolder);
+            var phenotypeName = phenotypeCoefficientDomObject.attr('phenotype');
+            var phenotypeCoefficient = phenotypeCoefficientDomObject.val();
+            if (phenotypeName){
+                phenotypeCoefficientMap.push({'phenotypeName':phenotypeName,'phenotypeCoefficient':phenotypeCoefficient});
+            }
+        });
+
 
         mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
             {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
@@ -1045,13 +1056,20 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome,
                 maximumAssociation:phenotypeWeigth,
                 minimumWeight:ldsrWeigth,
-            phenotype: phenotypeRestriction});
+                phenotype: phenotypeRestriction,
+                phenotypeCoefficients:phenotypeCoefficientMap});
     }
 
 
 
     var processGeneRankingData = function (data,params) {
         data.geneInformation = _.map(data.geneInformation.sort(function(a,b){return b.combinedWeight-a.combinedWeight}),function(o){o.combinedWeight=UTILS.realNumberFormatter(o.combinedWeight);return o;})
+        _.forEach(data.geneInformation,function(oneGene){
+            oneGene.phenoRecs=oneGene.phenoRecs.sort(function(a,b){return b.phenotypeValue-a.phenotypeValue});
+            _.forEach(oneGene.phenoRecs,function(onePheno){
+                onePheno['phenotypeValue'] = UTILS.realNumberFormatter(onePheno.phenotypeValue);
+            });
+        });
         $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
         $("button.dropdown-toggle").dropdown();
         $('a.genePrioritizationPhenotype').tooltip({ overflow: 'auto' })
@@ -1073,7 +1091,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["end"] = params.geneExtentEnd;
         callingObj ["maximumAssociation"] = (params.maximumAssociation)?params.maximumAssociation:".0001";
         callingObj ["minimumWeight"] = (params.minimumWeight)?params.minimumWeight:"1";
-        callingObj ["phenotypeCoefficients"] = JSON.stringify([{phenotypeName:'T2D',phenotypeCoefficient:1.0},{phenotypeName:'FG',phenotypeCoefficient:1.2}]);
+        //callingObj ["phenotypeCoefficients"] = JSON.stringify([{phenotypeName:'T2D',phenotypeCoefficient:'1.0'},{phenotypeName:'FG',phenotypeCoefficient:'1.2'}]);
+        callingObj ["phenotypeCoefficients"] = JSON.stringify(params.phenotypeCoefficients);
         callingObj ["phenotype"] = params.phenotype;
 
         $.ajax({

@@ -1371,6 +1371,7 @@ class WidgetService {
     public Map buildFinalDataStructureBeforeTransmission( Map phenotypesWeightsAndGenes,
                                                             Map parametersForAlgorithm ){
         List genesInRegion = phenotypesWeightsAndGenes.geneInformation.keySet()  as List
+        Map phenotypeCoefficientMap = parametersForAlgorithm.phenotypeCoefficientMap
         Map invertedGeneExpression = [:]
         Map geneInformation = [:]
         int geneId = 1
@@ -1387,8 +1388,16 @@ class WidgetService {
             }
         }
 
+        Map geneSpecificContribution = [:]
         List phenotypeRecords= phenotypesWeightsAndGenes["genefullCalculatedGraph"]
         for (Map phenotypeRecord in phenotypeRecords){
+            Float phenotypeCoefficient = 1.0
+            String phenoName = phenotypeRecord.phenoName as String
+            if (phenotypeCoefficientMap.containsKey(phenoName)){
+                phenotypeRecord.phenoWeight = phenotypeCoefficientMap[phenoName]
+            } else {
+                phenotypeRecord.phenoWeight = 1.0 as float
+            }
             if ((phenotypeRecord['tissues'])&& ((phenotypeRecord['tissues'].size()>0))){
                 List tissueRecords = phenotypeRecord['tissues']
                 for (Map tissueRecord in tissueRecords){
@@ -1396,11 +1405,35 @@ class WidgetService {
                     if (invertedGeneExpression.containsKey(tissueName)){
                         tissueRecord['genes'] = invertedGeneExpression[tissueName].findAll{it.geneWeight>0.0}
                         for (Map recPerGene in invertedGeneExpression[tissueName]){
-                            geneInformation[recPerGene['geneName']]['tissues'] << ['tissue':tissueName,'tissueWeight':tissueRecord["weight"] ]
-                            geneInformation[recPerGene['geneName']]['combinedWeight'] += (recPerGene['geneWeight']*tissueRecord["weight"])
+                            String geneName = recPerGene['geneName'] as String
+                            if (!geneSpecificContribution.containsKey(geneName)){
+                                geneSpecificContribution[geneName] = [:]
+                            }
+                            if (!((geneSpecificContribution[geneName] as Map).containsKey(phenoName))){
+                                geneSpecificContribution[geneName][phenoName] = 0.0
+                            }
+                            geneInformation[geneName]['tissues'] << ['tissue':tissueName,'tissueWeight':tissueRecord["weight"] ]
+                            Float valToAdd = (recPerGene['geneWeight']*tissueRecord["weight"])
+                            geneInformation[geneName]['combinedWeight'] += (recPerGene['geneWeight']*tissueRecord["weight"])
+                            geneSpecificContribution[geneName][phenoName] += valToAdd
                         }
                     }
                 }
+            }
+            phenotypeRecord.phenoWeight
+
+        }
+        phenotypesWeightsAndGenes['geneSpecificContribution'] = geneSpecificContribution
+        geneInformation.each{ gk,gv->
+            String geneName = gk as String
+            if (geneSpecificContribution.containsKey(geneName)){
+                List phenotypeInfoSpecificToAGene = []
+                geneSpecificContribution[geneName].each{ pk, pv ->
+                    if (pv>0){
+                        phenotypeInfoSpecificToAGene << [phenotypeName:pk,phenotypeValue:pv]
+                    }
+                }
+                gv["phenoRecs"] = phenotypeInfoSpecificToAGene
             }
         }
         phenotypesWeightsAndGenes['geneInformation'] = geneInformation.values()

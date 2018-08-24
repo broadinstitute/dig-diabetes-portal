@@ -184,7 +184,13 @@ class RegionInfoController {
         try{
             arrayOfPhenotypeCoefficients = slurper.parseText(params.phenotypeCoefficients as String)
             for(JSONObject jsonObject in arrayOfPhenotypeCoefficients){
-                phenotypeCoefficientMap[jsonObject.phenotypeName] = jsonObject.phenotypeCoefficient
+                Float numericalCoefficient = 1.0
+                try {
+                    numericalCoefficient = Float.parseFloat(jsonObject.phenotypeCoefficient)
+                    phenotypeCoefficientMap[jsonObject.phenotypeName as String] = numericalCoefficient
+                } catch (Exception e){
+                    e.printStackTrace()
+                }
             }
         } catch ( Exception e ) {
             e.printStackTrace()
@@ -227,7 +233,7 @@ class RegionInfoController {
         Map dataReadyForCalculation =  widgetService.gatherExpressionDataForEachGene( phenotypesWeightsAndGenes, [:] )
 
         // Now sum across the tree we've built
-        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [:] )
+        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [phenotypeCoefficientMap:phenotypeCoefficientMap] )
 
         // create our final data structure, and send it down to the browser
         finalFormData["maximumAssociation"] = maximumAssociation

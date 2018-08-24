@@ -1418,7 +1418,7 @@ span.genePrioritization {
         <tr>
             <th class="genePrioritization">gene name</th>
             <th class="genePrioritization">calculated weight</th>
-                %{--<th class="genePrioritization">calculated weight</th>--}%
+            <th class="genePrioritization">phenotype contributions</th>
 
         </tr>
         {{#geneInformation}}
@@ -1430,13 +1430,11 @@ span.genePrioritization {
                 <td class="genePrioritization">
                 {{combinedWeight}}
                 </td>
-               %{--<td class="genePrioritization">--}%
-                %{--{{#tissues}}--}%
-                    %{--<span class="genePrioritization">--}%
-                        %{--{{tissue}}--}%
-                   %{--</span>--}%
-                %{--{{/tissues}}--}%
-                %{--</td>--}%
+                <td class="genePrioritization">
+                {{#phenoRecs}}
+                  <span class="btn btn-outline-secondary">{{phenotypeName}}<span>{{phenotypeValue}}</span></span>
+                {{/phenoRecs}}
+                </td>
 
             </tr>
         {{/geneInformation}}
@@ -1457,7 +1455,7 @@ span.genePrioritization {
          <div class="btn-group-vertical">
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary genePrioritizationPhenotype dropdown-toggle  btn-group-vertical" data-toggle="dropdown" data-placement="right">
-                {{phenoName}}&nbsp;&nbsp;<input type="text" class="genePrioritizationPhenotype coefficient" phenotype="{{phenoName}}" value="1" style="width: 28px">
+                {{phenoName}}&nbsp;&nbsp;<input type="text" class="genePrioritizationPhenotype coefficient" phenotype="{{phenoName}}" value="{{phenoWeight}}" style="width: 28px">
                 </button>
                 <div class="dropdown-menu">
                     {{#tissues}}
