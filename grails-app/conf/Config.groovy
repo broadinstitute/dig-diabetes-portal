@@ -171,12 +171,12 @@ getRestServerList = [
 //        digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
-        digawsqanewKB_fed_dedicated_EBIv1,
+//        digawsqanewKB_fed_dedicated_EBIv1,
         digawsqanewKB_fed_dedicated_EBIv2,
 //        digawsprodmiKB,
 //        digawsprodstrokeKB,
 //        digawsdemoibdKB
-        ebiKB1,
+//        ebiKB1,
         ebiKB2
 ]
 
