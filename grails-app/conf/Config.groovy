@@ -154,7 +154,6 @@ federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-
 digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
 digawsqanewKB_fed_dedicated_EBIv1 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB1", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccservices/distributed/")
 
-
 // this will be your default
 defaultRestServer = digawsqanewKB_fed
 
