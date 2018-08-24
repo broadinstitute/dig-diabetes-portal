@@ -2,6 +2,8 @@
 %{--this will have all the mustache templates--}%
 %{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
 
+<g:render template="./data/GWAS_SIGN"/>
+<g:render template="./data/GWAS_Stroke"/>
 <g:render template="./data/GWAS_UKBB" />
 <g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
 <g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
@@ -43,8 +45,6 @@
 <g:render template="./data/GWAS_MEGASTROKE"/>
 <g:render template="./data/GWAS_MICAD"/>
 <g:render template="./data/GWAS_PWI" />
-<g:render template="./data/GWAS_SIGN"/>
-<g:render template="./data/GWAS_Stroke"/>
 <g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_AFGen" />
 <g:render template="./data/GWAS_GEI" />
