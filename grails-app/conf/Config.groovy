@@ -143,6 +143,9 @@ digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.
 digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
+// KB for the test federated portal changes
+digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+
 // this will be your default
 defaultRestServer = digawsdevnewKB
 
@@ -158,6 +161,7 @@ getRestServerList = [
         digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
+        digawsqanewKB_fed_dedicated_EBIv2,
         digawsprodmiKB,
         digawsprodstrokeKB,
         digawsdemoibdKB
