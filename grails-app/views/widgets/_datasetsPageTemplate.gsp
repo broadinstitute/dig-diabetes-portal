@@ -18,7 +18,6 @@
 <g:render template="./data/GWAS_DIAGRAM"/>
 <g:render template="./data/GWAS_MAGIC"/>
 <g:render template="./data/GWAS_GLGC"/>
-<g:render template="./data/GWAS_Oxford_GoDARTS_mdv1" />
 <g:render template="./data/ExChip_CAMP"/>
 <g:render template="./data/GWAS_CAMP"/>
 <g:render template="./data/GWAS_CKDGenConsortium"/>
@@ -83,7 +82,12 @@
 <g:render template="./data/AMPLOAD_7_exome" />
 <g:render template="./data/AMPLOAD_7_affymetrix" />
 <g:render template="./data/GWAS_Oxford_GoDARTS" />
-
+<g:render template="./data/GWAS_SUMMITDKD-T1DT2D" />
+<g:render template="./data/GWAS_SUMMITDKD-T1DT2D-ESRDvControl_eu" />
+<g:render template="./data/GWAS_SUMMITDKD-T1D_eu" />
+<g:render template="./data/GWAS_SUMMITDKD-T1D-ESRDvControl_eu" />
+<g:render template="./data/GWAS_SUMMITDKD-T2D" />
+<g:render template="./data/GWAS_SUMMITDKD-T2D-ESRDvControl_eu" />
 
 
 <script id="metaData2" type="x-tmpl-mustache">
