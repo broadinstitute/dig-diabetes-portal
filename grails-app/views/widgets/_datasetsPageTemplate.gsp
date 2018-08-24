@@ -77,11 +77,12 @@
 <g:render template="./data/ExChip_CHARGE-1_eu" />
 <g:render template="./data/ExChip_CHARGE-2_aa" />
 <g:render template="./data/GWAS_AAGILE" />
-<g:render template="./data/AMPLOAD_7_illumina_mdv1" />
-<g:render template="./data/AMPLOAD_7_broad_mdv1" />
-<g:render template="./data/AMPLOAD_7_affymetrix_mdv1" />
-<g:render template="./data/AMPLOAD_7_metabo_mdv1" />
-<g:render template="./data/AMPLOAD_7_exome_mdv1" />
+<g:render template="./data/AMPLOAD_7_illumina" />
+<g:render template="./data/AMPLOAD_7_broad" />
+<g:render template="./data/AMPLOAD_7_metabo" />
+<g:render template="./data/AMPLOAD_7_exome" />
+<g:render template="./data/AMPLOAD_7_affymetrix" />
+<g:render template="./data/GWAS_Oxford_GoDARTS" />
 
 
 
