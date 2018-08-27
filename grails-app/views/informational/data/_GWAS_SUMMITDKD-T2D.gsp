@@ -22,10 +22,13 @@
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
 <ul>
-    <li><g:message code="informational.shared.traits.t1d"></g:message></li>
-<li><g:message code="informational.shared.traits.t2d"></g:message></li>
-<li><g:message code="informational.shared.traits.X"></g:message></li>
-<li><g:message code="informational.shared.traits.X"></g:message></li>
+    <li><g:message code="informational.shared.traits.allDKD"></g:message></li>
+<li><g:message code="informational.shared.traits.CKD"></g:message></li>
+<li><g:message code="informational.shared.traits.CKDpDKD"></g:message></li>
+<li><g:message code="informational.shared.traits.lateDKD"></g:message></li>
+<li><g:message code="informational.shared.traits.ESRDvsnoESRD"></g:message></li>
+<li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
+<li><g:message code="informational.shared.traits.microalbuminuria"></g:message></li>
 </ul>
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
