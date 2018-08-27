@@ -235,12 +235,15 @@ class RegionInfoController {
         // Now sum across the tree we've built
         Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [phenotypeCoefficientMap:phenotypeCoefficientMap] )
 
+        List uniqueTissues = finalFormData.genefullCalculatedGraph.collect{it.tissues}.flatten().unique{ tissueRec->tissueRec.tissue }
+
         // create our final data structure, and send it down to the browser
         finalFormData["maximumAssociation"] = maximumAssociation
         finalFormData["minimumWeight"] = minimumWeight
         finalFormData["phenotype"] = phenotype
         finalFormData["startPosition"] = startPosition
         finalFormData["endPosition"] = endPosition
+        finalFormData["uniqueTissues"] = uniqueTissues
         String proposedJsonString = new JsonBuilder( finalFormData ).toPrettyString()
 
         jsonReturn =  slurper.parseText(proposedJsonString)

@@ -1047,6 +1047,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 phenotypeCoefficientMap.push({'phenotypeName':phenotypeName,'phenotypeCoefficient':phenotypeCoefficient});
             }
         });
+        var tissueCheckboxs = [];
+        var tissueCheckboxHolder = $('input.genePrioritizationTissue:checked');
+        _.forEach(tissueCheckboxHolder,function (tissueCheckbox){
+            tissueCheckboxs.push($(tissueCheckbox).val());
+        });
 
 
         mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
@@ -1057,7 +1062,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 maximumAssociation:phenotypeWeigth,
                 minimumWeight:ldsrWeigth,
                 phenotype: phenotypeRestriction,
-                phenotypeCoefficients:phenotypeCoefficientMap});
+                phenotypeCoefficients:phenotypeCoefficientMap,
+                tissueToInclude:tissueCheckboxs});
     }
 
 
@@ -1094,6 +1100,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         //callingObj ["phenotypeCoefficients"] = JSON.stringify([{phenotypeName:'T2D',phenotypeCoefficient:'1.0'},{phenotypeName:'FG',phenotypeCoefficient:'1.2'}]);
         callingObj ["phenotypeCoefficients"] = JSON.stringify(params.phenotypeCoefficients);
         callingObj ["phenotype"] = params.phenotype;
+        callingObj ["tissueToInclude"] = JSON.stringify(params.tissueToInclude);
 
         $.ajax({
             cache: false,

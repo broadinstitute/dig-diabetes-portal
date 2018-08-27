@@ -1474,6 +1474,26 @@ span.genePrioritization {
 
 
 
+
+<div clas="row">
+<div class="col-md-12 text-left"  style="margin-top:50px">
+<h4>Tissues to include</h4>
+</div>
+</div>
+
+<div class="row" style="margin-top:20px">
+    <div class="col-md-offset-2 col-md-10 text-left">
+    {{#uniqueTissues}}
+        <label class="checkbox-inline">
+            <input type="checkbox" tissueName="{{tissue}}" class="genePrioritizationTissue" checked value="{{tissue}}">{{tissue}}
+        </label>
+    {{/uniqueTissues}}
+    </div>
+</div>
+
+
+
+
 </script>
 
 
