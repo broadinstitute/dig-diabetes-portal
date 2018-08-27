@@ -1391,7 +1391,6 @@ class WidgetService {
         Map geneSpecificContribution = [:]
         List phenotypeRecords= phenotypesWeightsAndGenes["genefullCalculatedGraph"]
         for (Map phenotypeRecord in phenotypeRecords){
-            Float phenotypeCoefficient = 1.0
             String phenoName = phenotypeRecord.phenoName as String
             if (phenotypeCoefficientMap.containsKey(phenoName)){
                 phenotypeRecord.phenoWeight = phenotypeCoefficientMap[phenoName]
@@ -1413,8 +1412,8 @@ class WidgetService {
                                 geneSpecificContribution[geneName][phenoName] = 0.0
                             }
                             geneInformation[geneName]['tissues'] << ['tissue':tissueName,'tissueWeight':tissueRecord["weight"] ]
-                            Float valToAdd = (recPerGene['geneWeight']*tissueRecord["weight"])
-                            geneInformation[geneName]['combinedWeight'] += (recPerGene['geneWeight']*tissueRecord["weight"])
+                            Float valToAdd = (recPerGene['geneWeight']*tissueRecord["weight"]*phenotypeRecord.phenoWeight)
+                            geneInformation[geneName]['combinedWeight'] += valToAdd
                             geneSpecificContribution[geneName][phenoName] += valToAdd
                         }
                     }
