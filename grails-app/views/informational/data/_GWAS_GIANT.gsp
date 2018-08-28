@@ -5,11 +5,7 @@
 
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
-               <p><div class="paper">
-<g:message code="informational.shared.publications.Shungin_2015_Nature"></g:message><br>
-<g:message code="informational.shared.publications.Shungin_2015_Nature.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
-<div class="citation"><g:message code="informational.shared.publications.Shungin_2015_Nature.citation"></g:message> </div>
-</div></p>
+
 
                <p><div class="paper">
 <g:message code="informational.shared.publications.Yang_2012_Nature"></g:message><br>
