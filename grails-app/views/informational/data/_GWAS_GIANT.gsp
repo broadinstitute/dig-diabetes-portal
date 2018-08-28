@@ -25,12 +25,6 @@
 <ul>
 <li><g:message code="informational.shared.traits.BMI"></g:message></li>
 <li><g:message code="informational.shared.traits.height"></g:message></li>
-<li><g:message code="informational.shared.traits.hip_circumference"></g:message></li>
-<li><g:message code="informational.shared.traits.hip_circumference_adjBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.waist_circumference"></g:message></li>
-<li><g:message code="informational.shared.traits.waist_circumference_adjBMI"></g:message></li>
-<li><g:message code="informational.shared.traits.waist_hip_ratio"></g:message></li>
-<li><g:message code="informational.shared.traits.WHRadjBMI"></g:message></li>
 </ul>
 
 
