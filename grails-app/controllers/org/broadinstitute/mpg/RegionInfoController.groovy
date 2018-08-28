@@ -175,14 +175,20 @@ class RegionInfoController {
         String endString = params.end; // ex "29937203"
         String maximumAssociationString = params.maximumAssociation; // ex ".0001"
         String minimumWeightString = params.minimumWeight; // ex "1"
+        String defaultPhenotypeWeightingSchemeString = params.defaultPhenotypeWeightingScheme
+        int defaultPhenotypeWeightingScheme = 0
         int startPosition =  0
         int endPosition =  0
         float maximumAssociation = 0.0
         float minimumWeight = 0.0
         JSONArray arrayOfPhenotypeCoefficients
         Map phenotypeCoefficientMap = [:]
+        List tissueToInclude = []
+        boolean validParameters = false
         try{
             arrayOfPhenotypeCoefficients = slurper.parseText(params.phenotypeCoefficients as String)
+            tissueToInclude = slurper.parseText(params.tissueToInclude as String)
+            validParameters = true
             for(JSONObject jsonObject in arrayOfPhenotypeCoefficients){
                 Float numericalCoefficient = 1.0
                 try {
@@ -215,6 +221,11 @@ class RegionInfoController {
         } catch ( Exception e ) {
             e.printStackTrace()
         }
+        try{
+            defaultPhenotypeWeightingScheme = Integer.parseInt(defaultPhenotypeWeightingSchemeString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
 
 
         // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
@@ -227,15 +238,31 @@ class RegionInfoController {
 
         // Now for each phenotype, generate a list of tissues.  We will filter the list of tissues and require that each one have a weight
         //   greater than our threshold cut off
-        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:minimumWeight, phenotype: phenotype])
+        phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:minimumWeight,
+                                                                                                                           phenotype: phenotype
+        ])
 
         // Now for every gene gather the expression data
         Map dataReadyForCalculation =  widgetService.gatherExpressionDataForEachGene( phenotypesWeightsAndGenes, [:] )
 
         // Now sum across the tree we've built
-        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [phenotypeCoefficientMap:phenotypeCoefficientMap] )
+        Map finalFormData = widgetService.buildFinalDataStructureBeforeTransmission( dataReadyForCalculation, [phenotypeCoefficientMap:phenotypeCoefficientMap,
+                                                                                                               restrictTissues:validParameters,
+                                                                                                               tissueToInclude:tissueToInclude] )
 
         List uniqueTissues = finalFormData.genefullCalculatedGraph.collect{it.tissues}.flatten().unique{ tissueRec->tissueRec.tissue }
+
+        List tissuesToConsider = []
+        for (def tissueRec in  uniqueTissues){
+            String tissueName = tissueRec?.tissue
+            String includeIt
+            if (validParameters) {
+                includeIt = (tissueToInclude.contains(tissueName)) ? "checked" : ""
+            } else {
+                includeIt = "checked"
+            }
+            tissuesToConsider << [nameOfTissue:tissueName,isPresent:includeIt]
+        }
 
         // create our final data structure, and send it down to the browser
         finalFormData["maximumAssociation"] = maximumAssociation
@@ -244,6 +271,7 @@ class RegionInfoController {
         finalFormData["startPosition"] = startPosition
         finalFormData["endPosition"] = endPosition
         finalFormData["uniqueTissues"] = uniqueTissues
+        finalFormData["tissuesToConsider"] = tissuesToConsider
         String proposedJsonString = new JsonBuilder( finalFormData ).toPrettyString()
 
         jsonReturn =  slurper.parseText(proposedJsonString)

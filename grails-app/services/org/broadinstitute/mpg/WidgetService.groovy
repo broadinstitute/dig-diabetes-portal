@@ -1280,7 +1280,8 @@ class WidgetService {
     public Map determinePhenotypeWeightsAndCutOff( Map mapFromApiCall,
                                                     Map parametersForAlgorithm ) {
         Map returnValue = [ genefullCalculatedGraph: [],
-                            geneInformation: [] ]
+                            geneInformation: [],
+                            phenotypePValueMap: [:]]
         List nonUniqueGenesWithIdentifiedVariants = []
         float maximumAssociationValue = parametersForAlgorithm.maximumAssociationValue
         int phenotypeIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^PHENOTYPE/ } )
@@ -1302,6 +1303,9 @@ class WidgetService {
                         countingPhenotypeSignals[phenotypeToFlag] += 1.0
                     } else {
                         countingPhenotypeSignals[phenotypeToFlag] = 0.0
+                    }
+                    if (!returnValue.phenotypePValueMap.containsKey(phenotypeToFlag)){
+                        returnValue.phenotypePValueMap[phenotypeToFlag] = mapFromApiCall["data"][pValueIndex][i]
                     }
                 }
             }
@@ -1343,7 +1347,7 @@ class WidgetService {
             if (processRecord){
                 List tissueWeightPerPhenotype = restServerService.determineTissueAssociationPerPhenotype(onePhenotypeRecord.phenoName)
                 if ((tissueWeightPerPhenotype)&&(tissueWeightPerPhenotype.size()>0)){
-                    onePhenotypeRecord["tissues"]  =  tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
+                        onePhenotypeRecord["tissues"]  =  tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
                 } else {
                     onePhenotypeRecord["tissues"]  = []
                 }
@@ -1401,7 +1405,14 @@ class WidgetService {
                 List tissueRecords = phenotypeRecord['tissues']
                 for (Map tissueRecord in tissueRecords){
                     String tissueName = tissueRecord["tissue"]
-                    if (invertedGeneExpression.containsKey(tissueName)){
+                    boolean processTissue = false
+                    if (parametersForAlgorithm.restrictTissues){
+                        processTissue = (invertedGeneExpression.containsKey(tissueName)&&
+                                (parametersForAlgorithm.tissueToInclude.contains(tissueName)))
+                    } else {
+                        processTissue = invertedGeneExpression.containsKey(tissueName)
+                    }
+                    if (processTissue){
                         tissueRecord['genes'] = invertedGeneExpression[tissueName].findAll{it.geneWeight>0.0}
                         for (Map recPerGene in invertedGeneExpression[tissueName]){
                             String geneName = recPerGene['geneName'] as String

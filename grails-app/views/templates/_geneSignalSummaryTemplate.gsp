@@ -1364,6 +1364,19 @@ span.genePrioritization {
     max-width: 350px;
     width: 350px;
 }
+span.valuesPerPhenotype {
+    padding-left: 5px;
+}
+tr.ledgeTable:not(:last-child){
+    border-bottom: 1px solid #E3E3E3;
+}
+tr.ledgeTable:not(:last-child){
+    border-bottom: 1px solid #E3E3E3;
+}
+div.explanatoryText {
+   font-style: italic;
+    color:		#bbbbbb;
+}
 </style>
 
 
@@ -1371,33 +1384,32 @@ span.genePrioritization {
 <div class="row">
     <div class="col-md-3 text-right">p-value cutoff for phenotype < &nbsp;
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
     <input class="phenotypeParameter" type="text" value="{{maximumAssociation}}"></input>
     </div>
-    <div class="col-md-6"></div>
+    <div class="col-md-7 text-left explanatoryText">higher values include more phenotypes</div>
 </div>
 <div class="row">
     <div class="col-md-3 text-right">LDSR weight >  &nbsp;
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
     <input class="ldsrParameter" type="text" value="{{minimumWeight}}"></input>
     </div>
-    <div class="col-md-6"></div>
+    <div class="col-md-7 text-left explanatoryText">lower values include more tissues</div>
 </div>
-<div class="row">
-    <div class="col-md-3 text-right">phenotype restriction &nbsp;
-    </div>
-    <div class="col-md-3">
-    <input class="phenotypeLimitationParameter" type="text" value="{{phenotype}}"></input>
+<div class="row" style="margin-top: 20px">
+    <div class="col-md-3 text-right">
+        Genomic range:
     </div>
 
 
 
     <div class="col-md-2 text-left"> <input class="startPosition" type="text" value="{{startPosition}}"></input>
     </div>
-    <div class="col-md-2 text-center">range</div>
-    <div class="col-md-2 text-right">
+    <div class="col-md-2 text-left">
     <input class="endPosition" type="text" value="{{endPosition}}"></input>
+    </div>
+    <div class="col-md-5 text-left explanatoryText">bigger ranges include more genes
     </div>
 
 
@@ -1422,7 +1434,7 @@ span.genePrioritization {
 
         </tr>
         {{#geneInformation}}
-            <tr>
+            <tr class="ledgeTable">
 
                 <td class="genePrioritization">
                 {{geneName}}
@@ -1432,7 +1444,7 @@ span.genePrioritization {
                 </td>
                 <td class="genePrioritization">
                 {{#phenoRecs}}
-                  <span class="btn btn-outline-secondary">{{phenotypeName}}<span>{{phenotypeValue}}</span></span>
+                  <span class="btn btn-outline-secondary">{{phenotypeName}}<span class="valuesPerPhenotype">{{phenotypeValue}}</span></span>
                 {{/phenoRecs}}
                 </td>
 
@@ -1444,8 +1456,12 @@ span.genePrioritization {
 </div>
 
 <div clas="row">
-<div class="col-md-12 text-left"  style="margin-top:50px">
+<div class="col-md-6 text-left"  style="margin-top:50px">
 <h4>Phenotype weighting</h4>
+</div>
+<div class="col-md-6 text-left"  style="margin-top:50px">
+<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=1>Weight by significance</label>
+<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=2 checked>Unity weighting</label>
 </div>
 </div>
 
@@ -1481,13 +1497,14 @@ span.genePrioritization {
 </div>
 </div>
 
+
 <div class="row" style="margin-top:20px">
     <div class="col-md-offset-2 col-md-10 text-left">
-    {{#uniqueTissues}}
+    {{#tissuesToConsider}}
         <label class="checkbox-inline">
-            <input type="checkbox" tissueName="{{tissue}}" class="genePrioritizationTissue" checked value="{{tissue}}">{{tissue}}
+            <input type="checkbox" tissueName="{{nameOfTissue}}" class="genePrioritizationTissue" {{isPresent}} value="{{nameOfTissue}}">{{nameOfTissue}}
         </label>
-    {{/uniqueTissues}}
+    {{/tissuesToConsider}}
     </div>
 </div>
 
