@@ -31,7 +31,7 @@
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p>
-<g:message code="informational.data.exptsumm.GIANT"></g:message>
+<g:message code="informational.data.exptsumm.GIANT-A"></g:message>
 </p>
 
 <h4>Accessing GIANT GWAS data</h4>
