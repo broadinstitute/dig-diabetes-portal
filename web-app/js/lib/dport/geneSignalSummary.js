@@ -1052,7 +1052,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         _.forEach(tissueCheckboxHolder,function (tissueCheckbox){
             tissueCheckboxs.push($(tissueCheckbox).val());
         });
-        var defaultPhenotypeWeightingScheme = $("input[name='defaultPhenotypeWeighting']:checked").val();
+      //  var defaultPhenotypeWeightingScheme = $("input[name='defaultPhenotypeWeighting']:checked").val();
 
 
         mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
@@ -1064,8 +1064,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 minimumWeight:ldsrWeigth,
                 phenotype: phenotypeRestriction,
                 phenotypeCoefficients:phenotypeCoefficientMap,
-                tissueToInclude:tissueCheckboxs,
-                defaultPhenotypeWeightingScheme:defaultPhenotypeWeightingScheme});
+                tissueToInclude:tissueCheckboxs});
     }
 
 
@@ -1103,7 +1102,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["phenotypeCoefficients"] = JSON.stringify(params.phenotypeCoefficients);
         callingObj ["phenotype"] = params.phenotype;
         callingObj ["tissueToInclude"] = JSON.stringify(params.tissueToInclude);
-        callingObj ["defaultPhenotypeWeightingScheme"] = params.defaultPhenotypeWeightingScheme;
+       // callingObj ["defaultPhenotypeWeightingScheme"] = params.defaultPhenotypeWeightingScheme;
 
         $.ajax({
             cache: false,

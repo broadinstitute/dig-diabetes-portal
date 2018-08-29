@@ -1377,6 +1377,9 @@ div.explanatoryText {
    font-style: italic;
     color:		#bbbbbb;
 }
+span.explanatoryText {
+    color:		black;
+}
 </style>
 
 
@@ -1456,13 +1459,18 @@ div.explanatoryText {
 </div>
 
 <div clas="row">
-<div class="col-md-6 text-left"  style="margin-top:50px">
-<h4>Phenotype weighting</h4>
-</div>
-<div class="col-md-6 text-left"  style="margin-top:50px">
-<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=1>Weight by significance</label>
-<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=2 checked>Unity weighting</label>
-</div>
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+    <h4>Phenotype weighting</h4>
+    </div>
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+        <span class="explanatoryText">
+        Reset phenotype coefficients:
+        <button type="button" class="btn btn-secondary btn-sm">by phenotype significance</button>
+        <button type="button" class="btn btn-secondary btn-sm">unity weighting</button>
+        </span>
+        %{--<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=1>Weight by significance</label>--}%
+        %{--<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=2 checked>Unity weighting</label>--}%
+    </div>
 </div>
 
 <div class="row" style="margin-top:20px">

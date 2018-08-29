@@ -175,8 +175,8 @@ class RegionInfoController {
         String endString = params.end; // ex "29937203"
         String maximumAssociationString = params.maximumAssociation; // ex ".0001"
         String minimumWeightString = params.minimumWeight; // ex "1"
-        String defaultPhenotypeWeightingSchemeString = params.defaultPhenotypeWeightingScheme
-        int defaultPhenotypeWeightingScheme = 0
+//        String defaultPhenotypeWeightingSchemeString = params.defaultPhenotypeWeightingScheme
+//        int defaultPhenotypeWeightingScheme = 0
         int startPosition =  0
         int endPosition =  0
         float maximumAssociation = 0.0
@@ -221,11 +221,11 @@ class RegionInfoController {
         } catch ( Exception e ) {
             e.printStackTrace()
         }
-        try{
-            defaultPhenotypeWeightingScheme = Integer.parseInt(defaultPhenotypeWeightingSchemeString)
-        } catch ( Exception e ) {
-            e.printStackTrace()
-        }
+//        try{
+//            defaultPhenotypeWeightingScheme = Integer.parseInt(defaultPhenotypeWeightingSchemeString)
+//        } catch ( Exception e ) {
+//            e.printStackTrace()
+//        }
 
 
         // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
