@@ -84,9 +84,7 @@
 <g:render template="./data/AMPLOAD_7_affymetrix" />
 <g:render template="./data/GWAS_Oxford_GoDARTS" />
 <g:render template="./data/GWAS_SUMMITDKD-T1DT2D" />
-<g:render template="./data/GWAS_SUMMITDKD-T1D_eu" />
 <g:render template="./data/GWAS_SUMMITDKD-ESRDvControl_eu" />
-<g:render template="./data/GWAS_SUMMITDKD-T2D" />
 <g:render template="./data/GWAS_GIANT-A" />
 <g:render template="./data/GWAS_MAGIC-Metabochip" />
 
