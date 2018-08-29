@@ -1380,6 +1380,9 @@ div.explanatoryText {
 span.explanatoryText {
     color:		black;
 }
+input.genePrioritizationPhenotype.coefficient{
+    font-size:	10px;
+}
 </style>
 
 
@@ -1465,11 +1468,13 @@ span.explanatoryText {
     <div class="col-md-6 text-left"  style="margin-top:50px">
         <span class="explanatoryText">
         Reset phenotype coefficients:
-        <button type="button" class="btn btn-secondary btn-sm">by phenotype significance</button>
-        <button type="button" class="btn btn-secondary btn-sm">unity weighting</button>
+        <button type="button" class="btn btn-secondary btn-sm resetPhenotypeCoefficientsBySignificant"
+        onclick="mpgSoftware.geneSignalSummaryMethods.resetPhenotypeCoefficientsBySignificance(this)">by phenotype significance</button>
+        <button type="button" class="btn btn-secondary btn-sm"
+        onclick="mpgSoftware.geneSignalSummaryMethods.resetPhenotypeCoefficientsByZero()">all 0</button>
+        <button type="button" class="btn btn-secondary btn-sm"
+        onclick="mpgSoftware.geneSignalSummaryMethods.resetPhenotypeCoefficientsByOne()">all 1</button>
         </span>
-        %{--<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=1>Weight by significance</label>--}%
-        %{--<label class="radio-inline"><input type="radio" name="defaultPhenotypeWeighting" class="defaultPhenotypeWeighting" value=2 checked>Unity weighting</label>--}%
     </div>
 </div>
 
@@ -1479,7 +1484,7 @@ span.explanatoryText {
          <div class="btn-group-vertical">
             <div class="btn-group">
                 <button type="button" class="btn btn-secondary genePrioritizationPhenotype dropdown-toggle  btn-group-vertical" data-toggle="dropdown" data-placement="right">
-                {{phenoName}}&nbsp;&nbsp;<input type="text" class="genePrioritizationPhenotype coefficient" phenotype="{{phenoName}}" value="{{phenoWeight}}" style="width: 28px">
+                {{phenoName}}&nbsp;&nbsp;<input type="text" class="genePrioritizationPhenotype coefficient" phenotype="{{phenoName}}" value="{{phenoWeight}}" style="width: 30px">
                 </button>
                 <div class="dropdown-menu">
                     {{#tissues}}
@@ -1500,9 +1505,18 @@ span.explanatoryText {
 
 
 <div clas="row">
-<div class="col-md-12 text-left"  style="margin-top:50px">
-<h4>Tissues to include</h4>
-</div>
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+        <h4>Tissues to include</h4>
+    </div>
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+        <span class="explanatoryText">
+        Reset tissue choices:
+        <button type="button" class="btn btn-secondary btn-sm resetPhenotypeCoefficientsBySignificant"
+        onclick="mpgSoftware.geneSignalSummaryMethods.setAllTissueChoicesChecked()">All</button>
+                <button type="button" class="btn btn-secondary btn-sm resetPhenotypeCoefficientsBySignificant"
+        onclick="mpgSoftware.geneSignalSummaryMethods.setAllTissueChoicesUnchecked()">None</button>
+        </span>
+    </div>
 </div>
 
 

@@ -236,6 +236,22 @@ class RegionInfoController {
         //  Use that same list of variants to come up with a list of genes that we will pay attention to
         Map phenotypesWeightsAndGenes =  widgetService.determinePhenotypeWeightsAndCutOff(phenotypeViaVariantMap, [maximumAssociationValue:maximumAssociation])
 
+        // the first time through we aren't going to have any phenotype coefficients sent up from the browser, but we can derive them.
+        //  So let's generate those values, and create a data structure to mimic the one that we would have received from the browser
+        if ((arrayOfPhenotypeCoefficients == null)&& (phenotypesWeightsAndGenes!=null)&& (phenotypesWeightsAndGenes.phenotypePValueMap!=null)){
+            arrayOfPhenotypeCoefficients = []
+            Map revisedPhenotypePValueMap = [:]
+            phenotypesWeightsAndGenes.phenotypePValueMap.each{ k, v ->
+                String phenotypeName = "${k}".toString()
+                Double phenotypeCoefficient = Double.parseDouble("${v}".toString())
+                Double logPhenotypeCoefficient = 0-Math.log10(phenotypeCoefficient)
+                revisedPhenotypePValueMap[phenotypeName] = logPhenotypeCoefficient as float
+                arrayOfPhenotypeCoefficients << ["phenotypeName":phenotypeName,"phenotypeCoefficient":logPhenotypeCoefficient.toString()]
+            }
+            phenotypeCoefficientMap = revisedPhenotypePValueMap
+        }
+
+
         // Now for each phenotype, generate a list of tissues.  We will filter the list of tissues and require that each one have a weight
         //   greater than our threshold cut off
         phenotypesWeightsAndGenes =  widgetService.gatherTheTissuesAssociatedWithEachPhenotype(phenotypesWeightsAndGenes, [maximumAssociationWeight:minimumWeight,

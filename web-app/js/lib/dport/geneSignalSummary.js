@@ -1078,10 +1078,66 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             });
         });
         $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
+        $('button.resetPhenotypeCoefficientsBySignificant').data('significanceLevel',data.phenotypePValueMap);
         $("button.dropdown-toggle").dropdown();
-        $('a.genePrioritizationPhenotype').tooltip({ overflow: 'auto' })
-    }
+        $('a.genePrioritizationPhenotype').tooltip({ overflow: 'auto' });
+    };
 
+
+
+    var processGeneRankingDataAndResetPhenoCoefficients = function (data,params) {
+        processGeneRankingData(data,params);
+        resetPhenotypeCoefficientsBySignificance($('button.resetPhenotypeCoefficientsBySignificant'));
+
+    };
+
+
+
+
+
+    var resetPhenotypeCoefficientsBySignificance = function (myThis) {
+        var significanceLevel = $(myThis).data('significanceLevel');
+        var coefficientValues = $('input.genePrioritizationPhenotype.coefficient');
+        _.forEach(coefficientValues, function (coefficientValueInput){
+            var coefficientValueDom = $(coefficientValueInput);
+            var phenotypeName = coefficientValueDom.attr('phenotype');
+            var snpAssociation = significanceLevel[phenotypeName];
+            if ((snpAssociation)&&(typeof snpAssociation !== 'undefined') ){
+                var negativeLog = 0-Math.log10(snpAssociation);
+                coefficientValueDom.val(""+UTILS.realNumberFormatter(negativeLog,3));
+            }
+        });
+    };
+
+    var resetPhenotypeCoefficientsByOne = function (myThis) {
+        var coefficientValues = $('input.genePrioritizationPhenotype.coefficient');
+        _.forEach(coefficientValues, function (coefficientValueInput){
+            var coefficientValueDom = $(coefficientValueInput);
+            coefficientValueDom.val(""+UTILS.realNumberFormatter(1.0,3));
+        });
+    };
+
+    var resetPhenotypeCoefficientsByZero = function (myThis) {
+        var coefficientValues = $('input.genePrioritizationPhenotype.coefficient');
+        _.forEach(coefficientValues, function (coefficientValueInput){
+            var coefficientValueDom = $(coefficientValueInput);
+            coefficientValueDom.val(""+UTILS.realNumberFormatter(0.0,3));
+        });
+    };
+    var setAllTissueChoicesChecked = function (myThis) {
+        var tissueCheckboxes = $('input.genePrioritizationTissue')
+        _.forEach(tissueCheckboxes, function (tissueCheckbox){
+            var tissueCheckboxDom = $(tissueCheckbox);
+            tissueCheckboxDom.prop('checked',true);
+        });
+    };
+    var setAllTissueChoicesUnchecked = function (myThis) {
+        var tissueCheckboxes = $('input.genePrioritizationTissue')
+        _.forEach(tissueCheckboxes, function (tissueCheckbox){
+            var tissueCheckboxDom = $(tissueCheckbox);
+            tissueCheckboxDom.prop('checked',false);
+        });
+    };
 
 
     var processGeneRankingInfo = function ( callBack, params ) {
@@ -2008,7 +2064,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         getSignalSummarySectionVariables:getSignalSummarySectionVariables,
         processGeneRankingInfo: processGeneRankingInfo,
         processGeneRankingData:processGeneRankingData,
-        selfContainedGeneRanking: selfContainedGeneRanking
+        selfContainedGeneRanking: selfContainedGeneRanking,
+        resetPhenotypeCoefficientsBySignificance: resetPhenotypeCoefficientsBySignificance,
+        resetPhenotypeCoefficientsByOne:resetPhenotypeCoefficientsByOne,
+        resetPhenotypeCoefficientsByZero:resetPhenotypeCoefficientsByZero,
+        setAllTissueChoicesUnchecked:setAllTissueChoicesUnchecked,
+        setAllTissueChoicesChecked:setAllTissueChoicesChecked,
+        processGeneRankingDataAndResetPhenoCoefficients:processGeneRankingDataAndResetPhenoCoefficients
     }
 
 }());
