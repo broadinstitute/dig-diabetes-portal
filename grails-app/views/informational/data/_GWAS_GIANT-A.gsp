@@ -1,5 +1,5 @@
 <script class="panel-body" id="GWAS_GIANT-A_script" type="x-tmpl-mustache">
-
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
     <p>Download URL: <a href="https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files" target="_blank">https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files</a><br/>
 
       <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
