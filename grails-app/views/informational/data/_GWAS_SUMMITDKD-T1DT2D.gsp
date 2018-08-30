@@ -72,9 +72,11 @@
 </p>
 
 <p><g:message code="informational.data.project.SUMMIT"></g:message></p>
-
+<br />
+<br />
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.DKD"></g:message></p>
+<p><g:message code="informational.data.exptsumm.DKD1"></g:message></p>
+<p><g:message code="informational.data.exptsumm.DKD2"></g:message></p>
 
 
 <h4>Accessing Diabetic Kidney Disease GWAS data</h4>
