@@ -12,6 +12,7 @@
     <r:require modules="boxwhisker"/>
     <r:require modules="burdenTest"/>
     <r:require modules="traitsFilter"/>
+    <r:require modules="higlass"/>
     <r:require modules="gnomad"/>
     %{--Need to call directly or else the images don't come out right--}%
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">

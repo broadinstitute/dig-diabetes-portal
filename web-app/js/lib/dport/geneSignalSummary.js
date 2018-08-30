@@ -45,6 +45,25 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         );
 
     };
+
+    var hiGlassExperiment = function (d){
+        const baseUrl = 'http://higlass.io/api/v1/viewconfs/';
+        var hgv = hglib.createHgComponent(
+            ($('#fooyoo')[0]),
+            // document.getElementById('#fooyoo'),
+            baseUrl + '?d=KeXl4zLsTP6IKZGpFckuNA',
+            {
+                bounded: true,
+                onViewConfLoaded: zoomTo
+            }
+        );
+
+        function zoomTo() {
+            hgv.zoomTo("aa", 1000000,2000000,1000000,2000000, 1000);
+        }
+    }
+
+
     var commonTableRedraw = function (){
         commonTable.draw();
     }
@@ -2070,7 +2089,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         resetPhenotypeCoefficientsByZero:resetPhenotypeCoefficientsByZero,
         setAllTissueChoicesUnchecked:setAllTissueChoicesUnchecked,
         setAllTissueChoicesChecked:setAllTissueChoicesChecked,
-        processGeneRankingDataAndResetPhenoCoefficients:processGeneRankingDataAndResetPhenoCoefficients
+        processGeneRankingDataAndResetPhenoCoefficients:processGeneRankingDataAndResetPhenoCoefficients,
+        hiGlassExperiment:hiGlassExperiment
     }
 
 }());

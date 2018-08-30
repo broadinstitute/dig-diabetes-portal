@@ -30,6 +30,8 @@ td.tissueTable.informationIsPresent{
 
 </style>
 <div id="tableHeaderHolder"></div>
+<h1>fooyoo</h1>
+<div id="fooyoo" style="width:800px; height: 800px"></div>
 
 
 <div id="BurdenHiddenHere" style="display:none">
@@ -206,7 +208,20 @@ return {
 
 $( document ).ready(function() {
     mpgSoftware.geneSignalSummary.initializeSignalSummarySection();
-
+    mpgSoftware.geneSignalSummaryMethods.hiGlassExperiment(document);
+//    const baseUrl = 'http://higlass.io/api/v1/viewconfs/';
+//    var hgv = hglib.createHgComponent(
+//        document.getElementById('#fooyoo'),
+//        baseUrl + '?d=KeXl4zLsTP6IKZGpFckuNA',
+//        {
+//            bounded: true,
+//            onViewConfLoaded: zoomTo
+//        }
+//    );
+//
+//    function zoomTo() {
+//        hgv.zoomTo("aa", 1000000,2000000,1000000,2000000, 1000);
+//    }
 });
 
 
