@@ -87,6 +87,9 @@
 <g:render template="./data/GWAS_SUMMITDKD-ESRDvControl_eu" />
 <g:render template="./data/GWAS_GIANT-A" />
 <g:render template="./data/GWAS_MAGIC-Metabochip" />
+<g:render template="./data/GWAS_DIAMANTE_eu" />
+<g:render template="./data/GWAS_DIAMANTE-CredibleSet_eu" />
+<g:render template="./data/GWAS_DIAMANTE-UKBB_eu_dv2" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
