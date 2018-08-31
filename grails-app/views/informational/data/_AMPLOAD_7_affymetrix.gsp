@@ -11,20 +11,17 @@
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
     <ul>
-    <li><g:message code="informational.shared.traits.t2d"></g:message></li>
     <li><g:message code="informational.shared.traits.adiponectin"></g:message></li>
     <li><g:message code="informational.shared.traits.BMI"></g:message></li>
     <li><g:message code="informational.shared.traits.cholesterol"></g:message></li>
+        <li><g:message code="informational.shared.traits.creatinine"></g:message></li>
     <li><g:message code="informational.shared.traits.diastolicBP"></g:message></li>
     <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
     <li><g:message code="informational.shared.traits.HbA1c_mmol"></g:message></li>
     <li><g:message code="informational.shared.traits.HDL_cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.height"></g:message></li>
-    <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
-    <li><g:message code="informational.shared.traits.LDL_cholesterol"></g:message></li>
     <li><g:message code="informational.shared.traits.leptin"></g:message></li>
     <li><g:message code="informational.shared.traits.systolicBP"></g:message></li>
-    <li><g:message code="informational.shared.traits.creatinine"></g:message></li>
     <li><g:message code="informational.shared.traits.triglycerides"></g:message></li>
     <li><g:message code="informational.shared.traits.waist_circumference"></g:message></li>
     <li><g:message code="informational.shared.traits.weight"></g:message></li>
