@@ -30,8 +30,7 @@ td.tissueTable.informationIsPresent{
 
 </style>
 <div id="tableHeaderHolder"></div>
-<h1>fooyoo</h1>
-<div id="fooyoo" style="width:800px; height: 800px"></div>
+
 
 
 <div id="BurdenHiddenHere" style="display:none">

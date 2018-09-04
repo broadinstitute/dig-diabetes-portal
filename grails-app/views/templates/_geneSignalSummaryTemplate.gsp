@@ -510,6 +510,13 @@
                         </div>
                     </div>
         </div>
+        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="chromatinConformationTabHolder">
+           <div class="row" style="border: none">
+                <div class="col-sm-12">
+                    <div id="fooyoo" style="width:800px; height: 800px"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </script>
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
@@ -543,7 +550,11 @@
                                <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
                             </li>
                         {{/genePrioritizationTab}}
-
+                        {{#chromatinConformationTab}}
+                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                               <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
+                            </li>
+                        {{/chromatinConformationTab}}
                     </ul>
                 </div>
             </div>
@@ -878,6 +889,11 @@
                                <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
                             </li>
                         {{/genePrioritizationTab}}
+                        {{#chromatinConformationTab}}
+                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                               <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
+                            </li>
+                        {{/chromatinConformationTab}}
 
                     </ul>
                 </div>
@@ -1164,6 +1180,13 @@
                     </div>
                 </div>
                 {{/genePrioritizationTab}}
+
+                {{#chromatinConformationTab}}
+                <div role="tabpanel" class="tab-pane genePrioritizationChooser" id="chromatinConformationTabHolder">
+                    <h1>chromatin confirmation table 1</h1>
+                </div>
+                {{/chromatinConformationTab}}
+
 
 
             </div>
