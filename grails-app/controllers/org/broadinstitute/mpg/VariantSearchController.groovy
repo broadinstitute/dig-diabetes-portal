@@ -1252,7 +1252,9 @@ class VariantSearchController {
                      "common-common-CHROM",
                      "common-common-POS",
                      "common-common-Reference_Allele",
-                     "common-common-Effect_Allele"].join(":")
+                     "common-common-Effect_Allele",
+                     "common-common-Allele_Frequency",
+                     "common-common-Allele_Count"].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)

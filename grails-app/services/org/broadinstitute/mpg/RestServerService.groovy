@@ -962,7 +962,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "Consequence",
                                                                          "PolyPhen_PRED",
                                                                          "SIFT_PRED",
-                                                                         "Protein_change"
+                                                                         "Protein_change",
+                                                                         "Allele_Frequency",
+                                                                         "Allele_Count"
         ])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         JsonSlurper slurper = new JsonSlurper()
@@ -987,7 +989,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "Consequence",
                                                                          "PolyPhen_PRED",
                                                                          "SIFT_PRED",
-                                                                         "Protein_change"
+                                                                         "Protein_change",
+                                                                         "Allele_Frequency"
         ])
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder([filters], searchBuilderService, metaDataService)
         Property macProperty = metaDataService.getSampleGroupProperty(dataSet,"MAC",MetaDataService.METADATA_VARIANT)
@@ -1872,6 +1875,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             commonProperties << "Consequence"
             commonProperties << "CHROM"
             commonProperties << "POS"
+            commonProperties << "Allele_Frequency"
+            commonProperties << "Allele_Count"
         }
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
@@ -2169,7 +2174,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                                                          "Consequence",
                                                                          "Reference_Allele",
                                                                          "Effect_Allele",
-                                                                         "Protein_change"])
+                                                                         "Protein_change","Allele_Frequency","Allele_Count"])
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "DIR", technology, sampleGroupName )
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "BETA", technology, sampleGroupName)
         resultColumnsToDisplay = buildColumnsRequestForPProperties(resultColumnsToDisplay, "ODDS_RATIO", technology, sampleGroupName)
