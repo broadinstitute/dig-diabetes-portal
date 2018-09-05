@@ -30,15 +30,15 @@
 
 <table class="table table-condensed table-responsive table-striped">
 
-<tr><th>All DKD cases</th><th>All DKD controls</th><th>Cohort</th><th>Ancestry</th></tr>
+<tr><th>ESRD cases</th><th>ESRD controls</th><th>Cohort</th><th>Ancestry</th></tr>
 <tr><th colspan="4">T1D discovery cohorts</th></tr>
-<tr><td>298</td><td>491</td><td>EURODIAB Family Study (a substudy of the EURODIAB PCS)</td><td>European</td></tr>
-<tr><td>1,802</td><td>1,613</td><td>Finnish Diabetic Nephropathy Study (FinnDiane)</td><td>European</td></tr>
-<tr><td>266</td><td>292</td><td>Scannia Diabetes Registry (SDR)</td><td>European</td></tr>
+<tr><td>84</td><td>491</td><td>EURODIAB Family Study (a substudy of the EURODIAB PCS)</td><td>European</td></tr>
+<tr><td>654</td><td>1,613</td><td>Finnish Diabetic Nephropathy Study (FinnDiane)</td><td>European</td></tr>
+<tr><td>72</td><td>294</td><td>Scannia Diabetes Registry (SDR)</td><td>European</td></tr>
 <tr><th colspan="4">T2D discovery cohorts</th></tr>
-<tr><td>1,250</td><td>580</td><td>Scannia Diabetes Registry (SDR)</td><td>European</td></tr>
-<tr><td>885</td><td>816</td><td>Genetics of Diabetes Audit Research Tayside Scotland (GoDARTS 1)</td><td>European</td></tr>
-<tr><td>859</td><td>680</td><td>Genetics of Diabetes Audit Research Tayside Scotland (GoDARTS 2)</td><td>European</td></tr>
+<tr><td>243</td><td>580</td><td>Scannia Diabetes Registry (SDR)</td><td>European</td></tr>
+<tr><td>80</td><td>816</td><td>Genetics of Diabetes Audit Research Tayside Scotland (GoDARTS 1)</td><td>European</td></tr>
+<tr><td>48</td><td>680</td><td>Genetics of Diabetes Audit Research Tayside Scotland (GoDARTS 2)</td><td>European</td></tr>
 </table>
 
 <h4><g:message code="informational.shared.headers.project"></g:message></h4>
