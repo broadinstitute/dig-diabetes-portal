@@ -1379,6 +1379,7 @@ td.genePrioritization {
     font-family: 	Arial, Verdana, sans-serif;
     color:		#0000FF;
     font-size:	16px;
+    outline: 0px solid #000;
 }
 span.genePrioritization {
     padding-right: 5px;
@@ -1405,6 +1406,9 @@ span.explanatoryText {
 }
 input.genePrioritizationPhenotype.coefficient{
     font-size:	10px;
+}
+#commonVariantsLocationHolder td {
+    outline: 0px solid #000;
 }
 </style>
 

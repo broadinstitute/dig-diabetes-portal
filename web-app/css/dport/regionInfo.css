@@ -159,6 +159,7 @@ th.niceHeadersThatAreGeneLinks{
 }
 #overlapTable td {
     padding: 1px 0 0 0;
+    outline: 0 solid #000;
 }
 .credibleSetTableGoesHere {
     border-right: 1px solid black;

@@ -45,68 +45,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         );
 
     };
-    var testViewConfig =
-        {
-            "editable": true,
-            "trackSourceServers": [
-                "http://higlass.io/api/v1"
-            ],
-            "exportViewUrl": "http://higlass.io/api/v1/viewconfs",
-            "views": [
-                {
-                    "uid": "view1",
-                    "tracks": {
-                        "center": [
-                            {
-                                "name": "Rao et al. (2014) GM12878 MboI (allreps) 1kb",
-                                "server": "http://higlass.io/api/v1",
-                                "tilesetUid": "CQMd6V_cRw6iCI_-Unl3PQ",
-                                "type": "heatmap",
-                                "height": 200,
-                                "position": "center",
-                                options: {
-                                    maxZoom: null,
-                                    labelPosition: "bottomRight",
-                                    name: "Rao et al. (2014) GM12878 MboI (allreps) 1kb",
-                                    backgroundColor: "#eeeeee",
-                                    colorRange: [
-                                        "white",
-                                        "rgba(245,166,35,1.0)",
-                                        "rgba(208,2,27,1.0)",
-                                        "black"
-                                    ],
-                                    colorbarPosition: "topRight",
-                                    trackBorderWidth: 0,
-                                    trackBorderColor: "black",
-                                    heatmapValueScaling: "log",
-                                    showMousePosition: false,
-                                    mousePositionColor: "#999999",
-                                    showTooltip: false,
-                                    scaleStartPercent: "0.00000",
-                                    scaleEndPercent: "1.00000"
-                                },
-                            }
-                        ]
-                    },
-                    "genomePositionSearchBox": {
-                        "autocompleteServer": "http://higlass.io/api/v1",
-                        "chromInfoServer": "http://higlass.io/api/v1",
-                        "visible": true,
-                        "chromInfoId": "hg19",
-                        "autocompleteId": "OHJakQICQD6gTD7skx4EWA"
-                    },
-                    "initialXDomain": [
-                        1848402743.1816628,
-                        2477898350.3577456
-                    ],
-                    initialYDomain: [
-                        1192488771.5601773,
-                        1531564907.792705
-                    ]
-                }
-            ],
 
-        };
 
 
  var stolenConfigTest =   {
@@ -212,12 +151,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                              {
                                  server: "//higlass.io/api/v1",
                                  tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
+                                 // server: "//http://34.237.63.26:8888/api/v1",
+                                 // tilesetUid: "hitile-demo",
                                  type: "heatmap",
                                  position: "center",
                                  options: {
                                      maxZoom: null,
                                      labelPosition: "bottomRight",
-                                     name: "Rao et al. (2014) GM12878 MboI (allreps) 1kb",
+                                     name: "Gaulton et al. (2014) GM12878 MboI (allreps) 1kb",
                                      backgroundColor: "#eeeeee",
                                      colorRange: [
                                          "white",
@@ -236,7 +177,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                                      scaleEndPercent: "1.00000"
                                  },
                                  uid: "GjuZed1ySGW1IzZZqFB9BA",
-                                 name: "Rao et al. (2014) GM12878 MboI (allreps) 1kb",
+                                 name: "Gaulton et al. (2014) GM12878 MboI (allreps) 1kb",
                                  transforms: [
                                      {
                                          name: "ICE",
@@ -1375,8 +1316,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             var phenotypeName = coefficientValueDom.attr('phenotype');
             var snpAssociation = significanceLevel[phenotypeName];
             if ((snpAssociation)&&(typeof snpAssociation !== 'undefined') ){
-                var negativeLog = 0-Math.log10(snpAssociation);
-                coefficientValueDom.val(""+UTILS.realNumberFormatter(negativeLog,3));
+                if (snpAssociation>0){
+                    var negativeLog = 0-Math.log10(snpAssociation);
+                    coefficientValueDom.val(""+UTILS.realNumberFormatter(negativeLog,3));
+                } else {
+                    coefficientValueDom.val(""+UTILS.realNumberFormatter(47,3));
+                }
+
             }
         });
     };
