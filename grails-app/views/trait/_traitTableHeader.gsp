@@ -76,7 +76,7 @@
         <th><g:message code="variantTable.columnHeaders.exomeChip.pValue" /></th>
         <th id="effectTypeHeader"></th>
         <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
-        <th><g:message code="variantTable.columnHeaders.shared.all_p_val" /></th>
+        %{--<th><g:message code="variantTable.columnHeaders.shared.all_p_val" /></th>--}%
     </tr>
     </thead>
     <tbody id="traitTableBody">
