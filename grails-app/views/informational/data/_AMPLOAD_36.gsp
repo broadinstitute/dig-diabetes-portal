@@ -59,7 +59,7 @@
     <p><img src="${resource(dir: 'images/organizations', file: 'Hoorn_DCS_logo.png')}" style="width: 150px; margin-right: 15px"
         align="left">
 </p>
-    <p><g:message code="informational.data.project.Hoornstudies"></g:message></p>
+    <p><g:message code="informational.data.project.Hoornstudies"></g:message></p><br /><br /><br /><br />
 
 <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.Hoornstudies"></g:message></p>
