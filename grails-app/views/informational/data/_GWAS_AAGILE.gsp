@@ -32,6 +32,11 @@
 <tr><td>6,579</td><td>WHI</td><td>African American</td></tr>
     </table>
 
+<h4><g:message code="informational.shared.headers.project"></g:message></h4>
+<p><img src="${resource(dir: 'images/organizations', file: 'AAGILE_logo.png')}" style="width: 200px; margin-right: 15px"
+        align="left">
+</p>
+<p><g:message code="informational.data.project.AAGILE"></g:message></p><br /><br />
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
 <p><g:message code="informational.data.exptsumm.AAGILE"></g:message></p>
 <p><div class="paper">  <g:message code="informational.shared.publications.Manning_2012_NatGenet"></g:message><br>
