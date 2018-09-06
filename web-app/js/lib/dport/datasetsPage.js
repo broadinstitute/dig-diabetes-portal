@@ -294,6 +294,9 @@ var mpgSoftware = mpgSoftware || {};
                 var filterDynamicHtml = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
                 $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
+
+                addNewDatasetFlag (); //[DK] This function exists on t2dGenesCore.gsp. It's called to add "New dataset Flag
+
                 return {
                     storedJsonArray: storedJsonArray,
                     phenotypeDatasetsMap: phenotypeDatasetsMap

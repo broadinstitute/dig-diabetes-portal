@@ -839,6 +839,19 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
 #datasetNamesTabs li.active > a { background-color: #bfe3ef;}
 
 
+span.new-dataset-flag {
+	display: inline-block;
+	position: absolute;
+	background-image: url(../images/new_dataset.png);
+	background-size: 46px 18px;
+	background-repeat: no-repeat;
+	background-position: center;
+	width: 65px;
+	height: 20px;
+	transform: rotate(-10deg);
+}
+
+
 #modeledPhenotypeTabs {background-color: #bfe3ef; padding-left:20px; border-top: none; border-bottom: none;}
 #modeledPhenotypeTabs li > a { border-left:solid 2px #9fd3df; border-right:solid 2px #9fd3df;}
 #modeledPhenotypeTabs li.active > a {background-color: #9fd3df;}

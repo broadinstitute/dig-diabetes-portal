@@ -385,19 +385,41 @@
                 document.execCommand('copy');
             }
 
+            function addNewDatasetFlag () {
+
+                var wordsToReplace = [
+                    [/&lt;new-dataset-flag&gt;/g,"<span class='new-dataset-flag'>&nbsp;</span>"]
+                    ];
+
+                /* Go over wordsToReplace array and translate custom tags to html tags for content area.*/
+                for (j = 0; j < $("a.accordion-toggle").length; j++){
+                    var fieldItemContent = $("a.accordion-toggle").eq(j).html();
+
+                    var newFieldItemContent = "";
+                    for (i = 0; i < wordsToReplace.length; i++) {
+                        newFieldItemContent = fieldItemContent.replace(wordsToReplace[i][0],wordsToReplace[i][1]);
+                        fieldItemContent = newFieldItemContent;
+                    }
+                    $("a.accordion-toggle").eq(j).html(newFieldItemContent);
+                }
+
+            }
+
 
             /* copy URL function end */
 
             $( window ).load( function() {
 
-                /* massage LocusZoom UI */
-                //if(mpgSoftware.traitsFilter) mpgSoftware.traitsFilter.massageLZ();
+            });
+
+            $( window ).ready( function() {
 
             });
 
 
             $( window ).resize(function() {
                 menuHeaderSet();
+
             })
 
         </script>
