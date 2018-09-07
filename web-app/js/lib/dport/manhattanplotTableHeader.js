@@ -41,6 +41,9 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         }
                     }
+
+                    addNewDatasetFlag("option","");
+
                     loader.hide();
                 },
                 error: function (jqXHR, exception) {
