@@ -385,26 +385,22 @@
                 document.execCommand('copy');
             }
 
-            function addNewDatasetFlag (TGELEMENT,REPLACETO) {
+            function addNewDatasetFlag (DATASETSLIST,TGELEMENT,ADDINGFLAG) {
 
+                var newDatasetsList = DATASETSLIST;
                 var TargetElement = $(TGELEMENT);
 
-                var wordsToReplace = [
-                    [/&lt;new-dataset-flag&gt;/g,REPLACETO]
-                    ];
+                for(i=0; i < newDatasetsList.length; i++) {
+                    for (j = 0; j < TargetElement.length; j++) {
+                        var datasetName = TargetElement.eq(j).text();
 
-                /* Go over wordsToReplace array and translate custom tags to html tags for content area.*/
-                for (j = 0; j < TargetElement.length; j++){
-                    var fieldItemContent = TargetElement.eq(j).html();
+                        if(datasetName.indexOf(newDatasetsList[i]) != -1){
+                            var newDatasetName = TargetElement.eq(j).html() + ADDINGFLAG;
 
-                    var newFieldItemContent = "";
-                    for (i = 0; i < wordsToReplace.length; i++) {
-                        newFieldItemContent = fieldItemContent.replace(wordsToReplace[i][0],wordsToReplace[i][1]);
-                        fieldItemContent = newFieldItemContent;
+                            TargetElement.eq(j).html(newDatasetName);
+                        }
                     }
-                    TargetElement.eq(j).html(newFieldItemContent);
                 }
-
             }
 
 
