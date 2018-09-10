@@ -21,6 +21,10 @@ class InformationalController {
         render(view: 'about')
     }
 
+    def modules() {
+        render(view: 'modules')
+    }
+
     def data() {
         Set<Experiment> allExperimentsForGivenVersion = []
         String currentVersion = metaDataService.getDataVersion()
