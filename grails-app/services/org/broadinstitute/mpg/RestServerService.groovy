@@ -2759,7 +2759,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 //                dataJsonObject.results.pVals.level
 
-                keys = ["P_VALUE","ODDS_RATIO", "VAR_ID", "R2", "POS", "CHROM", "CLOSEST_GENE"];
+                keys = ["P_VALUE","ODDS_RATIO", "DBSNP_ID", "VAR_ID", "R2", "POS", "CHROM", "CLOSEST_GENE"];
                 List<String> variantSpecificList = []
                 for (String key in keys) {
                     ArrayList valueArray = []
@@ -2863,8 +2863,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "\"openPhenotypes\": []", "", MetaDataService.METADATA_VARIANT )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
-
-
         return returnValue
 
 
