@@ -512,6 +512,82 @@
         </div>
         <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="chromatinConformationTabHolder">
            <div class="row" style="border: none">
+
+           <div class="row" style="border: none">
+                <div class="dropdown col-md-2 lz-list" style="padding: 10px 10px">
+                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select from tissues: <b class="caret"></b></a>
+                           <ul  class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: 'Adipose',
+                                                        tissueDescriptiveName: 'adipose tissue',
+                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                                        assayIdList: '[3]'
+                                                    },
+                                                ('#'+'lz-lzCommon'),
+                                                {colorBy:1,positionBy:1})">adipose tissue
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: 'AnteriorCaudate',
+                                                        tissueDescriptiveName: 'brain anterior caudate',
+                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                                        assayIdList: '[3]'
+                                                    },
+                                                ('#'+'lz-lzCommon'),
+                                                {colorBy:1,positionBy:1})">brain anterior caudate
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: 'CD34-PB',
+                                                        tissueDescriptiveName: 'CD34-PB primary hematopoietic stem cells',
+                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                                        assayIdList: '[3]'
+                                                    },
+                                                ('#'+'lz-lzCommon'),
+                                                {colorBy:1,positionBy:1})">CD34-PB primary hematopoietic stem cells
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: 'CingulateGyrus',
+                                                        tissueDescriptiveName: 'brain cingulate gyrus',
+                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                                        assayIdList: '[3]'
+                                                    },
+                                                ('#'+'lz-lzCommon'),
+                                                {colorBy:1,positionBy:1})">brain cingulate gyrus
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                                        tissueCode: 'ColonicMucosa',
+                                                        tissueDescriptiveName: 'colonic mucosa',
+                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                                        assayIdList: '[3]'
+                                                    },
+                                                ('#'+'lz-lzCommon'),
+                                                {colorBy:1,positionBy:1})">colonic mucosa
+                                        </a>
+                                    </li>
+
+
+                           </ul>
+            </div>
+            <div class="dropdown col-md-3 lz-list text-left" style="padding: 10px 10px">
+                    <span style='color: black'>
+                    currently displaying:&nbsp;
+                    </span>
+                    <span style='color: blue'>
+                    pancreatic islet
+                    </span>
+            </div>
+            </div>
+
+
+           <div class="row" style="border: none">
                 <div class="col-sm-12">
                     <div id="fooyoo" style="width:800px; height: 800px"></div>
                 </div>

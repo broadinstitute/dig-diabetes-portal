@@ -46,6 +46,11 @@ class SystemController {
     }
 
 
+    def retrievePortalVersionBean = {
+
+    }
+
+
     def getPortalVersionList = {
         JsonSlurper slurper = new JsonSlurper()
         JSONArray portalVersionListJsonArray = slurper.parseText(restServerService?.getPortalVersionBeanListAsJson())

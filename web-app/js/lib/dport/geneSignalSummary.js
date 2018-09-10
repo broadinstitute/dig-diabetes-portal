@@ -151,8 +151,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                              {
                                  server: "//higlass.io/api/v1",
                                  tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
-                                 // server: "//http://34.237.63.26:8888/api/v1",
-                                 // tilesetUid: "hitile-demo",
+                                 // server: "//34.237.63.26:8888/api/v1",
+                                 // tilesetUid: "pancreas-demo",
                                  type: "heatmap",
                                  position: "center",
                                  options: {
