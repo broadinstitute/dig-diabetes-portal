@@ -31,10 +31,17 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col-md-12">
+                
+            </div>
+        </div>
+
 
 
         <div class="row">
             <div class="col-md-12">
+                <h3 style="color: #f00;">/* Initial version. Launch buttons open module pages with preset parameters. */</h3>
                 <table class="table modules-table">
                     <thead>
                         <tr>
@@ -44,11 +51,15 @@
                     <tbody>
                         <tr>
                             <td><h4>LD Clumping</h4></td>
-                            <td><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                            <td>
+                                <img src="../images/LD_clumping.jpg" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
                             Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
                             Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
                             Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                <p>View full genetic association results for a phenotype <br>(ex: bmi, glycemic; '=phenotype' for exact match)</p></td>
+                                <p>View full genetic association results for a phenotype <br>(ex: bmi, glycemic; '=phenotype' for exact match)</p>
+
+                            </td>
                             <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch LD Clumping</a></div></td>
                         </tr>
                         <tr>
@@ -90,7 +101,7 @@
 
         <div class="row">
             <div class="col-md-12">
-                <h3>/* Make this section available to users when Search UIs functional. */</h3>
+                <h3 style="color: #f00;">/* Make this section available when search UIs become functional. */</h3>
                 <ul class="nav nav-tabs">
                     <li class="active"><a data-toggle="tab" href="#ldClumping">LD Clumping</a></li>
                     <li><a data-toggle="tab" href="#variantFinder">Variant Finder</a></li>
@@ -101,6 +112,8 @@
 
                 <div class="tab-content">
                     <div id="ldClumping" class="tab-pane fade in active">
+
+                        <img src="../images/LD_clumping.jpg" align="left" style="width: 250px; border: solid 1px #ddd; margin-right: 15px;">
                         <h3>View full genetic association results for a phenotype</h3>
                         <p style="font-size: 16px;">
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
@@ -109,7 +122,7 @@
                         Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                         </p>
 
-                        <div class="traits-filter-wrapper">
+                        <div class="traits-filter-wrapper" style="clear: left; padding-top: 30px;">
                                 <div class="form-inline" style="margin: auto;">
                                     <div class="traits-filter-ui" style="width: 600px; margin: auto;">
                                         <span style="display:block; margin:0px 0 8px 0; font-size:13px;">(ex: bmi, glycemic; '=phenotype' for exact match)</span>
