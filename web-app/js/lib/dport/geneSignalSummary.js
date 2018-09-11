@@ -149,11 +149,13 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                          height: 200,
                          contents: [
                              {
-                                 server: "//higlass.io/api/v1",
-                                 tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
-                                 // server: "//34.237.63.26:8888/api/v1",
-                                 // tilesetUid: "pancreas-demo",
-                                 type: "heatmap",
+                                 // server: "//higlass.io/api/v1",
+                                 // tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
+                                 server: "//34.237.63.26:8888/api/v1",
+                                 tilesetUid: "pancreas-rect",
+                                 // type: "heatmap",
+                                 //type: "2d-rectangle-domains",
+                                  type: "horizontal-2d-rectangle-domains",
                                  position: "center",
                                  options: {
                                      maxZoom: null,
