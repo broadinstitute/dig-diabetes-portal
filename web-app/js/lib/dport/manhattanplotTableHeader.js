@@ -72,7 +72,9 @@ var mpgSoftware = mpgSoftware || {};
                     loading.hide();
                     if(data.variant.results[0].isClump == false){
                         document.getElementById("r2dropdown").style.display = "none";
-                        alert('this dataset is not clumped');
+                        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotypeNamex,dataset);
+                        //mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,1);
+                        //alert('this dataset is not clumped');
 
                     }
                     //if(data.isClump) is true then refresh the manhattan plot
