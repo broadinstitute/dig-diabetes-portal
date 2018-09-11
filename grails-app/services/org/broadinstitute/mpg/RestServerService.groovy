@@ -2111,7 +2111,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName,r2)
 
+
         String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
+
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
         return dataJsonObject
@@ -2737,6 +2739,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         List<String> crossVariantData = []
         if (!apiResults["is_error"]){
             int numberOfVariants = apiResults.numRecords
+            boolean isClumped = apiResults.isClump
+
+            if(!isClumped){
+                List<String> variantSpecificList = []
+                crossVariantData << "{\"isClump\": ${isClumped}, \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
+                return  "{\"results\":[" +  crossVariantData.join(",") + "]"+topLevelInformation+"}"
+            }
 
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
@@ -2817,7 +2826,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         log.error("An ArrayList is not an expected result.  Did the return data format change?")
                     }
                 }
-                crossVariantData << "{ \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
+                crossVariantData << "{\"isClump\": ${isClumped}, \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
             }
         }
         return  "{\"results\":[" +  crossVariantData.join(",") + "]"+topLevelInformation+"}"
@@ -2863,6 +2872,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String jsonParsedFromApi = processInfoFromGetDataCall( apiResults, "\"openPhenotypes\": []", "", MetaDataService.METADATA_VARIANT )
         def slurper = new JsonSlurper()
         returnValue = slurper.parseText(jsonParsedFromApi)
+
+
         return returnValue
 
 

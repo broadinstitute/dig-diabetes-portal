@@ -70,9 +70,17 @@ var mpgSoftware = mpgSoftware || {};
                 async: true,
                 success: function (data) {
                     loading.hide();
+                    if(data.variant.results[0].isClump == false){
+                        document.getElementById("r2dropdown").style.display = "none";
+                        alert('this dataset is not clumped');
 
-                    mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
-
+                    }
+                    //if(data.isClump) is true then refresh the manhattan plot
+                    //else (get the id of the r2 dropdown and disable the dropdown.
+                    else{
+                        mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+                        document.getElementById("r2dropdown").style.display = "block";
+                    }
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -82,7 +90,6 @@ var mpgSoftware = mpgSoftware || {};
                 _.forEach(data.children, function (eachKey,val) {
                     console.log(data);
                 })
-
             });
 
         };
