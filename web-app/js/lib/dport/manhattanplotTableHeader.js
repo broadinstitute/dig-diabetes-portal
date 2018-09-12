@@ -111,6 +111,7 @@ var mpgSoftware = mpgSoftware || {};
                 success: function (data) {
                     $('#spinner').hide();
                     try{
+                       // mpgSoftware.manhattanplotTableHeader.fillClumpVariants(rememVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,0.1);
                         mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
                     }
                     catch (e){console.log("I tried calling refreshManhattanPlotTableView but failed",e)}
@@ -127,22 +128,23 @@ var mpgSoftware = mpgSoftware || {};
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
-            if(r2 == 1){
-
-                $('#manhattanPlot1').empty();
-                $('#traitTableBody').empty();
-                $('#phenotypeTraits').DataTable().rows().remove();
-                $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-                mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
-            }
-            else{
+            // if(r2 == 1){
+            //
+            //     $('#manhattanPlot1').empty();
+            //     $('#traitTableBody').empty();
+            //     $('#phenotypeTraits').DataTable().rows().remove();
+            //     $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
+            //     //mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
+            //     mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
+            // }
+            // else{
 
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
                 mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
-            }
+            //}
         }
 
 
