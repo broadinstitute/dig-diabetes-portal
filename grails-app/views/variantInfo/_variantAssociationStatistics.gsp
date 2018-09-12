@@ -164,7 +164,17 @@
     </div>
 </g:if>
 
-
+<g:if test="${portalVersionBean.getExposeForestPlot()}">
+    <div class="container content-wrapper">
+        <div id="phewas">
+            <div class="text-right">
+                <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
+                <label for="phewasAllDatasets">Include all datasets</label></div>
+        </div>
+        <div id="forestPlot"></div>
+    </div>
+    </div>
+</g:if>
 
 <script id="boxTemplate" type="x-tmpl-mustache">
     %{--if emptyBlock is true, then show an invisible box to make the phenotypes line up nicely--}%

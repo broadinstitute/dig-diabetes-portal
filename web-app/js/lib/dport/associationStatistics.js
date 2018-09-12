@@ -23,7 +23,7 @@ var mpgSoftware = mpgSoftware || {};
             return associationStatisticsVariables;
         };
 
-        var initializePage = function(){
+        var initializePage = function(config){
             console.log("in mpgSoftware.associationStatistics.initializePage.");
             $(".collapse").on('show.bs.collapse', function (a, b) {
                 console.log('The collapsible content is about to show.');
@@ -37,7 +37,15 @@ var mpgSoftware = mpgSoftware || {};
             });
             $("#collapseVariantAssociationStatistics").on("shown.bs.collapse", function () {
                 console.log("b mpgSoftware.associationStatistics.initializePage.");
-                mpgSoftware.locusZoom.rescaleSVG('#plot');
+                if (typeof config !== 'undefined'){
+                    if (config.exposePhewasModule){
+                        mpgSoftware.locusZoom.rescaleSVG('#plot');
+                    }
+                    if (config.exposeForestPlot){
+                        mpgSoftware.locusZoom.rescaleSVG('#forestPlot');
+                    }
+                }
+
             });
             $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
             console.log("out mpgSoftware.associationStatistics.initializePage.");

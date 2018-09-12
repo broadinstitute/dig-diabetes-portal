@@ -735,8 +735,8 @@ class WidgetService {
                     Double logPValue =0d
                     Double beta =0d
                     Double standardError =0d
-                    Double ciHigh =0d
-                    Double ciLow =0d
+                    Double ciHigh =0.33d
+                    Double ciLow =-0.113d
 
                     if (variant."VAR_ID"){retrievedVarId = variant."VAR_ID"}
                     if (variant."P_VALUE"){pValueAsString = variant."P_VALUE"}
@@ -764,16 +764,21 @@ class WidgetService {
                             log.error("we have a beta that's nonnumeric, which is bad news")
                         }
                     }
-                    singleVariantData<<"\"phenotype\": \"${phenotypeDescription}\""
-                    singleVariantData<<"\"log_pvalue\": ${logPValue}"
-                    singleVariantData<<"\"beta\": ${beta}"
-                    LinkedHashMap stats = sharedToolsService.calculateConfidenceInterval(pValue,beta,sharedToolsService.CONFIDENCE_LEVEL_95)
-                    if (!stats.error){
-                        singleVariantData<<"\"ci_start\": ${ciLow}"
-                        singleVariantData<<"\"ci_end\": ${ciHigh}"
-                    }
+                    if (beta!=0){
+                        singleVariantData<<"\"phenotype\": \"${phenotypeDescription}\""
+                        singleVariantData<<"\"log_pvalue\": ${logPValue}"
+                        singleVariantData<<"\"beta\": ${beta}"
+                        LinkedHashMap stats = sharedToolsService.calculateConfidenceInterval(pValue,beta,sharedToolsService.CONFIDENCE_LEVEL_95)
+                        if (!stats.error){
+                            ciLow = stats.cLower
+                            ciHigh = stats.cUpper
+                            singleVariantData<<"\"ci_start\": ${ciLow}"
+                            singleVariantData<<"\"ci_end\": ${ciHigh}"
+                        }
 
-                    dataFromQuery << "{${singleVariantData.join(",")}}"
+                        dataFromQuery << "{${singleVariantData.join(",")}}"
+
+                    }
                 }
             }
 
