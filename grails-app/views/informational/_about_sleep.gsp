@@ -82,11 +82,14 @@ padding-left: 15px;
             <div class="col-md-10 col-md-offset-1">
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_SleepData.header"/></h3>
                 <p><g:message code="informational.about_sleep.section1"/></p>
+                <p><g:message code="informational.about_sleep.section2"/></p>
 
-                <h3 class="dk-blue-bordered"><g:message code="informational.about_KP.header"/></h3>
+                <h3 class="dk-blue-bordered"><g:message code="informational.about_SDKP.header"/></h3>
+                <p><g:message code="informational.about_SDKP1"/></p>
+
                 <p><g:message code="informational.about_MI.section5"/></p>
-                <p><g:message code="informational.about_MI.section6"/></p>
-                <p><g:message code="informational.about_MI.section7"/></p>
+                <p><g:message code="informational.about_SDKP2"/></p>
+                <p><g:message code="informational.about_SDKP3"/></p>
 
 
             </div>
