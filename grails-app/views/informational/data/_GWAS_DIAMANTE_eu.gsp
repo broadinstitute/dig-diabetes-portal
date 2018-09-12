@@ -1,5 +1,23 @@
 <script class="panel-body" id="GWAS_DIAMANTE_eu_script" type="x-tmpl-mustache">
 
+    <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+    <p><g:message code="informational.data.overlaps.DIAMANTE1"></g:message></p>
+    <p><g:message code="informational.data.overlaps.DIAMANTE2"></g:message></p>
+
+    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
+
+    <p><div class="paper">
+<g:message code="informational.shared.publications.Mahajan_2018b_NatGenet"></g:message><br>
+<g:message code="informational.shared.publications.Mahajan_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+<div class="citation"><g:message code="informational.shared.publications.Mahajan_2018b_NatGenet.citation"></g:message> </div>
+</div></p>
+
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
+<ul>
+<li><g:message code="informational.shared.traits.t2d"></g:message></li>
+<li><g:message code="informational.shared.traits.t2dadjbmi"></g:message></li>
+</ul>
+
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
     <table class="table table-condensed table-responsive table-striped">
 
@@ -374,196 +392,187 @@
                 </table>
             </div></td><td>White European</td></tr>
 
-******************
-
-<tr><td>2,910</td><td>4,596</td><td><a onclick="showSection(event)">PPP and DIREVA</a>
+<tr><td>1,350</td><td>5,178</td><td><a onclick="showSection(event)">METabolic Syndrome in Men (METSIM)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>PPP: Diagnosis of diabetes was based on an OGTT or a history of previously known diabetes applying WHO criteria. In uncertain cases, the diagnosis was confirmed from patient records</li>
-                                <li>DIREVA: Previous diagnosis of T2D, normal C-peptide levels and no Anti-GAD antibody</li>
+                                <li>WHO 1999 criteria of fasting glucose &ge; 7.0 mmol/l or 2-hour plasma glucose &ge; 11.1 mmol/l or reported diabetes medication use or based on medical record review</li>
+                                <li>No known or probable type 1 diabetes among first degree relatives</li>
+                                <li>Excluded if insulin treatment inititated within 10 years of disease diagnosis, detectable levels of anti-GAD antibodies and fasting C-peptide &le; 0.30 nmol/l</li>
+                                <li>excluded if insulin treatment inititiated within 4 years of diagnosis and fasting C-peptide &le; 0.30 nmol/l </li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>PPP: No previously known diabetes. Free from diabetes after an OGTT applying WHO criteria</li>
-                                <li>DIREVA: no controls</li>
+                                <li>NGT as defined by WHO 1999 criteria</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>White European</td></tr>
+
+<tr><td>1,987</td><td>14,906</td><td><a onclick="showSection(event)">Michigan Genomics Initiative (MGI)</a>
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>EHR-derived ICD-9 codes: 250.00,250.02,250.20,250.22,250.30,250.32,250.80,250.82,250.90,250.92</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                <li>ICD-9 exclude range 249-250.99</li>
                             </ul>
                         </td></tr>
                 </table>
             </div></td><td>European</td></tr>
 
-<tr><td>229</td><td>1,833</td><td><a onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS) / Uppsala Longitudinal Study of Adult Men (ULSAM)</a>
+<tr><td>1,453</td><td>1,731</td><td><a onclick="showSection(event)">Nurses' Health Study (NHS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>PIVUS: Known T2D or fasting whole blood glucose &ge; 6.1mmol/l</li>
-                                <li>ULSAM: Hospital discharge register-defined diabetes before 2002</li>
+                                <li>Type 2 diabetes cases were defined as self-reported diabetes confirmed by a validated supplementary questionnaire</li>
+                                <li>For cases before 1998, we used the National Diabetes Data Group criteria to define type 2 diabetes</li>
+                                <li>We used the American Diabetes Association diagnostic criteria for type 2 diabetes diagnosis from 1998 onward</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>No diagnosis of diabetes at the time of study</li>
+                                <li>Control subjects were defined as those free of diabetes at the time of diagnosis for case subjects and remaining unaffected through follow-up (until 2006)</li>
+                                <li>We matched the case subjects to nondiabetic control subjects on age, month and year of blood draw, and fasting status in NHS and HPFS, respectively</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>European</td></tr>
+            </div></td><td>White European</td></tr>
 
-<tr><td>163</td><td>489</td><td><a onclick="showSection(event)">Prospective Study of Pravastatin in the Elderly at Risk clinical trial (PROSPER)</a>
+<tr><td>521</td><td>600</td><td><a onclick="showSection(event)">NUgene Project (NUGENE)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Self-reported diabetes</li>
+                                <li>Include patients with Type 2 Diabetes diagnosis based on ICD9 codes (excluding those with ketoacidosis codes)</li>
+                                <li>Exclude patients (currently) treated only with insulin AND have never been on a type 2 diabetes medication, and: diagnosed with T1DM, or even if not diagnosed with T1DM, diagnosed with T2DM on < 2 dates in an encounter or problem list</li>
+                                <li>Also include patients with hemoglobin A1C lab value &ge; 6.5%, fasting glucose &gt; 125 mg/dl or random glucose &gt; 200 mg/dl AND prescribed T2D medication</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>Population based controls</li>
+                                <li>At least two clinic visits with no ICD-9 code for T2D, T1D or diabetes-related condition</li>
+                                <li>Not been described treatment for diabetes, no reported blood glucose &ge; 110mg/dl from at least one glucose measurement</li>
+                                <li>No reported HbA1c &ge; 6.0%</li>
+                                <li>No family history of T1D or T2D</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>European</td></tr>
+            </div></td><td>White European</td></tr>
 
-<tr><td>236</td><td>1,520</td><td><a onclick="showSection(event)">Rotterdam Study (RS)</a>
+<tr><td>111</td><td>838</td><td><a onclick="showSection(event)">Prospective Investigation of the Vasculature in Uppsala Seniors (PIVUS)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Prevalent diabetes</li>
+                                <li>Known T2D or fasting whole blood glucose >&gt; 6.1</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>Population based with fasting glucose &lt; 7 mmol/l and without antihyperglycemic medication</li>
+                                <li>Control subjects were defined as those free of diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>European</td></tr>
+            </div></td><td>White European</td></tr>
 
-<tr><td>335</td><td>2,112</td><td><a onclick="showSection(event)">Singapore Chinese Eye Study (CHES)</a>
+<tr><td>802</td><td>4,385</td><td><a onclick="showSection(event)">PROspective Study of Pravastatin in the Elderly at Risk (PROSPER)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Diagnosis of T2D</li>
+                                <li>T2D was defined as having known diabetes mellitus or fasting blood glucose &gt; 7 mmol/L</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>No T2D</li>
+                                <li>Control subjects were those free of prevalent or incident diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>East Asian</td></tr>
+            </div></td><td>White European</td></tr>
 
-<tr><td>109</td><td>877</td><td><a onclick="showSection(event)">SORBS</a>
+<tr><td>477</td><td>3,051</td><td><a onclick="showSection(event)">Rotterdam Study (RS1)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Diabetes diagnosis or treatment, fasting glucose &ge; 7 mmol/l</li>
+                                <li>T2D cases were ascertained through active follow-up using general practitioners’ records, hospital discharge letters and glucose measurements from the Rotterdam Study visits</li>
+                                <li>According to the WHO guidelines, type 2 diabetes was defined as a fasting blood glucose &gt; 7.0 mmol/L, or the use of blood-glucose-lowering medication</li>
+                                <li>Information regarding the use of blood-glucose lowering medication was derived from both structured home interviews and linkage to pharmacy records</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>Not known to be diagnosed with T2D with normal glycemic index</li>
+                                <li>Control subjects were defined as those free of diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>European</td></tr>
+            </div></td><td>Caucasian</td></tr>
 
-<tr><td>806</td><td>1,261</td><td><a onclick="showSection(event)">Taiwan USA Diabetes Retinopathy/Chinese American Eye Study (TUDR/CHES)</a>
+<tr><td>275</td><td>1,877</td><td><a onclick="showSection(event)">Rotterdam Study (RS2)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>The diagnosis of diabetes was based on standard criteria defined by the American Diabetes Association</li>
+                                <li>T2D cases were ascertained through active follow-up using general practitioners’ records, hospital discharge letters and glucose measurements from the Rotterdam Study visits</li>
+                                <li>According to the WHO guidelines, type 2 diabetes was defined as a fasting blood glucose &gt; 7.0 mmol/L, or the use of blood-glucose-lowering medication</li>
+                                <li>Information regarding the use of blood-glucose lowering medication was derived from both structured home interviews and linkage to pharmacy records</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>Population-based study recruited 4570 non-institutionalized Chinese Americans, aged 50 years and older</li>
+                                <li>Control subjects were defined as those free of diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>East Asian</td></tr>
+            </div></td><td>Caucasian</td></tr>
 
-<tr><td>622</td><td>5,471</td><td><a onclick="showSection(event)">The Netherlands Epidemiology of Obesity Study (NEO)</a>
+<tr><td>281</td><td>2,746</td><td><a onclick="showSection(event)">Rotterdam Study (RS3)</a>
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
                     <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Previous diagnosis of T2D, and new diagnosed T2D, and fasting glucose &ge; 7 mmol/L and HbA1c &ge; 6.5%</li>
+                                <li>T2D cases were ascertained through active follow-up using general practitioners’ records, hospital discharge letters and glucose measurements from the Rotterdam Study visits</li>
+                                <li>According to the WHO guidelines, type 2 diabetes was defined as a fasting blood glucose &gt; 7.0 mmol/L, or the use of blood-glucose-lowering medication</li>
+                                <li>Information regarding the use of blood-glucose lowering medication was derived from both structured home interviews and linkage to pharmacy records</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>Population based with fasting glucose &lt; 7 mmol/L and no oral medication and insulin</li>
+                                <li>Control subjects were defined as those free of diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>European</td></tr>
-
-<tr><td>7,154</td><td>14,669</td><td><a onclick="showSection(event)">The Pakistan Risk of Myocardial Infarction Study (PROMIS)</a>
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">
-                            <ul>
-                                <li>HbA1c &gt; 6.5%, previously diagnosed T2D, use of insulin or use of oral hypoglycemic medications</li>
-                            </ul>
-                        </td>
-                        <td valign="top">
-                             <ul>
-                                <li>Population based controls with HbA1c &lt; 6.5%, had not been diagnosed with T2D, did not use insulin or oral hypoglycemic medications</li>
-                            </ul>
-                        </td></tr>
-                </table>
-            </div></td><td>South Asian</td></tr>
-
-<tr><td>3,576</td><td>12,675</td><td><a onclick="showSection(event)">Wellcome Trust Case Control Consortium (UK Type 2 Diabetes Consortium); Young Diabetics Study (YDX); Oxford Biobank; TwinsUK; 1958 Birth Cohort (BC58) / Genetics of Diabetes and Audit Research Tayside Study (GoDARTS)</a>
-            <div style="display: none;" class="cohortDetail">
-                <table border="1">
-                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
-                    <tr>
-                        <td valign="top">
-                            <ul>
-                                <li>The T2D cases were selected from UK Caucasian subjects who are part of the Diabetes UK Warren 2 repository. The remainder were recruited as isolated cases but these cases were (compared to population-based cases) of relatively early onset and had a high proportion of T2D parents and/or siblings. T2D was defined as current prescribed treatment with sulphonylureas, biguanides, other oral agents and/or insulin or, in the case of individuals treated with diet alone, historical or contemporary laboratory evidence of hyperglycemia.</li>
-                                <li>GoDARTS: Cases had T2D diagnosed between the ages of 35-70 years (inclusive). The diagnosis of diabetes was based on either current prescribed treatment with diabetes-specific medication or, in the case of individuals treated with diet alone, laboratory evidence of diabetes as defined by the WHO.</li>
-                            </ul>
-                        </td>
-                        <td valign="top">
-                             <ul>
-                                <li>Controls from all sources were selected without reference to T2D status and fasting glucose &le; 7.0 mmol/l</li>
-                                <li>GoDARTS: Controls were defined as having no diagnosis of diabetes at the time of recruitment (or subsequently), fasting glucose &le; 7.0 mmol/l, HbA1c &le; 6.4% and age &lt; 80 years</li>
-                            </ul>
-                        </td></tr>
-                </table>
-            </div></td><td>European</td></tr>
-
-<tr><td>1,766</td><td>20,298</td><td><a onclick="showSection(event)">Women's Genome Health Study (WGHS)</a>
+            </div></td><td>Caucasian</td></tr>
 
 
+<tr><td>19,119</td><td>423,698</td><td><a onclick="showSection(event)">UK BioBank</a>
 
             <div style="display: none;" class="cohortDetail">
                 <table border="1">
@@ -571,19 +580,82 @@
                     <tr>
                         <td valign="top">
                             <ul>
-                                <li>Self-report</li>
+                                <li>Prevalent T2D status was defined using self-reported medical history and medication in UK Biobank participants</li>
                             </ul>
                         </td>
                         <td valign="top">
                              <ul>
-                                <li>Self-report</li>
+                                 <li>Control subjects were defined as those free of diabetes</li>
                             </ul>
                         </td></tr>
                 </table>
-            </div></td><td>European</td></tr>
+            </div></td><td>White European</td></tr>
 
+<tr><td>166</td><td>953</td><td><a onclick="showSection(event)">Uppsala Longitudinal Study of Adult Men (ULSAM)</a>
 
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>Hospital discharge register-defined diabetes before 2002</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                 <li>Control subjects were defined as those free of diabetes</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>White European</td></tr>
 
+<tr><td>5,220</td><td>18,556</td><td><a onclick="showSection(event)">Danish T2D case-control study (UPCH)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>T2D was defined based on self-report, anti-diabetic treatment, fasting plasma glucose &gt; 7.0 mmol/L or 2-hr plasma glucose &gt; 11.1 mmol/L</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                 <li>Control subjects were based on fasting plasma glucose &gt; 6.1 mmol/L and, if measured, 2 hr plasma glucose &gt; 7.8 mmol/L</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>White European</td></tr>
+
+<tr><td>1,924</td><td>2,938</td><td><a onclick="showSection(event)">Wellcome Trust Case-Control Consortium (WTCCC)</a>
+
+            <div style="display: none;" class="cohortDetail">
+                <table border="1">
+                    <tr><th>Case selection criteria</th><th>Control selection criteria</th></tr>
+                    <tr>
+                        <td valign="top">
+                            <ul>
+                                <li>T2D was defined as current prescribed treatment with sulphonylureas, biguanides, other oral agents and/or insulin or in the case of individuals treated with diet alone, historical or contemporary laboratory evidence of hyperglycemia</li>
+                            </ul>
+                        </td>
+                        <td valign="top">
+                             <ul>
+                                 <li>Control subjects were defined as those free of diabetes</li>
+                            </ul>
+                        </td></tr>
+                </table>
+            </div></td><td>White European</td></tr>
 
     </table>
+
+    <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
+<p><g:message code="informational.data.exptsumm.DIAMANTE1"></g:message></p>
+<p><g:message code="informational.data.exptsumm.DIAMANTE2"></g:message></p>
+
+   <h4>Accessing DIAMANTE GWAS data</h4>
+<p><g:message code="informational.data.accessing.DIAMANTE1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.DIAMANTE2"></g:message></p>
+
+
 </script>
