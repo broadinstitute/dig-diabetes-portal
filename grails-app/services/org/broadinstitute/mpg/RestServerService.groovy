@@ -2403,7 +2403,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             restApiParameterList << "\"source\": \"${source}\""
         }
         if ((assayIdListInStringForm) ){
-            restApiParameterList << "\"assay_id\": ${assayIdListInStringForm}"
+            restApiParameterList << "\"annotation\": ${assayIdListInStringForm}"
         }
         String specifyRequest = "{${restApiParameterList.join(",")}}"
         return postRestCall(specifyRequest, GET_REGION_URL)
