@@ -191,8 +191,8 @@ var mpgSoftware = mpgSoftware || {};
                             fields: ["{{namespace[phewas]}}phenotype", "{{namespace[phewas]}}log_pvalue", "{{namespace[phewas]}}log_pvalue|logtoscinotation", "{{namespace[phewas]}}beta", "{{namespace[phewas]}}ci_start", "{{namespace[phewas]}}ci_end"],
                             x_axis: {
                                 field: "{{namespace[phewas]}}beta",
-                                floor: -0.2,
-                                ceiling: 0.2
+                                floor: -1,
+                                ceiling: 1
                             },
                             y_axis: {
                                 axis: 2,

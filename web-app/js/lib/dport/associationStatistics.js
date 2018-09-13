@@ -281,13 +281,20 @@ var mpgSoftware = mpgSoftware || {};
             traitTable( getAssociationStatisticsVariables().variantIdentifier, dataSetMaps, arrayOfOpenPhenotypes );
         };
 
+        var buildDynamicPage = function(){
+            var drivingVariables = {};
+            var pheWASGraphics = Mustache.render($('#phenotypePerVariantTemplate')[0].innerHTML, drivingVariables);
+            $('#pheWASGraphicsGoHere').append(pheWASGraphics);
+        };
+
     return {
         initializePage:initializePage,
         setAssociationStatisticsVariables:setAssociationStatisticsVariables,
         allowExpansionByCohort:allowExpansionByCohort,
         allowExpansionByTrait:allowExpansionByTrait,
         respondToPlusSignClick:respondToPlusSignClick,
-        loadAssociationTable:loadAssociationTable
+        loadAssociationTable:loadAssociationTable,
+        buildDynamicPage:buildDynamicPage
     }
 
 }());
