@@ -899,11 +899,11 @@ var UTILS = {
             var sortedData = [];
             _.forEach(rawSortedData,function(o){
                 sortedData.push({
-                    //'CHROM':o.CHROM,
+                    'CHROM':o.CHROM,
                     'START':o.START,
                     'STOP':o.STOP,
-                    'SOURCE':o.source_trans,
-                    'ELEMENT':o.element_trans
+                    'source_trans':o.source_trans,
+                    'element':o.element_trans
 
                 })
             })
