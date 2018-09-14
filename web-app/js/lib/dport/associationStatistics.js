@@ -283,6 +283,8 @@ var mpgSoftware = mpgSoftware || {};
 
         var buildDynamicPage = function(){
             var drivingVariables = {};
+            drivingVariables['phewasTab'] = [1];
+            drivingVariables['forestTab'] = [1];
             var pheWASGraphics = Mustache.render($('#phenotypePerVariantTemplate')[0].innerHTML, drivingVariables);
             $('#pheWASGraphicsGoHere').append(pheWASGraphics);
         };

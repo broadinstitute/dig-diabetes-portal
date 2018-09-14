@@ -161,22 +161,22 @@
 </div>
 
 
-<g:if test="${portalVersionBean.getExposePhewasModule()}">
-    <div class="container content-wrapper">
-        <div id="phewas">
-            <div class="text-right">
-                <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
-                <label for="phewasAllDatasets">Include all datasets</label></div>
-        </div>
-        <div id="plot"></div>
-    </div>
-    </div>
-</g:if>
+%{--<g:if test="${portalVersionBean.getExposePhewasModule()}">--}%
+    %{--<div class="container content-wrapper">--}%
+        %{--<div id="phewas">--}%
+            %{--<div class="text-right">--}%
+                %{--<input id="phewasAllDatasets" type="checkbox">--}%%{--onClick generalizedInitLocusZoom added later--}%
+                %{--<label for="phewasAllDatasets">Include all datasets</label></div>--}%
+        %{--</div>--}%
+        %{--<div id="plot"></div>--}%
+    %{--</div>--}%
+    %{--</div>--}%
+%{--</g:if>--}%
 
-<g:if test="${portalVersionBean.getExposeForestPlot()}">
-    <div class="container content-wrapper">
-        <div id="forestPlot"></div>
-    </div>
-    </div>
-</g:if>
+%{--<g:if test="${portalVersionBean.getExposeForestPlot()}">--}%
+    %{--<div class="container content-wrapper">--}%
+        %{--<div id="forestPlot"></div>--}%
+    %{--</div>--}%
+    %{--</div>--}%
+%{--</g:if>--}%
 

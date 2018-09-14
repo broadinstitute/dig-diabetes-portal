@@ -48,4 +48,35 @@
         </div>
     </div>
 
+    <div class="tab-content">
+    {{#phewasTab}}
+        <div role="tabpanel" class="tab-pane active" id="phewasTabHolder">
+            <div class="row"   style="border: none">
+                <div class="container content-wrapper">
+                    <div id="phewas">
+                        <div class="text-right">
+                            <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
+                            <label for="phewasAllDatasets">Include all datasets</label>
+                        </div>
+                    </div>
+                    <div id="plot"></div>
+                </div>
+            </div>
+        </div>
+
+{{/phewasTab}}
+
+{{#forestTab}}
+        <div role="tabpanel" class="tab-pane active" id="forestTabHolder">
+            <div class="row"   style="border: none">
+                <div class="container content-wrapper">
+                    <div id="forestPlot"></div>
+                </div>
+            </div>
+        </div>
+{{/forestTab}}
+
+    </div>
+
+
 </script>
