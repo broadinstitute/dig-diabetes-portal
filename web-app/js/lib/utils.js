@@ -902,7 +902,7 @@ var UTILS = {
                     'CHROM':o.CHROM,
                     'START':o.START,
                     'STOP':o.STOP,
-                    'source_trans':o.source_trans,
+                    'source':o.source_trans,
                     'element':o.element_trans
 
                 })
