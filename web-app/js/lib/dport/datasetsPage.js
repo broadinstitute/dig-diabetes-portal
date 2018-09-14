@@ -20,9 +20,9 @@ var mpgSoftware = mpgSoftware || {};
         var getAccessName = function (dataTypeName){
             var access;
             if (dataTypeName.includes('FUSION')){
-                access = "Early access phase 1";}
+                access = "Early access phase 2";}
             else if (dataTypeName.includes('DCSP2')){
-                access = "Early access phase 1";}
+                access = "Early access phase 2";}
             else{
                 access = "Open access";}
             return access;

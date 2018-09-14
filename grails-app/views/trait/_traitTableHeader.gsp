@@ -35,6 +35,7 @@
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help2"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help3"></g:message></p>
+<p><g:message code="informational.traitTableHeader.help4"></g:message></p>
 <p>&nbsp;</p>
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Dataset</p>
