@@ -118,7 +118,7 @@
                     <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.epi.descr" default="about the data"/></p>
                 </div>
             </g:elseif>
-                <g:else>
+            <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                     <div class="col-md-12">
                         <h1 class="dk-page-title">Data</h1>
                     </div>
@@ -129,10 +129,21 @@
                     <div class="col-md-3">
                         <div class="dk-go-button dk-t2d-yellow dk-right-column-buttons"><a target="_blank" href="http://cerebrovascularportal.org/informational/downloads">Visit download page</a></div>
                     </div>
-                </g:else>
-            </div>
-        </div>
+                </g:elseif>
+<g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+    <div class="col-md-12">
+        <h1 class="dk-page-title">Data</h1>
     </div>
+    <div class="col-md-12">
+        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.sleep.title" default="about the data"/></p>
+    </div>
+
+</g:elseif>
+
+
+    </div>
+</div>
+</div>
         <div class="container">
             <g:renderBetaFeaturesDisplayedValue>
                 <div style="margin-top: 5px">
