@@ -448,6 +448,17 @@
 
                         </g:elseif>
 
+                        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                            <div style="position:absolute; top: 25px; right:-40px; ">
+                                <p style="margin-bottom:3px;">
+                                    <a href="mailto:help@sleepdisordergenetics.org">
+                                        <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                                    </a>
+                                </p>
+                            </div>
+
+                        </g:elseif>
+
                         <g:else>
                             <div style="position:absolute; top: 25px; right:-40px; ">
                                 <p style="margin-bottom:3px;">
