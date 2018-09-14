@@ -281,12 +281,28 @@ var mpgSoftware = mpgSoftware || {};
             traitTable( getAssociationStatisticsVariables().variantIdentifier, dataSetMaps, arrayOfOpenPhenotypes );
         };
 
-        var buildDynamicPage = function(){
+        var buildDynamicPage = function(configDetails){
             var drivingVariables = {};
-            drivingVariables['phewasTab'] = [1];
-            drivingVariables['forestTab'] = [1];
+
+
+            if (configDetails.exposeGreenBoxes==='1'){
+                drivingVariables['exposeGreenBoxes'] = [1];
+            }
+            if (configDetails.exposeForestPlot==='1'){
+                drivingVariables['forestTab'] = [1];
+            }
+            if (configDetails.exposePhewasModule==='1'){
+                drivingVariables['phewasTab'] = [1];
+            }
+
+            $('#variantAssociationSummarySection').empty();
+            // if ((typeof drivingVariables['exposeGreenBoxes'] !== 'undefined') ) {
+            //     $('#variantAssociationSummarySection').append(
+            //         Mustache.render( $('#greenBoxHolderTemplate')[0].innerHTML));
+            // }
             var pheWASGraphics = Mustache.render($('#phenotypePerVariantTemplate')[0].innerHTML, drivingVariables);
-            $('#pheWASGraphicsGoHere').append(pheWASGraphics);
+            $('#variantAssociationSummarySection').append(pheWASGraphics);
+            // $('a[href="#phewasTabHolder"]').click();
         };
 
     return {
