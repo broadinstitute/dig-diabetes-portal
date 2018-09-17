@@ -718,11 +718,16 @@ var mpgSoftware = mpgSoftware || {};
                             tissue:record.source_trans,displayableContent:displayableContent});
                     }
                 } else {
-                    arrayToBuild.push({annotation:0});
+                    arrayToBuild.push({annotation:0,matchingRegion:""});
                 }
             }
             //return lineToAdd;
-            return arrayToBuild[0];
+            if (arrayToBuild.length===0){
+                return {annotation:0,matchingRegion:""};
+            } else {
+                return arrayToBuild[0];
+            }
+
         };
 
 
@@ -1181,8 +1186,11 @@ var mpgSoftware = mpgSoftware || {};
 
             var tissueSpecificDataStructure = generateDataStructureForAllTissueSpecificHeatMap(primaryTissueObject, subsidiaryTissueObject, dataVariants, annotationId, writeOneCellOfTheHeatMap );
 
-            $(credibleSetTableGoesHere+' tr:last').parent().append(
-                Mustache.render( $('#credibleSetHeatMapTemplate')[0].innerHTML,tissueSpecificDataStructure));
+            if (typeof tissueSpecificDataStructure !== 'undefined') {
+                $(credibleSetTableGoesHere+' tr:last').parent().append(
+                    Mustache.render( $('#credibleSetHeatMapTemplate')[0].innerHTML,tissueSpecificDataStructure));
+            }
+
 
             if (setDefaultButton){
                 if ($('.credibleSetChooserButton').length > 1){

@@ -177,7 +177,8 @@ td.tissueTable.informationIsPresent{
                     tissueRegionOverlapMatcher:"${portalVersionBean.getTissueRegionOverlapMatcher().join(",")}".split(","),
                     tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(","),
                     exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}",
-                    exposePredictedGeneAssociations:"${portalVersionBean.getExposePredictedGeneAssociations()}"
+                    exposePredictedGeneAssociations:"${portalVersionBean.getExposePredictedGeneAssociations()}",
+                    exposeHiCData:"${portalVersionBean.getExposeHiCData()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
@@ -185,11 +186,13 @@ td.tissueTable.informationIsPresent{
                     mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
-                mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingDataAndResetPhenoCoefficients,
+                if (${portalVersionBean.getExposePredictedGeneAssociations()}){
+                    mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingDataAndResetPhenoCoefficients,
                         {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
                             geneExtentBegin:drivingVariables.geneExtentBegin,
                             geneExtentEnd:drivingVariables.geneExtentEnd,
                             geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
+                }
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
             };
 

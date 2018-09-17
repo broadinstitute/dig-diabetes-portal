@@ -1987,31 +1987,38 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             }
 
         }
-
+        var genePrioritizationIndicator = [];
+        var chromatinConformationIndicator = [];
+        if (additionalParameters.exposePredictedGeneAssociations === "1"){
+            genePrioritizationIndicator.push(1)
+        }
+        if (additionalParameters.exposeHiCData === "1"){
+            chromatinConformationIndicator.push(1)
+        }
          $("#organizeSignalSummaryHeaderGoesHere").empty().append(Mustache.render($('#organizeSignalSummaryHeader')[0].innerHTML,
             {commonTab: displayCommonTab,
                 highImpactTab: displayHighImpactTab,
                 pName: pName,
                 credibleSetTab:credibleSetTab,
                 incredibleSetTab:incredibleSetTab,
-                genePrioritizationTab:[1],
-                chromatinConformationTab:[1]}));
+                genePrioritizationTab:genePrioritizationIndicator,
+                chromatinConformationTab:chromatinConformationIndicator}));
         $("#commonVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCommon')[0].innerHTML,
             {commonTab: displayCommonTab,
                 highImpactTab: displayHighImpactTab,
                 pName: pName,
                 credibleSetTab:credibleSetTab,
                 incredibleSetTab:incredibleSetTab,
-                genePrioritizationTab:[1],
-                chromatinConformationTab:[1]}));
+                genePrioritizationTab:genePrioritizationIndicator,
+                chromatinConformationTab:chromatinConformationIndicator}));
         $("#highImpactVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryHighImpact')[0].innerHTML,
             {commonTab: displayCommonTab,
                 highImpactTab: displayHighImpactTab,
                 pName: pName,
                 credibleSetTab:credibleSetTab,
                 incredibleSetTab:incredibleSetTab,
-                genePrioritizationTab:[1],
-                chromatinConformationTab:[1]}));
+                genePrioritizationTab:genePrioritizationIndicator,
+                chromatinConformationTab:chromatinConformationIndicator}));
         if (credibleSetTab.length>0){
             $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCredibleSet')[0].innerHTML,
                 {commonTab: displayCommonTab,
@@ -2019,8 +2026,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     pName: pName,
                     credibleSetTab:credibleSetTab,
                     incredibleSetTab:incredibleSetTab,
-                    genePrioritizationTab:[1],
-                    chromatinConformationTab:[1]}));
+                    genePrioritizationTab:genePrioritizationIndicator,
+                    chromatinConformationTab:chromatinConformationIndicator}));
         }
         if (incredibleSetTab.length>0){
             $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryIncredibleSet')[0].innerHTML,
@@ -2029,8 +2036,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     pName: pName,
                     credibleSetTab:credibleSetTab,
                     incredibleSetTab:incredibleSetTab,
-                    genePrioritizationTab:[1],
-                    chromatinConformationTab:[1]}));
+                    genePrioritizationTab:genePrioritizationIndicator,
+                    chromatinConformationTab:chromatinConformationIndicator}));
         }
 
 
