@@ -168,6 +168,24 @@
 
             </g:elseif>
 
+<g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+
+    <div class="col-md-10 col-md-offset-1">
+        <h1 class="dk-page-title"><g:message code="contact.header2" /></h1>
+    </div>
+    <div class="col-md-8 col-md-offset-2">
+        <h4 class="dk-blue-bordered"><g:message code="informational.contact.sleep.header1"></g:message></h4>
+        <p><g:message code="informational.contact.sleep-1"></g:message></p>
+        <p><g:message code="informational.contact.MI-2"></g:message></p>
+        <h4 class="dk-blue-bordered"><g:message code="informational.contact.MI.header2"></g:message></h4>
+        <p><g:message code="informational.contact.sleep.consortia"></g:message></p>
+
+    </div>
+
+
+
+</g:elseif>
+
 <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
 
     <div class="col-md-10 col-md-offset-1">

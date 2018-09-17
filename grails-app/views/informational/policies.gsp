@@ -329,8 +329,8 @@
         </div>
         <div class="col-md-3" style="padding-top: 15px;">
             <h5 style="position:fixed; bottom:20px;"><a href="#"><span class="glyphicon glyphicon-arrow-up"></span> <g:message code="policies.tothetop"></g:message></a></h5>
-            <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></div>
-            <div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></div>
+            %{--<div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#data_use"><g:message code="policies.dataUse"></g:message></a></div>--}%
+            %{--<div class="dk-t2d-yellow dk-go-button dk-right-column-buttons"><a href="#citing_data"><g:message code="policies.citations"></g:message></a></div>--}%
             %{--<h4 class="dk-notice"><a href="#reusing_text"><g:message code="policies.reusing"></g:message></a></h4>--}%
             %{--<h4 class="dk-notice"><a href="#user_tracking"><g:message code="policies.tracking"></g:message></a></h4>--}%
 
