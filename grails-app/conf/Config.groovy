@@ -144,6 +144,7 @@ digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.
 digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
+
 ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/")
 ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
 digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
@@ -152,6 +153,10 @@ digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://
 digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
 federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 
+// KB for the test federated portal changes
+digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+
+
 // this will be your default
 defaultRestServer = digawsdevWorkflowKB
 
@@ -159,22 +164,21 @@ getRestServerList = [
         digdevlocalServer,
         digdevlocalFederatedServer,
         digAWSKBV2prodServer,
-//        digAWS02KBV2prodServer,
         federatedAwsProdKBV2Server,
-//        federatedAwsStageKBV2Server,
-//        toddTestServer,
-//        digdevmarcin,
         digawsdevnewKB,
-//        digawsdevnewKB_fed,
         digawsqanewKB,
         digawsdevWorkflowKB,
         digawsqanewKB_fed,
+//<<<<<<< HEAD
         digawsqanewKB_fed_dedicated,
-//        digawsprodmiKB,
-//        digawsprodstrokeKB,
-//        digawsdemoibdKB
         ebiKB1,
-        ebiKB2
+        ebiKB2,
+//=======
+        digawsqanewKB_fed_dedicated_EBIv2,
+        digawsprodmiKB,
+        digawsprodstrokeKB,
+        digawsdemoibdKB
+//>>>>>>> phewasForest
 ]
 
 
@@ -582,7 +586,7 @@ portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv33",    // the MDV number for this portal
+                                                        "mdv34",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -610,10 +614,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 '5010306206573083521',
                                                 1,
                                                 0,
-                                                1,
+                                                0,
                                                 1,
                                                 0,
-                                                1,0,1,
+                                                1,1,1,
                                                 0,
                                                 0,
                                                 0,
@@ -623,13 +627,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
-                                                          "mdv70",
+                                                          "mdv73",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
+                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
@@ -653,8 +657,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0,
-                                          1,
+                                          1,0,1,
+                                          0,
                                           0,
                                           0,
                                             0,
@@ -662,7 +666,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
-                                                          "mdv93",
+                                                          "mdv94",
                                                           "MI",
                                                           "GWAS_CARDIoGRAM_mdv91",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -823,3 +827,6 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,0
                                   )
 ]
+// Here the secret authentication strings
+auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
+oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'

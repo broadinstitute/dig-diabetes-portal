@@ -38,12 +38,13 @@
 </head>
 
 <body>
+
+<g:render template="/templates/variantAssociationStatisticsTemplate"/>
+
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
-<style>
 
-</style>
 
 <script>
 

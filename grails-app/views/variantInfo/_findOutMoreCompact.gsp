@@ -25,7 +25,7 @@
 <div class="dk-t2d-blue dk-right-column-buttons-compact btn dk-linkout-btn dk-amp-funded">
     <div class="tooltip-text"><g:message code="findoutmore.variantt2dream.descr" default="T2DREAM"/></div>
     <span>AMP</span>
-    <a target="_blank" id="T2DREAMLink">Diabetes Epigenome Atlas</a>
+    <a target="_blank" id="T2DREAMLink">Diabetes Genome Atlas</a>
 </div>
 
 <div class="dk-t2d-blue dk-right-column-buttons-compact btn dk-linkout-btn">

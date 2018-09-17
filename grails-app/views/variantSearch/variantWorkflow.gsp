@@ -138,7 +138,17 @@
                     <div class="dk-fluid">
                         <div class="dk-variant-search-builder">
                             <div style="padding: 10px 0;">
-                                <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.text"/></h5>
+
+
+
+                            <g:if test="${g.portalTypeString()?.equals('t2d')}">
+                                <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.t2d.text"></g:message></h5></g:if>
+                            <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
+                                <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.stroke.text"/></h5></g:elseif>
+                                <g:elseif test="${g.portalTypeString()?.equals('mi')}">
+                                    <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.mi.text"/></h5></g:elseif>
+                                <g:else>
+                                    <h5><g:message code="variantSearch.workflow.tab.phenotypeDependent.generic.text"/></h5></g:else>
 
                                 <div class="row">
                                     <div class="col-md-3 col-sm-3 col-xs-3 dk-variant-search-builder-title">
@@ -208,7 +218,22 @@
 
                 <div role="tabpanel" class="tab-pane" id="independent">
                     <div style="padding: 10px 0;" class="dk-variant-search-builder">
-                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>
+
+
+<g:if test="${g.portalTypeString()?.equals('t2d')}">
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependentT2D.text"/></h5>
+</g:if>
+<g:if test="${g.portalTypeString()?.equals('stroke')}">
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependentStroke.text"/></h5>
+</g:if>
+<g:if test="${g.portalTypeString()?.equals('mi')}">
+                        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependentMI.text"/></h5>
+
+</g:if>
+
+
+
+
 
                         <div id="datasetChooserIndependent" class="row additionalInputGroup">
                             <div class="col-md-8 col-sm-8 col-xs-8 col-md-offset-2 dk-variant-search-builder-ui">

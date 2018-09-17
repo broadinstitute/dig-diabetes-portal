@@ -1,4 +1,8 @@
 <script class="panel-body" id="ExChip_82k_script" type="x-tmpl-mustache">
+    <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+    <p><g:message code="informational.data.overlaps.ExTex"></g:message></p>
+
+
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
     <p><div class="paper">
@@ -428,7 +432,7 @@
 
    <p><g:message code="informational.project.descr.T2D-GENES"></g:message></p>
 
-   <h4>Accessing GoT2D 82k exome chip analysis data</h4>
+   <h4>Accessing GoT2D exome chip analysis data</h4>
 <p><g:message code="informational.data.accessing.82k"></g:message></p>
 
 </script>

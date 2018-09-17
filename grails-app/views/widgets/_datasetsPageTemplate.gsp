@@ -2,6 +2,9 @@
 %{--this will have all the mustache templates--}%
 %{--<g:elseif test="${g.portalTypeString()?.equals('stroke')}--}%
 
+<g:render template="./data/GWAS_SIGN"/>
+<g:render template="./data/GWAS_Stroke"/>
+<g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_UKBB" />
 <g:render template="./data/GWAS_CKDGenConsortium-eGFRcrea"/>
 <g:render template="./data/GWAS_CKDGenConsortium-UACR"/>
@@ -18,7 +21,6 @@
 <g:render template="./data/GWAS_DIAGRAM"/>
 <g:render template="./data/GWAS_MAGIC"/>
 <g:render template="./data/GWAS_GLGC"/>
-<g:render template="./data/GWAS_Oxford_GoDARTS_mdv1" />
 <g:render template="./data/ExChip_CAMP"/>
 <g:render template="./data/GWAS_CAMP"/>
 <g:render template="./data/GWAS_CKDGenConsortium"/>
@@ -44,8 +46,6 @@
 <g:render template="./data/GWAS_MEGASTROKE"/>
 <g:render template="./data/GWAS_MICAD"/>
 <g:render template="./data/GWAS_PWI" />
-<g:render template="./data/GWAS_SIGN"/>
-<g:render template="./data/GWAS_Stroke"/>
 <g:render template="./data/ExChip_AFGen" />
 <g:render template="./data/GWAS_AFGen" />
 <g:render template="./data/GWAS_GEI" />
@@ -56,6 +56,7 @@
 <g:render template="./data/ExSeq_RSNG" />
 <g:render template="./data/GWAS_DCSP2" />
 <g:render template="./data/GWAS_DIAGRAMimputed" />
+<g:render template="./data/GWAS_DIAGRAMimputed_eu" />
 <g:render template="./data/GWAS_AFHRC" />
 <g:render template="./data/ExChip_ExTexT2D" />
 <g:render template="./data/ExChip_FUSION" />
@@ -72,8 +73,23 @@
 <g:render template="./data/GWAS_AGEN_ea" />
 <g:render template="./data/GWAS_DCSP2_ea" />
 <g:render template="./data/ExSeq_52k" />
-
-
+<g:render template="./data/AMPLOAD_36" />
+<g:render template="./data/ExChip_CHARGE-1_eu" />
+<g:render template="./data/ExChip_CHARGE-2_aa" />
+<g:render template="./data/GWAS_AAGILE" />
+<g:render template="./data/AMPLOAD_7_illumina" />
+<g:render template="./data/AMPLOAD_7_broad" />
+<g:render template="./data/AMPLOAD_7_metabo" />
+<g:render template="./data/AMPLOAD_7_exome" />
+<g:render template="./data/AMPLOAD_7_affymetrix" />
+<g:render template="./data/GWAS_Oxford_GoDARTS" />
+<g:render template="./data/GWAS_SUMMITDKD-T1DT2D" />
+<g:render template="./data/GWAS_SUMMITDKD-ESRDvControl_eu" />
+<g:render template="./data/GWAS_GIANT-A" />
+<g:render template="./data/GWAS_MAGIC-Metabochip" />
+<g:render template="./data/GWAS_DIAMANTE_eu" />
+<g:render template="./data/GWAS_DIAMANTE-CredibleSet_eu" />
+<g:render template="./data/GWAS_DIAMANTE-UKBB_eu_dv2" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
