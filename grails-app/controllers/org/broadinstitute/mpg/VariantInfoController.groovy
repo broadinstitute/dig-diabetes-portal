@@ -327,6 +327,7 @@ class VariantInfoController {
 
         if (lzFormat){
             JSONObject root = new JSONObject()
+
             root["lastPage"] = null;
             JSONObject rootData = new JSONObject()
             rootData["chromosome"]=new JSONArray()
@@ -351,7 +352,7 @@ class VariantInfoController {
                 int individualAssayId = (individualAssayIdString) ? Integer.parseInt(individualAssayIdString) : 3
 
                 // map the Parker chromatin state information by hand
-                String element = pval["element"]
+                String element = pval["ELEMENT"]
                 LinkedHashMap map = elementMapper[element]
                 String elementTrans = g.message(code: "metadata." + element, default: element)
 
