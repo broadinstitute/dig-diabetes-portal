@@ -1,5 +1,6 @@
 <script class="panel-body" id="ExChip_T2DGO_script" type="x-tmpl-mustache">
-
+   <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+    <p><g:message code="informational.data.overlaps.ExTex"></g:message></p>
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
     <p><div class="paper">
@@ -16,7 +17,6 @@
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
     <ul>
-    <li><g:message code="informational.shared.traits.t2d"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_glucose"></g:message></li>
         <li><g:message code="informational.shared.traits.fasting_insulin"></g:message></li>
     </ul>

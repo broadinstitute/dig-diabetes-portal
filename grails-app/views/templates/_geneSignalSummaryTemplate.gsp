@@ -550,7 +550,7 @@
                                         <ul style="margin: 0 0 0 10px">
                                              <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
                                              <li>associated with {{pname}}</li>
-                                             <li>predicted to cause missense or protein-truncating mutations in the encoded protein</li>
+                                             <li>predicted to cause missense or protein-truncating mutations in an encoded protein within the region of this gene and its 100kb flanking regions</li>
                                         </ul>
                                      </div>
                                      Note: high-impact variants with MAF > 5% will also be shown on the Common variants tab.

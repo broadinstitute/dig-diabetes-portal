@@ -1158,7 +1158,7 @@ class VariantSearchController {
                 key = entry.getKey();
                 value = entry.getValue();
             }
-            errorMsg = "Properties can currently retrieved only from a single institution.  Please return to the Search page and restart your search"
+            errorMsg = "Properties can currently be retrieved only from a single institution.  Please return to the Search page and restart your search."
             render(status: 200, contentType: "application/json") {
                 [
 

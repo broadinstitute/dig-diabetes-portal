@@ -143,6 +143,9 @@ digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.
 digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
+// KB for the test federated portal changes
+digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+
 // this will be your default
 defaultRestServer = digawsdevnewKB
 
@@ -158,6 +161,7 @@ getRestServerList = [
         digawsdevnewKB_fed,
         digawsqanewKB,
         digawsqanewKB_fed,
+        digawsqanewKB_fed_dedicated_EBIv2,
         digawsprodmiKB,
         digawsprodstrokeKB,
         digawsdemoibdKB
@@ -566,14 +570,14 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv33",    // the MDV number for this portal
+                                                        "mdv34",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot -- use these for the DCC
  //       ["islet of Langerhans","liver","adipocyte"],  // tissues to display beneath a LocusZoom plot -- use these for UCSD
-                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CORONARY ARTERY DISEASE", "BLOOD PRESSURE"], // most important phenotype group name
+                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CARDIOVASCULAR", "BLOOD PRESSURE"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
@@ -605,13 +609,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
-                                                          "mdv72",
+                                                          "mdv73",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
+                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CARDIOVASCULAR", "LIPIDS"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
@@ -634,8 +638,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          0,0,0,
-                                          1,
+                                          1,0,1,
+                                          0,
                                           0,
                                             0,
                                             0
@@ -648,7 +652,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["SkeletalMuscle"],
-                                                          ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
+                                                          ["CARDIOVASCULAR", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",
@@ -778,13 +782,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '5414069947481666863',
+                                          '3616035242050290841',
                                           1,
                                           0,
                                           0,
                                           1,
                                           0,
-                                          0,0,0,
+                                          1,0,1,
                                           0,
                                           0,
                                           0,

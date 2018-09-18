@@ -20,9 +20,9 @@ var mpgSoftware = mpgSoftware || {};
         var getAccessName = function (dataTypeName){
             var access;
             if (dataTypeName.includes('FUSION')){
-                access = "Early access phase 1";}
+                access = "Early access phase 2";}
             else if (dataTypeName.includes('DCSP2')){
-                access = "Early access phase 1";}
+                access = "Early access phase 2";}
             else{
                 access = "Open access";}
             return access;
@@ -294,6 +294,10 @@ var mpgSoftware = mpgSoftware || {};
                 var filterDynamicHtml = Mustache.to_html(phenotypeFilterLevel1Template,phenotypeGroupArrayholder);
                 $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
+
+                var newDatasets = ["Hoorn DCS","AAGILE GWAS","GoDarts","Diabetic Kidney Disease"];
+                addNewDatasetFlag (newDatasets,".accordion-toggle","<span class='new-dataset-flag'>&nbsp;</span>"); //[DK] This function exists on t2dGenesCore.gsp. It's called to add "New dataset Flag
+
                 return {
                     storedJsonArray: storedJsonArray,
                     phenotypeDatasetsMap: phenotypeDatasetsMap

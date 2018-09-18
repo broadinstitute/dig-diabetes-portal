@@ -385,19 +385,39 @@
                 document.execCommand('copy');
             }
 
+            function addNewDatasetFlag (DATASETSLIST,TGELEMENT,ADDINGFLAG) {
+
+                var newDatasetsList = DATASETSLIST;
+                var TargetElement = $(TGELEMENT);
+
+                for(i=0; i < newDatasetsList.length; i++) {
+                    for (j = 0; j < TargetElement.length; j++) {
+                        var datasetName = TargetElement.eq(j).text();
+
+                        if(datasetName.indexOf(newDatasetsList[i]) != -1){
+                            var newDatasetName = TargetElement.eq(j).html() + ADDINGFLAG;
+
+                            TargetElement.eq(j).html(newDatasetName);
+                        }
+                    }
+                }
+            }
+
 
             /* copy URL function end */
 
             $( window ).load( function() {
 
-                /* massage LocusZoom UI */
-                //if(mpgSoftware.traitsFilter) mpgSoftware.traitsFilter.massageLZ();
+            });
+
+            $( window ).ready( function() {
 
             });
 
 
             $( window ).resize(function() {
                 menuHeaderSet();
+
             })
 
         </script>

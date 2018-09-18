@@ -102,6 +102,19 @@
                     <p><i><g:message code="informational.mi.prsinfo"></g:message></i></p>
 </table>
                     </div>
+                    <div class="col-md-12">
+                        <h1 class="dk-page-title">Download Summary Statistics</h1>
+                    </div>
+                    <div class="col-md-12">
+                        <table class="table table-condensed table-responsive table-striped" border="1">
+                            <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th></tr>
+
+                            <tr><td></td><td><a href="https://www.cell.com/ajhg/fulltext/S0002-9297(18)30270-2" target="_blank">Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure</a></td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip">UKB.v2.albuminuria.n382500.zip</a></td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td></tr>
+
+
+                        </table>
+                    </div>
 
                     <div class="col-md-12">
                         <h1 class="dk-page-title">Genetic Association Datasets</h1>
@@ -109,6 +122,8 @@
                     <div class="col-md-12">
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
                     </div>
+
+
                 </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                 <div class="col-md-12">
@@ -118,7 +133,7 @@
                     <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.epi.descr" default="about the data"/></p>
                 </div>
             </g:elseif>
-                <g:else>
+            <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                     <div class="col-md-12">
                         <h1 class="dk-page-title">Data</h1>
                     </div>
@@ -129,10 +144,21 @@
                     <div class="col-md-3">
                         <div class="dk-go-button dk-t2d-yellow dk-right-column-buttons"><a target="_blank" href="http://cerebrovascularportal.org/informational/downloads">Visit download page</a></div>
                     </div>
-                </g:else>
-            </div>
-        </div>
+                </g:elseif>
+<g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+    <div class="col-md-12">
+        <h1 class="dk-page-title">Data</h1>
     </div>
+    <div class="col-md-12">
+        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.sleep.title" default="about the data"/></p>
+    </div>
+
+</g:elseif>
+
+
+    </div>
+</div>
+</div>
         <div class="container">
             <g:renderBetaFeaturesDisplayedValue>
                 <div style="margin-top: 5px">
@@ -324,6 +350,5 @@
             %{--</g:else>--}%
         </div>
     </div>
-
 </body>
 </html>

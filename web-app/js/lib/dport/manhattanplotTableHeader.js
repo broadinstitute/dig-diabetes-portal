@@ -41,6 +41,7 @@ var mpgSoftware = mpgSoftware || {};
                             }
                         }
                     }
+
                     loader.hide();
                 },
                 error: function (jqXHR, exception) {
