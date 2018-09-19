@@ -243,7 +243,7 @@ modules = {
     }
     traitsFilter {
 
-        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css'
+        resource url: 'css/lib/bootstrap-select.css'
 
         resource url: 'js/lib/bootstrap-select.js'
 
