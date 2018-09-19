@@ -4,16 +4,10 @@
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
-    <r:require module="variantWF"/>
-    <r:require module="mustache"/>
     <r:require modules="traitsFilter"/>
     <r:layoutResources/>
 
     <style>
-    #main > div {
-        margin: auto;
-    }
-
     .modules-table td { vertical-align: middle !important; }
     </style>
 </head>
@@ -36,6 +30,15 @@
 
         <div class="row">
             <div class="col-md-12">
+                <H3>SELECT TEST</H3>
+                <select class="form-control selectpicker" data-live-search="true">
+                    <option>Tom Foolery</option>
+                    <option>Bill Gordon</option>
+                    <option>Elizabeth Warren</option>
+                    <option>Mario Flores</option>
+                    <option>Don Young</option>
+                    <option>Marvin Martinez</option>
+                </select>
 
             </div>
         </div>

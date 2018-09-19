@@ -146,7 +146,7 @@ modules = {
     }
 
     datasetsPage {
-        // dependsOn "portalHome"
+       // dependsOn "portalHome"
         resource url: 'css/dport/datasets.css'
         resource url: 'js/lib/dport/datasetsPage.js'
     }
@@ -243,11 +243,10 @@ modules = {
     }
     traitsFilter {
 
-        resource url: 'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.10.0/css/bootstrap-select.min.css'
-
+        resource url: 'css/lib/bootstrap-select.css'
         resource url: 'js/lib/bootstrap-select.js'
-
         resource url: 'js/lib/dport/traitsFilter.js'
     }
 
 }
+
