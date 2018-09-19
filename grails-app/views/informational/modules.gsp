@@ -1,9 +1,12 @@
+<%@ page import="org.broadinstitute.mpg.diabetes.util.PortalConstants" %>
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
-    <r:require modules="informational"/>
+    <r:require module="variantWF"/>
+    <r:require module="mustache"/>
+    <r:require modules="traitsFilter"/>
     <r:layoutResources/>
 
     <style>
@@ -33,15 +36,22 @@
 
         <div class="row">
             <div class="col-md-12">
-                
+
             </div>
         </div>
 
-
-
         <div class="row">
             <div class="col-md-12">
-                <h3 style="color: #f00;">/* Initial version. Launch buttons open module pages with preset parameters. */</h3>
+                <h3>Select a trait and a dataset to view available analysis. </h3>
+                <select id="phenotype" class="selectpicker" data-live-search="true">
+                    <option>Traits</option>
+                    <option>Type 2 diabetes</option>
+                    <option>BMI</option>
+                </select>
+
+
+
+
                 <table class="table modules-table">
                     <thead>
                         <tr>
@@ -98,7 +108,7 @@
                 </table>
             </div>
         </div>
-
+<!--
         <div class="row">
             <div class="col-md-12">
                 <h3 style="color: #f00;">/* Make this section available when search UIs become functional. */</h3>
@@ -211,7 +221,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>-->
 </div>
 
 </body>
