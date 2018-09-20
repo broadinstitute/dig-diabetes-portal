@@ -9,6 +9,8 @@
 
     <style>
     .modules-table td { vertical-align: middle !important; }
+
+    .inactive { background-color: rgba(0,0,0,.15) !important;}
     </style>
 </head>
 
@@ -28,32 +30,29 @@
             </div>
         </div>
 
-        <div class="row">
+        <div class="row" style="padding-bottom: 30px;">
             <div class="col-md-12">
-                <H3>SELECT TEST</H3>
-                <select class="form-control selectpicker" data-live-search="true">
-                    <option>Tom Foolery</option>
-                    <option>Bill Gordon</option>
-                    <option>Elizabeth Warren</option>
-                    <option>Mario Flores</option>
-                    <option>Don Young</option>
-                    <option>Marvin Martinez</option>
-                </select>
+                <h3>Select a trait and a dataset to view available analysis. </h3>
+                    <div class="col-md-4">
+                        <select id="phenotype" class="form-control selectpicker" data-live-search="true" style="width: 200px;">
+                            <option>Traits</option>
+                            <option>Type 2 diabetes</option>
+                            <option>BMI</option>
+                        </select>
+                    </div>
 
+                    <div class="col-md-4">
+                        <select id="dataset" class="form-control  selectpicker" style="width: 200px;">
+                            <option>Datasets</option>
+                            <option>dataset 1</option>
+                            <option>dataset 2</option>
+                        </select>
+                    </div>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <h3>Select a trait and a dataset to view available analysis. </h3>
-                <select id="phenotype" class="selectpicker" data-live-search="true">
-                    <option>Traits</option>
-                    <option>Type 2 diabetes</option>
-                    <option>BMI</option>
-                </select>
-
-
-
 
                 <table class="table modules-table">
                     <thead>
@@ -98,14 +97,9 @@
                             <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch GAIT</a></div></td>
                         </tr>
                         <tr>
-                            <td><h4>LocusZoom</h4></td>
+                            <td class="inactive"><h4>GRS</h4></td>
                             <td>View full genetic association results for a phenotype <br><small>(ex: bmi, glycemic; '=phenotype' for exact match)</small></td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch LocusZoom</a></div></td>
-                        </tr>
-                        <tr>
-                            <td><h4>LD Score</h4></td>
-                            <td>View full genetic association results for a phenotype <br><small>(ex: bmi, glycemic; '=phenotype' for exact match)</small></td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch LD Score</a></div></td>
+                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact inactive"><a href="javascript:;">Launch GRS</a></div></td>
                         </tr>
                     </tbody>
                 </table>
