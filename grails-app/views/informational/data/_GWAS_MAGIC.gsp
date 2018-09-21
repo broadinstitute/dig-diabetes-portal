@@ -57,28 +57,15 @@
 
 
 <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-<h5>Meta-Analyses of Glucose and Insulin-related traits Consortium (MAGIC) <small><a href="http://www.magicinvestigators.org/" target="_blank">Learn more ></a>
-</small></h5>
+
+<p><img src="${resource(dir: 'images/organizations', file: 'MAGIC_logo.png')}" style="width: 130px; margin-right: 15px"
+        align="left">
+</p>
 
 <p><g:message code="informational.project.descr.MAGIC"></g:message></p>
-
-
-%{--<h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>--}%
-
-%{--<h5>October 2016 updates</h5>--}%
-%{--<p><g:message code="informational.data.exptsumm.MAGIC1"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.MAGIC2"></g:message></p>--}%
-%{--<p><g:message code="informational.data.exptsumm.MAGIC3"></g:message></p>--}%
-%{--<h5>January 2017 updates</h5>--}%
-%{--<p><g:message code="informational.data.exptsumm.MAGIC4a">--}%
-    %{--&nbsp;--}%
-%{--</g:message><g:message code="informational.shared.publications.Walford_2016_Diabetes.author"></g:message><g:message code="informational.shared.publications.etal">--}%
-%{--</g:message><g:message code="informational.data.exptsumm.MAGIC4b"></g:message></p>--}%
-
-%{--<h5>April 2017 updates</h5>--}%
-%{--<p><g:message code="informational.data.exptsumm.MAGIC5a"> </g:message><g:message code="informational.shared.publications.Prokopenko_2014_PLoSGenet.author"></g:message><g:message code="informational.shared.publications.etal"> </g:message><g:message code="informational.data.exptsumm.MAGIC4b"></g:message>--}%
-%{--<g:message code="informational.data.exptsumm.MAGIC5b"></g:message></p>--}%
-
+<br />
+<br />
+<br />
    <h4>Accessing MAGIC GWAS data</h4>
 <p><g:message code="informational.data.accessing.MAGIC"></g:message></p>
 
