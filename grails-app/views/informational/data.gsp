@@ -109,7 +109,7 @@
                         <table class="table table-condensed table-responsive table-striped" border="1">
                             <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th></tr>
 
-                            <tr><td></td><td><a href="https://www.cell.com/ajhg/fulltext/S0002-9297(18)30270-2" target="_blank">Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure</a></td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip">UKB.v2.albuminuria.n382500.zip</a></td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip">UKB.v2.albuminuria.n382500.zip</a></td></tr>
                             <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td></tr>
 
 
