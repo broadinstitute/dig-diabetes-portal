@@ -349,12 +349,13 @@ class RestServerService {
                     existingPortalVersionBean.getVariantTakesYouToGenePage(),
                     existingPortalVersionBean.getUtilizeBiallelicGait(),
                     existingPortalVersionBean.getUtilizeUcsdData(),
-                    existingPortalVersionBean.getExposePredictedGeneAssociations()
+                    existingPortalVersionBean.getExposePredictedGeneAssociations(),
+                    existingPortalVersionBean.getExposeHiCData()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
