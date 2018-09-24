@@ -60,7 +60,7 @@ public class LocusZoomJsonBuilder {
      * @throws PortalException
      */
     public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
-                                          int maximumNumberOfPointsToRetrieve,String format,MetaDataService metadataService,
+                                          int maximumNumberOfPointsToRetrieve,String format, float minimumAllowablePosteriorProbability,MetaDataService metadataService,
                                           int metadataTree ) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
@@ -68,7 +68,7 @@ public class LocusZoomJsonBuilder {
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format, metadataService, metadataTree);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format, minimumAllowablePosteriorProbability,metadataService, metadataTree);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
@@ -108,7 +108,8 @@ public class LocusZoomJsonBuilder {
      * @throws PortalException
      */
     public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
-                                              int maximumNumberOfPointsToRetrieve,String format,MetaDataService metaDataService,
+                                              int maximumNumberOfPointsToRetrieve,String format,float minimumAllowablePosteriorProbability,
+                                              MetaDataService metaDataService,
                                               int metadataTree) throws PortalException {
         // local variables
         JsonParser currentJsonParser;
@@ -136,19 +137,25 @@ public class LocusZoomJsonBuilder {
         }
 
 
-            Property posteriorPValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
-            Property credibleSetId =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "CREDIBLE_SET_ID",  this.phenotypeString,  rootDataSetString);
-            Property pValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "P_VALUE",  this.phenotypeString,  rootDataSetString);
+
+        Property posteriorPValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_P_VALUE",  this.phenotypeString,  rootDataSetString);
+        Property posteriorProbabilityValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "POSTERIOR_PROBABILITY",  this.phenotypeString,  rootDataSetString);
+        Property credibleSetId =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "CREDIBLE_SET_ID",  this.phenotypeString,  rootDataSetString);
+        Property pValue =  currentJsonParser.getPropertyGivenItsAndPhenotypeAndSampleGroupNames( "P_VALUE",  this.phenotypeString,  rootDataSetString);
 
             // get the query properties, but only if they are not looking at hail, which can't do phenotype-based filtering
             float pValueCutOff = (float) 0.90;  // pValues > 0.9 don't interest us, and they slow down the query
-            if (posteriorPValue != null){
-                query.addQueryProperty(posteriorPValue);
-            }
+        if (posteriorPValue != null){
+            query.addQueryProperty(posteriorPValue);
+        }
+        if (posteriorProbabilityValue != null){
+            query.addFilterProperty(posteriorProbabilityValue, PortalConstants.OPERATOR_MORE_THAN_EQUALS, String.valueOf(minimumAllowablePosteriorProbability));
+        }
             if (credibleSetId != null){
                 query.addQueryProperty(credibleSetId);
                 pValueCutOff = (float) 1; // posterior probabilities near 1 are very interesting, so don't filter them out
             }
+
             if (pValue != null){
                 query.addQueryProperty(pValue);
             }
@@ -158,10 +165,6 @@ public class LocusZoomJsonBuilder {
 
 
         List<org.broadinstitute.mpg.diabetes.metadata.Property> propertiesList = metaDataService.getCommonProperties(metadataTree);
-//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_POSITION));
-//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME));
-//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOST_DEL_SCORE));
-//        query.addQueryProperty((Property)currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_CONSEQUENCE));
 
         query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_POSITION,query);
         query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_CHROMOSOME,query);
@@ -178,23 +181,14 @@ public class LocusZoomJsonBuilder {
         if (metadataTree == MetaDataService.METADATA_HAIL ) {
             query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE));
             query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE));
-//            query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE,query);
-//            query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE,query);
-//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_EFFECT_ALLELE));
-//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_HAIL_REFERENCE_ALLELE));
 
         } else {
             query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
-            //query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_VAR_ID,query);
             query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE,query);
             query = addCommonPropertyIfItExists(currentJsonParser,propertiesList,PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE,query);
 
-//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_VAR_ID));
-//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_EFFECT_ALLELE));
-//            query.addQueryProperty((Property) currentJsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_REFERENCE_ALLELE));
         }
         // TODO - fix common property not shared with EBI
-//        query.addQueryProperty((Property)this.jsonParser.getMapOfAllDataSetNodes().get(PortalConstants.PROPERTY_KEY_COMMON_MOTIF_NAME));
         query.setLimit(maximumNumberOfPointsToRetrieve);
 
         // get the query filters
@@ -202,6 +196,7 @@ public class LocusZoomJsonBuilder {
         if (metadataTree != MetaDataService.METADATA_HAIL ){
             query.addFilterProperty(pValueProperty, PortalConstants.OPERATOR_LESS_THAN_EQUALS, String.valueOf(pValueCutOff));
         }
+
         QueryFilterBean queryFilterBean = new QueryFilterBean(pValueProperty,"", String.valueOf(0.0));
         query.addOrderByQueryFilter(queryFilterBean);
 
