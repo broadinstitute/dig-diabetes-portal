@@ -1454,14 +1454,14 @@ var mpgSoftware = mpgSoftware || {};
                 }
             );
 
-            var distinctElements =  _.chain(rowsToDisplay).uniqBy('element').map('element').value();
-            var distinctTissues =  _.chain(rowsToDisplay).uniqBy('source').map('source').value();
+            var distinctElements =  _.chain(rowsToDisplay).uniqBy('element').map('ELEMENT').value();
+            var distinctTissues =  _.chain(rowsToDisplay).uniqBy('source').map('SOURCE').value();
             _.forEach(rowsToDisplay,function(variantRec){
                var arrayOfRows = [];
 
-                arrayOfRows.push('<span class="elementSpec">'+variantRec.element+'</span>');
+                arrayOfRows.push('<span class="elementSpec">'+variantRec.ELEMENT+'</span>');
               //  arrayOfRows.push(variantRec.element);
-               arrayOfRows.push(variantRec.source);
+               arrayOfRows.push(variantRec.SOURCE);
                arrayOfRows.push(variantRec.START);
                arrayOfRows.push(variantRec.STOP);
 

@@ -187,11 +187,12 @@ td.tissueTable.informationIsPresent{
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
                 if (${portalVersionBean.getExposePredictedGeneAssociations()}){
-                    mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingDataAndResetPhenoCoefficients,
-                        {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
-                            geneExtentBegin:drivingVariables.geneExtentBegin,
-                            geneExtentEnd:drivingVariables.geneExtentEnd,
-                            geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
+                    mpgSoftware.geneSignalSummaryMethods.selfContainedGeneRanking();
+//                    mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingDataAndResetPhenoCoefficients,
+//                        {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
+//                            geneExtentBegin:drivingVariables.geneExtentBegin,
+//                            geneExtentEnd:drivingVariables.geneExtentEnd,
+//                            geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome});
                 }
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
             };

@@ -775,9 +775,10 @@ class WidgetService {
                             ciHigh = stats.cUpper
                             singleVariantData<<"\"ci_start\": ${ciLow}"
                             singleVariantData<<"\"ci_end\": ${ciHigh}"
+                            dataFromQuery << "{${singleVariantData.join(",")}}"
                         }
 
-                        dataFromQuery << "{${singleVariantData.join(",")}}"
+
 
                     }
                 }
@@ -1413,7 +1414,8 @@ class WidgetService {
                     boolean processTissue = false
                     if (parametersForAlgorithm.restrictTissues){
                         processTissue = (invertedGeneExpression.containsKey(tissueName)&&
-                                (parametersForAlgorithm.tissueToInclude.contains(tissueName)))
+                                ((parametersForAlgorithm.tissueToInclude.contains(tissueName))|| // we were told to include this tissue
+                                        (parametersForAlgorithm.tissueToInclude.size()==0))) // we were told to include no tissues, which doesn't make any sense, so include every tissue instead
                     } else {
                         processTissue = invertedGeneExpression.containsKey(tissueName)
                     }

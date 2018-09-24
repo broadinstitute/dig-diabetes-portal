@@ -490,9 +490,11 @@ class SharedToolsService {
                     break;
             }
             if (!returnValue.error){
-                Double absEffect = Math.abs(effect)
-                returnValue["cLower"] = effect - (multiplier*absEffect)
-                returnValue["cUpper"] = effect + (multiplier*absEffect)
+                Double stdError = returnValue.standardError
+                Double absStdEffect = Math.abs(stdError)
+                //Double absEffect = Math.abs(effect)
+                returnValue["cLower"] = effect - (multiplier*absStdEffect)
+                returnValue["cUpper"] = effect + (multiplier*absStdEffect)
             }
         }
         return returnValue

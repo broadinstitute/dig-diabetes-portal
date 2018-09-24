@@ -238,7 +238,7 @@ class RegionInfoController {
 
         // the first time through we aren't going to have any phenotype coefficients sent up from the browser, but we can derive them.
         //  So let's generate those values, and create a data structure to mimic the one that we would have received from the browser
-        if ((arrayOfPhenotypeCoefficients == null)&& (phenotypesWeightsAndGenes!=null)&& (phenotypesWeightsAndGenes.phenotypePValueMap!=null)){
+        if (((arrayOfPhenotypeCoefficients == null)||(arrayOfPhenotypeCoefficients.size() == 0))&& (phenotypesWeightsAndGenes!=null)&& (phenotypesWeightsAndGenes.phenotypePValueMap!=null)){
             arrayOfPhenotypeCoefficients = []
             Map revisedPhenotypePValueMap = [:]
             phenotypesWeightsAndGenes.phenotypePValueMap.each{ k, v ->

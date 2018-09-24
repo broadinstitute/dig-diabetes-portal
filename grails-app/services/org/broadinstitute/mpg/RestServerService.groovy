@@ -2819,7 +2819,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 //                dataJsonObject.results.pVals.level
 
-                keys = ["P_VALUE","ODDS_RATIO", "VAR_ID", "R2", "POS", "CHROM", "CLOSEST_GENE"];
+                keys = ["P_VALUE","ODDS_RATIO", "DBSNP_ID", "VAR_ID", "R2", "POS", "CHROM", "CLOSEST_GENE"];
                 List<String> variantSpecificList = []
                 for (String key in keys) {
                     ArrayList valueArray = []
@@ -2877,7 +2877,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         log.error("An ArrayList is not an expected result.  Did the return data format change?")
                     }
                 }
-                crossVariantData << "{ \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
+                crossVariantData << "{\"isClump\": ${isClumped}, \"dataset\": 1, ${additionalDataSetInformation}, \"pVals\": [".toString() + variantSpecificList.join(",") + "]}"
             }
         }
         return  "{\"results\":[" +  crossVariantData.join(",") + "]"+topLevelInformation+"}"

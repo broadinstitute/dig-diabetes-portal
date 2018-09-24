@@ -158,6 +158,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
+//defaultRestServer = digawsqanewKB
 defaultRestServer = digawsdevWorkflowKB
 
 getRestServerList = [
@@ -622,7 +623,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0,
                                                 0,
                                                 0,
-                                                0,0,0
+                                                0,0,1
 
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",

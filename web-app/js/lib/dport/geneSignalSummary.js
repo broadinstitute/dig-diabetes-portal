@@ -149,10 +149,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                          height: 200,
                          contents: [
                              {
-                                 server: "//higlass.io/api/v1",
-                                 tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
-                                 // server: "//34.237.63.26:8888/api/v1",
-                                 // tilesetUid: "pancreas-rect",
+                                 //server: "//higlass.io/api/v1",
+                                 //tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
+                                  server: "//34.237.63.26:8888/api/v1",
+                                  tilesetUid: "pancreas-demo-3",
                                  type: "heatmap",
                                  //type: "2d-rectangle-domains",
                                  // type: "horizontal-2d-rectangle-domains",
@@ -160,7 +160,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                                  options: {
                                      maxZoom: null,
                                      labelPosition: "bottomRight",
-                                     name: "Gaulton et al. (2014) GM12878 MboI (allreps) 1kb",
+                                     name: "Gaulton et al., Pancreatic islet",
                                      backgroundColor: "#eeeeee",
                                      colorRange: [
                                          "white",
@@ -179,7 +179,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                                      scaleEndPercent: "1.00000"
                                  },
                                  uid: "GjuZed1ySGW1IzZZqFB9BA",
-                                 name: "Gaulton et al. (2014) GM12878 MboI (allreps) 1kb",
+                                 name: "Gaulton et al., Pancreatic islet, 5kb",
                                  transforms: [
                                      {
                                          name: "ICE",
