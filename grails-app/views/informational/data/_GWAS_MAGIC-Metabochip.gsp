@@ -20,10 +20,17 @@
 </ul>
 
 <h4><g:message code="informational.shared.headers.project"></g:message></h4>
-<h5>Meta-Analyses of Glucose and Insulin-related traits Consortium (MAGIC) <small><a href="http://www.magicinvestigators.org/" target="_blank">Learn more ></a>
-</small></h5>
+
+
+<p><img src="${resource(dir: 'images/organizations', file: 'MAGIC_logo.png')}" style="width: 130px; margin-right: 15px"
+        align="left">
+</p>
 
 <p><g:message code="informational.project.descr.MAGIC"></g:message></p>
+<br />
+<br />
+<br />
+
 
    <h4>Accessing MAGIC Metabochip GWAS data</h4>
 <p><g:message code="informational.data.accessing.MAGIC-Metabochip"></g:message></p>

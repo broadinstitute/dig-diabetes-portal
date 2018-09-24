@@ -324,6 +324,7 @@ class VariantInfoController {
 
         if (lzFormat){
             JSONObject root = new JSONObject()
+
             root["lastPage"] = null;
             JSONObject rootData = new JSONObject()
             rootData["chromosome"]=new JSONArray()

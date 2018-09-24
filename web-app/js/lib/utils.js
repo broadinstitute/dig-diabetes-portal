@@ -898,11 +898,13 @@ var UTILS = {
             }]);
             var sortedData = [];
             _.forEach(rawSortedData,function(o){
-                sortedData.push({'CHROM':o.CHROM,
+                sortedData.push({
+                    'CHROM':o.CHROM,
                     'START':o.START,
                     'STOP':o.STOP,
                     'SOURCE':o.source_trans,
                     'ELEMENT':o.element_trans
+
                 })
             })
             var uniqueElements = _.uniqBy(sortedData,function(item) {
@@ -927,7 +929,7 @@ var UTILS = {
             var arrayOfArraysGroupedByTissue = [];
             for (var j = 0 ; j < uniqueTissues.length ; j++){
 
-                var arrayGroupedByTissue = _.filter(sortedData, {source:uniqueTissues[j].source});
+                var arrayGroupedByTissue = _.filter(sortedData, {SOURCE:uniqueTissues[j].SOURCE});
                 arrayOfArraysGroupedByTissue.push(arrayGroupedByTissue);
             }
             var allUniqueElementNames = _.map(uniqueElements,'ELEMENT');

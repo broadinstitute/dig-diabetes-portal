@@ -13,8 +13,8 @@
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
-<li><g:message code="metadata.t2d"></g:message></li>
-<li><g:message code="metadata.T2DadjBMI"></g:message></li>
+<li><g:message code="informational.shared.traits.t2d"></g:message></li>
+<li><g:message code="informational.shared.traits.t2dadjbmi"></g:message></li>
 </ul>
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>

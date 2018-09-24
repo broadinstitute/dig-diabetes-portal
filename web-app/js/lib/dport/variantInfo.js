@@ -1454,12 +1454,12 @@ var mpgSoftware = mpgSoftware || {};
                 }
             );
 
-            var distinctElements =  _.chain(rowsToDisplay).uniqBy('element').map('ELEMENT').value();
-            var distinctTissues =  _.chain(rowsToDisplay).uniqBy('source').map('SOURCE').value();
+            var distinctElements =  _.chain(rowsToDisplay).uniqBy('ELEMENT').map('ELEMENT').value();
+            var distinctTissues =  _.chain(rowsToDisplay).uniqBy('SOURCE').map('SOURCE').value();
             _.forEach(rowsToDisplay,function(variantRec){
                var arrayOfRows = [];
 
-                arrayOfRows.push('<span class="elementSpec">'+variantRec.ELEMENT+'</span>');
+               arrayOfRows.push('<span class="elementSpec">'+variantRec.ELEMENT+'</span>');
               //  arrayOfRows.push(variantRec.element);
                arrayOfRows.push(variantRec.SOURCE);
                arrayOfRows.push(variantRec.START);
