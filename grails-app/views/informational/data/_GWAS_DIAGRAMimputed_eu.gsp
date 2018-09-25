@@ -3,7 +3,7 @@
 
     <p>Download URL: <a href="http://diagram-consortium.org/downloads.html">http://diagram-consortium.org/downloads.html</a><br/>
     Download date: January 2018<br/>
-    <p><g:message code="informational.data.overlaps.DIAGRAM1000G"></g:message></p>
+    %{--<p><g:message code="informational.data.overlaps.DIAGRAM1000G"></g:message></p>--}%
         <br/>
         <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
