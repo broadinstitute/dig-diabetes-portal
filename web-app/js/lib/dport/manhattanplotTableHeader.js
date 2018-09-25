@@ -160,6 +160,10 @@ var mpgSoftware = mpgSoftware || {};
                             } else if (key==='POS') {
                                 d[key] = parseInt(value);
                             } else {
+                                if(key == 'ODDS_RATIO'){
+                                    d[key] = value;
+                                    effectType = 'odds ratio'
+                                }
                                 d[key] = value;
                             }
 
