@@ -42,7 +42,7 @@ class WidgetService {
     private final String phenotypeKey = "T2D";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
     private final int NUMBER_OF_DISTRIBUTION_BINS = 24
-    private final int NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE = 10
+    private final int NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE = 100
     private final int NUMBER_OF_VARIANTS_IN_GENE_TABLE = 400
 
 

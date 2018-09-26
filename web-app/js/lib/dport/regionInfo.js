@@ -1397,9 +1397,50 @@ var mpgSoftware = mpgSoftware || {};
                             previouslyEstablishedCredibleSetRecord.variantsInCredibleSet.push(drivingVariable.details.VAR_ID);
                         });
                         return returnValues;
-                    }
+                    };
 
 
+                    var filterDownToCalculatedCredSetIfNecessary = function (inData) {
+                        var outData = inData;
+                        if (inData.propertyName === "P_VALUE") { // we have to be starting with P values, or else no filtering is necessary
+                            if ((typeof inData.variants !== 'undefined') && (inData.variants.length > 1)) { // We have to have enough data to be worth filtering
+                                var allVariants = _.flatten([{}, inData.variants]);
+                                var records = _.map(allVariants, function (o) {
+                                    return _.merge.apply(_, o)
+                                });
+                                var nlogpvals = records.map(function (item) {
+                                    var pValue = "";
+                                    _.forEach(item[inData.propertyName], function (ppvalue){
+                                        _.forEach(ppvalue,function (phenotype){
+                                            pValue=phenotype;
+                                        })
+                                    });
+                                    if ((item)&&(pValue > 0)) {
+                                        return 0 - (Math.log(pValue) / Math.LN10);
+                                    } else {
+                                        return 0;
+                                    }
+                                });
+                                var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
+                                var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
+                                var credibleSet = gwasCredibleSets.marking.findCredibleSet(posteriorProbabilities, 0.50);
+                                var credibleSetBoolean = gwasCredibleSets.marking.markBoolean(credibleSet);
+                                var filteredVariants = [];
+                                inData.variants.forEach(function (item, index) {
+                                    if (credibleSetBoolean[index]) {
+                                        item["POSTERIOR_PROBABILITY"] = posteriorProbabilities[index];
+                                        filteredVariants.push(item);
+                                    }
+                                });
+                                outData.variants = filteredVariants;
+
+                            }
+                        }
+                        return outData;
+                    };
+
+
+                    data = filterDownToCalculatedCredSetIfNecessary(data);
 
                     //var assayIdList = $("select.variantIntersectionChoiceSelect").find(":selected").val();
                     var assayIdList = additionalParameters.assayIdList;

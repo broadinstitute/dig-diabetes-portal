@@ -238,118 +238,7 @@ var mpgSoftware = mpgSoftware || {};
             ]
         });
 
-        // my first attempt.  let's try again, following andy's example...
-        // LocusZoom.Layouts.add("plot", "forestPlot", {
-        //         width: 800,
-        //         height: 800,
-        //     responsive_resize: true,
-        //     panels: [
-        //         {
-        //             id: "forestphewas",
-        //             width: 800,
-        //             height: 800,
-        //             proportional_width: 1,
-        //             margin: {top: 20, right: 220, bottom: 50, left: 20},
-        //             inner_border: "rgba(210, 210, 210, 0.85)",
-        //             axes: {
-        //                 x: {
-        //                     label: "Beta",
-        //                     label_offset: 33
-        //                 },
-        //                 y2: {
-        //                     ticks: "y2_ticks"
-        //                 }
-        //             },
-        //             legend: {
-        //                 origin: {x: 30, y: 30},
-        //                 orientation: "vertical"
-        //             }
-        //             ,
-        //             data_layers: [
-        //                 {
-        //                     id: "forestphewaspvalues",
-        //                     type: "forest",
-        //                     z_index: 1,
-        //                     point_shape: "square",
-        //                     point_size: {
-        //                         scale_function: "interpolate",
-        //                         field: "log_pvalue",
-        //                         parameters: {
-        //                             breaks: [0, 10],
-        //                             values: [60, 160],
-        //                             null_value: 50
-        //                         }
-        //                     },
-        //                     color: {
-        //                         scale_function: "interpolate",
-        //                         field: "log_pvalue",
-        //                         parameters: {
-        //                             breaks: [0, 10],
-        //                             values: ["#fee8c8","#b30000"],
-        //                             null_value: "#B8B8B8"
-        //                         }
-        //                     }
-        //                     ,
-        //                     legend: [
-        //                         { label: "-log10 p-value" },
-        //                         { shape: "square", class: "lz-data_layer-forest", color: "#fdd49e", size: 60, label: "< 2" },
-        //                         { shape: "square", class: "lz-data_layer-forest", color: "#fdbb84", size: 80, label: "2 - 4" },
-        //                         { shape: "square", class: "lz-data_layer-forest", color: "#fc8d59", size: 100, label: "4 - 6" },
-        //                         { shape: "square", class: "lz-data_layer-forest", color: "#ef6548", size: 120, label: "6 - 8" },
-        //                         { shape: "square", class: "lz-data_layer-forest", color: "#d7301f", size: 140, label: "8 - 10" },
-        //                         { shape: "square", class: "lz-data_layer-forest", color: "#b30000", size: 160, label: "10+" }
-        //                     ],
-        //                     id_field: "phenotype",
-        //                     fields: ["phenotype", "log_pvalue", "log_pvalue|logtoscinotation", "beta", "ci_start", "ci_end", "y_offset"],
-        //                     x_axis: {
-        //                         field: "beta",
-        //                         floor: -0.2,
-        //                         ceiling: 0.2
-        //                     },
-        //                     y_axis: {
-        //                         axis: 2,
-        //                         field: "y_offset",
-        //                         floor: 0//,
-        //       //                  ceiling: y_offset
-        //                     },
-        //                     confidence_intervals: {
-        //                         start_field: "ci_start",
-        //                         end_field: "ci_end"
-        //                     },
-        //                     highlighted: {
-        //                         onmouseover: "on",
-        //                         onmouseout: "off"
-        //                     },
-        //                     selected: {
-        //                         onclick: "toggle_exclusive",
-        //                         onshiftclick: "toggle"
-        //                     },
-        //                     tooltip: {
-        //                         closable: true,
-        //                         show: { or: ["highlighted", "selected"] },
-        //                         hide: { and: ["unhighlighted", "unselected"] },
-        //                         html: "<strong>{{phenotype}}</strong><br>"
-        //                         + "P Value: <strong>{{log_pvalue|logtoscinotation}}</strong><br>"
-        //                         + "Odds Ratio: <strong>{{beta}}</strong><br>"
-        //                         + "95% Conf. Interval: <strong>[ {{ci_start}} {{ci_end}} ]</strong>"
-        //                     }
-        //                 },
-        //                 {
-        //                     id: "zeroline",
-        //                     type: "orthogonal_line",
-        //                     z_index: 0,
-        //                     orientation: "vertical",
-        //                     offset: 0,
-        //                     y_axis: {
-        //                         axis: 2
-        //                     }
-        //                 }
-        //             ]
-        //         }
-        //
-        //
-        //     ]
-        // });
+
 
         LocusZoom.Layouts.add("plot", "abbreviated_phewas", {
             width: 800,
@@ -1675,6 +1564,7 @@ var mpgSoftware = mpgSoftware || {};
         var buildAssociationSource = function(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic){
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype,dataSetName,propertyName,makeDynamic) {
                 var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+                this.pvalueType = function(){return propertyName==='P_VALUE'};
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -1704,7 +1594,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return url;
                 };
-                this.prepareData = function(records){
+                this.annotateData = function(records){
                 //
                 //     // Below is an example of how we might use UM's latest in order to assign credible set definitions.  For now
                 //     //  I will leave it commented out.
@@ -1724,28 +1614,37 @@ var mpgSoftware = mpgSoftware || {};
                 //     // and then looking at the browser console to see what they were actually doing
                 //     //
                 //     // Calculate raw bayes factors and posterior probabilities based on information returned from the API
-                //     if (typeof pValueKeyName !== 'undefined') {
-                //         var nlogpvals = records.map(function (item) {
-                //             return item[pValueKeyName];
-                //         });
-                //         var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
-                //         var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
-                //
-                //         // Use scores to mark the credible set in various ways (depending on your visualization preferences,
-                //         //    some of these may be unneeded)
-                //         var credibleSet = gwasCredibleSets.marking.findCredibleSet(scores);
-                //         var credSetScaled= gwasCredibleSets.marking.rescaleCredibleSet(credibleSet);
-                //         var credSetBool = gwasCredibleSets.marking.markBoolean(credibleSet);
-                //
-                //         // Annotate each response record based on credible set membership
-                //         records.forEach(function (item, index) {
-                //             item["assoc:credibleSetPosteriorProb"] = posteriorProbabilities[index];
-                //             item["assoc:credibleSetContribution"] = credSetScaled[index]; // Visualization helper: normalized to contribution within the set
-                //             item["assoc:isCredible"] = credSetBool[index];
-                //         });
-                //         return records;
-                //
-                //     }
+                    pValueKeyName = 'pvalue';
+                    if ((typeof pValueKeyName !== 'undefined') &&(this.pvalueType())){
+                        var nlogpvals = records.map(function (item) {
+                            if (item[pValueKeyName]>0){
+                                return 0-(Math.log(item[pValueKeyName])/Math.LN10);
+                            } else {
+                                return 0;
+                            }
+                        });
+                        var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
+                        var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
+
+                        // Identify the credible set and apply filters for visualization
+                        var credibleSet = gwasCredibleSets.marking.findCredibleSet(posteriorProbabilities, 0.95);
+                        var credibleSetBoolean = gwasCredibleSets.marking.markBoolean(credibleSet);
+
+                        // Use scores to mark the credible set in various ways (depending on your visualization preferences,
+                        //    some of these may be unneeded)
+                        // var credibleSet = gwasCredibleSets.marking.findCredibleSet(scores);
+                        // var credSetScaled= gwasCredibleSets.marking.rescaleCredibleSet(credibleSet);
+                        // var credSetBool = gwasCredibleSets.marking.markBoolean(credibleSet);
+
+                        // Annotate each response record based on credible set membership
+                        records.forEach(function (item, index) {
+                            item["assoc:credibleSetPosteriorProb"] = posteriorProbabilities[index];
+                            //item["assoc:credibleSetContribution"] = credSetScaled[index]; // Visualization helper: normalized to contribution within the set
+                            item["assoc:isCredible"] = credibleSetBoolean[index];
+                        });
+                        return records;
+
+                    }
                 //
                     var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
                     var pValueKeyName;
