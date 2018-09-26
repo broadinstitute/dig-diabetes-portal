@@ -604,7 +604,7 @@ class VariantSearchController {
 
         }
         List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
-        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets.collect{it.systemId}
+        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets?.sort{a,b->return (b.getSubjectsNumber()<=>a.getSubjectsNumber())}?.collect{it.systemId}
 
         StringBuilder sb = new StringBuilder("[")
         if (portalType=='ibd'){
