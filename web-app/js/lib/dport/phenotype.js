@@ -44,6 +44,9 @@ var mpgSoftware = mpgSoftware || {};
                 else if (key === 'MAF')  {
                     mafValue=parseFloat(value);
                 }
+                else if (key === 'BETA')  {
+                    betaValue=parseFloat(value);
+                }
 
             });
 
