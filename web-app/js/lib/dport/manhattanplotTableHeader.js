@@ -159,9 +159,18 @@ var mpgSoftware = mpgSoftware || {};
                                 }
                             } else if (key==='POS') {
                                 d[key] = parseInt(value);
-                            } else {
+                            } else if (key == 'ODDS_RATIO'){
+                                    d[key] = value;
+                                    effectType = 'odds ratio'
+                            }
+                            else if(key==='BETA'){
+                                d[key] = value;
+                                effectType = 'beta'
+                            }
+                            else if(key==='MAF'){
                                 d[key] = value;
                             }
+                            d[key] = value;
 
                         }
                         collector.push(d);
