@@ -425,11 +425,11 @@ var mpgSoftware = mpgSoftware || {};
                 var record = tissueGrid[tissueKey][positionString];
                 var worthIncluding = false;
                 if ((typeof record !== 'undefined') && (typeof record.source_trans !== 'undefined') && (record.source_trans !== null)){
-                    quantileArray = createQuantilesArray(record.ASSAY_ID);
+                    quantileArray = createQuantilesArray(record.ANNOTATION);
                     var elementName = record.source_trans;
-                    var provideDefaultForAssayId = (typeof record.ASSAY_ID === 'undefined') ? 3 : record.ASSAY_ID;
+                    var provideDefaultForAssayId = (typeof record.ANNOTATION === 'undefined') ? 3 : record.ANNOTATION;
                     if  (provideDefaultForAssayId === 3){
-                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_"+determineCategoricalColorIndex(record.element)+" "+
+                        lineToAdd = ("<td class='tissueTable matchingRegion"+provideDefaultForAssayId + "_"+determineCategoricalColorIndex(record.ELEMENT)+" "+
                             elementName+"' data-toggle='tooltip' title='chromosome:"+ record.CHROM +
                             ", position:"+ positionString +", tissue:"+ record.source_trans +"'></td>");
                     } else if (provideDefaultForAssayId === 5) {
@@ -467,7 +467,7 @@ var mpgSoftware = mpgSoftware || {};
                 var variantsToKeep = {};
                 _.forEach(Object.keys(incomingTissueGrid[tissueKey]),function(variantPos){
                     var variantRecord = incomingTissueGrid[tissueKey][variantPos];
-                    if (((typeof variantRecord.ASSAY_ID === 'undefined') ) || (assayIdArray.includes(variantRecord.ASSAY_ID))){
+                    if (((typeof variantRecord.ANNOTATION === 'undefined') ) || (assayIdArray.includes(variantRecord.ANNOTATION))){
                         variantsToKeep[variantPos]=variantRecord;
                     }
                 });
@@ -795,7 +795,7 @@ var mpgSoftware = mpgSoftware || {};
                     var retval = false;
                     _.forEach(selectedElements,function(oe){
 
-                        if ((o.ASSAY_ID===1)||(o.ASSAY_ID===2)||(o.ASSAY_ID===5)){
+                        if ((o.ANNOTATION===1)||(o.ANNOTATION===2)||(o.ANNOTATION===5)){
                             retval = true;
                         } else {
                             chosenElementTypes.push(oe.name);
@@ -805,7 +805,7 @@ var mpgSoftware = mpgSoftware || {};
                     if (retval) {
                         return true;
                     } else {
-                        return ((chosenElementTypes.indexOf(o.element)>-1));
+                        return ((chosenElementTypes.indexOf(o.ELEMENT)>-1));
                     }
 
                 };

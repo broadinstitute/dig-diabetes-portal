@@ -241,7 +241,6 @@
                                                default="Build search request"/>
                                 </button>
                             </div>
-
                         </div>
                     </div>
                 </div>

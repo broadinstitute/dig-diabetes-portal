@@ -38,6 +38,16 @@ var mpgSoftware = mpgSoftware || {};
                 }   else if (key === 'P_VALUE')  {
                     pValue=parseFloat(value);
                 }
+                else if (key === 'ODDS_RATIO')  {
+                    orValue=parseFloat(value);
+                }
+                else if (key === 'MAF')  {
+                    mafValue=parseFloat(value);
+                }
+                else if (key === 'BETA')  {
+                    betaValue=parseFloat(value);
+                }
+
             });
 
             var variantIdentifier =  (typeof variant.DBSNP_ID!=='undefined') ? variant.DBSNP_ID :  variant.VAR_ID;

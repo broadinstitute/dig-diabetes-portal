@@ -41,6 +41,10 @@ class RegionInfoController {
         String dataType = params.datatype
         String propertyName = params.propertyName
 
+        float minimumAllowablePosteriorProbability = -1f
+        if (params.minimumAllowablePosteriorProbability){
+            minimumAllowablePosteriorProbability = Float.parseFloat(params.minimumAllowablePosteriorProbability)
+        }
 
         int startInteger;
         int endInteger;
@@ -62,7 +66,7 @@ class RegionInfoController {
                                                 propertyName,MetaDataService.METADATA_VARIANT)
                     propertyName = property.name
                 }
-                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName);
+                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability);
                 jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
             } else {
                 jsonReturn = slurper.parse(errorJsonString);
