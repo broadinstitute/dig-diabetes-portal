@@ -5,7 +5,7 @@
 
 <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
 <p><g:message code="informational.data.download.70KforT2D"></g:message></p>
-%{--<p><g:message code="informational.data.overlaps.70KforT2D"></g:message></p>--}%
+<p><g:message code="informational.data.overlaps.70KforT2D"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
