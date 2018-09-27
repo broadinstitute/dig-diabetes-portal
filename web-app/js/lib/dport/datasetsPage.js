@@ -295,7 +295,7 @@ var mpgSoftware = mpgSoftware || {};
                 $("#phenotypeFilterLevel1Display").empty().append(filterDynamicHtml);
                 renderFilteredData();
 
-                var newDatasets = ["GoDarts", "Hoorn", "AAGILE", "Diabetic Kidney Disease", "QRS", "MEGASTROKE", "NGCM"];
+                var newDatasets = ["DIAMANTE", "QRS", "MEGASTROKE", "NGCM"];
 
                 addNewDatasetFlag (newDatasets,".accordion-toggle","<span class='new-dataset-flag'>&nbsp;</span>"); //[DK] This function exists on t2dGenesCore.gsp. It's called to add "New dataset Flag
 
