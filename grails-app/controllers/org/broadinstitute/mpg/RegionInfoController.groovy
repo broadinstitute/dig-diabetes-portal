@@ -41,6 +41,10 @@ class RegionInfoController {
         String dataType = params.datatype
         String propertyName = params.propertyName
 
+        float minimumAllowablePosteriorProbability = -1f
+        if (params.minimumAllowablePosteriorProbability){
+            minimumAllowablePosteriorProbability = Float.parseFloat(params.minimumAllowablePosteriorProbability)
+        }
 
         int startInteger;
         int endInteger;
@@ -62,14 +66,11 @@ class RegionInfoController {
                                                 propertyName,MetaDataService.METADATA_VARIANT)
                     propertyName = property.name
                 }
-                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName, false);
+                jsonReturn = widgetService.getCredibleOrAlternativeSetInformation(chromosome, startInteger, endInteger, dataSet, phenotype,propertyName,minimumAllowablePosteriorProbability, false);
                 jsonReturn["credibleSetInfoCode"] = g.message(code: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode(), default: restServerService.retrieveBeanForCurrentPortal().getCredibleSetInfoCode())
             } else {
                 jsonReturn = slurper.parse(errorJsonString);
             }
-
-            // log
-            log.info("got LZ result: " + jsonReturn);
 
             // log end
             Date endTime = new Date();
@@ -132,6 +133,7 @@ class RegionInfoController {
                                                                                                             dataSet,
                                                                                                             phenotype,
                                                                                                             propertyName,
+                                                                                                            -1f, // use the default value for minimumAllowablePosteriorProbability
                                                                                                             true );
                         //jsonForGene["annotations"] = widgetService.buildTheIncredibleSet((gene.chromosome-"chr") as String, gene.addrStart as int, gene.addrEnd  as int, phenotype, 1000 )
                         supplementedGenes.add(jsonForGene)

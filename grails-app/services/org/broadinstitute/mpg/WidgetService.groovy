@@ -38,7 +38,9 @@ class WidgetService {
     final List<String> locusZoomEndpointList = [this.LOCUSZOOM_17K_ENDPOINT, this.LOCUSZOOM_HAIL_ENDPOINT_DEV, LOCUSZOOM_HAIL_ENDPOINT_QA];
     private final Integer MAXIMUM_RANGE_FOR_HAIL = 600000
 
+
     // constants for now
+    public final float DEFAULT_MINIMUM_POSTERIOR_PROBABILITY = 0.01f
     private final String phenotypeKey = "T2D";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
     private final int NUMBER_OF_DISTRIBUTION_BINS = 24
@@ -946,7 +948,7 @@ class WidgetService {
 
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition,
-                covariateList,maximumNumberOfPointsToRetrieve, "verbose", metaDataService,metadataTree);
+                covariateList,maximumNumberOfPointsToRetrieve, "verbose", DEFAULT_MINIMUM_POSTERIOR_PROBABILITY,metaDataService,metadataTree);
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -1035,7 +1037,7 @@ class WidgetService {
 
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,
-                maximumNumberOfPointsToRetrieve, "flat", metaDataService, metadataTree);
+                maximumNumberOfPointsToRetrieve, "flat", DEFAULT_MINIMUM_POSTERIOR_PROBABILITY,metaDataService, metadataTree);
 
 
             //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
@@ -1197,7 +1199,7 @@ class WidgetService {
         if (newlyChosenProperty!=null){
             LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
             String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                    maxNumberOfRecords, "verbose", metaDataService, MetaDataService.METADATA_VARIANT);
+                    10, "verbose",DEFAULT_MINIMUM_POSTERIOR_PROBABILITY, metaDataService, MetaDataService.METADATA_VARIANT);
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             jsonResultString["dataset"] = dataSetName
             jsonResultString["phenotype"] = phenotype
@@ -1206,20 +1208,36 @@ class WidgetService {
         return jsonResultString
     }
 
-
-
-
+    /***
+     * attempt to retrieve all credible sets defined within the specified range for the specified phenotype.  If no credible sets
+     * are defined then retrieve a set of variants with the strongest associations within the status of for this phenotype.  With regard
+     * to the minimumAllowablePosteriorProbability parameter – some credible sets can be big, and therefore we want to restrict them,
+     * lest we provide so many values that the user interface looks ugly
+     *
+     * @param chromosome
+     * @param startPosition
+     * @param endPosition
+     * @param dataset
+     * @param phenotype
+     * @param propertyName
+     * @param minimumAllowablePosteriorProbability
+     * @return
+     */
     public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
-                                                              String dataset, String phenotype, String propertyName,
+                                                              String dataset, String phenotype, String propertyName,float minimumAllowablePosteriorProbability,
                                                               Boolean calledInGeneQuery ) {
         LocusZoomJsonBuilder locusZoomJsonBuilder
         String jsonGetDataString
         JSONObject jsonResultString
         int maximumNumberOfRecords = NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE
+        if (minimumAllowablePosteriorProbability < 0){  // a probability has to always be greater than or equal to zero. If we find something else
+                                                        // then let's provide a default value
+            minimumAllowablePosteriorProbability = DEFAULT_MINIMUM_POSTERIOR_PROBABILITY
+        }
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
              jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                     1, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
+                     1, "verbose", minimumAllowablePosteriorProbability, metaDataService,MetaDataService.METADATA_VARIANT);
              jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             if ((jsonResultString) &&
                     (!jsonResultString.is_error) &&
@@ -1232,7 +1250,7 @@ class WidgetService {
                     maximumNumberOfRecords = NUMBER_OF_VARIANTS_IN_GENE_TABLE
                 }
                 jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                        maximumNumberOfRecords, "verbose", metaDataService,MetaDataService.METADATA_VARIANT);
+                        maximumNumberOfRecords, "verbose",minimumAllowablePosteriorProbability, metaDataService,MetaDataService.METADATA_VARIANT);
                 jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
                 jsonResultString["dataset"] = dataset
                 jsonResultString["phenotype"] = phenotype

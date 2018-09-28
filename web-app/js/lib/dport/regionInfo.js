@@ -1404,31 +1404,35 @@ var mpgSoftware = mpgSoftware || {};
                         var outData = inData;
                         if (inData.propertyName === "P_VALUE") { // we have to be starting with P values, or else no filtering is necessary
                             if ((typeof inData.variants !== 'undefined') && (inData.variants.length > 1)) { // We have to have enough data to be worth filtering
-                                var allVariants = _.flatten([{}, inData.variants]);
-                                var records = _.map(allVariants, function (o) {
-                                    return _.merge.apply(_, o)
-                                });
-                                var nlogpvals = records.map(function (item) {
+                                // extract an array of negative log P values from this preposterous data structure
+                                var nlogpValArray = _.map( inData.variants, function(eachVariant){
                                     var pValue = "";
-                                    _.forEach(item[inData.propertyName], function (ppvalue){
-                                        _.forEach(ppvalue,function (phenotype){
-                                            pValue=phenotype;
-                                        })
+                                    _.forEach( eachVariant, function(eachField){
+                                        _.forEach( eachField, function(value,key){
+                                            if (key===inData.propertyName){
+                                                _.forEach(value,function (phenotypeAndValue){
+                                                    _.forEach(phenotypeAndValue,function (phenotypeValue,phenotypeKey) {
+                                                        pValue = phenotypeValue;
+                                                    });
+                                                });
+                                            }
+                                        });
                                     });
-                                    if ((item)&&(pValue > 0)) {
+                                    if (pValue !== "") {
                                         return 0 - (Math.log(pValue) / Math.LN10);
                                     } else {
                                         return 0;
                                     }
                                 });
-                                var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
+                                var scores = gwasCredibleSets.scoring.bayesFactors(nlogpValArray);
                                 var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
                                 var credibleSet = gwasCredibleSets.marking.findCredibleSet(posteriorProbabilities, 0.50);
                                 var credibleSetBoolean = gwasCredibleSets.marking.markBoolean(credibleSet);
                                 var filteredVariants = [];
                                 inData.variants.forEach(function (item, index) {
                                     if (credibleSetBoolean[index]) {
-                                        item["POSTERIOR_PROBABILITY"] = posteriorProbabilities[index];
+                                        //item["POSTERIOR_PROBABILITY"] = posteriorProbabilities[index];
+                                        //item.push({"POSTERIOR_PROBABILITY":posteriorProbabilities[index]})
                                         filteredVariants.push(item);
                                     }
                                 });

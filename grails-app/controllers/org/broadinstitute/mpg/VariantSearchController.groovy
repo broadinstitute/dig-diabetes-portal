@@ -603,14 +603,15 @@ class VariantSearchController {
             }
 
         }
+        List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
+        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets?.sort{a,b->return (b.getSubjectsNumber()<=>a.getSubjectsNumber())}?.collect{it.systemId}
 
-        List<String> sampleGroupsWithCredibleSetNames = []
         if (params.limit=="1"){
             // if not then let's claim that there are no sample groups with credible set names
             sampleGroupsWithCredibleSetNames = []
         } else {
             // do we want to exclude sample groups with credible set names?  If so then use the following line:
-            List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
+            sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
             sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets.collect{it.systemId}
         }
 
