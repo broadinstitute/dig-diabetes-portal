@@ -1,10 +1,12 @@
 package org.broadinstitute.mpg.manager
 
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -58,6 +60,95 @@ class SystemController {
             [portalVersionList:portalVersionListJsonArray]
         }
     }
+
+
+
+    def getPortalVersionBeanDetails = {
+        JSONObject jsonReturn
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        LinkedHashMap objectWeAreBuilding = [:]
+        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
+            if (portalBeanMethodName.startsWith("get")){
+                String fieldName = portalBeanMethodName.substring(3)
+                try{
+                    print("method=${portalBeanMethodName}.")
+                    if ((fieldName!="MetaClass")&&
+                        (fieldName!="Class")&&
+                        (fieldName!="Property")){
+                        Object methodReturnValue =  portalVersionBean.invokeMethod(portalBeanMethodName,null as Object)
+                        if (methodReturnValue instanceof ArrayList){
+                            List listHolder = []
+                            for (String str in (methodReturnValue as ArrayList)){
+                                listHolder << str
+                            }
+                            objectWeAreBuilding[fieldName] = listHolder
+                        } else {
+                            objectWeAreBuilding[fieldName] = methodReturnValue
+                        }
+
+                    }
+                } catch(Exception e){
+                    print ("prob with ${fieldName}, ${e.toString()}.")
+                }
+
+            }
+
+        }
+        String proposedJsonString = new JsonBuilder( objectWeAreBuilding).toPrettyString()
+        def slurper = new JsonSlurper()
+        jsonReturn =  slurper.parseText(proposedJsonString);
+
+        render(status: 200, contentType: "application/json") {["jsonObject":jsonReturn,"jsonString":proposedJsonString]}
+        return
+    }
+
+
+
+
+
+    def setPortalVersionBeanDetails = {
+        String portaVersionFieldsDef = params.portalBeanInformation
+        def slurper = new JsonSlurper()
+        JSONObject jsonObject =  slurper.parseText(portaVersionFieldsDef);
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        LinkedHashMap objectWeAreBuilding = [:]
+        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
+            if (portalBeanMethodName.startsWith("get")){
+                String fieldName = portalBeanMethodName.substring(3)
+                try{
+                    print("method=${portalBeanMethodName}.")
+                    if ((fieldName!="MetaClass")&&
+                            (fieldName!="Class")&&
+                            (fieldName!="Property")){
+                        Object methodReturnValue =  portalVersionBean.invokeMethod(portalBeanMethodName,null as Object)
+                        if (methodReturnValue instanceof ArrayList){
+                            List listHolder = []
+                            for (String str in (methodReturnValue as ArrayList)){
+                                listHolder << str
+                            }
+                            objectWeAreBuilding[fieldName] = listHolder
+                        } else {
+                            objectWeAreBuilding[fieldName] = methodReturnValue
+                        }
+
+                    }
+                } catch(Exception e){
+                    print ("prob with ${fieldName}, ${e.toString()}.")
+                }
+
+            }
+
+        }
+
+
+        render(status: 200, contentType: "application/json") {}
+        return
+    }
+
+
+
+
+
 
 
     def determineVersion = {

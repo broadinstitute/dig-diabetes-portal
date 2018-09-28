@@ -28,7 +28,7 @@
             error: function (jqXHR, exception) {
                 // core.errorReporter(jqXHR, exception);
             }
-        });are
+        });
     } ;
     var refreshVariantsForChromosome = function ()  {
         $.ajax({
@@ -45,6 +45,52 @@
             }
         });
     } ;
+
+    var retrievePortalBeanInformation = function (cssSpec)  {
+        var rememberCssSpec = cssSpec;
+        var promise = $.ajax({
+            cache: false,
+            type: "post",
+            url: '${createLink(controller:"system", action:"getPortalVersionBeanDetails")}',
+            data: {},
+            async: true
+        });
+        promise.done(
+            function (data) {
+                $(rememberCssSpec).val(data.jsonString)
+            });
+        promise.fail(
+            function (){
+                console.log ("We were unable to obtain the assay info metadata. The credible set tab will fail soon");
+            }
+        );
+    } ;
+
+
+
+
+    var updatePortalBeanInformation = function (cssSpec)  {
+        var modifiedJson = {};
+        modifiedJson['portalBeanInformation'] = $(cssSpec).val();
+        var promise = $.ajax({
+            cache: false,
+            type: "post",
+            url: '${createLink(controller:"system", action:"setPortalVersionBeanDetails")}',
+            data: modifiedJson,
+            async: true
+        });
+        promise.done(
+            function (data) {
+                $(rememberCssSpec).val(data.jsonString)
+            });
+        promise.fail(
+            function (){
+                console.log ("We were unable to obtain the assay info metadata. The credible set tab will fail soon");
+            }
+        );
+    } ;
+
+
     $(document).ready(function () {
         $.ajax({
             cache: false,
@@ -59,6 +105,7 @@
                  core.errorReporter(jqXHR, exception);
             }
         });
+        retrievePortalBeanInformation();
 
     });
 </script>
@@ -602,7 +649,52 @@
             </g:form>
 
 
-            <div class="separator"></div>
+
+
+
+                <div class="separator"></div>
+
+                <h3>Portal Bean Details</h3>
+
+                    <textarea  rows="20" cols="100" id="portalBeanInfo" style="font-size: 12pt;">
+                    </textarea>
+                        <br/>
+
+                    <div class="row clearfix">
+                        <div class="col-md-10"></div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-lg" onclick="retrievePortalBeanInformation('#portalBeanInfo')">Retrieve</button>
+                            <button class="btn btn-primary btn-lg" onclick="updatePortalBeanInformation('#portalBeanInfo')">Modify</button>
+                        </div>
+
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-md-2"></div>
+                        <div class="col-md-8">
+                            <div >
+                                <g:if test='${flash.message}'>
+                                    <div class="alert alert-danger">${flash.message}</div>
+                                </g:if>
+                            </div>
+                        </div>
+                        <div class="col-md-2"></div>
+
+                    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <div class="separator"></div>
 
 
             <div class="row clearfix">
