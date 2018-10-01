@@ -1,4 +1,9 @@
 <script class="panel-body" id="WGS_GoT2Dimputed_script" type="x-tmpl-mustache">
+
+ <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+
+<p><g:message code="informational.data.overlaps.DIAGRAM1000G"></g:message></p>
+
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
     <p><div class="paper">
