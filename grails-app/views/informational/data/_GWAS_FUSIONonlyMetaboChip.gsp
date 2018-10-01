@@ -1,4 +1,9 @@
 <script class="panel-body" id="GWAS_FUSIONonlyMetaboChip_script" type="x-tmpl-mustache">
+
+ <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+
+<p><g:message code="informational.data.overlaps.DIAGRAM1000G"></g:message></p>
+
     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
     <ul>
