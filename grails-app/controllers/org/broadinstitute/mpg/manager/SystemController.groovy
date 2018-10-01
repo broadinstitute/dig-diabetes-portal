@@ -64,46 +64,68 @@ class SystemController {
 
 
     def getPortalVersionBeanDetails = {
+        def slurper = new JsonSlurper()
         JSONObject jsonReturn
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        List<String> dataAccessorsForPortalVersionBean = findDataAccessorsForPortalVersionBean("get",portalVersionBean)
         LinkedHashMap objectWeAreBuilding = [:]
-        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
-            if (portalBeanMethodName.startsWith("get")){
-                String fieldName = portalBeanMethodName.substring(3)
-                try{
-                    print("method=${portalBeanMethodName}.")
-                    if ((fieldName!="MetaClass")&&
-                        (fieldName!="Class")&&
-                        (fieldName!="Property")){
-                        Object methodReturnValue =  portalVersionBean.invokeMethod(portalBeanMethodName,null as Object)
-                        if (methodReturnValue instanceof ArrayList){
-                            List listHolder = []
-                            for (String str in (methodReturnValue as ArrayList)){
-                                listHolder << str
-                            }
-                            objectWeAreBuilding[fieldName] = listHolder
-                        } else {
-                            objectWeAreBuilding[fieldName] = methodReturnValue
-                        }
-
+        for (String fieldName in dataAccessorsForPortalVersionBean ){
+            String portalBeanMethodName = "get${fieldName}"
+            try{
+                Object methodReturnValue =  portalVersionBean.invokeMethod(portalBeanMethodName,null as Object)
+                if (methodReturnValue instanceof ArrayList){
+                    List listHolder = []
+                    for (String str in (methodReturnValue as ArrayList)){
+                        listHolder << str
                     }
-                } catch(Exception e){
-                    print ("prob with ${fieldName}, ${e.toString()}.")
+                    objectWeAreBuilding[fieldName] = listHolder
+                } else {
+                    objectWeAreBuilding[fieldName] = methodReturnValue
                 }
-
+            } catch(Exception e){
+                print ("prob with ${fieldName}, ${e.toString()}.")
             }
-
         }
         String proposedJsonString = new JsonBuilder( objectWeAreBuilding).toPrettyString()
-        def slurper = new JsonSlurper()
         jsonReturn =  slurper.parseText(proposedJsonString);
 
         render(status: 200, contentType: "application/json") {["jsonObject":jsonReturn,"jsonString":proposedJsonString]}
         return
+
     }
 
 
 
+
+    List<String> findDataAccessorsForPortalVersionBean(String getOrSet, PortalVersionBean portalVersionBean){
+        List<String> returnValue = []
+        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
+            if (portalBeanMethodName.startsWith(getOrSet)){
+                String fieldName = portalBeanMethodName.substring(3)
+                if ((fieldName!="MetaClass")&&
+                        (fieldName!="Class")&&
+                        (fieldName!="Property")){
+                    returnValue << fieldName
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+    String firstCharToLowerCase(String str) {
+
+        if(str == null || str.length() == 0)
+            return "";
+
+        if(str.length() == 1)
+            return str.toLowerCase();
+
+        char[] chArr = str.toCharArray();
+        chArr[0] = Character.toLowerCase(chArr[0]);
+
+        return new String(chArr);
+    }
 
 
     def setPortalVersionBeanDetails = {
@@ -111,37 +133,31 @@ class SystemController {
         def slurper = new JsonSlurper()
         JSONObject jsonObject =  slurper.parseText(portaVersionFieldsDef);
         PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
-        LinkedHashMap objectWeAreBuilding = [:]
-        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
-            if (portalBeanMethodName.startsWith("get")){
-                String fieldName = portalBeanMethodName.substring(3)
-                try{
-                    print("method=${portalBeanMethodName}.")
-                    if ((fieldName!="MetaClass")&&
-                            (fieldName!="Class")&&
-                            (fieldName!="Property")){
-                        Object methodReturnValue =  portalVersionBean.invokeMethod(portalBeanMethodName,null as Object)
-                        if (methodReturnValue instanceof ArrayList){
-                            List listHolder = []
-                            for (String str in (methodReturnValue as ArrayList)){
-                                listHolder << str
-                            }
-                            objectWeAreBuilding[fieldName] = listHolder
-                        } else {
-                            objectWeAreBuilding[fieldName] = methodReturnValue
-                        }
-
+        LinkedHashMap propertiesForPortalVersionBean = portalVersionBean.getProperties()
+        Iterator<String> keys = jsonObject.keys()
+        while(keys.hasNext()){
+            String key = keys.next()
+            Object value = jsonObject[key]
+            String property = firstCharToLowerCase(key)
+            if (propertiesForPortalVersionBean.containsKey(property)){
+                if (value instanceof ArrayList){
+                    List<String> listOfElements = []
+                    for (String element in (value as ArrayList)){
+                        listOfElements << element
                     }
-                } catch(Exception e){
-                    print ("prob with ${fieldName}, ${e.toString()}.")
+                    portalVersionBean.@"$property" = listOfElements
+                } else if (value instanceof String){
+                    portalVersionBean.@"$property" = value as String
+                } else if (value instanceof Integer){
+                    portalVersionBean.@"$property" = value as Integer
                 }
-
             }
+         }
 
-        }
 
 
-        render(status: 200, contentType: "application/json") {}
+
+        render(status: 200, contentType: "application/json") {["jsonObject":jsonObject]}
         return
     }
 
@@ -398,112 +414,6 @@ class SystemController {
     }
 
 
-//    def updateRestServer() {
-//        String restServer = params.datatype
-//        String currentServer =  restServerService.whatIsMyCurrentServer()
-//        if  (restServer == 'prodloadbalancedserver')  {
-//            if (!(currentServer == 'prodloadbalancedserver')) {
-//                restServerService.goWithTheProdLoadBalancedServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        } else  if (restServer == 'qaloadbalancedserver')  {
-//            if (!(currentServer == 'qaloadbalancedserver')) {
-//                restServerService.goWithTheQaLoadBalancedServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        } else  if (restServer == 'dev01server')  {
-//            if (!(currentServer == 'dev01server')) {
-//                restServerService.goWithTheDev01Server()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }  else  if (restServer == 'dev02server')  {
-//            if (!(currentServer == 'dev02server')) {
-//                restServerService.goWithTheDev02Server()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }  else  if (restServer == 'prod01server')  {
-//            if (!(currentServer == 'prod01server')) {
-//                restServerService.goWithTheProd01Server()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }  else  if (restServer == 'prod02server')  {
-//            if (!(currentServer == 'prod02server')) {
-//                restServerService.goWithTheProd02Server()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        } else  if (restServer == 'devloadbalancedserver')  {
-//            if (!(currentServer == 'devloadbalancedserver')) {
-//                restServerService.goWithTheDevLoadBalancedServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        } else  if (restServer == 'aws01restserver')  {
-//            if (!(currentServer == 'aws01restserver')) {
-//                restServerService.goWithTheAws01RestServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        } else  if (restServer == 'aws02restserver')  {
-//            if (!(currentServer == 'aws02restserver')) {
-//                restServerService.goWithTheAws02RestServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        } else  if (restServer == 'aws02newcoderestserver')  {
-//            if (!(currentServer == 'aws02newcoderestserver')) {
-//                restServerService.goWithTheAws02NewCodeRestServer()
-//                flash.message = "You are now using the ${restServer} new KB 2.0 code server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }else  if (restServer == 'aws01newcoderestserver')  {
-//            if (!(currentServer == 'aws01newcoderestserver')) {
-//                restServerService.goWithTheAws01NewCodeRestServer()
-//                flash.message = "You are now using the ${restServer} new KB 2.0 code server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }else  if (restServer == 'toddServer')  {
-//            if (!(currentServer == 'toddServer')) {
-//                restServerService.goWithToddServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }else  if (restServer == 'prodserverbroad')  {
-//            if (!(currentServer == 'prodserverbroad')) {
-//                restServerService.goWithProdLoadBalancedBroadServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }else  if (restServer == 'localserver')  {
-//            if (!(currentServer == 'localserver')) {
-//                restServerService.goWithLocalServer()
-//                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-//            }  else {
-//                flash.message = "But you were already using the ${currentServer} server!"
-//            }
-//        }
-//        params.datatype = "forceIt"
-//        forward(action: "forceMetadataCacheUpdate")
-//        //forward(action: "systemManager")
-//    }
 
     def switchSigmaT2d(){
        // String restServer = params
