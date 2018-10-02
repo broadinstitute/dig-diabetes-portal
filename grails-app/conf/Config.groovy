@@ -612,17 +612,21 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "gene.genePage.warning",
                                                 "",
                                                 '5010306206573083521',
-                                                1,
-                                                0,
-                                                0,
-                                                1,
-                                                0,
-                                                1,1,1,
-                                                0,
-                                                0,
-                                                0,
-                                                0,
-                                                0,0,1
+                                                1, // do we have parent level associations to show
+                                                0, // Do we have gene level associations to show?
+                                                0, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
+                                                1, // no longer used?
+                                                0, // if true then entering a gene takes you to a region page around that chain
+                                                1, // show the pheWAS plot
+                                                1, // show the forest pheWAS plot
+                                                1, // hould we show the variant Association section on the variant info page
+                                                0, // expose the green boxes on the variant info page
+                                                0, // expose a secondary table and the credible set page built around genes, not just variants
+                                                0, // licking on a variant can take you to the variant info page, or else to a range page (as in V2F)
+                                                0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
+                                                0,  // access UC San Diego data remotely? I'm not sure if this works anymore
+                                                0, // LEDGE tab on the gene page
+                                                1 // Hi-C tab on the gene page
 
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",

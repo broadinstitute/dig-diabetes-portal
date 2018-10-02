@@ -1063,9 +1063,17 @@ var mpgSoftware = mpgSoftware || {};
             var mods = {
                 state: {
                     variant: variantForPlot
-                }
+                },
+                dashboard: LocusZoom.Layouts.get("dashboard", "standard_plot", { unnamespaced: true } )
             };
             var layout = LocusZoom.Layouts.get("plot", "phewas_forest", mods);
+            layout.panels[0].legend['hidden']=true;
+            // I can't add the following components because the underlying data structures seems to be lacking a parent_panel.
+            // layout.dashboard.components.push({
+            //     type: 'toggle_legend',
+            //     position: 'right'
+            // });
+
             return layout;
         };
 

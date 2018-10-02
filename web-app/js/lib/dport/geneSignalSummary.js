@@ -1989,67 +1989,49 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         }
         var genePrioritizationIndicator = [];
         var chromatinConformationIndicator = [];
+        var exposeGeneComparisonIndicator = [];
+        var exposeVariantComparisonIndicator = [];
         if (additionalParameters.exposePredictedGeneAssociations === "1"){
             genePrioritizationIndicator.push(1)
         }
         if (additionalParameters.exposeHiCData === "1"){
             chromatinConformationIndicator.push(1)
         }
+        if (additionalParameters.exposeGeneComparisonTable === "1"){
+            exposeGeneComparisonIndicator.push(1)
+        }
+        if (true){// we want to insert a variable here
+            exposeVariantComparisonIndicator.push(1)
+        }
+
+        var genePageConfigurationParameters = {commonTab: displayCommonTab,
+            highImpactTab: displayHighImpactTab,
+            pName: pName,
+            credibleSetTab:credibleSetTab,
+            incredibleSetTab:incredibleSetTab,
+            genePrioritizationTab:genePrioritizationIndicator,
+            chromatinConformationTab:chromatinConformationIndicator,
+            exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
+            exposeVariantComparisonSubTab:exposeVariantComparisonIndicator};
          $("#organizeSignalSummaryHeaderGoesHere").empty().append(Mustache.render($('#organizeSignalSummaryHeader')[0].innerHTML,
-            {commonTab: displayCommonTab,
-                highImpactTab: displayHighImpactTab,
-                pName: pName,
-                credibleSetTab:credibleSetTab,
-                incredibleSetTab:incredibleSetTab,
-                genePrioritizationTab:genePrioritizationIndicator,
-                chromatinConformationTab:chromatinConformationIndicator}));
+             genePageConfigurationParameters
+                ));
         $("#commonVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCommon')[0].innerHTML,
-            {commonTab: displayCommonTab,
-                highImpactTab: displayHighImpactTab,
-                pName: pName,
-                credibleSetTab:credibleSetTab,
-                incredibleSetTab:incredibleSetTab,
-                genePrioritizationTab:genePrioritizationIndicator,
-                chromatinConformationTab:chromatinConformationIndicator}));
+            genePageConfigurationParameters
+                ));
         $("#highImpactVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryHighImpact')[0].innerHTML,
-            {commonTab: displayCommonTab,
-                highImpactTab: displayHighImpactTab,
-                pName: pName,
-                credibleSetTab:credibleSetTab,
-                incredibleSetTab:incredibleSetTab,
-                genePrioritizationTab:genePrioritizationIndicator,
-                chromatinConformationTab:chromatinConformationIndicator}));
+            genePageConfigurationParameters
+                ));
         if (credibleSetTab.length>0){
             $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCredibleSet')[0].innerHTML,
-                {commonTab: displayCommonTab,
-                    highImpactTab: displayHighImpactTab,
-                    pName: pName,
-                    credibleSetTab:credibleSetTab,
-                    incredibleSetTab:incredibleSetTab,
-                    genePrioritizationTab:genePrioritizationIndicator,
-                    chromatinConformationTab:chromatinConformationIndicator}));
+                genePageConfigurationParameters
+                    ));
         }
         if (incredibleSetTab.length>0){
             $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryIncredibleSet')[0].innerHTML,
-                {commonTab: displayCommonTab,
-                    highImpactTab: displayHighImpactTab,
-                    pName: pName,
-                    credibleSetTab:credibleSetTab,
-                    incredibleSetTab:incredibleSetTab,
-                    genePrioritizationTab:genePrioritizationIndicator,
-                    chromatinConformationTab:chromatinConformationIndicator}));
+                genePageConfigurationParameters
+                    ));
         }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

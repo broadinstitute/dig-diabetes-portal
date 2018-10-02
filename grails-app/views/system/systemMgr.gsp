@@ -661,10 +661,12 @@
                         <br/>
 
                     <div class="row clearfix">
-                        <div class="col-md-10"></div>
+                        <div class="col-md-8"></div>
                         <div class="col-md-2">
-                            <button class="btn btn-primary btn-lg" onclick="retrievePortalBeanInformation('#portalBeanInfo')">Retrieve</button>
-                            <button class="btn btn-primary btn-lg" onclick="updatePortalBeanInformation('#portalBeanInfo')">Modify</button>
+                            <button class="btn btn-primary btn-lg" onclick="retrievePortalBeanInformation('#portalBeanInfo')">Retrieve settings</button>
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-primary btn-lg" onclick="updatePortalBeanInformation('#portalBeanInfo')">Modify settings</button>
                         </div>
 
                     </div>
