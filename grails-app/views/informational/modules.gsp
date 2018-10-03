@@ -20,16 +20,16 @@
     <div class="container dk-static-content">
         <div class="row">
             <div class="col-md-12">
-                <h1 class="dk-page-title">Analysis Modules</h1>
+                <h1 class="dk-page-title"><g:message code="informational.modules.title"></g:message></h1>
             </div>
         </div>
 
         <div class="row">
             <div class="col-md-12">
-                <h5 class="dk-under-header">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h5>
+                <h5 class="dk-under-header"><g:message code="informational.modules.bellowtitle"></g:message></h5>
             </div>
         </div>
-
+<!--
         <div class="row" style="padding-bottom: 30px;">
             <div class="col-md-12">
                 <h3>Select a trait and a dataset to view available analysis. </h3>
@@ -50,7 +50,7 @@
                     </div>
             </div>
         </div>
-
+-->
         <div class="row">
             <div class="col-md-12">
 
@@ -62,44 +62,29 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td><h4>LD Clumping</h4></td>
+                            <td><h4><g:message code="informational.modules.LDClumping.title"></g:message></h4></td>
                             <td>
-                                <img src="../images/LD_clumping.jpg" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                            Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                            Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-                                <p>View full genetic association results for a phenotype <br>(ex: bmi, glycemic; '=phenotype' for exact match)</p>
+                                <img  src="${resource(dir: 'images', file: 'LD_clumping.jpg')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
+                                <g:message code="informational.modules.LDClumping.description"></g:message>
+
 
                             </td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch LD Clumping</a></div></td>
+                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="http://www.type2diabetesgenetics.org/trait/traitSearch?trait=T2D&significance=0.0005">Launch LD Clumping</a></div></td>
                         </tr>
                         <tr>
-                            <td><h4>Variant Finder</h4></td>
-                            <td>
-                                <p>This versatile tool lets you specify multiple search criteria to find genetic variants meeting those criteria.
-                                You can choose search criteria on either or both of the tabs below. Add multiple criteria until you have specified all your criteria of interest,
-                                then submit the search request. The variants that meet <b>all</b> of your criteria will be returned.</p>
-                                <div style="float: left; margin-top: 5px;" class="dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a></div>
-                                <div style="float: left; margin-top: 5px; margin-left: 5px;" class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Phenotype_reference_guide.pdf" target="_blank">Phenotype Reference Guide</a></div>
-                            </td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch Variant Finder</a></div></td>
+                            <td><h4><g:message code="informational.modules.VariantFinder.title"></g:message></h4></td>
+                            <td><g:message code="informational.modules.VariantFinder.description"></g:message></td>
+                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="http://www.type2diabetesgenetics.org/variantSearch/variantSearchWF">Launch Variant Finder</a></div></td>
                         </tr>
-                        <tr>
-                            <td><h4>GAIT</h4></td>
-                            <td>
-                                <p>The Genetic Association Interactive Tool allows you to compute custom association statistics by specifying the phenotype to test for association,
-                            a subset of samples to analyze based on specific phenotypic criteria, and a set of covariates to control for in the analysis.
-                                In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.</p>
-                                <div style="float: left; margin-top: 5px;" class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact ">
-                                    <a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/KP_GAIT_guide.pdf" target="_blank">GAIT guide</a>
-                                </div></td>
+                        <!--<tr>
+                            <td><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
+                            <td><g:message code="informational.modules.GAIT.description"></g:message></td>
                             <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch GAIT</a></div></td>
-                        </tr>
+                        </tr>-->
                         <tr>
-                            <td class="inactive"><h4>GRS</h4></td>
-                            <td>View full genetic association results for a phenotype <br><small>(ex: bmi, glycemic; '=phenotype' for exact match)</small></td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact inactive"><a href="javascript:;">Launch GRS</a></div></td>
+                            <td class=""><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>
+                            <td><g:message code="informational.modules.GRS.description"></g:message></td>
+                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="http://www.type2diabetesgenetics.org/grs/grsInfo">Launch GRS</a></div></td>
                         </tr>
                     </tbody>
                 </table>
