@@ -604,7 +604,7 @@ class VariantSearchController {
 
         }
         List<SampleGroup> sampleGroupsWithCredibleSets  = metaDataService.getSampleGroupListForPhenotypeWithMeaning(phenotypeName,"CREDIBLE_SET_ID")
-        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets.collect{it.systemId}
+        List<String> sampleGroupsWithCredibleSetNames = sampleGroupsWithCredibleSets?.sort{a,b->return (b.getSubjectsNumber()<=>a.getSubjectsNumber())}?.collect{it.systemId}
 
         StringBuilder sb = new StringBuilder("[")
         if (portalType=='ibd'){
@@ -1158,7 +1158,7 @@ class VariantSearchController {
                 key = entry.getKey();
                 value = entry.getValue();
             }
-            errorMsg = "Properties can currently retrieved only from a single institution.  Please return to the Search page and restart your search"
+            errorMsg = "Properties can currently be retrieved only from a single institution.  Please return to the Search page and restart your search."
             render(status: 200, contentType: "application/json") {
                 [
 

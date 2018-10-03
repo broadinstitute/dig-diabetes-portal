@@ -577,7 +577,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
         ["Islets","Liver","SkeletalMuscle","Adipose"],  // tissues to display beneath a LocusZoom plot -- use these for the DCC
  //       ["islet of Langerhans","liver","adipocyte"],  // tissues to display beneath a LocusZoom plot -- use these for UCSD
-                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CORONARY ARTERY DISEASE", "BLOOD PRESSURE"], // most important phenotype group name
+                                                        ["GLYCEMIC", "ANTHROPOMETRIC", "RENAL", "HEPATIC", "LIPIDS", "CARDIOVASCULAR", "BLOOD PRESSURE"], // most important phenotype group name
                                                         [], // any data sets that should be omitted from LZ display
                                                         "[3]",  // the assays we should search
                                                         "ExSeq_13k_mdv23",
@@ -615,7 +615,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CORONARY ARTERY DISEASE", "LIPIDS"], // most important phenotype group name
+                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CARDIOVASCULAR", "LIPIDS"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",
@@ -652,7 +652,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["SkeletalMuscle"],
-                                                          ["CORONARY ARTERY DISEASE", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
+                                                          ["CARDIOVASCULAR", "ATRIAL FIBRILLATION", "LIPIDS", "ECG TRAITS", "ANTHROPOMETRIC"], // most important phenotype group name
                                                           [],
                                                           "[3]",
                                                           "GWAS_CARDIoGRAM_mdv91",
@@ -767,7 +767,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["AnteriorCaudate"],
                                           ["SLEEP AND CIRCADIAN", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
-                                          "[1,2]",
+                                          "[3]",
                                           "GWAS_UKBB_mdv110",
                                           "images/sleep/front_sleep_logo_2018.svg",
                                           "portal.sleep.header.tagline",
@@ -782,13 +782,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "false",
                                           "",
                                           "",
-                                          '5414069947481666863',
+                                          '3616035242050290841',
                                           1,
                                           0,
                                           0,
                                           1,
                                           0,
-                                          0,0,0,
+                                          1,0,1,
                                           0,
                                           0,
                                           0,

@@ -758,6 +758,7 @@
 <script id="organizeCredibleSetChooserTemplate"  type="x-tmpl-mustache">
     <div class="credibleSetNameHolder">
     <label>Credible sets in this range</label>
+    &nbsp;&nbsp;<g:helpText title="credible_sets.help.header" placement="bottom" body="credible_sets.help.text"/>
         <ul class="nav nav-pills">
             {{#allCredibleSets}}
                     <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" toBeOnClick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>

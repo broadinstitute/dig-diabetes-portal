@@ -70,9 +70,17 @@ var mpgSoftware = mpgSoftware || {};
                 async: true,
                 success: function (data) {
                     loading.hide();
-
-                    mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
-
+                    if(data.variant.results[0].isClump == false){
+                        document.getElementById("r2dropdown").style.display = "none";
+                        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotypeNamex,dataset);
+                    }
+                    //if(data.isClump) is true then refresh the manhattan plot
+                    //else (get the id of the r2 dropdown and disable the dropdown.
+                    else{
+                        mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+                        document.getElementById("r2dropdown").style.display = "block";
+                        // $("#r2dropdown").css("display", "block");
+                    }
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -82,7 +90,6 @@ var mpgSoftware = mpgSoftware || {};
                 _.forEach(data.children, function (eachKey,val) {
                     console.log(data);
                 })
-
             });
 
         };
@@ -118,22 +125,11 @@ var mpgSoftware = mpgSoftware || {};
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
-            if(r2 == 1){
-
-                $('#manhattanPlot1').empty();
-                $('#traitTableBody').empty();
-                $('#phenotypeTraits').DataTable().rows().remove();
-                $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-                mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(mySavedVars.phenotypeName,sampleGroup);
-            }
-            else{
-
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
                 mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
-            }
         }
 
 
@@ -163,9 +159,18 @@ var mpgSoftware = mpgSoftware || {};
                                 }
                             } else if (key==='POS') {
                                 d[key] = parseInt(value);
-                            } else {
+                            } else if (key == 'ODDS_RATIO'){
+                                    d[key] = value;
+                                    effectType = 'odds ratio'
+                            }
+                            else if(key==='BETA'){
+                                d[key] = value;
+                                effectType = 'beta'
+                            }
+                            else if(key==='MAF'){
                                 d[key] = value;
                             }
+                            d[key] = value;
 
                         }
                         collector.push(d);
