@@ -617,6 +617,7 @@ class WidgetService {
 
 
 
+
     public JSONObject generatePhewasDataForLz(String varId, Boolean includeAllVariants){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion(), includeAllVariants )
@@ -683,7 +684,7 @@ class WidgetService {
                     singleVariantData<<"\"variant\": \"${varIdParts[0]}:${varIdParts[1]}_${varIdParts[2]}/${varIdParts[3]}\""
 
                     dataFromQuery << "{${singleVariantData.join(",")}}"
-                 }
+                }
             }
 
         }

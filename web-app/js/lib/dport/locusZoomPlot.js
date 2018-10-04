@@ -1063,8 +1063,8 @@ var mpgSoftware = mpgSoftware || {};
             var mods = {
                 state: {
                     variant: variantForPlot
-                },
-                dashboard: LocusZoom.Layouts.get("dashboard", "standard_plot", { unnamespaced: true } )
+                }
+//                dashboard: LocusZoom.Layouts.get("dashboard", "standard_plot", { unnamespaced: true } )
             };
             var layout = LocusZoom.Layouts.get("plot", "phewas_forest", mods);
             layout.panels[0].legend['hidden']=true;

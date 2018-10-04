@@ -2456,8 +2456,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-
-
     public Map gatherBottomLineVariantsPerGene( String gene ) {
         JsonSlurper slurper = new JsonSlurper()
 
