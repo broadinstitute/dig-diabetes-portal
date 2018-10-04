@@ -29,7 +29,7 @@
                 <h5 class="dk-under-header"><g:message code="informational.modules.bellowtitle"></g:message></h5>
             </div>
         </div>
-<!--
+
         <div class="row" style="padding-bottom: 30px;">
             <div class="col-md-12">
                 <h3>Select a trait and a dataset to view available analysis. </h3>
@@ -40,7 +40,7 @@
                             <option>BMI</option>
                         </select>
                     </div>
-
+                <!--
                     <div class="col-md-4">
                         <select id="dataset" class="form-control  selectpicker" style="width: 200px;">
                             <option>Datasets</option>
@@ -48,9 +48,10 @@
                             <option>dataset 2</option>
                         </select>
                     </div>
+                    -->
             </div>
         </div>
--->
+
         <div class="row">
             <div class="col-md-12">
 
