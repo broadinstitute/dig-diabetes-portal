@@ -65,7 +65,8 @@
                             <td><h4><g:message code="informational.modules.LDClumping.title"></g:message></h4></td>
                             <td>
                                 <img  src="${resource(dir: 'images', file: 'LD_clumping.jpg')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
-                                <g:message code="informational.modules.LDClumping.description"></g:message>
+                                <p><g:message code="informational.modules.LDClumping.description1"></g:message></p>
+                            <p><g:message code="informational.modules.LDClumping.description2"></g:message></td></p>
 
 
                             </td>
