@@ -801,7 +801,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           ["AnteriorCaudate"],
                                           ["SLEEP AND CIRCADIAN", "GLYCEMIC", "ANTHROPOMETRIC"], // most important phenotype group name
                                           [],
-                                          "[1,2]",
+                                          "[3]",
                                           "GWAS_UKBB_mdv110",
                                           "images/sleep/front_sleep_logo_2018.svg",
                                           "portal.sleep.header.tagline",
