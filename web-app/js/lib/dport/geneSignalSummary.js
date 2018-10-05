@@ -1498,11 +1498,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var epigeneticAssaysString = additionalParameters.epigeneticAssays;
         if (epigeneticAssaysString.length > 0){
             var epigeneticAssays = _.map(epigeneticAssaysString.replace(new RegExp(/[\[\]']+/g),"").split (','),function (str){return parseInt(str)});
-            _.forEach(epigeneticAssays, function (singleAssay){
+            var weHaveMoreThanOneAssay = (epigeneticAssays.length>1);
+                _.forEach(epigeneticAssays, function (singleAssay){
                 var assayRecord = mpgSoftware.regionInfo.retrieveDesiredAssay (singleAssay);
                 _.forEach(assayRecord.selectionOptions, function (selectionOption){
                     selectorInfo.push ({value:selectionOption.value,name:selectionOption.name});
-                    displayInfo.push ({value:selectionOption.value,name:selectionOption.name});
+                    if (weHaveMoreThanOneAssay){
+                        displayInfo.push ({value:selectionOption.value,name:selectionOption.name});
+                    }
                 });
             });
             _.forEach(selectorInfo,function(o){

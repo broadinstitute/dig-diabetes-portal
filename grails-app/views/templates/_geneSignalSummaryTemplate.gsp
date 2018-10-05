@@ -634,12 +634,12 @@
                                          {{#displayInfoExists}}
                                          <div class="col-sm-4">
                                              <span style="display: inline-block; float: none; vertical-align: middle; width: 100%">
-                                                %{--<label for="credSetDisplayChoice">Display genomic features:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.text"/>--}%
-                                                 %{--<select id="credSetDisplayChoice" multiple="multiple">--}%
-                                                    %{--{{#displayInfo}}--}%
-                                                    %{--<option {{selected}} value="{{value}}">{{name}}</option>--}%
-                                                    %{--{{/displayInfo}}--}%
-                                                %{--</select>--}%
+                                                <label for="credSetDisplayChoice">Display genomic features:&nbsp;</label><g:helpText title="tissue.display.help.header" placement="top" body="tissue.display.help.text"/>
+                                                 <select id="credSetDisplayChoice" multiple="multiple">
+                                                    {{#displayInfo}}
+                                                    <option {{selected}} value="{{value}}">{{name}}</option>
+                                                    {{/displayInfo}}
+                                                </select>
                                              </span>
                                          </div>
                                          <div class="col-sm-2" style="margin-top: 10px">
