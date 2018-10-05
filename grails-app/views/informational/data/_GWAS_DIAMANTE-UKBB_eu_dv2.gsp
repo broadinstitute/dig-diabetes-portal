@@ -46,7 +46,7 @@
     </table>
 
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.DIAMANTE1"></g:message></p>
+<p><g:message code="informational.data.exptsumm.DIAMANTE_ukbb1"></g:message></p>
 <p><g:message code="informational.data.exptsumm.DIAMANTE2"></g:message></p>
 
    <h4>Accessing DIAMANTE GWAS data</h4>
