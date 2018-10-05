@@ -179,9 +179,9 @@
             </g:if>
             <g:if test="${!portalVersionBean.regionSpecificVersion}">
                 <div style="padding-bottom:10px;" class="variant-finder-wrapper">
-                    <h2 style="font-size:20px; font-weight:300;"><g:message code="variant.search.header"/></h2>
-                    <p class="dk-footnote" style="width:83%;"><g:message code="variant.search.specifics"/></p>
-                    <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">
+                    <h2 style="font-size:20px; font-weight:300;"><g:message code="analysis.modules.header"/><span class="new-dataset-flag">&nbsp;</span></h2>
+                    <p class="dk-footnote" style="width:83%;"><g:message code="analysis.modules.specifics"/></p>
+                    <a href="${createLink(controller: 'informational', action: 'modules')}">
                         <button class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px;  margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right; margin-right:1%; margin-top: -45px; float:right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                     </a>
                 </div>
