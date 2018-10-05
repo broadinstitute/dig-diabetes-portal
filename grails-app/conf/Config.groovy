@@ -135,7 +135,7 @@ federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
-digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
+digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws-8089", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
@@ -310,11 +310,11 @@ environments {
 
 //       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
-        grails.serverURL = "http://variant2function.org"
+//        grails.serverURL = "http://variant2function.org"
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
 //     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
@@ -581,12 +581,12 @@ grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'org.broadinsti
 grails.plugin.springsecurity.authority.className = 'org.broadinstitute.mpg.people.Role'
 
 
-portal.type.override = "ibd"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
+portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "epilepsy", or "sleep".   What is the portal type for all nonsystem users?
 
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv34",    // the MDV number for this portal
+                                                        "mdv33",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
@@ -625,8 +625,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // licking on a variant can take you to the variant info page, or else to a range page (as in V2F)
                                                 0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
-                                                0, // LEDGE tab on the gene page
-                                                1 // Hi-C tab on the gene page
+                                                1, // LEDGE tab on the gene page
+                                                1, // Hi-C tab on the gene page
+                                                0
 
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
@@ -666,7 +667,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                             0,
-                                            0,0,0
+                                            0,0,0, // Hi-C tab on the gene page
+                                          0
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -706,7 +708,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          0,0
+                                          0,0, // Hi-C tab on the gene page
+                                          0
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -749,7 +752,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          1,1
+                                          1,1, // Hi-C tab on the gene page
+                                          0
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -789,7 +793,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          0,0
+                                          0,0, // Hi-C tab on the gene page
+                                          0
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -828,9 +833,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          0,0,0
+                                          0,0,0, // Hi-C tab on the gene page
+                                          0
                                   )
 ]
-// Here the secret authentication strings
-auth.providers.twitter.secret = 'l3dJBs3w9QraAuivcfaqdjVGkJ4cxQSMMNNkZ6v9bwz8nXBCXQ'
-oauth.providers.google.secret = 'HKIxi3AOLAgyFV6lDJQCfEgY'

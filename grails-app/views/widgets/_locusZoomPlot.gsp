@@ -115,7 +115,7 @@
         </div>
 
         <div class="accordion-inner row" style="border:solid 1px #ddd; border-top:none; padding:10px;">
-            <div id="lz-47" class="lz-container-responsive col-md-12" style=""></div>
+            <div id="lz-47" class="lz-container-responsive" style=""></div>
         </div>
 
     </div>

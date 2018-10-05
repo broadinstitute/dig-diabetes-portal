@@ -235,8 +235,12 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             { bounded: true,
               onViewConfLoaded: zoomTo }
         );
+
         function zoomTo() {
-            hgv.zoomTo("aa", 1000000,2000000,1000000,2000000, 1000);
+            var drivingVars = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
+            var chrom=drivingVars.geneChromosome.substr(3);
+            hgv.zoomTo(chrom, drivingVars.geneExtentBegin, drivingVars.geneExtentEnd,drivingVars.geneExtentBegin,drivingVars.geneExtentEnd, 1000);
+          //  hgv.zoomTo("aa", 1000000,2000000,1000000,2000000, 1000);
         }
 
 
@@ -1991,11 +1995,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var chromatinConformationIndicator = [];
         var exposeGeneComparisonIndicator = [];
         var exposeVariantComparisonIndicator = [];
+        var exposeDynamicUiIndicator = [];
         if (additionalParameters.exposePredictedGeneAssociations === "1"){
             genePrioritizationIndicator.push(1)
         }
         if (additionalParameters.exposeHiCData === "1"){
             chromatinConformationIndicator.push(1)
+        }
+        if (additionalParameters.exposeDynamicUi === "1"){
+            exposeDynamicUiIndicator.push(1)
         }
         if (additionalParameters.exposeGeneComparisonTable === "1"){
             exposeGeneComparisonIndicator.push(1)

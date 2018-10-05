@@ -53,6 +53,7 @@ class PortalVersionBean {
     private Integer utilizeUcsdData
     private Integer exposePredictedGeneAssociations
     private Integer exposeHiCData
+    private Integer exposeDynamicUi
 
 
 
@@ -97,7 +98,8 @@ class PortalVersionBean {
                              Integer utilizeBiallelicGait,
                              Integer utilizeUcsdData,
                              Integer exposePredictedGeneAssociations,
-                             Integer exposeHiCData){
+                             Integer exposeHiCData,
+                             Integer exposeDynamicUi){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -140,6 +142,7 @@ class PortalVersionBean {
         this.utilizeUcsdData = utilizeUcsdData
         this.exposePredictedGeneAssociations = exposePredictedGeneAssociations
         this.exposeHiCData = exposeHiCData
+        this.exposeDynamicUi = exposeDynamicUi
     }
 
     public String getPortalType() {
@@ -310,6 +313,9 @@ class PortalVersionBean {
     public Integer getExposeHiCData(){
         return exposeHiCData
     }
+    public Integer getExposeDynamicUi(){
+        return exposeDynamicUi
+    }
 
 
 
@@ -358,7 +364,8 @@ class PortalVersionBean {
 "utilizeBiallelicGait":${getUtilizeBiallelicGait()},
 "utilizeUcsdData":${getUtilizeUcsdData()},
 "exposePredictedGeneAssociations":${getExposePredictedGeneAssociations()},
-"exposeHiCData()": ${getExposeHiCData()}
+"exposeHiCData": ${getExposeHiCData()},
+"exposeDynamicUi": ${getExposeDynamicUi()}
 }""".toString()
     }
 }

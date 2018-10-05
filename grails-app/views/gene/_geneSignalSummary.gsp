@@ -178,7 +178,8 @@ td.tissueTable.informationIsPresent{
                     tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(","),
                     exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}",
                     exposePredictedGeneAssociations:"${portalVersionBean.getExposePredictedGeneAssociations()}",
-                    exposeHiCData:"${portalVersionBean.getExposeHiCData()}"
+                    exposeHiCData:"${portalVersionBean.getExposeHiCData()}",
+                    exposeDynamicUi:"${portalVersionBean.getExposeDynamicUi()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
