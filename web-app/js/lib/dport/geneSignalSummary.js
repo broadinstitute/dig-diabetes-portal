@@ -748,6 +748,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var buildListOfInterestingPhenotypes = function (renderData,unacceptableDatasets) {
         var listOfInterestingPhenotypes = [];
+        unacceptableDatasets = [];
         _.forEach(renderData.variants, function (v) {
             var vvv=_.findIndex(unacceptableDatasets,function(o){return o===v['dataset']});
             if (vvv===-1){

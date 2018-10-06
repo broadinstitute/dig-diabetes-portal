@@ -147,7 +147,7 @@ digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-2
 digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
 
 // this will be your default
-defaultRestServer = digawsdevnewKB
+defaultRestServer = digawsqanewKB_fed
 
 getRestServerList = [
         digdevlocalServer,
@@ -298,8 +298,8 @@ environments {
 //        grails.serverURL = "http://variant2function.org"
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -795,4 +795,3 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0
                                   )
 ]
-
