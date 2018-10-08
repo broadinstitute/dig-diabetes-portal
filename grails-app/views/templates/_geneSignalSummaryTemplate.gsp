@@ -643,7 +643,7 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-2" style="margin-top: 10px">
-                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             %{--<button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>--}%
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
@@ -758,7 +758,7 @@
 <script id="organizeCredibleSetChooserTemplate"  type="x-tmpl-mustache">
     <div class="credibleSetNameHolder">
     <label>Credible sets in this range</label>
-    %{--&nbsp;&nbsp;<g:helpText title="credible_sets.help.header" placement="bottom" body="credible_sets.help.text"/>--}%
+    &nbsp;&nbsp;<g:helpText title="credible_sets.help.header" placement="bottom" body="credible_sets.help.text"/>
         <ul class="nav nav-pills">
             {{#allCredibleSets}}
                     <li id="{{credibleSetId}}"  class="nav-item credibleSetChooserButton credibleSetChooserStrength inactive" toBeOnClick="mpgSoftware.regionInfo.specificCredibleSetSpecificDisplay(this,{{renderVariantsAsArray}})">{{credibleSetId}}</li>

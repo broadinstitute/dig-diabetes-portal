@@ -1,5 +1,8 @@
 <script class="panel-body" id="ExChip_FUSION_script" type="x-tmpl-mustache">
-     <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
+ <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+    <p><g:message code="informational.data.overlaps.ExTex1"></g:message></p>
+
+        <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 
     <ul>
         <li><g:message code="informational.shared.traits.t2d"></g:message></li>
