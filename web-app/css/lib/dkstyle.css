@@ -1183,3 +1183,43 @@ select.minimal:focus {
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
 }
+
+span.new-dataset-flag {
+    display: inline-block;
+    position: absolute;
+    background-image: url(../images/new_dataset.png);
+    background-size: 46px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 65px;
+    height: 20px;
+    transform: rotate(-10deg);
+}
+
+.analysis-modules-btn ul {
+	display: none;
+	position: absolute;
+	padding: 0;
+	margin: 0;
+}
+
+.analysis-modules-btn ul > li {
+	background-color: rgba(1, 84, 149, .75);
+	font-size: 0.8em;
+	padding: 5px 15px 5px 15px;
+	border-bottom: solid 1px #666;
+	text-align: left;
+	list-style: none;
+}
+
+.analysis-modules-btn ul > li:hover {
+	background-color: rgba(1, 84, 149, 1);
+}
+
+.analysis-modules-btn ul > li:last-child {
+	border-bottom: none;
+}
+
+.analysis-modules-btn:hover ul {
+	display: block;
+}
