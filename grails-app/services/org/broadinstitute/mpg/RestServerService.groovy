@@ -2119,6 +2119,29 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return dataJsonObject
     }
 
+    /***
+     * Gather up the data that is used in the variant finder tool
+     *
+     * @param phenotype
+     * @param dataSetName
+     * @param pValue
+
+     */
+
+    public JSONObject getVariantFinderSpecificData(String phenotype, String datasetName, String pValue){
+        JSONObject returnValue
+        JsonSlurper slurper
+
+        JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, datasetName, pValue)
+
+        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults)
+
+        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+
+        return dataJsonObject
+
+    }
+
 
 
     public JSONObject gatherSpecificTraitsPerVariantResults( String variantName, List<LinkedHashMap<String,String>> propsToUse) {
@@ -2891,6 +2914,32 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         return VectorDataJson;
     }
+
+
+    /***
+     * this is the core function for making a call to getData and return the data as a map.
+     */
+    def variantFinderGetDataRestCall(String inputJson){
+
+
+        inputJson
+
+        inputJson = "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":0, \"page_size\": 25, " +
+                "\"limit\": 1000, \"count\": false, \"result_format\": \"verbose\", " +
+                "\"order_by\": [{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"VAR_ID\"," +
+                " \"operator\": \"\"}],\"properties\": {\"cproperty\": [ \"CHROM\" , \"Consequence\" , \"DBSNP_ID\" ," +
+                " \"Effect_Allele\" , \"GENE\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
+                " \"dproperty\" : {} , \"pproperty\" : {} }, \"filters\":  [ {\"dataset_id\": \"blah\", " +
+                "\"phenotype\": \"blah\", \"operand\": \"CHROM\", \"operator\": \"EQ\", \"value\": \"21\", " +
+                "\"operand_type\": \"STRING\"}, {\"dataset_id\": \"blah\", \"phenotype\": \"blah\"," +
+                " \"operand\": \"POS\", \"operator\": \"GTE\", \"value\": 32931885, \"operand_type\": \"INTEGER\"}, " +
+                "{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"POS\", \"operator\": \"LTE\", " +
+                "\"value\": 33141294, \"operand_type\": \"INTEGER\"} ] } "
+
+        JsonObject jsonObject = RestServerService.postGetDataCall(inputJson)
+        return jsonObject
+    }
+
 
 
     /***

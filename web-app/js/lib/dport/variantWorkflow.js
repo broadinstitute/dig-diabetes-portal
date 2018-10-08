@@ -4,6 +4,19 @@ var mpgSoftware = mpgSoftware || {};
     "use strict";
 
     mpgSoftware.variantWF = (function () {
+
+
+        var mySavedVariables = {};
+        var setMySavedVariables = function(saveTheseVariables){
+            mySavedVariables = saveTheseVariables;
+        }
+
+        var getMySavedVariables = function(){
+            return mySavedVariables;
+        }
+
+
+
         // private variables
         var listOfSavedQueries = [];
 
@@ -281,10 +294,43 @@ var mpgSoftware = mpgSoftware || {};
                 listOfProcessedQueries.push(_.omit(query, keysToOmit));
             });
 
+
+           var datasetName = listOfProcessedQueries[0].dataset;
+           var phenotypeName = listOfProcessedQueries[0].phenotype;
+           var property = listOfProcessedQueries[0].prop;
+           var propertyValue = listOfProcessedQueries[0].value;
+
+         
             var encodedListOfQueries = encodeURIComponent(JSON.stringify(listOfProcessedQueries));
             window.location = './launchAVariantSearch/?filters=' + encodedListOfQueries
 
         };
+
+        var variantFinderGetData = function (phenotypeName, dataset, pValue) {
+            var coreVariables = mpgSoftware.variantWF.getMySavedVariables();
+            var loading = $('#spinner').show();
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: coreVariables.variantFinderGetDataUrl,
+                data: {phenotype: phenotypeName, dataset: dataset,pValue: pValue},
+                async: true,
+                success: function (data) {
+                    loading.hide();
+                    console.log(data);
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            }).done(function (data, textStatus, jqXHR) {
+                _.forEach(data.children, function (eachKey,val) {
+                    console.log(data);
+                })
+            });
+
+        };
+
 
         /**
          * User has clicked "Build Search Request" button. Grab all the current
@@ -881,6 +927,7 @@ var mpgSoftware = mpgSoftware || {};
         }
 
         return {
+
             forceToPhenotypeSelection: forceToPhenotypeSelection,
             respondToPhenotypeSelection: respondToPhenotypeSelection,
             respondToDataSetSelection: respondToDataSetSelection,
