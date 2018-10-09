@@ -7,6 +7,7 @@
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
+        retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
         ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
         phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
         variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
@@ -22,6 +23,7 @@
     $( document ).ready(function() {
 
         mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
+        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdown('T2D');
         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
 
@@ -37,6 +39,13 @@
 <p><g:message code="informational.traitTableHeader.help3"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help4"></g:message></p>
 <p>&nbsp;</p>
+
+<div style = "width: 30%; float: left; padding-right: 15px">
+    <p class= "dk-footnote" style="width:83%;">Phenotype</p>
+    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(this.value)">
+    </select>
+</div>
+
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Dataset</p>
     <span id="traitTableDescription"></span>

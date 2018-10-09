@@ -34,7 +34,10 @@ var mpgSoftware = mpgSoftware || {};
                     if ((typeof data !== 'undefined') &&
                         (data)) {
                         if ((data.sampleGroups) &&
-                            (data.sampleGroups.length > 0)) {//assume we have data and process it
+                            (data.sampleGroups.length > 0)) {
+                            //first empty the old one
+                            $('#manhattanSampleGroupChooser').empty()
+                            //assume we have data and process it
                             for (var i = 0; i < data.sampleGroups.length; i++) {
                                 var sampleGroup = data.sampleGroups[i];
                                 $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
@@ -131,6 +134,34 @@ var mpgSoftware = mpgSoftware || {};
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
                 mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
         }
+
+
+        // called when page loads
+        var fillPhenotypesDropdown = function (portaltype) {
+            var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+            var loading = $('#spinner').show();
+            var rememberportaltype = portaltype;
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: rememVars.retrievePhenotypesAjaxUrl,
+                data: {getNonePhenotype: false},
+                async: true,
+                success: function (data) {
+                    if (( data !== null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !== null )) {
+                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotypeVFChoser', true, [], rememberportaltype);
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
 
 
         var refreshManhattanplotTableView = (function(data) {
@@ -243,7 +274,8 @@ var mpgSoftware = mpgSoftware || {};
             fillRegionalTraitAnalysis:fillRegionalTraitAnalysis,
             callFillClumpVariants:callFillClumpVariants,
             setMySavedVariables:setMySavedVariables,
-            getMySavedVariables:getMySavedVariables
+            getMySavedVariables:getMySavedVariables,
+            fillPhenotypesDropdown: fillPhenotypesDropdown
 
         }
 
