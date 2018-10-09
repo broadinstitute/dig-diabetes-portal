@@ -1473,7 +1473,7 @@ var mpgSoftware = mpgSoftware || {};
                            // var oldTabName = $('a[href=#credibleSetTabHolder]').text();
                             $('a[href=#credibleSetTabHolder]').text("Credible sets: " +additionalParameters.pname);
                         }
-                    } else {
+                    } else if (!geneTablePresentation) {
                         var oldTabName = $('a[href=#credibleSetTabHolder]').text();
                         $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +additionalParameters.pname);
                     }

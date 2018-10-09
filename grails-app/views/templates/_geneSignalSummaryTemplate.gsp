@@ -492,11 +492,12 @@
         <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div>
         <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder"></div>
         <div role="tabpanel" class="tab-pane genePrioritizationChooser" id="genePrioritizationTabHolder">
+            {{#genePrioritizationTab}}
                    <div class="row" style="border: none">
                         <div class="col-sm-12">
                             <div class="row" style="border: none">
                                 <div class="col-sm-6">
-                                    %{--<h4>gene prioritization table</h4>--}%
+
                                 </div>
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-3">
@@ -509,92 +510,129 @@
                              </div>
                         </div>
                     </div>
+            {{/genePrioritizationTab}}
         </div>
+
         <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="chromatinConformationTabHolder">
-           <div class="row" style="border: none">
+            {{#chromatinConformationTab}}
+            <div class="row" style="border: none">
 
-           <div class="row" style="border: none">
-                <div class="dropdown col-md-2 lz-list" style="padding: 10px 10px">
-                           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select from tissues: <b class="caret"></b></a>
-                           <ul  class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
-                                    <li>
-                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                        tissueCode: 'Adipose',
-                                                        tissueDescriptiveName: 'adipose tissue',
-                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
-                                                        assayIdList: '[3]'
-                                                    },
-                                                ('#'+'lz-lzCommon'),
-                                                {colorBy:1,positionBy:1})">adipose tissue
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                        tissueCode: 'AnteriorCaudate',
-                                                        tissueDescriptiveName: 'brain anterior caudate',
-                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
-                                                        assayIdList: '[3]'
-                                                    },
-                                                ('#'+'lz-lzCommon'),
-                                                {colorBy:1,positionBy:1})">brain anterior caudate
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                        tissueCode: 'CD34-PB',
-                                                        tissueDescriptiveName: 'CD34-PB primary hematopoietic stem cells',
-                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
-                                                        assayIdList: '[3]'
-                                                    },
-                                                ('#'+'lz-lzCommon'),
-                                                {colorBy:1,positionBy:1})">CD34-PB primary hematopoietic stem cells
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                        tissueCode: 'CingulateGyrus',
-                                                        tissueDescriptiveName: 'brain cingulate gyrus',
-                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
-                                                        assayIdList: '[3]'
-                                                    },
-                                                ('#'+'lz-lzCommon'),
-                                                {colorBy:1,positionBy:1})">brain cingulate gyrus
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
-                                                        tissueCode: 'ColonicMucosa',
-                                                        tissueDescriptiveName: 'colonic mucosa',
-                                                        retrieveFunctionalDataAjaxUrl:'/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
-                                                        assayIdList: '[3]'
-                                                    },
-                                                ('#'+'lz-lzCommon'),
-                                                {colorBy:1,positionBy:1})">colonic mucosa
-                                        </a>
-                                    </li>
+                <div class="row" style="border: none">
+                    <div class="dropdown col-md-2 lz-list" style="padding: 10px 10px">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select from tissues: <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'Adipose',
+                                            tissueDescriptiveName: 'adipose tissue',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">adipose tissue
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'AnteriorCaudate',
+                                            tissueDescriptiveName: 'brain anterior caudate',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">brain anterior caudate
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'CD34-PB',
+                                            tissueDescriptiveName: 'CD34-PB primary hematopoietic stem cells',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">CD34-PB primary hematopoietic stem cells
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'CingulateGyrus',
+                                            tissueDescriptiveName: 'brain cingulate gyrus',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">brain cingulate gyrus
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'ColonicMucosa',
+                                            tissueDescriptiveName: 'colonic mucosa',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">colonic mucosa
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="dropdown col-md-3 lz-list text-left" style="padding: 10px 10px">
+                        <span style='color: black'>
+                            currently displaying:&nbsp;
+                        </span>
+                        <span style='color: blue'>
+                            pancreatic islet
+                        </span>
+                    </div>
+                </div>
 
 
-                           </ul>
-            </div>
-            <div class="dropdown col-md-3 lz-list text-left" style="padding: 10px 10px">
-                    <span style='color: black'>
-                    currently displaying:&nbsp;
-                    </span>
-                    <span style='color: blue'>
-                    pancreatic islet
-                    </span>
-            </div>
-            </div>
-
-
-           <div class="row" style="border: none">
-                <div class="col-sm-12">
-                    <div id="fooyoo" style="width:800px; height: 800px"></div>
+                <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                        <div id="fooyoo" style="width:800px; height: 800px"></div>
+                    </div>
                 </div>
             </div>
+            {{/chromatinConformationTab}}
+        </div>
+        <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
+            {{#dynamicUiTab}}
+                <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                        <nav class="nav nav-pills nav-fill">
+                          <a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>
+                          <a class="nav-item nav-link" href="#dynamicVariantHolder">Variant</a>
+                          <a class="nav-item nav-link" href="#dynamicTissueHolder">Tissue</a>
+                          <a class="nav-item nav-link" href="#dynamicPhenotypeHolder">Phenotype</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicGeneHolder">
+                            <h3>dynamicGeneHolder</h3>
+                        </div>
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicVariantHolder">
+                            <h3>dynamicVariantHolder</h3>
+                        </div>
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicTissueHolder">
+                            <h3>dynamicTissueHolder</h3>
+                        </div>
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicPhenotypeHolder">
+                            <h3>dynamicPhenotypeHolder</h3>
+                        </div>
+                     </div>
+                </div>
+            {{/dynamicUiTab}}
         </div>
     </div>
 </script>
+
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>
@@ -614,7 +652,7 @@
                         {{#credibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
                                <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
-                           </li>
+                            </li>
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
@@ -631,6 +669,11 @@
                                <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
                             </li>
                         {{/chromatinConformationTab}}
+                        {{#dynamicUiTab}}
+                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                               <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Dynamic UI</a>
+                            </li>
+                        {{/dynamicUiTab}}
                     </ul>
                 </div>
             </div>
@@ -770,7 +813,7 @@
                                              </span>
                                          </div>
                                          <div class="col-sm-2" style="margin-top: 10px">
-                                             <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
+                                             %{--<button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>--}%
                                          </div>
                                          {{/displayInfoExists}}
                                          {{^displayInfoExists}}
@@ -941,7 +984,25 @@
                 {{/genePrioritizationTab}}
 </script>
 
+<script id="organizeDynamicUi"  type="x-tmpl-mustache">
+                {{#dynamicUiTab}}
 
+                    <div class="row" style="border: none">
+                        <div class="col-sm-12">
+                            <div class="row" style="border: none">
+                                <div class="col-sm-6">
+                                    <h3>proper dynamic UI tab</h3>
+                                </div>
+                                <div class="col-sm-6"></div>
+                             </div>
+                             <div class="row" style="border: none">
+                                <h1>foo yodel</h1>
+                             </div>
+                        </div>
+                    </div>
+
+                {{/dynamicUiTab}}
+</script>
 
 
 
@@ -1165,6 +1226,9 @@ input.genePrioritizationPhenotype.coefficient{
     font-size:	10px;
 }
 #commonVariantsLocationHolder td {
+    outline: 0px solid #000;
+}
+#highImpactTemplateHolder td {
     outline: 0px solid #000;
 }
 </style>

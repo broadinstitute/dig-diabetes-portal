@@ -48,6 +48,7 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
+    private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
     private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
@@ -2224,8 +2225,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName,
-                                                             int  startHere, int pageSize,
-                                                             String version ) {
+                                                            int  startHere, int pageSize,
+                                                            String version )  {
         List<String> specifyRequestList = []
         //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
         if ((phenotype) && (phenotype.length() > 0)) {
@@ -2245,6 +2246,27 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
+
+
+
+
+
+    public JSONObject gatherEqtlData( String gene,String variant,
+    String tissue ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "\"gene\":\"${gene}\""
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "\"variant\":\"${variant}\""
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "\"tissue\":\"${tissue}\""
+        }
+        return getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+    }
+
+
 
 
 

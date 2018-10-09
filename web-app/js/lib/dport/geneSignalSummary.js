@@ -967,6 +967,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
     var buildListOfInterestingPhenotypes = function (renderData,unacceptableDatasets) {
         var listOfInterestingPhenotypes = [];
+        unacceptableDatasets = [];
         _.forEach(renderData.variants, function (v) {
             var vvv=_.findIndex(unacceptableDatasets,function(o){return o===v['dataset']});
             if (vvv===-1){
@@ -1766,9 +1767,19 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         mpgSoftware.regionInfo.initializeRegionInfoModule (drivingVariables);
         $("#tableHeaderHolder").empty().append(
             Mustache.render($('#genePageHeaderTemplate')[0].innerHTML, drivingVariables));
+        var displayCommonTab = [1];
+        var displayHighImpactTab=[1];
+        if (drivingVariables.regionSpecificVersion===1){
+            displayHighImpactTab = [];
+        }
+        var pName='notused';
+        var credibleSetTab = [1];
+        var incredibleSetTab = [1];
+        var pageConfigurationVariable = buildPageConfigurationVariable(drivingVariables,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab);
         $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryOutline')[0].innerHTML,
-            {}));
-    }
+            pageConfigurationVariable));
+    };
+
     var refreshTopVariantsByPhenotype = function (sel, callBack) {
         var phenotypeName = sel.value;
         var dataSetName = sel.attr('dsr');
@@ -1883,6 +1894,55 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
+    /***
+     * Build the data structure which we will then pass to Mustache
+     *
+     * @param additionalParameters
+     * @param displayHighImpactTab
+     * @param pName
+     * @param credibleSetTab
+     * @param incredibleSetTab
+     * @returns {{commonTab: *, highImpactTab: *, pName: *, credibleSetTab: *, incredibleSetTab: *, genePrioritizationTab: Array, chromatinConformationTab: Array, exposeGeneComparisonSubTab: Array, exposeVariantComparisonSubTab: Array, dynamicUiTab: Array}}
+     */
+    var buildPageConfigurationVariable = function (additionalParameters,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab){
+    var genePrioritizationIndicator = [];
+    var chromatinConformationIndicator = [];
+    var exposeGeneComparisonIndicator = [];
+    var exposeVariantComparisonIndicator = [];
+    var exposeDynamicUiIndicator = [];
+    if (additionalParameters.exposePredictedGeneAssociations === "1"){
+        genePrioritizationIndicator.push(1)
+    }
+    if (additionalParameters.exposeHiCData === "1"){
+        chromatinConformationIndicator.push(1)
+    }
+    if (additionalParameters.exposeDynamicUi === "1"){
+        exposeDynamicUiIndicator.push(1)
+    }
+    if (additionalParameters.exposeGeneComparisonTable === "1"){
+        exposeGeneComparisonIndicator.push(1)
+    }
+    if (true){// we want to insert a variable here
+        exposeVariantComparisonIndicator.push(1)
+    }
+
+    return {commonTab: displayCommonTab,
+        highImpactTab: displayHighImpactTab,
+        pName: pName,
+        credibleSetTab:credibleSetTab,
+        incredibleSetTab:incredibleSetTab,
+        genePrioritizationTab:genePrioritizationIndicator,
+        chromatinConformationTab:chromatinConformationIndicator,
+        exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
+        exposeVariantComparisonSubTab:exposeVariantComparisonIndicator,
+        dynamicUiTab:exposeDynamicUiIndicator};
+
+}
+
+
+
+
+
     var updateSignificantVariantDisplay = function (data, additionalParameters) {
         var phenotypeName = additionalParameters.phenotype;
         var datasetName = additionalParameters.ds;
@@ -1932,11 +1992,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var epigeneticAssaysString = additionalParameters.epigeneticAssays;
         if (epigeneticAssaysString.length > 0){
             var epigeneticAssays = _.map(epigeneticAssaysString.replace(new RegExp(/[\[\]']+/g),"").split (','),function (str){return parseInt(str)});
-            _.forEach(epigeneticAssays, function (singleAssay){
+            var weHaveMoreThanOneAssay = (epigeneticAssays.length>1);
+                _.forEach(epigeneticAssays, function (singleAssay){
                 var assayRecord = mpgSoftware.regionInfo.retrieveDesiredAssay (singleAssay);
                 _.forEach(assayRecord.selectionOptions, function (selectionOption){
                     selectorInfo.push ({value:selectionOption.value,name:selectionOption.name});
-                    displayInfo.push ({value:selectionOption.value,name:selectionOption.name});
+                    if (weHaveMoreThanOneAssay){
+                        displayInfo.push ({value:selectionOption.value,name:selectionOption.name});
+                    }
                 });
             });
             _.forEach(selectorInfo,function(o){
@@ -1991,36 +2054,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             }
 
         }
-        var genePrioritizationIndicator = [];
-        var chromatinConformationIndicator = [];
-        var exposeGeneComparisonIndicator = [];
-        var exposeVariantComparisonIndicator = [];
-        var exposeDynamicUiIndicator = [];
-        if (additionalParameters.exposePredictedGeneAssociations === "1"){
-            genePrioritizationIndicator.push(1)
-        }
-        if (additionalParameters.exposeHiCData === "1"){
-            chromatinConformationIndicator.push(1)
-        }
-        if (additionalParameters.exposeDynamicUi === "1"){
-            exposeDynamicUiIndicator.push(1)
-        }
-        if (additionalParameters.exposeGeneComparisonTable === "1"){
-            exposeGeneComparisonIndicator.push(1)
-        }
-        if (true){// we want to insert a variable here
-            exposeVariantComparisonIndicator.push(1)
-        }
 
-        var genePageConfigurationParameters = {commonTab: displayCommonTab,
-            highImpactTab: displayHighImpactTab,
-            pName: pName,
-            credibleSetTab:credibleSetTab,
-            incredibleSetTab:incredibleSetTab,
-            genePrioritizationTab:genePrioritizationIndicator,
-            chromatinConformationTab:chromatinConformationIndicator,
-            exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
-            exposeVariantComparisonSubTab:exposeVariantComparisonIndicator};
+        var genePageConfigurationParameters = buildPageConfigurationVariable(additionalParameters,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab);
          $("#organizeSignalSummaryHeaderGoesHere").empty().append(Mustache.render($('#organizeSignalSummaryHeader')[0].innerHTML,
              genePageConfigurationParameters
                 ));
@@ -2109,8 +2144,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             propertyToRequest = 'P_VALUE';
         }
         buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
-        buildOutSetPresentation (data, additionalParameters, true, propertyToRequest);
-
+        if (additionalParameters.exposeGeneComparisonTable === "1") {
+            buildOutSetPresentation(data, additionalParameters, true, propertyToRequest);
+        }
 
 
         //    buildOutCredibleSetPresentation(data, additionalParameters);

@@ -162,6 +162,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 //defaultRestServer = digawsqanewKB
 defaultRestServer = digawsdevWorkflowKB
 
+
 getRestServerList = [
         digdevlocalServer,
         digdevlocalFederatedServer,
@@ -314,8 +315,8 @@ environments {
 
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -618,16 +619,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 1, // no longer used?
                                                 0, // if true then entering a gene takes you to a region page around that chain
                                                 1, // show the pheWAS plot
-                                                1, // show the forest pheWAS plot
-                                                1, // hould we show the variant Association section on the variant info page
+                                                0, // show the forest pheWAS plot
+                                                1, // should we show the variant Association section on the variant info page
                                                 0, // expose the green boxes on the variant info page
                                                 0, // expose a secondary table and the credible set page built around genes, not just variants
-                                                0, // licking on a variant can take you to the variant info page, or else to a range page (as in V2F)
+                                                0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
                                                 0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
-                                                1, // LEDGE tab on the gene page
-                                                1, // Hi-C tab on the gene page
-                                                0
+                                                0, // LEDGE tab on the gene page
+                                                0, // Hi-C tab on the gene page
+                                                0  // expose dynamic UI
 
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",

@@ -2055,7 +2055,7 @@ var mpgSoftware = mpgSoftware || {};
 
                 if (inParm.positionBy == 2){ // credset only
                     inParm.locusZoomDataset = inParm.sampleGroupsWithCredibleSetNames[0];
-                    inParm.datasetReadableName = 'fine mapping';
+                    //inParm.datasetReadableName = 'fine mapping';
                 }
 
 

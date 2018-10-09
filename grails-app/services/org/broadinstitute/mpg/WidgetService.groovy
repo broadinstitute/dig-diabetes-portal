@@ -1641,9 +1641,9 @@ class WidgetService {
                     HashMap<String,String> phenotypeDataSetCombo = phenotypeDataKeyMap[eachDataset]
                     Boolean suitableForLzDefaultDisplay = true
 
-                    if (sampleGroupIdList.contains(phenotypeDataSetCombo.dataSet)) {
-                        suitableForLzDefaultDisplay = false
-                    }
+//                    if (sampleGroupIdList.contains(phenotypeDataSetCombo.dataSet)) {
+//                        suitableForLzDefaultDisplay = false
+//                    }
                     beanList.add(new PhenotypeBean(key: phenotype, name: phenotype, dataSet:phenotypeDataSetCombo.dataSet,
                             dataSetReadable: g.message(code: "metadata." + phenotypeDataSetCombo.dataSet, default: phenotypeDataSetCombo.dataSet),
                             propertyName:phenotypeDataSetCombo.property,dataType:"static",
