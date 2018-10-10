@@ -56,6 +56,10 @@
                 $(".media").attr("href", "${links.introTutorial}");
                 $(".media").find("iframe").attr("src", "${links.introTutorial}");
             </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+            $(".media").attr("href", "${links.introTutorial}");
+            $(".media").find("iframe").attr("src", "${links.introTutorial}");
+            </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 $(".media").attr("href", "${links.miIntroTutorial}");
                 $(".media").find("iframe").attr("src", "${links.miIntroTutorial}");
@@ -71,6 +75,10 @@
                 $(".media").attr("href", "${links.variantFinderTutorial}");
                 $(".media").find("iframe").attr("src", "${links.variantFinderTutorial}");
             </g:if>
+            <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+            $(".media").attr("href", "${links.variantFinderTutorial}");
+            $(".media").find("iframe").attr("src", "${links.variantFinderTutorial}");
+            </g:elseif>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 $(".media").attr("href", "${links.miVariantFinderTutorial}");
                 $(".media").find("iframe").attr("src", "${links.miVariantFinderTutorial}");
@@ -234,8 +242,17 @@
         </g:elseif>
 
         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
-
             <div class="tutorial" style="margin-bottom: 15px; text-align: center">
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="portalPdf"><g:message
+                        code="portal.introTutorial.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="GenePageGuidePdf"><g:message
+                        code="portal.GenePageGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact"><a id="variantPdf"><g:message
+                        code="portal.variantFinderTutorial.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact"><a id="VariantResultsPdf"><g:message
+                        code="portal.variantResultsTableGuide.title"/></a></div>
+                <div class="btn dk-t2d-green dk-reference-button dk-right-column-buttons-compact "><a id="GeneticsGuidePdf"><g:message
+                        code="portal.GeneticsGuide.title"/></a></div>
                 <div class="btn dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact "><a id="SDKPPhenotypeGuidePdf"><g:message
                         code="portal.PhenotypeGuide.title"/></a></div>
 
@@ -246,6 +263,9 @@
         <g:if test="${g.portalTypeString()?.equals('t2d')}">
             <a class="media" href="${links.introTutorial}">PDF File</a>
         </g:if>
+        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+            <a class="media" href="${links.introTutorial}">PDF File</a>
+        </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('mi')}">
             <a class="media" href="${links.miIntroTutorial}">PDF File</a>
         </g:elseif>
