@@ -135,6 +135,12 @@ var mpgSoftware = mpgSoftware || {};
                     proportional_width: 1,
                     margin: { top: 20, right: 220, bottom: 50, left: 20 },
                     inner_border: "rgba(210, 210, 210, 0.85)",
+                    dashboard: {
+                        components: [{
+                            type: "toggle_legend",
+                            position: "left"
+                        }]
+                    },
                     axes: {
                         x: {
                             label: "Beta",
@@ -190,9 +196,9 @@ var mpgSoftware = mpgSoftware || {};
                             id_field: "{{namespace[phewas]}}phenotype",
                             fields: ["{{namespace[phewas]}}phenotype", "{{namespace[phewas]}}log_pvalue", "{{namespace[phewas]}}log_pvalue|logtoscinotation", "{{namespace[phewas]}}beta", "{{namespace[phewas]}}ci_start", "{{namespace[phewas]}}ci_end"],
                             x_axis: {
-                                field: "{{namespace[phewas]}}beta",
-                                floor: -1,
-                                ceiling: 1
+                                field: "{{namespace[phewas]}}beta"
+                                //floor: -1,
+                                //ceiling: 1
                             },
                             y_axis: {
                                 axis: 2,
@@ -1064,15 +1070,9 @@ var mpgSoftware = mpgSoftware || {};
                 state: {
                     variant: variantForPlot
                 }
-//                dashboard: LocusZoom.Layouts.get("dashboard", "standard_plot", { unnamespaced: true } )
             };
             var layout = LocusZoom.Layouts.get("plot", "phewas_forest", mods);
             layout.panels[0].legend['hidden']=true;
-            // I can't add the following components because the underlying data structures seems to be lacking a parent_panel.
-            // layout.dashboard.components.push({
-            //     type: 'toggle_legend',
-            //     position: 'right'
-            // });
 
             return layout;
         };

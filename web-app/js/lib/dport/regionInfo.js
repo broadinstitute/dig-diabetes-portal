@@ -343,11 +343,21 @@ var mpgSoftware = mpgSoftware || {};
                 var flattendVariants = _.map(allVariants,function(o){return  _.merge.apply(_,o)});
                 _.forEach(_.take(flattendVariants.sort(function (a, b) {return a.POS - b.POS;}),maxSize), function (v){
                     var posteriorProbability = "";
-                    _.forEach(v.POSTERIOR_PROBABILITY, function (ppvalue){
-                        _.forEach(ppvalue,function (phenotype){
-                            posteriorProbability=phenotype;
-                        })
-                    });
+                    if ( typeof  v.POSTERIOR_PROBABILITY !== 'undefined'){ // Usually the posterior probabilities come from the backend database, and they are in the same form as
+                                                                           // all of the other JSON values we get that are dataset and phenotype specific.  UM has a way of calculating
+                                                                           // credible sets using only P values, which means our posterior probabilities do not have the usual form.
+                                                                           // it might be nice to display them, however, so let's use this hack and allow this one field
+                                                                           // to be in a nonstandard form.
+                        _.forEach(v.POSTERIOR_PROBABILITY, function (ppvalue){
+                            _.forEach(ppvalue,function (phenotype){
+                                posteriorProbability=phenotype;
+                            })
+                        });
+                        if (posteriorProbability === ""){
+                            posteriorProbability=v.POSTERIOR_PROBABILITY;
+                        }
+                    }
+
                     v['extractedPOSTERIOR_PROBABILITY'] = posteriorProbability;
                     var credibleSetId = "";
                     _.forEach(v.CREDIBLE_SET_ID, function (csvalue){
@@ -1426,17 +1436,31 @@ var mpgSoftware = mpgSoftware || {};
                                 });
                                 var scores = gwasCredibleSets.scoring.bayesFactors(nlogpValArray);
                                 var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
-                                var credibleSet = gwasCredibleSets.marking.findCredibleSet(posteriorProbabilities, 0.50);
-                                var credibleSetBoolean = gwasCredibleSets.marking.markBoolean(credibleSet);
-                                var filteredVariants = [];
-                                inData.variants.forEach(function (item, index) {
-                                    if (credibleSetBoolean[index]) {
-                                        //item["POSTERIOR_PROBABILITY"] = posteriorProbabilities[index];
-                                        //item.push({"POSTERIOR_PROBABILITY":posteriorProbabilities[index]})
-                                        filteredVariants.push(item);
+                                var credSetLevels = [0.95,0.9,0.8,0.7,0.6,0.5,0.4,0.3,0.2,0.1];
+                                var chosenCredSetLevel = -1;
+                                var credibleSet = [];
+                                for  (var i = 0 ; i < credSetLevels.length ; i++ ){
+                                    credibleSet = gwasCredibleSets.marking.findCredibleSet(posteriorProbabilities, credSetLevels[i] );
+                                    var numberOfElements =_.filter(credibleSet,function(o){return o>0}).length;
+                                    if ((numberOfElements>0)&&(numberOfElements<11)){
+                                        chosenCredSetLevel = i;
+                                        $('span.credSetLevelHere').empty().append(''+credSetLevels[chosenCredSetLevel]+'% credible interval');
+                                        break;
                                     }
-                                });
-                                outData.variants = filteredVariants;
+                                }
+                                if (chosenCredSetLevel>-1){
+                                    var credibleSetBoolean = gwasCredibleSets.marking.markBoolean(credibleSet);
+                                    var filteredVariants = [];
+                                    inData.variants.forEach(function (item, index) {
+                                        if (credibleSetBoolean[index]) {
+                                            //item["POSTERIOR_PROBABILITY"] = posteriorProbabilities[index];
+                                            item.push({"POSTERIOR_PROBABILITY":posteriorProbabilities[index]})
+                                            filteredVariants.push(item);
+                                        }
+                                    });
+                                    outData.variants = filteredVariants;
+                                }
+
 
                             }
                         }
@@ -1460,7 +1484,7 @@ var mpgSoftware = mpgSoftware || {};
 
                         if (allCredibleSets[0].credibleSetId===""){
                             //var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                            $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +additionalParameters.pname);
+                            $('a[href=#credibleSetTabHolder]').text("Calculated credible set: " +additionalParameters.pname);
                         } else {
                             $(".credibleSetChooserGoesHere").empty().append(
                                 Mustache.render( $('#organizeCredibleSetChooserTemplate')[0].innerHTML,{allCredibleSets:allCredibleSets,
@@ -1475,7 +1499,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     } else if (!geneTablePresentation) {
                         var oldTabName = $('a[href=#credibleSetTabHolder]').text();
-                        $('a[href=#credibleSetTabHolder]').text("Strongest associations: " +additionalParameters.pname);
+                        $('a[href=#credibleSetTabHolder]').text("Calculated credible set: " +additionalParameters.pname);
                     }
 
                     $.data($('#dataHolderForCredibleSets')[0],'assayIdList',assayIdList);

@@ -114,7 +114,7 @@
         /**
  * Convert an integer chromosome position to an SI string representation (e.g. 23423456 => "23.42" (Mb))
  * @param {Number} pos Position
- * @param {String} [exp] Exponent to use for the returned string, eg 6=> MB. If not specified, will attempt to guess
+ * @param {Number} [exp] Exponent to use for the returned string, eg 6=> MB. If not specified, will attempt to guess
  *   the most appropriate SI prefix based on the number provided.
  * @param {Boolean} [suffix=false] Whether or not to append a suffix (e.g. "Mb") to the end of the returned string
  * @returns {string}
@@ -1064,7 +1064,7 @@
                     'unselected'
                 ]
             },
-            html: '<strong>{{{{namespace[assoc]}}variant|htmlescape}}</strong><br>' + 'Catalog entries: <strong>{{n_catalog_matches}}</strong><br>' + 'Top Trait: <strong>{{{{namespace[catalog]}}trait|htmlescape}}</strong><br>' + 'Top P Value: <strong>{{{{namespace[catalog]}}log_pvalue|logtoscinotation}}</strong><br>'    // User note: if a different catalog is used, the tooltip will need to be replaced with a different link URL
+            html: '<strong>{{{{namespace[catalog]}}variant|htmlescape}}</strong><br>' + 'Catalog entries: <strong>{{n_catalog_matches}}</strong><br>' + 'Top Trait: <strong>{{{{namespace[catalog]}}trait|htmlescape}}</strong><br>' + 'Top P Value: <strong>{{{{namespace[catalog]}}log_pvalue|logtoscinotation}}</strong><br>'    // User note: if a different catalog is used, the tooltip will need to be replaced with a different link URL
 + 'More: <a href="https://www.ebi.ac.uk/gwas/search?query={{{{namespace[catalog]}}rsid}}" target="_new">GWAS catalog</a> / <a href="https://www.ncbi.nlm.nih.gov/snp/{{{{namespace[catalog]}}rsid}}" target="_new">dbSNP</a>'
         });
         /**
@@ -1580,15 +1580,14 @@
             },
             id: 'annotation_catalog',
             type: 'annotation_track',
-            id_field: '{{namespace[assoc]}}variant',
+            id_field: '{{namespace[catalog]}}variant',
             x_axis: { field: '{{namespace[assoc]}}position' },
             color: '#0000CC',
-            // Credible set markings are derived fields. Although they don't need to be specified in the fields array,
-            //  we DO need to specify the fields used to do the calculation (eg pvalue)
             fields: [
                 '{{namespace[assoc]}}variant',
                 '{{namespace[assoc]}}chromosome',
                 '{{namespace[assoc]}}position',
+                '{{namespace[catalog]}}variant',
                 '{{namespace[catalog]}}rsid',
                 '{{namespace[catalog]}}trait',
                 '{{namespace[catalog]}}log_pvalue'
@@ -2554,7 +2553,7 @@
                 }
                 element_id = element[id_field].toString().replace(/\W/g, '');
             }
-            return (this.getBaseId() + '-' + element_id).replace(/(:|\.|\[|\]|,)/g, '_');
+            return (this.getBaseId() + '-' + element_id).replace(/([:.[\],])/g, '_');
         };
         /**
  * Fetch an ID that may bind a data element to a separate visual node for displaying status
@@ -2576,7 +2575,8 @@
  * @returns {Object|null} The data bound to that element
  */
         LocusZoom.DataLayer.prototype.getElementById = function (id) {
-            var selector = d3.select('#' + id.replace(/(:|\.|\[|\]|,)/g, '\\$1'));
+            var selector = d3.select('#' + id.replace(/([:.[\],])/g, '\\$1'));
+            // escape special characters
             if (!selector.empty() && selector.data() && selector.data().length) {
                 return selector.data()[0];
             } else {
@@ -2692,6 +2692,23 @@
             return ret;
         };
         /**
+ * Implementation hook for fetching the min and max values of available data. Used to determine axis range, if no other
+ *   explicit axis settings override. Useful for data layers where the data extent depends on more than one field.
+ *   (eg confidence intervals in a forest plot)
+ * @param data
+ * @param axis_config The configuration object for the specified axis.
+ * @returns {Array} [min, max] without any padding applied
+ * @private
+ */
+        LocusZoom.DataLayer.prototype._getDataExtent = function (data, axis_config) {
+            data = data || this.data;
+            // By default this depends only on a single field.
+            return d3.extent(data, function (d) {
+                var f = new LocusZoom.Data.Field(axis_config.field);
+                return +f.resolve(d);
+            });
+        };
+        /**
  * Generate dimension extent function based on layout parameters
  * @param {('x'|'y')} dimension
  */
@@ -2720,10 +2737,7 @@
                     data_extent = axis_layout.min_extent || [];
                     return data_extent;
                 } else {
-                    data_extent = d3.extent(this.data, function (d) {
-                        var f = new LocusZoom.Data.Field(axis_layout.field);
-                        return +f.resolve(d);
-                    });
+                    data_extent = this._getDataExtent(this.data, axis_layout);
                     // Apply upper/lower buffers, if applicable
                     var original_extent_span = data_extent[1] - data_extent[0];
                     if (!isNaN(axis_layout.lower_buffer)) {
@@ -3733,7 +3747,7 @@
                 // Create elements, apply class, ID, and initial position
                 var initial_y = isNaN(this.parent.layout.height) ? 0 : this.parent.layout.height;
                 points_selection.enter().append('path').attr('class', 'lz-data_layer-forest lz-data_layer-forest-point').attr('id', function (d) {
-                    return this.getElementId(d) + '_point';
+                    return this.getElementId(d);
                 }.bind(this)).attr('transform', 'translate(0,' + initial_y + ')');
                 // Generate new values (or functions for them) for position, color, size, and shape
                 var transform = function (d) {
@@ -3776,13 +3790,34 @@
             return this;
         });
         /**
- * A y-aligned forest plot that dynamically chooses category labels when the data is first loaded.
- * This allows generating forest plots without defining the layout in advance.
+ * A y-aligned forest plot in which the y-axis represents item labels, which are dynamically chosen when data is loaded.
+ *   Each item is assumed to include both data and confidence intervals.
+ *   This allows generating forest plots without defining the layout in advance.
  *
  * @class LocusZoom.DataLayers.category_forest
  * @augments LocusZoom.DataLayers.forest
  */
         LocusZoom.DataLayers.extend('forest', 'category_forest', {
+            _getDataExtent: function (data, axis_config) {
+                // In a forest plot, the data range is determined by *three* fields (beta + CI start/end)
+                var ci_config = this.layout.confidence_intervals;
+                if (ci_config && this.layout.fields.indexOf(ci_config.start_field) !== -1 && this.layout.fields.indexOf(ci_config.end_field) !== -1) {
+                    var min = function (d) {
+                        var f = new LocusZoom.Data.Field(ci_config.start_field);
+                        return +f.resolve(d);
+                    };
+                    var max = function (d) {
+                        var f = new LocusZoom.Data.Field(ci_config.end_field);
+                        return +f.resolve(d);
+                    };
+                    return [
+                        d3.min(data, min),
+                        d3.max(data, max)
+                    ];
+                }
+                // If there are no confidence intervals set, then range must depend only on a single field
+                return LocusZoom.DataLayer.prototype._getDataExtent.call(this, data, axis_config);
+            },
             getTicks: function (dimension, config) {
                 // Overrides parent method
                 if ([
@@ -4680,7 +4715,7 @@
         'use strict';
         /*********************
  * Line Data Layer
- * Implements a standard line plot
+ * Implements a standard line plot, representing either a trace or a filled curve.
  * @class
  * @augments LocusZoom.DataLayer
 */
@@ -4857,11 +4892,23 @@
                 // Create path element, apply class
                 this.path = selection.enter().append('path').attr('class', 'lz-data_layer-line');
                 // Generate the line
-                this.line = d3.svg.line().x(function (d) {
-                    return parseFloat(panel[x_scale](d[x_field]));
-                }).y(function (d) {
-                    return parseFloat(panel[y_scale](d[y_field]));
-                }).interpolate(this.layout.interpolate);
+                if (this.layout.style.fill && this.layout.style.fill !== 'none') {
+                    // Filled curve: define the line as a filled boundary
+                    this.line = d3.svg.area().x(function (d) {
+                        return parseFloat(panel[x_scale](d[x_field]));
+                    }).y0(function (d) {
+                        return parseFloat(panel[y_scale](0));
+                    }).y1(function (d) {
+                        return parseFloat(panel[y_scale](d[y_field]));
+                    });
+                } else {
+                    // Basic line
+                    this.line = d3.svg.line().x(function (d) {
+                        return parseFloat(panel[x_scale](d[x_field]));
+                    }).y(function (d) {
+                        return parseFloat(panel[y_scale](d[y_field]));
+                    }).interpolate(this.layout.interpolate);
+                }
                 // Apply line and style
                 if (this.canTransition()) {
                     selection.transition().duration(this.layout.transition.duration || 0).ease(this.layout.transition.ease || 'cubic-in-out').attr('d', this.line).style(this.layout.style);
@@ -8051,6 +8098,11 @@
  *   create a known datasource type.
  */
         LocusZoom.DataSources.prototype.add = function (ns, x) {
+            // FIXME: Some existing sites create sources with arbitrary names. This leads to subtle breakage
+            //    of namespaced fields in layouts. To avoid breaking existing usages outright, issue a deprecation warning.
+            if (ns.match(/[^A-Za-z0-9_]/)) {
+                console.warn('Deprecation warning: source name \'' + ns + '\' should contain only alphanumeric characters or underscores. Use of other characters may break layouts, and will be disallowed in the future.');
+            }
             return this.set(ns, x);
         };
         /** @protected */
@@ -8236,7 +8288,7 @@
                 //TODO: better manage dependencies
                 var ret = Q.when({
                     header: {},
-                    body: {},
+                    body: [],
                     discrete: {}
                 });
                 for (var i = 0; i < request_handles.length; i++) {
@@ -8444,6 +8496,10 @@
             //  [ {"id":1, "val":5}, {"id":2, "val":10}]
             // Since a number of sources exist that do not obey this format, we will provide a convenient pass-through
             if (!Array.isArray(data)) {
+                return data;
+            }
+            if (!data.length) {
+                // Sometimes there are regions that just don't have data- this should not trigger a missing field error message!
                 return data;
             }
             var fieldFound = [];

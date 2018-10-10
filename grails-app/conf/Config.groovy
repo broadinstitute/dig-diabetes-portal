@@ -619,7 +619,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 1, // no longer used?
                                                 0, // if true then entering a gene takes you to a region page around that chain
                                                 1, // show the pheWAS plot
-                                                0, // show the forest pheWAS plot
+                                                1, // show the forest pheWAS plot
                                                 1, // should we show the variant Association section on the variant info page
                                                 0, // expose the green boxes on the variant info page
                                                 0, // expose a secondary table and the credible set page built around genes, not just variants

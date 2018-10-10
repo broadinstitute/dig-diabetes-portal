@@ -1,5 +1,12 @@
 
-
+<style>
+span.credSetLevelHere{
+    border: 2px solid black;
+    padding: 5px 5px 5px 12px;
+    white-space: nowrap;
+    font-size: 12px;
+}
+</style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
 <div class="row">
@@ -932,7 +939,7 @@
                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
-                                         <div class="col-sm-2"></div>
+                                         <div class="col-sm-2"><span style="display: inline-block; float: none; vertical-align: middle; width: 100%;"><g:helpText title="geneTable.credset.interval.explanation.help.header" placement="right" body="geneTable.credset.interval.explanation.help.text"/><span class="credSetLevelHere"></span></span></div>
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
