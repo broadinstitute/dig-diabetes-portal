@@ -1474,6 +1474,8 @@ var mpgSoftware = mpgSoftware || {};
                 'aria-expanded="false"></select>');
             $('tr.niceHeaders th.tissueHdr').append('<select class="hdrFilter tissueFilter" type="button" data-toggle="dropdown" aria-haspopup="true" '+
                 'aria-expanded="false"></select>');
+            $('table.dk-t2d-general-table.dataTable.no-footer').css('width','100%');
+            $('div.dataTables_scrollHeadInner').css('width','100%');
             $('select.elementFilter').on("click", UTILS.disableClickPropagation);
             $('select.tissueFilter').on("click", UTILS.disableClickPropagation);
             $('select.elementFilter').append("<option value='ALL'>All</option>");

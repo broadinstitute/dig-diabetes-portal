@@ -823,15 +823,15 @@
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
+                                {{#weNeedToPutTablesInTabs}}
                                 <ul class="nav nav-pills referenceSummaryTable" role="tablist">
-                                    {{#exposeGeneComparisonSubTab}}
                                         <li><a href="#tableGeneTableTab" role="tab" data-toggle="tab">gene table</a></li>
-                                    {{/exposeGeneComparisonSubTab}}
-                                    {{#exposeVariantComparisonSubTab}}
                                         <li class="active"><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
-                                    {{/exposeVariantComparisonSubTab}}
                                 </ul>
+                                {{/weNeedToPutTablesInTabs}}
+                                {{#weNeedToPutTablesInTabs}}
                                 <div class="referenceSummaryTable tab-content">
+                                {{/weNeedToPutTablesInTabs}}
                                     {{#exposeGeneComparisonSubTab}}
                                         <div class="tab-pane referenceSummaryTableContent" id="tableGeneTableTab">
                                             <div class="credGeneTableGoesHere"></div>
@@ -843,7 +843,9 @@
                                             <div class="credibleSetTableGoesHere"></div>
                                         </div>
                                     {{/exposeVariantComparisonSubTab}}
+                                {{#weNeedToPutTablesInTabs}}
                                 </div>
+                                {{/weNeedToPutTablesInTabs}}
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
@@ -934,15 +936,15 @@
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
+                                {{#weNeedToPutTablesInTabs}}
                                 <ul class="nav nav-tabs referenceSummaryTable" role="tablist">
-                                    {{#exposeGeneComparisonSubTab}}
                                         <li><a href="#tableGeneTableTab" role="tab" data-toggle="tab">gene table</a></li>
-                                    {{/exposeGeneComparisonSubTab}}
-                                    {{#exposeVariantComparisonSubTab}}
                                         <li class="active"><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
-                                    {{/exposeVariantComparisonSubTab}}
                                 </ul>
+                                {{/weNeedToPutTablesInTabs}}
+                                {{#weNeedToPutTablesInTabs}}
                                 <div class="referenceSummaryTable tab-content">
+                                {{/weNeedToPutTablesInTabs}}
                                     {{#exposeGeneComparisonSubTab}}
                                         <div class="tab-pane referenceSummaryTableContent" id="tableGeneTableTab">
                                             <div class="credGeneTableGoesHere"></div>
@@ -954,7 +956,9 @@
                                             <div class="credibleSetTableGoesHere"></div>
                                         </div>
                                     {{/exposeVariantComparisonSubTab}}
+                                {{#weNeedToPutTablesInTabs}}
                                 </div>
+                                {{/weNeedToPutTablesInTabs}}
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>

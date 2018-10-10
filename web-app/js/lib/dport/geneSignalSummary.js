@@ -1905,26 +1905,31 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
      * @returns {{commonTab: *, highImpactTab: *, pName: *, credibleSetTab: *, incredibleSetTab: *, genePrioritizationTab: Array, chromatinConformationTab: Array, exposeGeneComparisonSubTab: Array, exposeVariantComparisonSubTab: Array, dynamicUiTab: Array}}
      */
     var buildPageConfigurationVariable = function (additionalParameters,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab){
-    var genePrioritizationIndicator = [];
-    var chromatinConformationIndicator = [];
-    var exposeGeneComparisonIndicator = [];
-    var exposeVariantComparisonIndicator = [];
-    var exposeDynamicUiIndicator = [];
-    if (additionalParameters.exposePredictedGeneAssociations === "1"){
-        genePrioritizationIndicator.push(1)
-    }
-    if (additionalParameters.exposeHiCData === "1"){
-        chromatinConformationIndicator.push(1)
-    }
-    if (additionalParameters.exposeDynamicUi === "1"){
-        exposeDynamicUiIndicator.push(1)
-    }
-    if (additionalParameters.exposeGeneComparisonTable === "1"){
-        exposeGeneComparisonIndicator.push(1)
-    }
-    if (true){// we want to insert a variable here
-        exposeVariantComparisonIndicator.push(1)
-    }
+        var weNeedToPutTablesInTabs = [];
+        var genePrioritizationIndicator = [];
+        var chromatinConformationIndicator = [];
+        var exposeGeneComparisonIndicator = [];
+        var exposeVariantComparisonIndicator = [];
+        var exposeDynamicUiIndicator = [];
+
+        if (additionalParameters.exposePredictedGeneAssociations === "1"){
+            genePrioritizationIndicator.push(1);
+        }
+        if (additionalParameters.exposeHiCData === "1"){
+            chromatinConformationIndicator.push(1);
+        }
+        if (additionalParameters.exposeDynamicUi === "1"){
+            exposeDynamicUiIndicator.push(1);
+        }
+        if (additionalParameters.exposeGeneComparisonTable === "1"){
+            exposeGeneComparisonIndicator.push(1);
+        }
+        if (true){// we want to insert a variable here
+            exposeVariantComparisonIndicator.push(1);
+        }
+        if ((true) &&(additionalParameters.exposeGeneComparisonTable === "1")) { // we only need tabs if we have both jeans and variant tables
+             weNeedToPutTablesInTabs.push(1);
+        }
 
     return {commonTab: displayCommonTab,
         highImpactTab: displayHighImpactTab,
@@ -1935,7 +1940,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         chromatinConformationTab:chromatinConformationIndicator,
         exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
         exposeVariantComparisonSubTab:exposeVariantComparisonIndicator,
-        dynamicUiTab:exposeDynamicUiIndicator};
+        dynamicUiTab:exposeDynamicUiIndicator,
+        weNeedToPutTablesInTabs:weNeedToPutTablesInTabs};
 
 }
 
