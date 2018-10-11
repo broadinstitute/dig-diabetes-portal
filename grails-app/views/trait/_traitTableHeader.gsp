@@ -1,4 +1,6 @@
-<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
+<!--<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>-->
+<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html">Interactive Manhattan plot</h1>
+
 
 
 <script>

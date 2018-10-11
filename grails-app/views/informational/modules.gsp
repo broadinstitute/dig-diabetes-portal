@@ -74,6 +74,28 @@
             </div>
         </div>
 
+        <!--<div class="row" style="padding-bottom: 30px;">
+            <div class="col-md-12">
+                <h3>Select a trait and a dataset to view available analysis. </h3>
+                <div class="col-md-4">
+                    <select id="phenotype" class="form-control selectpicker" data-live-search="true" style="width: 200px;">
+                        <option>Traits</option>
+                        <option>Type 2 diabetes</option>
+                            <option>BMI</option>
+                    </select>
+                </div>
+
+                    <div class="col-md-4">
+                        <select id="dataset" class="form-control  selectpicker" style="width: 200px;">
+                            <option>Datasets</option>
+                            <option>dataset 1</option>
+                            <option>dataset 2</option>
+                        </select>
+                    </div>
+
+            </div>
+        </div>-->
+
         <div class="row">
             <div class="col-md-12">
 
@@ -94,13 +116,11 @@
                             </td>
 
                             <td>
-                                <div style = "width: 30%; float: left; padding-right: 15px">
-                                    <p class= "dk-footnote" style="width:83%;">Phenotype</p>
-                                    <select class="phenotypeDropdown" id="phenotypeDropdown" name="phenotypeDropdown">
-                                    </select>
-                                </div>
 
-                                <input type="button" id="launchLDClumping" value="Launch LD Clumping" onclick="mpgSoftware.moduleLaunch.launchLDClumping()"/>
+                                <label>Select phenotype</label>
+                                <select class="phenotypeDropdown form-control selectpicker" data-live-search="true" id="phenotypeDropdown" name="phenotypeDropdown">
+                                </select>
+                                <div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" ><a id="launchLDClumping" href="javascript:;" onclick="mpgSoftware.moduleLaunch.launchLDClumping()">Launch Interactive Manhattan plot</a></div>
 
                         </td>
                         </tr>
