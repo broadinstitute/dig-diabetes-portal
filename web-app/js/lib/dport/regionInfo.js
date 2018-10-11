@@ -290,11 +290,11 @@ var mpgSoftware = mpgSoftware || {};
                                 promoterVariants.push (v.VAR_ID);
                             }
                         }
-                        if (typeof v.MOTIF_NAME !== 'undefined') {
-                            tfBindingVariants.push((v.MOTIF_NAME === null) ?
-                                {val:'',descr:'absent'}:
-                                {val:v.MOTIF_NAME,descr:'present'});
-                        }
+                        // if (typeof v.MOTIF_NAME !== 'undefined') {
+                        //     tfBindingVariants.push((v.MOTIF_NAME === null) ?
+                        //         {val:'',descr:'absent'}:
+                        //         {val:v.MOTIF_NAME,descr:'present'});
+                        // }
 
                     });
                     insertAnnotation(renderData,'coding', codingVariants.length>0, false );
@@ -385,11 +385,11 @@ var mpgSoftware = mpgSoftware || {};
                         insertAnnotation(renderData,'utr', (v.Consequence.indexOf('UTR')>-1), false );
                         insertAnnotation(renderData,'promoter', (v.Consequence.indexOf('promoter')>-1), false );
                     }
-                    if (typeof v.MOTIF_NAME !== 'undefined') {
-                        insertAnnotation(renderData,'tfBindingMotif', (v.MOTIF_NAME === null) ?
-                            {val:'',descr:'absent'}:
-                            {val:v.MOTIF_NAME,descr:'present'}, false );
-                    }
+                    // if (typeof v.MOTIF_NAME !== 'undefined') {
+                    //     insertAnnotation(renderData,'tfBindingMotif', (v.MOTIF_NAME === null) ?
+                    //         {val:'',descr:'absent'}:
+                    //         {val:v.MOTIF_NAME,descr:'present'}, false );
+                    // }
                     var posteriorProbabilitiesExist = false;
                     if ((typeof v.extractedPOSTERIOR_PROBABILITY !== 'undefined') &&
                         ($.isNumeric(v.extractedPOSTERIOR_PROBABILITY))) {
