@@ -31,9 +31,6 @@
 
 </script>
 
-
-
-
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help2"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help3"></g:message></p>

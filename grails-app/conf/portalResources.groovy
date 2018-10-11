@@ -82,6 +82,15 @@ modules = {
         resource url: 'js/lib/dport/manhattanplotTableHeader.js'
         resource url: 'js/lib/dport/genePrioritization.js'
     }
+    mode3 {
+        dependsOn "d3tooltip"
+        dependsOn "manhattan"
+        dependsOn "traitsFilter"
+
+        resource url: 'js/lib/dport/moduleLaunch.js'
+        resource url: 'js/lib/dport/manhattanplotTableHeader.js'
+        resource url: 'js/lib/dport/traitsFilter.js'
+    }
     matrix {
         dependsOn "d3tooltip"
 

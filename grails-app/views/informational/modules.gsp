@@ -2,6 +2,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <r:require modules="manhattan"/>
+    <r:require modules="mode3"/>
+
+
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:require modules="traitsFilter"/>
@@ -12,7 +17,46 @@
 
     .inactive { background-color: rgba(0,0,0,.15) !important;}
     </style>
+
+
+    <script>
+
+        var drivingVariables = {
+            phenotypeName: '<%=phenotypeKey%>',
+
+            traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
+
+            ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
+            retrievePhenotypesAjaxUrl: '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
+            ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
+            phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
+            variantInfoUrl: '${createLink(controller: "variantInfo", action: "variantInfo")}',
+            requestedSignificance: '<%=requestedSignificance%>',
+            local: "${locale}",
+            copyMsg: '<g:message code="table.buttons.copyText" default="Copy" />',
+            printMsg: '<g:message code="table.buttons.printText" default="Print me!" />'
+
+        }
+        mpgSoftware.moduleLaunch.setMySavedVariables(drivingVariables);
+
+
+
+
+        $( document ).ready(function() {
+
+            mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('T2D');
+            mpgSoftware.moduleLaunch.fillPhenotypesDropdown('T2D');
+            mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('T2D','');
+        });
+
+
+
+    </script>
 </head>
+
+<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
+
+
 
 
 <body>
@@ -29,28 +73,6 @@
                 <h5 class="dk-under-header"><g:message code="informational.modules.bellowtitle"></g:message></h5>
             </div>
         </div>
-        <!--
-        <div class="row" style="padding-bottom: 30px;">
-            <div class="col-md-12">
-                <h3>Select a trait and a dataset to view available analysis. </h3>
-                    <div class="col-md-4">
-                        <select id="phenotype" class="form-control selectpicker" data-live-search="true" style="width: 200px;">
-                            <option>Traits</option>
-                            <option>Type 2 diabetes</option>
-                            <option>BMI</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-4">
-                        <select id="dataset" class="form-control  selectpicker" style="width: 200px;">
-                            <option>Datasets</option>
-                            <option>dataset 1</option>
-                            <option>dataset 2</option>
-                        </select>
-                    </div>
-
-            </div>
-        </div>-->
 
         <div class="row">
             <div class="col-md-12">
@@ -70,7 +92,17 @@
                             <p><g:message code="informational.modules.LDClumping.description2"></g:message></td></p>
 
                             </td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=<%=phenotypeName%>&significance=0.0005">Launch LD Clumping</a></div></td>
+
+                            <td>
+                                <div style = "width: 30%; float: left; padding-right: 15px">
+                                    <p class= "dk-footnote" style="width:83%;">Phenotype</p>
+                                    <select class="phenotypeDropdown" id="phenotypeDropdown" name="phenotypeDropdown">
+                                    </select>
+                                </div>
+
+                                <input type="button" id="launchLDClumping" value="Launch LD Clumping" onclick="mpgSoftware.moduleLaunch.launchLDClumping()"/>
+
+                        </td>
                         </tr>
                         <tr>
                             <td><h4><g:message code="informational.modules.VariantFinder.title"></g:message></h4></td>
