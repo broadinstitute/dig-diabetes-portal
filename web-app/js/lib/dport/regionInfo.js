@@ -1444,7 +1444,7 @@ var mpgSoftware = mpgSoftware || {};
                                     var numberOfElements =_.filter(credibleSet,function(o){return o>0}).length;
                                     if ((numberOfElements>0)&&(numberOfElements<11)){
                                         chosenCredSetLevel = i;
-                                        $('span.credSetLevelHere').empty().append(''+credSetLevels[chosenCredSetLevel]+'% credible interval');
+                                        $('span.credSetLevelHere').empty().append(''+credSetLevels[chosenCredSetLevel]+' credible interval');
                                         break;
                                     }
                                 }
