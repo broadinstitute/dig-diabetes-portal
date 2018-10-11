@@ -501,6 +501,8 @@
 
                         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                             <p><g:message code="about.the.sleep.portal.text"/></p>
+                            <h3 style="margin-top: 0px;font-weight:700; font-size:30px; font-family:'Oswald'"><g:message code="sleep.portal.faqs.header"/></h3>
+                            <p><g:message code="sleep.portal.faqs"/></p>
                         </g:elseif>
 
                         <g:else>
