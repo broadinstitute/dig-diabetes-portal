@@ -375,10 +375,17 @@
                         </g:elseif>
 
                         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+                            <div style="margin-top: 15px;">
+                                <a href="javascript:;"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
+                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
+                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:16px; margin:5px 0 0 0; "></h3>
+                            </div>
                             <div style="margin-top: 25px;">
-                                <img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-13px; margin-left:-3px; margin-right: 13px;">
+                                <a href="http://www.type2diabetesgenetics.org/"><img src="${resource(dir: 'images', file: 't2d_symbol.svg')}" style="width: 76px; float: left; margin-top:-3px; margin-left:-3px; margin-right: 13px;"></a>
                                 <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_T2DKP"></g:message></h3>
                                 <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Type 2 Diabetes <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
+                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.type2diabetesgenetics.org/">Visit portal</a></h3>
                             </div>
                             <div style="margin-top: 25px;">
                                 <a href="http://www.broadcvdi.org/"><img src="${resource(dir: 'images', file: 'mi_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
@@ -393,12 +400,7 @@
                                 <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Cerebrovascular Disease <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
                                 <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://www.cerebrovascularportal.org/">Visit portal</a></h3>
                             </div>
-                            <div style="margin-top: 15px;">
-                                <a href="http://sleepdisordergenetics.org/"><img src="${resource(dir: 'images', file: 'sleep_symbol.svg')}" style="width: 90px; float: left; margin-top:-10px; margin-left:-10px; margin-right: 5px;"></a>
-                                <h3 style="font-size:16px; margin:0;"><g:message code="portal.home.link_to_sleep"></g:message></h3>
-                                <h3 style="font-size:23px; margin:5px 0 0 0; font-family:'Oswald'; font-weight: 700;">Sleep Disorder <span style="font-family:'Oswald'; font-weight: 300;">Knowledge Portal</span></h3>
-                                <h3 style="font-size:16px; margin:5px 0 0 0; "><a href="http://sleepdisordergenetics.org/">Visit portal</a></h3>
-                            </div>
+
 
                         </g:elseif>
 
