@@ -1786,13 +1786,19 @@ var mpgSoftware = mpgSoftware || {};
                     if ($('#phewasAllDatasets').is(":checked")){
                         includeAllDatasets=true;
                     }
+                    var urlForPhewas = pageVars.phewasAjaxCallInLzFormatUrl;
+                    if ($('#phewasUseUKBB').is(":checked")) {
+                        //urlForPhewas = 'http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant%20eq%20%277:90350840_C/T%27&format=objects&build=GRCh37';
+                        urlForPhewas = encodeURI('http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant eq \''+convertVarIdToUmichFavoredForm(variantIdString)+'\''+
+                        '&format=objects&build=GRCh37');
+                    }
                     var includeAllDatasetsRequest = "false";
                     if (includeAllDatasets){
                         includeAllDatasetsRequest = "true";
                     }
                     ds
                         .add("phewas", ["PheWASLZ", {
-                            url: pageVars.phewasAjaxCallInLzFormatUrl,
+                            url: urlForPhewas,
                             params: { build: ["GRCh37"],
                                 includeAllVariants:[includeAllDatasetsRequest]}
                         }]);

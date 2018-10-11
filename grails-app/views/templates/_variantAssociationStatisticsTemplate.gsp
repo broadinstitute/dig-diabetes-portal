@@ -63,6 +63,11 @@
                             <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
                             <label for="phewasAllDatasets">Include all datasets</label>
                         </div>
+                                                <div class="text-right">
+                                                <g:helpText title="geneTable.ukbb.phewas.help.header" placement="right" body="geneTable.ukbb.phewas.help.text"/>
+                            <input id="phewasUseUKBB" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
+                            <label for="phewasUseUKBB">Use UKBB data</label>
+                        </div>
                     </div>
                     <div id="plot"></div>
                 </div>
