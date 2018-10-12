@@ -53,11 +53,6 @@ var mpgSoftware = mpgSoftware || {};
 
 
         return{
-            // refreshManhattanplotTableView:refreshManhattanplotTableView,
-            // fillClumpVariants:fillClumpVariants,
-            // fillSampleGroupDropdown: fillSampleGroupDropdown,
-            // fillRegionalTraitAnalysis:fillRegionalTraitAnalysis,
-            // callFillClumpVariants:callFillClumpVariants,
             fillPhenotypesDropdown: fillPhenotypesDropdown,
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables,
