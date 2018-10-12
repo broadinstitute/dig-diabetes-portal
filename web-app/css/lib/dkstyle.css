@@ -887,6 +887,8 @@ div.boxWhiskerPlot svg.box g.boxHolder {
 div.dk-linkout-btn {
 	margin-right: 5px;
 	background-size: 25px 25px;
+	padding: 0;
+	border: none;
 	padding-left: 3px;
 	border-radius: 3px;
 }
