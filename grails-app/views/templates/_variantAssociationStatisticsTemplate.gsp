@@ -41,7 +41,7 @@
                 {{/phewasTab}}
                 {{#forestTab}}
                 <li role="presentation" class="variantTableLabels highImpacVariantChooser">
-                    <a style="display: inline-block;" href="#forestTabHolder" aria-controls="forestTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Forest plot</a> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
+                    <a style="float: left;" href="#forestTabHolder" aria-controls="forestTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Forest plot</a> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
                 </li>
                 {{/forestTab}}
                 {{#exposeGreenBoxes}}
