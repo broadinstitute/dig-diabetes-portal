@@ -658,7 +658,7 @@ span.credSetLevelHere{
                         {{/highImpactTab}}
                         {{#credibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                               <a style="display: inline-block;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>
                             </li>
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
