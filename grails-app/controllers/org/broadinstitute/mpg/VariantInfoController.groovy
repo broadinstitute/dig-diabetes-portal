@@ -49,6 +49,9 @@ class VariantInfoController {
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
                 break
+            case 'sleep':
+                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
+                break
             case 'ibd':
                 igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
                 break
