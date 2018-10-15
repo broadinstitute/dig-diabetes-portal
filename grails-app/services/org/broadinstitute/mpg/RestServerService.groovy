@@ -593,11 +593,13 @@ class RestServerService {
                 List<SampleGroup> sampleGroups = experiment.getSampleGroups()
                 for (SampleGroup sampleGroup in sampleGroups){
                     extendDataSetJsonRecursively (sb,sampleGroup,sampleGroup.getSystemId())
-                }
-                if (experiment.name != lastExperiment.name){
-                    sb << """,
+                    if (experiment.name != lastExperiment.name){
+                        sb << """,
 """.toString()
+                    }
+
                 }
+
             }
         }
 
