@@ -156,8 +156,8 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
-            $('#phewasAllDatasets').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#plot', variantObject.VAR_ID , 2);});
-            $('#phewasUseUKBB').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#plot', variantObject.VAR_ID , 2);});
+            $('#phewasAllDatasets').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
+            $('#phewasUseUKBB').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
 
             setVariantTitleAndSummary(variantObject.VAR_ID,
                                         variantObject.DBSNP_ID,
@@ -204,7 +204,7 @@ var mpgSoftware = mpgSoftware || {};
             };
 
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
-            var selector = '#plot';
+            var selector = '#phewasplot';
             var lzPheWASParm = {
                 page:'variantInfo',
                 variantId:variantObject.VAR_ID,

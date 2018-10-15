@@ -70,7 +70,7 @@
                             <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
                         </div>
                     </div>
-                    <div id="plot"></div>
+                    <div id="phewasplot"></div>
                 </div>
             </div>
         </div>

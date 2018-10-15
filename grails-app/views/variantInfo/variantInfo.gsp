@@ -62,6 +62,24 @@
     // sometimes the headers weren't fully loaded before the initializePage function was called,
     // so don't run it until the DOM is ready
     $(document).ready(function () {
+        var configDetails = {  'exposeGreenBoxes':'${portalVersionBean.getExposeGreenBoxes()}',
+            'exposeForestPlot': '${portalVersionBean.getExposeForestPlot()}',
+            'exposePhewasModule':'${portalVersionBean.getExposePhewasModule()}'};
+        mpgSoftware.variantInfo.storeVarInfoData(configDetails);
+        mpgSoftware.variantInfo.retrieveVariantPhenotypeData(phenotypeDatasetMapping,
+                variantId,
+                variantAssociationStrings,
+                '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}',
+                '${g.defaultPhenotype()}');
+
+
+        mpgSoftware.associationStatistics.buildDynamicPage(configDetails);
+
+
+
+
+
+
         var loading = $('#spinner').show();
         $.ajax({
             cache: false,

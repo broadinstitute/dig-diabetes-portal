@@ -39,7 +39,7 @@ var mpgSoftware = mpgSoftware || {};
                 console.log("b mpgSoftware.associationStatistics.initializePage.");
                 if (typeof config !== 'undefined'){
                     if (config.exposePhewasModule){
-                        mpgSoftware.locusZoom.rescaleSVG('#plot');
+                        mpgSoftware.locusZoom.rescaleSVG('#phewasplot');
                     }
                     if (config.exposeForestPlot){
                         mpgSoftware.locusZoom.rescaleSVG('#forestPlot');

@@ -1802,7 +1802,10 @@ var mpgSoftware = mpgSoftware || {};
                             params: { build: ["GRCh37"],
                                 includeAllVariants:[includeAllDatasetsRequest]}
                         }]);
-                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                        console.log('selector='+selector+'.');
+                        lzp = LocusZoom.populate(selector, ds, newLayout);
+
+
                     lzp.panels.phewas.setTitle("Variant " + variantIdString);
                     break;
                 case 3: // pheWAS forestplot
@@ -2013,7 +2016,7 @@ var mpgSoftware = mpgSoftware || {};
                 "<strong>Subjects:</strong> {{phewas:subject_number}}<br>"
             ].join("");
             // Generate the plot
-            var plot = LocusZoom.populate("#plot", dataSources, layout);
+            var plot = LocusZoom.populate("#phewasplot", dataSources, layout);
             plot.panels.phewas.setTitle("Variant " + variantForPlot);
         }
 

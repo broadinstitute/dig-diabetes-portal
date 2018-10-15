@@ -29,28 +29,20 @@
             $('#otherTraitsSection').css({display: 'none'});
         }
     };
-    %{--if (${portalVersionBean.getExposeGreenBoxes()}){--}%
-        %{--$("#containerForGreenBoxHolder").empty().append(--}%
-            %{--Mustache.render( $('#greenBoxHolderTemplate')[0].innerHTML));--}%
-    %{--}--}%
-    %{--if (${portalVersionBean.getExposePhewasModule()}){--}%
-        %{--$("#containerForPhewasHolder").empty().append(--}%
-            %{--Mustache.render( $('#pheWASHolderTemplate')[0].innerHTML));--}%
-    %{--}--}%
-    var configDetails = {  'exposeGreenBoxes':'${portalVersionBean.getExposeGreenBoxes()}',
-                            'exposeForestPlot': '${portalVersionBean.getExposeForestPlot()}',
-                            'exposePhewasModule':'${portalVersionBean.getExposePhewasModule()}'};
-    mpgSoftware.variantInfo.storeVarInfoData(configDetails);
-    mpgSoftware.variantInfo.retrieveVariantPhenotypeData(phenotypeDatasetMapping,
-            variantId,
-            variantAssociationStrings,
-            '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}',
-            '${g.defaultPhenotype()}');
 
-    $(window).load( function() {
-        mpgSoftware.associationStatistics.buildDynamicPage(configDetails);
-        console.log('returned from God damn buildDynamicPage');
-    });
+    %{--var configDetails = {  'exposeGreenBoxes':'${portalVersionBean.getExposeGreenBoxes()}',--}%
+                            %{--'exposeForestPlot': '${portalVersionBean.getExposeForestPlot()}',--}%
+                            %{--'exposePhewasModule':'${portalVersionBean.getExposePhewasModule()}'};--}%
+    %{--mpgSoftware.variantInfo.storeVarInfoData(configDetails);--}%
+    %{--mpgSoftware.variantInfo.retrieveVariantPhenotypeData(phenotypeDatasetMapping,--}%
+            %{--variantId,--}%
+            %{--variantAssociationStrings,--}%
+            %{--'${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}',--}%
+            %{--'${g.defaultPhenotype()}');--}%
+
+    %{--$(window).load( function() {--}%
+        %{--mpgSoftware.associationStatistics.buildDynamicPage(configDetails);--}%
+    %{--});--}%
 
 </script>
 
