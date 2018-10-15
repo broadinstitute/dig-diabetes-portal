@@ -1414,7 +1414,7 @@ var mpgSoftware = mpgSoftware || {};
                     derivedAssayName = "DNase";
                 }
                 addLZTissueAnnotations({
-                    tissueCode: o.source,
+                    tissueCode: o.SOURCE,
                     tissueDescriptiveName: o.source_trans,
                     retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
                     assayName: derivedAssayName,

@@ -587,7 +587,7 @@ portal.type.override = "t2d"     // options are "t2d", "stroke", "mi", "ibd", "e
 
 portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for this portal type
                                                         "T2D",  // displayable label for this portal type
-                                                        "mdv33",    // the MDV number for this portal
+                                                        "mdv35",    // the MDV number for this portal
                                                         "T2D",      // the default phenotype for this portal
                                                         "ExSeq_19k_mdv28",  // default data set.  Used rarely.
                                                         ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
