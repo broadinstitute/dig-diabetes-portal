@@ -615,7 +615,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 '5010306206573083521',
                                                 1, // do we have parent level associations to show
                                                 0, // Do we have gene level associations to show?
-                                                0, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
+                                                1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
                                                 1, // no longer used?
                                                 0, // if true then entering a gene takes you to a region page around that chain
                                                 1, // show the pheWAS plot
