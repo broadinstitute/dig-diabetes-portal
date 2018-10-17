@@ -1,0 +1,259 @@
+swagger: "2.0"
+info:
+  description: "This is the REST service maintained by the Broad Institute's Type 2 Diabetes Research group"
+  version: "1.0.0"
+  title: "T2D genetics REST service"
+  termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "help@type2diabetesgenetics.org"
+  license:
+    name: "Apache 2.0"
+    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+host: "t2ddcc.broadinstitute.org"
+basePath: "/dccservices"
+tags:
+- name: "getAggregatedData"
+  description: "T2D data variant search"
+  externalDocs:
+    description: "Returns T2D genetics data based on variant inputs"
+    url: "http://t2ddcc.broadinstitute.org/dccservices/getAggregatedData"
+schemes:
+- "https"
+- "http"
+paths:
+  /variants:
+    post:
+      tags:
+      - "variants"
+      summary: "Search by variants"
+      description: ""
+      operationId: "searchByVariants"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Input search terms"
+        required: true
+        schema:
+          $ref: "#/definitions/VariantPayload"
+      responses:
+        200:
+          $ref: "#/definitions/ApiResponse"
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+  /phenotypes:
+    post:
+      tags:
+      - "phenotypes"
+      summary: "Search by phenotype"
+      description: ""
+      operationId: "searchByPhenotype"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Input search terms"
+        required: true
+        schema:
+          $ref: "#/definitions/PhenotypePayload"
+      responses:
+        200:
+          $ref: "#/definitions/ApiResponse"
+        405:
+          description: "Invalid input"
+      security:
+      - petstore_auth:
+        - "write:pets"
+        - "read:pets"
+securityDefinitions:
+  petstore_auth:
+    type: "oauth2"
+    authorizationUrl: "http://petstore.swagger.io/oauth/dialog"
+    flow: "implicit"
+    scopes:
+      write:pets: "modify pets in your account"
+      read:pets: "read your pets"
+  api_key:
+    type: "apiKey"
+    name: "api_key"
+    in: "header"
+definitions:
+  PhenotypeFilter:
+    type: "object"
+    properties:
+      parameter:
+        type: "string"
+        example: "phenotype"
+      operator:
+        type: "string"
+        example: "eq"
+      value:
+        type: "string"
+    xml:
+      name: "ChromFilter"
+  ChromFilter:
+    type: "object"
+    properties:
+      parameter:
+        type: "string"
+        example: "chrom"
+      operator:
+        type: "string"
+        example: "eq"
+      value:
+        type: "string"
+    xml:
+      name: "ChromFilter"
+  PositionStartFilter:
+    type: "object"
+    properties:
+      parameter:
+        type: "string"
+        example: "pos"
+      operator:
+        type: "string"
+        example: "ge"
+      value:
+        type: "integer"
+    xml:
+      name: "PositionStartFilter"
+  PositionEndFilter:
+    type: "object"
+    properties:
+      parameter:
+        type: "string"
+        example: "pos"
+      operator:
+        type: "string"
+        example: "le"
+      value:
+        type: "integer"
+    xml:
+      name: "PositionEndFilter"
+  Pagination:
+    type: "object"
+    properties:
+      limit:
+        type: "integer"
+        format: "int64"
+      offset:
+        type: "integer"
+        format: "int64"
+    xml:
+      name: "Pagination"
+  VariantsResult:
+    type: "object"
+    properties:
+      VAR_ID:
+        type: "string"
+      MOST_DEL_SCORE:
+        type: "integer"
+      dataset:
+        type: "string"
+      GENE:
+        type: "string"
+      Protein_change:
+        type: "string"
+      Consequence:
+        type: "string"
+      P_VALUE:
+        type: "number"
+      BETA:
+        type: "number"
+      EFFECT:
+        type: "number"
+      phenotype:
+        type: "string"
+      AF:
+        type: "number"
+      DBSNP_ID:
+        type: "string"
+      Reference_allele:
+        type: "string"
+      Effect_allele:
+        type: "string"
+    xml:
+      name: "Pagination"
+  VariantPayload:
+    type: "object"
+    required:
+    - "version"
+    - "pagination"
+    - "filters"
+    properties:
+      version:
+        type: "string"
+        example: "mdv200"
+      pagination:
+        type: "object"
+        $ref: "#/definitions/Pagination"
+      filters:
+        type: "array"
+        items:
+          type: "object"
+          anyOf: 
+            - $ref: "#/definitions/PhenotypeFilter"
+            - $ref: "#/definitions/ChromFilter"
+            - $ref: "#/definitions/PositionStartFilter"
+            - $ref: "#/definitions/PositionEndFilter"
+        minItems: 3
+        maxItems: 3
+      toVariants:
+        type: "boolean"
+    xml:
+      name: "VariantPayload"
+  PhenotypePayload:
+    type: "object"
+    required:
+    - "version"
+    - "pagination"
+    - "filters"
+    properties:
+      version:
+        type: "string"
+        example: "mdv200"
+      pagination:
+        type: "object"
+        $ref: "#/definitions/Pagination"
+      filters:
+        type: "array"
+        items:
+          type: "object"
+          anyOf: 
+            - $ref: "#/definitions/ChromFilter"
+            - $ref: "#/definitions/PositionStartFilter"
+            - $ref: "#/definitions/PositionEndFilter"
+        minItems: 3
+        maxItems: 3
+      toVariants:
+        type: "boolean"
+    xml:
+      name: "PhenotypePayload"
+  ApiResponse:
+    type: "object"
+    properties:
+      is_error:
+        type: "boolean"
+        example: false
+      passback:
+        type: "string"
+      numRecords:
+        type: "integer"
+      variants:
+        type: "array"
+        items:
+          type: "object"
+          $ref: "#/definitions/VariantsResult"
+externalDocs:
+  description: "Find out more about Swagger"
+  url: "http://swagger.io"
