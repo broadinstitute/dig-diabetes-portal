@@ -1,6 +1,7 @@
 package org.broadinstitute.mpg.diabetes.bean
 
 import grails.util.Holders
+import groovy.json.JsonBuilder
 import org.broadinstitute.mpg.RestServerService
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.springframework.beans.factory.annotation.Autowired
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired
  * Created by ben on 10/23/2017.
  */
 class PortalVersionBean {
+
+    RestServerService restServerService
 
     // instance variables
     private String portalType
@@ -54,6 +57,7 @@ class PortalVersionBean {
     private Integer exposePredictedGeneAssociations
     private Integer exposeHiCData
     private Integer exposeDynamicUi
+    private Integer exposeDatasetHierarchy
 
 
 
@@ -99,7 +103,8 @@ class PortalVersionBean {
                              Integer utilizeUcsdData,
                              Integer exposePredictedGeneAssociations,
                              Integer exposeHiCData,
-                             Integer exposeDynamicUi){
+                             Integer exposeDynamicUi,
+                             Integer exposeDatasetHierarchy){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -143,6 +148,7 @@ class PortalVersionBean {
         this.exposePredictedGeneAssociations = exposePredictedGeneAssociations
         this.exposeHiCData = exposeHiCData
         this.exposeDynamicUi = exposeDynamicUi
+        this.exposeDatasetHierarchy = exposeDatasetHierarchy
     }
 
     public String getPortalType() {
@@ -316,56 +322,105 @@ class PortalVersionBean {
     public Integer getExposeDynamicUi(){
         return exposeDynamicUi
     }
-
-
-
-
-
-
-    public String toJsonString(){
-        return """{"portalType":"${getPortalType()}",
-"portalDescription":"${getPortalDescription()}",
-"mdvName":"${getMdvName()}",
-"phenotype":"${getPhenotype()}",
-"dataSet":"${getDataSet()}",
-"tissueRegionOverlapMatcher":"${getTissueRegionOverlapMatcher().toString()}",
-"tissueRegionOverlapDisplayMatcher":"${getTissueRegionOverlapDisplayMatcher().toString()}",
-"tissues":"${getTissues().toString()}",
-"orderedPhenotypeGroupNames":"${getOrderedPhenotypeGroupNames().toString()}",
-"excludeFromLZ":"${getExcludeFromLZ().toString()}",
-"epigeneticAssays":"${getEpigeneticAssays()}",
-"lzDataset":"${getLzDataset()}",
-"frontLogo":"${getFrontLogo()}",
-"tagline":"${getTagline()}",
-"tabLabel":"${getTabLabel()}",
-"alternateLanguages":"${getAlternateLanguages().toString()}",
-"geneExamples":"${getGeneExamples().toString()}",
-"variantExamples":"${getVariantExamples().toString()}",
-"rangeExamples":"${getRangeExamples().toString()}",
-"backgroundGraphic":"${getBackgroundGraphic()}",
-"phenotypeLookupMessage":"${getPhenotypeLookupMessage()}",
-"logoCode":"${getLogoCode()}",
-"menuHeader":"${getMenuHeader()}",
-"sampleLevelSequencingDataExists":${getSampleLevelSequencingDataExists()},
-"genePageWarning":"${getGenePageWarning()}",
-"credibleSetInfoCode":"${getCredibleSetInfoCode()}",
-"blogId":"${getBlogId()}",
-"variantAssociationsExists":${getVariantAssociationsExists()},
-"geneLevelDataExists":${getGeneLevelDataExists()},
-"exposeGrsModule": ${getExposeGrsModule()},
-"highSpeedGetAggregatedDataCall": ${getHighSpeedGetAggregatedDataCall()},
-"regionSpecificVersion":${getRegionSpecificVersion()},
-"exposePhewasModule":${getExposePhewasModule()},
-"exposeForestPlot":${getExposeForestPlot()},
-"exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
-"exposeGreenBoxes":${getExposeGreenBoxes()},
-"exposeGeneComparisonTable": ${getExposeGeneComparisonTable()},
-"variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()},
-"utilizeBiallelicGait":${getUtilizeBiallelicGait()},
-"utilizeUcsdData":${getUtilizeUcsdData()},
-"exposePredictedGeneAssociations":${getExposePredictedGeneAssociations()},
-"exposeHiCData": ${getExposeHiCData()},
-"exposeDynamicUi": ${getExposeDynamicUi()}
-}""".toString()
+    public Integer getExposeDatasetHierarchy(){
+        return exposeDynamicUi
     }
+
+
+
+
+
+
+    private List<String> findDataAccessorsForPortalVersionBean(String getOrSet, PortalVersionBean portalVersionBean){
+        List<String> returnValue = []
+        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
+            if (portalBeanMethodName.startsWith(getOrSet)){
+                String fieldName = portalBeanMethodName.substring(3)
+                if ((fieldName!="MetaClass")&&
+                        (fieldName!="Class")&&
+                        (fieldName!="Property")){
+                    returnValue << fieldName
+                }
+            }
+        }
+        return returnValue
+    }
+
+
+
+
+
+
+    public String toJsonString(PortalVersionBean portalVersionBean) {
+//        return """{"portalType":"${getPortalType()}",
+//"portalDescription":"${getPortalDescription()}",
+//"mdvName":"${getMdvName()}",
+//"phenotype":"${getPhenotype()}",
+//"dataSet":"${getDataSet()}",
+//"tissueRegionOverlapMatcher":"${getTissueRegionOverlapMatcher().toString()}",
+//"tissueRegionOverlapDisplayMatcher":"${getTissueRegionOverlapDisplayMatcher().toString()}",
+//"tissues":"${getTissues().toString()}",
+//"orderedPhenotypeGroupNames":"${getOrderedPhenotypeGroupNames().toString()}",
+//"excludeFromLZ":"${getExcludeFromLZ().toString()}",
+//"epigeneticAssays":"${getEpigeneticAssays()}",
+//"lzDataset":"${getLzDataset()}",
+//"frontLogo":"${getFrontLogo()}",
+//"tagline":"${getTagline()}",
+//"tabLabel":"${getTabLabel()}",
+//"alternateLanguages":"${getAlternateLanguages().toString()}",
+//"geneExamples":"${getGeneExamples().toString()}",
+//"variantExamples":"${getVariantExamples().toString()}",
+//"rangeExamples":"${getRangeExamples().toString()}",
+//"backgroundGraphic":"${getBackgroundGraphic()}",
+//"phenotypeLookupMessage":"${getPhenotypeLookupMessage()}",
+//"logoCode":"${getLogoCode()}",
+//"menuHeader":"${getMenuHeader()}",
+//"sampleLevelSequencingDataExists":${getSampleLevelSequencingDataExists()},
+//"genePageWarning":"${getGenePageWarning()}",
+//"credibleSetInfoCode":"${getCredibleSetInfoCode()}",
+//"blogId":"${getBlogId()}",
+//"variantAssociationsExists":${getVariantAssociationsExists()},
+//"geneLevelDataExists":${getGeneLevelDataExists()},
+//"exposeGrsModule": ${getExposeGrsModule()},
+//"highSpeedGetAggregatedDataCall": ${getHighSpeedGetAggregatedDataCall()},
+//"regionSpecificVersion":${getRegionSpecificVersion()},
+//"exposePhewasModule":${getExposePhewasModule()},
+//"exposeForestPlot":${getExposeForestPlot()},
+//"exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
+//"exposeGreenBoxes":${getExposeGreenBoxes()},
+//"exposeGeneComparisonTable": ${getExposeGeneComparisonTable()},
+//"variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()},
+//"utilizeBiallelicGait":${getUtilizeBiallelicGait()},
+//"utilizeUcsdData":${getUtilizeUcsdData()},
+//"exposePredictedGeneAssociations":${getExposePredictedGeneAssociations()},
+//"exposeHiCData": ${getExposeHiCData()},
+//"exposeDynamicUi": ${getExposeDynamicUi()}
+//}""".toString()
+//    }
+
+
+        List<String> dataAccessorsForPortalVersionBean = findDataAccessorsForPortalVersionBean("get", portalVersionBean)
+        LinkedHashMap objectWeAreBuilding = [:]
+        for (String fieldName in dataAccessorsForPortalVersionBean) {
+            String portalBeanMethodName = "get${fieldName}"
+            try {
+                Object methodReturnValue = portalVersionBean.invokeMethod(portalBeanMethodName, null as Object)
+                if (methodReturnValue instanceof ArrayList) {
+                    List listHolder = []
+                    for (String str in (methodReturnValue as ArrayList)) {
+                        listHolder << str
+                    }
+                    objectWeAreBuilding[fieldName] = listHolder
+                } else {
+                    objectWeAreBuilding[fieldName] = methodReturnValue
+                }
+            } catch (Exception e) {
+                print("prob with ${fieldName}, ${e.toString()}.")
+            }
+        }
+        return new JsonBuilder(objectWeAreBuilding).toPrettyString()
+//        return proposedJsonString
+    }
+
+
 }
