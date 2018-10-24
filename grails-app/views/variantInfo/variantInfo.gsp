@@ -241,24 +241,6 @@
 
                     </div>
 
-                    <g:renderBetaFeaturesDisplayedValue>
-                    <div class="separator"></div>
-
-                    <div class="accordion-group">
-                    <div class="accordion-heading">
-                    <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                    data-parent="#accordionVariant"
-                    href="#collapseCarrierStatusImpact">
-                    <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
-                    </a>
-                    </div>
-
-                    <g:render template="carrierStatusImpact"/>
-
-                    </div>
-
-                    </g:renderBetaFeaturesDisplayedValue>
-
                     <div class="separator"></div>
 
                     %{--<div class="accordion-group">--}%

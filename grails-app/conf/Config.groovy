@@ -629,8 +629,11 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
                                                 0, // LEDGE tab on the gene page
                                                 0, // Hi-C tab on the gene page
-                                                0,  // expose dynamic UI
-                                                0  // expose the data set hierarchy in the sunburst visualization on the data page
+                                                0, // expose dynamic UI
+                                                0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                                0, // expose the old school variant and association table.  Potentially useful for debugging
+                                                0, // expose the IGV interface in its own accordion section
+                                                0  // expose an accordion section with the burden test on the gene page
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -671,7 +674,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                             0,
                                             0,0,0, // Hi-C tab on the gene page
                                           0,  // expose dynamic UI
-                                          0
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -713,7 +719,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,0, // Hi-C tab on the gene page
                                           0,  // expose dynamic UI
-                                          0
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
@@ -758,7 +767,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,1, // Hi-C tab on the gene page
                                           0,  // expose dynamic UI
-                                          0
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -800,7 +812,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,0, // Hi-C tab on the gene page
                                           0,  // expose dynamic UI
-                                          0
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -841,6 +856,9 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,0,0, // Hi-C tab on the gene page
                                           0,  // expose dynamic UI
-                                          0
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   )
 ]
