@@ -61,14 +61,14 @@ public class LocusZoomJsonBuilder {
      */
     public String getLocusZoomQueryString(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
                                           int maximumNumberOfPointsToRetrieve,String format, float minimumAllowablePosteriorProbability,MetaDataService metadataService,
-                                          int metadataTree ) throws PortalException {
+                                          int metadataTree, String propertyName ) throws PortalException {
         // local variables
         GetDataQuery query = new GetDataQueryBean();
         String jsonQueryString;
         System.out.println(this.phenotypeString + " " + this.rootDataSetString);
 
         // get the query object
-        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format, minimumAllowablePosteriorProbability,metadataService, metadataTree);
+        query = this.getLocusZoomQueryBean(chromosome, startPosition, endPosition, covariateList,maximumNumberOfPointsToRetrieve, format, minimumAllowablePosteriorProbability,metadataService, metadataTree, propertyName);
 
         // get the payload string
         jsonQueryString = this.jsonBuilder.getQueryJsonPayloadString(query);
@@ -110,7 +110,7 @@ public class LocusZoomJsonBuilder {
     public GetDataQuery getLocusZoomQueryBean(String chromosome, int startPosition, int endPosition, List<Covariate> covariateList,
                                               int maximumNumberOfPointsToRetrieve,String format,float minimumAllowablePosteriorProbability,
                                               MetaDataService metaDataService,
-                                              int metadataTree) throws PortalException {
+                                              int metadataTree, String propertyName) throws PortalException {
         // local variables
         JsonParser currentJsonParser;
         GetDataQuery query = new GetDataQueryBean();
@@ -145,10 +145,12 @@ public class LocusZoomJsonBuilder {
 
             // get the query properties, but only if they are not looking at hail, which can't do phenotype-based filtering
             float pValueCutOff = (float) 0.90;  // pValues > 0.9 don't interest us, and they slow down the query
-        if (posteriorPValue != null){
+        if ((posteriorPValue != null)&&(propertyName.equals("POSTERIOR_PROBABILITY"))){
             query.addQueryProperty(posteriorPValue);
         }
-        if (posteriorProbabilityValue != null){
+
+        System.out.println("**propertyName="+propertyName+".**");
+        if ((posteriorProbabilityValue != null)&&(propertyName.equals("POSTERIOR_PROBABILITY"))){
             query.addFilterProperty(posteriorProbabilityValue, PortalConstants.OPERATOR_MORE_THAN_EQUALS, String.valueOf(minimumAllowablePosteriorProbability));
         }
             if (credibleSetId != null){

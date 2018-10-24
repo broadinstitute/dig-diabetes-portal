@@ -65,27 +65,7 @@ class SystemController {
 
     def getPortalVersionBeanDetails = {
         def slurper = new JsonSlurper()
-//
-//        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
-//        List<String> dataAccessorsForPortalVersionBean = findDataAccessorsForPortalVersionBean("get",portalVersionBean)
-//        LinkedHashMap objectWeAreBuilding = [:]
-//        for (String fieldName in dataAccessorsForPortalVersionBean ){
-//            String portalBeanMethodName = "get${fieldName}"
-//            try{
-//                Object methodReturnValue =  portalVersionBean.invokeMethod(portalBeanMethodName,null as Object)
-//                if (methodReturnValue instanceof ArrayList){
-//                    List listHolder = []
-//                    for (String str in (methodReturnValue as ArrayList)){
-//                        listHolder << str
-//                    }
-//                    objectWeAreBuilding[fieldName] = listHolder
-//                } else {
-//                    objectWeAreBuilding[fieldName] = methodReturnValue
-//                }
-//            } catch(Exception e){
-//                print ("prob with ${fieldName}, ${e.toString()}.")
-//            }
-//        }
+
         String proposedJsonString = restServerService.retrieveBeanForCurrentPortal().toJsonString()
         JSONObject jsonReturn =  slurper.parseText(proposedJsonString);
 
@@ -95,22 +75,6 @@ class SystemController {
     }
 
 
-
-//
-//    List<String> findDataAccessorsForPortalVersionBean(String getOrSet, PortalVersionBean portalVersionBean){
-//        List<String> returnValue = []
-//        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
-//            if (portalBeanMethodName.startsWith(getOrSet)){
-//                String fieldName = portalBeanMethodName.substring(3)
-//                if ((fieldName!="MetaClass")&&
-//                        (fieldName!="Class")&&
-//                        (fieldName!="Property")){
-//                    returnValue << fieldName
-//                }
-//            }
-//        }
-//        return returnValue
-//    }
 
 
     String firstCharToLowerCase(String str) {

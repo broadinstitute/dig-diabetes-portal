@@ -318,17 +318,25 @@ class RestServerService {
         PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
         PortalVersionBean newPortalVersionBean
         if (existingPortalVersionBean){
-            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),
-                    mdvName, existingPortalVersionBean.getPhenotype(), existingPortalVersionBean.getDataSet(),
+            newPortalVersionBean = new PortalVersionBean( portalType,
+                    existingPortalVersionBean.getPortalDescription(),
+                    mdvName,
+                    existingPortalVersionBean.getPhenotype(),
+                    existingPortalVersionBean.getDataSet(),
                     existingPortalVersionBean.getTissueRegionOverlapMatcher(),
                     existingPortalVersionBean.getTissueRegionOverlapDisplayMatcher(),
-                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
+                    existingPortalVersionBean.getTissues(),
+                    existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
                     existingPortalVersionBean.getExcludeFromLZ(),
-                    existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset(),
-                    existingPortalVersionBean.getFrontLogo(), existingPortalVersionBean.getTagline(),
+                    existingPortalVersionBean.getEpigeneticAssays(),
+                    existingPortalVersionBean.getLzDataset(),
+                    existingPortalVersionBean.getFrontLogo(),
+                    existingPortalVersionBean.getTagline(),
                     existingPortalVersionBean.getTabLabel(),
-                    existingPortalVersionBean.getAlternateLanguages(),existingPortalVersionBean.getGeneExamples(),
-                    existingPortalVersionBean.getVariantExamples(),existingPortalVersionBean.getRangeExamples(),
+                    existingPortalVersionBean.getAlternateLanguages(),
+                    existingPortalVersionBean.getGeneExamples(),
+                    existingPortalVersionBean.getVariantExamples(),
+                    existingPortalVersionBean.getRangeExamples(),
                     existingPortalVersionBean.getBackgroundGraphic(),
                     existingPortalVersionBean.getPhenotypeLookupMessage(),
                     existingPortalVersionBean.getLogoCode(),
@@ -353,12 +361,14 @@ class RestServerService {
                     existingPortalVersionBean.getExposePredictedGeneAssociations(),
                     existingPortalVersionBean.getExposeHiCData(),
                     existingPortalVersionBean.getExposeDynamicUi(),
-                    existingPortalVersionBean.getExposeDatasetHierarchy()
+                    existingPortalVersionBean.getExposeDatasetHierarchy(),
+                    existingPortalVersionBean.getExposeVariantAndAssociationTable(),
+                    existingPortalVersionBean.getExposeIgvDisplay(),
+                    existingPortalVersionBean.getExposeIndependentBurdenTest()
             )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean

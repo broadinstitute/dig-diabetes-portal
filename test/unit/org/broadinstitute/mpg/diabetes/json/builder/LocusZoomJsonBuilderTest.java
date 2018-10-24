@@ -52,7 +52,7 @@ public class LocusZoomJsonBuilderTest extends TestCase {
         // get the json string
         try {
             jsonString = locusZoomJsonBuilder.getLocusZoomQueryString("8", 118000000, 121000000,
-                    null, 500, "verbose",0.9f, metaDataService,MetaDataService.METADATA_VARIANT);
+                    null, 500, "verbose",0.9f, metaDataService,MetaDataService.METADATA_VARIANT,"P_VALUE");
 
             // create the json object
             locusZoomJsonObject = new JSONObject(jsonString);

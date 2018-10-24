@@ -160,7 +160,7 @@
 </div>
 </div>
         <div class="container">
-            <g:renderBetaFeaturesDisplayedValue>
+            <g:if test="${portalVersionBean.getExposeDatasetHierarchy()}">
                 <div style="margin-top: 5px">
                     <div class="col-xs-2"></div>
                     <div class="col-xs-10"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
@@ -192,40 +192,38 @@
                             <div class="col-xs-3">
                                 <span class="pull-right">Version filter</span>
 
-                    <select id="versionDatasetFilter" class="form-control">
-                        <g:each in="${allVersions}" var="ver">
-                            <option value="${ver}">${ver}</option>
-                        </g:each>
-                    </select>
+                                <select id="versionDatasetFilter" class="form-control">
+                                    <g:each in="${allVersions}" var="ver">
+                                        <option value="${ver}">${ver}</option>
+                                    </g:each>
+                                </select>
 
-                </div>
+                            </div>
 
-                <div class="col-xs-3">
-                    <span class="pull-right">Technology filter</span>
-                    <select id="technologyFilter" class="form-control">
-                        <option selected>all</option>
-                        <option value="GWAS">GWAS</option>
-                        <option value="ExSeq">Exome sequencing</option>
-                        <option value="ExChip">Exome chip</option>
-                    </select>
+                            <div class="col-xs-3">
+                                <span class="pull-right">Technology filter</span>
+                                <select id="technologyFilter" class="form-control">
+                                    <option selected>all</option>
+                                    <option value="GWAS">GWAS</option>
+                                    <option value="ExSeq">Exome sequencing</option>
+                                    <option value="ExChip">Exome chip</option>
+                                </select>
 
-                </div>
+                            </div>
 
-                </div>
-
-            </div>
-
-            </g:renderBetaFeaturesDisplayedValue>
-
-
-            <g:renderBetaFeaturesDisplayedValue>
-                <div class="row pull-left col-xs-12" style="margin-top: 20px">
-                    <div id="sunburstdiv">
+                        </div>
 
                     </div>
 
+
+                    <div class="row pull-left col-xs-12" style="margin-top: 20px">
+                        <div id="sunburstdiv">
+
+                        </div>
+
+                    </div>
                 </div>
-            </g:renderBetaFeaturesDisplayedValue>
+            </g:if>
 
             <script>
                 function showSection(event) {
@@ -299,16 +297,16 @@
                             }
                         });
                     };
-                    <g:renderBetaFeaturesDisplayedValue>
+                    <g:if test="${portalVersionBean.getExposeDatasetHierarchy()}">
                     mpgSoftware.launchSunburst('', '', undefined);
-                    </g:renderBetaFeaturesDisplayedValue>
+                    </g:if>
 
                 });
 
             </script>
 
 
-            <g:renderBetaFeaturesDisplayedValue>
+            <g:if test="${portalVersionBean.getExposeDatasetHierarchy()}">
                 <div class="span3" style="padding-top: 50px;  height: 600px;">
                     <div style="float:right;">
 
@@ -337,7 +335,7 @@
                     </div>
 
                 </div>
-            </g:renderBetaFeaturesDisplayedValue>
+            </g:if>
 
 
             %{--<g:if test="${g.portalTypeString()?.equals('stroke')}">--}%

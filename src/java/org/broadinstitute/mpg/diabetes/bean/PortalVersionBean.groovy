@@ -17,47 +17,50 @@ class PortalVersionBean {
     private String portalType
     private String portalDescription
     private String mdvName
-    private String phenotype
-    private String dataSet
-    List<String> tissueRegionOverlapMatcher
-    List<String> tissueRegionOverlapDisplayMatcher
-    private List<String> tissues
-    private List<String> orderedPhenotypeGroupNames
-    private List<String> excludeFromLZ
-    private String epigeneticAssays
-    private String lzDataset
-    private String frontLogo
-    private String tagline
-    private String tabLabel
-    private List<String> alternateLanguages
-    private List<String> geneExamples
-    private List<String> variantExamples
-    private List<String> rangeExamples
-    private String backgroundGraphic
-    private String phenotypeLookupMessage
-    private String logoCode
-    private String menuHeader
-    private String sampleLevelSequencingDataExists
-    private String genePageWarning
-    private String credibleSetInfoCode
-    private String blogId
-    private Integer variantAssociationsExists
-    private Integer  geneLevelDataExists
-    private Integer exposeGrsModule
-    private Integer highSpeedGetAggregatedDataCall
-    private Integer regionSpecificVersion
-    private Integer exposePhewasModule
-    private Integer exposeForestPlot
-    private Integer exposeTraitDataSetAssociationView
-    private Integer exposeGreenBoxes
-    private Integer exposeGeneComparisonTable
-    private Integer variantTakesYouToGenePage
-    private Integer utilizeBiallelicGait
-    private Integer utilizeUcsdData
-    private Integer exposePredictedGeneAssociations
-    private Integer exposeHiCData
-    private Integer exposeDynamicUi
-    private Integer exposeDatasetHierarchy
+    private String phenotype=""
+    private String dataSet=""
+    List<String> tissueRegionOverlapMatcher=[]
+    List<String> tissueRegionOverlapDisplayMatcher=[]
+    private List<String> tissues=[]
+    private List<String> orderedPhenotypeGroupNames=[]
+    private List<String> excludeFromLZ=[]
+    private String epigeneticAssays=""
+    private String lzDataset=""
+    private String frontLogo=""
+    private String tagline=""
+    private String tabLabel=""
+    private List<String> alternateLanguages=[]
+    private List<String> geneExamples=[]
+    private List<String> variantExamples=[]
+    private List<String> rangeExamples=[]
+    private String backgroundGraphic=""
+    private String phenotypeLookupMessage=""
+    private String logoCode=""
+    private String menuHeader=""
+    private String sampleLevelSequencingDataExists=""
+    private String genePageWarning=""
+    private String credibleSetInfoCode=""
+    private String blogId=""
+    private Integer variantAssociationsExists=0
+    private Integer  geneLevelDataExists=0
+    private Integer exposeGrsModule=0
+    private Integer highSpeedGetAggregatedDataCall=0
+    private Integer regionSpecificVersion=0
+    private Integer exposePhewasModule=0
+    private Integer exposeForestPlot=0
+    private Integer exposeTraitDataSetAssociationView=0
+    private Integer exposeGreenBoxes=0
+    private Integer exposeGeneComparisonTable=0
+    private Integer variantTakesYouToGenePage=0
+    private Integer utilizeBiallelicGait=0
+    private Integer utilizeUcsdData=0
+    private Integer exposePredictedGeneAssociations=0
+    private Integer exposeHiCData=0
+    private Integer exposeDynamicUi=0
+    private Integer exposeDatasetHierarchy=0
+    private Integer exposeVariantAndAssociationTable=0
+    private Integer exposeIgvDisplay=0
+    private Integer exposeIndependentBurdenTest=0
 
 
 
@@ -104,7 +107,11 @@ class PortalVersionBean {
                              Integer exposePredictedGeneAssociations,
                              Integer exposeHiCData,
                              Integer exposeDynamicUi,
-                             Integer exposeDatasetHierarchy){
+                             Integer exposeDatasetHierarchy,
+                             Integer exposeVariantAndAssociationTable,
+                             Integer exposeIgvDisplay,
+                             Integer exposeIndependentBurdenTest
+    ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
         this.mdvName = mdvName;
@@ -149,7 +156,24 @@ class PortalVersionBean {
         this.exposeHiCData = exposeHiCData
         this.exposeDynamicUi = exposeDynamicUi
         this.exposeDatasetHierarchy = exposeDatasetHierarchy
+        this.exposeVariantAndAssociationTable = exposeVariantAndAssociationTable
+        this.exposeIgvDisplay = exposeIgvDisplay
+        this.exposeIndependentBurdenTest = exposeIndependentBurdenTest
     }
+
+
+
+    public PortalVersionBean(String portalType,
+                             String portalDescription,
+                             String mdvName
+    ){
+        this.portalType = portalType;
+        this.portalDescription = portalDescription;
+        this.mdvName = mdvName;
+    }
+
+
+
 
     public String getPortalType() {
         return portalType
@@ -323,7 +347,16 @@ class PortalVersionBean {
         return exposeDynamicUi
     }
     public Integer getExposeDatasetHierarchy(){
-        return exposeDynamicUi
+        return exposeDatasetHierarchy
+    }
+    public Integer getExposeVariantAndAssociationTable(){
+        return exposeVariantAndAssociationTable
+    }
+    public Integer getExposeIgvDisplay(){
+        return exposeIgvDisplay
+    }
+    public Integer getExposeIndependentBurdenTest(){
+        return exposeIndependentBurdenTest
     }
 
 
@@ -333,7 +366,7 @@ class PortalVersionBean {
 
     private List<String> findDataAccessorsForPortalVersionBean(String getOrSet, PortalVersionBean portalVersionBean){
         List<String> returnValue = []
-        for (String portalBeanMethodName in portalVersionBean.metaClass.methods*.name.sort().unique() ){
+        for (String portalBeanMethodName in this.metaClass.methods*.name.sort().unique() ){
             if (portalBeanMethodName.startsWith(getOrSet)){
                 String fieldName = portalBeanMethodName.substring(3)
                 if ((fieldName!="MetaClass")&&
@@ -352,59 +385,12 @@ class PortalVersionBean {
 
 
     public String toJsonString(PortalVersionBean portalVersionBean) {
-//        return """{"portalType":"${getPortalType()}",
-//"portalDescription":"${getPortalDescription()}",
-//"mdvName":"${getMdvName()}",
-//"phenotype":"${getPhenotype()}",
-//"dataSet":"${getDataSet()}",
-//"tissueRegionOverlapMatcher":"${getTissueRegionOverlapMatcher().toString()}",
-//"tissueRegionOverlapDisplayMatcher":"${getTissueRegionOverlapDisplayMatcher().toString()}",
-//"tissues":"${getTissues().toString()}",
-//"orderedPhenotypeGroupNames":"${getOrderedPhenotypeGroupNames().toString()}",
-//"excludeFromLZ":"${getExcludeFromLZ().toString()}",
-//"epigeneticAssays":"${getEpigeneticAssays()}",
-//"lzDataset":"${getLzDataset()}",
-//"frontLogo":"${getFrontLogo()}",
-//"tagline":"${getTagline()}",
-//"tabLabel":"${getTabLabel()}",
-//"alternateLanguages":"${getAlternateLanguages().toString()}",
-//"geneExamples":"${getGeneExamples().toString()}",
-//"variantExamples":"${getVariantExamples().toString()}",
-//"rangeExamples":"${getRangeExamples().toString()}",
-//"backgroundGraphic":"${getBackgroundGraphic()}",
-//"phenotypeLookupMessage":"${getPhenotypeLookupMessage()}",
-//"logoCode":"${getLogoCode()}",
-//"menuHeader":"${getMenuHeader()}",
-//"sampleLevelSequencingDataExists":${getSampleLevelSequencingDataExists()},
-//"genePageWarning":"${getGenePageWarning()}",
-//"credibleSetInfoCode":"${getCredibleSetInfoCode()}",
-//"blogId":"${getBlogId()}",
-//"variantAssociationsExists":${getVariantAssociationsExists()},
-//"geneLevelDataExists":${getGeneLevelDataExists()},
-//"exposeGrsModule": ${getExposeGrsModule()},
-//"highSpeedGetAggregatedDataCall": ${getHighSpeedGetAggregatedDataCall()},
-//"regionSpecificVersion":${getRegionSpecificVersion()},
-//"exposePhewasModule":${getExposePhewasModule()},
-//"exposeForestPlot":${getExposeForestPlot()},
-//"exposeTraitDataSetAssociationView":${getExposeTraitDataSetAssociationView()},
-//"exposeGreenBoxes":${getExposeGreenBoxes()},
-//"exposeGeneComparisonTable": ${getExposeGeneComparisonTable()},
-//"variantTakesYouToGenePage": ${getVariantTakesYouToGenePage()},
-//"utilizeBiallelicGait":${getUtilizeBiallelicGait()},
-//"utilizeUcsdData":${getUtilizeUcsdData()},
-//"exposePredictedGeneAssociations":${getExposePredictedGeneAssociations()},
-//"exposeHiCData": ${getExposeHiCData()},
-//"exposeDynamicUi": ${getExposeDynamicUi()}
-//}""".toString()
-//    }
-
-
         List<String> dataAccessorsForPortalVersionBean = findDataAccessorsForPortalVersionBean("get", portalVersionBean)
         LinkedHashMap objectWeAreBuilding = [:]
         for (String fieldName in dataAccessorsForPortalVersionBean) {
             String portalBeanMethodName = "get${fieldName}"
             try {
-                Object methodReturnValue = portalVersionBean.invokeMethod(portalBeanMethodName, null as Object)
+                Object methodReturnValue = this.invokeMethod(portalBeanMethodName, null as Object)
                 if (methodReturnValue instanceof ArrayList) {
                     List listHolder = []
                     for (String str in (methodReturnValue as ArrayList)) {
