@@ -352,12 +352,13 @@ class RestServerService {
                     existingPortalVersionBean.getUtilizeUcsdData(),
                     existingPortalVersionBean.getExposePredictedGeneAssociations(),
                     existingPortalVersionBean.getExposeHiCData(),
-                    existingPortalVersionBean.getExposeDynamicUi()
+                    existingPortalVersionBean.getExposeDynamicUi(),
+                    existingPortalVersionBean.getExposeDatasetHierarchy()
             )
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
+                    "", "","","","",[],[],[],[],[],[],"","","","","","","","", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -411,7 +412,7 @@ class RestServerService {
 
     public String getPortalVersionBeanListAsJson(){
         List<PortalVersionBean> listPortalVersionBean = PORTAL_VERSION_BEAN_LIST
-        return "[${listPortalVersionBean.collect{it.toJsonString()}.join(",")}]"
+        return "[${listPortalVersionBean.collect{it.toJsonString(retrieveBeanForCurrentPortal())}.join(",")}]"
     }
 
 

@@ -159,8 +159,8 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-//defaultRestServer = digawsqanewKB
-defaultRestServer = digawsdevWorkflowKB
+defaultRestServer = digawsqanewKB
+//defaultRestServer = digawsdevWorkflowKB
 
 
 getRestServerList = [
@@ -628,8 +628,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
                                                 0, // LEDGE tab on the gene page
                                                 0, // Hi-C tab on the gene page
-                                                0  // expose dynamic UI
-
+                                                0,  // expose dynamic UI
+                                                0  // expose the data set hierarchy in the sunburst visualization on the data page
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -669,6 +669,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                             0,
                                             0,0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
                                           0
                                   ),
                                   new PortalVersionBean("mi",
@@ -710,6 +711,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
                                           0
                                   ),
                                   new PortalVersionBean("ibd",
@@ -754,6 +756,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           1,1, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
                                           0
                                   ),
                                   new PortalVersionBean("epilepsy",
@@ -795,6 +798,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
                                           0
                                   ),
                                   new PortalVersionBean("sleep",
@@ -835,6 +839,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
                                           0
                                   )
 ]

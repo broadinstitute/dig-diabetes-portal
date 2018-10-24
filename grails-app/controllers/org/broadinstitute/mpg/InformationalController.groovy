@@ -39,7 +39,9 @@ class InformationalController {
         }
 
         String locale = RequestContextUtils.getLocale(request)
-        render(view: 'data', model: [locale: locale, experiments: allExperimentsForGivenVersion, allVersions: listOfVersionsAsJson])
+        render(view: 'data', model: [locale: locale, experiments: allExperimentsForGivenVersion,
+                                     allVersions: listOfVersionsAsJson,
+                                     portalVersionBean:restServerService.retrieveBeanForCurrentPortal()])
     }
 
 //
