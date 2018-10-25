@@ -1,23 +1,11 @@
 <%@ page import="org.broadinstitute.mpg.diabetes.util.PortalConstants" %>
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
-
-    <r:require modules="manhattan"/>
-    <r:require modules="mode3"/>
-
-
-    <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core"/>
-    <r:require modules="traitsFilter"/>
-    <r:layoutResources/>
-
-    <style>
-    .modules-table td { vertical-align: middle !important; }
-
-    .inactive { background-color: rgba(0,0,0,.15) !important;}
-    </style>
-
 
     <script>
 
@@ -52,6 +40,23 @@
 
 
     </script>
+
+    <r:require modules="manhattan"/>
+    <r:require modules="mode3"/>
+
+
+    <meta name="layout" content="t2dGenesCore"/>
+    <r:require modules="core"/>
+    <r:require modules="traitsFilter"/>
+    <r:layoutResources/>
+
+    <style>
+    .modules-table td { vertical-align: middle !important; }
+
+    .inactive { background-color: rgba(0,0,0,.15) !important;}
+    </style>
+
+
 </head>
 
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>

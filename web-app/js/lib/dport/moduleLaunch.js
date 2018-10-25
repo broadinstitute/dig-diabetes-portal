@@ -26,13 +26,13 @@ var mpgSoftware = mpgSoftware || {};
 
         // called when page loads
         var fillPhenotypesDropdown = function (portaltype) {
-            var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+            var rememVars = mpgSoftware.moduleLaunch.getMySavedVariables();
             var loading = $('#spinner').show();
             var rememberportaltype = portaltype;
             $.ajax({
                 cache: false,
                 type: "post",
-                url: "/dig-diabetes-portal/variantSearch/retrievePhenotypesAjax",
+                url: rememVars.retrievePhenotypesAjaxUrl,
                 data: {getNonePhenotype: false},
                 async: true,
                 success: function (data) {
