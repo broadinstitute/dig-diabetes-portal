@@ -1922,7 +1922,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             exposeDynamicUiIndicator.push(
                 {   generalizedInputId:additionalParameters.generalizedInputId,
                     generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
-                    phenoHolder:additionalParameters.phenoHolder }
+                    phenoHolder:additionalParameters.phenoHolder,
+                    eQTLGoButtonId:additionalParameters.eQTLGoButtonId
+                }
             );
         }
         if (additionalParameters.exposeGeneComparisonTable === "1"){
@@ -1948,11 +1950,20 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         weNeedToPutTablesInTabs:weNeedToPutTablesInTabs};
 
 }
-
+    var processRecordsFromMod = function (data){
+        var returnArray = [];
+        _.forEach(data,function(oneRec){
+            if (!phenoArray.includes(oneRec.Term)){
+                phenoArray.push(oneRec.Term);
+            };
+        });
+        return returnArray;
+    };
 
     var updateFromMod=function(inParms,additionalParameters){
         var promiseArray = [];
         var rememberInParmsGene = inParms.gene;
+        var rememberDataRecordProcessorFunctionName = inParms.recordProcessorFunctionalName;
         var rememberRetrieveModDataUrl1 = additionalParameters.retrieveModDataUrl;
         var rememberPhenoHolder = additionalParameters.phenoHolder;
         var phenoArray = [];
@@ -1995,6 +2006,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         function updateDynamicUiInResponseToGene(item, additionalParameters) {
             updateFromMod(item, additionalParameters);
         }
+        function updateDynamicUiInResponseeQTLGo(item, additionalParameters) {
+            updateFromMod(item, additionalParameters);
+        }
+
         $('#'+additionalParameters.generalizedInputId).typeahead({
             source: function (query, process) {
                 $.get(additionalParameters.generalizedTypeaheadUrl, {query: query}, function (data) {
@@ -2016,6 +2031,15 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 updateDynamicUiInResponseToGene({gene:somethingSymbol}, additionalParameters)
             }
         });
+        // assign the correct response to the eQTL go button
+        $('#'+additionalParameters.eQTLGoButtonId).on('click', function () {
+            var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
+            somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+            if (somethingSymbol) {
+                updateDynamicUiInResponseeQTLGo({gene:somethingSymbol}, additionalParameters)
+            }
+        });
+
     };
 
 

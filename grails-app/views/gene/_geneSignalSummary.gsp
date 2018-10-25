@@ -140,6 +140,7 @@ td.tissueTable.informationIsPresent{
                     lzCredSet: 'lzCredSet',
                     generalizedInputId:'generalized-dynamic-gene-input',
                     generalizedGoButtonId:'generalized-dynamic-gene-go',
+                    eQTLGoButtonId:'eQTL-dynamic-gene-go',
                     phenoHolder:'dynamicPhenoHolder',
                     vrtUrl:  '${createLink(controller: "VariantSearch", action: "gene")}',
                     redLightImage: '<r:img uri="/images/redlight.png"/>',
