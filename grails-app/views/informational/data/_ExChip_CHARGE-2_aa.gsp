@@ -1,7 +1,7 @@
 <script class="panel-body" id="ExChip_CHARGE-2_aa_script" type="x-tmpl-mustache">
 
             <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
-<p><g:message code="informational.data.download.QRS"></g:message></p>
+<p><g:message code="informational.data.download.QRS"></g:message> | <g:message code="informational.data.download.QRS_README"></g:message></p>
 
             <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
