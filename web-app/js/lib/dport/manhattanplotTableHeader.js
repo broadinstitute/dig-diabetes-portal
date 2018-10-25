@@ -240,7 +240,7 @@ var mpgSoftware = mpgSoftware || {};
                 //.blockColoringThreshold(0.5)
                 .significanceThreshold(- Math.log10(parseFloat(savedVar.requestedSignificance)))
                 .xAxisAccessor(function (d) {
-                    return d.POS
+                    return parseInt (d.POS);
                 })
                 .yAxisAccessor(function (d) {
                     if (d.P_VALUE > 0) {

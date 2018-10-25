@@ -26,7 +26,8 @@
             effect:'<g:message code="variantTable.columnHeaders.shared.effect" />',
             variantIdentifier: '<%=variantIdentifier%>'
         });
-        mpgSoftware.associationStatistics.initializePage();
+        mpgSoftware.associationStatistics.initializePage({  exposePhewasModule:${portalVersionBean.getExposePhewasModule()},
+                                                            exposeForestPlot:${portalVersionBean.getExposeForestPlot()}    });
        // mpgSoftware.associationStatistics.loadAssociationTable();
     });
 

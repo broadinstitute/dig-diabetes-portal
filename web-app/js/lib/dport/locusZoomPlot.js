@@ -92,31 +92,6 @@ var mpgSoftware = mpgSoftware || {};
             return returnVar;
         };
 
-        LocusZoom.Data.PheWASSource.prototype.getURL = function (state, chain, fields) {
-            var build = this.params.build;
-            var includeAllVariants = this.params.includeAllVariants;
-            if (!build || !Array.isArray(build) || !build.length) {
-                throw [
-                    'Data source',
-                    this.constructor.SOURCE_NAME,
-                    'requires that you specify array of one or more desired genome build names'
-                ].join(' ');
-            }
-            var url = [
-                this.url,
-                '?filter=variant eq \'',
-                encodeURIComponent(state.variant),
-                '\'&format=objects&',
-                build.map(function (item) {
-                    return 'build=' + encodeURIComponent(item);
-                }),
-                    includeAllVariants.map(function (item) {
-                        return '&includeAllVariants=' + encodeURIComponent(item);
-                    }    ).join('&')
-            ];
-            return url.join('');
-        };
-
 
         var customIntervalsToolTip = function (namespace){
             var htmlRef = "{{"+namespace+":state_name}}<br>"+"{{"+namespace+":start}}-"+"{{"+namespace+":end}}";
@@ -148,41 +123,52 @@ var mpgSoftware = mpgSoftware || {};
                 ]
             }
         };
-        LocusZoom.Layouts.add("plot", "forestPlot", {
-                width: 800,
-                height: 800,
+        LocusZoom.Layouts.add("plot", "phewas_forest", {
+            width: 800,
+            height: 800,
             responsive_resize: true,
             panels: [
                 {
-                    id: "forestphewas",
+                    id: "phewas_forest_panel",
                     width: 800,
                     height: 800,
                     proportional_width: 1,
-                    margin: {top: 20, right: 220, bottom: 50, left: 20},
+                    margin: { top: 20, right: 220, bottom: 50, left: 20 },
                     inner_border: "rgba(210, 210, 210, 0.85)",
+                    dashboard: {
+                        components: [{
+                            type: "toggle_legend",
+                            position: "left"
+                        }]
+                    },
                     axes: {
                         x: {
                             label: "Beta",
                             label_offset: 33
                         },
                         y2: {
-                            ticks: "y2_ticks"
+                            ticks: {  // Dynamically generated ticks, but specify custom options/styles to be used in every tick
+                                style: {
+                                    "font-weight": "bold",
+                                    "text-anchor": "start"
+                                }
+                            }
                         }
                     },
                     legend: {
-                        origin: {x: 30, y: 30},
+                        origin: { x: 30, y: 30 },
                         orientation: "vertical"
-                    }
-                    ,
+                    },
                     data_layers: [
                         {
-                            id: "forestphewaspvalues",
-                            type: "forest",
+                            namespace: { "phewas": "phewas" },
+                            id: "phewas_forest",
+                            type: "category_forest",
                             z_index: 1,
                             point_shape: "square",
                             point_size: {
                                 scale_function: "interpolate",
-                                field: "log_pvalue",
+                                field: "{{namespace[phewas]}}log_pvalue",
                                 parameters: {
                                     breaks: [0, 10],
                                     values: [60, 160],
@@ -191,14 +177,13 @@ var mpgSoftware = mpgSoftware || {};
                             },
                             color: {
                                 scale_function: "interpolate",
-                                field: "log_pvalue",
+                                field: "{{namespace[phewas]}}log_pvalue",
                                 parameters: {
                                     breaks: [0, 10],
                                     values: ["#fee8c8","#b30000"],
                                     null_value: "#B8B8B8"
                                 }
-                            }
-                            ,
+                            },
                             legend: [
                                 { label: "-log10 p-value" },
                                 { shape: "square", class: "lz-data_layer-forest", color: "#fdd49e", size: 60, label: "< 2" },
@@ -208,22 +193,23 @@ var mpgSoftware = mpgSoftware || {};
                                 { shape: "square", class: "lz-data_layer-forest", color: "#d7301f", size: 140, label: "8 - 10" },
                                 { shape: "square", class: "lz-data_layer-forest", color: "#b30000", size: 160, label: "10+" }
                             ],
-                            id_field: "phenotype",
-                            fields: ["phenotype", "log_pvalue", "log_pvalue|logtoscinotation", "beta", "ci_start", "ci_end", "y_offset"],
+                            id_field: "{{namespace[phewas]}}phenotype",
+                            fields: ["{{namespace[phewas]}}phenotype", "{{namespace[phewas]}}log_pvalue", "{{namespace[phewas]}}log_pvalue|logtoscinotation", "{{namespace[phewas]}}beta", "{{namespace[phewas]}}ci_start", "{{namespace[phewas]}}ci_end"],
                             x_axis: {
-                                field: "beta",
-                                floor: -0.2,
-                                ceiling: 0.2
+                                field: "{{namespace[phewas]}}beta"
+                                //floor: -1,
+                                //ceiling: 1
                             },
                             y_axis: {
                                 axis: 2,
-                                field: "y_offset",
-                                floor: 0//,
-              //                  ceiling: y_offset
+                                category_field: "{{namespace[phewas]}}phenotype",  // Labels
+                                field: "{{namespace[phewas]}}y_offset",  // Positions (dynamicaly added)
+                                floor: 0,
+                                ceiling: 0
                             },
                             confidence_intervals: {
-                                start_field: "ci_start",
-                                end_field: "ci_end"
+                                start_field: "{{namespace[phewas]}}ci_start",
+                                end_field: "{{namespace[phewas]}}ci_end"
                             },
                             highlighted: {
                                 onmouseover: "on",
@@ -237,10 +223,10 @@ var mpgSoftware = mpgSoftware || {};
                                 closable: true,
                                 show: { or: ["highlighted", "selected"] },
                                 hide: { and: ["unhighlighted", "unselected"] },
-                                html: "<strong>{{phenotype}}</strong><br>"
-                                + "P Value: <strong>{{log_pvalue|logtoscinotation}}</strong><br>"
-                                + "Odds Ratio: <strong>{{beta}}</strong><br>"
-                                + "95% Conf. Interval: <strong>[ {{ci_start}} {{ci_end}} ]</strong>"
+                                html: "<strong>{{{{namespace[phewas]}}phenotype}}</strong><br>"
+                                + "P Value: <strong>{{{{namespace[phewas]}}log_pvalue|logtoscinotation}}</strong><br>"
+                                + "Odds Ratio: <strong>{{{{namespace[phewas]}}beta}}</strong><br>"
+                                + "95% Conf. Interval: <strong>[ {{{{namespace[phewas]}}ci_start}} {{{{namespace[phewas]}}ci_end}} ]</strong>"
                             }
                         },
                         {
@@ -255,10 +241,10 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     ]
                 }
-
-
             ]
         });
+
+
 
         LocusZoom.Layouts.add("plot", "abbreviated_phewas", {
             width: 800,
@@ -1085,7 +1071,9 @@ var mpgSoftware = mpgSoftware || {};
                     variant: variantForPlot
                 }
             };
-            var layout = LocusZoom.Layouts.get("plot", "forestPlot", mods);
+            var layout = LocusZoom.Layouts.get("plot", "phewas_forest", mods);
+            layout.panels[0].legend['hidden']=true;
+
             return layout;
         };
 
@@ -1426,7 +1414,7 @@ var mpgSoftware = mpgSoftware || {};
                     derivedAssayName = "DNase";
                 }
                 addLZTissueAnnotations({
-                    tissueCode: o.source,
+                    tissueCode: o.SOURCE,
                     tissueDescriptiveName: o.source_trans,
                     retrieveFunctionalDataAjaxUrl:getPageVars([currentLzPlotKey]).retrieveFunctionalDataAjaxUrl,
                     assayName: derivedAssayName,
@@ -1584,6 +1572,7 @@ var mpgSoftware = mpgSoftware || {};
         var buildAssociationSource = function(dataSources,geneGetLZ,phenotype, rawPhenotype,dataSetName,propertyName,makeDynamic){
             var broadAssociationSource = LocusZoom.Data.Source.extend(function (init, rawPhenotype,dataSetName,propertyName,makeDynamic) {
                 var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
+                this.pvalueType = function(){return propertyName==='P_VALUE'};
                 this.parseInit(init);
                 this.getURL = function (state, chain, fields) {
                     var url = this.url + "?" +
@@ -1613,7 +1602,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     return url;
                 };
-                this.prepareData = function(records){
+                this.annotateData = function(records){
                 //
                 //     // Below is an example of how we might use UM's latest in order to assign credible set definitions.  For now
                 //     //  I will leave it commented out.
@@ -1633,28 +1622,37 @@ var mpgSoftware = mpgSoftware || {};
                 //     // and then looking at the browser console to see what they were actually doing
                 //     //
                 //     // Calculate raw bayes factors and posterior probabilities based on information returned from the API
-                //     if (typeof pValueKeyName !== 'undefined') {
-                //         var nlogpvals = records.map(function (item) {
-                //             return item[pValueKeyName];
-                //         });
-                //         var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
-                //         var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
-                //
-                //         // Use scores to mark the credible set in various ways (depending on your visualization preferences,
-                //         //    some of these may be unneeded)
-                //         var credibleSet = gwasCredibleSets.marking.findCredibleSet(scores);
-                //         var credSetScaled= gwasCredibleSets.marking.rescaleCredibleSet(credibleSet);
-                //         var credSetBool = gwasCredibleSets.marking.markBoolean(credibleSet);
-                //
-                //         // Annotate each response record based on credible set membership
-                //         records.forEach(function (item, index) {
-                //             item["assoc:credibleSetPosteriorProb"] = posteriorProbabilities[index];
-                //             item["assoc:credibleSetContribution"] = credSetScaled[index]; // Visualization helper: normalized to contribution within the set
-                //             item["assoc:isCredible"] = credSetBool[index];
-                //         });
-                //         return records;
-                //
-                //     }
+                    pValueKeyName = 'pvalue';
+                    if ((typeof pValueKeyName !== 'undefined') &&(this.pvalueType())){
+                        var nlogpvals = records.map(function (item) {
+                            if (item[pValueKeyName]>0){
+                                return 0-(Math.log(item[pValueKeyName])/Math.LN10);
+                            } else {
+                                return 0;
+                            }
+                        });
+                        var scores = gwasCredibleSets.scoring.bayesFactors(nlogpvals);
+                        var posteriorProbabilities = gwasCredibleSets.scoring.normalizeProbabilities(scores);
+
+                        // Identify the credible set and apply filters for visualization
+                        var credibleSet = gwasCredibleSets.marking.findCredibleSet(posteriorProbabilities, 0.95);
+                        var credibleSetBoolean = gwasCredibleSets.marking.markBoolean(credibleSet);
+
+                        // Use scores to mark the credible set in various ways (depending on your visualization preferences,
+                        //    some of these may be unneeded)
+                        // var credibleSet = gwasCredibleSets.marking.findCredibleSet(scores);
+                        // var credSetScaled= gwasCredibleSets.marking.rescaleCredibleSet(credibleSet);
+                        // var credSetBool = gwasCredibleSets.marking.markBoolean(credibleSet);
+
+                        // Annotate each response record based on credible set membership
+                        records.forEach(function (item, index) {
+                            item["assoc:credibleSetPosteriorProb"] = posteriorProbabilities[index];
+                            //item["assoc:credibleSetContribution"] = credSetScaled[index]; // Visualization helper: normalized to contribution within the set
+                            item["assoc:isCredible"] = credibleSetBoolean[index];
+                        });
+                        return records;
+
+                    }
                 //
                     var pageVars = getPageVars(mpgSoftware.locusZoom.getNewDefaultLzPlot());
                     var pValueKeyName;
@@ -1788,83 +1786,35 @@ var mpgSoftware = mpgSoftware || {};
                     if ($('#phewasAllDatasets').is(":checked")){
                         includeAllDatasets=true;
                     }
+                    var urlForPhewas = pageVars.phewasAjaxCallInLzFormatUrl;
+                    if ($('#phewasUseUKBB').is(":checked")) {
+                        //urlForPhewas = 'http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant%20eq%20%277:90350840_C/T%27&format=objects&build=GRCh37';
+                        urlForPhewas = encodeURI('http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant eq \''+convertVarIdToUmichFavoredForm(variantIdString)+'\''+
+                        '&format=objects&build=GRCh37');
+                    }
                     var includeAllDatasetsRequest = "false";
                     if (includeAllDatasets){
                         includeAllDatasetsRequest = "true";
                     }
                     ds
                         .add("phewas", ["PheWASLZ", {
-                            url: pageVars.phewasAjaxCallInLzFormatUrl,
+                            url: urlForPhewas,
                             params: { build: ["GRCh37"],
                                 includeAllVariants:[includeAllDatasetsRequest]}
                         }]);
-                    lzp = LocusZoom.populate(selector, ds, newLayout);
+                        console.log('selector='+selector+'.');
+                        lzp = LocusZoom.populate(selector, ds, newLayout);
+
+
                     lzp.panels.phewas.setTitle("Variant " + variantIdString);
                     break;
                 case 3: // pheWAS forestplot
-
-                    //the way I used to do it
-                    //var buildChromatinAccessibilitySource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
-                    //    var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
-                    //        this.parseInit(init);
-                    //        this.getURL = function (state, chain, fields) {
-                    //            var url = this.url + "?" +
-                    //                "chromosome=" + state.chr + "&" +
-                    //                "start=" + state.start + "&" +
-                    //                "end=" + state.end + "&" +
-                    //                "source=" + tissue + "&" +
-                    //                "assay_id=" + assayId + "&" +
-                    //                "lzFormat=1";
-                    //            return url;
-                    //        };
-                    //    }, "BroadT2Dc");
-                    //    var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
-                    //    dataSources.add(tissueAsId, new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
-                    //};
-
-                    //  flawed attempt number two
-                    // LocusZoom.Data.ForestSource = LocusZoom.Data.Source.extend(function (init) {
-                    //    this.parseInit(init);
-                    // }, 'forest');
-                    // LocusZoom.Data.ForestSource.prototype.getURL = function (state, chain, fields) {
-                    //     var build = this.params.build;
-                    //     var url = [
-                    //         this.url,
-                    //         '?filter=variant eq \'',
-                    //         encodeURIComponent(state.variant).join('&')
-                    //     ];
-                    //     return url.join('');
-                    // };
-
-                    //let's try something different
-                    var buildForestSource = function(dataSources,getLocusZoomFilledPlotUrl,rawTissue,phenotype,dom1,assayId){
-                       var broadAccessibilitySource = LocusZoom.Data.Source.extend(function (init, tissue,dom1,assayId) {
-                           this.parseInit(init);
-                           this.getURL = function (state, chain, fields) {
-                               var url = this.url + "?" +
-                                   "chromosome=" + state.chr + "&" +
-                                   "start=" + state.start + "&" +
-                                   "end=" + state.end + "&" +
-                                   "source=" + tissue + "&" +
-                                   "assay_id=" + assayId + "&" +
-                                   "lzFormat=1";
-                               return url;
-                           };
-                       }, "forestphewas");
-                       var tissueAsId = 'intervals-'+rawTissue+"-reads-"+dom1+"-"+assayId;
-                       ds.add("forestphewas", new broadAccessibilitySource(getLocusZoomFilledPlotUrl, rawTissue,dom1,assayId));
-                    };
-
-
                     newLayout = initLocusZoomForestPlotLayout(convertVarIdToUmichFavoredForm(variantIdString));
-                    buildForestSource(ds,pageVars.phewasForestAjaxCallInLzFormatUrl,'rawTissue','phenotype','dom1','assayId');
-                    // ds
-                    //     .add("forestphewas", ["forest", {
-                    //         url: pageVars.phewasForestAjaxCallInLzFormatUrl,
-                    //         params: { build: ["GRCh37"] }
-                    //     }]);
-                    // ;
+
+                    ds.add("phewas", ["PheWASLZ", { url: pageVars.phewasForestAjaxCallInLzFormatUrl, params: { build: ["GRCh37"] } } ]);
+
                     lzp = LocusZoom.populate(selector, ds, newLayout);
+
                     break;
                 default: // Association plot
                     break;
@@ -2066,7 +2016,7 @@ var mpgSoftware = mpgSoftware || {};
                 "<strong>Subjects:</strong> {{phewas:subject_number}}<br>"
             ].join("");
             // Generate the plot
-            var plot = LocusZoom.populate("#plot", dataSources, layout);
+            var plot = LocusZoom.populate("#phewasplot", dataSources, layout);
             plot.panels.phewas.setTitle("Variant " + variantForPlot);
         }
 
@@ -2114,7 +2064,7 @@ var mpgSoftware = mpgSoftware || {};
 
                 if (inParm.positionBy == 2){ // credset only
                     inParm.locusZoomDataset = inParm.sampleGroupsWithCredibleSetNames[0];
-                    inParm.datasetReadableName = 'fine mapping';
+                    //inParm.datasetReadableName = 'fine mapping';
                 }
 
 

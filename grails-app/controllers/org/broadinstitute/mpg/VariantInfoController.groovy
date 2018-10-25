@@ -49,6 +49,9 @@ class VariantInfoController {
             case 'stroke':
                 igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
                 break
+            case 'sleep':
+                igvIntro = g.message(code: "gene.stroke.igv.intro1", default: "Use the IGV browser")
+                break
             case 'ibd':
                 igvIntro = g.message(code: "gene.ibd.igv.intro1", default: "Use the IGV browser")
                 break
@@ -313,13 +316,10 @@ class VariantInfoController {
             String assayIdStringContents = (assayIdListWithDefaults - "]") - "["
             requestedAssays = assayIdStringContents.split(",")
         }
-        if (!requestedAssays.contains("5")){
-            dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
-                    source, assayIdListWithDefaults )
-        } else { // this is a temporary hack to call directly to UCSD.  Should be removed.
-            dataJsonObject = restServerService.getUcsdRangeData([],[],[],[],"binding footprints",
-            "chr${chromosome}:${startPos}-${endPos}", pageStart, pageEnd,source)
-        }
+
+        dataJsonObject = restServerService.gatherRegionInformation( chromosome, startPos, endPos, pageStart, pageEnd,
+                source, assayIdListWithDefaults )
+
 
 
 
@@ -363,7 +363,6 @@ class VariantInfoController {
             root["data"] = rootData
             dataJsonObject = root
         } else {
-            if (!requestedAssays.contains("5")){
                 if (dataJsonObject.variants) {
                     dataJsonObject['region_start'] = startPos;
                     dataJsonObject['region_end'] = endPos;
@@ -381,27 +380,6 @@ class VariantInfoController {
 
                 }
 
-            } else {
-                if (dataJsonObject."binding footprints") {
-                    dataJsonObject['region_start'] = startPos;
-                    dataJsonObject['region_end'] = endPos;
-                    for (Map pval in dataJsonObject."binding footprints"){
-                        pval["element"] = "null"
-                        pval["element_trans"] = "null_trans"
-                        pval["source"] = pval["biosample_term_name"]
-                        pval["source_trans"] = pval["biosample_term_name"]
-                        pval["assayName"] = assayName
-                        LinkedHashMap decipheredRange =  restServerService.parseARange (pval["region"] as String)
-                        pval["START"] = decipheredRange["start"]
-                        pval["STOP"] = decipheredRange["end"]
-                        pval["CHROM"] = decipheredRange["chromosome"]
-                        pval["VALUE"] = pval["value"]
-                        pval["ANNOTATION"] = 5
-                    }
-                    dataJsonObject['variants'] = dataJsonObject."binding footprints"
-                }
-            }
-
         }
 
 
@@ -411,14 +389,8 @@ class VariantInfoController {
                 dataJsonObject
             }
         } else {
-            if (!requestedAssays.contains("5")) {
-                render(status: 200, contentType: "application/json") {
-                    [variants: dataJsonObject]
-                }
-            } else {
-                render(status: 200, contentType: "application/json") {
-                    [variants: dataJsonObject]
-                }
+            render(status: 200, contentType: "application/json") {
+                [variants: dataJsonObject]
             }
 
         }

@@ -132,7 +132,7 @@ class HomeController {
 
     def retrieveOnePortalAjax = {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
-        String portalJsonDescr = restServerService.retrieveBeanForCurrentPortal().toJsonString()
+        String portalJsonDescr = restServerService.retrieveBeanForCurrentPortal().toJsonString(restServerService.retrieveBeanForCurrentPortal())
         JsonSlurper slurper = new JsonSlurper()
         JSONObject jsonObject= slurper.parseText(portalJsonDescr)
 

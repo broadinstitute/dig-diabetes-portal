@@ -1,6 +1,36 @@
 <style>
+/* Popover */
+.popover {
+    border: 2px dotted red;
+}
+
+/* Popover Header */
+.popover-title {
+    background-color: #73AD21;
+    color: #FFFFFF;
+    font-size: 28px;
+    text-align:center;
+}
+
+/* Popover Body */
+.popover-content {
+    background-color: #DDDDDD;
+    color: #000099;
+    padding: 25px;
+}
+
+/* Popover Arrow */
+.arrow {
+    border-right-color: red !important;
+}
+td.tissueTable.informationIsPresent{
+    background: #54FF5E;
+;
+}
+
 </style>
 <div id="tableHeaderHolder"></div>
+
 
 
 <div id="BurdenHiddenHere" style="display:none">
@@ -136,14 +166,20 @@
                     getGRSListOfVariantsAjaxUrl:"${createLink(controller:'grs',action: 'getGRSListOfVariantsAjax')}",
                     getLocusZoomFilledPlotUrl: '${createLink(controller:"gene", action:"getLocusZoomFilledPlot")}',
                     fillCredibleSetTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillCredibleSetTable")}',
+                    fillGeneComparisonTableUrl: '${g.createLink(controller: "RegionInfo", action: "fillGeneComparisonTable")}',
                     availableAssayIdsJsonUrl: '${g.createLink(controller: "RegionInfo", action: "availableAssayIdsJson")}',
+                    calculateGeneRankingUrl: '${g.createLink(controller: "RegionInfo", action: "calculateGeneRanking")}',
                     assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},
                     genePageWarning:"${genePageWarning}",
                     regionSpecificVersion:${regionSpecificVersion},
                     epigeneticAssays:"${portalVersionBean.getEpigeneticAssays()}",
                     tissueRegionOverlapMatcher:"${portalVersionBean.getTissueRegionOverlapMatcher().join(",")}".split(","),
-                    tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(",")
+                    tissueRegionOverlapDisplayMatcher:"${portalVersionBean.getTissueRegionOverlapDisplayMatcher().join(",")}".split(","),
+                    exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}",
+                    exposePredictedGeneAssociations:"${portalVersionBean.getExposePredictedGeneAssociations()}",
+                    exposeHiCData:"${portalVersionBean.getExposeHiCData()}",
+                    exposeDynamicUi:"${portalVersionBean.getExposeDynamicUi()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);
@@ -151,6 +187,9 @@
                     mpgSoftware.geneSignalSummaryMethods.getSingleBestPhenotypeAndLaunchInterface,{favoredPhenotype:drivingVariables['defaultPhenotype'],limit:1});
                 mpgSoftware.geneSignalSummaryMethods.refreshTopVariants(mpgSoftware.geneSignalSummaryMethods.displayInterestingPhenotypes,
                     {favoredPhenotype:drivingVariables['defaultPhenotype']});
+                if (${portalVersionBean.getExposePredictedGeneAssociations()}){
+                    mpgSoftware.geneSignalSummaryMethods.selfContainedGeneRanking();
+                }
                 mpgSoftware.geneSignalSummaryMethods.tableInitialization();
             };
 
@@ -168,7 +207,9 @@ return {
 
 $( document ).ready(function() {
     mpgSoftware.geneSignalSummary.initializeSignalSummarySection();
-
+    if ("${portalVersionBean.getExposeHiCData()}"==="1"){
+        mpgSoftware.geneSignalSummaryMethods.hiGlassExperiment(document);
+    }
 });
 
 

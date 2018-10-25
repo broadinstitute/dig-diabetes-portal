@@ -12,6 +12,7 @@
     <r:require modules="boxwhisker"/>
     <r:require modules="burdenTest"/>
     <r:require modules="traitsFilter"/>
+    <r:require modules="higlass"/>
     <r:require modules="gnomad"/>
     %{--Need to call directly or else the images don't come out right--}%
     <link rel="stylesheet" type="text/css"  href="../../css/lib/locuszoom.css">
@@ -228,16 +229,14 @@
 
 
 
-                <g:renderNotBetaFeaturesDisplayedValue>
-                    <g:render template="../templates/geneSignalSummaryTemplate"/>
-                    <g:render template="../templates/variantSearchResultsTemplate" />
-                    <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
-                    <g:render template="../templates/variantSearchResultsTemplate" />
-                </g:renderNotBetaFeaturesDisplayedValue>
+                <g:render template="../templates/geneSignalSummaryTemplate"/>
+                <g:render template="../templates/variantSearchResultsTemplate" />
+                <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>
+                <g:render template="../templates/variantSearchResultsTemplate" />
 
 
                 <div class="accordion" id="accordion2">
-                <g:renderBetaFeaturesDisplayedValue>
+                <g:if test="${portalVersionBean.exposeVariantAndAssociationTable}">
                     <div class="accordion-group">
                         <div class="accordion-heading">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#accordion2"
@@ -253,8 +252,8 @@
                             </div>
                         </div>
                     </div>
-                </g:renderBetaFeaturesDisplayedValue>
-                <g:renderBetaFeaturesDisplayedValue>
+                </g:if>
+                <g:if test="${portalVersionBean.exposeIgvDisplay}">
 
                     <div class="separator"></div>
 
@@ -277,14 +276,8 @@
                         </div>
                     </div>
 
-                </g:renderBetaFeaturesDisplayedValue>
-                   %{----}%
-                    %{--<g:renderBetaFeaturesDisplayedValue>--}%
-                    %{--<div class="separator"></div>--}%
-                    %{--<g:render template="/widgets/gwasRegionSummary"--}%
-                              %{--model="['phenotypeList': phenotypeList, 'regionSpecification': regionSpecification]"/>--}%
-                    %{--</g:renderBetaFeaturesDisplayedValue>--}%
-                    %{----}%
+                </g:if>
+
 
 
                 <script>
@@ -313,33 +306,21 @@
 
 
                     $('#collapseOne').collapse({hide: true})
-                    </script>
+                </script>
 
 
-                        <g:renderBetaFeaturesDisplayedValue>
+                <g:if test="${portalVersionBean.exposeIgvDisplay}">
+                    <div class="separator"></div>
 
-                            <div class="separator"></div>
-
-                            <g:render template="/widgets/locusZoomPlot"/>
-
-                        </g:renderBetaFeaturesDisplayedValue>
-
-                <g:if test="${g.portalTypeString()?.equals('t2d')||
-                                g.portalTypeString()?.equals('mi')}">
-
-                    <g:renderBetaFeaturesDisplayedValue>
-                        <div class="separator"></div>
-
-                        <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
-                                                                               'accordionHeaderClass': 'accordion-heading',
-                                                                               'modifiedTitle': 'Interactive burden test',
-                                                                               'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
-                                                                               'allowExperimentChoice': 0,
-                                                                               'allowPhenotypeChoice' : 1,
-                                                                               'allowStratificationChoice': 1,
-                                                                               'grsVariantSet':'']"/>
-                    </g:renderBetaFeaturesDisplayedValue>
-                    </g:if>
+                    <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
+                                                                           'accordionHeaderClass': 'accordion-heading',
+                                                                           'modifiedTitle': 'Interactive burden test',
+                                                                           'modifiedGaitSummary': 'The Genetic Association Interactive Tool (GAIT) allows you to compute the disease or phenotype burden for this gene, using custom sets of variants, samples, and covariates. In order to protect patient privacy, GAIT will only allow visualization or analysis of data from more than 100 individuals.',
+                                                                           'allowExperimentChoice': 0,
+                                                                           'allowPhenotypeChoice' : 1,
+                                                                           'allowStratificationChoice': 1,
+                                                                           'grsVariantSet':'']"/>
+                </g:if>
 
 
 
@@ -355,24 +336,7 @@
                     </div>
                 </div>
 
-<!--
-                    <div class="separator"></div>
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle  collapsed" data-toggle="collapse" data-parent="#accordion2"
-                               href="#findOutMore">
-                                <h2><strong><g:message code="gene.findoutmore.title" default="find out more"/></strong>
-                                </h2>
-                            </a>
-                        </div>
 
-                        <div id="findOutMore" class="accordion-body collapse">
-                            <div class="accordion-inner">
-                                <g:render template="findOutMore"/>
-                            </div>
-                        </div>
-                    </div>
-                    -->
 
                 </div>
             </div>
