@@ -150,7 +150,7 @@
 <hr>
 <h3><g:message code="informational.GWAS_AFGen_title"></g:message></h3>
 <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
-<p><g:message code="informational.data.download.AFGen2017"></g:message></p>
+<p><g:message code="informational.data.download.AFGen2017"></g:message> | <g:message code="informational.data.download.AFGen2017_README"></g:message></p>
 <p><g:message code="informational.data.overlaps.AFHRC"></g:message> <g:message code="informational.shared.publications.Christophersen_2017_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>, <g:message code="informational.shared.publications.Christophersen_2017_NatGenet"></g:message></p>
 
 
