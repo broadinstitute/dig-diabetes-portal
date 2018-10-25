@@ -1,7 +1,7 @@
 <script class="panel-body" id="ExChip_EPRI_script" type="x-tmpl-mustache">
 
         <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
-<p><g:message code="informational.data.download.EPRI"></g:message></p>
+<p><g:message code="informational.data.download.EPRI"></g:message> | <g:message code="informational.data.download.EPRI_README"></g:message></p>
 
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
