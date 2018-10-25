@@ -49,6 +49,7 @@ class RestServerService {
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
+    private String GET_TEMPORARY_MODS_URL = "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/"
     private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
@@ -2268,18 +2269,34 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     String tissue ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
-            specifyRequestList << "\"gene\":\"${gene}\""
+            specifyRequestList << "gene=${gene}"
         }
         if ((variant) && (variant.length() > 0)) {
-            specifyRequestList << "\"variant\":\"${variant}\""
+            specifyRequestList << "variant=${variant}"
         }
         if ((tissue) && (tissue.length() > 0)) {
-            specifyRequestList << "\"tissue\":\"${tissue}\""
+            specifyRequestList << "tissue=${tissue}"
         }
-        return getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject dataJsonObject = slurper.parseText(rawReturnFromApi)
+        return dataJsonObject
     }
 
 
+
+
+    public JSONArray gatherModsData( String gene ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+
+        String rawReturnFromApi =  getRestCallBase("testcalls/knockout/object?${specifyRequestList.join("&")}", GET_TEMPORARY_MODS_URL)
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        return jsonArray
+    }
 
 
 

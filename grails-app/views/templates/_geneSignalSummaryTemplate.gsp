@@ -610,31 +610,67 @@ span.credSetLevelHere{
         <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
                 <div class="row" style="border: none">
+                    %{--<div class="col-sm-12">--}%
+                        %{--<nav class="nav nav-pills nav-fill">--}%
+                          %{--<a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>--}%
+                          %{--<a class="nav-item nav-link" href="#dynamicVariantHolder">Variant</a>--}%
+                          %{--<a class="nav-item nav-link" href="#dynamicTissueHolder">Tissue</a>--}%
+                          %{--<a class="nav-item nav-link" href="#dynamicPhenotypeHolder">Phenotype</a>--}%
+                        %{--</nav>--}%
+                    %{--</div>--}%
                     <div class="col-sm-12">
-                        <nav class="nav nav-pills nav-fill">
-                          <a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>
-                          <a class="nav-item nav-link" href="#dynamicVariantHolder">Variant</a>
-                          <a class="nav-item nav-link" href="#dynamicTissueHolder">Tissue</a>
-                          <a class="nav-item nav-link" href="#dynamicPhenotypeHolder">Phenotype</a>
-                        </nav>
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#dynamicTissueHolder" role="tab" data-toggle="tab">Tissue</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#dynamicPhenotypeHolder" role="tab" data-toggle="tab">Phenotype</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
-                <div class="row" style="border: none">
-                    <div class="col-sm-12">
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicGeneHolder">
-                            <h3>dynamicGeneHolder</h3>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
+                        <h3>dynamicGeneHolder</h3>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <button id="{{generalizedGoButtonId}}" class="btn btn-primary" type="button" style="float: right; height: 41px; width:45px; border-radius:2px; margin: -1px 15px 0 0;">Go</button>
+                                <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                           <div class="col-sm-6">
+                            </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicVariantHolder">
-                            <h3>dynamicVariantHolder</h3>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="dynamicVariantHolder">
+                        <h3>dynamicVariantHolder</h3>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
+                        <h3>dynamicTissueHolder</h3>
+                    </div>
+                    <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder">
+                        <h3>dynamicPhenotypeHolder</h3>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div id="{{phenoHolder}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                            <div class="col-sm-6">
+                            </div>
                         </div>
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicTissueHolder">
-                            <h3>dynamicTissueHolder</h3>
-                        </div>
-                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicPhenotypeHolder">
-                            <h3>dynamicPhenotypeHolder</h3>
-                        </div>
-                     </div>
-                </div>
+                    </div>
+                 </div>
+
             {{/dynamicUiTab}}
         </div>
     </div>
@@ -1046,8 +1082,12 @@ span.credSetLevelHere{
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants: {{pName}}</a></li>
-                        <li role="presentation" class="active variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels commonVariantChooser">
+                            <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants: {{pName}}</a>
+                        </li>
+                        <li role="presentation" class="active variantTableLabels highImpacVariantChooser">
+                            <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a>
+                        </li>
                     </ul>
                 </div>
             </div>

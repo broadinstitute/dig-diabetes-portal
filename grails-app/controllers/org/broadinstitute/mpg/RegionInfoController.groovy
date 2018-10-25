@@ -467,6 +467,63 @@ class RegionInfoController {
 
 
 
+    def retrieveEqtlData() {
+        String gene = ""
+        String tissue = ""
+        String variant = ""
+        boolean looksOkay = true
+        JSONObject jsonReturn
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variant = params.variant
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEqtlData( gene,  variant, tissue)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString);
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+    def retrieveModData() {
+        String gene = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherModsData( gene )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  [slurper.parseText(proposedJsonString)] as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
 
 
 }

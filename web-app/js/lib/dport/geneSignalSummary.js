@@ -1919,7 +1919,11 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             chromatinConformationIndicator.push(1);
         }
         if (additionalParameters.exposeDynamicUi === "1"){
-            exposeDynamicUiIndicator.push(1);
+            exposeDynamicUiIndicator.push(
+                {   generalizedInputId:additionalParameters.generalizedInputId,
+                    generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
+                    phenoHolder:additionalParameters.phenoHolder }
+            );
         }
         if (additionalParameters.exposeGeneComparisonTable === "1"){
             exposeGeneComparisonIndicator.push(1);
@@ -1945,6 +1949,74 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
 }
 
+
+    var updateFromMod=function(inParms,additionalParameters){
+        var promiseArray = [];
+        var rememberInParmsGene = inParms.gene;
+        var rememberRetrieveModDataUrl1 = additionalParameters.retrieveModDataUrl;
+        var rememberPhenoHolder = additionalParameters.phenoHolder;
+        var phenoArray = [];
+        promiseArray.push(
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: rememberRetrieveModDataUrl1,
+                data: { gene: rememberInParmsGene },
+                async: true
+            }).done(function (data, textStatus, jqXHR) {
+
+                _.forEach(data,function(oneRec){
+                    if (!phenoArray.includes(oneRec.Term)){
+                        phenoArray.push(oneRec.Term);
+                    };
+                });
+
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                loading.hide();
+                core.errorReporter(jqXHR, errorThrown)
+            })
+        );
+        $.when.apply($, promiseArray).then(function(allCalls) {
+            $('#' + rememberPhenoHolder).empty();
+            _.forEach(_.sortBy(_.uniq(phenoArray)),function(onePhenotypeName) {
+                $('#' + rememberPhenoHolder).append(onePhenotypeName);
+            });
+
+        }, function(e) {
+            console.log("Ajax call failed");
+        });
+
+    };
+
+
+
+
+    var modifyScreenFields = function (data, additionalParameters) {
+        function updateDynamicUiInResponseToGene(item, additionalParameters) {
+            updateFromMod(item, additionalParameters);
+        }
+        $('#'+additionalParameters.generalizedInputId).typeahead({
+            source: function (query, process) {
+                $.get(additionalParameters.generalizedTypeaheadUrl, {query: query}, function (data) {
+                    process(data, additionalParameters);
+                })
+            },
+            afterSelect: function(selection) {
+                updateDynamicUiInResponseToGene({gene:selection}, additionalParameters);
+            }
+        });
+
+        /***
+         * respond to end-of-search-line button
+         */
+        $('#'+additionalParameters.generalizedGoButtonId).on('click', function () {
+            var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
+            somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+            if (somethingSymbol) {
+                updateDynamicUiInResponseToGene({gene:somethingSymbol}, additionalParameters)
+            }
+        });
+    };
 
 
 
@@ -2082,7 +2154,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     ));
         }
 
-
+        modifyScreenFields({},additionalParameters);
 
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
