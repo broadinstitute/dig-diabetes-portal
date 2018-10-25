@@ -129,13 +129,14 @@ if (grails.config.locations.isEmpty()){
 }
 
 digdevlocalServer = new ServerBean("KB-dev-localhost", "http://localhost:8090/dccservices/")
-digAWSKBV2prodServer = new ServerBean("KB-prod-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+digdevlocalFederatedServer = new ServerBean("KB-dev-localhost-federated", "http://localhost:8090/dccservices/distributed/")
 digAWS02KBV2prodServer = new ServerBean("KB-stage-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8090/dccservices/")
-federatedAwsProdKBV2Server = new ServerBean("KB-prod-fed-2016-aws", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
 federatedAwsStageKBV2Server = new ServerBean("KB-stage-fed-2016-aws", "http://ec2-52-207-40-241.compute-1.amazonaws.com:8085/dccservices/distributed/")
 toddTestServer = new ServerBean("KB-ToddTest-Broad","http://dig-prod.broadinstitute.org:8087/todd/gs/")
 digdevmarcin = new ServerBean("KB-dev-Broad", "http://dig-api-dev.broadinstitute.org/dev/gs/")
 digawsdevnewKB = new ServerBean("KB-dev-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/")
+digawsdevWorkflowKB = new ServerBean("KB-dev-2017-aws-8089", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8089/dccservices/")
+digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-228-247-254.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsdevnewKB_fed = new ServerBean("KB-dev-fed-2017-aws", "http://ec2-34-229-106-174.compute-1.amazonaws.com:8085/dccservices/distributed/")
 digawsqanewKB = new ServerBean("KB-qa-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
 digawsqanewKB_fed = new ServerBean("KB-qa-fed-2017-aws", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
@@ -143,28 +144,42 @@ digawsprodmiKB = new ServerBean("KB-prod-mi-2017-aws", "http://ec2-52-55-251-60.
 digawsprodstrokeKB = new ServerBean("KB-prod-stroke-2017-aws", "http://ec2-34-207-249-213.compute-1.amazonaws.com:8090/dccservices/")
 digawsdemoibdKB = new ServerBean("KB-ibd-demo-2017-aws", "http://ec2-54-90-219-234.compute-1.amazonaws.com:8090/dccservices/")
 
+
+// I'm not sure whether the following seven lines are necessary or not
+ebiKB1 = new ServerBean("EBI prod KB1 - no burden", "http://www.ebi.ac.uk/ega/t2d/dig-genome-store/gs/")
+ebiKB2 = new ServerBean("EBI dev KB2", "http://www.ebi.ac.uk/ega/ampt2d/dev/dig-genome-services/")
+digawsqanewKB = new ServerBean("QA Broad non fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8090/dccservices/")
+digawsqanewKB_fed = new ServerBean("QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8085/dccservices/distributed/")
+digawsqanewKB_fed_dedicated = new ServerBean("Dedicated EBI QA fed KB", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
+digAWSKBV2prodServer = new ServerBean("Prod Broad non fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8090/dccservices/")
+federatedAwsProdKBV2Server = new ServerBean("Prod fed KB", "http://ec2-52-90-97-40.compute-1.amazonaws.com:8085/dccservices/distributed/")
+
 // KB for the test federated portal changes
 digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Using EBI KB2", "http://ec2-34-237-63-26.compute-1.amazonaws.com:8082/dccservices/distributed/")
 
+
 // this will be your default
-defaultRestServer = digawsqanewKB_fed
+defaultRestServer = digawsqanewKB
+//defaultRestServer = digawsdevWorkflowKB
+
 
 getRestServerList = [
         digdevlocalServer,
+        digdevlocalFederatedServer,
         digAWSKBV2prodServer,
-        digAWS02KBV2prodServer,
         federatedAwsProdKBV2Server,
-        federatedAwsStageKBV2Server,
-        toddTestServer,
-        digdevmarcin,
         digawsdevnewKB,
-        digawsdevnewKB_fed,
         digawsqanewKB,
+        digawsdevWorkflowKB,
         digawsqanewKB_fed,
+        digawsqanewKB_fed_dedicated,
+        ebiKB1,
+        ebiKB2,
         digawsqanewKB_fed_dedicated_EBIv2,
         digawsprodmiKB,
         digawsprodstrokeKB,
         digawsdemoibdKB
+//>>>>>>> phewasForest
 ]
 
 
@@ -294,12 +309,14 @@ environments {
 
 //        grails.serverURL = "http://stroke-qasrvr-1.us-east-1.elasticbeanstalk.com"
 
+//       grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://www.type2diabetesgenetics.org"
 //        grails.serverURL = "http://variant2function.org"
+
 //        grails.serverURL = "http://demo52k.us-east-1.elasticbeanstalk.com"
 //      grails.serverURL = "http://ci-env.elasticbeanstalk.com"
-//      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
-     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
+      grails.serverURL = "http://type2diabetes-dev.elasticbeanstalk.com"
+//     grails.serverURL = "http://type2diabetesgen-qasrvr.elasticbeanstalk.com"
 
 //      grails.serverURL = "http://ec2-54-175-211-21.compute-1.amazonaws.com/"              // temp for now, will house new prdsrv1 URL
 
@@ -321,6 +338,7 @@ environments {
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
+//        grails.serverURL = "http://sleepdisordergenetics.org"                                  // Sleep portal
 //
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
@@ -583,7 +601,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                         "ExSeq_13k_mdv23",
                                                 "images/t2d_front_logo.svg",
                                                 "portal.header.tagline",
-                                        ["English", "Spanish"],
+                                                "portal.header.title.short",
+                                                ["English", "Spanish"],
                                                 ["SLC30A8"],
                                                 ["rs13266634"],
                                                 ["chr9:21,940,000-22,190,000"],
@@ -595,17 +614,26 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "gene.genePage.warning",
                                                 "",
                                                 '5010306206573083521',
-                                                1,
-                                                0,
-                                                0,
-                                                1,
-                                                0,
-                                                1,0,1,
-                                                0,
-                                                0,
-                                                0,
-                                                0
-
+                                                1, // do we have parent level associations to show
+                                                0, // Do we have gene level associations to show?
+                                                1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
+                                                1, // no longer used?
+                                                0, // if true then entering a gene takes you to a region page around that chain
+                                                1, // show the pheWAS plot
+                                                1, // show the forest pheWAS plot
+                                                1, // should we show the variant Association section on the variant info page
+                                                0, // expose the green boxes on the variant info page
+                                                0, // expose a secondary table and the credible set page built around genes, not just variants
+                                                0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
+                                                0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
+                                                0,  // access UC San Diego data remotely? I'm not sure if this works anymore
+                                                0, // LEDGE tab on the gene page
+                                                0, // Hi-C tab on the gene page
+                                                0, // expose dynamic UI
+                                                0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                                0, // expose the old school variant and association table.  Potentially useful for debugging
+                                                0, // expose the IGV interface in its own accordion section
+                                                0  // expose an accordion section with the burden test on the gene page
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
@@ -621,9 +649,10 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "ExSeq_13k_mdv23",
                                           "images/stroke/front_stroke_logo_2018.svg",
                                           "portal.stroke.header.tagline",
+                                          "portal.stroke.header.title.short",
                                           [],
                                           ["HDAC9"],
-                                          ["rs2984613","APOE-e2"],
+                                          ["rs2984613"],
                                           ["chr7:18,100,000-18,300,000"],
                                           "images/stroke/front_stroke_bg_2018.png",
                                           "stroke.pheno.help.text",
@@ -638,11 +667,17 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          1,0,1,
+                                          1,1,1,
+                                          0,
                                           0,
                                           0,
                                             0,
-                                            0
+                                            0,0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -658,12 +693,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                           "GWAS_CARDIoGRAM_mdv91",
                                           "images/mi/front_mi_logo_2018.svg",
                                           "portal.mi.header.tagline",
+                                          "portal.mi.header.title.short",
                                           [],
                                           ["LPA"],
                                           ["rs10965215"],
                                           ["chr9:20,940,000-21,800,000"],
                                           "images/mi/front_mi_banner_2018.png",
-                                  "",
+                                        "",
                                           "images/mi/mi_header_logo_2017.svg",
                                           "images/mi/menu_band_2017_mi.png",
                                           "false",
@@ -675,33 +711,42 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          1,0,1,
+                                          1,1,1,
                                           0,
                                           0,
                                           0,
-                                          0
+                                          0,
+                                          0,
+                                          0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
                                           "Variant to Function",
                                                           "mdv80",
-                                                          "IBD",
+                                                          "CD",// another option would be "IBD"
                                                             "GWAS_IBDGenomics_eu_mdv80",
-                                                          ["DNase"],
-                                                          ["DNase"],
+                                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
+                                                          ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
                                                           ["E071","E106","E088","E085"],
                                                           ["INFLAMMATORY BOWEL"], // most important phenotype group name
                                                           [],
-                                                          "[1,2]",
+//                                          "[1,2,3,4,5,6,7,8,9,10,11,12,13,14]",
+                                          "[1,2,4,5,6,9,10,11,12,13,14,15,16,17,18]",
                                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/ibd/ibd_front_logo_WOnT2.png",
                                           "portal.ibd.header.tagline",
+                                          "portal.ibd.header.title",
                                           [],
                                           ["IL23R"],
                                           ["6_31628397_T_A"],
                                           ["chr1:67,500,000-67,800,000"],
                                           "images/ibd/front_ibd_bg_2018.png",
-                                  "",
+                                        "",
                                          // "images/ibd/ibd_header_logo.svg",
                                           "images/ibd/v2f-little-logo.png",
                                           "images/ibd/ibd_menu_wrapper_bg.png",
@@ -714,11 +759,18 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           1,
-                                          0,0,0,
+                                          1,1,0,
                                           1,
                                           1,
                                           0,
-                                          0
+                                          0,
+                                          0,
+                                          1,1, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -734,6 +786,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "GWAS_IBDGenomics_eu_mdv80",
                                           "images/epilepsy/front_epilepsy_logo_2018.svg",
                                           "portal.epilepsy.header.tagline",
+                                          "portal.epilepsy.header.title",
                                           [],
                                           ["CDKL5"],
                                           [],
@@ -755,7 +808,14 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           0,
                                           0,
-                                          0
+                                          0,
+                                          0,
+                                          0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -771,6 +831,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "GWAS_UKBB_mdv110",
                                           "images/sleep/front_sleep_logo_2018.svg",
                                           "portal.sleep.header.tagline",
+                                          "portal.sleep.header.title.short",
                                           [],
                                           ["PAX8"],
                                           ["rs62158211"],
@@ -788,10 +849,16 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          1,0,1,
+                                          1,1,1,
                                           0,
                                           0,
                                           0,
-                                          0
+                                          0,
+                                          0,0,0, // Hi-C tab on the gene page
+                                          0,  // expose dynamic UI
+                                          0, // expose the data set hierarchy in the sunburst visualization on the data page
+                                          0, // expose the old school variant and association table.  Potentially useful for debugging
+                                          0, // expose the IGV interface in its own accordion section
+                                          0  // expose an accordion section with the burden test on the gene page
                                   )
 ]

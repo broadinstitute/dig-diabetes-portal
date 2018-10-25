@@ -76,7 +76,7 @@ class GeneController {
      */
     def geneInfo() {
         String locale = RequestContextUtils.getLocale(request)
-        String geneToStartWith = params.id
+        String geneToStartWith = params.id?.trim()
         Long startExtent=0L
         Long endExtent=0L
         String chromosomeNumber=params.chromosomeNumber
@@ -569,6 +569,17 @@ class GeneController {
         int startInteger;
         int endInteger;
         String errorJson = "{\"data\": {}, \"error\": true}";
+
+        // if we are not given a data set, then default to the data set with the larger sample size for this phenotype
+        if (dataSet == "undefined"){
+            String sampleGroupName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
+            if ((sampleGroupName !=  null ) && (sampleGroupName.size () > 0)){
+                dataSet = sampleGroupName
+            }else {
+                log.error("we received a request for ${phenotype} with no specified data set and we were unable to find one. Expect failure soon.")
+            }
+        }
+
 
         // get the covariate variants
         List<String> conditionVariants

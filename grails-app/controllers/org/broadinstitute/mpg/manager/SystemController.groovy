@@ -1,10 +1,12 @@
 package org.broadinstitute.mpg.manager
 
+import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import org.broadinstitute.mpg.RestServerService
 import org.broadinstitute.mpg.SharedToolsService
 import org.broadinstitute.mpg.WidgetService
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
@@ -46,6 +48,11 @@ class SystemController {
     }
 
 
+    def retrievePortalVersionBean = {
+
+    }
+
+
     def getPortalVersionList = {
         JsonSlurper slurper = new JsonSlurper()
         JSONArray portalVersionListJsonArray = slurper.parseText(restServerService?.getPortalVersionBeanListAsJson())
@@ -53,6 +60,75 @@ class SystemController {
             [portalVersionList:portalVersionListJsonArray]
         }
     }
+
+
+
+    def getPortalVersionBeanDetails = {
+        def slurper = new JsonSlurper()
+
+        String proposedJsonString = restServerService.retrieveBeanForCurrentPortal().toJsonString()
+        JSONObject jsonReturn =  slurper.parseText(proposedJsonString);
+
+        render(status: 200, contentType: "application/json") {["jsonObject":jsonReturn,"jsonString":proposedJsonString]}
+        return
+
+    }
+
+
+
+
+    String firstCharToLowerCase(String str) {
+
+        if(str == null || str.length() == 0)
+            return "";
+
+        if(str.length() == 1)
+            return str.toLowerCase();
+
+        char[] chArr = str.toCharArray();
+        chArr[0] = Character.toLowerCase(chArr[0]);
+
+        return new String(chArr);
+    }
+
+
+    def setPortalVersionBeanDetails = {
+        String portaVersionFieldsDef = params.portalBeanInformation
+        def slurper = new JsonSlurper()
+        JSONObject jsonObject =  slurper.parseText(portaVersionFieldsDef);
+        PortalVersionBean portalVersionBean = restServerService.retrieveBeanForCurrentPortal()
+        LinkedHashMap propertiesForPortalVersionBean = portalVersionBean.getProperties()
+        Iterator<String> keys = jsonObject.keys()
+        while(keys.hasNext()){
+            String key = keys.next()
+            Object value = jsonObject[key]
+            String property = firstCharToLowerCase(key)
+            if (propertiesForPortalVersionBean.containsKey(property)){
+                if (value instanceof ArrayList){
+                    List<String> listOfElements = []
+                    for (String element in (value as ArrayList)){
+                        listOfElements << element
+                    }
+                    portalVersionBean.@"$property" = listOfElements
+                } else if (value instanceof String){
+                    portalVersionBean.@"$property" = value as String
+                } else if (value instanceof Integer){
+                    portalVersionBean.@"$property" = value as Integer
+                }
+            }
+         }
+
+
+
+
+        render(status: 200, contentType: "application/json") {["jsonObject":jsonObject]}
+        return
+    }
+
+
+
+
+
 
 
     def determineVersion = {
@@ -302,112 +378,6 @@ class SystemController {
     }
 
 
-    def updateRestServer() {
-        String restServer = params.datatype
-        String currentServer =  restServerService.whatIsMyCurrentServer()
-        if  (restServer == 'prodloadbalancedserver')  {
-            if (!(currentServer == 'prodloadbalancedserver')) {
-                restServerService.goWithTheProdLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'qaloadbalancedserver')  {
-            if (!(currentServer == 'qaloadbalancedserver')) {
-                restServerService.goWithTheQaLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'dev01server')  {
-            if (!(currentServer == 'dev01server')) {
-                restServerService.goWithTheDev01Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'dev02server')  {
-            if (!(currentServer == 'dev02server')) {
-                restServerService.goWithTheDev02Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'prod01server')  {
-            if (!(currentServer == 'prod01server')) {
-                restServerService.goWithTheProd01Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }  else  if (restServer == 'prod02server')  {
-            if (!(currentServer == 'prod02server')) {
-                restServerService.goWithTheProd02Server()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'devloadbalancedserver')  {
-            if (!(currentServer == 'devloadbalancedserver')) {
-                restServerService.goWithTheDevLoadBalancedServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache."
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'aws01restserver')  {
-            if (!(currentServer == 'aws01restserver')) {
-                restServerService.goWithTheAws01RestServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'aws02restserver')  {
-            if (!(currentServer == 'aws02restserver')) {
-                restServerService.goWithTheAws02RestServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        } else  if (restServer == 'aws02newcoderestserver')  {
-            if (!(currentServer == 'aws02newcoderestserver')) {
-                restServerService.goWithTheAws02NewCodeRestServer()
-                flash.message = "You are now using the ${restServer} new KB 2.0 code server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'aws01newcoderestserver')  {
-            if (!(currentServer == 'aws01newcoderestserver')) {
-                restServerService.goWithTheAws01NewCodeRestServer()
-                flash.message = "You are now using the ${restServer} new KB 2.0 code server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'toddServer')  {
-            if (!(currentServer == 'toddServer')) {
-                restServerService.goWithToddServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'prodserverbroad')  {
-            if (!(currentServer == 'prodserverbroad')) {
-                restServerService.goWithProdLoadBalancedBroadServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }else  if (restServer == 'localserver')  {
-            if (!(currentServer == 'localserver')) {
-                restServerService.goWithLocalServer()
-                flash.message = "You are now using the ${restServer} server, AND you have scheduled an override to the metadata cache.!"
-            }  else {
-                flash.message = "But you were already using the ${currentServer} server!"
-            }
-        }
-        params.datatype = "forceIt"
-        forward(action: "forceMetadataCacheUpdate")
-        //forward(action: "systemManager")
-    }
 
     def switchSigmaT2d(){
        // String restServer = params

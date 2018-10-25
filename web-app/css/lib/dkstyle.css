@@ -192,13 +192,15 @@ table.dk-search-result td.credcell  {
 table.dk-search-result td.credcellpval  {
 	text-align: center;
 	vertical-align: middle;
+	border:0 ;
 	border-bottom:double 1px #000 !important;
 }
 table.dk-search-result td.credcellmotif  {;
 	background: #ffffff;
+	outline: 0px solid #000;
 	border-left:solid 1px #000 !important;
 	border-right:solid 1px #000 !important;
-	border-bottom:double 1px #000 !important;
+	border:0 ;	border-bottom:double 1px #000 !important;
 }
 table.dk-search-result td.credcellmotif.present  {
 	text-align: center;
@@ -885,6 +887,8 @@ div.boxWhiskerPlot svg.box g.boxHolder {
 div.dk-linkout-btn {
 	margin-right: 5px;
 	background-size: 25px 25px;
+	padding: 0;
+	border: none;
 	padding-left: 3px;
 	border-radius: 3px;
 }

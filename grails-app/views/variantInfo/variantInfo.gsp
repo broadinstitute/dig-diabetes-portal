@@ -38,12 +38,13 @@
 </head>
 
 <body>
+
+<g:render template="/templates/variantAssociationStatisticsTemplate"/>
+
 <div id="rSpinner" class="dk-loading-wheel center-block" style="display:none">
     <img src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
-<style>
 
-</style>
 
 <script>
 
@@ -61,6 +62,24 @@
     // sometimes the headers weren't fully loaded before the initializePage function was called,
     // so don't run it until the DOM is ready
     $(document).ready(function () {
+        var configDetails = {  'exposeGreenBoxes':'${portalVersionBean.getExposeGreenBoxes()}',
+            'exposeForestPlot': '${portalVersionBean.getExposeForestPlot()}',
+            'exposePhewasModule':'${portalVersionBean.getExposePhewasModule()}'};
+        mpgSoftware.variantInfo.storeVarInfoData(configDetails);
+        mpgSoftware.variantInfo.retrieveVariantPhenotypeData(phenotypeDatasetMapping,
+                variantId,
+                variantAssociationStrings,
+                '${createLink(controller:'variantInfo',action: 'variantDescriptiveStatistics')}',
+                '${g.defaultPhenotype()}');
+
+
+        mpgSoftware.associationStatistics.buildDynamicPage(configDetails);
+
+
+
+
+
+
         var loading = $('#spinner').show();
         $.ajax({
             cache: false,
@@ -221,24 +240,6 @@
                         <g:render template="howCommonIsVariant"/>
 
                     </div>
-
-                    <g:renderBetaFeaturesDisplayedValue>
-                    <div class="separator"></div>
-
-                    <div class="accordion-group">
-                    <div class="accordion-heading">
-                    <a class="accordion-toggle  collapsed" data-toggle="collapse"
-                    data-parent="#accordionVariant"
-                    href="#collapseCarrierStatusImpact">
-                    <h2><strong><g:message code="variant.carrierStatusImpact.title" default="How many carriers in the data set"/></strong></h2>
-                    </a>
-                    </div>
-
-                    <g:render template="carrierStatusImpact"/>
-
-                    </div>
-
-                    </g:renderBetaFeaturesDisplayedValue>
 
                     <div class="separator"></div>
 

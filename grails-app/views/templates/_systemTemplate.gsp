@@ -13,9 +13,9 @@
         {{/portalVersionList}}
         {{#portalVersionList}}
             <div class="row clearfix">
-                <div class="col-md-3"> <span class="elementForVersionTable">{{portalType}}</span></div>
-                <div class="col-md-3"> <span class="elementForVersionTable">{{portalDescription}}</span></div>
-                <div class="col-md-2"><input type="text" name="mdvName_{{portalType}}" Value="{{mdvName}}" style="width:100%"></div>
+                <div class="col-md-3"> <span class="elementForVersionTable">{{PortalType}}</span></div>
+                <div class="col-md-3"> <span class="elementForVersionTable">{{PortalDescription}}</span></div>
+                <div class="col-md-2"><input type="text" name="mdvName_{{PortalType}}" Value="{{MdvName}}" style="width:100%"></div>
                 <div class="col-md-4"></div>
             </div>
        {{/portalVersionList}}

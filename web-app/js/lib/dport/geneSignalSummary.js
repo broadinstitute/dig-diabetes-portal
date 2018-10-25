@@ -45,6 +45,225 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         );
 
     };
+
+
+
+ var stolenConfigTest =   {
+     editable: true,
+     zoomFixed: false,
+     trackSourceServers: [
+         "//higlass.io/api/v1"
+     ],
+     exportViewUrl: "/api/v1/viewconfs",
+     views: [
+         {
+             uid: "aa",
+             initialXDomain: [
+                 1848402743.1816628,
+                 2477898350.3577456
+             ],
+             autocompleteSource: "/api/v1/suggest/?d=OHJakQICQD6gTD7skx4EWA&",
+             genomePositionSearchBox: {
+                 autocompleteServer: "//higlass.io/api/v1",
+                 autocompleteId: "OHJakQICQD6gTD7skx4EWA",
+                 chromInfoServer: "//higlass.io/api/v1",
+                 chromInfoId: "hg19",
+                 visible: true
+             },
+             chromInfoPath: "//s3.amazonaws.com/pkerp/data/hg19/chromSizes.tsv",
+             tracks: {
+                 top: [
+                     {
+                         type: "horizontal-gene-annotations",
+                         height: 60,
+                         tilesetUid: "OHJakQICQD6gTD7skx4EWA",
+                         server: "//higlass.io/api/v1",
+                         position: "top",
+                         uid: "OHJakQICQD6gTD7skx4EWA",
+                         name: "Gene Annotations (hg19)",
+                         options: {
+                             name: "Gene Annotations (hg19)",
+                             labelColor: "black",
+                             labelPosition: "hidden",
+                             plusStrandColor: "blue",
+                             minusStrandColor: "red",
+                             trackBorderWidth: 0,
+                             trackBorderColor: "black",
+                             showMousePosition: false,
+                             mousePositionColor: "#999999"
+                         },
+                         header: ""
+                     },
+                     {
+                         chromInfoPath: "//s3.amazonaws.com/pkerp/data/hg19/chromSizes.tsv",
+                         type: "horizontal-chromosome-labels",
+                         position: "top",
+                         name: "Chromosome Labels (hg19)",
+                         height: 30,
+                         uid: "X4e_1DKiQHmyghDa6lLMVA",
+                         options: {
+                             showMousePosition: false,
+                             mousePositionColor: "#999999"
+                         }
+                     }
+                 ],
+                 left: [
+                     {
+                         type: "vertical-gene-annotations",
+                         width: 60,
+                         tilesetUid: "OHJakQICQD6gTD7skx4EWA",
+                         server: "//higlass.io/api/v1",
+                         position: "left",
+                         name: "Gene Annotations (hg19)",
+                         options: {
+                             labelPosition: "bottomRight",
+                             name: "Gene Annotations (hg19)",
+                             labelColor: "black",
+                             plusStrandColor: "blue",
+                             minusStrandColor: "red",
+                             trackBorderWidth: 0,
+                             trackBorderColor: "black",
+                             showMousePosition: false,
+                             mousePositionColor: "#999999"
+                         },
+                         uid: "dqBTMH78Rn6DeSyDBoAEXw",
+                         header: ""
+                     },
+                     {
+                         chromInfoPath: "//s3.amazonaws.com/pkerp/data/hg19/chromSizes.tsv",
+                         type: "vertical-chromosome-labels",
+                         position: "left",
+                         name: "Chromosome Labels (hg19)",
+                         width: 30,
+                         uid: "RHdQK4IRQ7yJeDmKWb7Pcg",
+                         options: {
+                             showMousePosition: false,
+                             mousePositionColor: "#999999"
+                         }
+                     }
+                 ],
+                 center: [
+                     {
+                         uid: "c1",
+                         type: "combined",
+                         height: 200,
+                         contents: [
+                             {
+                                 //server: "//higlass.io/api/v1",
+                                 //tilesetUid: "CQMd6V_cRw6iCI_-Unl3PQ",
+                                  server: "//34.237.63.26:8888/api/v1",
+                                  tilesetUid: "pancreas-demo-3",
+                                 type: "heatmap",
+                                 //type: "2d-rectangle-domains",
+                                 // type: "horizontal-2d-rectangle-domains",
+                                 position: "center",
+                                 options: {
+                                     maxZoom: null,
+                                     labelPosition: "bottomRight",
+                                     name: "Gaulton et al., Pancreatic islet",
+                                     backgroundColor: "#eeeeee",
+                                     colorRange: [
+                                         "white",
+                                         "rgba(245,166,35,1.0)",
+                                         "rgba(208,2,27,1.0)",
+                                         "black"
+                                     ],
+                                     colorbarPosition: "topRight",
+                                     trackBorderWidth: 0,
+                                     trackBorderColor: "black",
+                                     heatmapValueScaling: "log",
+                                     showMousePosition: false,
+                                     mousePositionColor: "#999999",
+                                     showTooltip: false,
+                                     scaleStartPercent: "0.00000",
+                                     scaleEndPercent: "1.00000"
+                                 },
+                                 uid: "GjuZed1ySGW1IzZZqFB9BA",
+                                 name: "Gaulton et al., Pancreatic islet, 5kb",
+                                 transforms: [
+                                     {
+                                         name: "ICE",
+                                         value: "weight"
+                                     }
+                                 ]
+                             }
+                         ],
+                         position: "center",
+                         options: { }
+                     }
+                 ],
+                 right: [ ],
+                 bottom: [ ],
+                 whole: [ ],
+                 gallery: [ ]
+             },
+             layout: {
+                 w: 12,
+                 h: 12,
+                 x: 0,
+                 y: 0,
+                 i: "aa",
+                 moved: false,
+                 static: false
+             },
+             initialYDomain: [
+                 1192488771.5601773,
+                 1531564907.792705
+             ]
+         }
+     ],
+     zoomLocks: {
+         locksByViewUid: { },
+         locksDict: { }
+     },
+     locationLocks: {
+         locksByViewUid: { },
+         locksDict: { }
+     },
+     valueScaleLocks: {
+         locksByViewUid: { },
+         locksDict: { }
+     }
+ };
+
+
+
+    var hiGlassExperiment = function (d){
+        var hgv = hglib.createHgComponent(
+        ($('#fooyoo')[0]),
+            stolenConfigTest,
+            { bounded: true,
+              onViewConfLoaded: zoomTo }
+        );
+
+        function zoomTo() {
+            var drivingVars = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
+            var chrom=drivingVars.geneChromosome.substr(3);
+            hgv.zoomTo(chrom, drivingVars.geneExtentBegin, drivingVars.geneExtentEnd,drivingVars.geneExtentBegin,drivingVars.geneExtentEnd, 1000);
+          //  hgv.zoomTo("aa", 1000000,2000000,1000000,2000000, 1000);
+        }
+
+
+
+
+        // const baseUrl = 'http://higlass.io/api/v1/viewconfs/';
+        // //const baseUrl = 'http://34.237.63.26:8888/api/v1/viewconfs/';
+        // var hgv = hglib.createHgComponent(
+        //     ($('#fooyoo')[0]),
+        //     baseUrl + '?d=KeXl4zLsTP6IKZGpFckuNA',
+        //     //baseUrl + '?d=hitile-demo',
+        //     {
+        //         bounded: true,
+        //         onViewConfLoaded: zoomTo
+        //     }
+        // );
+        //
+        // function zoomTo() {
+        //     hgv.zoomTo("aa", 1000000,2000000,1000000,2000000, 1000);
+        // }
+    }
+
+
     var commonTableRedraw = function (){
         commonTable.draw();
     }
@@ -822,7 +1041,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var phenoName = $('.phenotypeStrength.chosenPhenotype').text();
         launchUpdateSignalSummaryBasedOnPhenotype(phenocode,ds,phenoName);
     };
+
     var displayInterestingPhenotypes = function (data,params) {
+        var drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
         var renderData = buildRenderData(data, 0.05, params);
         var signalLevel = assessSignalSignificance(renderData);
         var acceptableDatasetObjs =_.filter(data.datasetToChoose,function(o){return o.suitableForDefaultDisplay==='false'});
@@ -1008,9 +1229,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         callingObj ["geneExtentBegin"] =params.geneExtentBegin;
         callingObj ["geneExtentEnd"] = params.geneExtentEnd;
 
-
-
-                $.ajax({
+        $.ajax({
             cache: false,
             type: "post",
             url: params.retrieveTopVariantsAcrossSgsUrl,
@@ -1026,6 +1245,166 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         });
 
     };
+
+
+
+    var selfContainedGeneRanking = function(){
+        var drivingVariables = mpgSoftware.geneSignalSummaryMethods.getSignalSummarySectionVariables();
+        var ldsrWeigth = $('input.ldsrParameter').val();
+        var phenotypeWeigth = $('input.phenotypeParameter').val();
+        var phenotypeRestriction = $('input.phenotypeLimitationParameter').val();
+        var startPosition = $('input.startPosition').val();
+        var endPosition = $('input.endPosition').val();
+        var adjustedStartingPosition = (startPosition) ? startPosition : drivingVariables.geneExtentBegin;
+        var adjustedEndingPosition = (endPosition) ? endPosition : drivingVariables.geneExtentEnd;
+        var phenotypeCoefficientsHolder = $('input.genePrioritizationPhenotype.coefficient');
+        var phenotypeCoefficientMap = [];
+        _.forEach(phenotypeCoefficientsHolder,function (phenotypeCoefficientHolder){
+            var phenotypeCoefficientDomObject = $(phenotypeCoefficientHolder);
+            var phenotypeName = phenotypeCoefficientDomObject.attr('phenotype');
+            var phenotypeCoefficient = phenotypeCoefficientDomObject.val();
+            if (phenotypeName){
+                phenotypeCoefficientMap.push({'phenotypeName':phenotypeName,'phenotypeCoefficient':phenotypeCoefficient});
+            }
+        });
+        var tissueCheckboxs = [];
+        var tissueCheckboxHolder = $('input.genePrioritizationTissue:checked');
+        _.forEach(tissueCheckboxHolder,function (tissueCheckbox){
+            tissueCheckboxs.push($(tissueCheckbox).val());
+        });
+      //  var defaultPhenotypeWeightingScheme = $("input[name='defaultPhenotypeWeighting']:checked").val();
+
+
+        mpgSoftware.geneSignalSummaryMethods.processGeneRankingInfo(mpgSoftware.geneSignalSummaryMethods.processGeneRankingData,
+            {calculateGeneRankingUrl:drivingVariables.calculateGeneRankingUrl,
+                geneExtentBegin:adjustedStartingPosition,
+                geneExtentEnd:adjustedEndingPosition,
+                geneChromosome:(drivingVariables.geneChromosome.indexOf('chr')>=0)?drivingVariables.geneChromosome.substring(3):drivingVariables.geneChromosome,
+                maximumAssociation:phenotypeWeigth,
+                minimumWeight:ldsrWeigth,
+                phenotype: phenotypeRestriction,
+                phenotypeCoefficients:phenotypeCoefficientMap,
+                tissueToInclude:tissueCheckboxs});
+    }
+
+
+
+    var processGeneRankingData = function (data,params) {
+        data.geneInformation = _.map(data.geneInformation.sort(function(a,b){return b.combinedWeight-a.combinedWeight}),function(o){o.combinedWeight=UTILS.realNumberFormatter(o.combinedWeight);return o;})
+        _.forEach(data.geneInformation,function(oneGene){
+            oneGene.phenoRecs=oneGene.phenoRecs.sort(function(a,b){return b.phenotypeValue-a.phenotypeValue});
+            _.forEach(oneGene.phenoRecs,function(onePheno){
+                onePheno['phenotypeValue'] = UTILS.realNumberFormatter(onePheno.phenotypeValue);
+            });
+        });
+        $("#rankedGeneTableGoesHere").empty().append(Mustache.render($('#rankedGeneTable')[0].innerHTML, data));
+        $('button.resetPhenotypeCoefficientsBySignificant').data('significanceLevel',data.phenotypePValueMap);
+        $("button.dropdown-toggle").dropdown();
+        $('a.genePrioritizationPhenotype').tooltip({ overflow: 'auto' });
+    };
+
+
+
+    var processGeneRankingDataAndResetPhenoCoefficients = function (data,params) {
+        processGeneRankingData(data,params);
+        resetPhenotypeCoefficientsBySignificance($('button.resetPhenotypeCoefficientsBySignificant'));
+
+    };
+
+
+
+
+
+    var resetPhenotypeCoefficientsBySignificance = function (myThis) {
+        var significanceLevel = $(myThis).data('significanceLevel');
+        var coefficientValues = $('input.genePrioritizationPhenotype.coefficient');
+        _.forEach(coefficientValues, function (coefficientValueInput){
+            var coefficientValueDom = $(coefficientValueInput);
+            var phenotypeName = coefficientValueDom.attr('phenotype');
+            var snpAssociation = significanceLevel[phenotypeName];
+            if ((snpAssociation)&&(typeof snpAssociation !== 'undefined') ){
+                if (snpAssociation>0){
+                    var negativeLog = 0-Math.log10(snpAssociation);
+                    coefficientValueDom.val(""+UTILS.realNumberFormatter(negativeLog,3));
+                } else {
+                    coefficientValueDom.val(""+UTILS.realNumberFormatter(47,3));
+                }
+
+            }
+        });
+    };
+
+    var resetPhenotypeCoefficientsByOne = function (myThis) {
+        var coefficientValues = $('input.genePrioritizationPhenotype.coefficient');
+        _.forEach(coefficientValues, function (coefficientValueInput){
+            var coefficientValueDom = $(coefficientValueInput);
+            coefficientValueDom.val(""+UTILS.realNumberFormatter(1.0,3));
+        });
+    };
+
+    var resetPhenotypeCoefficientsByZero = function (myThis) {
+        var coefficientValues = $('input.genePrioritizationPhenotype.coefficient');
+        _.forEach(coefficientValues, function (coefficientValueInput){
+            var coefficientValueDom = $(coefficientValueInput);
+            coefficientValueDom.val(""+UTILS.realNumberFormatter(0.0,3));
+        });
+    };
+    var setAllTissueChoicesChecked = function (myThis) {
+        var tissueCheckboxes = $('input.genePrioritizationTissue')
+        _.forEach(tissueCheckboxes, function (tissueCheckbox){
+            var tissueCheckboxDom = $(tissueCheckbox);
+            tissueCheckboxDom.prop('checked',true);
+        });
+    };
+    var setAllTissueChoicesUnchecked = function (myThis) {
+        var tissueCheckboxes = $('input.genePrioritizationTissue')
+        _.forEach(tissueCheckboxes, function (tissueCheckbox){
+            var tissueCheckboxDom = $(tissueCheckbox);
+            tissueCheckboxDom.prop('checked',false);
+        });
+    };
+
+
+    var processGeneRankingInfo = function ( callBack, params ) {
+        loading.show();
+
+        var rememberCallBack = callBack;
+        var rememberParams = params;
+
+        var callingObj = {
+            geneToSummarize:signalSummarySectionVariables.geneName
+        };
+        callingObj ["chromosome"] = params.geneChromosome;
+        callingObj ["start"] =params.geneExtentBegin;
+        callingObj ["end"] = params.geneExtentEnd;
+        callingObj ["maximumAssociation"] = (params.maximumAssociation)?params.maximumAssociation:".0001";
+        callingObj ["minimumWeight"] = (params.minimumWeight)?params.minimumWeight:"1";
+        //callingObj ["phenotypeCoefficients"] = JSON.stringify([{phenotypeName:'T2D',phenotypeCoefficient:'1.0'},{phenotypeName:'FG',phenotypeCoefficient:'1.2'}]);
+        callingObj ["phenotypeCoefficients"] = JSON.stringify(params.phenotypeCoefficients);
+        callingObj ["phenotype"] = params.phenotype;
+        callingObj ["tissueToInclude"] = JSON.stringify(params.tissueToInclude);
+       // callingObj ["defaultPhenotypeWeightingScheme"] = params.defaultPhenotypeWeightingScheme;
+
+        $.ajax({
+            cache: false,
+            type: "post",
+            url: params.calculateGeneRankingUrl,
+            data: callingObj,
+            async: true,
+            success: function (data) {
+                rememberCallBack(data,rememberParams);
+                loading.show();
+            },
+            error: function (jqXHR, exception) {
+                core.errorReporter(jqXHR, exception);
+            }
+        });
+
+    };
+
+
+
+
 
     var updateCommonTable = function (data,additionalParameters) {
         var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData (data,0.05, additionalParameters);
@@ -1190,7 +1569,53 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: credibleSetDataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
-                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames
+                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
+                geneTable: true
+            };
+            additionalData.assayIdList = mpgSoftware.regionInfo.getSelectorAssayIds();
+            mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
+            var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
+            var drivingVariables = {};
+            drivingVariables["allGenes"] = identifiedGenes.replace("[","").replace(" ","").replace("]","").split(',');
+            drivingVariables["namedGeneArray"] = [];
+            drivingVariables["supressTitle"] = [1];
+            if ((drivingVariables["allGenes"].length>0)&&
+                (drivingVariables["allGenes"][0].length>0)) {
+                drivingVariables["namedGeneArray"] = _.map(drivingVariables["allGenes"], function (o) {
+                    return {'name': o.trim()}
+                });
+            }
+            $(".matchedGenesGoHere").empty().append(
+                Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
+            );
+
+        }
+        loading.hide();
+    };
+
+
+
+    var buildOutSetPresentation = function (data,additionalData,createGeneTable, propertyToRequest){
+        loading.show();
+        var signalSummarySectionVariables = getSignalSummarySectionVariables();
+        var sampleGroupsWithCredibleSetNames = ['data.sampleGroupsWithCredibleSetNames'];
+        var dataSet = additionalData.ds;
+        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)){ // use cred sets if avail
+            sampleGroupsWithCredibleSetNames = data.sampleGroupsWithCredibleSetNames;
+            dataSet = sampleGroupsWithCredibleSetNames[0];
+                mpgSoftware.regionInfo.setSampleGroupsWithCredibleSetNames(sampleGroupsWithCredibleSetNames);
+        }
+            var setToRecall = {chromosome: signalSummarySectionVariables.geneChromosome,
+                start: signalSummarySectionVariables.geneExtentBegin,
+                end: signalSummarySectionVariables.geneExtentEnd,
+                phenotype: additionalData.phenotype,
+                propertyName: propertyToRequest,
+                dataSet: dataSet,
+                fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
+                sampleGroupsWithCredibleSetNames:sampleGroupsWithCredibleSetNames,
+                geneTable: createGeneTable
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1208,9 +1633,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 Mustache.render( $('#dataRegionTemplate')[0].innerHTML,drivingVariables)
             );
 
-        }
+        //}
         loading.hide();
     };
+
+
+
+
+
 
 
 
@@ -1228,7 +1658,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: credibleSetDataSet,
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
-                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
+                sampleGroupsWithCredibleSetNames:data.sampleGroupsWithCredibleSetNames,
+                geneTable: true
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1266,7 +1698,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 propertyName: 'POSTERIOR_PROBABILITY',
                 dataSet: '',
                 fillCredibleSetTableUrl:signalSummarySectionVariables.fillCredibleSetTableUrl,
-                sampleGroupsWithCredibleSetNames:fakeCredibleSetNames
+                fillGeneComparisonTableUrl:signalSummarySectionVariables.fillGeneComparisonTableUrl,
+                sampleGroupsWithCredibleSetNames:fakeCredibleSetNames,
+                geneTable: false
             };
             mpgSoftware.regionInfo.fillRegionInfoTable(setToRecall,additionalData);
             var identifiedGenes = signalSummarySectionVariables.identifiedGenes;
@@ -1333,7 +1767,19 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         mpgSoftware.regionInfo.initializeRegionInfoModule (drivingVariables);
         $("#tableHeaderHolder").empty().append(
             Mustache.render($('#genePageHeaderTemplate')[0].innerHTML, drivingVariables));
-    }
+        var displayCommonTab = [1];
+        var displayHighImpactTab=[1];
+        if (drivingVariables.regionSpecificVersion===1){
+            displayHighImpactTab = [];
+        }
+        var pName='notused';
+        var credibleSetTab = [1];
+        var incredibleSetTab = [1];
+        var pageConfigurationVariable = buildPageConfigurationVariable(drivingVariables,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab);
+        $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryOutline')[0].innerHTML,
+            pageConfigurationVariable));
+    };
+
     var refreshTopVariantsByPhenotype = function (sel, callBack) {
         var phenotypeName = sel.value;
         var dataSetName = sel.attr('dsr');
@@ -1448,6 +1894,61 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
     };
 
 
+    /***
+     * Build the data structure which we will then pass to Mustache
+     *
+     * @param additionalParameters
+     * @param displayHighImpactTab
+     * @param pName
+     * @param credibleSetTab
+     * @param incredibleSetTab
+     * @returns {{commonTab: *, highImpactTab: *, pName: *, credibleSetTab: *, incredibleSetTab: *, genePrioritizationTab: Array, chromatinConformationTab: Array, exposeGeneComparisonSubTab: Array, exposeVariantComparisonSubTab: Array, dynamicUiTab: Array}}
+     */
+    var buildPageConfigurationVariable = function (additionalParameters,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab){
+        var weNeedToPutTablesInTabs = [];
+        var genePrioritizationIndicator = [];
+        var chromatinConformationIndicator = [];
+        var exposeGeneComparisonIndicator = [];
+        var exposeVariantComparisonIndicator = [];
+        var exposeDynamicUiIndicator = [];
+
+        if (additionalParameters.exposePredictedGeneAssociations === "1"){
+            genePrioritizationIndicator.push(1);
+        }
+        if (additionalParameters.exposeHiCData === "1"){
+            chromatinConformationIndicator.push(1);
+        }
+        if (additionalParameters.exposeDynamicUi === "1"){
+            exposeDynamicUiIndicator.push(1);
+        }
+        if (additionalParameters.exposeGeneComparisonTable === "1"){
+            exposeGeneComparisonIndicator.push(1);
+        }
+        if (true){// we want to insert a variable here
+            exposeVariantComparisonIndicator.push(1);
+        }
+        if ((true) &&(additionalParameters.exposeGeneComparisonTable === "1")) { // we only need tabs if we have both jeans and variant tables
+             weNeedToPutTablesInTabs.push(1);
+        }
+
+    return {commonTab: displayCommonTab,
+        highImpactTab: displayHighImpactTab,
+        pName: pName,
+        credibleSetTab:credibleSetTab,
+        incredibleSetTab:incredibleSetTab,
+        genePrioritizationTab:genePrioritizationIndicator,
+        chromatinConformationTab:chromatinConformationIndicator,
+        exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
+        exposeVariantComparisonSubTab:exposeVariantComparisonIndicator,
+        dynamicUiTab:exposeDynamicUiIndicator,
+        weNeedToPutTablesInTabs:weNeedToPutTablesInTabs};
+
+}
+
+
+
+
+
     var updateSignificantVariantDisplay = function (data, additionalParameters) {
         var phenotypeName = additionalParameters.phenotype;
         var datasetName = additionalParameters.ds;
@@ -1481,8 +1982,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             }
         }
 
-        // var useIgvNotLz = additionalParameters.preferIgv;
-        //var useIgvNotLz = ($('input[name=genomeBrowser]:checked').val() === '2');
         var useIgvNotLz = false; // remove option for now
         var renderData = mpgSoftware.geneSignalSummaryMethods.buildRenderData(data, 0.05, additionalParameters);
         var signalLevel = mpgSoftware.geneSignalSummaryMethods.assessSignalSignificance(renderData);
@@ -1519,16 +2018,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             });
         }
 
-        // if (additionalParameters.portalTypeString==='ibd'){
-        //     selectorInfo = getIbdData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
-        //     selectorInfo = getParkerData(selectorInfo,[]);
-        //     displayInfo = getIbdData(displayInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,1));
-        //     displayInfo = getParkerData(displayInfo,[]);
-        // } else {
-        //     selectorInfo = getParkerData(selectorInfo,mpgSoftware.regionInfo.getDefaultTissueRegionOverlapMatcher(additionalParameters,0));
-        // }
-
-
         var credibleSetTab = [];
         var incredibleSetTab = [];
         var dropDownRenderInfo = {};
@@ -1548,7 +2037,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             incredibleSetTab.push(dropDownRenderInfo);
         }
 
-        $('#collapseExample div.wellPlace').empty();
+       // $('#collapseExample div.wellPlace').empty();
 
         var regionSpecificVersion = additionalParameters.regionSpecificVersion;
         var displayCommonTab = [{chromosome:additionalParameters.geneChromosomeMinusChr,
@@ -1572,8 +2061,29 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         }
 
-        $("#collapseExample div.wellPlace").empty().append(Mustache.render($('#organizeSignalSummaryCommonFirstTemplate')[0].innerHTML,
-            {commonTab: displayCommonTab, highImpactTab: displayHighImpactTab, pName: pName,credibleSetTab:credibleSetTab,incredibleSetTab:incredibleSetTab}));
+        var genePageConfigurationParameters = buildPageConfigurationVariable(additionalParameters,displayCommonTab,displayHighImpactTab,pName,credibleSetTab,incredibleSetTab);
+         $("#organizeSignalSummaryHeaderGoesHere").empty().append(Mustache.render($('#organizeSignalSummaryHeader')[0].innerHTML,
+             genePageConfigurationParameters
+                ));
+        $("#commonVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCommon')[0].innerHTML,
+            genePageConfigurationParameters
+                ));
+        $("#highImpactVariantTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryHighImpact')[0].innerHTML,
+            genePageConfigurationParameters
+                ));
+        if (credibleSetTab.length>0){
+            $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryCredibleSet')[0].innerHTML,
+                genePageConfigurationParameters
+                    ));
+        }
+        if (incredibleSetTab.length>0){
+            $("#credibleSetTabHolder").empty().append(Mustache.render($('#organizeSignalSummaryIncredibleSet')[0].innerHTML,
+                genePageConfigurationParameters
+                    ));
+        }
+
+
+
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);
         $('div.credibleSetHeader input.credSetEndPos').val(""+additionalParameters.geneExtentEnd);
 
@@ -1620,15 +2130,6 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 additionalParameters.geneName,
                 true,
                 '#datasetFilter',additionalParameters);
-                //additionalParameters.sampleMetadataExperimentAjaxUrl,
-                //additionalParameters.sampleMetadataAjaxWithAssumedExperimentUrl,
-                //additionalParameters.variantOnlyTypeAheadUrl,
-                //additionalParameters.sampleMetadataAjaxUrl,
-                //additionalParameters.generateListOfVariantsFromFiltersAjaxUrl,
-                //additionalParameters.retrieveSampleSummaryUrl,
-                //additionalParameters.variantInfoUrl,
-                //additionalParameters.variantAndDsAjaxUrl,
-                //additionalParameters.burdenTestVariantSelectionOptionsAjaxUrl);
         }
 
 
@@ -1639,11 +2140,25 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
 
         var alwaysShowTheCredibleSetTab = true;
 
-        if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
-            buildOutCredibleSetPresentation(data, additionalParameters);
-        } else if (alwaysShowTheCredibleSetTab){
-            buildOutIncredibleSetPresentation(data, additionalParameters);
+        // if ((data.sampleGroupsWithCredibleSetNames)&&(data.sampleGroupsWithCredibleSetNames.length>0)) {
+
+
+        var weHaveAnIncredibleSet = true;
+        var propertyToRequest = 'POSTERIOR_PROBABILITY';
+        if (incredibleSetTab.length>0){
+            weHaveAnIncredibleSet = false;
+            propertyToRequest = 'P_VALUE';
         }
+        buildOutSetPresentation (data, additionalParameters, false, propertyToRequest);
+        if (additionalParameters.exposeGeneComparisonTable === "1") {
+            buildOutSetPresentation(data, additionalParameters, true, propertyToRequest);
+        }
+
+
+        //    buildOutCredibleSetPresentation(data, additionalParameters);
+        // } else if (alwaysShowTheCredibleSetTab){
+        //    buildOutIncredibleSetPresentation(data, additionalParameters);
+        // }
 
         if (displayCommonTab.length>0){
             mpgSoftware.geneSignalSummaryMethods.updateCommonTable(data, additionalParameters);
@@ -1827,7 +2342,18 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         lzOnCredSetTab:lzOnCredSetTab,
         getSingleBestPhenotypeAndLaunchInterface:getSingleBestPhenotypeAndLaunchInterface,
         getSingleBestNonFavoredPhenotypeAndLaunchInterface:getSingleBestNonFavoredPhenotypeAndLaunchInterface,
-        refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype
+        refreshTopVariantsDirectlyByPhenotype:refreshTopVariantsDirectlyByPhenotype,
+        getSignalSummarySectionVariables:getSignalSummarySectionVariables,
+        processGeneRankingInfo: processGeneRankingInfo,
+        processGeneRankingData:processGeneRankingData,
+        selfContainedGeneRanking: selfContainedGeneRanking,
+        resetPhenotypeCoefficientsBySignificance: resetPhenotypeCoefficientsBySignificance,
+        resetPhenotypeCoefficientsByOne:resetPhenotypeCoefficientsByOne,
+        resetPhenotypeCoefficientsByZero:resetPhenotypeCoefficientsByZero,
+        setAllTissueChoicesUnchecked:setAllTissueChoicesUnchecked,
+        setAllTissueChoicesChecked:setAllTissueChoicesChecked,
+        processGeneRankingDataAndResetPhenoCoefficients:processGeneRankingDataAndResetPhenoCoefficients,
+        hiGlassExperiment:hiGlassExperiment
     }
 
 }());

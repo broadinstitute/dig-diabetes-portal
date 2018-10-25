@@ -1,5 +1,12 @@
 
-
+<style>
+span.credSetLevelHere{
+    border: 2px solid black;
+    padding: 5px 5px 5px 12px;
+    white-space: nowrap;
+    font-size: 12px;
+}
+</style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
 <div class="row">
@@ -484,8 +491,157 @@
         </script>
 
 
+<script id="organizeSignalSummaryOutline"  type="x-tmpl-mustache">
+    <div id="organizeSignalSummaryHeaderGoesHere"></div>
+    <div id="cDataModalGoesHere"></div>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder"></div>
+        <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder"></div>
+        <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder"></div>
+        <div role="tabpanel" class="tab-pane genePrioritizationChooser" id="genePrioritizationTabHolder">
+            {{#genePrioritizationTab}}
+                   <div class="row" style="border: none">
+                        <div class="col-sm-12">
+                            <div class="row" style="border: none">
+                                <div class="col-sm-6">
 
-<script id="organizeSignalSummaryCommonFirstTemplate"  type="x-tmpl-mustache">
+                                </div>
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-3">
+                                    <button class="btn" onclick="mpgSoftware.geneSignalSummaryMethods.selfContainedGeneRanking()">Refresh</button>
+                                </div>
+                             </div>
+                             <div class="row" style="border: none">
+                                <div id="rankedGeneTableGoesHere">
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+            {{/genePrioritizationTab}}
+        </div>
+
+        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="chromatinConformationTabHolder">
+            {{#chromatinConformationTab}}
+            <div class="row" style="border: none">
+
+                <div class="row" style="border: none">
+                    <div class="dropdown col-md-2 lz-list" style="padding: 10px 10px">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Select from tissues: <b
+                                class="caret"></b></a>
+                        <ul class="dropdown-menu" style="height:auto; max-height:500px; overflow:auto;">
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'Adipose',
+                                            tissueDescriptiveName: 'adipose tissue',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">adipose tissue
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'AnteriorCaudate',
+                                            tissueDescriptiveName: 'brain anterior caudate',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">brain anterior caudate
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'CD34-PB',
+                                            tissueDescriptiveName: 'CD34-PB primary hematopoietic stem cells',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">CD34-PB primary hematopoietic stem cells
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'CingulateGyrus',
+                                            tissueDescriptiveName: 'brain cingulate gyrus',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">brain cingulate gyrus
+                                </a>
+                            </li>
+                            <li>
+                                <a onclick="mpgSoftware.locusZoom.addLZTissueAnnotations({
+                                            tissueCode: 'ColonicMucosa',
+                                            tissueDescriptiveName: 'colonic mucosa',
+                                            retrieveFunctionalDataAjaxUrl: '/dig-diabetes-portal/variantInfo/retrieveFunctionalDataAjax',
+                                            assayIdList: '[3]'
+                                        },
+                                        ('#' + 'lz-lzCommon'),
+                                        {colorBy: 1, positionBy: 1})">colonic mucosa
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <div class="dropdown col-md-3 lz-list text-left" style="padding: 10px 10px">
+                        <span style='color: black'>
+                            currently displaying:&nbsp;
+                        </span>
+                        <span style='color: blue'>
+                            pancreatic islet
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                        <div id="fooyoo" style="width:800px; height: 800px"></div>
+                    </div>
+                </div>
+            </div>
+            {{/chromatinConformationTab}}
+        </div>
+        <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
+            {{#dynamicUiTab}}
+                <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                        <nav class="nav nav-pills nav-fill">
+                          <a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>
+                          <a class="nav-item nav-link" href="#dynamicVariantHolder">Variant</a>
+                          <a class="nav-item nav-link" href="#dynamicTissueHolder">Tissue</a>
+                          <a class="nav-item nav-link" href="#dynamicPhenotypeHolder">Phenotype</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicGeneHolder">
+                            <h3>dynamicGeneHolder</h3>
+                        </div>
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicVariantHolder">
+                            <h3>dynamicVariantHolder</h3>
+                        </div>
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicTissueHolder">
+                            <h3>dynamicTissueHolder</h3>
+                        </div>
+                        <div role="tabpanel" class="tab-pane chromatinConfirmationChooser" id="dynamicPhenotypeHolder">
+                            <h3>dynamicPhenotypeHolder</h3>
+                        </div>
+                     </div>
+                </div>
+            {{/dynamicUiTab}}
+        </div>
+    </div>
+</script>
+
+<script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
+
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>
             <div class="row">
                 <div class="col-xs-12">
@@ -502,22 +658,38 @@
                         {{/highImpactTab}}
                         {{#credibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
-                           </li>
+                               <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
+                            </li>
                         {{/credibleSetTab}}
                         {{#incredibleSetTab}}
                             <li role="presentation" class="variantTableLabels credibleSetChooser">
                                <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
                             </li>
                         {{/incredibleSetTab}}
+                        {{#genePrioritizationTab}}
+                            <li role="presentation" class="variantTableLabels genePrioritizationChooser">
+                               <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
+                            </li>
+                        {{/genePrioritizationTab}}
+                        {{#chromatinConformationTab}}
+                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                               <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
+                            </li>
+                        {{/chromatinConformationTab}}
+                        {{#dynamicUiTab}}
+                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                               <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Dynamic UI</a>
+                            </li>
+                        {{/dynamicUiTab}}
                     </ul>
                 </div>
             </div>
             <div id="cDataModalGoesHere"></div>
+</script>
+<script id="organizeSignalSummaryCommon"  type="x-tmpl-mustache">
 
-            <div class="tab-content">
                 {{#commonTab}}
-                    <div role="tabpanel" class="tab-pane active commonVariantChooser" id="commonVariantTabHolder">
+
                         <div class="row"   style="border: none">
                             <div class="col-xs-12">
                                 <div class="variantCategoryHolder">
@@ -538,10 +710,13 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+
                 {{/commonTab}}
+
+</script>
+<script id="organizeSignalSummaryHighImpact"  type="x-tmpl-mustache">
                 {{#highImpactTab}}
-                <div role="tabpanel" class="tab-pane highImpacVariantChooser" id="highImpactVariantTabHolder">
+
                     <div class="row" style="border: none">
                         <div class="col-xs-12">
                             <div class="variantCategoryHolder">
@@ -550,7 +725,7 @@
                                         <ul style="margin: 0 0 0 10px">
                                              <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
                                              <li>associated with {{pname}}</li>
-                                             <li>predicted to cause missense or protein-truncating mutations in an encoded protein within the region of this gene and its 100kb flanking regions</li>
+                                             <li>predicted to cause missense or protein-truncating mutations in the encoded protein</li>
                                         </ul>
                                      </div>
                                      Note: high-impact variants with MAF > 5% will also be shown on the Common variants tab.
@@ -566,10 +741,12 @@
                             </div>
                         </div>
                     </div>
-                </div>
+
                 {{/highImpactTab}}
-                {{#credibleSetTab}}
-                <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
+</script>
+<script id="organizeSignalSummaryCredibleSet"  type="x-tmpl-mustache">
+    {{#credibleSetTab}}
+
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
                             <div class="variantCategoryHolder">Credible sets are collections of variants in which posterior probabilities are calculated to indicate the likelihood that each variant is causal for association with the selected phenotype.
@@ -607,7 +784,7 @@
                                 <p>&nbsp;</p>
                                 <div><p><g:message code="geneSignalSummary.credSetsT2D.help"></g:message></p></div>
                                 <p>&nbsp;</p>
-                                <div class="credibleSetChooserGoesHere"></div>
+
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
@@ -649,20 +826,44 @@
                                          {{^displayInfoExists}}
 
                                          {{/displayInfoExists}}
-                                         %{--<div class="col-sm-2"></div>--}%
+                                         <div class="col-sm-2"></div>
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
-                                %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
-                                <div class="credibleSetTableGoesHere"></div>
+                                {{#weNeedToPutTablesInTabs}}
+                                <ul class="nav nav-pills referenceSummaryTable" role="tablist">
+                                        <li><a href="#tableGeneTableTab" role="tab" data-toggle="tab">gene table</a></li>
+                                        <li class="active"><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
+                                </ul>
+                                {{/weNeedToPutTablesInTabs}}
+                                {{#weNeedToPutTablesInTabs}}
+                                <div class="referenceSummaryTable tab-content">
+                                {{/weNeedToPutTablesInTabs}}
+                                    {{#exposeGeneComparisonSubTab}}
+                                        <div class="tab-pane referenceSummaryTableContent" id="tableGeneTableTab">
+                                            <div class="credGeneTableGoesHere"></div>
+                                        </div>
+                                    {{/exposeGeneComparisonSubTab}}
+                                    {{#exposeVariantComparisonSubTab}}
+                                        <div class="tab-pane active referenceSummaryTableContent" id="tableVariantTableTab">
+                                            <div class="credibleSetChooserGoesHere"></div>
+                                            <div class="credibleSetTableGoesHere"></div>
+                                        </div>
+                                    {{/exposeVariantComparisonSubTab}}
+                                {{#weNeedToPutTablesInTabs}}
+                                </div>
+                                {{/weNeedToPutTablesInTabs}}
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
                     </div>
                 </div>
+
                 {{/credibleSetTab}}
+</script>
+<script id="organizeSignalSummaryIncredibleSet"  type="x-tmpl-mustache">
                 {{#incredibleSetTab}}
-                <div role="tabpanel" class="tab-pane credibleSetChooser" id="credibleSetTabHolder">
+
                     <div class="row" style="border: none">
                         <div class="col-sm-12">
                             <div class="variantCategoryHolder"><g:message code="geneSignalSummary.incredibleSets.tabDescription"></g:message>
@@ -697,7 +898,7 @@
                                 <p>&nbsp;</p>
                                 <div><p><g:message code="geneSignalSummary.incredibleSetsT2D.help"></g:message></p></div>
                                 <p>&nbsp;</p>
-                                <div class="credibleSetChooserGoesHere"></div>
+
                                 <div class="credibleSetTissueSelectorGoesHere" style="margin: 10px 0 0 0">
 
                                     <div class="row clearfix">
@@ -738,22 +939,87 @@
                                              <button class="btn btn-secondary btn-default" onclick="mpgSoftware.regionInfo.redisplayTheCredibleSetHeatMap()">Go</button>
                                          </div>
                                          {{/displayInfoExists}}
-                                         %{--<div class="col-sm-2"></div>--}%
+                                         <div class="col-sm-2"><span style="display: inline-block; float: none; vertical-align: middle; width: 100%;"><g:helpText title="geneTable.credset.interval.explanation.help.header" placement="bottom" body="geneTable.credset.interval.explanation.help.text"/><span class="credSetLevelHere"></span></span></div>
                                     </div>
                                 </div>
                                 <p>&nbsp;</p>
-                                %{--<p><g:message code="geneSignalSummary.variantLink.help"></g:message></p>--}%
-
-                                <div class="credibleSetTableGoesHere"></div>
+                                {{#weNeedToPutTablesInTabs}}
+                                <ul class="nav nav-tabs referenceSummaryTable" role="tablist">
+                                        <li><a href="#tableGeneTableTab" role="tab" data-toggle="tab">gene table</a></li>
+                                        <li class="active"><a href="#tableVariantTableTab" role="tab" data-toggle="tab">variant table</a></li>
+                                </ul>
+                                {{/weNeedToPutTablesInTabs}}
+                                {{#weNeedToPutTablesInTabs}}
+                                <div class="referenceSummaryTable tab-content">
+                                {{/weNeedToPutTablesInTabs}}
+                                    {{#exposeGeneComparisonSubTab}}
+                                        <div class="tab-pane referenceSummaryTableContent" id="tableGeneTableTab">
+                                            <div class="credGeneTableGoesHere"></div>
+                                        </div>
+                                    {{/exposeGeneComparisonSubTab}}
+                                    {{#exposeVariantComparisonSubTab}}
+                                        <div class="tab-pane active referenceSummaryTableContent" id="tableVariantTableTab">
+                                            <div class="credibleSetChooserGoesHere"></div>
+                                            <div class="credibleSetTableGoesHere"></div>
+                                        </div>
+                                    {{/exposeVariantComparisonSubTab}}
+                                {{#weNeedToPutTablesInTabs}}
+                                </div>
+                                {{/weNeedToPutTablesInTabs}}
                                 <div id="allVariantsLocation" class="in"></div>
                                 <div id="locusZoomLocationCredSet" class="locusZoomLocation" style="border: solid 1px #ccc; padding: 15px;"></div>
                         </div>
                     </div>
                 </div>
-                {{/incredibleSetTab}}
 
-            </div>
+                {{/incredibleSetTab}}
 </script>
+<script id="organizeSignalSummaryGenePrioritization"  type="x-tmpl-mustache">
+                {{#genePrioritizationTab}}
+
+                    <div class="row" style="border: none">
+                        <div class="col-sm-12">
+                            <div class="row" style="border: none">
+                                <div class="col-sm-6">
+                                    <h3>gene prioritization table</h3>
+                                </div>
+                                <div class="col-sm-6"></div>
+                             </div>
+                             <div class="row" style="border: none">
+                                <div id="rankedGeneTableGoesHere">
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+
+                {{/genePrioritizationTab}}
+</script>
+
+<script id="organizeDynamicUi"  type="x-tmpl-mustache">
+                {{#dynamicUiTab}}
+
+                    <div class="row" style="border: none">
+                        <div class="col-sm-12">
+                            <div class="row" style="border: none">
+                                <div class="col-sm-6">
+                                    <h3>proper dynamic UI tab</h3>
+                                </div>
+                                <div class="col-sm-6"></div>
+                             </div>
+                             <div class="row" style="border: none">
+                                <h1>foo yodel</h1>
+                             </div>
+                        </div>
+                    </div>
+
+                {{/dynamicUiTab}}
+</script>
+
+
+
+
+
+%{--old way...--}%
 
 <script id="organizeCredibleSetChooserTemplate"  type="x-tmpl-mustache">
     <div class="credibleSetNameHolder">
@@ -843,96 +1109,32 @@
                 defRefA="{{details.Reference_Allele}}" defEffA="{{details.Effect_Allele}}" chrom="{{details.CHROM}}" position="{{details.POS}}"
                 postprob="{{details.extractedPOSTERIOR_PROBABILITY}}" varid="{{details.CHROM}}:{{details.POS}}_{{details.Reference_Allele}}/{{details.Effect_Allele}}" data-toggle="popover">{{details.CHROM}}:{{details.POS}}_{{details.Reference_Allele}}/{{details.Effect_Allele}}</th>
             {{/variants}}
+            {{#columns}}
+                <th class="niceHeadersThatAreGeneLinks headersWithVarIds" style="background:rgba(0,0,0,0)"
+                chromosome="{{chromosome}}" addrStart="{{addrStart}}" addrEnd="{{addrEnd}}"
+                data-toggle="popover">{{name}}</th>
+            {{/columns}}
+
         </tr>
     </thead>
     <tbody>
     {{#const}}
 
-        <tr>
-            <td class="credcellpval credSetOrgLabel" rowspan=5>annotation</td>
-            <td class="credSetConstLabel">Coding</td>
-        {{#coding}}
-            <td class="credcell {{descr}}">{{val}}</td>
-        {{/coding}}
-        </tr>
-
-        <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
-            <td class="credSetConstLabel">Splice site</td>
-            {{#spliceSite}}
-            <td class="credcell {{descr}}">{{val}}</td>
-            {{/spliceSite}}
-        </tr>
-
-        <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
-            <td class="credSetConstLabel">UTR</td>
-            {{#utr}}
-            <td class="credcell {{descr}}">{{val}}</td>
-            {{/utr}}
-        </tr>
-
-        <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
-            <td class="credSetConstLabel">Promoter</td>
-            {{#promoter}}
-            <td class="credcell {{descr}}">{{val}}</td>
-            {{/promoter}}
-        </tr>
-
-        <tr>
-            %{--<td class="credSetOrgLabel"></td>--}%
-            <td class="credcellpval credSetConstLabel">TF binding motif</td>
-            {{#tfBindingMotif}}
-            <td class="credcellmotif {{descr}}">{{val}}</td>
-            {{/tfBindingMotif}}
-        </tr>
-
-        {{#posteriorProbabilityExists}}
-        <tr>
-            <td class="credcellpval credSetOrgLabel" rowspan=2>association</td>
-            <td class="credSetConstLabel">Posterior probability</td>
-            {{/posteriorProbabilityExists}}
-            {{#posteriorProbability}}
-            <td class="{{descr}}">{{val}}</td>
-            {{/posteriorProbability}}
-       {{#posteriorProbabilityExists}}
-        </tr>
-        {{/posteriorProbabilityExists}}
-
-        <tr>
-            {{^posteriorProbabilityExists}}
-            <td class="credcellpval credSetOrgLabel">association</td>
-            {{/posteriorProbabilityExists}}
-            <td class="credcellpval credSetConstLabel">P value</td>
-            {{#pValue}}
-            <td class="credcellpval {{descr}}">{{val}}</td>
-            {{/pValue}}
-        </tr>
-
-
+        {{#annotation}}
+            <tr>
+                {{#annotationSection}}
+                    <td class="{{primaryRowClass}} {{secondaryRowClass}}" rowspan={{rowsPerSection}}>{{sectionName}}</td>
+                {{/annotationSection}}
+                <td class="{{rowClass}}">{{rowName}}</td>
+                {{#annotationRecord}}
+                    <td class="credcell {{descr}}">{{val}}</td>
+                {{/annotationRecord}}
+            </tr>
+        {{/annotation}}
 
 
     {{/const}}
 
-    {{#cellTypeSpecs}}
-
-        <tr>
-            <td></td>
-            <td>{{name}} DHS</td>
-            {{#DHS}}
-            <td>{{val}}</td>
-            {{/DHS}}
-        </tr>
-        <tr>
-            <td></td>
-            <td>{{name}} H3K27AC</td>
-            {{#K27}}
-            <td>{{val}}</td>
-            {{/K27}}
-        </tr>
-
-    {{/cellTypeSpecs}}
     </tbody>
 </table>
 <div class="heatmaplegend">
@@ -957,4 +1159,239 @@
 </div>
 
 </script>
+
+<script id="credibleSetHeatMapTemplate"  type="x-tmpl-mustache">
+{{#tissueSpecificRow}}
+    <tr style='{{rowDecoration}}' class='tissueHider_{{annotationId}}'>
+    {{#createSpanningCell}}
+        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>tissue</td>
+    {{/createSpanningCell}}
+    <td  class='{{tissueDescriptionClass}} tissueHider_{{annotationId}}' title='{{tissueName}}'><span class='{{tissueDescriptionClass}}'>{{tissueName}}</span></td>
+    {{#cellsPerLine}}
+    <td class='tissueTable {{matchingRegion}} tissueHider_{{annotationId}}'
+              data-toggle='tooltip' data-content="{{title}}" title='{{title}}'>
+              <span data-toggle="popover" data-content="{{title}}">{{displayableContent}}</span></td>
+    {{/cellsPerLine}}
+    </tr>
+{{/tissueSpecificRow}}
+</script>
+
+<script id="heatMapAggregatedAcrossTissueTemplate"  type="x-tmpl-mustache">
+{{#assaySpecificRow}}
+    <tr style='{{rowDecoration}}'>
+
+        <td class='credSetOrgLabel' style='vertical-align: middle' rowspan={{rowSpan}}>
+        <button type="button" class="btn btn-info btn-sm tissueDisplay_{{annotationId}} {{expandTissues}}" onclick="mpgSoftware.regionInfo.displayTissuesForAnnotation({{annotationId}})">display tissues</button>
+        <button type="button" style="display:none" class="btn btn-info btn-sm tissueHide_{{annotationId}}" onclick="mpgSoftware.regionInfo.hideTissuesForAnnotation({{annotationId}})">hide tissues</button>
+        </td>
+
+    <td  class='{{tissueDescriptionClass}}  aggregateHider_{{annotationId}}'><span class='{{tissueDescriptionClass}}'>{{assayName}}</span></td>
+    {{#cellsPerLine}}
+    <td class='tissueTable {{matchingRegion}}'
+              data-toggle='tooltip' title='{{title}}{{genes}}'><span data-toggle="popover" data-content="{{genes}}" class='geneCountDisplay'>{{geneCount}}</span>
+              {{countDivider}}
+              <span data-toggle="popover" data-content="{{tissues}}" class='tissueCountDisplay'>{{tissueCount}}</span></td>
+    {{/cellsPerLine}}
+    </tr>
+{{/assaySpecificRow}}
+</script>
+<style>
+table.genePrioritization {
+    /*border: 1px solid black;*/
+}
+th.genePrioritization {
+    font-family: 	Arial, Verdana, sans-serif;
+    text-decoration: underline;
+    font-size:	18px;
+}
+td.genePrioritization {
+    font-family: 	Arial, Verdana, sans-serif;
+    color:		#0000FF;
+    font-size:	16px;
+    outline: 0px solid #000;
+}
+span.genePrioritization {
+    padding-right: 5px;
+}
+.tooltip-inner {
+    max-width: 350px;
+    width: 350px;
+}
+span.valuesPerPhenotype {
+    padding-left: 5px;
+}
+tr.ledgeTable:not(:last-child){
+    border-bottom: 1px solid #E3E3E3;
+}
+tr.ledgeTable:not(:last-child){
+    border-bottom: 1px solid #E3E3E3;
+}
+div.explanatoryText {
+   font-style: italic;
+    color:		#bbbbbb;
+}
+span.explanatoryText {
+    color:		black;
+}
+input.genePrioritizationPhenotype.coefficient{
+    font-size:	10px;
+}
+#commonVariantsLocationHolder td {
+    outline: 0px solid #000;
+}
+#highImpactTemplateHolder td {
+    outline: 0px solid #000;
+}
+</style>
+
+
+<script id="rankedGeneTable"  type="x-tmpl-mustache">
+<div class="row">
+    <div class="col-md-3 text-right">p-value cutoff for phenotype < &nbsp;
+    </div>
+    <div class="col-md-2">
+    <input class="phenotypeParameter" type="text" value="{{maximumAssociation}}"></input>
+    </div>
+    <div class="col-md-7 text-left explanatoryText">higher values include more phenotypes</div>
+</div>
+<div class="row">
+    <div class="col-md-3 text-right">LDSR weight >  &nbsp;
+    </div>
+    <div class="col-md-2">
+    <input class="ldsrParameter" type="text" value="{{minimumWeight}}"></input>
+    </div>
+    <div class="col-md-7 text-left explanatoryText">lower values include more tissues</div>
+</div>
+<div class="row" style="margin-top: 20px">
+    <div class="col-md-3 text-right">
+        Genomic range:
+    </div>
+
+
+
+    <div class="col-md-2 text-left"> <input class="startPosition" type="text" value="{{startPosition}}"></input>
+    </div>
+    <div class="col-md-2 text-left">
+    <input class="endPosition" type="text" value="{{endPosition}}"></input>
+    </div>
+    <div class="col-md-5 text-left explanatoryText">bigger ranges include more genes
+    </div>
+
+
+</div>
+
+
+
+<div style="margin-top:20px;"></div>
+<div clas="row" style="margin-top:30px">
+<div class="col-md-12 text-left">
+<h4>LEDGE ranked genes</h4>
+</div>
+</div>
+
+<div clas="row">
+    <div class="col-md-offset-2 col-md-8 text-left">
+        <table style="width:100%" class="genePrioritization" style="border: solid 2px black">
+        <tr>
+            <th class="genePrioritization">gene name</th>
+            <th class="genePrioritization">calculated weight</th>
+            <th class="genePrioritization">phenotype contributions</th>
+
+        </tr>
+        {{#geneInformation}}
+            <tr class="ledgeTable">
+
+                <td class="genePrioritization">
+                {{geneName}}
+                </td>
+                <td class="genePrioritization">
+                {{combinedWeight}}
+                </td>
+                <td class="genePrioritization">
+                {{#phenoRecs}}
+                  <span class="btn btn-outline-secondary">{{phenotypeName}}<span class="valuesPerPhenotype">{{phenotypeValue}}</span></span>
+                {{/phenoRecs}}
+                </td>
+
+            </tr>
+        {{/geneInformation}}
+        </table>
+        <div class="col-md-2"></div>
+    </div>
+</div>
+
+<div clas="row">
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+    <h4>Phenotype weighting</h4>
+    </div>
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+        <span class="explanatoryText">
+        Reset phenotype coefficients:
+        <button type="button" class="btn btn-secondary btn-sm resetPhenotypeCoefficientsBySignificant"
+        onclick="mpgSoftware.geneSignalSummaryMethods.resetPhenotypeCoefficientsBySignificance(this)">by phenotype significance</button>
+        <button type="button" class="btn btn-secondary btn-sm"
+        onclick="mpgSoftware.geneSignalSummaryMethods.resetPhenotypeCoefficientsByZero()">all 0</button>
+        <button type="button" class="btn btn-secondary btn-sm"
+        onclick="mpgSoftware.geneSignalSummaryMethods.resetPhenotypeCoefficientsByOne()">all 1</button>
+        </span>
+    </div>
+</div>
+
+<div class="row" style="margin-top:20px">
+    <div class="col-md-offset-2 col-md-10 text-left">
+    {{#genefullCalculatedGraph}}
+         <div class="btn-group-vertical">
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary genePrioritizationPhenotype dropdown-toggle  btn-group-vertical" data-toggle="dropdown" data-placement="right">
+                {{phenoName}}&nbsp;&nbsp;<input type="text" class="genePrioritizationPhenotype coefficient" phenotype="{{phenoName}}" value="{{phenoWeight}}" style="width: 30px">
+                </button>
+                <div class="dropdown-menu">
+                    {{#tissues}}
+                    <a type="button" class="btn btn-secondary genePrioritizationPhenotype" data-toggle="tooltip" data-placement="right" href="#"
+                        title="{{#genes}}{{geneName}}&nbsp;{{/genes}}">
+                        {{tissue}}&nbsp;({{weight}})
+                        </a>
+
+                    {{/tissues}}
+                </div>
+            </div>
+        </div>
+    {{/genefullCalculatedGraph}}
+    </div>
+</div>
+
+
+
+
+<div clas="row">
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+        <h4>Tissues to include</h4>
+    </div>
+    <div class="col-md-6 text-left"  style="margin-top:50px">
+        <span class="explanatoryText">
+        Reset tissue choices:
+        <button type="button" class="btn btn-secondary btn-sm resetPhenotypeCoefficientsBySignificant"
+        onclick="mpgSoftware.geneSignalSummaryMethods.setAllTissueChoicesChecked()">All</button>
+                <button type="button" class="btn btn-secondary btn-sm resetPhenotypeCoefficientsBySignificant"
+        onclick="mpgSoftware.geneSignalSummaryMethods.setAllTissueChoicesUnchecked()">None</button>
+        </span>
+    </div>
+</div>
+
+
+<div class="row" style="margin-top:20px">
+    <div class="col-md-offset-2 col-md-10 text-left">
+    {{#tissuesToConsider}}
+        <label class="checkbox-inline">
+            <input type="checkbox" tissueName="{{nameOfTissue}}" class="genePrioritizationTissue" {{isPresent}} value="{{nameOfTissue}}">{{nameOfTissue}}
+        </label>
+    {{/tissuesToConsider}}
+    </div>
+</div>
+
+
+
+
+</script>
+
 

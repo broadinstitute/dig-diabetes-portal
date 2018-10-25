@@ -44,6 +44,9 @@ class WidgetService {
     private final String phenotypeKey = "T2D";
     private final String errorResponse = "{\"data\": {}, \"error\": true}";
     private final int NUMBER_OF_DISTRIBUTION_BINS = 24
+    private final int NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE = 100
+    private final int NUMBER_OF_VARIANTS_IN_GENE_TABLE = 400
+
 
     private String singleFilter(String categorical, //
                                 String comparator,
@@ -614,6 +617,7 @@ class WidgetService {
 
 
 
+
     public JSONObject generatePhewasDataForLz(String varId, Boolean includeAllVariants){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject jsonObject = restServerService.gatherTopVariantsFromAggregatedTablesByVarId( "",varId,-1, -1,metaDataService.getDataVersion(), includeAllVariants )
@@ -680,7 +684,7 @@ class WidgetService {
                     singleVariantData<<"\"variant\": \"${varIdParts[0]}:${varIdParts[1]}_${varIdParts[2]}/${varIdParts[3]}\""
 
                     dataFromQuery << "{${singleVariantData.join(",")}}"
-                 }
+                }
             }
 
         }
@@ -735,8 +739,8 @@ class WidgetService {
                     Double logPValue =0d
                     Double beta =0d
                     Double standardError =0d
-                    Double ciHigh =0d
-                    Double ciLow =0d
+                    Double ciHigh =0.33d
+                    Double ciLow =-0.113d
 
                     if (variant."VAR_ID"){retrievedVarId = variant."VAR_ID"}
                     if (variant."P_VALUE"){pValueAsString = variant."P_VALUE"}
@@ -764,16 +768,22 @@ class WidgetService {
                             log.error("we have a beta that's nonnumeric, which is bad news")
                         }
                     }
-                    singleVariantData<<"\"phenotype\": \"${phenotypeDescription}\""
-                    singleVariantData<<"\"log_pvalue\": ${logPValue}"
-                    singleVariantData<<"\"beta\": ${beta}"
-                    LinkedHashMap stats = sharedToolsService.calculateConfidenceInterval(pValue,beta,sharedToolsService.CONFIDENCE_LEVEL_95)
-                    if (!stats.error){
-                        singleVariantData<<"\"ci_start\": ${ciLow}"
-                        singleVariantData<<"\"ci_end\": ${ciHigh}"
-                    }
+                    if (beta!=0){
+                        singleVariantData<<"\"phenotype\": \"${phenotypeDescription}\""
+                        singleVariantData<<"\"log_pvalue\": ${logPValue}"
+                        singleVariantData<<"\"beta\": ${beta}"
+                        LinkedHashMap stats = sharedToolsService.calculateConfidenceInterval(pValue,beta,sharedToolsService.CONFIDENCE_LEVEL_95)
+                        if (!stats.error){
+                            ciLow = stats.cLower
+                            ciHigh = stats.cUpper
+                            singleVariantData<<"\"ci_start\": ${ciLow}"
+                            singleVariantData<<"\"ci_end\": ${ciHigh}"
+                            dataFromQuery << "{${singleVariantData.join(",")}}"
+                        }
 
-                    dataFromQuery << "{${singleVariantData.join(",")}}"
+
+
+                    }
                 }
             }
 
@@ -939,7 +949,7 @@ class WidgetService {
 
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition,
-                covariateList,maximumNumberOfPointsToRetrieve, "verbose", DEFAULT_MINIMUM_POSTERIOR_PROBABILITY,metaDataService,metadataTree);
+                covariateList,maximumNumberOfPointsToRetrieve, "verbose", DEFAULT_MINIMUM_POSTERIOR_PROBABILITY,metaDataService,metadataTree, propertyName);
 
         // submit the post request
         if (!attemptDynamicCall){
@@ -1028,7 +1038,7 @@ class WidgetService {
 
         // get json getData query string
         jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, covariateList,
-                maximumNumberOfPointsToRetrieve, "flat", DEFAULT_MINIMUM_POSTERIOR_PROBABILITY,metaDataService, metadataTree);
+                maximumNumberOfPointsToRetrieve, "flat", DEFAULT_MINIMUM_POSTERIOR_PROBABILITY,metaDataService, metadataTree, propertyName);
 
 
             //if ((this.getLocusZoomEndpointSelection() == this.LOCUSZOOM_17K_ENDPOINT)||(!attemptDynamicCall)){
@@ -1181,30 +1191,8 @@ class WidgetService {
 
 
 
-
-
-
-
-//    public JSONObject getCredibleSetInformation(String chromosome, int startPosition, int endPosition,
-//                                                   String dataset, String phenotype, String propertyName) {
-//
-//        LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
-//
-//        String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-//                2000, "verbose", metaDataService);
-//
-//        JSONObject jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
-//
-//
-//
-//        // return
-//        return jsonResultString;
-//    }
-
-
-
-    private JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
-                                             String phenotype ){
+    public JSONObject buildTheIncredibleSet( String chromosome, int startPosition, int endPosition,
+                                             String phenotype, int maxNumberOfRecords ){
         JSONObject jsonResultString = new JSONObject()
         String dataSetName = metaDataService.getPreferredSampleGroupNameForPhenotype(phenotype)
         Property newlyChosenProperty = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(phenotype,dataSetName, "P_VALUE",
@@ -1212,7 +1200,7 @@ class WidgetService {
         if (newlyChosenProperty!=null){
             LocusZoomJsonBuilder locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataSetName, phenotype, newlyChosenProperty.name);
             String jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                    10, "verbose",DEFAULT_MINIMUM_POSTERIOR_PROBABILITY, metaDataService, MetaDataService.METADATA_VARIANT);
+                    10, "verbose",DEFAULT_MINIMUM_POSTERIOR_PROBABILITY, metaDataService, MetaDataService.METADATA_VARIANT,"P_VALUE");
             jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             jsonResultString["dataset"] = dataSetName
             jsonResultString["phenotype"] = phenotype
@@ -1237,10 +1225,12 @@ class WidgetService {
      * @return
      */
     public JSONObject getCredibleOrAlternativeSetInformation( String chromosome, int startPosition, int endPosition,
-                                                              String dataset, String phenotype, String propertyName,float minimumAllowablePosteriorProbability ) {
+                                                              String dataset, String phenotype, String propertyName,float minimumAllowablePosteriorProbability,
+                                                              Boolean calledInGeneQuery ) {
         LocusZoomJsonBuilder locusZoomJsonBuilder
         String jsonGetDataString
         JSONObject jsonResultString
+        int maximumNumberOfRecords = NUMBER_OF_VARIANTS_IN_ASSOCIATION_TABLE
         if (minimumAllowablePosteriorProbability < 0){  // a probability has to always be greater than or equal to zero. If we find something else
                                                         // then let's provide a default value
             minimumAllowablePosteriorProbability = DEFAULT_MINIMUM_POSTERIOR_PROBABILITY
@@ -1248,29 +1238,246 @@ class WidgetService {
         if (dataset != ''){
              locusZoomJsonBuilder = new LocusZoomJsonBuilder(dataset, phenotype, propertyName);
              jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                     1, "verbose", minimumAllowablePosteriorProbability, metaDataService,MetaDataService.METADATA_VARIANT);
+                     1, "verbose", minimumAllowablePosteriorProbability, metaDataService,MetaDataService.METADATA_VARIANT, propertyName);
              jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
             if ((jsonResultString) &&
                     (!jsonResultString.is_error) &&
                     (jsonResultString.numRecords>0) ) { // we have at least one point. Let's get the rest of them
+                if ((calledInGeneQuery)||("POSTERIOR_PROBABILITY"==propertyName)){ // the logic is this: if a part of a gene table then we want to get lots of variants to consider
+                    // If we are just looking at the top 10 associations then that's all we need, so limit the call to that many points.
+                    //  However, if we are pulling back variants and looking at a credible set then in fact we want to get lots of points so that we can get the whole of the credible set.
+                    //  This is all a workaround until we can have a call that allows us to ask the question this way: find me every variant in the range that is associated with a credible set,
+                    //   and then find me every variant in each of those credible sets.
+                    maximumNumberOfRecords = NUMBER_OF_VARIANTS_IN_GENE_TABLE
+                }
                 jsonGetDataString = locusZoomJsonBuilder.getLocusZoomQueryString(chromosome, startPosition, endPosition, [] as List,
-                        300, "verbose",minimumAllowablePosteriorProbability, metaDataService,MetaDataService.METADATA_VARIANT);
+                        maximumNumberOfRecords, "verbose",minimumAllowablePosteriorProbability, metaDataService,MetaDataService.METADATA_VARIANT, propertyName);
                 jsonResultString = this.restServerService.postGetDataCall(jsonGetDataString);
                 jsonResultString["dataset"] = dataset
                 jsonResultString["phenotype"] = phenotype
                 jsonResultString["propertyName"] = propertyName
             } else {   // We didn't have any variants in this region.  Search a different data set
-                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+                jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, maximumNumberOfRecords )
             }
 
         } else {  // We didn't have any credible set data set for this phenotype. Let's go straight to the alternate data set
-            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype )
+            jsonResultString = buildTheIncredibleSet(  chromosome,  startPosition,  endPosition, phenotype, maximumNumberOfRecords )
         }
 
 
         // return
         return jsonResultString;
     }
+
+    /***
+     * Decide how many phenotypes oil well further explore. Assign a weight to each one.
+     *
+     * Format of mapFromApiCall:
+     * {
+     data: [
+            ... // arrays to match each of the fields described in the header
+     ],
+     header: ["DBSNP_ID",
+     "GENE",
+     "CHROM",
+     "POS",
+     "Reference_allele",
+     "Effect_allele",
+     "VAR_ID",
+     "PHENOTYPE",
+     "P_VALUE",
+     "BETA",
+     "EFFECT",
+     "DATASET" ] }
+     *
+     *
+     * Format of example return list of records:
+     * [ {phenoName:'T2D',phenoWeight: 0.8 },
+     *   {phenoName:'BMI',phenoWeight: 0.2 } ]
+     *
+     *  For now let's use a super simple algorithm: provide a maximum value threshold for association strength, and then count the
+     *  number of signals we see for each phenotype with a variant that meets the threshold.
+     *
+     * @param mapFromApiCall
+     * @param parametersForAlgorithm
+     * @return
+     */
+    public Map determinePhenotypeWeightsAndCutOff( Map mapFromApiCall,
+                                                    Map parametersForAlgorithm ) {
+        Map returnValue = [ genefullCalculatedGraph: [],
+                            geneInformation: [],
+                            phenotypePValueMap: [:]]
+        List nonUniqueGenesWithIdentifiedVariants = []
+        float maximumAssociationValue = parametersForAlgorithm.maximumAssociationValue
+        int phenotypeIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^PHENOTYPE/ } )
+        int pValueIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^P_VALUE/ } )
+        int geneIndex =  (mapFromApiCall.header.findIndexOf { name -> name =~ /^GENE/ } )
+        if ((phenotypeIndex > -1) && (pValueIndex > -1)){
+            int numberOfRecords = mapFromApiCall["data"][phenotypeIndex].size ()
+            if (mapFromApiCall["data"][geneIndex]!=null){
+                nonUniqueGenesWithIdentifiedVariants << mapFromApiCall["data"][geneIndex]?.findAll{it!=null}
+            }
+            float recordsExceedingThreshold = 0.0
+            Map countingPhenotypeSignals = [:]
+            for ( int i = 0 ; i < numberOfRecords ; i++ ){
+                if ( mapFromApiCall["data"][pValueIndex][i]  < maximumAssociationValue ) {
+                    recordsExceedingThreshold += 1
+
+                    String phenotypeToFlag =  mapFromApiCall["data"][phenotypeIndex][i]
+                    if (countingPhenotypeSignals.containsKey(phenotypeToFlag)){
+                        countingPhenotypeSignals[phenotypeToFlag] += 1.0
+                    } else {
+                        countingPhenotypeSignals[phenotypeToFlag] = 0.0
+                    }
+                    if (!returnValue.phenotypePValueMap.containsKey(phenotypeToFlag)){
+                        returnValue.phenotypePValueMap[phenotypeToFlag] = mapFromApiCall["data"][pValueIndex][i]
+                    }
+                }
+            }
+            if (recordsExceedingThreshold > 0)
+            countingPhenotypeSignals.sort { a, b -> a.value <=> b.value }.each{
+                k, v -> returnValue.genefullCalculatedGraph << [phenoName:"${k}",phenoWeight:"${v/recordsExceedingThreshold}"]
+            }
+
+        }
+        returnValue["geneInformation"] = (nonUniqueGenesWithIdentifiedVariants.size()>0) ? nonUniqueGenesWithIdentifiedVariants[0].unique() : []
+        return returnValue
+    }
+
+    /***
+     * This information should be supplied through the LD regression call, and should return in the set of tissues rated by the algorithm
+     * as being most significantly associated with a particular phenotype.  Create a data structure which passes back the tissues on a
+     * per phenotype basis.
+     *
+     * For now we will simulate the result, always returning the same tissues, until the real API call has been implemented.
+     *
+     *
+     *
+     * @param phenotypesAndWeights
+     * @param parametersForAlgorithm
+     * @return
+     */
+    public Map gatherTheTissuesAssociatedWithEachPhenotype( Map phenotypesWeightsAndGenes,
+                                                            Map parametersForAlgorithm ){
+        int loopCounter = 0
+        List phenotypesAndWeights = phenotypesWeightsAndGenes.genefullCalculatedGraph
+        for (Map onePhenotypeRecord in phenotypesAndWeights){
+
+            Boolean processRecord = false
+            if (!parametersForAlgorithm.phenotype)  {
+                processRecord = true
+            } else if ((parametersForAlgorithm.phenotype)&&(parametersForAlgorithm.phenotype==onePhenotypeRecord.phenoName)) {
+                processRecord = true
+            }
+            if (processRecord){
+                List tissueWeightPerPhenotype = restServerService.determineTissueAssociationPerPhenotype(onePhenotypeRecord.phenoName)
+                if ((tissueWeightPerPhenotype)&&(tissueWeightPerPhenotype.size()>0)){
+                        onePhenotypeRecord["tissues"]  =  tissueWeightPerPhenotype.findAll{it.weight>parametersForAlgorithm.maximumAssociationWeight}
+                } else {
+                    onePhenotypeRecord["tissues"]  = []
+                }
+            }
+
+        }
+        return phenotypesWeightsAndGenes
+    }
+
+
+
+    public Map gatherExpressionDataForEachGene( Map phenotypesWeightsAndGenes,
+                                                                   Map parametersForAlgorithm ){
+        List genesInRegion = phenotypesWeightsAndGenes.geneInformation
+        Map temporaryGeneInformationHolder = [:]
+        for (String geneName in genesInRegion){
+            Map expressionDataForGene = restServerService.gatherBottomLineVariantsPerGene( geneName )
+            temporaryGeneInformationHolder[geneName] = expressionDataForGene
+        }
+        phenotypesWeightsAndGenes['geneInformation'] = temporaryGeneInformationHolder
+        return phenotypesWeightsAndGenes
+    }
+
+
+    public Map buildFinalDataStructureBeforeTransmission( Map phenotypesWeightsAndGenes,
+                                                            Map parametersForAlgorithm ){
+        List genesInRegion = phenotypesWeightsAndGenes.geneInformation.keySet()  as List
+        Map phenotypeCoefficientMap = parametersForAlgorithm.phenotypeCoefficientMap
+        Map invertedGeneExpression = [:]
+        Map geneInformation = [:]
+        int geneId = 1
+        for (String geneName in genesInRegion){
+            Map geneExpressionMapping = phenotypesWeightsAndGenes.geneInformation[geneName]
+            geneExpressionMapping.each{ k, v ->
+                if (!invertedGeneExpression.containsKey(k)){
+                    invertedGeneExpression[k] = []
+                }
+                if (!geneInformation.containsKey(geneName)){
+                    geneInformation[geneName] = ['geneId': geneId++,'geneName':geneName, 'combinedWeight': 0.0, tissues:[]]
+                }
+                invertedGeneExpression[k] << ['geneName':geneName,'geneWeight':v, 'geneId': geneInformation[geneName].geneId ]
+            }
+        }
+
+        Map geneSpecificContribution = [:]
+        List phenotypeRecords= phenotypesWeightsAndGenes["genefullCalculatedGraph"]
+        for (Map phenotypeRecord in phenotypeRecords){
+            String phenoName = phenotypeRecord.phenoName as String
+            if (phenotypeCoefficientMap.containsKey(phenoName)){
+                phenotypeRecord.phenoWeight = phenotypeCoefficientMap[phenoName]
+            } else {
+                phenotypeRecord.phenoWeight = 1.0 as float
+            }
+            if ((phenotypeRecord['tissues'])&& ((phenotypeRecord['tissues'].size()>0))){
+                List tissueRecords = phenotypeRecord['tissues']
+                for (Map tissueRecord in tissueRecords){
+                    String tissueName = tissueRecord["tissue"]
+                    boolean processTissue = false
+                    if (parametersForAlgorithm.restrictTissues){
+                        processTissue = (invertedGeneExpression.containsKey(tissueName)&&
+                                ((parametersForAlgorithm.tissueToInclude.contains(tissueName))|| // we were told to include this tissue
+                                        (parametersForAlgorithm.tissueToInclude.size()==0))) // we were told to include no tissues, which doesn't make any sense, so include every tissue instead
+                    } else {
+                        processTissue = invertedGeneExpression.containsKey(tissueName)
+                    }
+                    if (processTissue){
+                        tissueRecord['genes'] = invertedGeneExpression[tissueName].findAll{it.geneWeight>0.0}
+                        for (Map recPerGene in invertedGeneExpression[tissueName]){
+                            String geneName = recPerGene['geneName'] as String
+                            if (!geneSpecificContribution.containsKey(geneName)){
+                                geneSpecificContribution[geneName] = [:]
+                            }
+                            if (!((geneSpecificContribution[geneName] as Map).containsKey(phenoName))){
+                                geneSpecificContribution[geneName][phenoName] = 0.0
+                            }
+                            geneInformation[geneName]['tissues'] << ['tissue':tissueName,'tissueWeight':tissueRecord["weight"] ]
+                            Float valToAdd = (recPerGene['geneWeight']*tissueRecord["weight"]*phenotypeRecord.phenoWeight)
+                            geneInformation[geneName]['combinedWeight'] += valToAdd
+                            geneSpecificContribution[geneName][phenoName] += valToAdd
+                        }
+                    }
+                }
+            }
+            phenotypeRecord.phenoWeight
+
+        }
+        phenotypesWeightsAndGenes['geneSpecificContribution'] = geneSpecificContribution
+        geneInformation.each{ gk,gv->
+            String geneName = gk as String
+            if (geneSpecificContribution.containsKey(geneName)){
+                List phenotypeInfoSpecificToAGene = []
+                geneSpecificContribution[geneName].each{ pk, pv ->
+                    if (pv>0){
+                        phenotypeInfoSpecificToAGene << [phenotypeName:pk,phenotypeValue:pv]
+                    }
+                }
+                gv["phenoRecs"] = phenotypeInfoSpecificToAGene
+            }
+        }
+        phenotypesWeightsAndGenes['geneInformation'] = geneInformation.values()
+        //phenotypesWeightsAndGenes['geneInformation'] = temporaryGeneInformationHolder
+        return phenotypesWeightsAndGenes
+    }
+
+
 
 
 

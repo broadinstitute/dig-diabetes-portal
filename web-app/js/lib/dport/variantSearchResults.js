@@ -55,7 +55,7 @@ var mpgSoftware = mpgSoftware || {};
                     if ((myVarsToRemember["allGenes"].length>0)&&
                         (myVarsToRemember["allGenes"][0].length>0)) {
                         myVarsToRemember["namedGeneArray"] = _.map(myVarsToRemember["allGenes"], function (o) {
-                            return {'name': o}
+                            return {'name': o.trim()}
                         });
                     }
                     var dataNode = $('#'+dataNodeName);

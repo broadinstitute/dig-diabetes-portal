@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <%@ page import="org.springframework.web.servlet.support.RequestContextUtils" %>
 <%@ page import="temporary.BuildInfo" %>
+<%@ page import="temporary.BuildInfo" %>
+<%@ page import="org.broadinstitute.mpg.RestServerService" %>
+<g:set var="restServer" bean="restServerService"/>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
@@ -8,24 +11,7 @@
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"><!--<![endif]-->
 <html>
     <head>
-        <g:if test="${g.portalTypeString()?.equals('stroke')}">
-            <title><g:message code="portal.stroke.header.title.short"/> <g:message code="portal.stroke.header.title.genetics"/></title>
-        </g:if>
-        <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-            <title><g:message code="portal.mi.header.title.short"/> <g:message code="portal.mi.header.title.genetics"/></title>
-        </g:elseif>
-        <g:elseif test="${g.portalTypeString()?.equals('ibd')}">
-            <title><g:message code="portal.ibd.header.title"/></title>
-        </g:elseif>
-        <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
-            <title><g:message code="portal.epilepsy.header.title"/> <g:message code="portal.mi.header.title.genetics"/></title>
-        </g:elseif>
-        <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
-            <title><g:message code="portal.sleep.header.title.short"/> <g:message code="portal.sleep.header.title.genetics"/></title>
-        </g:elseif>
-        <g:else>
-            <title><g:message code="portal.header.title.short"/> <g:message code="portal.header.title.genetics"/></title>
-        </g:else>
+        <title><g:message code="${restServer.retrieveBeanForCurrentPortal().getTabLabel()}"/></title>
 
         <r:require modules="core"/>
         <r:layoutResources/>
