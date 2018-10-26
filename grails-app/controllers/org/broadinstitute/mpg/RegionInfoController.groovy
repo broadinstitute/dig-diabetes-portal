@@ -472,7 +472,7 @@ class RegionInfoController {
         String tissue = ""
         String variant = ""
         boolean looksOkay = true
-        JSONObject jsonReturn
+        JSONArray jsonReturn
 
         if (params.gene) {
             gene = params.gene
@@ -491,7 +491,7 @@ class RegionInfoController {
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
             def slurper = new JsonSlurper()
-            jsonReturn =  slurper.parseText(proposedJsonString);
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
 
         render(status: 200, contentType: "application/json") {jsonReturn}

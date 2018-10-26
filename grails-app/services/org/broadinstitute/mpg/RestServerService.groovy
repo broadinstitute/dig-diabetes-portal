@@ -2265,7 +2265,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONObject gatherEqtlData( String gene,String variant,
+    public JSONArray gatherEqtlData( String gene,String variant,
     String tissue ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
@@ -2279,8 +2279,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
         JsonSlurper slurper = new JsonSlurper()
-        JSONObject dataJsonObject = slurper.parseText(rawReturnFromApi)
-        return dataJsonObject
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        return jsonArray
     }
 
 

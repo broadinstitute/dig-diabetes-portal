@@ -6,14 +6,6 @@ span.credSetLevelHere{
     white-space: nowrap;
     font-size: 12px;
 }
-div.multipleElementScrolledBox {
-    float:left;
-    width:250px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    height: 200px;
-    border: 1px solid black;
-}
 </style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
@@ -650,7 +642,7 @@ div.multipleElementScrolledBox {
                         <div class="row">
                             <div class="col-sm-3">
                                 <button id="{{generalizedGoButtonId}}" class="btn btn-primary" type="button" style="float: right; height: 41px; width:100px; border-radius:2px; margin: -1px 15px 0 0;">MOD</button>
-                                <button id="{{generalizedGoButtonId}}" class="btn btn-primary" type="button" style="float: right; height: 41px; width:100px; border-radius:2px; margin: -1px 15px 0 0;">eQTL</button>
+                                <button id="{{eQTLGoButtonId}}" class="btn btn-primary" type="button" style="float: right; height: 41px; width:100px; border-radius:2px; margin: -1px 15px 0 0;">eQTL</button>
                                 <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
                             </div>
                             <div class="col-sm-3">

@@ -1,0 +1,8 @@
+div.multipleElementScrolledBox {
+    float:left;
+    width:250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 200px;
+    border: 1px solid black;
+}

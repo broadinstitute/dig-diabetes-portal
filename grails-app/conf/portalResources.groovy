@@ -185,6 +185,8 @@ modules = {
         dependsOn 'variantSearchResults'
         resource url: 'js/lib/dport/geneSignalSummary.js'
         resource url: 'css/dport/geneSignalSummary.css'
+        resource url: 'js/lib/dport/dynamicUi.js'
+        resource url: 'css/dport/dynamicUi.css'
     }
     mustache {
         resource url: 'js/lib/mustache.js'
