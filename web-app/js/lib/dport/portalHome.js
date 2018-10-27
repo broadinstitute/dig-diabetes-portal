@@ -155,8 +155,8 @@ var mpgSoftware = mpgSoftware || {};
                 // $("#logoGoesHere").empty().append(substitutedMenuHeaderLine);
                 var portal_typeSelector = $("#portal_typeSelector");
                 _.forEach(data, function(eachPortal){
-                    var option = new Option( eachPortal.portalDescription,eachPortal.portalType);
-                    if  (parms.currentPortalType===eachPortal.portalType){
+                    var option = new Option( eachPortal.PortalDescription,eachPortal.PortalType);
+                    if  (parms.currentPortalType===eachPortal.PortalType){
                         $(option).prop('selected', true);
                     }
                     portal_typeSelector.append(option);
