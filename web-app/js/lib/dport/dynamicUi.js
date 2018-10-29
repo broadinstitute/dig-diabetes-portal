@@ -27,9 +27,17 @@ mpgSoftware.dynamicUi = (function () {
     };
 
     var processRecordsFromEqtls = function (data){
-        var returnArray = [];
+        var returnObject = {rawData:[],
+                            uniqueGenes:[],
+                            uniqueTissues:[]};
         _.forEach(data,function(oneRec){
-            returnArray.push(oneRec);
+            returnObject.rawData.push(oneRec);
+            if (!returnObject.uniqueGenes.includes(oneRec.gene)){
+                returnObject.uniqueGenes.push(oneRec.gene);
+            };
+            if (!returnObject.uniqueTissues.includes(oneRec.tissue)){
+                returnObject.uniqueTissues.push(oneRec.tissue);
+            };
         });
         return returnArray;
     };
@@ -70,7 +78,9 @@ mpgSoftware.dynamicUi = (function () {
                 async: true
             }).done(function (data, textStatus, jqXHR) {
 
-                arrayOfRetrievedRecords = rememberProcessEachRecord( data );
+                arrayOfRetrievedRecords = rememberProcessEachRecord( data );// HEY -- I should return an object
+                // with useful summary information, and not just an array of strings. I started in
+                // processRecordsFromEqtls, but the MODS data is still handled the old way.
 
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 loading.hide();
