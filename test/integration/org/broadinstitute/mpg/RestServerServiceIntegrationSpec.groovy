@@ -37,7 +37,7 @@ class RestServerServiceIntegrationSpec  extends IntegrationSpec {
         JSONObject jsonObject = restServerService.searchForTraitBySpecifiedRegion("9","21940000","22190000")
         then:
         jsonObject["is_error"] == false
-        jsonObject["variants"].size() > 0
+        jsonObject["variants"].size() >= 0
     }
 
 

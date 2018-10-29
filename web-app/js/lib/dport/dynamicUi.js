@@ -17,13 +17,16 @@ mpgSoftware.dynamicUi = (function () {
     };
 
     var processRecordsFromMod = function (data){
-        var returnArray = [];
+        var returnObject = {rawData:[],
+            uniqueGenes:[],
+            uniqueTissues:[]};
         _.forEach(data,function(oneRec){
-            if (!returnArray.includes(oneRec.Term)){
-                returnArray.push(oneRec.Term);
+            if (!returnObject.uniqueTissues.includes(oneRec)){
+                returnObject.uniqueTissues.push(oneRec);
             };
+            returnObject.rawData.push(oneRec);
         });
-        return returnArray;
+        return returnObject;
     };
 
     var processRecordsFromEqtls = function (data){
@@ -39,22 +42,22 @@ mpgSoftware.dynamicUi = (function () {
                 returnObject.uniqueTissues.push(oneRec.tissue);
             };
         });
-        return returnArray;
+        return returnObject;
     };
 
-    var displayRefinedModContext = function (idForTheTargetDiv,arrayOfRetrievedRecords){
+    var displayRefinedModContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv = '#' + idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(_.sortBy(_.uniq(arrayOfRetrievedRecords)),function(onePhenotypeName) {
-            $(selectorForIidForTheTargetDiv).append(onePhenotypeName);
+        _.forEach(_.sortBy(_.uniq(objectContainingRetrievedRecords.rawData)),function(onePhenotypeName) {
+            $(selectorForIidForTheTargetDiv).append(onePhenotypeName.Term+'\n');
         });
     };
 
-    var displayRefinedEqtlContext = function (idForTheTargetDiv,arrayOfRetrievedRecords){
+    var displayRefinedEqtlContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv = '#' + idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(arrayOfRetrievedRecords,function(onePhenotypeName) {
-            $(selectorForIidForTheTargetDiv).append(onePhenotypeName.tissue+'\n');
+        _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
+            $(selectorForIidForTheTargetDiv).append(oneTissue+'\n');
         });
     };
 
@@ -68,7 +71,7 @@ mpgSoftware.dynamicUi = (function () {
         var rememberRetrieveDataUrl = inParms.retrieveDataUrl;
         var rememberDisplayRefinedContextFunction =  inParms.displayRefinedContextFunction;
         var rememberPhenoHolder = additionalParameters.phenoHolder;
-        var arrayOfRetrievedRecords = [];
+        var objectContainingRetrievedRecords = [];
         promiseArray.push(
             $.ajax({
                 cache: false,
@@ -78,7 +81,7 @@ mpgSoftware.dynamicUi = (function () {
                 async: true
             }).done(function (data, textStatus, jqXHR) {
 
-                arrayOfRetrievedRecords = rememberProcessEachRecord( data );// HEY -- I should return an object
+                objectContainingRetrievedRecords = rememberProcessEachRecord( data );// HEY -- I should return an object
                 // with useful summary information, and not just an array of strings. I started in
                 // processRecordsFromEqtls, but the MODS data is still handled the old way.
 
@@ -89,7 +92,7 @@ mpgSoftware.dynamicUi = (function () {
         );
         $.when.apply($, promiseArray).then(function(allCalls) {
 
-            rememberDisplayRefinedContextFunction( rememberPhenoHolder, arrayOfRetrievedRecords );
+            rememberDisplayRefinedContextFunction( rememberPhenoHolder, objectContainingRetrievedRecords );
 
         }, function(e) {
             console.log("Ajax call failed");

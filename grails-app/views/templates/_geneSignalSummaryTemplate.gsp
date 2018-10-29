@@ -610,6 +610,20 @@ span.credSetLevelHere{
         <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
                 <div class="row" style="border: none">
+                    <div class="col-sm-12">
+                    Current context:
+                    </div>
+                    <div class="contextHolder">
+                        <div id="contextDescription">
+                             <ul style="margin: 0 0 0 10px">
+                                 <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
+                                 <li>associated with {{pname}}</li>
+                             </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="border: none">
                     %{--<div class="col-sm-12">--}%
                         %{--<nav class="nav nav-pills nav-fill">--}%
                           %{--<a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>--}%

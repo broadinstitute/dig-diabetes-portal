@@ -1919,11 +1919,22 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             chromatinConformationIndicator.push(1);
         }
         if (additionalParameters.exposeDynamicUi === "1"){
+            var phenotype = additionalParameters.defaultPhenotype;
+            var chromosome =  (additionalParameters.geneChromosome.substr(0,3)==='chr')?
+                additionalParameters.geneChromosome.substr(3):
+                additionalParameters.geneChromosome;
+            if ( typeof additionalParameters.currentPhenotype !== 'undefined'){
+                phenotype =  additionalParameters.currentPhenotype;
+            }
             exposeDynamicUiIndicator.push(
                 {   generalizedInputId:additionalParameters.generalizedInputId,
                     generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
                     phenoHolder:additionalParameters.phenoHolder,
-                    eQTLGoButtonId:additionalParameters.eQTLGoButtonId
+                    eQTLGoButtonId:additionalParameters.eQTLGoButtonId,
+                    geneExtentBegin:additionalParameters.geneExtentBegin,
+                    geneExtentEnd:additionalParameters.geneExtentEnd,
+                    chromosome:chromosome,
+                    pname: phenotype
                 }
             );
         }

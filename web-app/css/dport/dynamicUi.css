@@ -6,3 +6,6 @@ div.multipleElementScrolledBox {
     height: 200px;
     border: 1px solid black;
 }
+div.contextHolder{
+    border: 1px solid black;
+}
