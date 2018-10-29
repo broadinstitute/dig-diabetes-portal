@@ -338,7 +338,7 @@ environments {
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
 
 //        grails.serverURL = "http://sleepportal-prodsrvr.us-east-1.elasticbeanstalk.com"
-        grails.serverURL = "http://sleepdisordergenetics.org"                                  // Sleep portal
+//        grails.serverURL = "http://sleepdisordergenetics.org"                                  // Sleep portal
 //
 //        grails.serverURL = "http://intel-rp-env.us-east-1.elasticbeanstalk.com"             // intel portal dev for now
 //        grails.serverURL = "http://distrib-dcc-portal-env.us-east-1.elasticbeanstalk.com"             // distributed portal dev for now
@@ -711,7 +711,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0,
                                           1,
                                           0,
-                                          1,0,1,
+                                          1,1,1,
                                           0,
                                           0,
                                           0,
