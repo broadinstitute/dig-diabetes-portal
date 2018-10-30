@@ -611,15 +611,38 @@ span.credSetLevelHere{
             {{#dynamicUiTab}}
                 <div class="row" style="border: none">
                     <div class="col-sm-12">
-                    Current context:
+                    Current context:each
                     </div>
-                    <div class="contextHolder">
-                        <div id="contextDescription">
-                             <ul style="margin: 0 0 0 10px">
-                                 <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
-                                 <li>associated with {{pname}}</li>
-                             </ul>
+                    <div class="col-sm-6">
+                        <div class="contextHolder">
+                            <div id="contextDescription">
+                                 <ul style="margin: 0 0 0 10px">
+                                     <li>located on chromosome
+                                        <span class="dynamicUiChromosome">{{chromosome}}</span>
+                                         between
+                                         <span class="dynamicUiGeneExtentBegin">{{geneExtentBegin}}</span>
+                                          and
+                                         <span class="dynamicUiGeneExtentEnd">{{geneExtentEnd}}</span></li>
+                                     <li>associated with {{pname}}</li>
+                                 </ul>
+                            </div>
                         </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseContextRefiner" aria-expanded="false" aria-controls="collapseContextRefiner">
+                            Refine context
+                         </button>
+                         <div class="collapse" id="collapseContextRefiner">
+                             <div class="card card-body">
+                                <button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+                                type="button">proximity</button>
+                                <button id="{{generalizedGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+                                type="button">MOD</button>
+                                <button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+                                type="button">eQTL</button>
+                                <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
+                             </div>
+                         </div>
                     </div>
                 </div>
 
@@ -652,24 +675,30 @@ span.credSetLevelHere{
 
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
-                        <h3>dynamicGeneHolder</h3>
+                        <h3>Genes in context</h3>
                         <div class="row">
-                            <div class="col-sm-3">
-                                <button id="{{generalizedGoButtonId}}" class="btn btn-primary" type="button" style="float: right; height: 41px; width:100px; border-radius:2px; margin: -1px 15px 0 0;">MOD</button>
-                                <button id="{{eQTLGoButtonId}}" class="btn btn-primary" type="button" style="float: right; height: 41px; width:100px; border-radius:2px; margin: -1px 15px 0 0;">eQTL</button>
-                                <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default" style="float: right; height: 41px; width:200px; border-radius: 2px; margin: -1px 0 0 0;">
-                            </div>
-                            <div class="col-sm-3">
-                            </div>
-                           <div class="col-sm-6">
+                            <div class="col-sm-12">
+                                <div id="{{dynamicUiGeneHolder}}">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicVariantHolder">
-                        <h3>dynamicVariantHolder</h3>
-                    </div>
+                        <h3>Variants in context</h3>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div id="{{dynamicUiVariantHolder}}" class="multipleElementScrolledBox">
+                                </div>
+                            </div>
+                        </div>                    </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
-                        <h3>dynamicTissueHolder</h3>
+                        <h3>Tissues in context</h3>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div id="{{dynamicUiTissueHolder}}" class="multipleElementScrolledBox">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder">
 
@@ -693,7 +722,31 @@ span.credSetLevelHere{
         </div>
     </div>
 </script>
+<script id="dynamicGeneTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    <tr>
+        <th>gene</th>
+        {{#uniqueGenes}}
+            <th  scope="col">{{.}}</th>
+        {{/uniqueGenes}}
+    </tr>
 
+    <tr>
+        <th  scope="row">ABC gene-enhancer</th>
+        {{#uniqueGenes}}
+            <td ></th>
+        {{/uniqueGenes}}
+    </tr>
+
+    <tr>
+        <th  scope="row">eQTL</th>
+         {{#uniqueGenes}}
+            <td ></th>
+        {{/uniqueGenes}}
+    </tr>
+
+    </table>
+</script>
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>

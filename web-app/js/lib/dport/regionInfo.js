@@ -301,7 +301,7 @@ var mpgSoftware = mpgSoftware || {};
                     insertAnnotation(renderData,'spliceSite', (spliceSiteVariants.length>0), false );
                     insertAnnotation(renderData,'utr', (utrVariants.length>0), false );
                     insertAnnotation(renderData,'promoter', (promoterVariants.length>0), false );
-                    insertAnnotation(renderData,'tfBindingMotif', (tfBindingVariants.length>0), false );
+                   // insertAnnotation(renderData,'tfBindingMotif', (tfBindingVariants.length>0), false );
                     var posteriorProbabilitiesExist = false;
                     if (maximumPosteriorPValue>0) {
                         posteriorProbabilitiesExist = true;

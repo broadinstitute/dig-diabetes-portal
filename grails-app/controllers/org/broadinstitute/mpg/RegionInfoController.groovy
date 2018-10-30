@@ -445,6 +445,8 @@ class RegionInfoController {
         }
         if (!params.chromosome) {
             looksOkay = false
+        } else {
+            chromosome = params.chromosome
         }
 
         Map geneSearchResults
