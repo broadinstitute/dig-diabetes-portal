@@ -500,7 +500,7 @@
 
                 <div class="col-md-3 dk-submit-btn-wrapper">
                     {{ #shouldSubmitBeEnabled }}
-                    <button class="btn btn-lg btn-primary" onclick="mpgSoftware.variantWF.launchAVariantSearch()">
+                    <button class="btn btn-lg btn-primary" onclick="mpgSoftware.variantWF.variantFinderGetData()">
                         <g:message code="variantSearch.actions.submit_search" default="Submit search request"/>
                     </button>
                     {{ /shouldSubmitBeEnabled }}

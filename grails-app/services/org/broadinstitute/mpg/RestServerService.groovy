@@ -2142,7 +2142,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, datasetName, pValue)
 
-        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults)
+        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${datasetName}\"", MetaDataService.METADATA_VARIANT)
 
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
@@ -3014,24 +3014,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     /***
      * this is the core function for making a call to getData and return the data as a map.
      */
-    def variantFinderGetDataRestCall(String inputJson){
+    def variantFinderGetDataRestCall(String phenotypeName, String datasetName, String pValue){
 
+       String inputJson = "\n" +
+                "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":-1, \"page_size\": -1, \"limit\": 1000, \"count\": false," +
+                " \"result_format\": \"verbose\", \"order_by\": [],\"properties\": {\"cproperty\": [ \"CHROM\" , \"CLOSEST_GENE\" , " +
+                "\"Consequence\" , \"DBSNP_ID\" , \"Effect_Allele\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
+                " \"dproperty\" : {} , \"pproperty\" : {\"MINA\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
+                " \"MINU\" : { \"${datasetName}\" : [ \"T2D\"]}, \"ODDS_RATIO\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}, \"P_VALUE\" : { \"${datasetName}\" : [ \"${phenotypeName}\"] } } }," +
+                " \"filters\":  [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\", \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] } "
 
-        inputJson
-
-        inputJson = "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":0, \"page_size\": 25, " +
-                "\"limit\": 1000, \"count\": false, \"result_format\": \"verbose\", " +
-                "\"order_by\": [{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"VAR_ID\"," +
-                " \"operator\": \"\"}],\"properties\": {\"cproperty\": [ \"CHROM\" , \"Consequence\" , \"DBSNP_ID\" ," +
-                " \"Effect_Allele\" , \"GENE\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
-                " \"dproperty\" : {} , \"pproperty\" : {} }, \"filters\":  [ {\"dataset_id\": \"blah\", " +
-                "\"phenotype\": \"blah\", \"operand\": \"CHROM\", \"operator\": \"EQ\", \"value\": \"21\", " +
-                "\"operand_type\": \"STRING\"}, {\"dataset_id\": \"blah\", \"phenotype\": \"blah\"," +
-                " \"operand\": \"POS\", \"operator\": \"GTE\", \"value\": 32931885, \"operand_type\": \"INTEGER\"}, " +
-                "{\"dataset_id\": \"blah\", \"phenotype\": \"blah\", \"operand\": \"POS\", \"operator\": \"LTE\", " +
-                "\"value\": 33141294, \"operand_type\": \"INTEGER\"} ] } "
-
-        JsonObject jsonObject = RestServerService.postGetDataCall(inputJson)
+        JSONObject jsonObject = postGetDataCall(inputJson)
         return jsonObject
     }
 

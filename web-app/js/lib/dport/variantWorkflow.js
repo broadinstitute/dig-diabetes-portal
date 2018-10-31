@@ -306,14 +306,31 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
-        var variantFinderGetData = function (phenotypeName, dataset, pValue) {
+        var variantFinderGetData = function () {
             var coreVariables = mpgSoftware.variantWF.getMySavedVariables();
+            var listOfProcessedQueries = [];
+            _.each(listOfSavedQueries, function (query) {
+                var keysToOmit = [
+                    'translatedPhenotype',
+                    'translatedName',
+                    'translatedDataset'
+                ];
+                listOfProcessedQueries.push(_.omit(query, keysToOmit));
+            });
+
+
+            var dataset = listOfProcessedQueries[0].dataset;
+            var phenotypeName = listOfProcessedQueries[0].phenotype;
+            var property = listOfProcessedQueries[0].prop;
+            var propertyValue = listOfProcessedQueries[0].value;
+
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
-                url: coreVariables.variantFinderGetDataUrl,
-                data: {phenotype: phenotypeName, dataset: dataset,pValue: pValue},
+               // url: coreVariables.variantFinderGetDataUrl,
+                url: "./ajaxVariantFinderGetData",
+                data: {phenotype: phenotypeName, dataset: dataset,pValue: propertyValue},
                 async: true,
                 success: function (data) {
                     loading.hide();
@@ -704,6 +721,7 @@ var mpgSoftware = mpgSoftware || {};
 
         return {
             fillDatasetDropdown: fillDatasetDropdown,
+            variantFinderGetData: variantFinderGetData,
             fillPropertiesDropdown: fillPropertiesDropdown,
             launchAVariantSearch: launchAVariantSearch,
             retrievePhenotypes: retrievePhenotypes,
@@ -715,7 +733,11 @@ var mpgSoftware = mpgSoftware || {};
             deleteQuery: deleteQuery,
             resetInputFields: resetInputFields,
             propsWithQueries: propsWithQueries,
-            initializePage: initializePage
+            initializePage: initializePage,
+            setMySavedVariables: setMySavedVariables,
+            getMySavedVariables:getMySavedVariables
+
+
         }
 
     }());

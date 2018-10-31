@@ -479,7 +479,7 @@ class VariantSearchController {
 
         String dataSetName = params["dataset"]
 
-        String pValue = params["p_value"]
+        String pValue = params["pValue"]
 
         JSONObject jsonObject = restServerService.getVariantFinderSpecificData(phenotype, dataSetName,pValue)
         render(status: 200, contentType: "application/json") {
