@@ -246,17 +246,22 @@ table.dataTable td {
     -moz-box-sizing: content-box;
     box-sizing: content-box;
 }
-button.buttonsForInitiatingRefinementStep {
-    float: right;
+button.buttonsForManualContextRefinement {
+    float: left;
     height: 41px;
-    width:100px;
+    width:120px;
     border-radius:2px;
     margin: -1px 15px 0 0;
 }
 input.inputForInitiatingRefinementStep {
-    float: right;
+    float: left;
     height: 41px;
     width: 200px;
     border-radius: 2px;
     margin: -1px 0 0 0;
+}
+button.buttonsForInitiatingRefinementStep {
+    height: 35px;
+    width:100px;
+    border-radius:2px;
 }

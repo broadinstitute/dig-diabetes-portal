@@ -41,6 +41,8 @@ class PortalVersionBean {
     private String genePageWarning=""
     private String credibleSetInfoCode=""
     private String blogId=""
+    private Integer exposeCommonVariantTab=0
+    private Integer exposeRareVariantTab=0
     private Integer variantAssociationsExists=0
     private Integer  geneLevelDataExists=0
     private Integer exposeGrsModule=0
@@ -91,6 +93,8 @@ class PortalVersionBean {
                              String genePageWarning,
                              String credibleSetInfoCode,
                              String blogId,
+                             Integer exposeCommonVariantTab,
+                             Integer exposeRareVariantTab,
                              Integer variantAssociationsExists,
                              Integer geneLevelDataExists,
                              Integer exposeGrsModule,
@@ -139,6 +143,8 @@ class PortalVersionBean {
         this.genePageWarning = genePageWarning
         this.credibleSetInfoCode = credibleSetInfoCode
         this.blogId = blogId
+        this.exposeCommonVariantTab = exposeCommonVariantTab
+        this.exposeRareVariantTab = exposeRareVariantTab
         this.variantAssociationsExists =  variantAssociationsExists
         this.geneLevelDataExists = geneLevelDataExists
         this.exposeGrsModule = exposeGrsModule
@@ -285,6 +291,14 @@ class PortalVersionBean {
         return blogId
     }
 
+    public Integer getExposeCommonVariantTab() {
+        return exposeCommonVariantTab
+    }
+
+    public Integer getExposeRareVariantTab() {
+        return exposeRareVariantTab
+    }
+
     public Integer getVariantAssociationsExists() {
         return variantAssociationsExists
     }
@@ -405,7 +419,6 @@ class PortalVersionBean {
             }
         }
         return new JsonBuilder(objectWeAreBuilding).toPrettyString()
-//        return proposedJsonString
     }
 
 

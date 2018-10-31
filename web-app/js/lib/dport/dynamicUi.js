@@ -29,6 +29,24 @@ mpgSoftware.dynamicUi = (function () {
         return returnObject;
     };
 
+
+    var processRecordsUpdateContext = function (data){
+        var returnObject = {geneName: undefined,
+            chromosome : undefined,
+            extentBegin : undefined,
+            extentEnd : undefined,
+        };
+        if (( typeof data !== 'undefined')&&
+            ( typeof data.geneInfo !== 'undefined')){
+            returnObject.geneName = data.geneInfo.Gene_name;
+            returnObject.chromosome = data.geneInfo.CHROM;
+            returnObject.extentBegin = data.geneInfo.BEG;
+            returnObject.extentEnd = data.geneInfo.END;
+        }
+        return returnObject;
+    };
+
+
     var processRecordsFromEqtls = function (data){
         var returnObject = {rawData:[],
                             uniqueGenes:[],
@@ -88,6 +106,15 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+    var displayRangeContext = function(idForTheTargetDiv,objectContainingRetrievedRecords){
+        $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
+            objectContainingRetrievedRecords
+        ));
+        $("#configurableUiTabStorage").data("dataHolder").extentBegin = objectContainingRetrievedRecords.extentBegin;
+        $("#configurableUiTabStorage").data("dataHolder").extentEnd = objectContainingRetrievedRecords.extentEnd;
+        $("#configurableUiTabStorage").data("dataHolder").chromosome = objectContainingRetrievedRecords.chromosome;
+        $("#configurableUiTabStorage").data("dataHolder").originalGeneName = objectContainingRetrievedRecords.geneName;
+    }
 
 
 
@@ -129,6 +156,8 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicUiGeneHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
+
+
     };
 
 
@@ -153,6 +182,7 @@ mpgSoftware.dynamicUi = (function () {
                 type: "post",
                 url: rememberRetrieveDataUrl,
                 data: { gene: rememberInParmsGene,
+                        geneName:rememberInParmsGene,
                         chromosome: rememberChromosome,
                         startPos: rememberExtentBegin,
                         endPos: rememberExtentEnd },
@@ -194,10 +224,25 @@ mpgSoftware.dynamicUi = (function () {
             }
         });
 
-        // assign the correct response to the MOD go button
+
+        // manually set the range
         $('#'+additionalParameters.generalizedGoButtonId).on('click', function () {
             var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
             somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+            if (somethingSymbol) {
+                updateDynamicUiInResponseToButtonClick({   gene:somethingSymbol,
+                        processEachRecord:processRecordsUpdateContext,
+                        retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
+                        displayRefinedContextFunction:displayRangeContext,
+                        placeToDisplayData:'#contextDescription'
+                    },
+                    additionalParameters)
+            }
+        });
+
+        // assign the correct response to the MOD go button
+        $('#'+additionalParameters.modAnnotationButtonId).on('click', function () {
+            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
             if (somethingSymbol) {
                 updateDynamicUiInResponseToButtonClick({   gene:somethingSymbol,
                         processEachRecord:processRecordsFromMod,
@@ -211,8 +256,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // assign the correct response to the eQTL go button
         $('#'+additionalParameters.eQTLGoButtonId).on('click', function () {
-            var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
-            somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
             if (somethingSymbol) {
                 updateDynamicUiInResponseToButtonClick({   gene:somethingSymbol,
                         processEachRecord:processRecordsFromEqtls,
@@ -227,9 +271,9 @@ mpgSoftware.dynamicUi = (function () {
 
         // assign the correct response to the eQTL go button
         $('#'+additionalParameters.genesWithinRangeButtonId).on('click', function () {
-            var chromosome  = $('span.dynamicUiChromosome').html();
-            var extentBegin  = $('span.dynamicUiGeneExtentBegin').html();
-            var extentEnd  = $('span.dynamicUiGeneExtentEnd').html();
+            var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
+            var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
+            var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
             if  ( ( typeof chromosome !== 'undefined') &&
                 ( typeof extentBegin !== 'undefined') &&
                 ( typeof extentEnd !== 'undefined') ) {
@@ -245,12 +289,41 @@ mpgSoftware.dynamicUi = (function () {
             }
         });
 
+        var chrom=(additionalParameters.geneChromosome.indexOf('chr')>-1)?additionalParameters.geneChromosome.substr(3):additionalParameters.geneChromosome;
+        $("#configurableUiTabStorage").data("dataHolder",{
+            extentBegin:additionalParameters.geneExtentBegin,
+            extentEnd:additionalParameters.geneExtentEnd,
+            chromosome:chrom,
+            originalGeneName:additionalParameters.geneName,
+            geneNameArray:[]});
+
+        $('#contextDescription').empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
+            $("#configurableUiTabStorage").data("dataHolder")
+        ));
+
     };
+    var adjustExtentHolders = function(domStorage,storageField,spanClass,basesToShift){
+        var extentBegin = parseInt( domStorage[storageField] );
+        extentBegin += basesToShift;
+        domStorage[storageField] = extentBegin;
+        $(spanClass).html(""+extentBegin);
+    };
+
+    var adjustLowerExtent = function(basesToShift){
+        adjustExtentHolders($("#configurableUiTabStorage").data("dataHolder"),"extentBegin","span.dynamicUiGeneExtentBegin",basesToShift);
+    };
+
+    var adjustUpperExtent = function(basesToShift){
+        adjustExtentHolders($("#configurableUiTabStorage").data("dataHolder"),"extentEnd","span.dynamicUiGeneExtentEnd",basesToShift);
+    };
+
 
 
 // public routines are declared below
     return {
-        modifyScreenFields:modifyScreenFields
+        modifyScreenFields:modifyScreenFields,
+        adjustLowerExtent:adjustLowerExtent,
+        adjustUpperExtent:adjustUpperExtent
     }
 
 }());

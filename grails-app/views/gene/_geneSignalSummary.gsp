@@ -140,6 +140,7 @@ td.tissueTable.informationIsPresent{
                     lzCredSet: 'lzCredSet',
                     generalizedInputId:'generalized-dynamic-gene-input',
                     generalizedGoButtonId:'generalized-dynamic-gene-go',
+                    modAnnotationButtonId:'modAnnotationButtonId',
                     eQTLGoButtonId:'eQTL-dynamic-gene-go',
                     genesWithinRangeButtonId:'genesWithinRangeButtonId',
                     phenoHolder:'dynamicPhenoHolder',
@@ -181,6 +182,7 @@ td.tissueTable.informationIsPresent{
                     retrieveEqtlDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveEqtlData")}',
                     retrieveModDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveModData")}',
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
+                    geneInfoAjaxUrl: '${g.createLink(controller: "Gene", action: "geneInfoAjax")}',
                     assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},
                     genePageWarning:"${genePageWarning}",
@@ -191,7 +193,9 @@ td.tissueTable.informationIsPresent{
                     exposeGeneComparisonTable:"${portalVersionBean.getExposeGeneComparisonTable()}",
                     exposePredictedGeneAssociations:"${portalVersionBean.getExposePredictedGeneAssociations()}",
                     exposeHiCData:"${portalVersionBean.getExposeHiCData()}",
-                    exposeDynamicUi:"${portalVersionBean.getExposeDynamicUi()}"
+                    exposeDynamicUi:"${portalVersionBean.getExposeDynamicUi()}",
+                    exposeCommonVariantTab:"${portalVersionBean.getExposeCommonVariantTab()}",
+                    exposeRareVariantTab:"${portalVersionBean.getExposeRareVariantTab()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);

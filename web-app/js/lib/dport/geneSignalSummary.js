@@ -1929,6 +1929,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             exposeDynamicUiIndicator.push(
                 {   generalizedInputId:additionalParameters.generalizedInputId,
                     generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
+                    modAnnotationButtonId:additionalParameters.modAnnotationButtonId,
                     phenoHolder:additionalParameters.phenoHolder,
                     dynamicUiGeneHolder:additionalParameters.dynamicUiGeneHolder,
                     dynamicUiVariantHolder:additionalParameters.dynamicUiVariantHolder,
@@ -2069,9 +2070,14 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             geneExtentEnd:additionalParameters.geneExtentEnd,
             pname:additionalParameters.pname
         }];
+        if (additionalParameters.exposeCommonVariantTab==="0"){
+            displayCommonTab = []; //don't display the common variant tab unless we want it
+        }
+        if (!additionalParameters.exposeRareVariantTab==="0"){
+            displayHighImpactTab = [];//don't display the high-impact variant tab unless want it
+        }
         if (regionSpecificVersion === 1){
-            //displayCommonTab = [];
-            displayHighImpactTab = [];
+            displayHighImpactTab = []; //don't display the high-impact variant tab in the case of a region search
         } else {
             if ((typeof data.userQueryContext !== 'undefined')&&
                 (!data.userQueryContext.gene)){

@@ -614,6 +614,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "gene.genePage.warning",
                                                 "",
                                                 '5010306206573083521',
+                                                1, // expose the common variant tab have on the gene page
+                                                1, // expose the high-impact variant tab on the gene page
                                                 1, // do we have parent level associations to show
                                                 0, // Do we have gene level associations to show?
                                                 1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
@@ -662,6 +664,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '7961982646849648720',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -706,6 +710,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '3944203828206499294',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -754,6 +760,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '7857348124942584918',
+                                          0, // expose the common variant tab have on the gene page
+                                          0, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,
@@ -799,6 +807,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '5414069947481666863',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           0,
                                           1,
                                           0,
@@ -844,6 +854,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "",
                                           "",
                                           '3616035242050290841',
+                                          1, // expose the common variant tab have on the gene page
+                                          1, // expose the high-impact variant tab on the gene page
                                           1,
                                           0,
                                           0,

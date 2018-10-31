@@ -346,6 +346,8 @@ class RestServerService {
                     existingPortalVersionBean.getGenePageWarning(),
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
+                    existingPortalVersionBean.getExposeCommonVariantTabs(),
+                    existingPortalVersionBean.getExposeRareVariantTab(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
                     existingPortalVersionBean.getGeneLevelDataExists(),
                     existingPortalVersionBean.getExposeGrsModule(),
@@ -365,8 +367,8 @@ class RestServerService {
                     existingPortalVersionBean.getExposeDatasetHierarchy(),
                     existingPortalVersionBean.getExposeVariantAndAssociationTable(),
                     existingPortalVersionBean.getExposeIgvDisplay(),
-                    existingPortalVersionBean.getExposeIndependentBurdenTest()
-            )
+                    existingPortalVersionBean.getExposeIndependentBurdenTest())
+
             removePortalVersion(portalType)
         } else {
             newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName )

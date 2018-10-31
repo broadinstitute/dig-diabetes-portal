@@ -610,38 +610,48 @@ span.credSetLevelHere{
         <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
                 <div class="row" style="border: none">
+                    <div id="configurableUiTabStorage" style="display: none"></div>
                     <div class="col-sm-12">
-                    Current context:each
+                    Current context:
                     </div>
                     <div class="col-sm-6">
                         <div class="contextHolder">
                             <div id="contextDescription">
-                                 <ul style="margin: 0 0 0 10px">
-                                     <li>located on chromosome
-                                        <span class="dynamicUiChromosome">{{chromosome}}</span>
-                                         between
-                                         <span class="dynamicUiGeneExtentBegin">{{geneExtentBegin}}</span>
-                                          and
-                                         <span class="dynamicUiGeneExtentEnd">{{geneExtentEnd}}</span></li>
-                                     <li>associated with {{pname}}</li>
-                                 </ul>
+                                 %{--<ul style="margin: 0 0 0 10px">--}%
+                                     %{--<li>located on chromosome--}%
+                                        %{--<span class="dynamicUiChromosome">{{chromosome}}</span>--}%
+                                         %{--between--}%
+                                         %{--<span class="dynamicUiGeneExtentBegin">{{geneExtentBegin}}</span>--}%
+                                          %{--and--}%
+                                         %{--<span class="dynamicUiGeneExtentEnd">{{geneExtentEnd}}</span></li>--}%
+                                 %{--</ul>--}%
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-6">
-                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseContextRefiner" aria-expanded="false" aria-controls="collapseContextRefiner">
+                        <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#collapseContextRefiner" aria-expanded="false" aria-controls="collapseContextRefiner">
                             Refine context
                          </button>
                          <div class="collapse" id="collapseContextRefiner">
-                             <div class="card card-body">
-                                <button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
-                                type="button">proximity</button>
-                                <button id="{{generalizedGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
-                                type="button">MOD</button>
-                                <button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
-                                type="button">eQTL</button>
-                                <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
-                             </div>
+                            <div  style="margin-top: 10px">
+                                <div class="card card-body">
+                                    <div>
+                                        <div class="row" style="border: none">
+                                           <button id="{{generalizedGoButtonId}}" class="btn btn-primary buttonsForManualContextRefinement "
+                                                type="button">Reset context</button>
+                                            <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
+                                        </div>
+                                        <div class="row" style="border: none; margin-top: 10px">
+                                            <button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+                                            type="button">proximity</button>
+                                            <button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+                                            type="button">eQTL</button>
+                                            <button id="{{modAnnotationButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep "
+                                                type="button">MOD</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                          </div>
                     </div>
                 </div>
@@ -722,6 +732,32 @@ span.credSetLevelHere{
         </div>
     </div>
 </script>
+
+<script id="contextDescriptionSection"  type="x-tmpl-mustache">
+ <div class="row" style="border: none">
+   <ul>
+    <li>chromosome<span class="dynamicUiChromosome">{{chromosome}}</span></li>
+    <li>starting position
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(-100000)"><<</button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(-10000)"><</button>
+        <span class="dynamicUiGeneExtentBegin">{{extentBegin}}</span>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(10000)">></button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(100000)">>></button>
+    </li>
+    <li>
+        ending position
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(-100000)"><<</button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(-10000)"><</button>
+        <span class="dynamicUiGeneExtentEnd">{{extentEnd}}</span>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(10000)">></button>
+        <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(100000)">>></button>
+    </li>
+    </ul>
+</div>
+</script>
+
+
+
 <script id="dynamicGeneTable"  type="x-tmpl-mustache">
     <table  class="table">
     <tr>
@@ -785,7 +821,7 @@ span.credSetLevelHere{
                         {{/chromatinConformationTab}}
                         {{#dynamicUiTab}}
                             <li role="presentation" class="variantTableLabels chromatinConformationChooser">
-                               <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Dynamic UI</a>
+                               <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Configurable UI</a>
                             </li>
                         {{/dynamicUiTab}}
                     </ul>
