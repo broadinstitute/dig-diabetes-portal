@@ -320,10 +320,22 @@ mpgSoftware.dynamicUi = (function () {
     };
 
     var adjustLowerExtent = function(basesToShift){
+        if (basesToShift>0){
+            if ( ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentBegin)+basesToShift ) > //
+                 ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentEnd ) ) ){
+                return;
+            }
+        }
         adjustExtentHolders($("#configurableUiTabStorage").data("dataHolder"),"extentBegin","span.dynamicUiGeneExtentBegin",basesToShift);
     };
 
     var adjustUpperExtent = function(basesToShift){
+        if (basesToShift<0){
+            if ( ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentEnd )+basesToShift ) < //
+                 ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentBegin ) ) ){
+                return;
+            }
+        }
         adjustExtentHolders($("#configurableUiTabStorage").data("dataHolder"),"extentEnd","span.dynamicUiGeneExtentEnd",basesToShift);
     };
 

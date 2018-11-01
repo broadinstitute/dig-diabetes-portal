@@ -680,8 +680,15 @@ span.credSetLevelHere{
                         <h3>Genes in context</h3>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div id="{{dynamicUiGeneHolder}}">
+
+                                <div class="directorButtonHolder">
+
                                 </div>
+                                <div class="resultsTableHolder">
+                                    <div id="{{dynamicUiGeneHolder}}">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -689,8 +696,15 @@ span.credSetLevelHere{
                         <h3>Variants in context</h3>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div id="{{dynamicUiVariantHolder}}" class="multipleElementScrolledBox">
+
+                                <div class="directorButtonHolder">
+                                    <h1>hey</h1>
                                 </div>
+                                <div class="resultsTableHolder">
+                                    <div id="{{dynamicUiVariantHolder}}" class="multipleElementScrolledBox">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>                    </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
@@ -770,6 +784,25 @@ span.credSetLevelHere{
     </div>
 {{/additionalContext}}
 </script>
+
+
+
+<script id="templateForDirectorButtonsOnATab"  type="x-tmpl-mustache">
+ <div class="row" style="border: none; margin-top: 10px">
+{{#directorButtons}}
+        <button id="{{buttonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+                                            type="button">{{buttonName}}</button>
+{{/directorButtons}}
+</div>
+                                            %{--<button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
+                                            %{--type="button">proximity</button>--}%
+                                            %{--<button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
+                                            %{--type="button">eQTL</button>--}%
+                                            %{--<button id="{{modAnnotationButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep "--}%
+                                                %{--type="button">MOD</button>--}%
+                                           %{----}%
+</script>
+
 
 
 
