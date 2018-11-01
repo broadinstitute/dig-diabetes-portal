@@ -134,7 +134,7 @@
                         <td><img  src="${resource(dir: 'images', file: 'variant_finder.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
                             <g:message code="informational.modules.VariantFinder.description"></g:message>
                             <div class="dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact" style="float: left; margin-right: 15px;"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a></div>
-                            <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float: left;"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Phenotype_reference_guide.pdf" target="_blank">Phenotype Reference Guide</a></div></td>
+                            </td>
                         <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}">Launch Variant Finder</a></div></td>
                     </tr>
                     <!--<tr>
