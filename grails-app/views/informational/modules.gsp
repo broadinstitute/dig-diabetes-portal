@@ -67,18 +67,17 @@
                             <td>
                                 <img  src="${resource(dir: 'images', file: 'LD_clumping.jpg')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
                                 <p><g:message code="informational.modules.LDClumping.description1"></g:message></p>
-                            <p><g:message code="informational.modules.LDClumping.description2"></g:message></td></p>
+                                <p><g:message code="informational.modules.LDClumping.description2"></g:message></p>
 
                             </td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=<%=phenotypeName%>&significance=0.0005">Launch LD Clumping</a></div></td>
+                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'trait', action:'traitSearch')}?trait=<%=phenotypeName%>&significance=0.0005">Launch Manhattan plot</a></div></td>
                         </tr>
                         <tr>
                             <td><h4><g:message code="informational.modules.VariantFinder.title"></g:message></h4></td>
                             <td><img  src="${resource(dir: 'images', file: 'variant_finder.png')}" align="left" style="width: 200px; border: solid 1px #ddd; margin-right: 15px;">
                                 <g:message code="informational.modules.VariantFinder.description"></g:message>
                                 <div class="dk-t2d-green dk-tutorial-button dk-right-column-buttons-compact" style="float: left; margin-right: 15px;"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/VariantFinderTutorial.pdf" target="_blank">Variant Finder tutorial</a></div>
-                                <div class="dk-t2d-green dk-reference-button dk-right-column-buttons-compact" style="float: left;"><a href="https://s3.amazonaws.com/broad-portal-resources/tutorials/Phenotype_reference_guide.pdf" target="_blank">Phenotype Reference Guide</a></div></td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}">Launch Variant Finder</a></div></td>
+                                 <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}">Launch Variant Finder</a></div></td>
                         </tr>
                         <!--<tr>
                             <td><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
