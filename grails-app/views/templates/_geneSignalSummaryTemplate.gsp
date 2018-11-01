@@ -657,14 +657,6 @@ span.credSetLevelHere{
                 </div>
 
                 <div class="row" style="border: none">
-                    %{--<div class="col-sm-12">--}%
-                        %{--<nav class="nav nav-pills nav-fill">--}%
-                          %{--<a class="nav-item nav-link active" href="#dynamicGeneHolder">Gene</a>--}%
-                          %{--<a class="nav-item nav-link" href="#dynamicVariantHolder">Variant</a>--}%
-                          %{--<a class="nav-item nav-link" href="#dynamicTissueHolder">Tissue</a>--}%
-                          %{--<a class="nav-item nav-link" href="#dynamicPhenotypeHolder">Phenotype</a>--}%
-                        %{--</nav>--}%
-                    %{--</div>--}%
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
@@ -735,25 +727,48 @@ span.credSetLevelHere{
 
 <script id="contextDescriptionSection"  type="x-tmpl-mustache">
  <div class="row" style="border: none">
-   <ul>
-    <li>chromosome<span class="dynamicUiChromosome">{{chromosome}}</span></li>
-    <li>starting position
+    <div class="col-sm-3 text-center">
+        chromosome
+    </div>
+    <div class="col-sm-9">
+        <span class="dynamicUiChromosome">{{chromosome}}</span>
+    </div>
+</div>
+<div class="row" style="border: none">
+    <div class="col-sm-3 text-center" >
+        starting extent
+    </div>
+    <div class="col-sm-9">
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(-100000)"><<</button>
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(-10000)"><</button>
         <span class="dynamicUiGeneExtentBegin">{{extentBegin}}</span>
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(10000)">></button>
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustLowerExtent(100000)">>></button>
-    </li>
-    <li>
+    </div>
+</div>
+ <div class="row" style="border: none">
+    <div class="col-sm-3 text-center">
         ending position
+    </div>
+    <div class="col-sm-9">
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(-100000)"><<</button>
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(-10000)"><</button>
         <span class="dynamicUiGeneExtentEnd">{{extentEnd}}</span>
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(10000)">></button>
         <button type="button" class="btn btn-secondary btn-xs" onclick="mpgSoftware.dynamicUi.adjustUpperExtent(100000)">>></button>
-    </li>
-    </ul>
+    </div>
 </div>
+{{#additionalContext}}
+    <div class="col-sm-4">
+        {{name}}
+    </div>
+    <div class="col-sm-4">
+        {{value}}
+    </div>
+    <div class="col-sm-4">
+        {{qualifier}}
+    </div>
+{{/additionalContext}}
 </script>
 
 

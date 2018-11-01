@@ -240,7 +240,7 @@ mpgSoftware.dynamicUi = (function () {
             }
         });
 
-        // assign the correct response to the MOD go button
+        // pull back mouse annotations
         $('#'+additionalParameters.modAnnotationButtonId).on('click', function () {
             var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
             if (somethingSymbol) {
@@ -254,7 +254,7 @@ mpgSoftware.dynamicUi = (function () {
             }
         });
 
-        // assign the correct response to the eQTL go button
+        // perform an eQTL based lookup
         $('#'+additionalParameters.eQTLGoButtonId).on('click', function () {
             var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
             if (somethingSymbol) {
@@ -295,16 +295,26 @@ mpgSoftware.dynamicUi = (function () {
             extentEnd:additionalParameters.geneExtentEnd,
             chromosome:chrom,
             originalGeneName:additionalParameters.geneName,
-            geneNameArray:[]});
+            geneNameArray:[],
+            contextDescr:{
+                chromosome: chrom,
+                extentBegin:additionalParameters.geneExtentBegin,
+                extentEnd:additionalParameters.geneExtentEnd,
+                moreContext:[]
+            }});
 
         $('#contextDescription').empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
-            $("#configurableUiTabStorage").data("dataHolder")
+            $("#configurableUiTabStorage").data("dataHolder").contextDescr
         ));
 
     };
     var adjustExtentHolders = function(domStorage,storageField,spanClass,basesToShift){
         var extentBegin = parseInt( domStorage[storageField] );
-        extentBegin += basesToShift;
+        if ((extentBegin+basesToShift)>0){
+            extentBegin += basesToShift;
+        } else {
+            extentBegin = 0;
+        }
         domStorage[storageField] = extentBegin;
         $(spanClass).html(""+extentBegin);
     };
