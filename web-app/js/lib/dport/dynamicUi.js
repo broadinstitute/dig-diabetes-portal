@@ -119,7 +119,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var displayRefinedModContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
-        var selectorForIidForTheTargetDiv = '#' + idForTheTargetDiv;
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         _.forEach(_.sortBy(_.uniq(objectContainingRetrievedRecords.rawData)),function(onePhenotypeName) {
             $(selectorForIidForTheTargetDiv).append(onePhenotypeName.Term+'\n');
@@ -127,7 +127,7 @@ mpgSoftware.dynamicUi = (function () {
     };
 
     var displayRefinedEqtlContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
-        var selectorForIidForTheTargetDiv = '#' + idForTheTargetDiv;
+        var selectorForIidForTheTargetDiv =idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
             $(selectorForIidForTheTargetDiv).append(oneTissue+'\n');
@@ -141,19 +141,19 @@ mpgSoftware.dynamicUi = (function () {
         if ( typeof objectContainingRetrievedRecords.chromosome !== 'undefined'){
             $('span.dynamicUiChromosome').html(''+objectContainingRetrievedRecords.chromosome);
         }
-        $("#dynamicUiGeneHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
+        $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
     };
 
 
     var displayRefinedGenesInARange = function (idForTheTargetDiv,objectContainingRetrievedRecords){
-        var selectorForIidForTheTargetDiv = '#' + idForTheTargetDiv;
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
             $(selectorForIidForTheTargetDiv).append(oneTissue+'\n');
         });
-        $("#dynamicUiGeneHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
+        $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
 
@@ -248,7 +248,7 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord:processRecordsFromMod,
                         retrieveDataUrl:additionalParameters.retrieveModDataUrl,
                         displayRefinedContextFunction:displayRefinedModContext,
-                        placeToDisplayData:additionalParameters.phenoHolder
+                        placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
                     },
                     additionalParameters)
             }
@@ -262,14 +262,14 @@ mpgSoftware.dynamicUi = (function () {
                         processEachRecord:processRecordsFromEqtls,
                         retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
                         displayRefinedContextFunction:displayRefinedEqtlContext,
-                        placeToDisplayData:additionalParameters.dynamicUiTissueHolder
+                        placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
                     },
                     additionalParameters)
             }
         });
 
 
-        // assign the correct response to the eQTL go button
+        // assign the correct response to the proximity range go button
         $('#'+additionalParameters.genesWithinRangeButtonId).on('click', function () {
             var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
             var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
@@ -284,7 +284,7 @@ mpgSoftware.dynamicUi = (function () {
                             chromosome:chromosome ,
                             startPos:extentBegin ,
                             endPos:extentEnd,
-                            placeToDisplayData:additionalParameters.dynamicUiGeneHolder },
+                            placeToDisplayData: '#dynamicGeneHolder div.dynamicUiHolder'  },
                     additionalParameters)
             }
         });

@@ -685,7 +685,7 @@ span.credSetLevelHere{
 
                                 </div>
                                 <div class="resultsTableHolder">
-                                    <div id="{{dynamicUiGeneHolder}}">
+                                    <div class="dynamicUiHolder">
                                     </div>
                                 </div>
 
@@ -701,7 +701,7 @@ span.credSetLevelHere{
                                     <h1>hey</h1>
                                 </div>
                                 <div class="resultsTableHolder">
-                                    <div id="{{dynamicUiVariantHolder}}" class="multipleElementScrolledBox">
+                                    <div class="multipleElementScrolledBox dynamicUiHolder">
                                     </div>
                                 </div>
 
@@ -711,7 +711,7 @@ span.credSetLevelHere{
                         <h3>Tissues in context</h3>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div id="{{dynamicUiTissueHolder}}" class="multipleElementScrolledBox">
+                                <div class="multipleElementScrolledBox dynamicUiHolder">
                                 </div>
                             </div>
                         </div>
@@ -723,7 +723,7 @@ span.credSetLevelHere{
                                 <div>
                                 <h4>selected phenotypes</h4>
                                 </div>
-                                <div id="{{phenoHolder}}" class="multipleElementScrolledBox">
+                                <div class="multipleElementScrolledBox dynamicUiHolder">
                                 </div>
                             </div>
                             <div class="col-sm-3">
