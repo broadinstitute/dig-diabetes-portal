@@ -267,7 +267,7 @@
 <p><g:message code="informational.data.exptsumm.WGS_TOPMedAF"></g:message></p>
 
 
-<h4>Accessing Albuminuria GWAS results</h4>
+<h4>Accessing TOPMed early-onset AF WGS results</h4>
 
     <p><g:message code="informational.data.accessing.WGS_TOPMedAF1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.WGS_TOPMedAF2"></g:message></p>
 
