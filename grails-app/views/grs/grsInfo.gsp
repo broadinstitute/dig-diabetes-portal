@@ -94,7 +94,7 @@
             <g:render template="/widgets/burdenTestShared" model="['variantIdentifier': '',
                                                                    'accordionHeaderClass': 'accordion-heading',
                                                                    'modifiedTitle': 'Genetic risk score module',
-                                                                   'modifiedGaitSummary': 'The Genetic Risk Score (GRS) tool takes a defined set of T2D risk-associated variants and allows you to calculate the  p-value for association of this set with different phenotypes, potentially revealing genetic relationships between phenotypes. Start by selecting a dataset and a phenotype to compare, edit the set of variants if desired, and click “Launch” to calculate the p-value.',
+                                                                   'modifiedGaitSummary': 'The Genetic Risk Score (GRS) tool takes a defined set of T2D risk-associated variants and allows you to calculate the  p-value for association of this set with different phenotypes, potentially revealing genetic relationships between phenotypes. Start by selecting a dataset and a phenotype to compare, edit the set of variants if desired, and click Launch to calculate the p-value.',
                                                                    'allowExperimentChoice': 1,
                                                                    'allowPhenotypeChoice' : 1,
                                                                    'allowStratificationChoice': 1,

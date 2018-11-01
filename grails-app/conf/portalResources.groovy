@@ -82,6 +82,15 @@ modules = {
         resource url: 'js/lib/dport/manhattanplotTableHeader.js'
         resource url: 'js/lib/dport/genePrioritization.js'
     }
+    mode3 {
+        dependsOn "d3tooltip"
+        dependsOn "manhattan"
+        dependsOn "traitsFilter"
+
+        resource url: 'js/lib/dport/moduleLaunch.js'
+        resource url: 'js/lib/dport/manhattanplotTableHeader.js'
+        resource url: 'js/lib/dport/traitsFilter.js'
+    }
     matrix {
         dependsOn "d3tooltip"
 
@@ -246,6 +255,18 @@ modules = {
         resource url: 'css/lib/bootstrap-select.css'
         resource url: 'js/lib/bootstrap-select.js'
         resource url: 'js/lib/dport/traitsFilter.js'
+    }
+    higlass {
+        resource url:"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        resource url:"https://unpkg.com/higlass@1.0.1/dist/styles/hglib.css"
+
+        resource url:"https://cdnjs.cloudflare.com/ajax/libs/react/15.6.2/react.min.js"
+        resource url:"https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.6.2/react-dom.min.js"
+        resource url:"https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.6.2/pixi.min.js"
+        resource url:"https://cdnjs.cloudflare.com/ajax/libs/react-bootstrap/0.31.0/react-bootstrap.min.js"
+        resource url:"https://unpkg.com/higlass@1.0.1/dist/scripts/hglib.js"
+
+//        resource url: 'js/lib/HiGlassComponent.js'
     }
 
 }

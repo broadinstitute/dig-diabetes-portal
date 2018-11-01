@@ -23,7 +23,7 @@ var mpgSoftware = mpgSoftware || {};
             return associationStatisticsVariables;
         };
 
-        var initializePage = function(){
+        var initializePage = function(config){
             console.log("in mpgSoftware.associationStatistics.initializePage.");
             $(".collapse").on('show.bs.collapse', function (a, b) {
                 console.log('The collapsible content is about to show.');
@@ -37,7 +37,15 @@ var mpgSoftware = mpgSoftware || {};
             });
             $("#collapseVariantAssociationStatistics").on("shown.bs.collapse", function () {
                 console.log("b mpgSoftware.associationStatistics.initializePage.");
-                mpgSoftware.locusZoom.rescaleSVG('#plot');
+                if (typeof config !== 'undefined'){
+                    if (config.exposePhewasModule){
+                        mpgSoftware.locusZoom.rescaleSVG('#phewasplot');
+                    }
+                    if (config.exposeForestPlot){
+                        mpgSoftware.locusZoom.rescaleSVG('#forestPlot');
+                    }
+                }
+
             });
             $('#traitsPerVariantTable').on('order.dt', UTILS.labelIndenter('traitsPerVariantTable'));
             console.log("out mpgSoftware.associationStatistics.initializePage.");
@@ -273,13 +281,38 @@ var mpgSoftware = mpgSoftware || {};
             traitTable( getAssociationStatisticsVariables().variantIdentifier, dataSetMaps, arrayOfOpenPhenotypes );
         };
 
+        var buildDynamicPage = function(configDetails){
+            var drivingVariables = {};
+
+
+            if (configDetails.exposeGreenBoxes==='1'){
+                drivingVariables['exposeGreenBoxes'] = [1];
+            }
+            if (configDetails.exposeForestPlot==='1'){
+                drivingVariables['forestTab'] = [1];
+            }
+            if (configDetails.exposePhewasModule==='1'){
+                drivingVariables['phewasTab'] = [1];
+            }
+
+            $('#variantAssociationSummarySection').empty();
+            // if ((typeof drivingVariables['exposeGreenBoxes'] !== 'undefined') ) {
+            //     $('#variantAssociationSummarySection').append(
+            //         Mustache.render( $('#greenBoxHolderTemplate')[0].innerHTML));
+            // }
+            var pheWASGraphics = Mustache.render($('#phenotypePerVariantTemplate')[0].innerHTML, drivingVariables);
+            $('#variantAssociationSummarySection').append(pheWASGraphics);
+            // $('a[href="#phewasTabHolder"]').click();
+        };
+
     return {
         initializePage:initializePage,
         setAssociationStatisticsVariables:setAssociationStatisticsVariables,
         allowExpansionByCohort:allowExpansionByCohort,
         allowExpansionByTrait:allowExpansionByTrait,
         respondToPlusSignClick:respondToPlusSignClick,
-        loadAssociationTable:loadAssociationTable
+        loadAssociationTable:loadAssociationTable,
+        buildDynamicPage:buildDynamicPage
     }
 
 }());

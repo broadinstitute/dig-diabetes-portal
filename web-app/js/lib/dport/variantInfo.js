@@ -156,7 +156,8 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
-            $('#phewasAllDatasets').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#plot', variantObject.VAR_ID , 2);});
+            $('#phewasAllDatasets').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
+            $('#phewasUseUKBB').click(function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
 
             setVariantTitleAndSummary(variantObject.VAR_ID,
                                         variantObject.DBSNP_ID,
@@ -203,7 +204,7 @@ var mpgSoftware = mpgSoftware || {};
             };
 
             mpgSoftware.locusZoom.initializeLZPage(lzParm);
-            var selector = '#plot';
+            var selector = '#phewasplot';
             var lzPheWASParm = {
                 page:'variantInfo',
                 variantId:variantObject.VAR_ID,
@@ -1474,6 +1475,8 @@ var mpgSoftware = mpgSoftware || {};
                 'aria-expanded="false"></select>');
             $('tr.niceHeaders th.tissueHdr').append('<select class="hdrFilter tissueFilter" type="button" data-toggle="dropdown" aria-haspopup="true" '+
                 'aria-expanded="false"></select>');
+            $('table.dk-t2d-general-table.dataTable.no-footer').css('width','100%');
+            $('div.dataTables_scrollHeadInner').css('width','100%');
             $('select.elementFilter').on("click", UTILS.disableClickPropagation);
             $('select.tissueFilter').on("click", UTILS.disableClickPropagation);
             $('select.elementFilter').append("<option value='ALL'>All</option>");

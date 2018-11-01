@@ -107,10 +107,13 @@
                     </div>
                     <div class="col-md-12">
                         <table class="table table-condensed table-responsive table-striped" border="1">
-                            <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th></tr>
+                            <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
 
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip">UKB.v2.albuminuria.n382500.zip</a></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip">UKB.v2.albuminuria.n382500.zip</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/UKB.v2.albuminuria.n382500.README.txt" target="_blank">README</a></td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td><td>&nbsp;</td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/29748316" target="_blank">PMID:29748316</a></td><td>Common and Rare Coding Genetic Variation Underlying the Electrocardiographic PR Interval.</td><td><a href="https://personal.broadinstitute.org/mvon/29748316.PR.interval.ExomeChip.zip" target="_blank">Download files</a></td><td>&nbsp;</td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28794112" target="_blank">PMID:28794112</a></td><td>Fifteen Genetic Loci Associated With the Electrocardiographic P Wave.</td><td><a href="https://personal.broadinstitute.org/mvon/28794112.PWI.GWAS.zip" target="_blank">Download files</a></td><td>&nbsp;</td></tr>
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28416818" target="_blank">PMID:28416818</a></td><td>Large-scale analyses of common and rare variants identify 12 new loci associated with atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/28416818.2017.AFGen.GWAS.zip" target="_blank">Download files</a></td><td>&nbsp;</td></tr>
 
 
                         </table>
@@ -160,7 +163,7 @@
 </div>
 </div>
         <div class="container">
-            <g:renderBetaFeaturesDisplayedValue>
+            <g:if test="${portalVersionBean.getExposeDatasetHierarchy()}">
                 <div style="margin-top: 5px">
                     <div class="col-xs-2"></div>
                     <div class="col-xs-10"  style="padding: 5px 0 12px 0; border: 1px solid #aaaaaa">
@@ -192,40 +195,38 @@
                             <div class="col-xs-3">
                                 <span class="pull-right">Version filter</span>
 
-                    <select id="versionDatasetFilter" class="form-control">
-                        <g:each in="${allVersions}" var="ver">
-                            <option value="${ver}">${ver}</option>
-                        </g:each>
-                    </select>
+                                <select id="versionDatasetFilter" class="form-control">
+                                    <g:each in="${allVersions}" var="ver">
+                                        <option value="${ver}">${ver}</option>
+                                    </g:each>
+                                </select>
 
-                </div>
+                            </div>
 
-                <div class="col-xs-3">
-                    <span class="pull-right">Technology filter</span>
-                    <select id="technologyFilter" class="form-control">
-                        <option selected>all</option>
-                        <option value="GWAS">GWAS</option>
-                        <option value="ExSeq">Exome sequencing</option>
-                        <option value="ExChip">Exome chip</option>
-                    </select>
+                            <div class="col-xs-3">
+                                <span class="pull-right">Technology filter</span>
+                                <select id="technologyFilter" class="form-control">
+                                    <option selected>all</option>
+                                    <option value="GWAS">GWAS</option>
+                                    <option value="ExSeq">Exome sequencing</option>
+                                    <option value="ExChip">Exome chip</option>
+                                </select>
 
-                </div>
+                            </div>
 
-                </div>
-
-            </div>
-
-            </g:renderBetaFeaturesDisplayedValue>
-
-
-            <g:renderBetaFeaturesDisplayedValue>
-                <div class="row pull-left col-xs-12" style="margin-top: 20px">
-                    <div id="sunburstdiv">
+                        </div>
 
                     </div>
 
+
+                    <div class="row pull-left col-xs-12" style="margin-top: 20px">
+                        <div id="sunburstdiv">
+
+                        </div>
+
+                    </div>
                 </div>
-            </g:renderBetaFeaturesDisplayedValue>
+            </g:if>
 
             <script>
                 function showSection(event) {
@@ -299,16 +300,16 @@
                             }
                         });
                     };
-                    <g:renderBetaFeaturesDisplayedValue>
+                    <g:if test="${portalVersionBean.getExposeDatasetHierarchy()}">
                     mpgSoftware.launchSunburst('', '', undefined);
-                    </g:renderBetaFeaturesDisplayedValue>
+                    </g:if>
 
                 });
 
             </script>
 
 
-            <g:renderBetaFeaturesDisplayedValue>
+            <g:if test="${portalVersionBean.getExposeDatasetHierarchy()}">
                 <div class="span3" style="padding-top: 50px;  height: 600px;">
                     <div style="float:right;">
 
@@ -337,7 +338,7 @@
                     </div>
 
                 </div>
-            </g:renderBetaFeaturesDisplayedValue>
+            </g:if>
 
 
             %{--<g:if test="${g.portalTypeString()?.equals('stroke')}">--}%

@@ -1,3 +1,8 @@
+<style>
+#gaitTable td {
+    outline: 0px solid #000;
+}
+</style>
 <script id="displayResultsTemplate"  type="x-tmpl-mustache">
     <div class="">%{--should hold the Choose data set panel--}%
 

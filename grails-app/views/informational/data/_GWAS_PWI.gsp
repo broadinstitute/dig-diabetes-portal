@@ -1,6 +1,10 @@
 <script class="panel-body" id="GWAS_PWI_script" type="x-tmpl-mustache">
     <div class="panel-body">
 
+        <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.download.PWI"></g:message></p>
+
+
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 <p><div class="paper">

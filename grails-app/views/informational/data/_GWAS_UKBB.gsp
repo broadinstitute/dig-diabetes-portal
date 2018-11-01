@@ -1,5 +1,8 @@
 <script class="panel-body" id="GWAS_UKBB_script" type="x-tmpl-mustache">
 
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.download.SleepUKBB"></g:message></p>
+
     <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
     <p><div class="paper">
@@ -7,8 +10,6 @@
     <g:message code="informational.shared.publications.Lane_2016_NatCommun.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
     <div class="citation"><g:message code="informational.shared.publications.Lane_2017_NatGenet.citation"></g:message> </div>
     </div></p>
-
-    <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
     <p><div class="paper">
     <g:message code="informational.shared.publications.Lane_2016_NatCommun"></g:message><br>

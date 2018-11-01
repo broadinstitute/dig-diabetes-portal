@@ -1,4 +1,6 @@
-<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
+<!--<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>-->
+<h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html">Interactive Manhattan plot</h1>
+
 
 
 <script>
@@ -30,9 +32,6 @@
 
 
 </script>
-
-
-
 
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
 <p><g:message code="informational.traitTableHeader.help2"></g:message></p>

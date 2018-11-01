@@ -37,21 +37,7 @@ class RestServerService {
     SqlService sqlService
 
     private Boolean TRY_RESTRICTING_ALL_AGGREGATED_CALLS_TO_TOP_VARIANTS = Boolean.TRUE
-    private String PROD_LOAD_BALANCED_SERVER = ""
-    private String PROD_LOAD_BALANCED_BROAD_SERVER = ""
     private String LOCAL_SERVER = ""
-    private String TODD_SERVER = ""
-    private String QA_LOAD_BALANCED_SERVER = ""
-    private String DEV_LOAD_BALANCED_SERVER = ""
-    private String DEV_01_SERVER = ""
-    private String DEV_02_SERVER = ""
-    private String PROD_01_SERVER = ""
-    private String PROD_02_SERVER = ""
-    private String AWS01_REST_SERVER = ""
-    private String AWS02_REST_SERVER = ""
-    private String AWS01_NEW_CODE_REST_SERVER = ""
-    private String AWS02_NEW_CODE_REST_SERVER = ""
-    private String DEV_REST_SERVER = ""
     private String BASE_URL = ""
     private String REMEMBER_BASE_URL = ""
     private String GENE_INFO_URL = "gene-info"
@@ -62,11 +48,16 @@ class RestServerService {
     private String GET_DATA_URL = "getData"
     private String GET_GENE_DATA_URL = "getGeneData"
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
+    private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
     private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
     private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
     private String  GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
     private String  GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String  GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
+    private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
+    private String  GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
+    private String  GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -86,7 +77,6 @@ class RestServerService {
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_TOPVARIANTS = 5000
     public static int  DEFAULT_NUMBER_OF_RESULTS_FROM_GETDATA = 5000
 
-    //public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     public static int  EXPAND_ON_EITHER_SIDE_OF_GENE = 100000
     private String DEFAULTPHENOTYPE = "T2D"
     private String MAFPHENOTYPE = "MAF"
@@ -222,76 +212,76 @@ class RestServerService {
     public void setGrsVariants(List <String> grsVariants){
         this.grsVariants = grsVariants
     }
-
-    public String getCurrentServer() {
-        return (BASE_URL ?: "none")
-    }
-
-
-    public void resetCurrentRestServer(){
-        BASE_URL = REMEMBER_BASE_URL
-    }
-
-    public void explicitlySetRestServer(String newRestServer){
-        BASE_URL = newRestServer
-    }
-
-
-    public void goWithTheProdLoadBalancedServer() {
-        pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheQaLoadBalancedServer() {
-        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
-    }
-
-
-        public void goWithTheDev01Server() {
-            pickADifferentRestServer(DEV_01_SERVER )
-        }
-
-        public void goWithTheDev02Server() {
-            pickADifferentRestServer(DEV_02_SERVER)
-        }
-
-        public void goWithTheProd01Server() {
-            pickADifferentRestServer(PROD_01_SERVER )
-        }
-
-        public void goWithTheProd02Server() {
-            pickADifferentRestServer(PROD_02_SERVER)
-        }
-
-    public void goWithTheDevLoadBalancedServer() {
-        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
-    }
-
-    public void goWithTheAws01RestServer() {
-        pickADifferentRestServer(AWS01_REST_SERVER)
-    }
-
-    public void goWithTheAws02RestServer() {
-        pickADifferentRestServer(AWS02_REST_SERVER)
-    }
-
-    public void goWithTheAws01NewCodeRestServer() {
-        pickADifferentRestServer(AWS01_NEW_CODE_REST_SERVER)
-    }
-    public void goWithTheAws02NewCodeRestServer() {
-        pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
-    }
-
-    public void goWithProdLoadBalancedBroadServer() {
-        pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
-    }
-    public void goWithLocalServer() {
-        pickADifferentRestServer(LOCAL_SERVER)
-    }
-
-
-    public void goWithTheDevServer() {
-        pickADifferentRestServer(DEV_REST_SERVER)
-    }
+//
+//    public String getCurrentServer() {
+//        return (BASE_URL ?: "none")
+//    }
+//
+//
+//    public void resetCurrentRestServer(){
+//        BASE_URL = REMEMBER_BASE_URL
+//    }
+//
+//    public void explicitlySetRestServer(String newRestServer){
+//        BASE_URL = newRestServer
+//    }
+//
+//
+//    public void goWithTheProdLoadBalancedServer() {
+//        pickADifferentRestServer(PROD_LOAD_BALANCED_SERVER)
+//    }
+//
+//    public void goWithTheQaLoadBalancedServer() {
+//        pickADifferentRestServer(QA_LOAD_BALANCED_SERVER)
+//    }
+//
+//
+//        public void goWithTheDev01Server() {
+//            pickADifferentRestServer(DEV_01_SERVER )
+//        }
+//
+//        public void goWithTheDev02Server() {
+//            pickADifferentRestServer(DEV_02_SERVER)
+//        }
+//
+//        public void goWithTheProd01Server() {
+//            pickADifferentRestServer(PROD_01_SERVER )
+//        }
+//
+//        public void goWithTheProd02Server() {
+//            pickADifferentRestServer(PROD_02_SERVER)
+//        }
+//
+//    public void goWithTheDevLoadBalancedServer() {
+//        pickADifferentRestServer(DEV_LOAD_BALANCED_SERVER)
+//    }
+//
+//    public void goWithTheAws01RestServer() {
+//        pickADifferentRestServer(AWS01_REST_SERVER)
+//    }
+//
+//    public void goWithTheAws02RestServer() {
+//        pickADifferentRestServer(AWS02_REST_SERVER)
+//    }
+//
+//    public void goWithTheAws01NewCodeRestServer() {
+//        pickADifferentRestServer(AWS01_NEW_CODE_REST_SERVER)
+//    }
+//    public void goWithTheAws02NewCodeRestServer() {
+//        pickADifferentRestServer(AWS02_NEW_CODE_REST_SERVER)
+//    }
+//
+//    public void goWithProdLoadBalancedBroadServer() {
+//        pickADifferentRestServer(PROD_LOAD_BALANCED_BROAD_SERVER)
+//    }
+//    public void goWithLocalServer() {
+//        pickADifferentRestServer(LOCAL_SERVER)
+//    }
+//
+//
+//    public void goWithTheDevServer() {
+//        pickADifferentRestServer(DEV_REST_SERVER)
+//    }
 
     public String currentRestServer() {
         return this.REST_SERVER.url;
@@ -328,16 +318,25 @@ class RestServerService {
         PortalVersionBean existingPortalVersionBean = PORTAL_VERSION_BEAN_LIST.find{it.portalType==portalType}
         PortalVersionBean newPortalVersionBean
         if (existingPortalVersionBean){
-            newPortalVersionBean = new PortalVersionBean( portalType,  existingPortalVersionBean.getPortalDescription(),
-                    mdvName, existingPortalVersionBean.getPhenotype(), existingPortalVersionBean.getDataSet(),
+            newPortalVersionBean = new PortalVersionBean( portalType,
+                    existingPortalVersionBean.getPortalDescription(),
+                    mdvName,
+                    existingPortalVersionBean.getPhenotype(),
+                    existingPortalVersionBean.getDataSet(),
                     existingPortalVersionBean.getTissueRegionOverlapMatcher(),
                     existingPortalVersionBean.getTissueRegionOverlapDisplayMatcher(),
-                    existingPortalVersionBean.getTissues(), existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
+                    existingPortalVersionBean.getTissues(),
+                    existingPortalVersionBean.getOrderedPhenotypeGroupNames(),
                     existingPortalVersionBean.getExcludeFromLZ(),
-                    existingPortalVersionBean.getEpigeneticAssays(), existingPortalVersionBean.getLzDataset(),
-                    existingPortalVersionBean.getFrontLogo(), existingPortalVersionBean.getTagline(),
-                    existingPortalVersionBean.getAlternateLanguages(),existingPortalVersionBean.getGeneExamples(),
-                    existingPortalVersionBean.getVariantExamples(),existingPortalVersionBean.getRangeExamples(),
+                    existingPortalVersionBean.getEpigeneticAssays(),
+                    existingPortalVersionBean.getLzDataset(),
+                    existingPortalVersionBean.getFrontLogo(),
+                    existingPortalVersionBean.getTagline(),
+                    existingPortalVersionBean.getTabLabel(),
+                    existingPortalVersionBean.getAlternateLanguages(),
+                    existingPortalVersionBean.getGeneExamples(),
+                    existingPortalVersionBean.getVariantExamples(),
+                    existingPortalVersionBean.getRangeExamples(),
                     existingPortalVersionBean.getBackgroundGraphic(),
                     existingPortalVersionBean.getPhenotypeLookupMessage(),
                     existingPortalVersionBean.getLogoCode(),
@@ -355,14 +354,21 @@ class RestServerService {
                     existingPortalVersionBean.getExposeForestPlot(),
                     existingPortalVersionBean.getExposeTraitDataSetAssociationView(),
                     existingPortalVersionBean.getExposeGreenBoxes(),
+                    existingPortalVersionBean.getExposeGeneComparisonTable(),
                     existingPortalVersionBean.getVariantTakesYouToGenePage(),
                     existingPortalVersionBean.getUtilizeBiallelicGait(),
-                    existingPortalVersionBean.getUtilizeUcsdData()
+                    existingPortalVersionBean.getUtilizeUcsdData(),
+                    existingPortalVersionBean.getExposePredictedGeneAssociations(),
+                    existingPortalVersionBean.getExposeHiCData(),
+                    existingPortalVersionBean.getExposeDynamicUi(),
+                    existingPortalVersionBean.getExposeDatasetHierarchy(),
+                    existingPortalVersionBean.getExposeVariantAndAssociationTable(),
+                    existingPortalVersionBean.getExposeIgvDisplay(),
+                    existingPortalVersionBean.getExposeIndependentBurdenTest()
             )
             removePortalVersion(portalType)
         } else {
-            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName, "", "", [],[],[],
-                    "", "","","",[],[],[],[],[],[],"","","","","","","","",0,0, 0, 0, 0, 0,0,0,0, 0, 0,0,0 )
+            newPortalVersionBean = new PortalVersionBean( portalType,  "",  mdvName )
         }
         PORTAL_VERSION_BEAN_LIST << newPortalVersionBean
         return newPortalVersionBean
@@ -416,7 +422,7 @@ class RestServerService {
 
     public String getPortalVersionBeanListAsJson(){
         List<PortalVersionBean> listPortalVersionBean = PORTAL_VERSION_BEAN_LIST
-        return "[${listPortalVersionBean.collect{it.toJsonString()}.join(",")}]"
+        return "[${listPortalVersionBean.collect{it.toJsonString(retrieveBeanForCurrentPortal())}.join(",")}]"
     }
 
 
@@ -598,11 +604,13 @@ class RestServerService {
                 List<SampleGroup> sampleGroups = experiment.getSampleGroups()
                 for (SampleGroup sampleGroup in sampleGroups){
                     extendDataSetJsonRecursively (sb,sampleGroup,sampleGroup.getSystemId())
-                }
-                if (experiment.name != lastExperiment.name){
-                    sb << """,
+                    if (experiment.name != lastExperiment.name){
+                        sb << """,
 """.toString()
+                    }
+
                 }
+
             }
         }
 
@@ -2230,8 +2238,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONObject gatherTopVariantsFromAggregatedTables( String phenotype,String geneName,
-                                                             int  startHere, int pageSize,
-                                                             String version ) {
+                                                            int  startHere, int pageSize,
+                                                            String version )  {
         List<String> specifyRequestList = []
         //specifyRequestList << "\"version\":\"${sharedToolsService.getCurrentDataVersion()}\""
         if ((phenotype) && (phenotype.length() > 0)) {
@@ -2251,6 +2259,27 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_URL)
     }
+
+
+
+
+
+    public JSONObject gatherEqtlData( String gene,String variant,
+    String tissue ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "\"gene\":\"${gene}\""
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "\"variant\":\"${variant}\""
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "\"tissue\":\"${tissue}\""
+        }
+        return getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+    }
+
+
 
 
 
@@ -2463,7 +2492,73 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-        public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
+    public Map gatherBottomLineVariantsPerGene( String gene ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        Map retval = [:]
+
+        String combinedCommonNameUrl = GET_BOTTOM_LINE_VARIANTS_URL +"?id=" +gene
+
+        String  retrieveGeneIdJsonAsString = getRestCall(combinedCommonNameUrl)
+
+        List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
+        if (retrieveGeneIdArray[0]){
+            String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" +(retrieveGeneIdArray[0]["GEN_ID"] as String)
+
+            String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedEnsemblNameUrl)
+
+            List retrieveTissueExpressionArray =   slurper.parseText(retrieveTissueExpressionInformationJsonAsString)  as List
+
+            retval =  retrieveTissueExpressionArray[0]
+        }
+        return retval
+
+
+
+    }
+
+
+
+
+    public Map gatherBottomLinePhenotypesVariantsPerRange( String chromosome, Integer startPosition, Integer endPosition ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        String combinedRangeAndUrl = "${GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL}?chrom=${chromosome}&start=${startPosition}&end=${endPosition}"
+
+        String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedRangeAndUrl)
+
+        Map bottomLinePhenotypes =   slurper.parseText(retrieveTissueExpressionInformationJsonAsString)  as Map
+
+        return bottomLinePhenotypes
+
+    }
+
+
+
+
+    public List determineTissueAssociationPerPhenotype( String phenotype ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        String combinedPhenotypeAndUrl = "${GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL}?id=${phenotype}"
+
+        String  rawTissueWeightPerPhenotype = getRestCall(combinedPhenotypeAndUrl)
+
+        List tissueWeightPerPhenotype =   slurper.parseText(rawTissueWeightPerPhenotype)  as List
+
+        return tissueWeightPerPhenotype
+
+    }
+
+
+
+
+
+
+
+
+
+
+    public JSONObject gatherTopVariantsAcrossSgs( List<SampleGroup> fullListOfSampleGroups, String phenotype,String geneName, float pValueSignificance) {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject dataJsonObject
         List variants = []

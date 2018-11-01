@@ -29,6 +29,7 @@ var mpgSoftware = mpgSoftware || {};
                 data: {phenotype: phenotype},
                 async: false,
                 success: function (data) {
+                    loader.hide();
 
                     var rowDataStructure = [];
                     if ((typeof data !== 'undefined') &&
@@ -42,6 +43,8 @@ var mpgSoftware = mpgSoftware || {};
                                 var sampleGroup = data.sampleGroups[i];
                                 $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
                             }
+                            mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(phenotype);
+
                         }
                     }
 
@@ -110,9 +113,11 @@ var mpgSoftware = mpgSoftware || {};
                     sampleGroup: sampleGroup  },
                 async: true,
                 success: function (data) {
-                    $('#spinner').hide();
+                    loading.hide();
+
                     try{
                         mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
+                        loading.hide();
                     }
                     catch (e){console.log("I tried calling refreshManhattanPlotTableView but failed",e)}
 
@@ -124,7 +129,7 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var callFillClumpVariants = function() {
+        var callFillClumpVariants = function(phenotype) {
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
@@ -132,7 +137,9 @@ var mpgSoftware = mpgSoftware || {};
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(mySavedVars.phenotypeName,document.getElementById("manhattanSampleGroupChooser").value,r2);
+
+                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(phenotype,document.getElementById("manhattanSampleGroupChooser").value,r2);
+
         }
 
 
@@ -233,7 +240,7 @@ var mpgSoftware = mpgSoftware || {};
                 //.blockColoringThreshold(0.5)
                 .significanceThreshold(- Math.log10(parseFloat(savedVar.requestedSignificance)))
                 .xAxisAccessor(function (d) {
-                    return d.POS
+                    return parseInt (d.POS);
                 })
                 .yAxisAccessor(function (d) {
                     if (d.P_VALUE > 0) {
