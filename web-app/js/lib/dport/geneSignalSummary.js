@@ -1927,11 +1927,9 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 phenotype =  additionalParameters.currentPhenotype;
             }
             exposeDynamicUiIndicator.push(
-                {   generalizedInputId:additionalParameters.generalizedInputId,
+                {
+                    generalizedInputId:additionalParameters.generalizedInputId,
                     generalizedGoButtonId:additionalParameters.generalizedGoButtonId,
-                    modAnnotationButtonId:additionalParameters.modAnnotationButtonId,
-                    eQTLGoButtonId:additionalParameters.eQTLGoButtonId,
-                    genesWithinRangeButtonId:additionalParameters.genesWithinRangeButtonId,
                     geneExtentBegin:additionalParameters.geneExtentBegin,
                     geneExtentEnd:additionalParameters.geneExtentEnd,
                     chromosome:chromosome,

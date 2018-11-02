@@ -69,7 +69,7 @@ mpgSoftware.dynamicUi = (function () {
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
         _.forEach(_.sortBy(_.uniq(objectContainingRetrievedRecords.rawData)),function(onePhenotypeName) {
-            $(selectorForIidForTheTargetDiv).append(onePhenotypeName.Term+'\n');
+            $(selectorForIidForTheTargetDiv).append('<div class="resultElementPerLine">'+onePhenotypeName.Term+'</div>');
         });
     };
 
@@ -141,6 +141,8 @@ mpgSoftware.dynamicUi = (function () {
     var processRecordsFromProximitySearch = function (data){
         var returnObject = {rawData:[],
             uniqueGenes:[],
+            genePositions:[],
+            genesExist:[],
             uniqueTissues:[]};
         if (( typeof data !== 'undefined') &&
             ( data !== null ) &&
@@ -152,19 +154,25 @@ mpgSoftware.dynamicUi = (function () {
                 _.forEach(data.listOfGenes,function(geneRec){
                     returnObject.rawData.push(geneRec);
                     if (!returnObject.uniqueGenes.includes(geneRec.name2)){
+                        if (returnObject.genesExist.length===0){
+                            returnObject.genesExist.push(1);
+                        }
                         returnObject.uniqueGenes.push(geneRec.name2);
+                        returnObject.genePositions.push(geneRec.chromosome +":"+geneRec.addrStart +"-"+geneRec.addrEnd);
                     };
                 });
             }
         }
+        // we have a list of all the genes in the range.  Let's remember that information.
+        $("#configurableUiTabStorage").data("dataHolder").geneNameArray =  returnObject.uniqueGenes;
         return returnObject;
     };
     var displayRefinedGenesInARange = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
-            $(selectorForIidForTheTargetDiv).append(oneTissue+'\n');
-        });
+        // _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
+        //     $(selectorForIidForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
+        // });
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
@@ -204,15 +212,24 @@ mpgSoftware.dynamicUi = (function () {
         } else {
             alert('API call return to unexpected result. Is the KB fully functional?');
         }
-         return returnObject;
+        returnObject.uniqueGenes = returnObject.uniqueGenes.sort();
+        returnObject.uniquePhenotypes = returnObject.uniquePhenotypes.sort();
+        returnObject.uniqueVarIds = returnObject.uniqueVarIds.sort();
+        return returnObject;
     };
-    var displayRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
+    var displayVariantRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
         $(idForTheTargetDiv).empty();
         _.forEach(objectContainingRetrievedRecords.uniqueVarIds,function(oneTissue) {
-            $(idForTheTargetDiv).append(oneTissue+'\n');
+            $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
         });
     };
+    var displayPhenotypeRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
+        $(idForTheTargetDiv).empty();
+        _.forEach(objectContainingRetrievedRecords.uniquePhenotypes,function(onePhenotype) {
+            $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+onePhenotype+'</div>');
+        });
 
+    };
 
 
 
@@ -262,23 +279,52 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var installDirectorButtonsOnTabs =  function ( additionalParameters) {
+        /***
+         * gene tab
+         * @type {{directorButtons: *[]}}
+         */
         var objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'genesWithinRangeButtonId', buttonName: 'proximity', description: 'present all genes overlapping  the specified region'},
-                {buttonId: 'eQTL-dynamic-gene-go', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
-                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'}]
+                {buttonId: 'eQTL-dynamic-gene-go', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'}]
         };
         $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
         ));
+
+        /***
+         * variant tab
+         * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
+         */
         objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'getVariantsButtonId', buttonName: 'QTL', description: 'find all variants in the above range with QTL relationship with some phenotype'}]
         };
         $("#dynamicVariantHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
         ));
+
+        /***
+         * tissue tab
+         * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
+         */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getPhenotypesFromQtlButtonId', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'}]
+            directorButtons: [{buttonId: 'getTissuesFromEqtlButtonId', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'}]
         };
+        $("#dynamicTissueHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
+            objectDescribingDirectorButtons
+        ));
+
+        /***
+         * phenotype tab
+         * @type {{directorButtons: *[]}}
+         */
+        objectDescribingDirectorButtons = {
+            directorButtons: [{buttonId: 'getPhenotypesFromQtlButtonId', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'},
+                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'}]
+        };
+        $("#dynamicPhenotypeHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
+            objectDescribingDirectorButtons
+        ));
+
     };
 
 
@@ -288,9 +334,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
     var modifyScreenFields = function (data, additionalParameters) {
-        var updateDynamicUiInResponseToButtonClick = function(item, additionalParameters) {
-            retrieveRefinedContext(item, additionalParameters);
-        };
+
         $('#'+additionalParameters.generalizedInputId).typeahead({
             source: function (query, process) {
                 $.get(additionalParameters.generalizedTypeaheadUrl, {query: query}, function (data) {
@@ -308,7 +352,7 @@ mpgSoftware.dynamicUi = (function () {
             var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
             somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
             if (somethingSymbol) {
-                updateDynamicUiInResponseToButtonClick({   gene:somethingSymbol,
+                retrieveRefinedContext({   gene:somethingSymbol,
                         processEachRecord:processRecordsUpdateContext,
                         retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
                         displayRefinedContextFunction:displayRangeContext,
@@ -319,10 +363,10 @@ mpgSoftware.dynamicUi = (function () {
         });
 
         // pull back mouse annotations
-        $('#'+additionalParameters.modAnnotationButtonId).on('click', function () {
+        $('#modAnnotationButtonId').on('click', function () {
             var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
             if (somethingSymbol) {
-                updateDynamicUiInResponseToButtonClick({   gene:somethingSymbol,
+                retrieveRefinedContext({   gene:somethingSymbol,
                         processEachRecord:processRecordsFromMod,
                         retrieveDataUrl:additionalParameters.retrieveModDataUrl,
                         displayRefinedContextFunction:displayRefinedModContext,
@@ -333,10 +377,10 @@ mpgSoftware.dynamicUi = (function () {
         });
 
         // perform an eQTL based lookup
-        $('#'+additionalParameters.eQTLGoButtonId).on('click', function () {
+        $('#eQTL-dynamic-gene-go').on('click', function () {
             var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
             if (somethingSymbol) {
-                updateDynamicUiInResponseToButtonClick({   gene:somethingSymbol,
+                retrieveRefinedContext({   gene:somethingSymbol,
                         processEachRecord:processRecordsFromEqtls,
                         retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
                         displayRefinedContextFunction:displayRefinedEqtlContext,
@@ -348,14 +392,14 @@ mpgSoftware.dynamicUi = (function () {
 
 
         // assign the correct response to the proximity range go button
-        $('#'+additionalParameters.genesWithinRangeButtonId).on('click', function () {
+        $('#genesWithinRangeButtonId').on('click', function () {
             var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
             var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
             var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
             if  ( ( typeof chromosome !== 'undefined') &&
                 ( typeof extentBegin !== 'undefined') &&
                 ( typeof extentEnd !== 'undefined') ) {
-                updateDynamicUiInResponseToButtonClick({
+                retrieveRefinedContext({
                             processEachRecord:processRecordsFromProximitySearch,
                             retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
                             displayRefinedContextFunction:displayRefinedGenesInARange,
@@ -375,10 +419,10 @@ mpgSoftware.dynamicUi = (function () {
             if  ( ( typeof chromosome !== 'undefined') &&
                 ( typeof extentBegin !== 'undefined') &&
                 ( typeof extentEnd !== 'undefined') ) {
-                updateDynamicUiInResponseToButtonClick({
+                retrieveRefinedContext({
                         processEachRecord:processRecordsFromVariantQtlSearch,
                         retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
-                        displayRefinedContextFunction:displayRecordsFromVariantQtlSearch,
+                        displayRefinedContextFunction:displayVariantRecordsFromVariantQtlSearch,
                         chromosome:chromosome ,
                         startPos:extentBegin ,
                         endPos:extentEnd,
@@ -388,7 +432,48 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
+        $('#getTissuesFromEqtlButtonId').on('click', function () {
+            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
+            if (somethingSymbol) {
+                retrieveRefinedContext({
+                        gene: somethingSymbol,
+                        processEachRecord: processRecordsFromEqtls,
+                        retrieveDataUrl: additionalParameters.retrieveEqtlDataUrl,
+                        displayRefinedContextFunction: displayRefinedEqtlContext,
+                        placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+                    },
+                    additionalParameters)
+            }
+        });
 
+
+        $('#getPhenotypesFromQtlButtonId').on('click', function () {
+            var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
+            var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
+            var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
+            if  ( ( typeof chromosome !== 'undefined') &&
+                ( typeof extentBegin !== 'undefined') &&
+                ( typeof extentEnd !== 'undefined') ) {
+                retrieveRefinedContext({
+                        processEachRecord:processRecordsFromVariantQtlSearch,
+                        retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
+                        displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
+                        chromosome:chromosome ,
+                        startPos:extentBegin ,
+                        endPos:extentEnd,
+                        placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'  },
+                    additionalParameters)
+            }
+        });
+
+
+
+
+
+        /***
+         * Non tab-based placement
+         * @type {string}
+         */
         var chrom=(additionalParameters.geneChromosome.indexOf('chr')>-1)?additionalParameters.geneChromosome.substr(3):additionalParameters.geneChromosome;
         $("#configurableUiTabStorage").data("dataHolder",{
             extentBegin:additionalParameters.geneExtentBegin,

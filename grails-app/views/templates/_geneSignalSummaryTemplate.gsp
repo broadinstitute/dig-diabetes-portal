@@ -648,12 +648,6 @@ button.directorButtonDetails{
                                             <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
                                         </div>
                                         <div class="row" style="border: none; margin-top: 10px">
-                                            %{--<button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
-                                            %{--type="button">proximity</button>--}%
-                                            %{--<button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
-                                            %{--type="button">eQTL</button>--}%
-                                            %{--<button id="{{modAnnotationButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep "--}%
-                                                %{--type="button">MOD</button>--}%
                                         </div>
                                     </div>
                                 </div>
@@ -823,13 +817,6 @@ button.directorButtonDetails{
      </div>
 {{/directorButtons}}
 </div>
-                                            %{--<button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
-                                            %{--type="button">proximity</button>--}%
-                                            %{--<button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
-                                            %{--type="button">eQTL</button>--}%
-                                            %{--<button id="{{modAnnotationButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep "--}%
-                                                %{--type="button">MOD</button>--}%
-                                           %{----}%
 </script>
 
 
@@ -837,26 +824,34 @@ button.directorButtonDetails{
 
 <script id="dynamicGeneTable"  type="x-tmpl-mustache">
     <table  class="table">
+    {{#genesExist}}
     <tr>
         <th>gene</th>
+        {{/genesExist}}
         {{#uniqueGenes}}
             <th  scope="col">{{.}}</th>
         {{/uniqueGenes}}
+        {{#genesExist}}
     </tr>
+    {{/genesExist}}
 
+    {{#genesExist}}
     <tr>
-        <th  scope="row">ABC gene-enhancer</th>
-        {{#uniqueGenes}}
-            <td ></th>
-        {{/uniqueGenes}}
+        <th  scope="row">Position</th>
+        {{/genesExist}}
+        {{#genePositions}}
+            <td >{{.}}</td>
+        {{/genePositions}}
+        {{#genesExist}}
     </tr>
+    {{/genesExist}}
 
-    <tr>
-        <th  scope="row">eQTL</th>
-         {{#uniqueGenes}}
-            <td ></th>
-        {{/uniqueGenes}}
-    </tr>
+    %{--<tr>--}%
+        %{--<th  scope="row">eQTL</th>--}%
+         %{--{{#uniqueGenes}}--}%
+            %{--<td ></th>--}%
+        %{--{{/uniqueGenes}}--}%
+    %{--</tr>--}%
 
     </table>
 </script>
