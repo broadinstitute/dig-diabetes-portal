@@ -1269,6 +1269,73 @@ class WidgetService {
         return jsonResultString;
     }
 
+
+public Map convertParametersToUsableFormat(def params){
+    def slurper = new JsonSlurper()
+    JSONObject jsonReturn
+    String chromosome = params.chromosome; // ex "22"
+    String phenotype = params.phenotype
+    String startString = params.start; // ex "29737203"
+    String endString = params.end; // ex "29937203"
+    String maximumAssociationString = params.maximumAssociation; // ex ".0001"
+    String minimumWeightString = params.minimumWeight; // ex "1"
+    int startPosition =  0
+    int endPosition =  0
+    float maximumAssociation = 0.0
+    float minimumWeight = 0.0
+    JSONArray arrayOfPhenotypeCoefficients
+    Map phenotypeCoefficientMap = [:]
+    List tissueToInclude = []
+    boolean validParameters = false
+    try{
+        arrayOfPhenotypeCoefficients = slurper.parseText(params.phenotypeCoefficients as String)
+        tissueToInclude = slurper.parseText(params.tissueToInclude as String)
+        validParameters = true
+        for(JSONObject jsonObject in arrayOfPhenotypeCoefficients){
+            Float numericalCoefficient = 1.0
+            try {
+                numericalCoefficient = Float.parseFloat(jsonObject.phenotypeCoefficient)
+                phenotypeCoefficientMap[jsonObject.phenotypeName as String] = numericalCoefficient
+            } catch (Exception e){
+                e.printStackTrace()
+            }
+        }
+    } catch ( Exception e ) {
+        e.printStackTrace()
+    }
+    try{
+        startPosition = Integer.parseInt(startString)
+    } catch ( Exception e ) {
+        e.printStackTrace()
+    }
+    try{
+        endPosition = Integer.parseInt(endString)
+    } catch ( Exception e ) {
+        e.printStackTrace()
+    }
+    try{
+        maximumAssociation = Float.parseFloat(maximumAssociationString)
+    } catch ( Exception e ) {
+        e.printStackTrace()
+    }
+    try{
+        minimumWeight = Float.parseFloat(minimumWeightString)
+    } catch ( Exception e ) {
+        e.printStackTrace()
+    }
+    return [    startPosition:startPosition,
+                endPosition:endPosition,
+                minimumWeight:minimumWeight,
+                maximumAssociation:maximumAssociation
+    ]
+
+}
+
+
+
+
+
+
     /***
      * Decide how many phenotypes oil well further explore. Assign a weight to each one.
      *

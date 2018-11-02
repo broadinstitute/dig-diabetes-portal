@@ -16,20 +16,12 @@ mpgSoftware.dynamicUi = (function () {
         return dyanamicUiVariables;
     };
 
-    var processRecordsFromMod = function (data){
-        var returnObject = {rawData:[],
-            uniqueGenes:[],
-            uniqueTissues:[]};
-        _.forEach(data,function(oneRec){
-            if (!returnObject.uniqueTissues.includes(oneRec)){
-                returnObject.uniqueTissues.push(oneRec);
-            };
-            returnObject.rawData.push(oneRec);
-        });
-        return returnObject;
-    };
 
-
+    /***
+     *
+     * @param data
+     * @returns {{geneName: undefined, chromosome: undefined, extentBegin: undefined, extentEnd: undefined}}
+     */
     var processRecordsUpdateContext = function (data){
         var returnObject = {geneName: undefined,
             chromosome : undefined,
@@ -45,15 +37,57 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnObject;
     };
+    var displayRangeContext = function(idForTheTargetDiv,objectContainingRetrievedRecords){
+        $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
+            objectContainingRetrievedRecords
+        ));
+        $("#configurableUiTabStorage").data("dataHolder").extentBegin = objectContainingRetrievedRecords.extentBegin;
+        $("#configurableUiTabStorage").data("dataHolder").extentEnd = objectContainingRetrievedRecords.extentEnd;
+        $("#configurableUiTabStorage").data("dataHolder").chromosome = objectContainingRetrievedRecords.chromosome;
+        $("#configurableUiTabStorage").data("dataHolder").originalGeneName = objectContainingRetrievedRecords.geneName;
+    }
 
 
+    /***
+     * Mod annotation search
+     * @param idForTheTargetDiv
+     * @param objectContainingRetrievedRecords
+     */
+    var processRecordsFromMod = function (data){
+        var returnObject = {rawData:[],
+            uniqueGenes:[],
+            uniqueTissues:[]};
+        _.forEach(data,function(oneRec){
+            if (!returnObject.uniqueTissues.includes(oneRec)){
+                returnObject.uniqueTissues.push(oneRec);
+            };
+            returnObject.rawData.push(oneRec);
+        });
+        return returnObject;
+    };
+    var displayRefinedModContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
+        $(selectorForIidForTheTargetDiv).empty();
+        _.forEach(_.sortBy(_.uniq(objectContainingRetrievedRecords.rawData)),function(onePhenotypeName) {
+            $(selectorForIidForTheTargetDiv).append(onePhenotypeName.Term+'\n');
+        });
+    };
+
+
+
+
+    /***
+     * gene eQTL search
+     * @param data
+     * @returns {{rawData: Array, uniqueGenes: Array, uniqueTissues: Array, chromosome: undefined, startPos: undefined, endPos: undefined}}
+     */
     var processRecordsFromEqtls = function (data){
         var returnObject = {rawData:[],
-                            uniqueGenes:[],
-                            uniqueTissues:[],
-                            chromosome:undefined,
-                            startPos:undefined,
-                            endPos:undefined
+            uniqueGenes:[],
+            uniqueTissues:[],
+            chromosome:undefined,
+            startPos:undefined,
+            endPos:undefined
         };
         _.forEach(data,function(oneRec){
             returnObject.rawData.push(oneRec);
@@ -79,53 +113,6 @@ mpgSoftware.dynamicUi = (function () {
         });
         return returnObject;
     };
-
-
-
-    var processRecordsFromProximitySearch = function (data){
-        var returnObject = {rawData:[],
-            uniqueGenes:[],
-            uniqueTissues:[]};
-        if (( typeof data !== 'undefined') &&
-            ( data !== null ) &&
-            (data.is_error === false ) &&
-            ( typeof data.listOfGenes !== 'undefined') ){
-            if (data.listOfGenes.length === 0){
-                alert(' No genes in the specified region')
-            } else {
-                _.forEach(data.listOfGenes,function(geneRec){
-                    returnObject.rawData.push(geneRec);
-                    if (!returnObject.uniqueGenes.includes(geneRec.name2)){
-                        returnObject.uniqueGenes.push(geneRec.name2);
-                    };
-                });
-            }
-        }
-
-        return returnObject;
-    };
-
-
-    var displayRangeContext = function(idForTheTargetDiv,objectContainingRetrievedRecords){
-        $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
-            objectContainingRetrievedRecords
-        ));
-        $("#configurableUiTabStorage").data("dataHolder").extentBegin = objectContainingRetrievedRecords.extentBegin;
-        $("#configurableUiTabStorage").data("dataHolder").extentEnd = objectContainingRetrievedRecords.extentEnd;
-        $("#configurableUiTabStorage").data("dataHolder").chromosome = objectContainingRetrievedRecords.chromosome;
-        $("#configurableUiTabStorage").data("dataHolder").originalGeneName = objectContainingRetrievedRecords.geneName;
-    }
-
-
-
-    var displayRefinedModContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
-        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
-        $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(_.sortBy(_.uniq(objectContainingRetrievedRecords.rawData)),function(onePhenotypeName) {
-            $(selectorForIidForTheTargetDiv).append(onePhenotypeName.Term+'\n');
-        });
-    };
-
     var displayRefinedEqtlContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv =idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
@@ -146,7 +133,32 @@ mpgSoftware.dynamicUi = (function () {
         ));
     };
 
-
+    /***
+     * Gene proximity search
+     * @param data
+     * @returns {{rawData: Array, uniqueGenes: Array, uniqueTissues: Array}}
+     */
+    var processRecordsFromProximitySearch = function (data){
+        var returnObject = {rawData:[],
+            uniqueGenes:[],
+            uniqueTissues:[]};
+        if (( typeof data !== 'undefined') &&
+            ( data !== null ) &&
+            (data.is_error === false ) &&
+            ( typeof data.listOfGenes !== 'undefined') ){
+            if (data.listOfGenes.length === 0){
+                alert(' No genes in the specified region')
+            } else {
+                _.forEach(data.listOfGenes,function(geneRec){
+                    returnObject.rawData.push(geneRec);
+                    if (!returnObject.uniqueGenes.includes(geneRec.name2)){
+                        returnObject.uniqueGenes.push(geneRec.name2);
+                    };
+                });
+            }
+        }
+        return returnObject;
+    };
     var displayRefinedGenesInARange = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
@@ -156,10 +168,50 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
-
-
     };
 
+
+
+    var processRecordsFromVariantQtlSearch = function (data) {
+        var returnObject = {rawData:[],
+            uniqueGenes:[],
+            uniquePhenotypes:[],
+            uniqueVarIds:[]
+        };
+        if ( ( typeof data !== 'undefined') &&
+                ( typeof data.data !== 'undefined') &&
+                ( typeof data.header !== 'undefined') &&
+                ( data.header.length > 0 ) ) {
+            var varIdIndex =  _.indexOf(data.header,'VAR_ID');
+            var geneIndex =  _.indexOf(data.header,'GENE');
+            var phenotypeIndex =  _.indexOf(data.header,'PHENOTYPE');
+            var numberOfElements =  data.data[0].length;
+            for ( var variant = 0; variant < numberOfElements; variant++ ){
+                var varId = data.data[varIdIndex][variant];
+                var gene = data.data[geneIndex][variant];
+                var phenotype = data.data[phenotypeIndex][variant];
+                if (!returnObject.uniqueGenes.includes(gene)){
+                    returnObject.uniqueGenes.push(gene);
+                };
+                if (!returnObject.uniquePhenotypes.includes(phenotype)){
+                    returnObject.uniquePhenotypes.push(phenotype);
+                };
+                if (!returnObject.uniqueVarIds.includes(varId)){
+                    returnObject.uniqueVarIds.push(varId);
+                };
+                returnObject.rawData.push({varId:varId,gene:gene,phenotype:phenotype});
+            }
+        } else {
+            alert('API call return to unexpected result. Is the KB fully functional?');
+        }
+         return returnObject;
+    };
+    var displayRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
+        $(idForTheTargetDiv).empty();
+        _.forEach(objectContainingRetrievedRecords.uniqueVarIds,function(oneTissue) {
+            $(idForTheTargetDiv).append(oneTissue+'\n');
+        });
+    };
 
 
 
@@ -205,6 +257,32 @@ mpgSoftware.dynamicUi = (function () {
         });
 
     };
+
+
+
+
+    var installDirectorButtonsOnTabs =  function ( additionalParameters) {
+        var objectDescribingDirectorButtons = {
+            directorButtons: [{buttonId: 'genesWithinRangeButtonId', buttonName: 'proximity', description: 'present all genes overlapping  the specified region'},
+                {buttonId: 'eQTL-dynamic-gene-go', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
+                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'}]
+        };
+        $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
+            objectDescribingDirectorButtons
+        ));
+        objectDescribingDirectorButtons = {
+            directorButtons: [{buttonId: 'getVariantsButtonId', buttonName: 'QTL', description: 'find all variants in the above range with QTL relationship with some phenotype'}]
+        };
+        $("#dynamicVariantHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
+            objectDescribingDirectorButtons
+        ));
+        objectDescribingDirectorButtons = {
+            directorButtons: [{buttonId: 'getPhenotypesFromQtlButtonId', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'}]
+        };
+    };
+
+
+
 
 
 
@@ -289,6 +367,28 @@ mpgSoftware.dynamicUi = (function () {
             }
         });
 
+
+        $('#getVariantsButtonId').on('click', function () {
+            var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
+            var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
+            var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
+            if  ( ( typeof chromosome !== 'undefined') &&
+                ( typeof extentBegin !== 'undefined') &&
+                ( typeof extentEnd !== 'undefined') ) {
+                updateDynamicUiInResponseToButtonClick({
+                        processEachRecord:processRecordsFromVariantQtlSearch,
+                        retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
+                        displayRefinedContextFunction:displayRecordsFromVariantQtlSearch,
+                        chromosome:chromosome ,
+                        startPos:extentBegin ,
+                        endPos:extentEnd,
+                        placeToDisplayData: '#dynamicVariantHolder div.dynamicUiHolder'  },
+                    additionalParameters)
+            }
+        });
+
+
+
         var chrom=(additionalParameters.geneChromosome.indexOf('chr')>-1)?additionalParameters.geneChromosome.substr(3):additionalParameters.geneChromosome;
         $("#configurableUiTabStorage").data("dataHolder",{
             extentBegin:additionalParameters.geneExtentBegin,
@@ -308,6 +408,9 @@ mpgSoftware.dynamicUi = (function () {
         ));
 
     };
+
+
+
     var adjustExtentHolders = function(domStorage,storageField,spanClass,basesToShift){
         var extentBegin = parseInt( domStorage[storageField] );
         if ((extentBegin+basesToShift)>0){
@@ -343,6 +446,7 @@ mpgSoftware.dynamicUi = (function () {
 
 // public routines are declared below
     return {
+        installDirectorButtonsOnTabs:installDirectorButtonsOnTabs,
         modifyScreenFields:modifyScreenFields,
         adjustLowerExtent:adjustLowerExtent,
         adjustUpperExtent:adjustUpperExtent

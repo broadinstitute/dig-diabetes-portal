@@ -2103,6 +2103,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     ));
         }
 
+        mpgSoftware.dynamicUi.installDirectorButtonsOnTabs(additionalParameters);
         mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);
 
         $('div.credibleSetHeader input.credSetStartPos').val(""+additionalParameters.geneExtentBegin);

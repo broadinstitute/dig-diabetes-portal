@@ -179,6 +179,7 @@ td.tissueTable.informationIsPresent{
                     retrieveModDataUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveModData")}',
                     retrieveListOfGenesInARangeUrl: '${g.createLink(controller: "RegionInfo", action: "retrieveListOfGenesInARange")}',
                     geneInfoAjaxUrl: '${g.createLink(controller: "Gene", action: "geneInfoAjax")}',
+                    retrieveVariantsWithQtlRelationshipsUrl:'${g.createLink(controller: "RegionInfo", action: "retrieveVariantsWithQtlRelationships")}',
                     assayIdList: "${assayIdList}",
                     geneChromosomeMinusChr:function(){if ('${geneChromosome}'.indexOf('chr')==0) { return '${geneChromosome}'.substr(3)} else {return '${geneChromosome}' }},
                     genePageWarning:"${genePageWarning}",

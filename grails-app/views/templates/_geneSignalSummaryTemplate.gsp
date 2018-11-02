@@ -6,6 +6,12 @@ span.credSetLevelHere{
     white-space: nowrap;
     font-size: 12px;
 }
+div.directorButtonHolder{
+    margin: 0 0 15px 20px;
+}
+button.directorButtonDetails{
+    margin: 5px;
+}
 </style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
@@ -642,12 +648,12 @@ span.credSetLevelHere{
                                             <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
                                         </div>
                                         <div class="row" style="border: none; margin-top: 10px">
-                                            <button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
-                                            type="button">proximity</button>
-                                            <button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
-                                            type="button">eQTL</button>
-                                            <button id="{{modAnnotationButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep "
-                                                type="button">MOD</button>
+                                            %{--<button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
+                                            %{--type="button">proximity</button>--}%
+                                            %{--<button id="{{eQTLGoButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%
+                                            %{--type="button">eQTL</button>--}%
+                                            %{--<button id="{{modAnnotationButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep "--}%
+                                                %{--type="button">MOD</button>--}%
                                         </div>
                                     </div>
                                 </div>
@@ -677,13 +683,18 @@ span.credSetLevelHere{
 
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
-                        <h3>Genes in context</h3>
+
                         <div class="row">
                             <div class="col-sm-12">
+                                <h3>Gene directors</h3>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="directorButtonHolder">
 
-                                <div class="directorButtonHolder">
-
+                                        </div>
+                                    </div>
                                 </div>
+                                <h3> Results </h3>
                                 <div class="resultsTableHolder">
                                     <div class="dynamicUiHolder">
                                     </div>
@@ -693,44 +704,55 @@ span.credSetLevelHere{
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicVariantHolder">
-                        <h3>Variants in context</h3>
+                        <h3>Variant directors</h3>
                         <div class="row">
                             <div class="col-sm-12">
 
                                 <div class="directorButtonHolder">
-                                    <h1>hey</h1>
+
                                 </div>
+                                <h3> Results </h3>
                                 <div class="resultsTableHolder">
-                                    <div class="multipleElementScrolledBox dynamicUiHolder">
+                                    <div class="multipleElementScrolledBox dynamicUiHolder" style="width:180px">
                                     </div>
                                 </div>
 
                             </div>
                         </div>                    </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
-                        <h3>Tissues in context</h3>
+                        <h3>Tissue director</h3>
                         <div class="row">
                             <div class="col-sm-12">
-                                <div class="multipleElementScrolledBox dynamicUiHolder">
+
+                                <div class="directorButtonHolder">
+
                                 </div>
+                                <h3> Results </h3>
+                                <div class="resultsTableHolder">
+                                    <div class="multipleElementScrolledBox dynamicUiHolder" style="width:180px">
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder">
-
+                        <h3>Phenotype director</h3>
                         <div class="row">
-                            <div class="col-sm-3">
-                                <div>
-                                <h4>selected phenotypes</h4>
+                            <div class="col-sm-12">
+
+                                <div class="directorButtonHolder">
+
                                 </div>
-                                <div class="multipleElementScrolledBox dynamicUiHolder">
+                                <h3> Results </h3>
+                                <div class="resultsTableHolder">
+                                    <div class="multipleElementScrolledBox dynamicUiHolder">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-3">
-                            </div>
-                            <div class="col-sm-6">
+
                             </div>
                         </div>
+
                     </div>
                  </div>
 
@@ -790,8 +812,15 @@ span.credSetLevelHere{
 <script id="templateForDirectorButtonsOnATab"  type="x-tmpl-mustache">
  <div class="row" style="border: none; margin-top: 10px">
 {{#directorButtons}}
-        <button id="{{buttonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"
+     <div class="row">
+        <div class="col-sm-2">
+            <button id="{{buttonId}}" class="btn btn-success directorButtonDetails"
                                             type="button">{{buttonName}}</button>
+        </div>
+        <div class="col-sm-10">
+            {{description}}
+        </div>
+     </div>
 {{/directorButtons}}
 </div>
                                             %{--<button id="{{genesWithinRangeButtonId}}" class="btn btn-primary buttonsForInitiatingRefinementStep"--}%

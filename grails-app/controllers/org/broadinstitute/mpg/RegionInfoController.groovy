@@ -167,6 +167,43 @@ class RegionInfoController {
     }
 
 
+    def retrieveVariantsWithQtlRelationships(){
+        JSONObject jsonReturn
+        int startPosition =  0
+        int endPosition =  0
+        String chromosome = params.chromosome
+        String startString = params.startPos
+        String endString = params.endPos
+        def slurper = new JsonSlurper()
+        try{
+            startPosition = Integer.parseInt(startString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+        try{
+            endPosition = Integer.parseInt(endString)
+        } catch ( Exception e ) {
+            e.printStackTrace()
+        }
+
+
+        // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
+        //  of the current range, and pull out all of the phenotypes that match those variants
+        Map phenotypeViaVariantMap = restServerService.gatherBottomLinePhenotypesVariantsPerRange(chromosome, startPosition, endPosition )
+
+        String proposedJsonString = new JsonBuilder( phenotypeViaVariantMap ).toPrettyString()
+
+        jsonReturn =  slurper.parseText(proposedJsonString)
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+
+    }
+
+
+
+
+
 
     def calculateGeneRanking() {
         def slurper = new JsonSlurper()
@@ -177,8 +214,6 @@ class RegionInfoController {
         String endString = params.end; // ex "29937203"
         String maximumAssociationString = params.maximumAssociation; // ex ".0001"
         String minimumWeightString = params.minimumWeight; // ex "1"
-//        String defaultPhenotypeWeightingSchemeString = params.defaultPhenotypeWeightingScheme
-//        int defaultPhenotypeWeightingScheme = 0
         int startPosition =  0
         int endPosition =  0
         float maximumAssociation = 0.0
@@ -223,11 +258,6 @@ class RegionInfoController {
         } catch ( Exception e ) {
             e.printStackTrace()
         }
-//        try{
-//            defaultPhenotypeWeightingScheme = Integer.parseInt(defaultPhenotypeWeightingSchemeString)
-//        } catch ( Exception e ) {
-//            e.printStackTrace()
-//        }
 
 
         // We want to get a set of phenotypes to begin with.  Let's gather all of the variance with the strongest associations inside
