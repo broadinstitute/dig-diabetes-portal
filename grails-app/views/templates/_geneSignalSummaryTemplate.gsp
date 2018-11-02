@@ -829,7 +829,7 @@ button.directorButtonDetails{
         <th>gene</th>
         {{/genesExist}}
         {{#uniqueGenes}}
-            <th  scope="col">{{.}}</th>
+            <th  scope="col">{{name}}</th>
         {{/uniqueGenes}}
         {{#genesExist}}
     </tr>
@@ -840,7 +840,7 @@ button.directorButtonDetails{
         <th  scope="row">Position</th>
         {{/genesExist}}
         {{#genePositions}}
-            <td >{{.}}</td>
+            <td >{{name}}</td>
         {{/genePositions}}
         {{#genesExist}}
     </tr>

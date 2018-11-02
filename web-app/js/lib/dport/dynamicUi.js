@@ -111,6 +111,14 @@ mpgSoftware.dynamicUi = (function () {
                 returnObject.uniqueTissues.push(oneRec.tissue);
             };
         });
+        // we need to add tissues for each gene
+        if (( typeof returnObject.uniqueGenes !== 'undefined')&&( returnObject.uniqueGenes.length>1 )){
+            console.log('did not expect multiple genes');
+        } else {
+            var genRecordIndex = _.indexOf($("#configurableUiTabStorage").data("dataHolder").geneNameArray,
+                {name:returnObject.uniqueGenes[0]});
+            $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex] = returnObject.uniqueTissues;
+        }
         return returnObject;
     };
     var displayRefinedEqtlContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
@@ -157,8 +165,8 @@ mpgSoftware.dynamicUi = (function () {
                         if (returnObject.genesExist.length===0){
                             returnObject.genesExist.push(1);
                         }
-                        returnObject.uniqueGenes.push(geneRec.name2);
-                        returnObject.genePositions.push(geneRec.chromosome +":"+geneRec.addrStart +"-"+geneRec.addrEnd);
+                        returnObject.uniqueGenes.push({name:geneRec.name2});
+                        returnObject.genePositions.push({name:geneRec.chromosome +":"+geneRec.addrStart +"-"+geneRec.addrEnd});
                     };
                 });
             }
@@ -245,27 +253,50 @@ mpgSoftware.dynamicUi = (function () {
         var rememberDisplayRefinedContextFunction =  inParms.displayRefinedContextFunction;
         var rememberPlaceToDisplayData = inParms.placeToDisplayData;
         var objectContainingRetrievedRecords = [];
-        promiseArray.push(
-            $.ajax({
-                cache: false,
-                type: "post",
-                url: rememberRetrieveDataUrl,
-                data: { gene: rememberInParmsGene,
+        if ( typeof inParms.loopOverGenes === 'undefined') {
+            promiseArray.push(
+                $.ajax({
+                    cache: false,
+                    type: "post",
+                    url: rememberRetrieveDataUrl,
+                    data: { gene: rememberInParmsGene,
                         geneName:rememberInParmsGene,
                         chromosome: rememberChromosome,
                         startPos: rememberExtentBegin,
                         endPos: rememberExtentEnd },
-                async: true
-            }).done(function (data, textStatus, jqXHR) {
+                    async: true
+                }).done(function (data, textStatus, jqXHR) {
 
-                objectContainingRetrievedRecords = rememberProcessEachRecord( data );
+                    objectContainingRetrievedRecords = rememberProcessEachRecord( data );
 
-            }).fail(function (jqXHR, textStatus, errorThrown) {
-                loading.hide();
-                core.errorReporter(jqXHR, errorThrown)
-            })
-        );
-        $.when.apply($, promiseArray).then(function(allCalls) {
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, errorThrown)
+                })
+            );
+
+        } else {
+            _.forEach(inParms.loopOverGenes,function(eachGene){
+                promiseArray.push(
+                    $.ajax({
+                        cache: false,
+                        type: "post",
+                        url: rememberRetrieveDataUrl,
+                        data: { gene: eachGene.name },
+                        async: true
+                    }).done(function (data, textStatus, jqXHR) {
+
+                        objectContainingRetrievedRecords = rememberProcessEachRecord( data );
+
+                    }).fail(function (jqXHR, textStatus, errorThrown) {
+                        loading.hide();
+                        core.errorReporter(jqXHR, errorThrown)
+                    })
+                );
+            });
+
+        }
+         $.when.apply($, promiseArray).then(function(allCalls) {
 
             rememberDisplayRefinedContextFunction( rememberPlaceToDisplayData, objectContainingRetrievedRecords );
 
@@ -378,9 +409,12 @@ mpgSoftware.dynamicUi = (function () {
 
         // perform an eQTL based lookup
         $('#eQTL-dynamic-gene-go').on('click', function () {
-            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
+            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").geneNameArray;
+            if (!somethingSymbol){
+                somethingSymbol = [$("#configurableUiTabStorage").data("dataHolder").originalGeneName];
+            }
             if (somethingSymbol) {
-                retrieveRefinedContext({   gene:somethingSymbol,
+                retrieveRefinedContext({   loopOverGenes:somethingSymbol,
                         processEachRecord:processRecordsFromEqtls,
                         retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
                         displayRefinedContextFunction:displayRefinedEqtlContext,
