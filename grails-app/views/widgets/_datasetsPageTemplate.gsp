@@ -92,6 +92,7 @@
 <g:render template="./data/GWAS_DIAMANTE-UKBB_eu_dv2" />
 <g:render template="./data/GWAS_UKBiobankACR_eu" />
 <g:render template="./data/WGS_TOPMedAF_eu" />
+<g:render template="./data/GWAS_UKBiobankHRC_eu" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
