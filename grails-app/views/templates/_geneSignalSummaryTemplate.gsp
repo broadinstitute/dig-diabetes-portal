@@ -835,16 +835,35 @@ button.directorButtonDetails{
     </tr>
     {{/genesExist}}
 
-    {{#genesExist}}
+    {{#genesPositionsExist}}
     <tr>
         <th  scope="row">Position</th>
-        {{/genesExist}}
+        {{/genesPositionsExist}}
         {{#genePositions}}
             <td >{{name}}</td>
         {{/genePositions}}
-        {{#genesExist}}
+        {{#genesPositionsExist}}
     </tr>
-    {{/genesExist}}
+    {{/genesPositionsExist}}
+
+    {{#eqtlTissuesExist}}
+    <tr>
+        <th  scope="row">Tissues with eQTLs</th>
+        {{/eqtlTissuesExist}}
+        {{#uniqueEqtlGenes}}
+            <td >
+            {{#tissues}}
+                <div>
+                    {{tissueName}}
+                </div>
+            {{/tissues}}
+            </td>
+        {{/uniqueEqtlGenes}}
+       {{#eqtlTissuesExist}}
+    </tr>
+    {{/eqtlTissuesExist}}
+
+
 
     %{--<tr>--}%
         %{--<th  scope="row">eQTL</th>--}%

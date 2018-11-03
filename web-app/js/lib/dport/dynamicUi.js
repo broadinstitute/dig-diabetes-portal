@@ -115,29 +115,39 @@ mpgSoftware.dynamicUi = (function () {
         if (( typeof returnObject.uniqueGenes !== 'undefined')&&( returnObject.uniqueGenes.length>1 )){
             console.log('did not expect multiple genes');
         } else {
-            var genRecordIndex = _.indexOf($("#configurableUiTabStorage").data("dataHolder").geneNameArray,
+            var genRecordIndex = _.findIndex($("#configurableUiTabStorage").data("dataHolder").geneNameArray,
                 {name:returnObject.uniqueGenes[0]});
-            $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex] = returnObject.uniqueTissues;
+            $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex]['tissues'] = returnObject.uniqueTissues;
         }
         return returnObject;
     };
     var displayRefinedEqtlContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
-        var selectorForIidForTheTargetDiv =idForTheTargetDiv;
-        $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
-            $(selectorForIidForTheTargetDiv).append(oneTissue+'\n');
+        var returnObject = {rawData:[],
+            eqtlTissuesExist:[1],
+            uniqueGenes:[],
+            uniqueEqtlGenes:[],
+            genePositions:[],
+            uniqueTissues:[],
+            geneTissueEqtls:[],
+            genesPositionsExist:function(){
+                return (this.genePositions.length>0)?[1]:[];
+            },
+            genesExist:function(){
+                return (this.uniqueGenes.length>0)?[1]:[];
+            }
+        };
+        // pull everything out of the dom variable, not the passed in parameter
+        _.forEach($("#configurableUiTabStorage").data("dataHolder").geneNameArray,function(eachGene){
+            returnObject.uniqueGenes.push({name:eachGene.name});
+
+            var recordToDisplay = {tissues:[]};
+            _.forEach(eachGene.tissues,function(eachTissue){
+                recordToDisplay.tissues.push({tissueName:eachTissue})
+            });;
+            returnObject.uniqueEqtlGenes.push(recordToDisplay);
         });
-        if ( typeof objectContainingRetrievedRecords.startPos !== 'undefined'){
-            $('span.dynamicUiGeneExtentBegin').html(''+objectContainingRetrievedRecords.startPos);
-        }
-        if ( typeof objectContainingRetrievedRecords.endPos !== 'undefined'){
-            $('span.dynamicUiGeneExtentEnd').html(''+objectContainingRetrievedRecords.endPos);
-        }
-        if ( typeof objectContainingRetrievedRecords.chromosome !== 'undefined'){
-            $('span.dynamicUiChromosome').html(''+objectContainingRetrievedRecords.chromosome);
-        }
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
-            objectContainingRetrievedRecords
+            returnObject
         ));
     };
 
@@ -150,8 +160,14 @@ mpgSoftware.dynamicUi = (function () {
         var returnObject = {rawData:[],
             uniqueGenes:[],
             genePositions:[],
-            genesExist:[],
-            uniqueTissues:[]};
+            uniqueTissues:[],
+            genesPositionsExist:function(){
+                return (this.genePositions.length>0)?[1]:[];
+            },
+            genesExist:function(){
+                return (this.uniqueGenes.length>0)?[1]:[];
+            }
+        };
         if (( typeof data !== 'undefined') &&
             ( data !== null ) &&
             (data.is_error === false ) &&
@@ -162,9 +178,6 @@ mpgSoftware.dynamicUi = (function () {
                 _.forEach(data.listOfGenes,function(geneRec){
                     returnObject.rawData.push(geneRec);
                     if (!returnObject.uniqueGenes.includes(geneRec.name2)){
-                        if (returnObject.genesExist.length===0){
-                            returnObject.genesExist.push(1);
-                        }
                         returnObject.uniqueGenes.push({name:geneRec.name2});
                         returnObject.genePositions.push({name:geneRec.chromosome +":"+geneRec.addrStart +"-"+geneRec.addrEnd});
                     };
