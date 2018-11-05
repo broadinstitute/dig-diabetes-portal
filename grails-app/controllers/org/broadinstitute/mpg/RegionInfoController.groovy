@@ -535,7 +535,7 @@ class RegionInfoController {
     def retrieveModData() {
         String gene = ""
         boolean looksOkay = true
-        JSONArray jsonReturn
+        JSONObject jsonReturn
 
         if (params.gene) {
             gene = params.gene
@@ -547,7 +547,7 @@ class RegionInfoController {
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
             def slurper = new JsonSlurper()
-            jsonReturn =  [slurper.parseText(proposedJsonString)] as JSONArray;
+            jsonReturn =  slurper.parseText(proposedJsonString)
         }
 
         render(status: 200, contentType: "application/json") {jsonReturn}

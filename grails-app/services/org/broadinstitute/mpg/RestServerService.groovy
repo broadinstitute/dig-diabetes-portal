@@ -2288,7 +2288,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONArray gatherModsData( String gene ) {
+    public JSONObject gatherModsData( String gene ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
             specifyRequestList << "gene=${gene}"
@@ -2297,7 +2297,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String rawReturnFromApi =  getRestCallBase("testcalls/knockout/object?${specifyRequestList.join("&")}", GET_TEMPORARY_MODS_URL)
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
-        return jsonArray
+        JSONObject jsonObject = new JSONObject()
+        jsonObject['gene']=gene
+        jsonObject['records']=jsonArray
+        return jsonObject
     }
 
 
