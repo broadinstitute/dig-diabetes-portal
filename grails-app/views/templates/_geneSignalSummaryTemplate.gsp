@@ -723,7 +723,7 @@ button.directorButtonDetails{
                                 </div>
                                 <h3> Results </h3>
                                 <div class="resultsTableHolder">
-                                    <div class="multipleElementScrolledBox dynamicUiHolder" style="width:180px">
+                                    <div class="dynamicUiHolder">
                                     </div>
                                 </div>
 
@@ -874,6 +874,53 @@ button.directorButtonDetails{
 
     </table>
 </script>
+
+<script id="dynamicTissueTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    {{#tissuesExist}}
+    <tr>
+        <th>tissue</th>
+        {{/tissuesExist}}
+        {{#uniqueTissues}}
+            <th  scope="col">{{name}}</th>
+        {{/uniqueTissues}}
+        {{#tissuesExist}}
+    </tr>
+    {{/tissuesExist}}
+
+    {{#genesPositionsExist}}
+    <tr>
+        <th  scope="row">Position</th>
+        {{/genesPositionsExist}}
+        {{#genePositions}}
+            <td >{{name}}</td>
+        {{/genePositions}}
+        {{#genesPositionsExist}}
+    </tr>
+    {{/genesPositionsExist}}
+
+    {{#eqtlGenesExist}}
+    <tr>
+        <th  scope="row">Tissues with eQTLs</th>
+        {{/eqtlGenesExist}}
+        {{#geneTissueEqtls}}
+            <td >
+            {{#genes}}
+                <div>
+                    {{geneName}}
+                </div>
+            {{/genes}}
+            </td>
+        {{/geneTissueEqtls}}
+       {{#eqtlGenesExist}}
+    </tr>
+    {{/eqtlGenesExist}}
+
+    </table>
+</script>
+
+
+
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>

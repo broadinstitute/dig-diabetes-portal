@@ -111,17 +111,34 @@ mpgSoftware.dynamicUi = (function () {
                 returnObject.uniqueTissues.push(oneRec.tissue);
             };
         });
+
+        // we have found the unique elements in this batch of records.  Now process those into our global data structure
+        _.forEach(returnObject.uniqueTissues,function(oneTissue){
+            var tissueIndex = _.findIndex($("#configurableUiTabStorage").data("dataHolder").tissueNameArray,{tissueName:oneTissue});
+            if (tissueIndex<0){
+                $("#configurableUiTabStorage").data("dataHolder").tissueNameArray.push({tissueName:oneTissue,
+                                                                                        genes:[returnObject.uniqueGenes[0]]});
+            } else{ // we already know about this tissue, but have we seen this gene associated with it before?
+                var tissueRecord = $("#configurableUiTabStorage").data("dataHolder").tissueNameArray[tissueIndex];
+                if (_.findIndex(tissueRecord.genes,returnObject.uniqueGenes[0])<0){
+                    tissueRecord.genes.push(returnObject.uniqueGenes[0]);
+                }
+            }
+        });
+
         // we need to add tissues for each gene
         if (( typeof returnObject.uniqueGenes !== 'undefined')&&( returnObject.uniqueGenes.length>1 )){
             console.log('did not expect multiple genes');
-        } else {
+        } else if ( typeof returnObject.uniqueGenes.length === 0 ){ // no eQTLs exist
+            $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex]['tissues'] = [];
+        }else if ( returnObject.uniqueGenes.length > 0 ){
             var genRecordIndex = _.findIndex($("#configurableUiTabStorage").data("dataHolder").geneNameArray,
                 {name:returnObject.uniqueGenes[0]});
             $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex]['tissues'] = returnObject.uniqueTissues;
         }
         return returnObject;
     };
-    var displayRefinedEqtlContext = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+    var displayTissuesPerGeneFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var returnObject = {rawData:[],
             eqtlTissuesExist:[1],
             uniqueGenes:[],
@@ -134,6 +151,9 @@ mpgSoftware.dynamicUi = (function () {
             },
             genesExist:function(){
                 return (this.uniqueGenes.length>0)?[1]:[];
+            },
+            tissuesExist:function(){
+                return (this.uniqueTissues.length>0)?[1]:[];
             }
         };
         // pull everything out of the dom variable, not the passed in parameter
@@ -143,10 +163,51 @@ mpgSoftware.dynamicUi = (function () {
             var recordToDisplay = {tissues:[]};
             _.forEach(eachGene.tissues,function(eachTissue){
                 recordToDisplay.tissues.push({tissueName:eachTissue})
-            });;
+            });
             returnObject.uniqueEqtlGenes.push(recordToDisplay);
         });
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
+            returnObject
+        ));
+    };
+    var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = {rawData:[],
+            eqtlTissuesExist:[],
+            eqtlGenesExist:[1],
+            uniqueGenes:[],
+            uniqueEqtlGenes:[],
+            genePositions:[],
+            uniqueTissues:[],
+            geneTissueEqtls:[],
+            genesPositionsExist:function(){
+                return (this.genePositions.length>0)?[1]:[];
+            },
+            genesExist:function(){
+                return (this.uniqueGenes.length>0)?[1]:[];
+            },
+            tissuesExist:function(){
+                return (this.uniqueTissues.length>0)?[1]:[];
+            }
+        };
+        _.forEach($("#configurableUiTabStorage").data("dataHolder").tissueNameArray,function(eachTissue){
+            returnObject.uniqueTissues.push({name:eachTissue.tissueName});
+
+            var recordToDisplay = {genes:[]};
+            _.forEach(eachTissue.genes,function(eachGene){
+                recordToDisplay.genes.push({geneName:eachGene})
+            });
+            if (!returnObject.geneTissueEqtls.includes(recordToDisplay)){
+                returnObject.geneTissueEqtls.push(recordToDisplay);
+            }
+
+        });
+        // now go through each unique tissue and gather up the genes that reference each one
+        // _.forEach($("#configurableUiTabStorage").data("dataHolder").tissueNameArray,function(eachTissue){
+        //     returnObject.geneTissueEqtls.push({name:eachTissue});
+        //
+        // }
+        // returnObject.uniqueEqtlGenes.push(recordToDisplay);
+        $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicTissueTable')[0].innerHTML,
             returnObject
         ));
     };
@@ -430,7 +491,7 @@ mpgSoftware.dynamicUi = (function () {
                 retrieveRefinedContext({   loopOverGenes:somethingSymbol,
                         processEachRecord:processRecordsFromEqtls,
                         retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-                        displayRefinedContextFunction:displayRefinedEqtlContext,
+                        displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
                         placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
                     },
                     additionalParameters)
@@ -480,13 +541,17 @@ mpgSoftware.dynamicUi = (function () {
 
 
         $('#getTissuesFromEqtlButtonId').on('click', function () {
-            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").originalGeneName;
+            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").geneNameArray;
+            if (!somethingSymbol){
+                somethingSymbol = [$("#configurableUiTabStorage").data("dataHolder").originalGeneName];
+            }
+            $("#configurableUiTabStorage").data("dataHolder").tissueNameArray = [];
             if (somethingSymbol) {
                 retrieveRefinedContext({
-                        gene: somethingSymbol,
+                        loopOverGenes: somethingSymbol,
                         processEachRecord: processRecordsFromEqtls,
                         retrieveDataUrl: additionalParameters.retrieveEqtlDataUrl,
-                        displayRefinedContextFunction: displayRefinedEqtlContext,
+                        displayRefinedContextFunction: displayGenesPerTissueFromEqtl,
                         placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
                     },
                     additionalParameters)
@@ -528,6 +593,7 @@ mpgSoftware.dynamicUi = (function () {
             chromosome:chrom,
             originalGeneName:additionalParameters.geneName,
             geneNameArray:[],
+            tissueNameArray:[],
             contextDescr:{
                 chromosome: chrom,
                 extentBegin:additionalParameters.geneExtentBegin,
