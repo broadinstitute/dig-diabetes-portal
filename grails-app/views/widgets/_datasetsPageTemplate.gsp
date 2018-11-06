@@ -94,6 +94,7 @@
 <g:render template="./data/WGS_TOPMedAF_eu" />
 <g:render template="./data/GWAS_UKBiobankHRC_eu" />
 <g:render template="./data/GWAS_ADIPOGen" />
+<g:render template="./data/GWAS_CHARGE_eu" />
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
