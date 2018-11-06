@@ -32,8 +32,8 @@ mpgSoftware.dynamicUi = (function () {
             ( typeof data.geneInfo !== 'undefined')){
             returnObject.geneName = data.geneInfo.Gene_name;
             returnObject.chromosome = data.geneInfo.CHROM;
-            returnObject.extentBegin = data.geneInfo.BEG;
-            returnObject.extentEnd = data.geneInfo.END;
+            returnObject.extentBegin = data.geneInfo.BEG-1;
+            returnObject.extentEnd = data.geneInfo.END+1;
         }
         return returnObject;
     };
@@ -41,10 +41,10 @@ mpgSoftware.dynamicUi = (function () {
         $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
-        $("#configurableUiTabStorage").data("dataHolder").extentBegin = objectContainingRetrievedRecords.extentBegin;
-        $("#configurableUiTabStorage").data("dataHolder").extentEnd = objectContainingRetrievedRecords.extentEnd;
-        $("#configurableUiTabStorage").data("dataHolder").chromosome = objectContainingRetrievedRecords.chromosome;
-        $("#configurableUiTabStorage").data("dataHolder").originalGeneName = objectContainingRetrievedRecords.geneName;
+        setAccumulatorObject( "extentBegin", objectContainingRetrievedRecords.extentBegin );
+        setAccumulatorObject( "extentEnd", objectContainingRetrievedRecords.extentEnd );
+        setAccumulatorObject( "chromosome", objectContainingRetrievedRecords.chromosome );
+        setAccumulatorObject( "originalGeneName", objectContainingRetrievedRecords.geneName );
     }
 
 
@@ -59,8 +59,12 @@ mpgSoftware.dynamicUi = (function () {
             uniqueMods:[]};
         var originalGene = data.gene;
         if (data.records.length===0){
-            $("#configurableUiTabStorage").data("dataHolder").modNameArray.push({geneName:originalGene,mods:[]});
+            // no mods.  add an empty record for this gene to the global structure
+            var modNameArray =  getAccumulatorObject("modNameArray");
+            modNameArray.push({geneName:originalGene,mods:[]});
+            setAccumulatorObject("modNameArray",modNameArray);
         } else {
+            // we have mods for this gene. First let's save them
             _.forEach(data.records,function(oneRec){
                 if (!returnObject.uniqueGenes.includes(oneRec.Human_gene)){
                     returnObject.uniqueGenes.push(oneRec.Human_gene);
@@ -70,24 +74,36 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 returnObject.rawData.push(oneRec);
             });
-
-        }
-         // we have found the unique elements in this batch of records.  Now process those into our global data structure
-        _.forEach(returnObject.uniqueGenes,function(oneGene){
-            var geneIndex = _.findIndex($("#configurableUiTabStorage").data("dataHolder").modNameArray,{geneName:oneGene});
-            if (geneIndex<0){
-                $("#configurableUiTabStorage").data("dataHolder").modNameArray.push({geneName:oneGene,
+            // now let's add them to our global structure.  First, find any record for this gene that we might already have
+            var geneIndex = _.findIndex(getAccumulatorObject("modNameArray"),{geneName:originalGene});
+            if (geneIndex<0){ // this is the only path we ever take, right
+                var modNameArray =  getAccumulatorObject("modNameArray");
+                modNameArray.push({geneName:originalGene,
                     mods:returnObject.uniqueMods});
+                setAccumulatorObject("modNameArray",modNameArray);
             } else{ // we already know about this tissue, but have we seen this gene associated with it before?
-                var tissueRecord = $("#configurableUiTabStorage").data("dataHolder").modNameArray[geneIndex];
+                alert('this never happens, I think');
+                var tissueRecord = getAccumulatorObject("modNameArray")[geneIndex];
                 _.forEach(uniqueMods,function(oneMod){
                     if (!tissueRecord.mods.includes(oneMod)){
                         tissueRecord.mods.push(oneMod);
                     }
                 });
-                // if (_.findIndex(tissueRecord.mods,returnObject.uniqueGenes[0])<0){
-                //     tissueRecord.genes.push(returnObject.uniqueGenes[0]);
-                // }
+            }
+        }
+         // we have found the unique elements in this batch of records.  Now process those into our global data structure
+        _.forEach(returnObject.uniqueGenes,function(oneGene){
+            var geneIndex = _.findIndex(getAccumulatorObject("modNameArray"),{geneName:oneGene});
+            if (geneIndex<0){
+                $("#configurableUiTabStorage").data("dataHolder").modNameArray.push({geneName:oneGene,
+                    mods:returnObject.uniqueMods});
+            } else{ // we already know about this tissue, but have we seen this gene associated with it before?
+                var tissueRecord = $("#configurableUiTabStorage").data("dataHolder").modNameArray[geneIndex];
+                _.forEach(returnObject.uniqueMods,function(oneMod){
+                    if (!tissueRecord.mods.includes(oneMod)){
+                        tissueRecord.mods.push(oneMod);
+                    }
+                });
             }
         });
         return returnObject;
@@ -96,9 +112,6 @@ mpgSoftware.dynamicUi = (function () {
         var returnObject = createNewDisplayReturnObject();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        // _.forEach(_.sortBy(_.uniq(objectContainingRetrievedRecords.rawData)),function(onePhenotypeName) {
-        //     $(selectorForIidForTheTargetDiv).append('<div class="resultElementPerLine">'+onePhenotypeName.Term+'</div>');
-        // });
         _.forEach($("#configurableUiTabStorage").data("dataHolder").modNameArray, function (geneWithMods) {
             returnObject.uniqueGenes.push({name:geneWithMods.geneName});
 
@@ -114,10 +127,12 @@ mpgSoftware.dynamicUi = (function () {
         ));
     }
 
-
-var createNewDisplayReturnObject = function(){
+    /***
+     * The object is passed into mustache and describes the display that will be presented to users
+     * @returns {{rawData: Array, uniqueGenes: Array, uniqueEqtlGenes: Array, genePositions: Array, uniqueTissues: Array, geneTissueEqtls: Array, geneModTerms: Array, genesPositionsExist: (function(): *), genesExist: (function(): *), tissuesExist: (function(): *), eqtlTissuesExist: (function(): *), eqtlGenesExist: (function(): *), geneModsExist: (function(): *)}}
+     */
+    var createNewDisplayReturnObject = function(){
         return {rawData:[],
-           // eqtlTissuesExist:[1],
             uniqueGenes:[],
             uniqueEqtlGenes:[],
             genePositions:[],
@@ -143,7 +158,79 @@ var createNewDisplayReturnObject = function(){
                 return (this.geneModTerms.length>0)?[1]:[];
             }
         };
+    };
+
+    /***
+     * Default value of the shared accumulator object
+     * @param additionalParameters
+     * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
+     */
+    var sharedAccumulatorObject = function (additionalParameters){
+        var chrom=(additionalParameters.geneChromosome.indexOf('chr')>-1)?
+            additionalParameters.geneChromosome.substr(3):
+            additionalParameters.geneChromosome;
+        return {
+            extentBegin:additionalParameters.geneExtentBegin,
+            extentEnd:additionalParameters.geneExtentEnd,
+            chromosome:chrom,
+            originalGeneName:additionalParameters.geneName,
+            geneNameArray:[],
+            tissueNameArray:[],
+            modNameArray:[],
+            mods:[]
+            // contextDescr:{
+            //     chromosome: chrom,
+            //     extentBegin:additionalParameters.geneExtentBegin,
+            //     extentEnd:additionalParameters.geneExtentEnd,
+            //     moreContext:[]
+            // }
+        };
+    };
+
+    /***
+     * retrieve the accumulator object, pulling back a specified field if requested
+     * @param chosenField
+     * @returns {jQuery}
+     */
+    var getAccumulatorObject = function (chosenField){
+        var returnValue = $("#configurableUiTabStorage").data("dataHolder");
+        if ( typeof returnValue === 'undefined'){
+            alert('Fatal error.  Malfunction is imminent. Missing accumulator object.');
+            return;
+        }
+        if ( typeof chosenField !== 'undefined'){
+            returnValue = returnValue[chosenField];
+        }
+        return returnValue
+    };
+
+    /***
+     * store the accumulator object in the DOM
+     * @param accumulatorObject
+     * @returns {*}
+     */
+    var setAccumulatorObject = function (specificField, value){
+        if ( typeof specificField === 'undefined'){
+            alert("Serious error.  Attempted assignment of unspecified field.");
+            return;
+        }
+        getAccumulatorObject()[specificField]=value;
+        return getAccumulatorObject(specificField);
+    };
+
+    /***
+     * Reset the chosen field in the accumulator object to its default value. If no field is specified then reset the entire
+     * accumulator object to its default.
+     */
+    var resetAccumulatorObject =  function(additionalParameters,specificField){
+        if ( typeof specificField !== 'undefined'){
+            getAccumulatorObject()[specificField]=sharedAccumulatorObject(additionalParameters)[specificField]
+        } else {
+            $("#configurableUiTabStorage").data("dataHolder", sharedAccumulatorObject(additionalParameters));
+        }
     }
+
+
 
     /***
      * gene eQTL search
@@ -209,25 +296,8 @@ var createNewDisplayReturnObject = function(){
     };
     var displayTissuesPerGeneFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var returnObject = createNewDisplayReturnObject();
-        // var returnObject = {rawData:[],
-        //     eqtlTissuesExist:[1],
-        //     uniqueGenes:[],
-        //     uniqueEqtlGenes:[],
-        //     genePositions:[],
-        //     uniqueTissues:[],
-        //     geneTissueEqtls:[],
-        //     genesPositionsExist:function(){
-        //         return (this.genePositions.length>0)?[1]:[];
-        //     },
-        //     genesExist:function(){
-        //         return (this.uniqueGenes.length>0)?[1]:[];
-        //     },
-        //     tissuesExist:function(){
-        //         return (this.uniqueTissues.length>0)?[1]:[];
-        //     }
-        // };
-        // pull everything out of the dom variable, not the passed in parameter
-        _.forEach($("#configurableUiTabStorage").data("dataHolder").geneNameArray,function(eachGene){
+
+        _.forEach(getAccumulatorObject("geneNameArray"),function(eachGene){
             returnObject.uniqueGenes.push({name:eachGene.name});
 
             var recordToDisplay = {tissues:[]};
@@ -241,25 +311,9 @@ var createNewDisplayReturnObject = function(){
         ));
     };
     var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
-        var returnObject = {rawData:[],
-            eqtlTissuesExist:[],
-            eqtlGenesExist:[1],
-            uniqueGenes:[],
-            uniqueEqtlGenes:[],
-            genePositions:[],
-            uniqueTissues:[],
-            geneTissueEqtls:[],
-            genesPositionsExist:function(){
-                return (this.genePositions.length>0)?[1]:[];
-            },
-            genesExist:function(){
-                return (this.uniqueGenes.length>0)?[1]:[];
-            },
-            tissuesExist:function(){
-                return (this.uniqueTissues.length>0)?[1]:[];
-            }
-        };
-        _.forEach($("#configurableUiTabStorage").data("dataHolder").tissueNameArray,function(eachTissue){
+
+        var returnObject = createNewDisplayReturnObject();
+        _.forEach(getAccumulatorObject("tissueNameArray"),function(eachTissue){
             returnObject.uniqueTissues.push({name:eachTissue.tissueName});
 
             var recordToDisplay = {genes:[]};
@@ -271,12 +325,7 @@ var createNewDisplayReturnObject = function(){
             }
 
         });
-        // now go through each unique tissue and gather up the genes that reference each one
-        // _.forEach($("#configurableUiTabStorage").data("dataHolder").tissueNameArray,function(eachTissue){
-        //     returnObject.geneTissueEqtls.push({name:eachTissue});
-        //
-        // }
-        // returnObject.uniqueEqtlGenes.push(recordToDisplay);
+
         $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicTissueTable')[0].innerHTML,
             returnObject
         ));
@@ -316,15 +365,12 @@ var createNewDisplayReturnObject = function(){
             }
         }
         // we have a list of all the genes in the range.  Let's remember that information.
-        $("#configurableUiTabStorage").data("dataHolder").geneNameArray =  returnObject.uniqueGenes;
+        setAccumulatorObject("geneNameArray",returnObject.uniqueGenes);
         return returnObject;
     };
     var displayRefinedGenesInARange = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        // _.forEach(objectContainingRetrievedRecords.uniqueTissues,function(oneTissue) {
-        //     $(selectorForIidForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
-        // });
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
@@ -383,6 +429,13 @@ var createNewDisplayReturnObject = function(){
 
     };
 
+    var displayContext = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
+        var contextDescr = objectContainingRetrievedRecords;
+        $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
+            contextDescr
+        ));
+    };
+
 
 
     var retrieveRefinedContext=function(inParms,additionalParameters){
@@ -397,14 +450,15 @@ var createNewDisplayReturnObject = function(){
         var rememberDisplayRefinedContextFunction =  inParms.displayRefinedContextFunction;
         var rememberPlaceToDisplayData = inParms.placeToDisplayData;
         var objectContainingRetrievedRecords = [];
-        if ( typeof inParms.loopOverGenes === 'undefined') {
+
+        _.forEach(inParms.loopOverGenes,function(eachGene){
             promiseArray.push(
                 $.ajax({
                     cache: false,
                     type: "post",
                     url: rememberRetrieveDataUrl,
-                    data: { gene: rememberInParmsGene,
-                        geneName:rememberInParmsGene,
+                    data: { gene: eachGene.name,
+                        geneName:eachGene.name,
                         chromosome: rememberChromosome,
                         startPos: rememberExtentBegin,
                         endPos: rememberExtentEnd },
@@ -418,28 +472,9 @@ var createNewDisplayReturnObject = function(){
                     core.errorReporter(jqXHR, errorThrown)
                 })
             );
+        });
 
-        } else {
-            _.forEach(inParms.loopOverGenes,function(eachGene){
-                promiseArray.push(
-                    $.ajax({
-                        cache: false,
-                        type: "post",
-                        url: rememberRetrieveDataUrl,
-                        data: { gene: eachGene.name },
-                        async: true
-                    }).done(function (data, textStatus, jqXHR) {
 
-                        objectContainingRetrievedRecords = rememberProcessEachRecord( data );
-
-                    }).fail(function (jqXHR, textStatus, errorThrown) {
-                        loading.hide();
-                        core.errorReporter(jqXHR, errorThrown)
-                    })
-                );
-            });
-
-        }
          $.when.apply($, promiseArray).then(function(allCalls) {
 
             rememberDisplayRefinedContextFunction( rememberPlaceToDisplayData, objectContainingRetrievedRecords );
@@ -526,8 +561,11 @@ var createNewDisplayReturnObject = function(){
         $('#'+additionalParameters.generalizedGoButtonId).on('click', function () {
             var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
             somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+            var geneInArray =[{name:somethingSymbol}];
+            setAccumulatorObject("geneNameArray",geneInArray);
             if (somethingSymbol) {
-                retrieveRefinedContext({   gene:somethingSymbol,
+                retrieveRefinedContext({ loopOverGenes:geneInArray,
+                        gene:somethingSymbol,
                         processEachRecord:processRecordsUpdateContext,
                         retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
                         displayRefinedContextFunction:displayRangeContext,
@@ -539,11 +577,10 @@ var createNewDisplayReturnObject = function(){
 
         // pull back mouse annotations
         $('#modAnnotationButtonId').on('click', function () {
-            $("#configurableUiTabStorage").data("dataHolder").modNameArray = [];
-            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").geneNameArray;
-            if (!somethingSymbol){
-                somethingSymbol = [$("#configurableUiTabStorage").data("dataHolder").originalGeneName];
-            }
+            resetAccumulatorObject(additionalParameters,"modNameArray");
+
+            var somethingSymbol = getAccumulatorObject("geneNameArray");
+
             if (somethingSymbol) {
                 retrieveRefinedContext({   loopOverGenes:somethingSymbol,
                         processEachRecord:processRecordsFromMod,
@@ -557,10 +594,8 @@ var createNewDisplayReturnObject = function(){
 
         // perform an eQTL based lookup
         $('#eQTL-dynamic-gene-go').on('click', function () {
-            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").geneNameArray;
-            if (!somethingSymbol){
-                somethingSymbol = [$("#configurableUiTabStorage").data("dataHolder").originalGeneName];
-            }
+            var somethingSymbol = getAccumulatorObject("geneNameArray");
+
             if (somethingSymbol) {
                 retrieveRefinedContext({   loopOverGenes:somethingSymbol,
                         processEachRecord:processRecordsFromEqtls,
@@ -575,51 +610,42 @@ var createNewDisplayReturnObject = function(){
 
         // assign the correct response to the proximity range go button
         $('#genesWithinRangeButtonId').on('click', function () {
-            var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
-            var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
-            var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
-            if  ( ( typeof chromosome !== 'undefined') &&
-                ( typeof extentBegin !== 'undefined') &&
-                ( typeof extentEnd !== 'undefined') ) {
+
                 retrieveRefinedContext({
+                            loopOverGenes:["1"],
                             processEachRecord:processRecordsFromProximitySearch,
                             retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
                             displayRefinedContextFunction:displayRefinedGenesInARange,
-                            chromosome:chromosome ,
-                            startPos:extentBegin ,
-                            endPos:extentEnd,
+                            chromosome:getAccumulatorObject("chromosome") ,
+                            startPos:getAccumulatorObject("extentBegin") ,
+                            endPos:getAccumulatorObject("extentEnd"),
                             placeToDisplayData: '#dynamicGeneHolder div.dynamicUiHolder'  },
                     additionalParameters)
-            }
+
         });
 
 
         $('#getVariantsButtonId').on('click', function () {
-            var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
-            var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
-            var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
-            if  ( ( typeof chromosome !== 'undefined') &&
-                ( typeof extentBegin !== 'undefined') &&
-                ( typeof extentEnd !== 'undefined') ) {
-                retrieveRefinedContext({
-                        processEachRecord:processRecordsFromVariantQtlSearch,
-                        retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
-                        displayRefinedContextFunction:displayVariantRecordsFromVariantQtlSearch,
-                        chromosome:chromosome ,
-                        startPos:extentBegin ,
-                        endPos:extentEnd,
-                        placeToDisplayData: '#dynamicVariantHolder div.dynamicUiHolder'  },
-                    additionalParameters)
-            }
+
+            retrieveRefinedContext({
+                    loopOverGenes:["1"],
+                    processEachRecord:processRecordsFromVariantQtlSearch,
+                    retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
+                    displayRefinedContextFunction:displayVariantRecordsFromVariantQtlSearch,
+                    chromosome:getAccumulatorObject("chromosome") ,
+                    startPos:getAccumulatorObject("extentBegin") ,
+                    endPos:getAccumulatorObject("extentEnd"),
+                    placeToDisplayData: '#dynamicVariantHolder div.dynamicUiHolder'  },
+                additionalParameters)
+
         });
 
 
         $('#getTissuesFromEqtlButtonId').on('click', function () {
-            var somethingSymbol = $("#configurableUiTabStorage").data("dataHolder").geneNameArray;
-            if (!somethingSymbol){
-                somethingSymbol = [$("#configurableUiTabStorage").data("dataHolder").originalGeneName];
-            }
-            $("#configurableUiTabStorage").data("dataHolder").tissueNameArray = [];
+            var somethingSymbol = getAccumulatorObject("geneNameArray");
+
+            resetAccumulatorObject(additionalParameters,"tissueNameArray");
+
             if (somethingSymbol) {
                 retrieveRefinedContext({
                         loopOverGenes: somethingSymbol,
@@ -634,86 +660,59 @@ var createNewDisplayReturnObject = function(){
 
 
         $('#getPhenotypesFromQtlButtonId').on('click', function () {
-            var chromosome  = $("#configurableUiTabStorage").data("dataHolder").chromosome;
-            var extentBegin  = $("#configurableUiTabStorage").data("dataHolder").extentBegin;
-            var extentEnd  = $("#configurableUiTabStorage").data("dataHolder").extentEnd;
-            if  ( ( typeof chromosome !== 'undefined') &&
-                ( typeof extentBegin !== 'undefined') &&
-                ( typeof extentEnd !== 'undefined') ) {
-                retrieveRefinedContext({
-                        processEachRecord:processRecordsFromVariantQtlSearch,
-                        retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
-                        displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
-                        chromosome:chromosome ,
-                        startPos:extentBegin ,
-                        endPos:extentEnd,
-                        placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'  },
-                    additionalParameters)
-            }
+            retrieveRefinedContext({
+                    loopOverGenes:["1"],
+                    processEachRecord:processRecordsFromVariantQtlSearch,
+                    retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
+                    displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
+                    chromosome:getAccumulatorObject("chromosome") ,
+                    startPos:getAccumulatorObject("extentBegin") ,
+                    endPos:getAccumulatorObject("extentEnd"),
+                    placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'  },
+                additionalParameters);
         });
 
+        resetAccumulatorObject(additionalParameters);
 
+        displayContext('#contextDescription',getAccumulatorObject());
 
-
-
-        /***
-         * Non tab-based placement
-         * @type {string}
-         */
-        var chrom=(additionalParameters.geneChromosome.indexOf('chr')>-1)?additionalParameters.geneChromosome.substr(3):additionalParameters.geneChromosome;
-        $("#configurableUiTabStorage").data("dataHolder",{
-            extentBegin:additionalParameters.geneExtentBegin,
-            extentEnd:additionalParameters.geneExtentEnd,
-            chromosome:chrom,
-            originalGeneName:additionalParameters.geneName,
-            geneNameArray:[],
-            tissueNameArray:[],
-            modNameArray:[],
-            mods:[],
-            contextDescr:{
-                chromosome: chrom,
-                extentBegin:additionalParameters.geneExtentBegin,
-                extentEnd:additionalParameters.geneExtentEnd,
-                moreContext:[]
-            }});
-
-        $('#contextDescription').empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
-            $("#configurableUiTabStorage").data("dataHolder").contextDescr
-        ));
+        // $('#contextDescription').empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
+        //     $("#configurableUiTabStorage").data("dataHolder").contextDescr
+        // ));
 
     };
 
 
 
-    var adjustExtentHolders = function(domStorage,storageField,spanClass,basesToShift){
-        var extentBegin = parseInt( domStorage[storageField] );
+    var adjustExtentHolders = function(storageField,spanClass,basesToShift){
+        var extentBegin = parseInt( getAccumulatorObject(storageField) );
         if ((extentBegin+basesToShift)>0){
             extentBegin += basesToShift;
         } else {
             extentBegin = 0;
         }
-        domStorage[storageField] = extentBegin;
+        setAccumulatorObject(storageField,extentBegin);
         $(spanClass).html(""+extentBegin);
     };
 
     var adjustLowerExtent = function(basesToShift){
         if (basesToShift>0){
-            if ( ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentBegin)+basesToShift ) > //
-                 ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentEnd ) ) ){
+            if ( ( parseInt(getAccumulatorObject("extentBegin") )+basesToShift ) > //
+                 ( parseInt(getAccumulatorObject("extentEnd") ) ) ){
                 return;
             }
         }
-        adjustExtentHolders($("#configurableUiTabStorage").data("dataHolder"),"extentBegin","span.dynamicUiGeneExtentBegin",basesToShift);
+        adjustExtentHolders("extentBegin","span.dynamicUiGeneExtentBegin",basesToShift);
     };
 
     var adjustUpperExtent = function(basesToShift){
         if (basesToShift<0){
-            if ( ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentEnd )+basesToShift ) < //
-                 ( parseInt($("#configurableUiTabStorage").data("dataHolder").extentBegin ) ) ){
+            if ( ( parseInt(getAccumulatorObject("extentEnd") )+basesToShift ) < //
+                 ( parseInt(getAccumulatorObject("extentBegin") ) ) ){
                 return;
             }
         }
-        adjustExtentHolders($("#configurableUiTabStorage").data("dataHolder"),"extentEnd","span.dynamicUiGeneExtentEnd",basesToShift);
+        adjustExtentHolders("extentEnd","span.dynamicUiGeneExtentEnd",basesToShift);
     };
 
 
