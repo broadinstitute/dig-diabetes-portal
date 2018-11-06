@@ -475,13 +475,11 @@ class VariantSearchController {
      * @return
      */
     def ajaxVariantFinderGetData() {
-        String phenotype = params["phenotype"]
 
-        String dataSetName = params["dataset"]
 
-        String pValue = params["pValue"]
 
-        JSONObject jsonObject = restServerService.getVariantFinderSpecificData(phenotype, dataSetName,pValue)
+
+        JSONObject jsonObject = restServerService.getVariantFinderSpecificData(inputListOfMap)
         render(status: 200, contentType: "application/json") {
             [variant: jsonObject]
         }

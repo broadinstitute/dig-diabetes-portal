@@ -2136,9 +2136,11 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
      */
 
-    public JSONObject getVariantFinderSpecificData(String phenotype, String datasetName, String pValue){
+    public JSONObject getVariantFinderSpecificData(List inputListOfMap){
         JSONObject returnValue
         JsonSlurper slurper
+
+        def inputList = inputListOfMap
 
         JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, datasetName, pValue)
 

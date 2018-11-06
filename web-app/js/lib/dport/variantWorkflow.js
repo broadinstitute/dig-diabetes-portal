@@ -306,6 +306,9 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+
+        //make a function
+
         var variantFinderGetData = function () {
             var coreVariables = mpgSoftware.variantWF.getMySavedVariables();
             var listOfProcessedQueries = [];
@@ -319,18 +322,13 @@ var mpgSoftware = mpgSoftware || {};
             });
 
 
-            var dataset = listOfProcessedQueries[0].dataset;
-            var phenotypeName = listOfProcessedQueries[0].phenotype;
-            var property = listOfProcessedQueries[0].prop;
-            var propertyValue = listOfProcessedQueries[0].value;
-
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
                // url: coreVariables.variantFinderGetDataUrl,
                 url: "./ajaxVariantFinderGetData",
-                data: {phenotype: phenotypeName, dataset: dataset,pValue: propertyValue},
+                data: {inputListOfMap: listOfProcessedQueries},
                 async: true,
                 success: function (data) {
                     loading.hide();
