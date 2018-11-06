@@ -1,9 +1,12 @@
 package org.broadinstitute.mpg
 
+import dig.diabetes.portal.NewsFeedService
 import grails.test.mixin.TestFor
 import grails.test.mixin.TestMixin
 import grails.test.mixin.support.GrailsUnitTestMixin
 import org.broadinstitute.mpg.diabetes.MetaDataService
+import org.broadinstitute.mpg.RestServerService
+import org.codehaus.groovy.grails.web.json.JSONObject
 import spock.lang.Specification
 
 /**
@@ -12,6 +15,8 @@ import spock.lang.Specification
 @TestFor(InformationalController)
 @TestMixin(GrailsUnitTestMixin)
 class InformationalControllerUnitSpec extends Specification {
+
+    RestServerService restServerService = new RestServerService()
 
     def setup() {
         controller.metaDataService = Mock(MetaDataService)
@@ -30,8 +35,13 @@ class InformationalControllerUnitSpec extends Specification {
     }
 
     void "test data"() {
+        setup:
+        controller.restServerService = restServerService
+
         when:
+        restServerService.metaClass.retrieveBeanForCurrentPortal = {->null}
         controller.data()
+
 
         then:
         response.status == 200

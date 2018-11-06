@@ -9,7 +9,7 @@
             <div class="col-md-3"></div>
         </div>
         {{#portalVersionList}}
-        <input type="text" name="dataType" Value="{{portalType}}" style="display:none">
+        <input type="text" name="dataType" Value="{{PortalType}}" style="display:none">
         {{/portalVersionList}}
         {{#portalVersionList}}
             <div class="row clearfix">
