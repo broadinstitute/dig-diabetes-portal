@@ -90,18 +90,30 @@
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                     <div class="col-md-12">
-                        <h1 class="dk-page-title">Polygenic Risk Score Variant Weights</h1>
+                        <h1 class="dk-page-title">Polygenic Risk Scores</h1>
+
                         <p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS"></g:message></p>
                     <p style="font-weight: 300; font-size: 15px;">
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet"></g:message><br>
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>
-                    <g:message code="informational.shared.publications.Khera_2018_NatGenet.citation"></g:message>
+                    <g:message code="informational.shared.publications.Khera_2018_NatGenet.citation"></g:message><br>
                 </p>
-                    <p style="font-weight: 300; font-size: 15px;"><a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
+                    <p style="font-weight: 300; font-size: 15px;">
+                        <a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
                     </p>
-                    <p><i><g:message code="informational.mi.prsinfo"></g:message></i></p>
-</table>
-                    </div>
+                    <p>
+                        <i><g:message code="informational.mi.prsinfo"></g:message></i>
+                    </p>
+<hr width="70%" size="10">
+                    <p style="font-weight: 300; font-size: 18px;">
+                        <g:message code="informational.data.download.LTRfile2"></g:message></p>
+                        <p style="font-weight: 300; font-size: 15px;">
+                    <g:message code="informational.shared.publications.Weng_2017_Circulation"></g:message><br>
+                    <g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
+                    <g:message code="informational.shared.publications.Weng_2017_Circulation.citation"></g:message><br>
+                </p>
+    </div>
+
                     <div class="col-md-12">
                         <h1 class="dk-page-title">Download Summary Statistics</h1>
                     </div>
@@ -110,8 +122,8 @@
                             <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
 
 
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">&nbsp;</a></td><td>Association between titin loss-of-function variants and early-onset atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.AF.WGS.TOPMed.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/AF_WGS_TOPMed_Freeze4_GWAS.README.txt" target="_blank">README</a></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">&nbsp;</a></td><td>Phenotypic Refinement of Heart Failure in a National Biobank Facilitates Genetic Discovery.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.HRC.GWAS.UKBB.zip" target="_blank">Download files</a></td><td><a href="" target="_blank">README</a></td></tr>
+                            %{--<tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">&nbsp;</a></td><td>Association between titin loss-of-function variants and early-onset atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.AF.WGS.TOPMed.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/AF_WGS_TOPMed_Freeze4_GWAS.README.txt" target="_blank">README</a></td></tr>--}%
+                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/" target="_blank">&nbsp;</a></td><td>Phenotypic Refinement of Heart Failure in a National Biobank Facilitates Genetic Discovery.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.HRC.GWAS.UKBB.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/Heart_failure_GWAS_README.txt" target="_blank">README</a></td></tr>
                             <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure.</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/UKB.v2.albuminuria.n382500.README.txt" target="_blank">README</a></td></tr>
                             <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td><td><g:message code="informational.data.download.QRS_README"></g:message></td></tr>
                             <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/29748316" target="_blank">PMID:29748316</a></td><td>Common and Rare Coding Genetic Variation Underlying the Electrocardiographic PR Interval.</td><td><a href="https://personal.broadinstitute.org/mvon/29748316.PR.interval.ExomeChip.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.EPRI_README"></g:message></td></tr>

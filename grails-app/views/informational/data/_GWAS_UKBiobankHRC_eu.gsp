@@ -1,7 +1,7 @@
 <script class="panel-body" id="GWAS_UKBiobankHRC_eu_script" type="x-tmpl-mustache">
 
  <h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
-<p><g:message code="informational.data.download.UKBBHRC"></g:message> | <g:message code="informational.data.download.UKBBHRC_README"></g:message></p>
+<p><g:message code="informational.data.download.UKBBHRC"></g:message> | <g:message code="informational.data.download.UKBBHRC.README"></g:message></p>
 
             <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
