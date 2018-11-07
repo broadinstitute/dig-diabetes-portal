@@ -63,6 +63,9 @@ mpgSoftware.dynamicUi = (function () {
             var modNameArray =  getAccumulatorObject("modNameArray");
             modNameArray.push({geneName:originalGene,mods:[]});
             setAccumulatorObject("modNameArray",modNameArray);
+            if (!returnObject.uniqueGenes.includes(originalGene)){
+                returnObject.uniqueGenes.push(originalGene);
+            };
         } else {
             // we have mods for this gene. First let's save them
             _.forEach(data.records,function(oneRec){
@@ -91,28 +94,13 @@ mpgSoftware.dynamicUi = (function () {
                 });
             }
         }
-         // we have found the unique elements in this batch of records.  Now process those into our global data structure
-        _.forEach(returnObject.uniqueGenes,function(oneGene){
-            var geneIndex = _.findIndex(getAccumulatorObject("modNameArray"),{geneName:oneGene});
-            if (geneIndex<0){
-                $("#configurableUiTabStorage").data("dataHolder").modNameArray.push({geneName:oneGene,
-                    mods:returnObject.uniqueMods});
-            } else{ // we already know about this tissue, but have we seen this gene associated with it before?
-                var tissueRecord = $("#configurableUiTabStorage").data("dataHolder").modNameArray[geneIndex];
-                _.forEach(returnObject.uniqueMods,function(oneMod){
-                    if (!tissueRecord.mods.includes(oneMod)){
-                        tissueRecord.mods.push(oneMod);
-                    }
-                });
-            }
-        });
         return returnObject;
     };
     var displayRefinedModContext = function (idForTheTargetDiv,objectContainingRetrievedRecords) {
         var returnObject = createNewDisplayReturnObject();
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach($("#configurableUiTabStorage").data("dataHolder").modNameArray, function (geneWithMods) {
+        _.forEach(getAccumulatorObject("modNameArray"), function (geneWithMods) {
             returnObject.uniqueGenes.push({name:geneWithMods.geneName});
 
             var recordToDisplay = {mods:[]};
@@ -125,7 +113,7 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             returnObject
         ));
-    }
+    };
 
     /***
      * The object is passed into mustache and describes the display that will be presented to users
@@ -238,6 +226,7 @@ mpgSoftware.dynamicUi = (function () {
      * @returns {{rawData: Array, uniqueGenes: Array, uniqueTissues: Array, chromosome: undefined, startPos: undefined, endPos: undefined}}
      */
     var processRecordsFromEqtls = function (data){
+        // build up an object to describe this
         var returnObject = {rawData:[],
             uniqueGenes:[],
             uniqueTissues:[],
@@ -270,7 +259,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // we have found the unique elements in this batch of records.  Now process those into our global data structure
         _.forEach(returnObject.uniqueTissues,function(oneTissue){
-            var tissueIndex = _.findIndex($("#configurableUiTabStorage").data("dataHolder").tissueNameArray,{tissueName:oneTissue});
+            var tissueIndex = _.findIndex(getAccumulatorObject("tissueNameArray"),{tissueName:oneTissue});
             if (tissueIndex<0){
                 $("#configurableUiTabStorage").data("dataHolder").tissueNameArray.push({tissueName:oneTissue,
                                                                                         genes:[returnObject.uniqueGenes[0]]});
@@ -675,10 +664,6 @@ mpgSoftware.dynamicUi = (function () {
         resetAccumulatorObject(additionalParameters);
 
         displayContext('#contextDescription',getAccumulatorObject());
-
-        // $('#contextDescription').empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
-        //     $("#configurableUiTabStorage").data("dataHolder").contextDescr
-        // ));
 
     };
 
