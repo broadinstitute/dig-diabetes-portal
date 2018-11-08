@@ -164,14 +164,10 @@ mpgSoftware.dynamicUi = (function () {
             originalGeneName:additionalParameters.geneName,
             geneNameArray:[],
             tissueNameArray:[],
+            tissuesForEveryGene:[],
+            genesForEveryTissue:[],
             modNameArray:[],
             mods:[]
-            // contextDescr:{
-            //     chromosome: chrom,
-            //     extentBegin:additionalParameters.geneExtentBegin,
-            //     extentEnd:additionalParameters.geneExtentEnd,
-            //     moreContext:[]
-            // }
         };
     };
 
@@ -255,39 +251,40 @@ mpgSoftware.dynamicUi = (function () {
             if (!returnObject.uniqueTissues.includes(oneRec.tissue)){
                 returnObject.uniqueTissues.push(oneRec.tissue);
             };
-        });
 
-        // we have found the unique elements in this batch of records.  Now process those into our global data structure
-        _.forEach(returnObject.uniqueTissues,function(oneTissue){
-            var tissueIndex = _.findIndex(getAccumulatorObject("tissueNameArray"),{tissueName:oneTissue});
-            if (tissueIndex<0){
-                $("#configurableUiTabStorage").data("dataHolder").tissueNameArray.push({tissueName:oneTissue,
-                                                                                        genes:[returnObject.uniqueGenes[0]]});
-            } else{ // we already know about this tissue, but have we seen this gene associated with it before?
-                var tissueRecord = $("#configurableUiTabStorage").data("dataHolder").tissueNameArray[tissueIndex];
-                if (_.findIndex(tissueRecord.genes,returnObject.uniqueGenes[0])<0){
-                    tissueRecord.genes.push(returnObject.uniqueGenes[0]);
+            var geneIndex = _.findIndex( getAccumulatorObject("tissuesForEveryGene"),{geneName:oneRec.gene} );
+            if (geneIndex<0) {
+                var accumulatorArray = getAccumulatorObject("tissuesForEveryGene");
+                accumulatorArray.push({geneName: oneRec.gene, tissues: [oneRec.tissue]});
+                setAccumulatorObject("tissuesForEveryGene", accumulatorArray);
+            } else {
+                var accumulatorElement = getAccumulatorObject("tissuesForEveryGene")[geneIndex];
+                if (!accumulatorElement.tissues.includes(oneRec.tissue)) {
+                    accumulatorElement.tissues.push(oneRec.tissue);
                 }
             }
+
+            var tissueIndex = _.findIndex( getAccumulatorObject("genesForEveryTissue"),{tissueName:oneRec.tissue} );
+            if (tissueIndex<0) {
+                var accumulatorArray = getAccumulatorObject("genesForEveryTissue");
+                accumulatorArray.push({tissueName: oneRec.tissue, genes: [oneRec.gene]});
+                setAccumulatorObject("genesForEveryTissue", accumulatorArray);
+            } else {
+                var accumulatorElement = getAccumulatorObject("genesForEveryTissue")[tissueIndex];
+                if (!accumulatorElement.genes.includes(oneRec.gene)) {
+                    accumulatorElement.genes.push(oneRec.gene);
+                }
+            }
+
+
         });
 
-        // we need to add tissues for each gene
-        if (( typeof returnObject.uniqueGenes !== 'undefined')&&( returnObject.uniqueGenes.length>1 )){
-            console.log('did not expect multiple genes');
-        } else if ( typeof returnObject.uniqueGenes.length === 0 ){ // no eQTLs exist
-            $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex]['tissues'] = [];
-        }else if ( returnObject.uniqueGenes.length > 0 ){
-            var genRecordIndex = _.findIndex($("#configurableUiTabStorage").data("dataHolder").geneNameArray,
-                {name:returnObject.uniqueGenes[0]});
-            $("#configurableUiTabStorage").data("dataHolder").geneNameArray[genRecordIndex]['tissues'] = returnObject.uniqueTissues;
-        }
         return returnObject;
     };
     var displayTissuesPerGeneFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var returnObject = createNewDisplayReturnObject();
-
-        _.forEach(getAccumulatorObject("geneNameArray"),function(eachGene){
-            returnObject.uniqueGenes.push({name:eachGene.name});
+        _.forEach(getAccumulatorObject("tissuesForEveryGene"),function(eachGene){
+            returnObject.uniqueGenes.push({name:eachGene.geneName});
 
             var recordToDisplay = {tissues:[]};
             _.forEach(eachGene.tissues,function(eachTissue){
@@ -302,7 +299,7 @@ mpgSoftware.dynamicUi = (function () {
     var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
 
         var returnObject = createNewDisplayReturnObject();
-        _.forEach(getAccumulatorObject("tissueNameArray"),function(eachTissue){
+        _.forEach(getAccumulatorObject("genesForEveryTissue"),function(eachTissue){
             returnObject.uniqueTissues.push({name:eachTissue.tissueName});
 
             var recordToDisplay = {genes:[]};
@@ -584,6 +581,7 @@ mpgSoftware.dynamicUi = (function () {
         // perform an eQTL based lookup
         $('#eQTL-dynamic-gene-go').on('click', function () {
             var somethingSymbol = getAccumulatorObject("geneNameArray");
+
 
             if (somethingSymbol) {
                 retrieveRefinedContext({   loopOverGenes:somethingSymbol,
