@@ -2140,9 +2140,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONObject returnValue
         JsonSlurper slurper
 
-        def inputList = inputListOfMap
-
-        JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, datasetName, pValue)
+        JSONObject apiresults = this.variantFinderGetDataRestCall(inputListOfMap)
 
         String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${datasetName}\"", MetaDataService.METADATA_VARIANT)
 
@@ -3013,19 +3011,45 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+    public String generateGetDataJsonInput(List listOfInputMap){
+
+
+        String inputJson = "\n" +
+                                "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":-1, \"page_size\": -1, \"limit\": 1000, \"count\": false," +
+                                " \"result_format\": \"verbose\", \"order_by\": [],\"properties\": {\"cproperty\": [ \"CHROM\" , \"CLOSEST_GENE\" , " +
+                                "\"Consequence\" , \"DBSNP_ID\" , \"Effect_Allele\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
+                                " \"dproperty\" : {} , " +
+
+                                " \"pproperty\" : {\"MINA\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
+                                " \"MINU\" : { \"${datasetName}\" : [ \"T2D\"]}, \"ODDS_RATIO\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
+                                " \"P_VALUE\" : { \"${datasetName}\" : [ \"${phenotypeName}\"] } } }," +
+
+                                " \"filters\":  [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\"," +
+                                " \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] } "
+
+
+
+
+        String getDataInputJson
+        //parse this list of inputMap and feed it dynamically to the filters:
+        //for each map create
+        // [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\", \"operand\": \"P_VALUE\",
+        // \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] "
+
+
+
+
+        return getDataInputJson
+
+
+    }
+
     /***
      * this is the core function for making a call to getData and return the data as a map.
      */
-    def variantFinderGetDataRestCall(String phenotypeName, String datasetName, String pValue){
+    def variantFinderGetDataRestCall(List listOfInputMap){
 
-       String inputJson = "\n" +
-                "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":-1, \"page_size\": -1, \"limit\": 1000, \"count\": false," +
-                " \"result_format\": \"verbose\", \"order_by\": [],\"properties\": {\"cproperty\": [ \"CHROM\" , \"CLOSEST_GENE\" , " +
-                "\"Consequence\" , \"DBSNP_ID\" , \"Effect_Allele\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
-                " \"dproperty\" : {} , \"pproperty\" : {\"MINA\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
-                " \"MINU\" : { \"${datasetName}\" : [ \"T2D\"]}, \"ODDS_RATIO\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}, \"P_VALUE\" : { \"${datasetName}\" : [ \"${phenotypeName}\"] } } }," +
-                " \"filters\":  [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\", \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] } "
-
+        String inputJson = this.generateGetDataJsonInput(listOfInputMap);
         JSONObject jsonObject = postGetDataCall(inputJson)
         return jsonObject
     }

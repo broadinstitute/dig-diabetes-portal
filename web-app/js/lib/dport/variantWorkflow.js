@@ -321,6 +321,17 @@ var mpgSoftware = mpgSoftware || {};
                 listOfProcessedQueries.push(_.omit(query, keysToOmit));
             });
 
+            //
+            // //create a list of map
+            // var keyList = []
+            // var valueList = []
+            // var i;
+            // for (i = 0; i < listOfProcessedQueries.length; i++) {
+            //
+            //     keyList.push(Object.keys(listOfProcessedQueries[i]))
+            //     valueList.push(Object.values(listOfProcessedQueries[i]))
+            // }
+
 
             var loading = $('#spinner').show();
             $.ajax({
@@ -328,7 +339,7 @@ var mpgSoftware = mpgSoftware || {};
                 type: "post",
                // url: coreVariables.variantFinderGetDataUrl,
                 url: "./ajaxVariantFinderGetData",
-                data: {inputListOfMap: listOfProcessedQueries},
+                data: {'data': JSON.stringify(listOfProcessedQueries)},
                 async: true,
                 success: function (data) {
                     loading.hide();
