@@ -421,37 +421,26 @@ mpgSoftware.dynamicUi = (function () {
             contextDescr
         ));
     };
+    
 
 
 
-    var retrieveRefinedContext=function(inParms,additionalParameters){
-        var promiseArray = [];
-        var rememberInParmsGene = inParms.gene;
-        var rememberChromosome = inParms.chromosome;
-        var rememberExtentBegin = inParms.startPos;
-        var rememberExtentEnd = inParms.endPos;
+    var retrieveRemotedContextInformation=function(collectionOfRemoteCallingParameters){
 
-        var rememberProcessEachRecord = inParms.processEachRecord;
-        var rememberRetrieveDataUrl = inParms.retrieveDataUrl;
-        var rememberDisplayRefinedContextFunction =  inParms.displayRefinedContextFunction;
-        var rememberPlaceToDisplayData = inParms.placeToDisplayData;
         var objectContainingRetrievedRecords = [];
+        var promiseArray = [];
 
-        _.forEach(inParms.loopOverGenes,function(eachGene){
+        _.forEach(collectionOfRemoteCallingParameters.multiples,function(eachRemoteCallingParameter){
             promiseArray.push(
                 $.ajax({
                     cache: false,
                     type: "post",
-                    url: rememberRetrieveDataUrl,
-                    data: { gene: eachGene.name,
-                        geneName:eachGene.name,
-                        chromosome: rememberChromosome,
-                        startPos: rememberExtentBegin,
-                        endPos: rememberExtentEnd },
+                    url: eachRemoteCallingParameter.retrieveDataUrl,
+                    data: eachRemoteCallingParameter.dataForCall,
                     async: true
                 }).done(function (data, textStatus, jqXHR) {
 
-                    objectContainingRetrievedRecords = rememberProcessEachRecord( data );
+                    objectContainingRetrievedRecords = eachRemoteCallingParameter.processEachRecord( data );
 
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();
@@ -461,16 +450,50 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
-         $.when.apply($, promiseArray).then(function(allCalls) {
+        $.when.apply($, promiseArray).then(function(allCalls) {
 
-            rememberDisplayRefinedContextFunction( rememberPlaceToDisplayData, objectContainingRetrievedRecords );
+            collectionOfRemoteCallingParameters.displayRefinedContextFunction(   collectionOfRemoteCallingParameters.placeToDisplayData,
+                                                                        objectContainingRetrievedRecords );
 
         }, function(e) {
-            console.log("Ajax call failed");
+            alert("Ajax call failed");
         });
 
     };
 
+
+    var buildRemoteContextArray = function(startingMaterials){
+        var returnValue = {multiples:[]};
+        if(( typeof startingMaterials !== 'undefined') &&
+            ( typeof startingMaterials.retrieveDataUrl !== 'undefined') &&
+            ( typeof startingMaterials.dataForCall !== 'undefined') &&
+            ( typeof startingMaterials.processEachRecord !== 'undefined') &&
+            ( typeof startingMaterials.displayRefinedContextFunction !== 'undefined') &&
+            ( typeof startingMaterials.placeToDisplayData !== 'undefined') &&
+            ( !Array.isArray(startingMaterials.displayRefinedContextFunction) ) &&
+            ( !Array.isArray(startingMaterials.placeToDisplayData) ) ){
+                var retrieveDataUrlMultiple = (Array.isArray(startingMaterials.retrieveDataUrl))?
+                    startingMaterials.retrieveDataUrl:[startingMaterials.retrieveDataUrl];
+                var dataForCallMultiple = (Array.isArray(startingMaterials.dataForCall))?
+                    startingMaterials.dataForCall:[startingMaterials.dataForCall];
+                var processEachRecordMultiple = (Array.isArray(startingMaterials.processEachRecord))?
+                    startingMaterials.processEachRecord:[startingMaterials.processEachRecord];
+                _.forEach(retrieveDataUrlMultiple,function(eachRetrieveDataUrl){
+                    _.forEach(dataForCallMultiple,function(eachDataForCall){
+                        _.forEach(processEachRecordMultiple,function(eachprocessEachRecord){
+                            returnValue.multiples.push({ retrieveDataUrl:eachRetrieveDataUrl,
+                                                        dataForCall: eachDataForCall,
+                                                        processEachRecord:eachprocessEachRecord });
+                        });
+                    });
+                });
+                returnValue["displayRefinedContextFunction"] = startingMaterials.displayRefinedContextFunction;
+                returnValue["placeToDisplayData"] = startingMaterials.placeToDisplayData;
+            } else {
+                console.log("Serious error: incorrect fields in startingMaterials = "+startingMaterials.name+".")
+            };
+        return returnValue;
+    };
 
 
 
@@ -565,98 +588,99 @@ mpgSoftware.dynamicUi = (function () {
         $('#modAnnotationButtonId').on('click', function () {
             resetAccumulatorObject(additionalParameters,"modNameArray");
 
-            var somethingSymbol = getAccumulatorObject("geneNameArray");
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"modAnnotationButtonId",
+                retrieveDataUrl:additionalParameters.retrieveModDataUrl,
+                dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+                processEachRecord:processRecordsFromMod,
+                displayRefinedContextFunction:displayRefinedModContext,
+                placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
+                }));
 
-            if (somethingSymbol) {
-                retrieveRefinedContext({   loopOverGenes:somethingSymbol,
-                        processEachRecord:processRecordsFromMod,
-                        retrieveDataUrl:additionalParameters.retrieveModDataUrl,
-                        displayRefinedContextFunction:displayRefinedModContext,
-                        placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
-                    },
-                    additionalParameters)
-            }
         });
 
         // perform an eQTL based lookup
         $('#eQTL-dynamic-gene-go').on('click', function () {
-            var somethingSymbol = getAccumulatorObject("geneNameArray");
 
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"eQTL-dynamic-gene-go",
+                retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+                dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+                processEachRecord:processRecordsFromEqtls,
+                displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
+                placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+            }));
 
-            if (somethingSymbol) {
-                retrieveRefinedContext({   loopOverGenes:somethingSymbol,
-                        processEachRecord:processRecordsFromEqtls,
-                        retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-                        displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
-                        placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-                    },
-                    additionalParameters)
-            }
         });
 
 
         // assign the correct response to the proximity range go button
         $('#genesWithinRangeButtonId').on('click', function () {
 
-                retrieveRefinedContext({
-                            loopOverGenes:["1"],
-                            processEachRecord:processRecordsFromProximitySearch,
-                            retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
-                            displayRefinedContextFunction:displayRefinedGenesInARange,
-                            chromosome:getAccumulatorObject("chromosome") ,
-                            startPos:getAccumulatorObject("extentBegin") ,
-                            endPos:getAccumulatorObject("extentEnd"),
-                            placeToDisplayData: '#dynamicGeneHolder div.dynamicUiHolder'  },
-                    additionalParameters)
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"genesWithinRangeButtonId",
+                retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
+                dataForCall:{
+                    chromosome: getAccumulatorObject("chromosome"),
+                    startPos: getAccumulatorObject("extentBegin"),
+                    endPos: getAccumulatorObject("extentEnd")
+                },
+                processEachRecord:processRecordsFromProximitySearch,
+                displayRefinedContextFunction:displayRefinedGenesInARange,
+                placeToDisplayData: '#dynamicGeneHolder div.dynamicUiHolder'
+            }));
 
         });
 
 
         $('#getVariantsButtonId').on('click', function () {
 
-            retrieveRefinedContext({
-                    loopOverGenes:["1"],
-                    processEachRecord:processRecordsFromVariantQtlSearch,
-                    retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
-                    displayRefinedContextFunction:displayVariantRecordsFromVariantQtlSearch,
-                    chromosome:getAccumulatorObject("chromosome") ,
-                    startPos:getAccumulatorObject("extentBegin") ,
-                    endPos:getAccumulatorObject("extentEnd"),
-                    placeToDisplayData: '#dynamicVariantHolder div.dynamicUiHolder'  },
-                additionalParameters)
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"getVariantsButtonId",
+                retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
+                dataForCall:{
+                    chromosome: getAccumulatorObject("chromosome"),
+                    startPos: getAccumulatorObject("extentBegin"),
+                    endPos: getAccumulatorObject("extentEnd")
+                },
+                processEachRecord:processRecordsFromVariantQtlSearch,
+                displayRefinedContextFunction:displayVariantRecordsFromVariantQtlSearch,
+                placeToDisplayData: '#dynamicVariantHolder div.dynamicUiHolder'
+            }));
 
         });
 
 
         $('#getTissuesFromEqtlButtonId').on('click', function () {
-            var somethingSymbol = getAccumulatorObject("geneNameArray");
-
             resetAccumulatorObject(additionalParameters,"tissueNameArray");
 
-            if (somethingSymbol) {
-                retrieveRefinedContext({
-                        loopOverGenes: somethingSymbol,
-                        processEachRecord: processRecordsFromEqtls,
-                        retrieveDataUrl: additionalParameters.retrieveEqtlDataUrl,
-                        displayRefinedContextFunction: displayGenesPerTissueFromEqtl,
-                        placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-                    },
-                    additionalParameters)
-            }
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"getTissuesFromEqtlButtonId",
+                retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+                dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+                processEachRecord:processRecordsFromEqtls,
+                displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
+                placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+            }));
+
         });
 
 
         $('#getPhenotypesFromQtlButtonId').on('click', function () {
-            retrieveRefinedContext({
-                    loopOverGenes:["1"],
-                    processEachRecord:processRecordsFromVariantQtlSearch,
-                    retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
-                    displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
-                    chromosome:getAccumulatorObject("chromosome") ,
-                    startPos:getAccumulatorObject("extentBegin") ,
-                    endPos:getAccumulatorObject("extentEnd"),
-                    placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'  },
-                additionalParameters);
+
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"getTissuesFromEqtlButtonId",
+                retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
+                dataForCall:{
+                    chromosome: getAccumulatorObject("chromosome"),
+                    startPos: getAccumulatorObject("extentBegin"),
+                    endPos: getAccumulatorObject("extentEnd")
+                },
+                processEachRecord:processRecordsFromVariantQtlSearch,
+                displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
+                placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
+            }));
+
         });
 
         resetAccumulatorObject(additionalParameters);
