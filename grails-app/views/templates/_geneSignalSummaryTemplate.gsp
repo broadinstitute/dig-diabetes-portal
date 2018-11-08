@@ -882,14 +882,6 @@ button.directorButtonDetails{
     {{/geneModsExist}}
 
 
-
-    %{--<tr>--}%
-        %{--<th  scope="row">eQTL</th>--}%
-         %{--{{#uniqueGenes}}--}%
-            %{--<td ></th>--}%
-        %{--{{/uniqueGenes}}--}%
-    %{--</tr>--}%
-
     </table>
 </script>
 
@@ -937,6 +929,35 @@ button.directorButtonDetails{
     </table>
 </script>
 
+
+
+<script id="dynamicVariantTable"  type="x-tmpl-mustache">
+    <table  class="table">
+    {{#variantsExist}}
+    <tr>
+        <th>gene</th>
+        {{/variantsExist}}
+        {{#uniqueVariants}}
+            <th  scope="col">{{name}}</th>
+        {{/uniqueVariants}}
+        {{#genesExist}}
+    </tr>
+    {{/genesExist}}
+
+    {{#variantPhenotypesExist}}
+    <tr>
+        <th  scope="row">Position</th>
+        {{/variantPhenotypesExist}}
+        {{#variantPhenotypes}}
+            <td >{{name}}</td>
+        {{/variantPhenotypes}}
+        {{#variantPhenotypesExist}}
+    </tr>
+    {{/variantPhenotypesExist}}
+
+
+    </table>
+</script>
 
 
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">

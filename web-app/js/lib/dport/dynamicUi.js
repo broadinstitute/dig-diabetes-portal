@@ -126,6 +126,7 @@ mpgSoftware.dynamicUi = (function () {
             genePositions:[],
             uniqueTissues:[],
             geneTissueEqtls:[],
+            variantPhenotypeQtl:[],
             geneModTerms:[],
             genesPositionsExist:function(){
                 return (this.genePositions.length>0)?[1]:[];
@@ -144,7 +145,11 @@ mpgSoftware.dynamicUi = (function () {
             },
             geneModsExist:function(){
                 return (this.geneModTerms.length>0)?[1]:[];
+            },
+            variantsExist:function(){
+                return (this.variantPhenotypeQtl.length>0)?[1]:[];
             }
+
         };
     };
 
@@ -167,7 +172,9 @@ mpgSoftware.dynamicUi = (function () {
             tissuesForEveryGene:[],
             genesForEveryTissue:[],
             modNameArray:[],
-            mods:[]
+            mods:[],
+            phenotypesForEveryVariant:[],
+            variantsForEveryPhenotype:[]
         };
     };
 
@@ -391,6 +398,33 @@ mpgSoftware.dynamicUi = (function () {
                 if (!returnObject.uniqueVarIds.includes(varId)){
                     returnObject.uniqueVarIds.push(varId);
                 };
+
+                var variantIndex = _.findIndex( getAccumulatorObject("phenotypesForEveryVariant"),{variantName:varId} );
+                if (variantIndex<0) {
+                    var accumulatorArray = getAccumulatorObject("phenotypesForEveryVariant");
+                    accumulatorArray.push({variantName:varId, phenotypes: [phenotype]});
+                    setAccumulatorObject("phenotypesForEveryVariant", accumulatorArray);
+                } else {
+                    var accumulatorElement = getAccumulatorObject("phenotypesForEveryVariant")[variantIndex];
+                    if (!accumulatorElement.phenotypes.includes(phenotype)) {
+                        accumulatorElement.phenotypes.push(phenotype);
+                    }
+                }
+
+                var phenotIndex = _.findIndex( getAccumulatorObject("variantsForEveryPhenotype"),{phenotypeName:phenotype} );
+                if (phenotIndex<0) {
+                    var accumulatorArray = getAccumulatorObject("variantsForEveryPhenotype");
+                    accumulatorArray.push({phenotypeName:phenotype, variants: [varId]});
+                    setAccumulatorObject("variantsForEveryPhenotype", accumulatorArray);
+                } else {
+                    var accumulatorElement = getAccumulatorObject("variantsForEveryPhenotype")[phenotIndex];
+                    if (!accumulatorElement.variants.includes(phenotype)) {
+                        accumulatorElement.variants.push(phenotype);
+                    }
+                }
+
+
+
                 returnObject.rawData.push({varId:varId,gene:gene,phenotype:phenotype});
             }
         } else {
@@ -406,6 +440,11 @@ mpgSoftware.dynamicUi = (function () {
         _.forEach(objectContainingRetrievedRecords.uniqueVarIds,function(oneTissue) {
             $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
         });
+
+I
+
+
+
     };
     var displayPhenotypeRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
         $(idForTheTargetDiv).empty();
@@ -421,7 +460,7 @@ mpgSoftware.dynamicUi = (function () {
             contextDescr
         ));
     };
-    
+
 
 
 
