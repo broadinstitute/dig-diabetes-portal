@@ -321,16 +321,11 @@ var mpgSoftware = mpgSoftware || {};
                 listOfProcessedQueries.push(_.omit(query, keysToOmit));
             });
 
-            //
-            // //create a list of map
-            // var keyList = []
-            // var valueList = []
-            // var i;
-            // for (i = 0; i < listOfProcessedQueries.length; i++) {
-            //
-            //     keyList.push(Object.keys(listOfProcessedQueries[i]))
-            //     valueList.push(Object.values(listOfProcessedQueries[i]))
-            // }
+
+            var datasetName = listOfProcessedQueries[0].dataset;
+            var phenotypeName = listOfProcessedQueries[0].phenotype;
+            var property = listOfProcessedQueries[0].prop;
+            var propertyValue = listOfProcessedQueries[0].value;
 
 
             var loading = $('#spinner').show();
@@ -339,7 +334,8 @@ var mpgSoftware = mpgSoftware || {};
                 type: "post",
                // url: coreVariables.variantFinderGetDataUrl,
                 url: "./ajaxVariantFinderGetData",
-                data: {'data': JSON.stringify(listOfProcessedQueries)},
+                // data: {'data': JSON.stringify(listOfProcessedQueries)},
+                data:{phenotype: phenotypeName, dataset: datasetName,pValue: propertyValue},
                 async: true,
                 success: function (data) {
                     loading.hide();

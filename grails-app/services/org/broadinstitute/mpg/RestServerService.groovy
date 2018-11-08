@@ -2127,6 +2127,29 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         return dataJsonObject
     }
 
+//    /***
+//     * Gather up the data that is used in the variant finder tool
+//     *
+//     * @param phenotype
+//     * @param dataSetName
+//     * @param pValue
+//
+//     */
+//
+//    public JSONObject getVariantFinderSpecificData(List inputListOfMap){
+//        JSONObject returnValue
+//        JsonSlurper slurper
+//
+//        JSONObject apiresults = this.variantFinderGetDataRestCall(inputListOfMap)
+//
+//        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${datasetName}\"", MetaDataService.METADATA_VARIANT)
+//
+//        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+//
+//        return dataJsonObject
+//
+//    }
+
     /***
      * Gather up the data that is used in the variant finder tool
      *
@@ -2136,18 +2159,16 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
      */
 
-    public JSONObject getVariantFinderSpecificData(List inputListOfMap){
+    public JSONObject getVariantFinderSpecificData(String phenotype, String dataset, String pValue){
         JSONObject returnValue
-        JsonSlurper slurper
+        JsonSlurper slurper = new JsonSlurper()
 
-        JSONObject apiresults = this.variantFinderGetDataRestCall(inputListOfMap)
-
-        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${datasetName}\"", MetaDataService.METADATA_VARIANT)
+        JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, dataset, pValue)
+        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${dataset}\"", MetaDataService.METADATA_VARIANT)
 
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
         return dataJsonObject
-
     }
 
 
@@ -3047,9 +3068,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     /***
      * this is the core function for making a call to getData and return the data as a map.
      */
-    def variantFinderGetDataRestCall(List listOfInputMap){
+    def variantFinderGetDataRestCall(String phenotypeName, String datasetName, String pValue){
 
-        String inputJson = this.generateGetDataJsonInput(listOfInputMap);
+        String inputJson = "\n" +
+                "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":-1, \"page_size\": -1, \"limit\": 1000, \"count\": false," +
+                " \"result_format\": \"verbose\", \"order_by\": [],\"properties\": {\"cproperty\": [ \"CHROM\" , \"CLOSEST_GENE\" , " +
+                "\"Consequence\" , \"DBSNP_ID\" , \"Effect_Allele\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
+                " \"dproperty\" : {} , \"pproperty\" : {\"MINA\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
+                " \"MINU\" : { \"${datasetName}\" : [ \"T2D\"]}, \"ODDS_RATIO\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}, \"P_VALUE\" : { \"${datasetName}\" : [ \"${phenotypeName}\"] } } }," +
+                " \"filters\":  [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\", \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] } "
+
+        //String inputJson = this.generateGetDataJsonInput(listOfInputMap);
+
         JSONObject jsonObject = postGetDataCall(inputJson)
         return jsonObject
     }
