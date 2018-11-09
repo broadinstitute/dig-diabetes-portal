@@ -125,6 +125,7 @@ mpgSoftware.dynamicUi = (function () {
             uniqueEqtlGenes:[],
             genePositions:[],
             uniqueTissues:[],
+            uniqueVariants: [],
             geneTissueEqtls:[],
             variantPhenotypeQtl:[],
             geneModTerms:[],
@@ -133,6 +134,9 @@ mpgSoftware.dynamicUi = (function () {
             },
             genesExist:function(){
                 return (this.uniqueGenes.length>0)?[1]:[];
+            },
+            variantsExist:function(){
+                return (this.uniqueVariants.length>0)?[1]:[];
             },
             tissuesExist:function(){
                 return (this.uniqueTissues.length>0)?[1]:[];
@@ -146,7 +150,7 @@ mpgSoftware.dynamicUi = (function () {
             geneModsExist:function(){
                 return (this.geneModTerms.length>0)?[1]:[];
             },
-            variantsExist:function(){
+            variantPhenotypesExist:function(){
                 return (this.variantPhenotypeQtl.length>0)?[1]:[];
             }
 
@@ -214,10 +218,14 @@ mpgSoftware.dynamicUi = (function () {
      * accumulator object to its default.
      */
     var resetAccumulatorObject =  function(additionalParameters,specificField){
+        var filledOutSharedAccumulatorObject = sharedAccumulatorObject(additionalParameters);
         if ( typeof specificField !== 'undefined'){
-            getAccumulatorObject()[specificField]=sharedAccumulatorObject(additionalParameters)[specificField]
+            if ( typeof filledOutSharedAccumulatorObject === 'undefined'){
+                alert(" Unexpected absence of field '"+specificField+"' in shared accumulator object");
+            }
+            getAccumulatorObject()[specificField]=filledOutSharedAccumulatorObject[specificField]
         } else {
-            $("#configurableUiTabStorage").data("dataHolder", sharedAccumulatorObject(additionalParameters));
+            $("#configurableUiTabStorage").data("dataHolder", filledOutSharedAccumulatorObject);
         }
     }
 
@@ -441,9 +449,22 @@ mpgSoftware.dynamicUi = (function () {
             $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
         });
 
-I
+        var returnObject = createNewDisplayReturnObject();
+        var selectorForIidForTheTargetDiv = "div.refinementTable";
+        $(selectorForIidForTheTargetDiv).empty();
+        _.forEach(getAccumulatorObject("phenotypesForEveryVariant"), function (variantWithPhenotypes) {
+            returnObject.uniqueVariants.push({variantName:variantWithPhenotypes.variantName});
 
+            var recordToDisplay = {phenotypes:[]};
+            _.forEach(variantWithPhenotypes.phenotypes,function(eachPhenotype){
+                recordToDisplay.phenotypes.push({phenotypeName:eachPhenotype})
+            });
+            returnObject.variantPhenotypeQtl.push(recordToDisplay);
 
+        });
+        $("#dynamicVariantHolder div.refinementTable").empty().append(Mustache.render($('#dynamicVariantTable')[0].innerHTML,
+            returnObject
+        ));
 
     };
     var displayPhenotypeRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
@@ -607,20 +628,34 @@ I
 
         // manually set the range
         $('#'+additionalParameters.generalizedGoButtonId).on('click', function () {
+            // var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
+            // somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
+            // var geneInArray =[{name:somethingSymbol}];
+            // setAccumulatorObject("geneNameArray",geneInArray);
+            // if (somethingSymbol) {
+            //     retrieveRefinedContext({ loopOverGenes:geneInArray,
+            //             gene:somethingSymbol,
+            //             processEachRecord:processRecordsUpdateContext,
+            //             retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
+            //             displayRefinedContextFunction:displayRangeContext,
+            //             placeToDisplayData:'#contextDescription'
+            //         },
+            //         additionalParameters)
+            // }
+
             var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
-            somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
-            var geneInArray =[{name:somethingSymbol}];
-            setAccumulatorObject("geneNameArray",geneInArray);
-            if (somethingSymbol) {
-                retrieveRefinedContext({ loopOverGenes:geneInArray,
-                        gene:somethingSymbol,
-                        processEachRecord:processRecordsUpdateContext,
-                        retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
-                        displayRefinedContextFunction:displayRangeContext,
-                        placeToDisplayData:'#contextDescription'
-                    },
-                    additionalParameters)
-            }
+            somethingSymbol = somethingSymbol.replace(/\//g,"_");
+            setAccumulatorObject("geneNameArray",[{name:somethingSymbol}]);
+            retrieveRemotedContextInformation(buildRemoteContextArray ({
+                name:"replace gene context",
+                retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
+                dataForCall:{geneName:somethingSymbol},
+                processEachRecord:processRecordsUpdateContext,
+                displayRefinedContextFunction:displayRangeContext,
+                placeToDisplayData: '#contextDescription'
+            }));
+
+
         });
 
         // pull back mouse annotations
@@ -674,6 +709,9 @@ I
 
         $('#getVariantsButtonId').on('click', function () {
 
+            resetAccumulatorObject(additionalParameters,"phenotypesForEveryVariant");
+            resetAccumulatorObject(additionalParameters,"variantsForEveryPhenotype");
+
             retrieveRemotedContextInformation(buildRemoteContextArray ({
                 name:"getVariantsButtonId",
                 retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
@@ -706,6 +744,9 @@ I
 
 
         $('#getPhenotypesFromQtlButtonId').on('click', function () {
+
+            resetAccumulatorObject(additionalParameters,"phenotypesForEveryVariant");
+            resetAccumulatorObject(additionalParameters,"variantsForEveryPhenotype");
 
             retrieveRemotedContextInformation(buildRemoteContextArray ({
                 name:"getTissuesFromEqtlButtonId",

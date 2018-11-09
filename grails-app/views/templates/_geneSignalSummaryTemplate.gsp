@@ -712,7 +712,21 @@ button.directorButtonDetails{
                                 </div>
 
                             </div>
-                        </div>                    </div>
+                        </div>
+
+                                <div class="row">
+                                   <div class="col-sm-12">
+
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="refinementTable">
+
+                                        </div>
+                                    </div>
+                               </div>
+
+
+                                        </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
                         <h3>Tissue director</h3>
                         <div class="row">
@@ -932,25 +946,29 @@ button.directorButtonDetails{
 
 
 <script id="dynamicVariantTable"  type="x-tmpl-mustache">
+
     <table  class="table">
     {{#variantsExist}}
     <tr>
-        <th>gene</th>
+        <th  scope="row">Variants</th>
         {{/variantsExist}}
         {{#uniqueVariants}}
-            <th  scope="col">{{name}}</th>
+            <th  scope="col">{{variantName}}</th>
         {{/uniqueVariants}}
-        {{#genesExist}}
+        {{#variantsExist}}
     </tr>
-    {{/genesExist}}
+    {{/variantsExist}}
 
     {{#variantPhenotypesExist}}
     <tr>
-        <th  scope="row">Position</th>
+        <th  scope="row">Phenotype</th>
         {{/variantPhenotypesExist}}
-        {{#variantPhenotypes}}
-            <td >{{name}}</td>
-        {{/variantPhenotypes}}
+        {{#variantPhenotypeQtl}}
+            <td >{{#phenotypes}}
+            <div>{{phenotypeName}}</div>
+            {{/phenotypes}}
+            </td>
+        {{/variantPhenotypeQtl}}
         {{#variantPhenotypesExist}}
     </tr>
     {{/variantPhenotypesExist}}
