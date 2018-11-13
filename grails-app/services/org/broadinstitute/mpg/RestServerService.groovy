@@ -2860,7 +2860,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             }
                         }
 
-                    } else if (value instanceof ArrayList) {
+                    }
+                    else if (value == null) {
+                        String emptyValue = " "
+                        variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${emptyValue}\"}"
+                    }
+                    else if (value instanceof ArrayList) {
                         ArrayList arrayListValue = value as ArrayList
                         log.error("An ArrayList is not an expected result.  Did the return data format change?")
                     }
