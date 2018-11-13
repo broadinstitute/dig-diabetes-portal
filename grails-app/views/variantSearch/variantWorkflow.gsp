@@ -470,6 +470,7 @@
             </div>-->
 
             <div id="searchDetailsHolder" class="row dk-variant-submit-search"></div>
+            <div id="searchResultsHolder" class="row dk-variant-submit-search"></div>
 
             <script id="searchDetailsTemplate" type="x-tmpl-mustache">
                 %{--<h6><g:message code="variantSearch.actions.submit_search" default="Submit search request"/></h6>--}%

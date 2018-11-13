@@ -359,6 +359,13 @@
                 }
             }
 
+            /*temporary placeholder for a function to render VF sear sesults table.*/
+
+            function renderVFSearchResult(DATA) {
+                $("#searchResultsHolder").append(DATA["variant"]["results"][0]["pVals"][0]["level"]);
+                console.log(DATA);
+            }
+
             /* copy url of variant search result page to clipboard*/
 
             function copyVariantSearchURL() {

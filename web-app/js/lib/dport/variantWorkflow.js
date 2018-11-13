@@ -339,7 +339,7 @@ var mpgSoftware = mpgSoftware || {};
                 async: true,
                 success: function (data) {
                     loading.hide();
-                    console.log(data);
+                    renderVFSearchResult(data);
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
