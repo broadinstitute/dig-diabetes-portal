@@ -13,6 +13,11 @@
     <head>
         <title><g:message code="${restServer.retrieveBeanForCurrentPortal().getTabLabel()}"/></title>
 
+        <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+        <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>-->
+
         <r:require modules="core"/>
         <r:layoutResources/>
 
@@ -362,8 +367,88 @@
             /*temporary placeholder for a function to render VF sear sesults table.*/
 
             function renderVFSearchResult(DATA) {
-                $("#searchResultsHolder").append(DATA["variant"]["results"][0]["pVals"][0]["level"]);
+
+                $("#xvariantTableResults").find("tbody").html("")
+                $("#xvariantTableResults").find("thead").html("")
+
+                var VFResultTableBody = '';
+                var VFResultTableHead = '';
+                var commonAnnotations = 8;
+                var otherProperties = 5;
+
+                VFResultTableHead += '<tr><th class="dk-common" colspan="'+commonAnnotations+'">Variant annotations</th><th class="dk-property-10" colspan="'+otherProperties+'">otherProperties</th></tr>'
+                VFResultTableHead += '<tr><th class="dk-common">Variant ID</th>';
+                VFResultTableHead += '<th class="dk-common">SNP ID</th>';
+                VFResultTableHead += '<th class="dk-common">Chromosome</th>';
+                VFResultTableHead += '<th class="dk-common">Position</th>';
+                VFResultTableHead += '<th class="dk-common">Reference allele</th>';
+                VFResultTableHead += '<th class="dk-common">Effect allele</th>';
+                VFResultTableHead += '<th class="dk-common">Nearest gene</th>';
+                VFResultTableHead += '<th class="dk-common">Protein change</th>';
+                VFResultTableHead += '<th class="dk-property-10">Consquence</th>';
+                VFResultTableHead += '<th class="dk-property-10">P-value</th>';
+                VFResultTableHead += '<th class="dk-property-10">Odds ratio</th>';
+                VFResultTableHead += '<th class="dk-property-10">Case</th>';
+                VFResultTableHead += '<th class="dk-property-10">Control</th></tr>';
+
+
+                for (var result = 0; result < DATA["variant"]["results"].length; result++) {
+                    VFResultTableBody += '<tr>';
+
+                    var resultVariant = DATA["variant"]["results"][result]["pVals"];
+
+                    if (resultVariant.length == 12 ) {
+                        VFResultTableBody += '<td>' + resultVariant[0]["count"] +":" +resultVariant[5]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[3]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[0]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[5]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[6]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[4]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[1]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + " " + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[2]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[8]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[9]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[10]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[11]["count"] + '</td>';
+                    } else if (resultVariant.length == 13 ) {
+                        VFResultTableBody += '<td>' + resultVariant[0]["count"] +":" +resultVariant[5]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[3]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[0]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[5]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[7]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[4]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[1]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[6]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[2]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[9]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[10]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[11]["count"] + '</td>';
+                        VFResultTableBody += '<td>' + resultVariant[12]["count"] + '</td>';
+                    }
+
+                    /*
+                    for (var variant = 0; variant < DATA["variant"]["results"][result]["pVals"].length; variant++) {
+                        var eachCell = DATA["variant"]["results"][result]["pVals"][variant];
+                        VFResultTable += '<td>' + eachCell["count"] + '</td>';
+                    }*/
+
+                    VFResultTableBody += '</tr>';
+                }
+
+                $("#xvariantTableResults").find("tbody").append(VFResultTableBody);
+                $("#xvariantTableResults").find("thead").append(VFResultTableHead);
                 console.log(DATA);
+
+                $.noConflict();
+
+                $ = jQuery;
+
+                if($("#xvariantTableResults").find("tbody").find("tr").length) {
+                    $('#xvariantTableResults').DataTable({"pageLength": 50});
+                }
+
+
             }
 
             /* copy url of variant search result page to clipboard*/
@@ -404,6 +489,7 @@
             });
 
             $( window ).ready( function() {
+
 
             });
 

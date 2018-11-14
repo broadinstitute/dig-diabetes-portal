@@ -8,6 +8,7 @@
     <r:require module="variantWF"/>
     <r:require module="mustache"/>
     <r:require modules="traitsFilter"/>
+    <r:require modules="datatables"/>
 
     <r:layoutResources/>
 </head>
@@ -470,7 +471,6 @@
             </div>-->
 
             <div id="searchDetailsHolder" class="row dk-variant-submit-search"></div>
-            <div id="searchResultsHolder" class="row dk-variant-submit-search"></div>
 
             <script id="searchDetailsTemplate" type="x-tmpl-mustache">
                 %{--<h6><g:message code="variantSearch.actions.submit_search" default="Submit search request"/></h6>--}%
@@ -501,7 +501,7 @@
 
                 <div class="col-md-3 dk-submit-btn-wrapper">
                     {{ #shouldSubmitBeEnabled }}
-                    <button class="btn btn-lg btn-primary" onclick="mpgSoftware.variantWF.variantFinderGetData()">
+                    <button class="btn btn-lg btn-primary" onclick="mpgSoftware.variantWF.variantFinderGetData(); openClosePullout();">
                         <g:message code="variantSearch.actions.submit_search" default="Submit search request"/>
                     </button>
                     {{ /shouldSubmitBeEnabled }}
@@ -514,6 +514,13 @@
             </script>
         </div>
 </div>
+
+<div class="container-fluid" style="padding: 30px;"><div id="searchResultsHolder" class="row">
+    <table id="xvariantTableResults" class="table table-striped dk-search-result dk-t2d-table no-footer" style="border-collapse: collapse; width: 100%;" role="grid" aria-describedby="xvariantTableResults_info">
+        <thead></thead>
+        <tbody></tbody>
+    </table>
+</div></div>
 
 </div>
 <style>
@@ -811,7 +818,7 @@
         <div class="additionalInputGroup dk-submit-btn-wrapper">
                 <button id="buildSearchRequestIndependent"
                         class="btn btn-sm btn-primary dk-search-btn-inactive"
-                        onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('independent')"
+                        onclick="mpgSoftware.variantWF.gatherCurrentQueryAndSave('independent'); "
                         disabled>
                     <g:message code="variantSearch.spec.actions.build_req"
                                default="Build search request"/>
