@@ -2164,11 +2164,81 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JsonSlurper slurper = new JsonSlurper()
 
         JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, dataset, pValue)
-        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${dataset}\"", MetaDataService.METADATA_VARIANT)
 
-        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
+       // String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${dataset}\"", MetaDataService.METADATA_VARIANT)
+
+        String processedGetData = processInfoFromGetData(apiresults)
+
+        JSONObject dataJsonObject = slurper.parseText(processedGetData)
 
         return dataJsonObject
+    }
+
+    public String processInfoFromGetData(JSONObject apiResults) {
+        JSONObject finalObject = new JSONObject();
+        String resultObject;
+        if (!apiResults["is_error"]) {
+            List<Map> listOfEachVariantInfoMap = []
+            Map<String,Object> variantInfoMap = new HashMap<>()
+
+            int numberOfVariantsRecords = apiResults.numRecords
+            for (int j = 0; j < numberOfVariantsRecords; j++) {
+                List<String> keys = []
+                Map<String,Object> commonAnnotationMap = new HashMap()
+                Map<String,Object> entitiesMap = new HashMap()
+                List<Map> listOfEntitiesMap = []
+
+                List<Map> listOfCommonAnnotationEntitiesMap = []
+
+                Map<String,Object> eachVariantInfoMap = new HashMap<>()
+
+                for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
+                    keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
+
+                }
+
+                for(int l = 0; l< keys.size();l++){
+                    def value = apiResults.variants[j][l][keys[l]]
+                    if(value instanceof String || value instanceof Integer){
+                        commonAnnotationMap.put(keys[l],value)
+                    }
+                    if(value == null){
+                            //add empty String if the value doesn't exist
+                        commonAnnotationMap.put(keys[l],"")
+                    }
+
+                        eachVariantInfoMap.put("common_annotation",commonAnnotationMap)
+
+                       // listOfCommonAnnotationMap.add(commonAnnotationMap)
+
+                        if(value instanceof Map){
+                            Iterator<String> keysItr = value.keys();
+                            while (keysItr.hasNext()) {
+                                String keyOfMap = keysItr.next();
+                                Object valueOfMap = value.get(keyOfMap);
+                                entitiesMap.put("annotation",keys[l])
+                                entitiesMap.put("dataset",keyOfMap)
+                                Iterator<String> nextkeysItr = valueOfMap.keys();
+                                while (nextkeysItr.hasNext()) {
+                                    String nextkeyOfMap = nextkeysItr.next();
+                                    Object nextvalueOfMap = value.get(keyOfMap).get(nextkeyOfMap);
+                                    entitiesMap.put("phenotype", nextkeyOfMap)
+                                    entitiesMap.put("value",nextvalueOfMap)
+                                }
+                            }
+                        }
+                    }
+                    listOfEntitiesMap.add(entitiesMap)
+                    eachVariantInfoMap.put("entities",listOfEntitiesMap)
+                    listOfEachVariantInfoMap.add(eachVariantInfoMap)
+
+
+            }
+            variantInfoMap.put("variants",listOfEachVariantInfoMap)
+            finalObject = new JSONObject(variantInfoMap)
+            resultObject = finalObject.toString()
+        }
+        return resultObject
     }
 
 
