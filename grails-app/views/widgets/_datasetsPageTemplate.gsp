@@ -95,6 +95,13 @@
 <g:render template="./data/GWAS_UKBiobankHRC_eu" />
 <g:render template="./data/GWAS_ADIPOGen" />
 <g:render template="./data/GWAS_CHARGE_eu" />
+<g:render template="./data/GWAS_GUGC_eu" />
+<g:render template="./data/GWAS_Leptin" />
+<g:render template="./data/GWAS_MAGIC-A1C_aa" />
+<g:render template="./data/GWAS_MAGIC-A1C_ea" />
+<g:render template="./data/GWAS_MAGIC-A1C_eu" />
+<g:render template="./data/GWAS_MAGIC-A1C_sa" />
+
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>
