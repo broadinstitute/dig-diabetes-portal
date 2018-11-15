@@ -1,6 +1,13 @@
 var mpgSoftware = mpgSoftware || {};
 
-
+/***
+ * Rules:
+ *   setAccumulatorObject should be done within processRecordXXX
+ *   resetAccumulatorObject should be done within modifyScreenFields
+ *
+ *
+ * @type {{installDirectorButtonsOnTabs, modifyScreenFields, adjustLowerExtent, adjustUpperExtent}}
+ */
 
 
 mpgSoftware.dynamicUi = (function () {
@@ -14,6 +21,24 @@ mpgSoftware.dynamicUi = (function () {
 
     var getDyanamicUiVariables = function(){
         return dyanamicUiVariables;
+    };
+
+    var actionContainer =  function(actionId, additionalParameters){
+        switch(actionId){
+            case 47:
+                var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"getTissuesFromEqtlButtonId",
+                    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+                    dataForCall:geneNameArray,
+                    processEachRecord:processRecordsFromEqtls,
+                    displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
+                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+                }));
+                break;
+            default:
+                break;
+        }
     };
 
 
@@ -541,8 +566,18 @@ mpgSoftware.dynamicUi = (function () {
 
         $.when.apply($, promiseArray).then(function(allCalls) {
 
-            collectionOfRemoteCallingParameters.displayRefinedContextFunction(   collectionOfRemoteCallingParameters.placeToDisplayData,
-                                                                        objectContainingRetrievedRecords );
+            if (( typeof collectionOfRemoteCallingParameters.displayRefinedContextFunction !== 'undefined') &&
+                ( collectionOfRemoteCallingParameters.displayRefinedContextFunction !== null ) ) {
+
+                collectionOfRemoteCallingParameters.displayRefinedContextFunction(   collectionOfRemoteCallingParameters.placeToDisplayData,
+                    objectContainingRetrievedRecords );
+
+            } else if  ( typeof collectionOfRemoteCallingParameters.actionId !== 'undefined')  {
+
+                actionContainer(collectionOfRemoteCallingParameters.actionId, collectionOfRemoteCallingParameters);
+
+            }
+
 
         }, function(e) {
             alert("Ajax call failed");
@@ -557,8 +592,8 @@ mpgSoftware.dynamicUi = (function () {
             ( typeof startingMaterials.retrieveDataUrl !== 'undefined') &&
             ( typeof startingMaterials.dataForCall !== 'undefined') &&
             ( typeof startingMaterials.processEachRecord !== 'undefined') &&
-            ( typeof startingMaterials.displayRefinedContextFunction !== 'undefined') &&
-            ( typeof startingMaterials.placeToDisplayData !== 'undefined') &&
+            //( typeof startingMaterials.displayRefinedContextFunction !== 'undefined') &&
+            //( typeof startingMaterials.placeToDisplayData !== 'undefined') &&
             ( !Array.isArray(startingMaterials.displayRefinedContextFunction) ) &&
             ( !Array.isArray(startingMaterials.placeToDisplayData) ) ){
                 var retrieveDataUrlMultiple = (Array.isArray(startingMaterials.retrieveDataUrl))?
@@ -578,7 +613,9 @@ mpgSoftware.dynamicUi = (function () {
                 });
                 returnValue["displayRefinedContextFunction"] = startingMaterials.displayRefinedContextFunction;
                 returnValue["placeToDisplayData"] = startingMaterials.placeToDisplayData;
-            } else {
+                returnValue["actionId"] = startingMaterials.actionId;
+
+        } else {
                 console.log("Serious error: incorrect fields in startingMaterials = "+startingMaterials.name+".")
             };
         return returnValue;
@@ -657,20 +694,6 @@ mpgSoftware.dynamicUi = (function () {
 
         // manually set the range
         $('#'+additionalParameters.generalizedGoButtonId).on('click', function () {
-            // var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
-            // somethingSymbol = somethingSymbol.replace(/\//g,"_"); // forward slash crashes app (even though it is the LZ standard variant format
-            // var geneInArray =[{name:somethingSymbol}];
-            // setAccumulatorObject("geneNameArray",geneInArray);
-            // if (somethingSymbol) {
-            //     retrieveRefinedContext({ loopOverGenes:geneInArray,
-            //             gene:somethingSymbol,
-            //             processEachRecord:processRecordsUpdateContext,
-            //             retrieveDataUrl:additionalParameters.geneInfoAjaxUrl,
-            //             displayRefinedContextFunction:displayRangeContext,
-            //             placeToDisplayData:'#contextDescription'
-            //         },
-            //         additionalParameters)
-            // }
 
             var somethingSymbol = $('#'+additionalParameters.generalizedInputId).val();
             somethingSymbol = somethingSymbol.replace(/\//g,"_");
@@ -760,14 +783,28 @@ mpgSoftware.dynamicUi = (function () {
         $('#getTissuesFromEqtlButtonId').on('click', function () {
             resetAccumulatorObject(additionalParameters,"tissueNameArray");
 
+
             retrieveRemotedContextInformation(buildRemoteContextArray ({
-                name:"getTissuesFromEqtlButtonId",
-                retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-                dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
-                processEachRecord:processRecordsFromEqtls,
-                displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
-                placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+                name:"retrieveGenesWithinRange",
+                retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
+                dataForCall:{
+                    chromosome: getAccumulatorObject("chromosome"),
+                    startPos: getAccumulatorObject("extentBegin"),
+                    endPos: getAccumulatorObject("extentEnd")
+                },
+                processEachRecord:processRecordsFromProximitySearch,
+                actionId: 47
             }));
+
+
+            // retrieveRemotedContextInformation(buildRemoteContextArray ({
+            //     name:"getTissuesFromEqtlButtonId",
+            //     retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+            //     dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+            //     processEachRecord:processRecordsFromEqtls,
+            //     displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
+            //     placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+            // }));
 
         });
 
