@@ -2187,9 +2187,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     if(value instanceof String || value instanceof Integer){
                         commonAnnotationMap.put(keys[l],value)
                     }
-                    if(value == null){
+                    if(value.equals(null)){
+                        String emptyString = " "
                         //add empty String if the value doesn't exist
-                        commonAnnotationMap.put(keys[l],"")
+                        commonAnnotationMap.put(keys[l],emptyString)
                     }
                     eachVariantInfoMap.put("common_annotation",commonAnnotationMap)
                     if(value instanceof Map){
