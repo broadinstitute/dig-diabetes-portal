@@ -2167,6 +2167,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
     public JSONObject processInfoFromGetData(JSONObject apiResults) {
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject resultObject = new JSONObject();
         if (!apiResults["is_error"]) {
             List<Map> listOfEachVariantInfoMap = []
@@ -2198,12 +2199,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         while (keysItr.hasNext()) {
                             String keyOfMap = keysItr.next();
                             Object valueOfMap = value.get(keyOfMap);
-                            entitiesMap.put("dataset",keyOfMap)
+                            //get the translated name of the dataset
+                            String translatedDatasetName = g.message(code: 'metadata.' + keyOfMap, default: keyOfMap);
+                          //  keyOfMap = translatedDatasetName
+                            entitiesMap.put("dataset",translatedDatasetName)
                             Iterator<String> nextkeysItr = valueOfMap.keys();
                             while (nextkeysItr.hasNext()) {
                                 String nextkeyOfMap = nextkeysItr.next();
                                 Object nextvalueOfMap = value.get(keyOfMap).get(nextkeyOfMap);
-                                entitiesMap.put("phenotype", nextkeyOfMap)
+                                //get the translated name of phenotype
+                                String translatedPhenotypeName = g.message(code: 'metadata.' + nextkeyOfMap, default: nextkeyOfMap);
+                                //nextkeyOfMap = translatedPhenotypeName
+                                entitiesMap.put("phenotype", translatedPhenotypeName)
                                 entitiesMap.put(keys[l],nextvalueOfMap)
                             }
                         }
