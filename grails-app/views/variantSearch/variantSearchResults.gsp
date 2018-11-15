@@ -81,6 +81,7 @@ table.dataTable th.datatype-header.sorting {
             returnToTheVariantResultsTable: [1],
 
             // a bunch of URLs we need to pass around
+            variantFinderGetDataUrl: '${createLink(controller: "variantSearch", action: "ajaxVariantFinderGetData")}',
             retrieveTopVariantsAcrossSgs:'<g:createLink controller="variantSearch" action="retrieveTopVariantsAcrossSgs" />',
             retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
             geneInfoUrl:'<g:createLink controller="gene" action="geneInfo" />',

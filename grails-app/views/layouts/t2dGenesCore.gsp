@@ -13,6 +13,11 @@
     <head>
         <title><g:message code="${restServer.retrieveBeanForCurrentPortal().getTabLabel()}"/></title>
 
+        <!--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+        <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>-->
+
         <r:require modules="core"/>
         <r:layoutResources/>
 
@@ -359,6 +364,134 @@
                 }
             }
 
+            /*temporary placeholder for a function to render VF sear results table.*/
+
+            function countElement(item,array) {
+                var count = 0;
+                $.each(array, function(i,v) { if (v === item) count++; });
+                return count;
+            }
+
+            function renderVFSearchResult(DATA) {
+
+                var VARIANTS = DATA["variant"]["variants"];
+
+                var VFResultTableHead = '';
+                var VFResultTableBody = '';
+                var commonAnnotations = VARIANTS[0]["common_annotation"].length;
+                var otherProperties = VARIANTS[0]["entities"].length;
+
+                var allDatasets = [];
+                var uniqueDatasets = [];
+
+
+                $.each(VARIANTS[0]["entities"], function(index, val) {
+                    allDatasets.push(val["phenotype"] +"("+ val["dataset"]+")");
+                    uniqueDatasets.push(val["phenotype"] +"("+ val["dataset"]+")");
+                });
+
+
+
+                $.unique(uniqueDatasets);
+
+                //console.log(allDatasets);
+                //console.log(uniqueDatasets);
+
+                //render common annotations first
+
+                VFResultTableHead += '<tr><th class="dk-common" colspan="9">Variant annotations</th>';
+
+                $.each(uniqueDatasets, function(index, val) {
+                    var uniqueDatasetNum = countElement(val,allDatasets);
+                    VFResultTableHead += '<th class="dk-property-10" colspan="'+uniqueDatasetNum+'">'+val+'</th>';
+                });
+
+                VFResultTableHead += '</tr><tr>';
+                VFResultTableHead += '<th class="dk-common">Variant ID</th>';
+            	VFResultTableHead += '<th class="dk-common">dbSNP ID</th>';
+            	VFResultTableHead += '<th class="dk-common">Chromosome</th>';
+            	VFResultTableHead += '<th class="dk-common">Position</th>';
+            	VFResultTableHead += '<th class="dk-common">Reference allele</th>';
+            	VFResultTableHead += '<th class="dk-common">Effect allele</th>';
+            	VFResultTableHead += '<th class="dk-common">Nearest gene</th>';
+            	VFResultTableHead += '<th class="dk-common">Protein change</th>';
+                VFResultTableHead += '<th class="dk-common">Consequence</th>';
+
+                $.each(uniqueDatasets, function(index, val) {
+                    $.each(VARIANTS[0]["entities"], function(index2, val2) {
+                        var datasetName = val2["phenotype"] +"("+ val2["dataset"]+")";
+                        if (datasetName == val) {
+                            for (var key in val2) {
+                                if (val2.hasOwnProperty(key)) {
+                                    (key != "dataset" && key != "phenotype")? VFResultTableHead += '<th class="dk-property-10">'+key+'</th>':"";
+                                }
+                            }
+                        }
+                    });
+                });
+
+
+                VFResultTableHead += '</tr>';
+
+                $.each(VARIANTS, function(index,val) {
+
+                    VFResultTableBody += '<tr>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["CHROM"] +":" +val["common_annotation"]["POS"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["DBSNP_ID"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["CHROM"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["POS"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["Reference_Allele"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["Effect_Allele"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["CLOSEST_GENE"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["Protein_change"] + '</td>';
+                    VFResultTableBody += '<td>' + val["common_annotation"]["Consequence"] + '</td>';
+
+                    $.each(val["entities"], function(index2, val2) {
+                        for (var key in val2) {
+                            if (val2.hasOwnProperty(key)) {
+                                (key != "dataset" && key != "phenotype")? VFResultTableBody += '<td>'+val2[key]+'</td>':"";
+                            }
+                        }
+                    })
+
+
+
+                    VFResultTableBody += '</tr>';
+                });
+
+
+
+                $("#xvariantTableResults").find("tbody").html("");
+                $("#xvariantTableResults").find("thead").html("");
+
+
+
+
+
+                $("#xvariantTableResults").find("thead").append(VFResultTableHead);
+                $("#xvariantTableResults").find("tbody").append(VFResultTableBody);
+
+
+
+                console.log(VARIANTS);
+
+
+                $.noConflict();
+
+                $ = jQuery;
+
+                if($("#xvariantTableResults").find("tbody").find("tr").length) {
+                    $('#xvariantTableResults').DataTable({"pageLength": 50,
+                        //"order": [[ 12, "asc" ]],
+                        dom: 'Bfrtip',
+                        buttons: [
+                            'pdf',
+                            'csv',
+                            'print'
+                        ]});
+                }
+            }
+
             /* copy url of variant search result page to clipboard*/
 
             function copyVariantSearchURL() {
@@ -397,6 +530,7 @@
             });
 
             $( window ).ready( function() {
+
 
             });
 

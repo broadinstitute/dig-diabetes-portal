@@ -1,5 +1,6 @@
 package org.broadinstitute.mpg
 
+import com.google.gson.JsonObject
 import grails.converters.JSON
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
@@ -221,6 +222,8 @@ class VariantSearchController {
         return jsonQueries
     }
 
+
+
     /***
      *  Someone has requested the 'search builder' page.  If they are coming to this page without a search
      *  context then encParams will be empty.   If instead they are trying to revise their search then
@@ -338,6 +341,7 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch() {
+
         displayCombinedVariantSearch(params.filters, params.props, params.specificGene)
     }
 
@@ -462,6 +466,32 @@ class VariantSearchController {
 
 
     def retrieveTopVariantsAcrossSgsAndPhenotypes () {
+
+    }
+
+
+    /***
+     * Returns association statistics across 25 traits for a single variant.  The launching page is traitInfo
+     * @return
+     */
+    def ajaxVariantFinderGetData() {
+//       def myjson = JSON.parse(params.data)
+//
+//       for(int i = 0;i< myjson.length();i++){
+//
+//       }
+
+        String phenotypeName = params["phenotype"]
+        String dataSetName = params["dataset"]
+        String pValue = params["pValue"]
+
+
+//        JSONObject jsonObject = restServerService.getVariantFinderSpecificData(inputListOfMap)
+        JSONObject jsonObject = restServerService.getVariantFinderSpecificData(phenotypeName, dataSetName,pValue)
+
+        render(status: 200, contentType: "application/json") {
+            [variant: jsonObject]
+        }
 
     }
 
@@ -1227,6 +1257,8 @@ class VariantSearchController {
     }
 
     private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties,String specificGene) {
+
+       // JSONObject getDataOutput = RestServerService.v
         ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(filters)
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
 
