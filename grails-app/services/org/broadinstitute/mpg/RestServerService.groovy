@@ -22,6 +22,7 @@ import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
+//import sun.plugin.javascript.navig.Link
 
 @Transactional
 class RestServerService {
@@ -2173,15 +2174,15 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariantsRecords = apiResults.numRecords
             for (int j = 0; j < numberOfVariantsRecords; j++) {
                 List<String> keys = []
-                Map<String,Object> commonAnnotationMap = new HashMap()
-                Map<String,Object> eachVariantInfoMap = new HashMap<>()
+                LinkedHashMap<String,Object> commonAnnotationMap = new LinkedHashMap<>()
+                LinkedHashMap<String,Object> eachVariantInfoMap = new LinkedHashMap<>()
                 for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
                     keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
                 }
                 List<Map> listOfEntitiesMap = []
                 for(int l = 0; l< keys.size();l++){
                     //create new entitiesMap only when the dataset is different
-                    Map<String,Object> entitiesMap = new HashMap()
+                    LinkedHashMap<String,Object> entitiesMap = new LinkedHashMap<>()
                     def value = apiResults.variants[j][l][keys[l]]
                     if(value instanceof String || value instanceof Integer){
                         commonAnnotationMap.put(keys[l],value)
