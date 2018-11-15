@@ -367,6 +367,7 @@
             /*temporary placeholder for a function to render VF sear sesults table.*/
 
             function renderVFSearchResult(DATA) {
+                /*
 
                 $("#xvariantTableResults").find("tbody").html("")
                 $("#xvariantTableResults").find("thead").html("")
@@ -431,24 +432,25 @@
                     for (var variant = 0; variant < DATA["variant"]["results"][result]["pVals"].length; variant++) {
                         var eachCell = DATA["variant"]["results"][result]["pVals"][variant];
                         VFResultTable += '<td>' + eachCell["count"] + '</td>';
-                    }*/
+                    }
 
                     VFResultTableBody += '</tr>';
                 }
 
                 $("#xvariantTableResults").find("tbody").append(VFResultTableBody);
                 $("#xvariantTableResults").find("thead").append(VFResultTableHead);
+                */
                 console.log(DATA);
 
+                /*
                 $.noConflict();
 
                 $ = jQuery;
 
                 if($("#xvariantTableResults").find("tbody").find("tr").length) {
-                    $('#xvariantTableResults').DataTable({"pageLength": 50});
+                    $('#xvariantTableResults').DataTable({"pageLength": 50, buttons: ['copy', 'csv', 'pdf']});
                 }
-
-
+*/
             }
 
             /* copy url of variant search result page to clipboard*/
