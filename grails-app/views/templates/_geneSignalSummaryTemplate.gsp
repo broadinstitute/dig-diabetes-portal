@@ -705,21 +705,21 @@ button.directorButtonDetails{
                                 <div class="directorButtonHolder">
 
                                 </div>
-                                <h3> Results </h3>
-                                <div class="resultsTableHolder">
-                                    <div class="multipleElementScrolledBox dynamicUiHolder" style="width:180px">
-                                    </div>
-                                </div>
+
+                                %{--<div class="resultsTableHolder">--}%
+                                    %{--<div class="multipleElementScrolledBox dynamicUiHolder" style="width:180px">--}%
+                                    %{--</div>--}%
+                                %{--</div>--}%
 
                             </div>
                         </div>
 
                                 <div class="row">
                                    <div class="col-sm-12">
-
+                                        <h3> Results </h3>
                                     </div>
                                     <div class="col-sm-12">
-                                        <div class="refinementTable">
+                                        <div class="refinementTable dynamicUiHolder">
 
                                         </div>
                                     </div>
@@ -754,7 +754,7 @@ button.directorButtonDetails{
                                 </div>
                                 <h3> Results </h3>
                                 <div class="resultsTableHolder">
-                                    <div class="multipleElementScrolledBox dynamicUiHolder">
+                                    <div class="dynamicUiHolder">
                                     </div>
                                 </div>
 
@@ -972,6 +972,41 @@ button.directorButtonDetails{
         {{#variantPhenotypesExist}}
     </tr>
     {{/variantPhenotypesExist}}
+
+
+    </table>
+</script>
+
+
+
+
+<script id="dynamicPhenotypeTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#phenotypesExist}}
+    <tr>
+        <th  scope="row">Phenotypes</th>
+        {{/phenotypesExist}}
+        {{#uniquePhenotypes}}
+            <th  scope="col">{{phenotypeName}}</th>
+        {{/uniquePhenotypes}}
+        {{#phenotypesExist}}
+    </tr>
+    {{/phenotypesExist}}
+
+    {{#phenotypeVariantsExist}}
+    <tr>
+        <th  scope="row">Variants</th>
+        {{/phenotypeVariantsExist}}
+        {{#phenotypeVariantQtl}}
+            <td >{{#variants}}
+            <div>{{variantName}}</div>
+            {{/variants}}
+            </td>
+        {{/phenotypeVariantQtl}}
+        {{#phenotypeVariantsExist}}
+    </tr>
+    {{/phenotypeVariantsExist}}
 
 
     </table>

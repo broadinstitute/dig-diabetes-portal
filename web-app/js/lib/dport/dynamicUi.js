@@ -125,9 +125,11 @@ mpgSoftware.dynamicUi = (function () {
             uniqueEqtlGenes:[],
             genePositions:[],
             uniqueTissues:[],
+            uniquePhenotypes:[],
             uniqueVariants: [],
             geneTissueEqtls:[],
             variantPhenotypeQtl:[],
+            phenotypeVariantQtl:[],
             geneModTerms:[],
             genesPositionsExist:function(){
                 return (this.genePositions.length>0)?[1]:[];
@@ -137,6 +139,9 @@ mpgSoftware.dynamicUi = (function () {
             },
             variantsExist:function(){
                 return (this.uniqueVariants.length>0)?[1]:[];
+            },
+            phenotypesExist:function(){
+                return (this.uniquePhenotypes.length>0)?[1]:[];
             },
             tissuesExist:function(){
                 return (this.uniqueTissues.length>0)?[1]:[];
@@ -152,6 +157,9 @@ mpgSoftware.dynamicUi = (function () {
             },
             variantPhenotypesExist:function(){
                 return (this.variantPhenotypeQtl.length>0)?[1]:[];
+            },
+            phenotypeVariantsExist:function(){
+                return (this.phenotypeVariantQtl.length>0)?[1]:[];
             }
 
         };
@@ -392,11 +400,13 @@ mpgSoftware.dynamicUi = (function () {
             var varIdIndex =  _.indexOf(data.header,'VAR_ID');
             var geneIndex =  _.indexOf(data.header,'GENE');
             var phenotypeIndex =  _.indexOf(data.header,'PHENOTYPE');
+            var positionIndex =  _.indexOf(data.header,'POS');
             var numberOfElements =  data.data[0].length;
             for ( var variant = 0; variant < numberOfElements; variant++ ){
                 var varId = data.data[varIdIndex][variant];
                 var gene = data.data[geneIndex][variant];
                 var phenotype = data.data[phenotypeIndex][variant];
+                var position = data.data[positionIndex][variant];
                 if (!returnObject.uniqueGenes.includes(gene)){
                     returnObject.uniqueGenes.push(gene);
                 };
@@ -407,10 +417,12 @@ mpgSoftware.dynamicUi = (function () {
                     returnObject.uniqueVarIds.push(varId);
                 };
 
-                var variantIndex = _.findIndex( getAccumulatorObject("phenotypesForEveryVariant"),{variantName:varId} );
+                var variantIndex = _.findIndex( getAccumulatorObject("phenotypesForEveryVariant"),{ variantName:varId } );
                 if (variantIndex<0) {
                     var accumulatorArray = getAccumulatorObject("phenotypesForEveryVariant");
-                    accumulatorArray.push({variantName:varId, phenotypes: [phenotype]});
+                    accumulatorArray.push({ variantName:varId,
+                                            phenotypes: [phenotype],
+                                            position: position });
                     setAccumulatorObject("phenotypesForEveryVariant", accumulatorArray);
                 } else {
                     var accumulatorElement = getAccumulatorObject("phenotypesForEveryVariant")[variantIndex];
@@ -445,14 +457,14 @@ mpgSoftware.dynamicUi = (function () {
     };
     var displayVariantRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
         $(idForTheTargetDiv).empty();
-        _.forEach(objectContainingRetrievedRecords.uniqueVarIds,function(oneTissue) {
-            $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
-        });
+        // _.forEach(objectContainingRetrievedRecords.uniqueVarIds,function(oneTissue) {
+        //     $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+oneTissue+'</div>');
+        // });
 
         var returnObject = createNewDisplayReturnObject();
-        var selectorForIidForTheTargetDiv = "div.refinementTable";
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
-        _.forEach(getAccumulatorObject("phenotypesForEveryVariant"), function (variantWithPhenotypes) {
+        _.forEach(_.sortBy(getAccumulatorObject("phenotypesForEveryVariant"),['position']), function (variantWithPhenotypes) {
             returnObject.uniqueVariants.push({variantName:variantWithPhenotypes.variantName});
 
             var recordToDisplay = {phenotypes:[]};
@@ -462,16 +474,33 @@ mpgSoftware.dynamicUi = (function () {
             returnObject.variantPhenotypeQtl.push(recordToDisplay);
 
         });
-        $("#dynamicVariantHolder div.refinementTable").empty().append(Mustache.render($('#dynamicVariantTable')[0].innerHTML,
+        $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicVariantTable')[0].innerHTML,
             returnObject
         ));
 
     };
     var displayPhenotypeRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
         $(idForTheTargetDiv).empty();
-        _.forEach(objectContainingRetrievedRecords.uniquePhenotypes,function(onePhenotype) {
-            $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+onePhenotype+'</div>');
+        // _.forEach(objectContainingRetrievedRecords.uniquePhenotypes,function(onePhenotype) {
+        //     $(idForTheTargetDiv).append('<div class="resultElementPerLine">'+onePhenotype+'</div>');
+        // });
+
+        var returnObject = createNewDisplayReturnObject();
+        var selectorForIidForTheTargetDiv = idForTheTargetDiv;
+        $(selectorForIidForTheTargetDiv).empty();
+        _.forEach(_.sortBy(getAccumulatorObject("variantsForEveryPhenotype"),['phenotypeName']), function (phenotypesWithVariants) {
+            returnObject.uniquePhenotypes.push({phenotypeName:phenotypesWithVariants.phenotypeName});
+
+            var recordToDisplay = {variants:[]};
+            _.forEach(phenotypesWithVariants.variants,function(eachVariant){
+                recordToDisplay.variants.push({variantName:eachVariant})
+            });
+            returnObject.phenotypeVariantQtl.push(recordToDisplay);
+
         });
+        $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicPhenotypeTable')[0].innerHTML,
+            returnObject
+        ));
 
     };
 
