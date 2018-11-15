@@ -41,6 +41,6 @@ Download date: October 2016<br />
 <h4>Experiment summary</h4>
 <p><g:message code="informational.data.exptsumm.CARDIoGRAM"></g:message></p>
 
-<h4>Accessing CARDIoGRAM GWAS data</h4>
+<h4>Accessing CARDIoGRAMplusC4D GWAS results</h4>
 <p><g:message code="informational.data.accessing.CARDIoGRAM"></g:message></p>
 </script>
