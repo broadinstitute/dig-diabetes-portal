@@ -5,6 +5,10 @@ var mpgSoftware = mpgSoftware || {};
  *   setAccumulatorObject should be done within processRecordXXX
  *   resetAccumulatorObject should be done within modifyScreenFields
  *
+ *   challenge: sometimes one Ajax call must proceed another.  How to organize this in an elegant way?
+ *      Each call might have dependencies in the accumulatorObject.
+ *      Each call might set one or more fields in the accumulator object.
+ *
  *
  * @type {{installDirectorButtonsOnTabs, modifyScreenFields, adjustLowerExtent, adjustUpperExtent}}
  */
@@ -23,7 +27,8 @@ mpgSoftware.dynamicUi = (function () {
         return dyanamicUiVariables;
     };
 
-    var actionContainer =  function(actionId, additionalParameters){
+    var actionContainer =  function(actionId){
+        var additionalParameters = getDyanamicUiVariables();
         switch(actionId){
             case 47:
                 var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
@@ -33,6 +38,17 @@ mpgSoftware.dynamicUi = (function () {
                     dataForCall:geneNameArray,
                     processEachRecord:processRecordsFromEqtls,
                     displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
+                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+                }));
+                break;
+            case 48:
+                var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"eQTL-dynamic-gene-go",
+                    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+                    dataForCall:geneNameArray,
+                    processEachRecord:processRecordsFromEqtls,
+                    displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
                     placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
                 }));
                 break;
@@ -260,6 +276,19 @@ mpgSoftware.dynamicUi = (function () {
         } else {
             $("#configurableUiTabStorage").data("dataHolder", filledOutSharedAccumulatorObject);
         }
+    };
+
+
+
+    var accumulatorObjectFieldEmpty = function(specificField) {
+        var returnValue = true;
+        var accumulatorObjectField = getAccumulatorObject(specificField);
+        if (Array.isArray(accumulatorObjectField)){
+            if (accumulatorObjectField.length>0){
+                returnValue = false;
+            }
+        }
+        return returnValue;
     }
 
 
@@ -680,6 +709,8 @@ mpgSoftware.dynamicUi = (function () {
 
     var modifyScreenFields = function (data, additionalParameters) {
 
+        setDyanamicUiVariables(additionalParameters);
+
         $('#'+additionalParameters.generalizedInputId).typeahead({
             source: function (query, process) {
                 $.get(additionalParameters.generalizedTypeaheadUrl, {query: query}, function (data) {
@@ -728,14 +759,39 @@ mpgSoftware.dynamicUi = (function () {
         // perform an eQTL based lookup
         $('#eQTL-dynamic-gene-go').on('click', function () {
 
-            retrieveRemotedContextInformation(buildRemoteContextArray ({
-                name:"eQTL-dynamic-gene-go",
-                retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-                dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
-                processEachRecord:processRecordsFromEqtls,
-                displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
-                placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-            }));
+            //retrieveRemotedContextInformation(buildRemoteContextArray ({
+            //    name:"eQTL-dynamic-gene-go",
+            //    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+            //    dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+            //    processEachRecord:processRecordsFromEqtls,
+            //    displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
+            //    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+            //}));
+
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"retrieveGenesWithinRange",
+                    retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
+                    dataForCall:{
+                        chromosome: getAccumulatorObject("chromosome"),
+                        startPos: getAccumulatorObject("extentBegin"),
+                        endPos: getAccumulatorObject("extentEnd")
+                    },
+                    processEachRecord:processRecordsFromProximitySearch,
+                    actionId: 48
+                }));
+            } else {
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"eQTL-dynamic-gene-go",
+                    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+                    dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+                    processEachRecord:processRecordsFromEqtls,
+                    displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
+                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+                }));
+            }
+
+
 
         });
 
@@ -784,27 +840,31 @@ mpgSoftware.dynamicUi = (function () {
             resetAccumulatorObject(additionalParameters,"tissueNameArray");
 
 
-            retrieveRemotedContextInformation(buildRemoteContextArray ({
-                name:"retrieveGenesWithinRange",
-                retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
-                dataForCall:{
-                    chromosome: getAccumulatorObject("chromosome"),
-                    startPos: getAccumulatorObject("extentBegin"),
-                    endPos: getAccumulatorObject("extentEnd")
-                },
-                processEachRecord:processRecordsFromProximitySearch,
-                actionId: 47
-            }));
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"retrieveGenesWithinRange",
+                    retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
+                    dataForCall:{
+                        chromosome: getAccumulatorObject("chromosome"),
+                        startPos: getAccumulatorObject("extentBegin"),
+                        endPos: getAccumulatorObject("extentEnd")
+                    },
+                    processEachRecord:processRecordsFromProximitySearch,
+                    actionId: 47
+                }));
+            } else {
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"getTissuesFromEqtlButtonId",
+                    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
+                    dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
+                    processEachRecord:processRecordsFromEqtls,
+                    displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
+                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
+                }));
+
+            }
 
 
-            // retrieveRemotedContextInformation(buildRemoteContextArray ({
-            //     name:"getTissuesFromEqtlButtonId",
-            //     retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-            //     dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
-            //     processEachRecord:processRecordsFromEqtls,
-            //     displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
-            //     placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-            // }));
 
         });
 
