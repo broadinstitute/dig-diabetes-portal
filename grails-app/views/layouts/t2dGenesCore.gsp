@@ -387,12 +387,32 @@
                     return count;
                 }
 
+                var massageContent = function(CONTENT) {
+                    var returnStr = CONTENT.replace(/_/g, " ");
+
+                    switch(returnStr) {
+                        case "MINA":
+                            returnStr = "Case minor allele counts";
+                            break;
+                        case "MINU":
+                            returnStr = "Control minor allele counts";
+                            break;
+                        case "ODDS RATIO":
+                            returnStr = "Odds ratio";
+                            break;
+                        case "P VALUE":
+                            returnStr = "p-Value";
+                            break;
+                    }
+                    return returnStr;
+                }
+
 
                 $.each(VARIANTS[0]["entities"], function(index, val) {
                     allDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
                     uniqueDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
                 });
-                
+
                 $.unique(uniqueDatasets);
 
 
@@ -405,7 +425,7 @@
                     VFResultTableHead += '<th class="dk-property-10" colspan="'+uniqueDatasetNum+'">'+val+'</th>';
                 });
 
-                VFResultTableHead += '</tr><tr>';
+                VFResultTableHead += '</tr><tr class="vf-table-headers">';
                 VFResultTableHead += '<th class="dk-common">Variant ID</th>';
             	VFResultTableHead += '<th class="dk-common">dbSNP ID</th>';
             	VFResultTableHead += '<th class="dk-common">Chromosome</th>';
@@ -422,7 +442,7 @@
                         if (datasetName == val) {
                             for (var key in val2) {
                                 if (val2.hasOwnProperty(key)) {
-                                    (key != "dataset" && key != "phenotype")? VFResultTableHead += '<th class="dk-property-10">'+key+'</th>':"";
+                                    (key != "dataset" && key != "phenotype")? VFResultTableHead += '<th class="dk-property-10">'+massageContent(key)+'</th>':"";
                                 }
                             }
                         }
@@ -443,7 +463,7 @@
                     VFResultTableBody += '<td>' + val["common_annotation"]["Effect_Allele"] + '</td>';
                     VFResultTableBody += '<td><a href="<g:createLink controller="gene" action="geneInfo" />/' + val["common_annotation"]["CLOSEST_GENE"] + '">' + val["common_annotation"]["CLOSEST_GENE"] + '</a></td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Protein_change"] + '</td>';
-                    VFResultTableBody += '<td>' + val["common_annotation"]["Consequence"] + '</td>';
+                    VFResultTableBody += '<td>' + massageContent(val["common_annotation"]["Consequence"]) + '</td>';
 
                     $.each(val["entities"], function(index2, val2) {
                         for (var key in val2) {
@@ -459,20 +479,18 @@
                 });
 
 
-
-                $("#xvariantTableResults").find("tbody").html("");
-                $("#xvariantTableResults").find("thead").html("");
-
-
-
-
-
                 $("#xvariantTableResults").find("thead").append(VFResultTableHead);
                 $("#xvariantTableResults").find("tbody").append(VFResultTableBody);
 
 
 
-                console.log(VARIANTS);
+                //console.log(VARIANTS);
+
+                var initialSort = 0;
+
+                $.each($(".vf-table-headers").find("th"),function(index) {
+                    ($(this).text() == "p-Value")? initialSort = index : "";
+                })
 
 
                 $.noConflict();
@@ -481,7 +499,7 @@
 
                 if($("#xvariantTableResults").find("tbody").find("tr").length) {
                     $('#xvariantTableResults').DataTable({"pageLength": 50,
-                        //"order": [[ 12, "asc" ]],
+                        "order": [[ initialSort, "asc" ]],
                         dom: 'Bfrtip',
                         buttons: [
                             'pdf',

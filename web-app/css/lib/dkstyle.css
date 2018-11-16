@@ -274,6 +274,10 @@ th.dk-property-10 {
 	color: #000;
 }
 
+th.dk-property-10.sorting_asc, th.dk-property-10.sorting_desc {
+	background-color:#7fc343;
+}
+
 table.dk-t2d-table th.dk-property-100 {
 	background-color:#61b2c3;
 	color: #333;

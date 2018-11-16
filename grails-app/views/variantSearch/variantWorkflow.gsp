@@ -4,41 +4,52 @@
 <html>
 <head>
     <meta name="layout" content="t2dGenesCore"/>
+    <r:require modules="traitsFilter"/>
+    <r:require modules="datatables"/>
     <r:require module="core"/>
     <r:require module="variantWF"/>
     <r:require module="mustache"/>
-    <r:require modules="traitsFilter"/>
-    <r:require modules="datatables"/>
-
     <r:layoutResources/>
 </head>
 
 <body>
 <style>
-.redBorder, .redBorder:focus {
-    border-color: red !important;
-}
+    .redBorder, .redBorder:focus {
+        border-color: red !important;
+    }
 
-.dk-variant-search-builder-ui, .dk-submit-btn-wrapper {
-    padding: 0 0 10px 0 !important;
-}
+    .dk-variant-search-builder-ui, .dk-submit-btn-wrapper {
+        padding: 0 0 10px 0 !important;
+    }
 
 
-#missense-options.form-control {
-    padding-right: 5px;
-}
+    #missense-options.form-control {
+        padding-right: 5px;
+    }
 
-.additionalInputGroup {
-    padding: 0;
-}
+    .additionalInputGroup {
+        padding: 0;
+    }
 
-.additionalInputGroup:first-of-type {
-    padding-top: 0;
-}
+    .additionalInputGroup:first-of-type {
+        padding-top: 0;
+    }
 
-#dependent h5, #independent h5 {
-    /*padding: 10px 0 25px 0;*/
-}
+    #dependent h5, #independent h5 {
+        /*padding: 10px 0 25px 0;*/
+    }
+
+    th.sorting_desc, th.sorting_asc {
+        background-color: #9fe343 !important;
+    }
+
+    td.sorting_1 {
+        background-color: #ecffe4 !important;
+    }
+
+    th.sorting {
+        background-image: url("../css/lib/datatables/sort_both2.png") !important;
+    }
 </style>
 <script>
 
@@ -48,13 +59,14 @@
         $(".variant-finder-pullout-content").css({"height":pulloutHeight-20 +"px"})
     }
 
-    var openClosePullout = function() {
-        console.log($(".variant-finder-pullout").attr("openfilter"));
-       if ($(".variant-finder-pullout").attr("openfilter") == "close"){
-           $(".variant-finder-pullout").css({"left":"-1px"}).attr("openfilter","open").find(".variant-finder-puller").find("span").attr("class","glyphicon glyphicon-menu-left");
-       } else {
-           $(".variant-finder-pullout").css({"left":"-350px"}).attr("openfilter","close").find(".variant-finder-puller").find("span").attr("class","glyphicon glyphicon-menu-right");
-       }
+    var openClosePullout = function(ACTION) {
+
+        if (ACTION == "open" ) {
+            $ (".variant-finder-pullout").css({"left":"-1px"}).find(".variant-finder-puller").find("a").attr("onclick","openClosePullout('close')").find("span").attr("class","glyphicon glyphicon-menu-left");
+
+        } else {
+            $(".variant-finder-pullout").css({"left":"-350px"}).find(".variant-finder-puller").find("a").attr("onclick","openClosePullout('open')").find("span").attr("class","glyphicon glyphicon-menu-right");
+        }
     }
 
     $(window).resize(function() {
@@ -94,7 +106,7 @@
 
         adjustPullout();
 
-        openClosePullout();
+        openClosePullout("open");
 
     });
 
@@ -489,7 +501,7 @@
                         <td>
                             {{ translatedPhenotype }} {{ #translatedDataset }} [{{{ translatedDataset }}}] {{ /translatedDataset }} {{ translatedName }} {{ comparator }} {{ displayValue }}<br>
                         </td>
-                        <td><a onclick="mpgSoftware.variantWF.editQuery({{ index }})"><g:message
+                        <td><a onclick="mpgSoftware.variantWF.editQuery({{ index }}); openClosePullout('open')"><g:message
                     code="variantSearch.spec.actions.edit" default="Edit"/></a></td>
                         <td><a onclick="mpgSoftware.variantWF.deleteQuery({{ index }})"><g:message
                     code="variantSearch.spec.actions.delete" default="Delete"/></a></td>
@@ -501,7 +513,7 @@
 
                 <div class="col-md-3 dk-submit-btn-wrapper">
                     {{ #shouldSubmitBeEnabled }}
-                    <button class="btn btn-lg btn-primary" onclick="mpgSoftware.variantWF.variantFinderGetData(); openClosePullout();">
+                    <button class="btn btn-lg btn-primary" onclick="mpgSoftware.variantWF.variantFinderGetData(); openClosePullout('close');">
                         <g:message code="variantSearch.actions.submit_search" default="Submit search request"/>
                     </button>
                     {{ /shouldSubmitBeEnabled }}
@@ -623,7 +635,7 @@
     <h4 style="padding: 0; margin:0;"><a href="javascript:;" class="other-options-opener">&#9654; Additional options</a></h4>
 
     <div style="padding: 10px 0; display: none;" class="dk-variant-search-builder other-options">
-        <h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>
+        <!--<h5><g:message code="variantSearch.workflow.tab.phenotypeIndependent.text"/></h5>-->
 
         <div id="datasetChooserIndependent" class="additionalInputGroup dk-variant-search-builder-ui">
             <div class="dk-variant-search-builder-ui">
