@@ -641,26 +641,29 @@ class RestServerService {
         RestResponse response
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
+        String completeUrl = currentRestServer + targetUrl
         try {
-            log.info("About to attempt call to ${targetUrl}")
-            response = rest.get(currentRestServer + targetUrl) {
+            log.info("About to attempt call to ${completeUrl}")
+            response = rest.get(completeUrl) {
                 contentType "text/plain"
             }
         } catch (Exception exception) {
-            log.error("NOTE: exception on post to backend. Target=${targetUrl}")
+            log.error("NOTE: exception on post to backend. Target=${completeUrl}")
             log.error(exception.toString())
-            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}"
+            logStatus << "NOTE: exception on post to backend. Target=${completeUrl}"
         }
 
         if (response?.responseEntity?.statusCode?.value == 200) {
             returnValue = response.text
             logStatus << """status: ok""".toString()
         } else {
-            logStatus << """status: failed""".toString()
+            logStatus << """status: failed (${response?.responseEntity?.statusCode?.value}) on ${completeUrl}""".toString()
         }
         log.info(logStatus)
         return returnValue
     }
+
+
 
     /***
      * This is the underlying routine for every call to the rest backend.
@@ -673,24 +676,25 @@ class RestServerService {
         Date beforeCall = new Date()
         Date afterCall
         RestResponse response
+        String completeUrl = currentRestServer + targetUrl
         RestBuilder rest = new grails.plugins.rest.client.RestBuilder()
         StringBuilder logStatus = new StringBuilder()
         try {
-            log.info("About to attempt call to ${targetUrl}")
-            response = rest.post(currentRestServer + targetUrl) {
+            log.info("About to attempt call to ${completeUrl}")
+            response = rest.post(completeUrl) {
                 contentType "application/json"
                 json drivingJson
             }
             afterCall = new Date()
         } catch (Exception exception) {
-            log.error("NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}")
+            log.error("NOTE: exception on post to backend. Target=${completeUrl}, driving Json=${drivingJson}")
             log.error(exception.toString())
-            logStatus << "NOTE: exception on post to backend. Target=${targetUrl}, driving Json=${drivingJson}"
+            logStatus << "NOTE: exception on post to backend. Target=${completeUrl}, driving Json=${drivingJson}"
             afterCall = new Date()
         }
         logStatus << """
 SERVER POST:
-url=${currentRestServer + targetUrl},
+url=${completeUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()
@@ -709,7 +713,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             }
             logStatus << """
 FAILED CALL:
-url=${currentRestServer + targetUrl},
+url=${completeUrl},
 parm=${drivingJson},
 time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 """.toString()

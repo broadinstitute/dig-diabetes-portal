@@ -30,10 +30,27 @@ mpgSoftware.dynamicUi = (function () {
     var actionContainer =  function(actionId){
         var additionalParameters = getDyanamicUiVariables();
         switch(actionId){
-            case 47:
+            case "genesWithinRangeButtonId":
+                var chromosome = getAccumulatorObject("chromosome");
+                var startPos = getAccumulatorObject("extentBegin");
+                var endPos = getAccumulatorObject("extentEnd");
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"genesWithinRangeButtonId",
+                    retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
+                    dataForCall:{
+                        chromosome: chromosome,
+                        startPos: startPos,
+                        endPos: endPos
+                    },
+                    processEachRecord:processRecordsFromProximitySearch,
+                    displayRefinedContextFunction:displayRefinedGenesInARange,
+                    placeToDisplayData: '#dynamicGeneHolder div.dynamicUiHolder'
+                }));
+                break;
+            case "getTissuesFromEqtlsForTissuesTable":
                 var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
-                    name:"getTissuesFromEqtlButtonId",
+                    name:"getTissuesFromEqtlsForTissuesTable",
                     retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
                     dataForCall:geneNameArray,
                     processEachRecord:processRecordsFromEqtls,
@@ -41,10 +58,10 @@ mpgSoftware.dynamicUi = (function () {
                     placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
                 }));
                 break;
-            case 48:
+            case "getTissuesFromEqtlsForGenesTable":
                 var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
-                    name:"eQTL-dynamic-gene-go",
+                    name:"getTissuesFromEqtlsForGenesTable",
                     retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
                     dataForCall:geneNameArray,
                     processEachRecord:processRecordsFromEqtls,
@@ -266,7 +283,8 @@ mpgSoftware.dynamicUi = (function () {
      * Reset the chosen field in the accumulator object to its default value. If no field is specified then reset the entire
      * accumulator object to its default.
      */
-    var resetAccumulatorObject =  function(additionalParameters,specificField){
+    var resetAccumulatorObject =  function(specificField){
+        var additionalParameters = getDyanamicUiVariables();
         var filledOutSharedAccumulatorObject = sharedAccumulatorObject(additionalParameters);
         if ( typeof specificField !== 'undefined'){
             if ( typeof filledOutSharedAccumulatorObject === 'undefined'){
@@ -603,7 +621,7 @@ mpgSoftware.dynamicUi = (function () {
 
             } else if  ( typeof collectionOfRemoteCallingParameters.actionId !== 'undefined')  {
 
-                actionContainer(collectionOfRemoteCallingParameters.actionId, collectionOfRemoteCallingParameters);
+                actionContainer( collectionOfRemoteCallingParameters.actionId );
 
             }
 
@@ -659,7 +677,7 @@ mpgSoftware.dynamicUi = (function () {
          */
         var objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'genesWithinRangeButtonId', buttonName: 'proximity', description: 'present all genes overlapping  the specified region'},
-                {buttonId: 'eQTL-dynamic-gene-go', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
+                {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
                 {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'}]
         };
         $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
@@ -682,7 +700,7 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getTissuesFromEqtlButtonId', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'}]
+            directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'}]
         };
         $("#dynamicTissueHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -743,7 +761,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // pull back mouse annotations
         $('#modAnnotationButtonId').on('click', function () {
-            resetAccumulatorObject(additionalParameters,"modNameArray");
+            resetAccumulatorObject("modNameArray");
 
             retrieveRemotedContextInformation(buildRemoteContextArray ({
                 name:"modAnnotationButtonId",
@@ -757,16 +775,10 @@ mpgSoftware.dynamicUi = (function () {
         });
 
         // perform an eQTL based lookup
-        $('#eQTL-dynamic-gene-go').on('click', function () {
-
-            //retrieveRemotedContextInformation(buildRemoteContextArray ({
-            //    name:"eQTL-dynamic-gene-go",
-            //    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-            //    dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
-            //    processEachRecord:processRecordsFromEqtls,
-            //    displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
-            //    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-            //}));
+        $('#getTissuesFromEqtlsForGenesTable').on('click', function () {
+            resetAccumulatorObject("tissueNameArray");
+            resetAccumulatorObject("genesForEveryTissue");
+            resetAccumulatorObject("tissuesForEveryGene");
 
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
@@ -778,17 +790,10 @@ mpgSoftware.dynamicUi = (function () {
                         endPos: getAccumulatorObject("extentEnd")
                     },
                     processEachRecord:processRecordsFromProximitySearch,
-                    actionId: 48
+                    actionId: 'getTissuesFromEqtlsForGenesTable'
                 }));
             } else {
-                retrieveRemotedContextInformation(buildRemoteContextArray ({
-                    name:"eQTL-dynamic-gene-go",
-                    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-                    dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
-                    processEachRecord:processRecordsFromEqtls,
-                    displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
-                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-                }));
+                actionContainer('getTissuesFromEqtlsForGenesTable');
             }
 
 
@@ -799,26 +804,15 @@ mpgSoftware.dynamicUi = (function () {
         // assign the correct response to the proximity range go button
         $('#genesWithinRangeButtonId').on('click', function () {
 
-            retrieveRemotedContextInformation(buildRemoteContextArray ({
-                name:"genesWithinRangeButtonId",
-                retrieveDataUrl:additionalParameters.retrieveListOfGenesInARangeUrl,
-                dataForCall:{
-                    chromosome: getAccumulatorObject("chromosome"),
-                    startPos: getAccumulatorObject("extentBegin"),
-                    endPos: getAccumulatorObject("extentEnd")
-                },
-                processEachRecord:processRecordsFromProximitySearch,
-                displayRefinedContextFunction:displayRefinedGenesInARange,
-                placeToDisplayData: '#dynamicGeneHolder div.dynamicUiHolder'
-            }));
+            actionContainer("genesWithinRangeButtonId");
 
         });
 
 
         $('#getVariantsButtonId').on('click', function () {
 
-            resetAccumulatorObject(additionalParameters,"phenotypesForEveryVariant");
-            resetAccumulatorObject(additionalParameters,"variantsForEveryPhenotype");
+            resetAccumulatorObject("phenotypesForEveryVariant");
+            resetAccumulatorObject("variantsForEveryPhenotype");
 
             retrieveRemotedContextInformation(buildRemoteContextArray ({
                 name:"getVariantsButtonId",
@@ -836,8 +830,10 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
-        $('#getTissuesFromEqtlButtonId').on('click', function () {
-            resetAccumulatorObject(additionalParameters,"tissueNameArray");
+        $('#getTissuesFromEqtlsForTissuesTable').on('click', function () {
+            resetAccumulatorObject("tissueNameArray");
+            resetAccumulatorObject("tissuesForEveryGene");
+            resetAccumulatorObject("genesForEveryTissue");
 
 
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
@@ -850,17 +846,10 @@ mpgSoftware.dynamicUi = (function () {
                         endPos: getAccumulatorObject("extentEnd")
                     },
                     processEachRecord:processRecordsFromProximitySearch,
-                    actionId: 47
+                    actionId:"getTissuesFromEqtlsForTissuesTable"
                 }));
             } else {
-                retrieveRemotedContextInformation(buildRemoteContextArray ({
-                    name:"getTissuesFromEqtlButtonId",
-                    retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
-                    dataForCall:_.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}}),
-                    processEachRecord:processRecordsFromEqtls,
-                    displayRefinedContextFunction:displayGenesPerTissueFromEqtl,
-                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
-                }));
+                actionContainer("getTissuesFromEqtlsForTissuesTable");
 
             }
 
@@ -871,11 +860,11 @@ mpgSoftware.dynamicUi = (function () {
 
         $('#getPhenotypesFromQtlButtonId').on('click', function () {
 
-            resetAccumulatorObject(additionalParameters,"phenotypesForEveryVariant");
-            resetAccumulatorObject(additionalParameters,"variantsForEveryPhenotype");
+            resetAccumulatorObject("phenotypesForEveryVariant");
+            resetAccumulatorObject("variantsForEveryPhenotype");
 
             retrieveRemotedContextInformation(buildRemoteContextArray ({
-                name:"getTissuesFromEqtlButtonId",
+                name:"getPhenotypesFromQtlButtonId",
                 retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
                 dataForCall:{
                     chromosome: getAccumulatorObject("chromosome"),
@@ -889,7 +878,7 @@ mpgSoftware.dynamicUi = (function () {
 
         });
 
-        resetAccumulatorObject(additionalParameters);
+        resetAccumulatorObject();
 
         displayContext('#contextDescription',getAccumulatorObject());
 
@@ -906,6 +895,8 @@ mpgSoftware.dynamicUi = (function () {
         }
         setAccumulatorObject(storageField,extentBegin);
         $(spanClass).html(""+extentBegin);
+        resetAccumulatorObject("geneNameArray");
+        resetAccumulatorObject("tissueNameArray");
     };
 
     var adjustLowerExtent = function(basesToShift){
