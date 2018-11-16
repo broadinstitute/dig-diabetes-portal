@@ -623,14 +623,7 @@ button.directorButtonDetails{
                     <div class="col-sm-6">
                         <div class="contextHolder">
                             <div id="contextDescription">
-                                 %{--<ul style="margin: 0 0 0 10px">--}%
-                                     %{--<li>located on chromosome--}%
-                                        %{--<span class="dynamicUiChromosome">{{chromosome}}</span>--}%
-                                         %{--between--}%
-                                         %{--<span class="dynamicUiGeneExtentBegin">{{geneExtentBegin}}</span>--}%
-                                          %{--and--}%
-                                         %{--<span class="dynamicUiGeneExtentEnd">{{geneExtentEnd}}</span></li>--}%
-                                 %{--</ul>--}%
+
                             </div>
                         </div>
                     </div>
@@ -641,14 +634,14 @@ button.directorButtonDetails{
                          <div class="collapse" id="collapseContextRefiner">
                             <div  style="margin-top: 10px">
                                 <div class="card card-body">
-                                    <div>
-                                        <div class="row" style="border: none">
-                                           <button id="{{generalizedGoButtonId}}" class="btn btn-primary buttonsForManualContextRefinement "
-                                                type="button">Reset context</button>
-                                            <input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
-                                        </div>
-                                        <div class="row" style="border: none; margin-top: 10px">
-                                        </div>
+                                    <div id="contextControllersInDynamicUi">
+                                        %{--<div class="row" style="border: none">--}%
+                                           %{--<button id="{{generalizedGoButtonId}}" class="btn btn-primary buttonsForManualContextRefinement "--}%
+                                                %{--type="button">Reset context</button>--}%
+                                            %{--<input id="{{generalizedInputId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">--}%
+                                        %{--</div>--}%
+                                        %{--<div class="row" style="border: none; margin-top: 10px">--}%
+                                        %{--</div>--}%
                                     </div>
                                 </div>
                             </div>
@@ -768,6 +761,22 @@ button.directorButtonDetails{
         </div>
     </div>
 </script>
+
+
+<script id="contextControllerDescriptionSection"  type="x-tmpl-mustache">
+       {{#directorButtons}}
+            <div class="row" style="border: none">
+                <button id="{{buttonId}}" class="btn btn-primary buttonsForManualContextRefinement" type="button" title="{{description}}">{{buttonName}}</button>
+                <input id="{{inputBoxId}}" value="" type="text" class="form-control input-default inputForInitiatingRefinementStep">
+            </div>
+            <div class="row" style="border: none; margin-top: 10px">
+            </div>
+        {{/directorButtons}}
+</script>
+
+
+
+
 
 <script id="contextDescriptionSection"  type="x-tmpl-mustache">
  <div class="row" style="border: none">
