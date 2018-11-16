@@ -366,36 +366,35 @@
 
             /*temporary placeholder for a function to render VF sear results table.*/
 
-            function countElement(item,array) {
-                var count = 0;
-                $.each(array, function(i,v) { if (v === item) count++; });
-                return count;
-            }
-
             function renderVFSearchResult(DATA) {
+
+                $("#searchResultsHolder").html('<table id="xvariantTableResults" class="table table-striped dk-search-result dk-t2d-table no-footer" style="border-collapse: collapse; width: 100%;" role="grid" aria-describedby="xvariantTableResults_info">\n' +
+                    '    <thead></thead>\n' +
+                    '    <tbody></tbody>\n' +
+                    '</table>');
 
                 var VARIANTS = DATA["variant"]["variants"];
 
                 var VFResultTableHead = '';
                 var VFResultTableBody = '';
-                var commonAnnotations = VARIANTS[0]["common_annotation"].length;
-                var otherProperties = VARIANTS[0]["entities"].length;
 
                 var allDatasets = [];
                 var uniqueDatasets = [];
 
+                var countElement = function(item,array) {
+                    var count = 0;
+                    $.each(array, function(i,v) { if (v === item) count++; });
+                    return count;
+                }
+
 
                 $.each(VARIANTS[0]["entities"], function(index, val) {
-                    allDatasets.push(val["phenotype"] +"("+ val["dataset"]+")");
-                    uniqueDatasets.push(val["phenotype"] +"("+ val["dataset"]+")");
+                    allDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
+                    uniqueDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
                 });
-
-
-
+                
                 $.unique(uniqueDatasets);
 
-                //console.log(allDatasets);
-                //console.log(uniqueDatasets);
 
                 //render common annotations first
 
@@ -419,7 +418,7 @@
 
                 $.each(uniqueDatasets, function(index, val) {
                     $.each(VARIANTS[0]["entities"], function(index2, val2) {
-                        var datasetName = val2["phenotype"] +"("+ val2["dataset"]+")";
+                        var datasetName = val2["phenotype"] +" <span style='color:#fff'>("+ val2["dataset"]+")</span>";
                         if (datasetName == val) {
                             for (var key in val2) {
                                 if (val2.hasOwnProperty(key)) {
@@ -436,13 +435,13 @@
                 $.each(VARIANTS, function(index,val) {
 
                     VFResultTableBody += '<tr>';
-                    VFResultTableBody += '<td>' + val["common_annotation"]["CHROM"] +":" +val["common_annotation"]["POS"] + '</td>';
+                    VFResultTableBody += '<td><a href="<g:createLink controller="variantInfo" action="variantInfo" />/' + val["common_annotation"]["VAR_ID"] + '">' + val["common_annotation"]["CHROM"] +":" +val["common_annotation"]["POS"] + '</a></td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["DBSNP_ID"] + '</td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["CHROM"] + '</td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["POS"] + '</td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Reference_Allele"] + '</td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Effect_Allele"] + '</td>';
-                    VFResultTableBody += '<td>' + val["common_annotation"]["CLOSEST_GENE"] + '</td>';
+                    VFResultTableBody += '<td><a href="<g:createLink controller="gene" action="geneInfo" />/' + val["common_annotation"]["CLOSEST_GENE"] + '">' + val["common_annotation"]["CLOSEST_GENE"] + '</a></td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Protein_change"] + '</td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Consequence"] + '</td>';
 

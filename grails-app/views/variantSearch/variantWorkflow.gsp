@@ -516,10 +516,7 @@
 </div>
 
 <div class="container-fluid" style="padding: 30px;"><div id="searchResultsHolder" class="row">
-    <table id="xvariantTableResults" class="table table-striped dk-search-result dk-t2d-table no-footer" style="border-collapse: collapse; width: 100%;" role="grid" aria-describedby="xvariantTableResults_info">
-        <thead></thead>
-        <tbody></tbody>
-    </table>
+
 </div></div>
 
 </div>
