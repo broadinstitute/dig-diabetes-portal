@@ -109,6 +109,29 @@ mpgSoftware.dynamicUi = (function () {
                 }));
                 break;
 
+
+            case "getPhenotypesFromECaviarForPhenotypeTable":
+                var chromosome = getAccumulatorObject("chromosome");
+                var startPos = getAccumulatorObject("extentBegin");
+                var endPos = getAccumulatorObject("extentEnd");
+                var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"getPhenotypesFromECaviarForPhenotypeTable",
+                    retrieveDataUrl:additionalParameters.retrieveECaviarDataUrl,
+                    dataForCall:geneNameArray,
+                    // dataForCall:{
+                    //     chromosome: chromosome,
+                    //     startPos: startPos,
+                    //     endPos: endPos
+                    // },
+                    processEachRecord:processRecordsFromVariantQtlSearch,
+                    displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
+                    placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
+                }));
+                break;
+
+
+
             case "getAnnotationsFromModForGenesTable":
                 var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
@@ -132,6 +155,18 @@ mpgSoftware.dynamicUi = (function () {
                     processEachRecord:processRecordsUpdateContext,
                     displayRefinedContextFunction:displayRangeContext,
                     placeToDisplayData: '#contextDescription'
+                }));
+                break;
+
+            case "getTissuesFromAbcForGenesTable":
+                var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"getTissuesFromEqtlsForGenesTable",
+                    retrieveDataUrl:additionalParameters.retrieveAbcDataUrl,
+                    dataForCall:geneNameArray,
+                    processEachRecord:processRecordsFromEqtls,
+                    displayRefinedContextFunction:displayTissuesPerGeneFromEqtl,
+                    placeToDisplayData: '#dynamicTissueHolder div.dynamicUiHolder'
                 }));
                 break;
 
@@ -755,7 +790,8 @@ mpgSoftware.dynamicUi = (function () {
         objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity', description: 'present all genes overlapping  the specified region'},
                 {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
-                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'}]
+                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'},
+                {buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC', description: 'get a list of regions associated with a gene via ABC test'}]
         };
         $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -788,7 +824,8 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: *[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getPhenotypesFromQtlForPhenotypeTable', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'}]
+            directorButtons: [{buttonId: 'getPhenotypesFromQtlForPhenotypeTable', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'},
+                {buttonId: 'getPhenotypesFromECaviarForPhenotypeTable', buttonName: 'eCAVIAR', description: 'find all variants which co-localize with eQTLs'}]
         };
         $("#dynamicPhenotypeHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -796,17 +833,6 @@ mpgSoftware.dynamicUi = (function () {
 
     };
 
-
-    /***
-     *
-     * var prepareToRunAMethod = [{
-        name:"",
-        fieldsToClear:["aummulatorFieldName","aummulatorFieldName2"],
-        prerequisites:[{aummulatorFieldName:["methodToFillIt"]}],
-        cellAggregator:function(){}}
-     ];
-      * @type {*[]}
-     */
 
 
 
@@ -864,10 +890,16 @@ mpgSoftware.dynamicUi = (function () {
             } else {
                 actionContainer('getTissuesFromEqtlsForGenesTable');
             }
+        });
 
 
+
+        $('#getTissuesFromAbcForGenesTable').on('click', function () {
+
+            actionContainer("getTissuesFromAbcForGenesTable");
 
         });
+
 
 
         // assign the correct response to the proximity range go button
@@ -922,6 +954,18 @@ mpgSoftware.dynamicUi = (function () {
             actionContainer("getPhenotypesFromQtlForPhenotypeTable");
 
         });
+
+
+
+        $('#getPhenotypesFromECaviarForPhenotypeTable').on('click', function () {
+
+            actionContainer("getPhenotypesFromECaviarForPhenotypeTable");
+
+        });
+
+
+
+
 
         resetAccumulatorObject();
 

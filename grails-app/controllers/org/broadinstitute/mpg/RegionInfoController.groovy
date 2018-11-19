@@ -532,6 +532,136 @@ class RegionInfoController {
 
 
 
+
+
+    def retrieveAbcData() {
+        String gene = ""
+        String tissue = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherAbcData( gene, tissue, startPosition, endPosition, chromosome )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+    def retrieveECaviarData() {
+        String gene = ""
+        String tissue = ""
+        String variant = ""
+        String phenotype = ""
+        int startPosition = -1
+        int endPosition = -1
+        String chromosome = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+
+        if (params.gene) {
+            String temporaryGeneName = params.gene
+            if (temporaryGeneName.startsWith("ENSG")){
+                gene = temporaryGeneName
+            } else {
+                gene = restServerService.convertGeneCommonNameToEnsemblId(temporaryGeneName)
+            }
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variant = params.variant
+        }
+
+        if (params.phenotype) {
+            phenotype = params.variant
+        }
+
+        if (params.startPos) {
+            try {
+                startPosition = Double.parseDouble(params.startPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert startPos value=${params.startPos}")
+            }
+        }
+        if (params.endPos) {
+            try {
+                endPosition = Double.parseDouble(params.endPos).intValue()
+            } catch (Exception e) {
+                looksOkay = false
+                e.printStackTrace()
+                log.error("retrieveAbcData:failed to convert endPos value=${params.startPos}")
+            }
+        }
+
+        if (params.chromosome) {
+            chromosome = params.chromosome
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherECaviarData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
+
     def retrieveModData() {
         String gene = ""
         boolean looksOkay = true

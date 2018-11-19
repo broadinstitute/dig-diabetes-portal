@@ -50,15 +50,18 @@ class RestServerService {
     private String GET_DATA_AGGREGATION_URL = "getAggregatedData"
     private String GET_TEMPORARY_EQTL_URL = "http://ec2-34-237-63-26.compute-1.amazonaws.com:8083/dccgraph/"
     private String GET_TEMPORARY_MODS_URL = "http://ec2-34-229-106-174.compute-1.amazonaws.com:8090/dccservices/"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
-    private String  GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
-    private String  GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
-    private String  GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
-    private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
-    private String  GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
-    private String  GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
+    private String GET_DATA_AGGREGATION_BY_RANGE_URL= "getAggregatedData"
+    private String GET_DATA_AGGREGATION_BY_RANGE_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String GET_DATA_AGGREGATION_BY_RANGE_PHENOTYPES_URL= "getAggregatedData/phenotypes"
+    private String GET_DATA_AGGREGATION_BY_RANGE_VARIANTS_URL= "getAggregatedData/variants"
+    private String GET_DATA_AGGREGATION_PHEWAS_URL= "getAggregatedData/PheWAS"
+    private String GET_BOTTOM_LINE_VARIANTS_URL= "gene/common"
+    private String GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
+    private String GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
+    private String GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
+    private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
+    private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
+    private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2283,13 +2286,72 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if ((tissue) && (tissue.length() > 0)) {
             specifyRequestList << "tissue=${tissue}"
         }
-        String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        String rawReturnFromApi =  getRestCallBase("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        //String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
         return jsonArray
     }
 
 
+    public JSONArray gatherAbcData( String gene, String tissue,
+                                     int  startPosition, int  endPosition, String chromosome ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${tissue}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_REGION_FROM_ABC_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        return jsonArray
+    }
+
+
+    public JSONArray gatherECaviarData( String gene, String tissue,
+                                         String variant, String phenotype,
+                                         int  startPosition, int  endPosition, String chromosome ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "variant=${variant}"
+        }
+
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${tissue}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        return jsonArray
+    }
 
 
     public JSONObject gatherModsData( String gene ) {
@@ -2518,18 +2580,38 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public Map gatherBottomLineVariantsPerGene( String gene ) {
-        JsonSlurper slurper = new JsonSlurper()
+    public String convertGeneCommonNameToEnsemblId( String gene ) {
+        String returnValue = ""
 
-        Map retval = [:]
+        JsonSlurper slurper = new JsonSlurper()
 
         String combinedCommonNameUrl = GET_BOTTOM_LINE_VARIANTS_URL +"?id=" +gene
 
         String  retrieveGeneIdJsonAsString = getRestCall(combinedCommonNameUrl)
 
         List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
-        if (retrieveGeneIdArray[0]){
-            String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" +(retrieveGeneIdArray[0]["GEN_ID"] as String)
+        if (retrieveGeneIdArray.size()>0){
+
+            returnValue = (retrieveGeneIdArray[0]["GEN_ID"] as String)
+
+        } else {
+            log.error("Problem:  we have an unrecognized gene common name == '${gene}'")
+        }
+        return returnValue
+    }
+
+
+
+
+    public Map gatherBottomLineVariantsPerGene( String gene ) {
+        JsonSlurper slurper = new JsonSlurper()
+
+        Map retval = [:]
+
+        String ensemblId = convertGeneCommonNameToEnsemblId(gene)
+
+        if (ensemblId){
+            String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" + ensemblId
 
             String  retrieveTissueExpressionInformationJsonAsString = getRestCall(combinedEnsemblNameUrl)
 
@@ -2542,6 +2624,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     }
+
+
 
 
 
