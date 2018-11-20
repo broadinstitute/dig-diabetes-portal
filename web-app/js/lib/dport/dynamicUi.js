@@ -130,6 +130,18 @@ mpgSoftware.dynamicUi = (function () {
                 }));
                 break;
 
+            case "getPhenotypesFromECaviarForTissueTable":
+                var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"getPhenotypesFromECaviarForPhenotypeTable",
+                    retrieveDataUrl:additionalParameters.retrieveECaviarDataUrl,
+                    dataForCall:geneNameArray,
+                    processEachRecord:processRecordsFromColocalization,
+                    displayRefinedContextFunction:displayTissuesFromColocalization,
+                    placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
+                }));
+                break;
+
 
 
             case "getAnnotationsFromModForGenesTable":
@@ -468,6 +480,39 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+    var displayTissuesFromColocalization = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = createNewDisplayReturnObject();
+
+        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"),'tissue'),function(value,tissueName){
+            var tissueObject = {tissueName:tissueName};
+            tissueObject['phenotypes'] = _.map(_.uniqBy(value,'phenotype'),function(o){return o.phenotype}).sort();
+            tissueObject['genes'] = _.map(_.uniqBy(value,'gene'),function(o){return o.gene}).sort();
+            tissueObject['varId'] = _.map(_.uniqBy(value,'var_id'),function(o){return o.var_id}).sort();
+            returnObject.phenotypesByColocalization.push(tissueObject);
+            returnObject.uniqueTissues.push({tissueName:tissueName});
+        });
+
+        returnObject['phenotypeColocsExist'] = function(){
+            return (this.phenotypesByColocalization.length>0)?[1]:[];
+        };
+        returnObject['numberOfTissues'] = function(){
+            return (this.tissues.length);
+        };
+        returnObject['numberOfPhenotypes'] = function(){
+            return (this.phenotypes.length);
+        };
+        returnObject['numberOfGenes'] = function(){
+            return (this.genes.length);
+        };
+        returnObject['numberOfVariants'] = function(){
+            return (this.varId.length);
+        };
+
+
+        $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationTissueTable')[0].innerHTML,
+            returnObject
+        ));
+    };
 
 
 
@@ -876,7 +921,8 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'}]
+            directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'},
+                {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar', description: 'find all tissues for which co-localized variants exist'}]
         };
         $("#dynamicTissueHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1023,6 +1069,12 @@ mpgSoftware.dynamicUi = (function () {
         $('#getPhenotypesFromECaviarForPhenotypeTable').on('click', function () {
 
             actionContainer("getPhenotypesFromECaviarForPhenotypeTable");
+
+        });
+
+        $('#getPhenotypesFromECaviarForTissueTable').on('click', function () {
+
+            actionContainer("getPhenotypesFromECaviarForTissueTable");
 
         });
 

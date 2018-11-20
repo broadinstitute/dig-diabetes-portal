@@ -1079,6 +1079,64 @@ div.holdMultipleElements{
 </script>
 
 
+
+
+
+<script id="dynamicColocalizationTissueTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#phenotypesExist}}
+    <tr>
+        <th  scope="row">Tissues</th>
+        {{/phenotypesExist}}
+        {{#uniquePhenotypes}}
+            <th  scope="col">{{phenotypeName}}</th>
+        {{/uniquePhenotypes}}
+        {{#phenotypesExist}}
+    </tr>
+    {{/phenotypesExist}}
+
+    {{#phenotypeColocsExist}}
+    <tr>
+        <th  scope="row">Variants</th>
+        {{/phenotypeColocsExist}}
+        {{#phenotypesByColocalization}}
+            <td >
+            <div><a data-toggle="collapse" data-target="#tissues_{{tissueName}}">phenotypes={{numberOfPhenotypes}}</a>
+               <div  class="collapse holdMultipleElements" id="tissues_{{tissueName}}">
+                    {{#phenotypes}}
+                       <div>{{.}}</div>
+                    {{/phenotypes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+               <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
+                    {{#genes}}
+                       <div>{{.}}</div>
+                    {{/genes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" data-target="#varId_{{tissueName}}">variants={{numberOfVariants}}</a>
+               <div  class="collapse holdMultipleElements" id="varId_{{tissueName}}">
+                    {{#varId}}
+                       <div>{{.}}</div>
+                    {{/varId}}
+               </div>
+            </div>
+            </td>
+        {{/phenotypesByColocalization}}
+        {{#phenotypeColocsExist}}
+    </tr>
+    {{/phenotypeColocsExist}}
+
+
+    </table>
+</script>
+
+
+
+
+
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>
