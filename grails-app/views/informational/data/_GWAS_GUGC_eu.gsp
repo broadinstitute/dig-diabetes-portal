@@ -41,7 +41,7 @@
 <tr><td>3,837</td><td>Family Heart Study (FamHS)</td><td>European</td></tr>
 <tr><td>7,699</td><td>The Framingham Heart Study (FHS)</td><td>European</td></tr>
 <tr><td>2,069</td><td>Health 2000</td><td>European</td></tr>
-<tr><td>1,205</td><td>InCHIANTI</td><td>European</td></tr>
+<tr><td>1,205</td><td>Invecchiare in Chianti (InCHIANTI)</td><td>European</td></tr>
 <tr><td>940</td><td>INCIPE</td><td>European</td></tr>
 <tr><td>432</td><td>INGI-Carlantino</td><td>European</td></tr>
 <tr><td>859</td><td>INGI-CILENTO</td><td>European</td></tr>
