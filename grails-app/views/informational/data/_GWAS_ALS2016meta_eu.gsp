@@ -1,4 +1,4 @@
-<script class="panel-body" id="GWAS_ALS2016meta_script" type="x-tmpl-mustache">
+<script class="panel-body" id="GWAS_ALS2016meta_eu_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 

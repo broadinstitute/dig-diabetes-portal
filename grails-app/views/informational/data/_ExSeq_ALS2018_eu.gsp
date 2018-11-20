@@ -1,4 +1,4 @@
-<script class="panel-body" id="ExSeq_ALS2018_script" type="x-tmpl-mustache">
+<script class="panel-body" id="ExSeq_ALS2018_eu_script" type="x-tmpl-mustache">
 
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
