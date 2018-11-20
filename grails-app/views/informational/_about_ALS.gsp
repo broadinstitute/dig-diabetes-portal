@@ -81,7 +81,9 @@ padding-left: 15px;
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_ALSData.header"/></h3>
-                <p><g:message code="informational.about_sleep.section1"/></p>
+                <p><g:message code="informational.about_ALSData.section1"/></p>
+                <p><g:message code="informational.about_ALSData.section2"/></p>
+                <p><g:message code="informational.about_ALSData.section3"/></p>
 
                 <h3 class="dk-blue-bordered"><g:message code="informational.about_KP.header"/></h3>
                 <p><g:message code="informational.about_MI.section5"/></p>
