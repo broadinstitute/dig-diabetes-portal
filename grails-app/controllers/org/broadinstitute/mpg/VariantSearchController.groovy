@@ -335,7 +335,7 @@ class VariantSearchController {
                 return
             }
         }
-        forward controller:"home", action:"portalHome", params:[errorText:"No record for gene=${geneName}.  Please try different gene"]
+        forward controller:"home", action:"portalHome", params:[errorText:"No record for gene=${geneName}.  Please try a different gene name."]
         return
     }
 
