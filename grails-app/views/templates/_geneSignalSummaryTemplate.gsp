@@ -12,6 +12,9 @@ div.directorButtonHolder{
 button.directorButtonDetails{
     margin: 5px;
 }
+div.holdMultipleElements{
+    padding: 4px 0 2px 10px;
+}
 </style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
@@ -1016,6 +1019,60 @@ button.directorButtonDetails{
         {{#phenotypeVariantsExist}}
     </tr>
     {{/phenotypeVariantsExist}}
+
+
+    </table>
+</script>
+
+
+
+
+<script id="dynamicColocalizationPhenotypeTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#phenotypesExist}}
+    <tr>
+        <th  scope="row">Phenotypes</th>
+        {{/phenotypesExist}}
+        {{#uniquePhenotypes}}
+            <th  scope="col">{{phenotypeName}}</th>
+        {{/uniquePhenotypes}}
+        {{#phenotypesExist}}
+    </tr>
+    {{/phenotypesExist}}
+
+    {{#phenotypeColocsExist}}
+    <tr>
+        <th  scope="row">Variants</th>
+        {{/phenotypeColocsExist}}
+        {{#phenotypesByColocalization}}
+            <td >
+            <div><a data-toggle="collapse" data-target="#tissues_{{phenotypeName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements" id="tissues_{{phenotypeName}}">
+                    {{#tissues}}
+                       <div>{{.}}</div>
+                    {{/tissues}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" data-target="#genes_{{phenotypeName}}">genes={{numberOfGenes}}</a>
+               <div  class="collapse holdMultipleElements" id="genes_{{phenotypeName}}">
+                    {{#genes}}
+                       <div>{{.}}</div>
+                    {{/genes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" data-target="#varId_{{phenotypeName}}">variants={{numberOfVariants}}</a>
+               <div  class="collapse holdMultipleElements" id="varId_{{phenotypeName}}">
+                    {{#varId}}
+                       <div>{{.}}</div>
+                    {{/varId}}
+               </div>
+            </div>
+            </td>
+        {{/phenotypesByColocalization}}
+        {{#phenotypeColocsExist}}
+    </tr>
+    {{/phenotypeColocsExist}}
 
 
     </table>

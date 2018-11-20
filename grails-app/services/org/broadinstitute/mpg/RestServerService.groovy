@@ -2580,7 +2580,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public String convertGeneCommonNameToEnsemblId( String gene ) {
+    public String convertGeneCommonNameToEnsemblId( String gene, boolean removeTrailingDot ) {
         String returnValue = ""
 
         JsonSlurper slurper = new JsonSlurper()
@@ -2592,7 +2592,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
         if (retrieveGeneIdArray.size()>0){
 
-            returnValue = (retrieveGeneIdArray[0]["GEN_ID"] as String)
+            String unmodifiedReturn = (retrieveGeneIdArray[0]["GEN_ID"] as String)
+            if (removeTrailingDot){
+                returnValue = unmodifiedReturn - ~/\.([^\.]+)$/
+            } else {
+                returnValue = unmodifiedReturn
+            }
+
 
         } else {
             log.error("Problem:  we have an unrecognized gene common name == '${gene}'")
@@ -2608,7 +2614,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         Map retval = [:]
 
-        String ensemblId = convertGeneCommonNameToEnsemblId(gene)
+        String ensemblId = convertGeneCommonNameToEnsemblId(gene,false)
 
         if (ensemblId){
             String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" + ensemblId

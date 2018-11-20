@@ -606,7 +606,7 @@ class RegionInfoController {
             if (temporaryGeneName.startsWith("ENSG")){
                 gene = temporaryGeneName
             } else {
-                gene = restServerService.convertGeneCommonNameToEnsemblId(temporaryGeneName)
+                gene = restServerService.convertGeneCommonNameToEnsemblId(temporaryGeneName,true)
             }
         }
 

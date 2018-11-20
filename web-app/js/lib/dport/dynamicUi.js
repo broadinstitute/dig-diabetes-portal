@@ -124,8 +124,8 @@ mpgSoftware.dynamicUi = (function () {
                     //     startPos: startPos,
                     //     endPos: endPos
                     // },
-                    processEachRecord:processRecordsFromVariantQtlSearch,
-                    displayRefinedContextFunction:displayPhenotypeRecordsFromVariantQtlSearch,
+                    processEachRecord:processRecordsFromColocalization,//TODO
+                    displayRefinedContextFunction:displayPhenotypesFromColocalization,
                     placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
                 }));
                 break;
@@ -290,6 +290,7 @@ mpgSoftware.dynamicUi = (function () {
             variantPhenotypeQtl:[],
             phenotypeVariantQtl:[],
             geneModTerms:[],
+            phenotypesByColocalization:[],
             genesPositionsExist:function(){
                 return (this.genePositions.length>0)?[1]:[];
             },
@@ -345,7 +346,8 @@ mpgSoftware.dynamicUi = (function () {
             modNameArray:[],
             mods:[],
             phenotypesForEveryVariant:[],
-            variantsForEveryPhenotype:[]
+            variantsForEveryPhenotype:[],
+            rawColocalizationInfo:[]
         };
     };
 
@@ -409,6 +411,67 @@ mpgSoftware.dynamicUi = (function () {
         }
         return returnValue;
     }
+
+
+
+
+
+
+
+    var processRecordsFromColocalization = function (data){
+        // build up an object to describe this
+        var returnObject = {rawData:[]
+        };
+
+        var rawColocalizationInfo = getAccumulatorObject('rawColocalizationInfo');
+
+        _.forEach(data,function(oneRec){
+
+            rawColocalizationInfo.push(oneRec);
+
+        });
+
+        return rawColocalizationInfo;
+    };
+
+    var displayPhenotypesFromColocalization = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = createNewDisplayReturnObject();
+
+        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"),'phenotype'),function(value,phenotypeName){
+            var phenotypeObject = {phenotypeName:phenotypeName};
+            phenotypeObject['tissues'] = _.map(_.uniqBy(value,'tissue'),function(o){return o.tissue}).sort();
+            phenotypeObject['genes'] = _.map(_.uniqBy(value,'gene'),function(o){return o.gene}).sort();
+            phenotypeObject['varId'] = _.map(_.uniqBy(value,'var_id'),function(o){return o.var_id}).sort();
+            returnObject.phenotypesByColocalization.push(phenotypeObject);
+            returnObject.uniquePhenotypes.push({phenotypeName:phenotypeName});
+        });
+
+        returnObject['phenotypeColocsExist'] = function(){
+            return (this.phenotypesByColocalization.length>0)?[1]:[];
+        };
+        returnObject['numberOfTissues'] = function(){
+            return (this.tissues.length);
+        };
+        returnObject['numberOfGenes'] = function(){
+            return (this.genes.length);
+        };
+        returnObject['numberOfVariants'] = function(){
+            return (this.varId.length);
+        };
+
+
+        $("#dynamicPhenotypeHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationPhenotypeTable')[0].innerHTML,
+            returnObject
+        ));
+    };
+
+
+
+
+
+
+
+
 
 
 
