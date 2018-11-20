@@ -72,9 +72,9 @@
 <g:render template="./data/GWAS_AGEN_ea" />
 <g:render template="./data/GWAS_DCSP2_ea" />
 <g:render template="./data/ExSeq_52k" />
-<g:render template="./data/GWAS_ALS2016lmm" />
-<g:render template="./data/GWAS_ALS2016meta" />
-<g:render template="./data/ExSeq_ALS2018" />
+<g:render template="./data/GWAS_ALS2016lmm_eu" />
+<g:render template="./data/GWAS_ALS2016meta_eu" />
+<g:render template="./data/ExSeq_ALS2018_eu" />
 
 
 
