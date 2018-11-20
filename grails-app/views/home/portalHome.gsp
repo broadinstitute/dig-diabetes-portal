@@ -411,6 +411,9 @@
                     <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
                         <g:message code="portal.sleep.use.citation.itself" />
                     </g:elseif>
+                    <g:elseif test="${g.portalTypeString()?.equals('als')}">
+                        <g:message code="portal.als.use.citation.itself" />
+                    </g:elseif>
                         <g:else></g:else>
                     </p>
                 </div>
@@ -430,6 +433,17 @@
                </div>
 
             </g:if>
+
+            <g:elseif test="${g.portalTypeString()?.equals('als')}">
+                <div style="position:absolute; top: 25px; right:-40px; ">
+                    <p style="margin-bottom:3px;">
+                        <a href="mailto:help@alskp.org">
+                            <img style="width:30px; height:30px;" src="${resource(dir:'images/icons', file:'email_update.svg')}" />
+                        </a>
+                    </p>
+                </div>
+
+            </g:elseif>
 
             <g:elseif test="${g.portalTypeString()?.equals('stroke')}">
                 <div style="position:absolute; top: 25px; right:-40px; ">
