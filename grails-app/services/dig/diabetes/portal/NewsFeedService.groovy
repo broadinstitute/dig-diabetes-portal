@@ -32,6 +32,7 @@ class NewsFeedService {
 //            mi: '3944203828206499294',
 //            ibd: '7857348124942584918',
 //            stroke: '7961982646849648720'
+//            ALS: '2854182648437419920'
 //    ]
     // the last time the posts were successfully retrieved
     private JSONObject postsLastUpdatedAt = new JSONObject()
