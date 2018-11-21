@@ -253,7 +253,10 @@
             Tutorials will go here.
         </g:elseif>
         <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
-            <a class="media" href="${links.SDKPPhenotypeGuide}">PDF File</a>
+        <a class="media" href="${links.SDKPPhenotypeGuide}">PDF File</a>
+    </g:elseif>
+        <g:elseif test="${g.portalTypeString()?.equals('als')}">
+            <a class="media" href="${links.GeneticsGuide}">PDF File</a>
         </g:elseif>
         <g:else>
             <a class="media" href="${links.strokeIntroTutorial}">PDF File</a>

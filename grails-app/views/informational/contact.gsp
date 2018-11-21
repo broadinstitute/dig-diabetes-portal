@@ -138,12 +138,11 @@
     <div class="col-md-8 col-md-offset-2">
         <h4 class="dk-blue-bordered"><g:message code="informational.contact.als.header1"></g:message></h4>
 
-
-        <p><g:message code="informational.contact.MI-1"></g:message></p>
         <p><g:message code="informational.contact.MI-2"></g:message></p>
+        <p><g:message code="informational.contact.als-1"></g:message></p>
         <h4 class="dk-blue-bordered"><g:message code="informational.contact.MI.header2"></g:message></h4>
-        
 
+        <table class="dk-team-list"><g:message code="contact.als.team.list"></g:message></table>
     </div>
 
 </g:elseif>
