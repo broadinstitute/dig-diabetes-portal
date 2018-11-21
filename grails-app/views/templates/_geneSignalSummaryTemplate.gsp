@@ -1043,7 +1043,7 @@ div.holdMultipleElements{
 
     {{#phenotypeColocsExist}}
     <tr>
-        <th  scope="row">Variants</th>
+        <th  scope="row">For each phenotype</th>
         {{/phenotypeColocsExist}}
         {{#phenotypesByColocalization}}
             <td >
@@ -1080,25 +1080,77 @@ div.holdMultipleElements{
 
 
 
+<script id="dynamicColocalizationGeneTable"  type="x-tmpl-mustache">
+
+    <table  class="table">
+    {{#colocsExist}}
+    <tr>
+        <th  scope="row">Phenotypes</th>
+        {{/colocsExist}}
+        {{#phenotypesByColocalization}}
+            <th  scope="col">{{geneName}}</th>
+        {{/phenotypesByColocalization}}
+        {{#colocsExist}}
+    </tr>
+    {{/colocsExist}}
+
+    {{#colocsExist}}
+    <tr>
+        <th  scope="row">For each phenotype</th>
+        {{/colocsExist}}
+        {{#phenotypesByColocalization}}
+            <td >
+            <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements" id="tissues_{{geneName}}">
+                    {{#tissues}}
+                       <div>{{.}}</div>
+                    {{/tissues}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" data-target="#phenotypes_{{geneName}}">phenotypes={{numberOfPhenotypes}}</a>
+               <div  class="collapse holdMultipleElements" id="phenotypes_{{geneName}}">
+                    {{#phenotypes}}
+                       <div>{{.}}</div>
+                    {{/phenotypes}}
+               </div>
+            </div>
+            <div><a data-toggle="collapse" data-target="#varId_{{geneName}}">variants={{numberOfVariants}}</a>
+               <div  class="collapse holdMultipleElements" id="varId_{{geneName}}">
+                    {{#varId}}
+                       <div>{{.}}</div>
+                    {{/varId}}
+               </div>
+            </div>
+            </td>
+        {{/phenotypesByColocalization}}
+        {{#colocsExist}}
+    </tr>
+    {{/colocsExist}}
+
+
+    </table>
+</script>
+
+
 
 
 <script id="dynamicColocalizationTissueTable"  type="x-tmpl-mustache">
 
     <table  class="table">
-    {{#phenotypesExist}}
+    {{#colocsTissuesExist}}
     <tr>
         <th  scope="row">Tissues</th>
-        {{/phenotypesExist}}
-        {{#uniquePhenotypes}}
-            <th  scope="col">{{phenotypeName}}</th>
-        {{/uniquePhenotypes}}
-        {{#phenotypesExist}}
+        {{/colocsTissuesExist}}
+        {{#phenotypesByColocalization}}
+            <th  scope="col">{{tissueName}}</th>
+        {{/phenotypesByColocalization}}
+        {{#colocsTissuesExist}}
     </tr>
-    {{/phenotypesExist}}
+    {{/colocsTissuesExist}}
 
     {{#phenotypeColocsExist}}
     <tr>
-        <th  scope="row">Variants</th>
+        <th  scope="row">For each tissue</th>
         {{/phenotypeColocsExist}}
         {{#phenotypesByColocalization}}
             <td >

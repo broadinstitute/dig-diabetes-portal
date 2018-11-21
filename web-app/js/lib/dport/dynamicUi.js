@@ -142,6 +142,18 @@ mpgSoftware.dynamicUi = (function () {
                 }));
                 break;
 
+            case "getRecordsFromECaviarForGeneTable":
+                var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                retrieveRemotedContextInformation(buildRemoteContextArray ({
+                    name:"getRecordsFromECaviarForGeneTable",
+                    retrieveDataUrl:additionalParameters.retrieveECaviarDataUrl,
+                    dataForCall:geneNameArray,
+                    processEachRecord:processRecordsFromColocalization,
+                    displayRefinedContextFunction:displayGenesFromColocalization,
+                    placeToDisplayData: '#dynamicPhenotypeHolder div.dynamicUiHolder'
+                }));
+                break;
+
 
 
             case "getAnnotationsFromModForGenesTable":
@@ -491,6 +503,9 @@ mpgSoftware.dynamicUi = (function () {
             returnObject.phenotypesByColocalization.push(tissueObject);
             returnObject.uniqueTissues.push({tissueName:tissueName});
         });
+        returnObject['colocsTissuesExist'] = function(){
+            return (this.phenotypesByColocalization.length>0)?[1]:[];
+        };
 
         returnObject['phenotypeColocsExist'] = function(){
             return (this.phenotypesByColocalization.length>0)?[1]:[];
@@ -514,6 +529,45 @@ mpgSoftware.dynamicUi = (function () {
         ));
     };
 
+
+
+
+
+    var displayGenesFromColocalization = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = createNewDisplayReturnObject();
+
+        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"),'gene'),function(value,geneName){
+            var geneObject = {geneName:geneName};
+            geneObject['phenotypes'] = _.map(_.uniqBy(value,'phenotype'),function(o){return o.phenotype}).sort();
+            geneObject['tissues'] = _.map(_.uniqBy(value,'tissue'),function(o){return o.tissue}).sort();
+            geneObject['varId'] = _.map(_.uniqBy(value,'var_id'),function(o){return o.var_id}).sort();
+            returnObject.phenotypesByColocalization.push(geneObject);
+        });
+        returnObject['colocsExist'] = function(){
+            return (this.phenotypesByColocalization.length>0)?[1]:[];
+        };
+
+        returnObject['phenotypeColocsExist'] = function(){
+            return (this.phenotypesByColocalization.length>0)?[1]:[];
+        };
+        returnObject['numberOfTissues'] = function(){
+            return (this.tissues.length);
+        };
+        returnObject['numberOfPhenotypes'] = function(){
+            return (this.phenotypes.length);
+        };
+        returnObject['numberOfGenes'] = function(){
+            return (this.genes.length);
+        };
+        returnObject['numberOfVariants'] = function(){
+            return (this.varId.length);
+        };
+
+
+        $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationGeneTable')[0].innerHTML,
+            returnObject
+        ));
+    };
 
 
 
@@ -899,7 +953,8 @@ mpgSoftware.dynamicUi = (function () {
             directorButtons: [{buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity', description: 'present all genes overlapping  the specified region'},
                 {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
                 {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'},
-                {buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC', description: 'get a list of regions associated with a gene via ABC test'}]
+                {buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC', description: 'get a list of regions associated with a gene via ABC test'},
+                {buttonId: 'getRecordsFromECaviarForGeneTable', buttonName: 'eCaviar', description: 'find all genes for which co-localized variants exist'}]
         };
         $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1077,6 +1132,16 @@ mpgSoftware.dynamicUi = (function () {
             actionContainer("getPhenotypesFromECaviarForTissueTable");
 
         });
+
+
+
+        $('#getRecordsFromECaviarForGeneTable').on('click', function () {
+
+            actionContainer("getRecordsFromECaviarForGeneTable");
+
+        });
+
+
 
 
 
