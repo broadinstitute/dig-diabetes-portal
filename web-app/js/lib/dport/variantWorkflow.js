@@ -282,32 +282,6 @@ var mpgSoftware = mpgSoftware || {};
             }
         };
 
-        var launchAVariantSearch = function () {
-            // process the queries to remove fields the server won't use
-            var listOfProcessedQueries = [];
-            _.each(listOfSavedQueries, function (query) {
-                var keysToOmit = [
-                    'translatedPhenotype',
-                    'translatedName',
-                    'translatedDataset'
-                ];
-                listOfProcessedQueries.push(_.omit(query, keysToOmit));
-            });
-
-
-           var datasetName = listOfProcessedQueries[0].dataset;
-           var phenotypeName = listOfProcessedQueries[0].phenotype;
-           var property = listOfProcessedQueries[0].prop;
-           var propertyValue = listOfProcessedQueries[0].value;
-
-         
-            var encodedListOfQueries = encodeURIComponent(JSON.stringify(listOfProcessedQueries));
-            window.location = './launchAVariantSearch/?filters=' + encodedListOfQueries
-
-        };
-
-
-        //make a function
 
         var variantFinderGetData = function () {
             var coreVariables = mpgSoftware.variantWF.getMySavedVariables();
@@ -320,22 +294,12 @@ var mpgSoftware = mpgSoftware || {};
                 ];
                 listOfProcessedQueries.push(_.omit(query, keysToOmit));
             });
-
-
-            var datasetName = listOfProcessedQueries[0].dataset;
-            var phenotypeName = listOfProcessedQueries[0].phenotype;
-            var property = listOfProcessedQueries[0].prop;
-            var propertyValue = listOfProcessedQueries[0].value;
-
-
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
-               // url: coreVariables.variantFinderGetDataUrl,
                 url: "./ajaxVariantFinderGetData",
-                // data: {'data': JSON.stringify(listOfProcessedQueries)},
-                data:{phenotype: phenotypeName, dataset: datasetName,pValue: propertyValue},
+                data: {'data': JSON.stringify(listOfProcessedQueries)},
                 async: true,
                 success: function (data) {
                     loading.hide();
@@ -393,12 +357,12 @@ var mpgSoftware = mpgSoftware || {};
                             translatedPhenotype: translatedPhenotype,
                             dataset: dataset,
                             translatedDataset: translatedDataset,
-                            prop: input.dataset.prop,
+                            operand: input.dataset.prop,
                             translatedName: input.dataset.translatedname,
                             // this parsing/toStringing is because the backend doesn't
                             // like decimal values without leading zeros
-                            value: parseFloat(input.value).toString(),
-                            comparator: comparator
+                            value: parseFloat(input.value),
+                            operator: comparator
                         };
                         listOfSavedQueries.push(newQuery);
                     }
@@ -728,7 +692,6 @@ var mpgSoftware = mpgSoftware || {};
             fillDatasetDropdown: fillDatasetDropdown,
             variantFinderGetData: variantFinderGetData,
             fillPropertiesDropdown: fillPropertiesDropdown,
-            launchAVariantSearch: launchAVariantSearch,
             retrievePhenotypes: retrievePhenotypes,
             retrievePhenotypeIndependentDatasets: retrievePhenotypeIndependentDatasets,
             retrieveDatasets: retrieveDatasets,

@@ -1,6 +1,5 @@
 package org.broadinstitute.mpg
 
-import com.google.gson.JsonObject
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
@@ -2119,54 +2118,30 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JsonSlurper slurper = new JsonSlurper()
 
         JSONObject apiResults = this.getClumpDataRestCall(phenotype, dataSetName,r2)
-
-
         String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
-
         JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
 
         return dataJsonObject
     }
 
-//    /***
-//     * Gather up the data that is used in the variant finder tool
-//     *
-//     * @param phenotype
-//     * @param dataSetName
-//     * @param pValue
-//
-//     */
-//
-//    public JSONObject getVariantFinderSpecificData(List inputListOfMap){
-//        JSONObject returnValue
-//        JsonSlurper slurper
-//
-//        JSONObject apiresults = this.variantFinderGetDataRestCall(inputListOfMap)
-//
-//        String jsonParsedFromApi = processInfoFromGetDataCall(apiresults, "", ",\n\"dataset\":\"${datasetName}\"", MetaDataService.METADATA_VARIANT)
-//
-//        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
-//
-//        return dataJsonObject
-//
-//    }
-
     /***
      * Gather up the data that is used in the variant finder tool
      *
-     * @param phenotype
-     * @param dataSetName
-     * @param pValue
-
+     * @param listOfMap
      */
+    public JSONObject getVariantFinderSpecificData(JSONArray inputListOfMap) {
+        JSONObject apiResults = this.variantFinderGetDataRestCall(inputListOfMap)
+        JSONObject resultObject = this.processInfoFromGetDataRestCall(apiResults)
 
-    public JSONObject getVariantFinderSpecificData(String phenotype, String dataset, String pValue){
-        JSONObject apiresults = this.variantFinderGetDataRestCall(phenotype, dataset, pValue)
-        JSONObject processedGetData = processInfoFromGetData(apiresults)
-        return processedGetData
+        return resultObject
     }
 
-    public JSONObject processInfoFromGetData(JSONObject apiResults) {
+/***
+ * Process the data after getData rest API call
+ *
+ * @param apiResults
+ */
+    public JSONObject processInfoFromGetDataRestCall(JSONObject apiResults) {
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
         JSONObject resultObject = new JSONObject();
         if (!apiResults["is_error"]) {
@@ -2201,7 +2176,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                             Object valueOfMap = value.get(keyOfMap);
                             //get the translated name of the dataset
                             String translatedDatasetName = g.message(code: 'metadata.' + keyOfMap, default: keyOfMap);
-                          //  keyOfMap = translatedDatasetName
                             entitiesMap.put("dataset",translatedDatasetName)
                             Iterator<String> nextkeysItr = valueOfMap.keys();
                             while (nextkeysItr.hasNext()) {
@@ -2209,7 +2183,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                 Object nextvalueOfMap = value.get(keyOfMap).get(nextkeyOfMap);
                                 //get the translated name of phenotype
                                 String translatedPhenotypeName = g.message(code: 'metadata.' + nextkeyOfMap, default: nextkeyOfMap);
-                                //nextkeyOfMap = translatedPhenotypeName
                                 entitiesMap.put("phenotype", translatedPhenotypeName)
                                 entitiesMap.put(keys[l],nextvalueOfMap)
                             }
@@ -2225,7 +2198,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return resultObject
     }
-
 
 
     public JSONObject gatherSpecificTraitsPerVariantResults( String variantName, List<LinkedHashMap<String,String>> propsToUse) {
@@ -3084,62 +3056,116 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
  */
        String clumpDataJsonPayloadString = """ {"phenotype": "${phenotype}","dataset": "${datasetName}", "r2": "${r2}",
                                                     "pagination":{"size":5000,"offset":0},"p_valueThreshold":1.0 } """.toString()
-
         JSONObject VectorDataJson = this.postClumpDataRestCall(clumpDataJsonPayloadString);
-
 
         return VectorDataJson;
     }
 
+    public List<Map<String,Object>> getFilterList(JSONArray listOfInputMap){
+        List listOfFilterMaps = []
+        for(int i = 0;i<listOfInputMap.length();i++){
+            Map<String, Object> eachFilter = new HashMap<String, Object>();
+            for(int j=0;j<listOfInputMap[i].values().size();j++){
+                eachFilter.put(listOfInputMap[i].keys()[j].toString(),listOfInputMap[i].values()[j])
+                eachFilter.put("operand_type",listOfInputMap[i]['value'].getClass().getSimpleName())
+            }
+            listOfFilterMaps.add(new JSONObject(eachFilter))
+        }
 
-    public String generateGetDataJsonInput(List listOfInputMap){
+        return listOfFilterMaps
+    }
+
+    public Map<String,Map> getPproperties(JSONArray listOfInputMap){
+        Map <String,Object> pPropertyMap = new HashMap<>()
+        List listOfEntityPropertyMap = []
+        Map<String,Map> annotationMap = new HashMap<>()
+        Map<String, List> datasetPhenotypeMap = new HashMap<>()
+        List<String> phenotypeList = []
+        for (int i = 0;i<listOfInputMap.length();i++){
+            phenotypeList.add(listOfInputMap[i]['phenotype'].toString())
+            datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
+            for(int j = 1;j<listOfInputMap.length();j++){
+                //check if two annotations are same in two different maps
+                if(listOfInputMap[i]['operand'] == listOfInputMap[j]['operand']){
+                    //if yes then club them together into annotation map where key would be dataset and value would be list of phenotype
+                 //   List<String> phenotypeList = []
+                    if(listOfInputMap[i]['dataset'] == listOfInputMap[j]['dataset']){
+                        phenotypeList.add(listOfInputMap[j]['phenotype'].toString())
+                        //update the value of the key added above
+                        datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
+                    }
+                    else{
+                        phenotypeList.add(listOfInputMap[i]['phenotype'].toString())
+                    }
+                    datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
+                    annotationMap.put(listOfInputMap[i]['operand'].toString(),datasetPhenotypeMap)
+
+                }
+                else{
+                   // List <String> phenotypeList = []
+                    phenotypeList.add(listOfInputMap[i]['phenotype'].toString())
+                    datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
+                    annotationMap.put(listOfInputMap[i]['operand'].toString(),datasetPhenotypeMap)
+                }
+            }
+        }
+
+        return annotationMap
+    }
+
+    public List<String> getCproperties(JSONArray listOfInputMap){
+        List<String> cProperties = []
+        cProperties.add("CHROM")
+        cProperties.add("CLOSEST_GENE")
+        cProperties.add("Consequence")
+        cProperties.add("DBSNP_ID")
+        cProperties.add("Effect_Allele")
+        cProperties.add("POS")
+        cProperties.add("Protein_change")
+        cProperties.add("Reference_Allele")
+        cProperties.add("VAR_ID")
+
+        return cProperties
+    }
+
+    public Map<String,Object> getDproperies(JSONArray listOfInputMap){
+
+     Map<String,Object> dPropertyMap = new HashMap<>()
+        dPropertyMap.put("empty","")
+
+        return dPropertyMap
+    }
 
 
-        String inputJson = "\n" +
-                                "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":-1, \"page_size\": -1, \"limit\": 1000, \"count\": false," +
-                                " \"result_format\": \"verbose\", \"order_by\": [],\"properties\": {\"cproperty\": [ \"CHROM\" , \"CLOSEST_GENE\" , " +
-                                "\"Consequence\" , \"DBSNP_ID\" , \"Effect_Allele\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
-                                " \"dproperty\" : {} , " +
+    public String generateGetDataJsonInput(JSONArray listOfInputMap){
+//        inputJson = {"passback":"abc123","entity":variant,"filters":listOfFilters}
+//        inputJsonString = inputJson.toString()
+//        def json = JsonOutput.toJson([name: 'John Doe', age: 42])
 
-                                " \"pproperty\" : {\"MINA\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
-                                " \"MINU\" : { \"${datasetName}\" : [ \"T2D\"]}, \"ODDS_RATIO\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
-                                " \"P_VALUE\" : { \"${datasetName}\" : [ \"${phenotypeName}\"] } } }," +
+        Map <String,Object> properties = new HashMap<>()
+        Map <String,Object> inputGetDataJsonObject = new HashMap<>()
+        inputGetDataJsonObject.put("passback", "abc123")
+        inputGetDataJsonObject.put("entity", "variant")
+        inputGetDataJsonObject.put("page_start", -1)
+        inputGetDataJsonObject.put("page_size", -1)
+        inputGetDataJsonObject.put("limit",1000)
+        inputGetDataJsonObject.put("count", false)
+        inputGetDataJsonObject.put("result_format", "verbose")
+        inputGetDataJsonObject.put("order_by",[])
+        inputGetDataJsonObject.put("properties",properties)
+        properties.put("cproperty", getCproperties(listOfInputMap))
+        properties.put("dproperty",getDproperies(listOfInputMap))
+        properties.put("pproperty", getPproperties(listOfInputMap))
+        inputGetDataJsonObject.put("filters",getFilterList(listOfInputMap))
 
-                                " \"filters\":  [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\"," +
-                                " \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] } "
-
-
-
-
-        String getDataInputJson
-        //parse this list of inputMap and feed it dynamically to the filters:
-        //for each map create
-        // [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\", \"operand\": \"P_VALUE\",
-        // \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] "
-
-
-
-
-        return getDataInputJson
-
-
+        return inputGetDataJsonObject
     }
 
     /***
      * this is the core function for making a call to getData and return the data as a map.
      */
-    def variantFinderGetDataRestCall(String phenotypeName, String datasetName, String pValue){
-
-        String inputJson = "\n" +
-                "{\"passback\": \"abc123\", \"entity\": \"variant\", \"page_start\":-1, \"page_size\": -1, \"limit\": 1000, \"count\": false," +
-                " \"result_format\": \"verbose\", \"order_by\": [],\"properties\": {\"cproperty\": [ \"CHROM\" , \"CLOSEST_GENE\" , " +
-                "\"Consequence\" , \"DBSNP_ID\" , \"Effect_Allele\" , \"POS\" , \"Protein_change\" , \"Reference_Allele\" , \"VAR_ID\"]," +
-                " \"dproperty\" : {} , \"pproperty\" : {\"MINA\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}," +
-                " \"MINU\" : { \"${datasetName}\" : [ \"T2D\"]}, \"ODDS_RATIO\" : { \"${datasetName}\" : [ \"${phenotypeName}\"]}, \"P_VALUE\" : { \"${datasetName}\" : [ \"${phenotypeName}\"] } } }," +
-                " \"filters\":  [ {\"dataset_id\": \"${datasetName}\", \"phenotype\": \"${phenotypeName}\", \"operand\": \"P_VALUE\", \"operator\": \"LT\", \"value\": ${pValue}, \"operand_type\": \"FLOAT\"} ] } "
-
-        //String inputJson = this.generateGetDataJsonInput(listOfInputMap);
-
+    def variantFinderGetDataRestCall(JSONArray listOfInputMap){
+        String inputJson = this.generateGetDataJsonInput(listOfInputMap);
         JSONObject jsonObject = postGetDataCall(inputJson)
         return jsonObject
     }
