@@ -1231,6 +1231,12 @@ div.holdMultipleElements{
 
 
 
+<script id="dynamicAbcTissueTable"  type="x-tmpl-mustache">
+    <h1>test me, test me, why don't you arrest me?<h1>
+</script>
+
+
+
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>

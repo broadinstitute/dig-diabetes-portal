@@ -89,7 +89,12 @@ mpgSoftware.dynamicUi = (function () {
 
             case "getTissuesFromAbcForGenesTable":
                 defaultFollowUp.displayRefinedContextFunction =  displayGenesFromAbc;
-                defaultFollowUp.placeToDisplayData =  '#dynamicGeneolder div.dynamicUiHolder';
+                defaultFollowUp.placeToDisplayData =  '#dynamicGeneHolder div.dynamicUiHolder';
+                break;
+
+            case "getRecordsFromECaviarForTissueTable":
+                defaultFollowUp.displayRefinedContextFunction =  displayTissuesFromAbc;
+                defaultFollowUp.placeToDisplayData =  '#dynamicTissueHolder div.dynamicUiHolder';
                 break;
 
             default:
@@ -427,6 +432,7 @@ mpgSoftware.dynamicUi = (function () {
             geneModTerms:[],
             phenotypesByColocalization:[],
             genesByAbc:[],
+            tissuesByAbc:[],
             genesPositionsExist:function(){
                 return (this.genePositions.length>0)?[1]:[];
             },
@@ -613,9 +619,37 @@ mpgSoftware.dynamicUi = (function () {
             return (this.experiment.length);
         };
 
-
-
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
+            returnObject
+        ));
+    };
+
+
+    var displayTissuesFromAbc = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = createNewDisplayReturnObject();
+
+        _.forEach(_.groupBy(getAccumulatorObject("rawAbcInfo"),'SOURCE'),function(value,tissueName){
+            var geneObject = {tissueName:tissueName};
+            geneObject['gene'] = _.map(_.uniqBy(value,'GENE'),function(o){return o.GENE}).sort();
+            geneObject['experiment'] = _.map(_.uniqBy(value,'EXPERIMENT'),function(o){return o.EXPERIMENT}).sort();
+            var startPosRec = _.minBy(value,function(o){return o.START});
+            geneObject['start_pos'] = (startPosRec)?startPosRec.START:0;
+            var stopPosRec = _.maxBy(value,function(o){return o.STOP});
+            geneObject['stop_pos'] = (stopPosRec)?stopPosRec.STOP:0;
+            returnObject.tissuesByAbc.push(geneObject);
+        });
+        returnObject['abcGenesExist'] = function(){
+            return (this.tissuesByAbc.length>0)?[1]:[];
+        };
+
+        returnObject['numberOfGenes'] = function(){
+            return (this.gene.length);
+        };
+        returnObject['numberOfExperiments'] = function(){
+            return (this.experiment.length);
+        };
+
+        $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcTissueTable')[0].innerHTML,
             returnObject
         ));
     };
@@ -1146,7 +1180,9 @@ mpgSoftware.dynamicUi = (function () {
          */
         objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'},
-                {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar', description: 'find all tissues for which co-localized variants exist'}]
+                {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar', description: 'find all tissues for which co-localized variants exist'},
+                {buttonId: 'getRecordsFromECaviarForTissueTable', buttonName: 'ABC', description: 'find all tissues identified in the ABC gene-enhancer screen'}
+                ]
         };
         $("#dynamicTissueHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1266,17 +1302,19 @@ mpgSoftware.dynamicUi = (function () {
         });
 
         $('#getPhenotypesFromECaviarForTissueTable').on('click', function () {
-
             actionContainer("getPhenotypesFromECaviarForTissueTable", actionDefaultFollowUp("getPhenotypesFromECaviarForTissueTable"));
-
         });
 
 
 
         $('#getRecordsFromECaviarForGeneTable').on('click', function () {
-
             actionContainer("getRecordsFromECaviarForGeneTable", actionDefaultFollowUp("getRecordsFromECaviarForGeneTable"));
+        });
 
+
+
+        $('#getRecordsFromECaviarForTissueTable').on('click', function () {
+            actionContainer("getRecordsFromECaviarForTissueTable", actionDefaultFollowUp("getRecordsFromECaviarForTissueTable"));
         });
 
 
