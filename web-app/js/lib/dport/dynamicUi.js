@@ -88,8 +88,8 @@ mpgSoftware.dynamicUi = (function () {
                 break;
 
             case "getTissuesFromAbcForGenesTable":
-                defaultFollowUp.displayRefinedContextFunction =  displayTissuesPerGeneFromEqtl;
-                defaultFollowUp.placeToDisplayData =  '#dynamicTissueHolder div.dynamicUiHolder';
+                defaultFollowUp.displayRefinedContextFunction =  displayGenesFromAbc;
+                defaultFollowUp.placeToDisplayData =  '#dynamicGeneolder div.dynamicUiHolder';
                 break;
 
             default:
@@ -297,7 +297,7 @@ mpgSoftware.dynamicUi = (function () {
                         name: "getTissuesFromAbcForGenesTable",
                         retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
                         dataForCall: geneNameArray,
-                        processEachRecord: processRecordsFromEqtls,
+                        processEachRecord: processRecordsFromAbc,
                         displayRefinedContextFunction: displayFunction,
                         placeToDisplayData: displayLocation,
                         actionId: nextActionId
@@ -426,6 +426,7 @@ mpgSoftware.dynamicUi = (function () {
             phenotypeVariantQtl:[],
             geneModTerms:[],
             phenotypesByColocalization:[],
+            genesByAbc:[],
             genesPositionsExist:function(){
                 return (this.genePositions.length>0)?[1]:[];
             },
@@ -482,7 +483,8 @@ mpgSoftware.dynamicUi = (function () {
             mods:[],
             phenotypesForEveryVariant:[],
             variantsForEveryPhenotype:[],
-            rawColocalizationInfo:[]
+            rawColocalizationInfo:[],
+            rawAbcInfo:[]
         };
     };
 
@@ -568,6 +570,66 @@ mpgSoftware.dynamicUi = (function () {
 
         return rawColocalizationInfo;
     };
+
+
+
+    var processRecordsFromAbc = function (data){
+        // build up an object to describe this
+        var returnObject = {rawData:[]
+        };
+
+        var rawAbcInfo = getAccumulatorObject('rawAbcInfo');
+
+        _.forEach(data,function(oneRec){
+
+            rawAbcInfo.push(oneRec);
+
+        });
+
+        return rawAbcInfo;
+    };
+
+    var displayGenesFromAbc = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = createNewDisplayReturnObject();
+
+        _.forEach(_.groupBy(getAccumulatorObject("rawAbcInfo"),'GENE'),function(value,geneName){
+            var geneObject = {geneName:geneName};
+            geneObject['source'] = _.map(_.uniqBy(value,'SOURCE'),function(o){return o. SOURCE}).sort();
+            geneObject['experiment'] = _.map(_.uniqBy(value,'EXPERIMENT'),function(o){return o.EXPERIMENT}).sort();
+            var startPosRec = _.minBy(value,function(o){return o.START});
+            geneObject['start_pos'] = (startPosRec)?startPosRec.START:0;
+            var stopPosRec = _.maxBy(value,function(o){return o.STOP});
+            geneObject['stop_pos'] = (startPosRec)?startPosRec.STOP:0;
+            returnObject.genesByAbc.push(geneObject);
+        });
+        // returnObject['colocsExist'] = function(){
+        //     return (this.phenotypesByColocalization.length>0)?[1]:[];
+        // };
+        //
+        // returnObject['phenotypeColocsExist'] = function(){
+        //     return (this.phenotypesByColocalization.length>0)?[1]:[];
+        // };
+        // returnObject['numberOfTissues'] = function(){
+        //     return (this.tissues.length);
+        // };
+        // returnObject['numberOfPhenotypes'] = function(){
+        //     return (this.phenotypes.length);
+        // };
+        // returnObject['numberOfGenes'] = function(){
+        //     return (this.genes.length);
+        // };
+        // returnObject['numberOfVariants'] = function(){
+        //     return (this.varId.length);
+        // };
+
+
+        $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
+            returnObject
+        ));
+    };
+
+
+
 
     var displayPhenotypesFromColocalization = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var returnObject = createNewDisplayReturnObject();

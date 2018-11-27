@@ -1186,6 +1186,9 @@ div.holdMultipleElements{
 </script>
 
 
+<script id="dynamicAbcGeneTable"  type="x-tmpl-mustache">
+<h1>dynamicAbcGeneTable</h1>
+</script>
 
 
 
