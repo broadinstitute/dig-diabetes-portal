@@ -1187,7 +1187,46 @@ div.holdMultipleElements{
 
 
 <script id="dynamicAbcGeneTable"  type="x-tmpl-mustache">
-<h1>dynamicAbcGeneTable</h1>
+    <table  class="table">
+    {{#abcGenesExist}}
+    <tr>
+        <th  scope="row">Genes</th>
+        {{/abcGenesExist}}
+        {{#genesByAbc}}
+            <th  scope="col">{{geneName}}</th>
+        {{/genesByAbc}}
+        {{#abcGenesExist}}
+    </tr>
+    {{/abcGenesExist}}
+
+    {{#abcGenesExist}}
+    <tr>
+        <th  scope="row">Genes</th>
+        {{/abcGenesExist}}
+        {{#genesByAbc}}
+            <td >
+            <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements" id="tissues_{{geneName}}">
+                    {{#source}}
+                       <div>{{.}}</div>
+                    {{/source}}
+               </div>
+            </div>
+
+            <div><a data-toggle="collapse" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
+               <div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">
+                    {{#experiment}}
+                       <div>{{.}}</div>
+                    {{/experiment}}
+               </div>
+            </div>
+
+            </td>
+        {{/genesByAbc}}
+        {{#abcGenesExist}}
+    </tr>
+    {{/abcGenesExist}}
+    </table>
 </script>
 
 
