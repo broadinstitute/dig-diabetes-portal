@@ -1206,10 +1206,11 @@ div.holdMultipleElements{
         {{#genesByAbc}}
             <td >
             <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
-               <div  class="collapse holdMultipleElements" id="tissues_{{geneName}}">
+               <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     {{#source}}
                        <div>{{.}}</div>
                     {{/source}}
+                    <div id="graphic_tissues_{{geneName}}"></div>
                </div>
             </div>
 
@@ -1262,6 +1263,7 @@ div.holdMultipleElements{
                <div  class="collapse holdMultipleElements" id="experiments_{{tissueName}}">
                     {{#experiment}}
                        <div>{{.}}</div>
+                       <div id="chart2_{{tissueName}}"></div>
                     {{/experiment}}
                </div>
             </div>

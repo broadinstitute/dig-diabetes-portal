@@ -625,11 +625,19 @@ mpgSoftware.dynamicUi = (function () {
             var geneObject = {geneName:geneName};
             geneObject['source'] = _.map(_.uniqBy(value,'SOURCE'),function(o){return o.SOURCE}).sort();
             geneObject['experiment'] = _.map(_.uniqBy(value,'EXPERIMENT'),function(o){return o.EXPERIMENT}).sort();
+            geneObject['chrom'] = _.first(_.map(_.uniqBy(value,'CHROM'),function(o){return o.CHROM}).sort());
             var startPosRec = _.minBy(value,function(o){return o.START});
             geneObject['start_pos'] = (startPosRec)?startPosRec.START:0;
             var stopPosRec = _.maxBy(value,function(o){return o.STOP});
             geneObject['stop_pos'] = (stopPosRec)?stopPosRec.STOP:0;
+            geneObject['abcTissuesVector'] = function(){
+                return geneObject['source'];
+            };
+            geneObject['sourceByTissue'] = function(){
+                return _.groupBy(value,'SOURCE');
+            };
             returnObject.genesByAbc.push(geneObject);
+
         });
         returnObject['abcGenesExist'] = function(){
             return (this.genesByAbc.length>0)?[1]:[];
@@ -645,6 +653,43 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
             returnObject
         ));
+        _.forEach(returnObject.genesByAbc, function (value){
+            $('#tissues_'+value.geneName).data('allUniqueTissues', value.abcTissuesVector());
+            $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
+            $('#tissues_'+value.geneName).data('regionStart', value.start_pos);
+            $('#tissues_'+value.geneName).data('regionEnd', value.stop_pos);
+
+        });
+
+
+        $('div.openTissues').on('show.bs.collapse', function () {
+
+            var dataMatrix =
+                _.map($(this).data("sourceByTissue"),
+                    function(v,k){
+                        return [{
+                            CHROM:_.first(_.map(_.uniqBy(v,'CHROM'),function(oo){return oo.CHROM})),
+                            STOP:_.maxBy(v,'STOP').STOP,
+                            START:_.minBy(v,'START').START,
+                            SOURCE: k,
+                            ELEMENT:'Flanking TSS'
+                        }]
+                    }
+                );
+
+            var additionalParameters = {regionStart:$(this).data("regionStart"),
+                regionEnd:$(this).data("regionEnd"),
+                stateColorBy:['Flanking TSS'],
+            mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
+            };
+
+            buildMultiTissueDisplay(['Flanking TSS'],
+                                    $(this).data('allUniqueTissues'),
+                                    dataMatrix,
+                                    additionalParameters,
+                '#graphic_'+$(this).attr('id'));
+
+        });
     };
 
 
@@ -660,10 +705,12 @@ mpgSoftware.dynamicUi = (function () {
             var stopPosRec = _.maxBy(value,function(o){return o.STOP});
             geneObject['stop_pos'] = (stopPosRec)?stopPosRec.STOP:0;
             returnObject.tissuesByAbc.push(geneObject);
+
         });
         returnObject['abcTissuesExist'] = function(){
             return (this.tissuesByAbc.length>0)?[1]:[];
         };
+
 
         returnObject['numberOfGenes'] = function(){
             return (this.gene.length);
@@ -709,6 +756,8 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicPhenotypeHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationPhenotypeTable')[0].innerHTML,
             returnObject
         ));
+
+
     };
 
 
@@ -1388,15 +1437,42 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+    var buildMultiTissueDisplay  = function(     allUniqueElementNames,
+                                                allUniqueTissueNames,
+                                                dataMatrix,
+                                                additionalParams,
+                                                cssSelector ){
+        var correlationMatrix = dataMatrix;
+        var xlabels = additionalParams.stateColorBy;
+        var ylabels = allUniqueTissueNames;
+        var margin = {top: 50, right: 50, bottom: 100, left: 250},
+            width = 750 - margin.left - margin.right,
+            height = 800 - margin.top - margin.bottom;
+        var multiTrack = baget.multiTrack()
+            .height(height)
+            .width(width)
+            .margin(margin)
+            .renderCellText(0)
+            .xlabelsData(xlabels)
+            .ylabelsData(ylabels)
+            .startColor('#ffffff')
+            .endColor('#3498db')
+            .endRegion(additionalParams.regionEnd)
+            .startRegion(additionalParams.regionStart)
+            .xAxisLabel('genomic position')
+            .mappingInfo(additionalParams.mappingInformation)
+            .dataHanger(cssSelector, correlationMatrix);
+        d3.select(cssSelector).call(multiTrack.render);
+    }
+
 
 // public routines are declared below
     return {
-        installDirectorButtonsOnTabs:installDirectorButtonsOnTabs,
-        modifyScreenFields:modifyScreenFields,
-        adjustLowerExtent:adjustLowerExtent,
-        adjustUpperExtent:adjustUpperExtent
+        installDirectorButtonsOnTabs: installDirectorButtonsOnTabs,
+        modifyScreenFields: modifyScreenFields,
+        adjustLowerExtent: adjustLowerExtent,
+        adjustUpperExtent: adjustUpperExtent
     }
-
 }());
 
 
