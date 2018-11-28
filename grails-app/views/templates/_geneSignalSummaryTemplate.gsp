@@ -1201,7 +1201,7 @@ div.holdMultipleElements{
 
     {{#abcGenesExist}}
     <tr>
-        <th  scope="row">Genes</th>
+        <th  scope="row"></th>
         {{/abcGenesExist}}
         {{#genesByAbc}}
             <td >
@@ -1232,7 +1232,46 @@ div.holdMultipleElements{
 
 
 <script id="dynamicAbcTissueTable"  type="x-tmpl-mustache">
-    <h1>test me, test me, why don't you arrest me?<h1>
+    <table  class="table">
+    {{#abcTissuesExist}}
+    <tr>
+        <th  scope="row">Sources</th>
+        {{/abcTissuesExist}}
+        {{#tissuesByAbc}}
+            <th  scope="col">{{tissueName}}</th>
+        {{/tissuesByAbc}}
+        {{#abcTissuesExist}}
+    </tr>
+    {{/abcTissuesExist}}
+
+    {{#abcTissuesExist}}
+    <tr>
+        <th  scope="row"></th>
+        {{/abcTissuesExist}}
+        {{#tissuesByAbc}}
+            <td >
+            <div><a data-toggle="collapse" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+               <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
+                    {{#gene}}
+                       <div>{{.}}</div>
+                    {{/gene}}
+               </div>
+            </div>
+
+            <div><a data-toggle="collapse" data-target="#experiments_{{tissueName}}">experiments={{numberOfExperiments}}</a>
+               <div  class="collapse holdMultipleElements" id="experiments_{{tissueName}}">
+                    {{#experiment}}
+                       <div>{{.}}</div>
+                    {{/experiment}}
+               </div>
+            </div>
+
+            </td>
+        {{/tissuesByAbc}}
+        {{#abcTissuesExist}}
+    </tr>
+    {{/abcTissuesExist}}
+    </table>
 </script>
 
 

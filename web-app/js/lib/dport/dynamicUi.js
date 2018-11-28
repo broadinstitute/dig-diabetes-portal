@@ -92,7 +92,7 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData =  '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
-            case "getRecordsFromECaviarForTissueTable":
+            case "getRecordsFromAbcForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction =  displayTissuesFromAbc;
                 defaultFollowUp.placeToDisplayData =  '#dynamicTissueHolder div.dynamicUiHolder';
                 break;
@@ -309,6 +309,29 @@ mpgSoftware.dynamicUi = (function () {
                     }));
                 }
                 break;
+
+            case "getRecordsFromAbcForTissueTable":
+                if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                    actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getRecordsFromAbcForTissueTable"});
+                } else {
+                    var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        return {gene: o.name}
+                    });
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                        name: "getTissuesFromAbcForGenesTable",
+                        retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
+                        dataForCall: geneNameArray,
+                        processEachRecord: processRecordsFromAbc,
+                        displayRefinedContextFunction: displayFunction,
+                        placeToDisplayData: displayLocation,
+                        actionId: nextActionId
+                    }));
+                }
+
+
+                break;
+
+
 
             default:
                 break;
@@ -638,7 +661,7 @@ mpgSoftware.dynamicUi = (function () {
             geneObject['stop_pos'] = (stopPosRec)?stopPosRec.STOP:0;
             returnObject.tissuesByAbc.push(geneObject);
         });
-        returnObject['abcGenesExist'] = function(){
+        returnObject['abcTissuesExist'] = function(){
             return (this.tissuesByAbc.length>0)?[1]:[];
         };
 
@@ -649,7 +672,7 @@ mpgSoftware.dynamicUi = (function () {
             return (this.experiment.length);
         };
 
-        $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcTissueTable')[0].innerHTML,
+        $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicAbcTissueTable')[0].innerHTML,
             returnObject
         ));
     };
@@ -1181,7 +1204,7 @@ mpgSoftware.dynamicUi = (function () {
         objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'},
                 {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar', description: 'find all tissues for which co-localized variants exist'},
-                {buttonId: 'getRecordsFromECaviarForTissueTable', buttonName: 'ABC', description: 'find all tissues identified in the ABC gene-enhancer screen'}
+                {buttonId: 'getRecordsFromAbcForTissueTable', buttonName: 'ABC', description: 'find all tissues identified in the ABC gene-enhancer screen'}
                 ]
         };
         $("#dynamicTissueHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
@@ -1313,8 +1336,8 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        $('#getRecordsFromECaviarForTissueTable').on('click', function () {
-            actionContainer("getRecordsFromECaviarForTissueTable", actionDefaultFollowUp("getRecordsFromECaviarForTissueTable"));
+        $('#getRecordsFromAbcForTissueTable').on('click', function () {
+            actionContainer("getRecordsFromAbcForTissueTable", actionDefaultFollowUp("getRecordsFromAbcForTissueTable"));
         });
 
 
