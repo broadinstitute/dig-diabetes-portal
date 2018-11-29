@@ -664,21 +664,42 @@ mpgSoftware.dynamicUi = (function () {
 
         $('div.openTissues').on('show.bs.collapse', function () {
 
+            // var dataMatrix =
+            //     _.map($(this).data("sourceByTissue"),
+            //         function(v,k){
+            //             return [{
+            //                 CHROM:_.first(_.map(_.uniqBy(v,'CHROM'),function(oo){return oo.CHROM})),
+            //                 STOP:_.maxBy(v,'STOP').STOP,
+            //                 START:_.minBy(v,'START').START,
+            //                 SOURCE: k,
+            //                 ELEMENT:'Flanking TSS'
+            //             }]
+            //         }
+            //     );
+            // var regionDetails =_.map($(this).data("sourceByTissue"),
+            //     function(v,k){
+            //         var retVal = {experiment:k,
+            //             details:[]};
+            //         _.forEach(v,function(oneRec){
+            //             retVal.details.push(oneRec);
+            //         });
+            //         return retVal ;
+            //     }
+            // );
+
             var dataMatrix =
                 _.map($(this).data("sourceByTissue"),
                     function(v,k){
-                        return [{
-                            CHROM:_.first(_.map(_.uniqBy(v,'CHROM'),function(oo){return oo.CHROM})),
-                            STOP:_.maxBy(v,'STOP').STOP,
-                            START:_.minBy(v,'START').START,
-                            SOURCE: k,
-                            ELEMENT:'Flanking TSS'
-                        }]
+                        var retVal = [];
+                        _.forEach(v,function(oneRec){
+                            retVal.push(oneRec);
+                        });
+                        return retVal ;
                     }
                 );
 
-            var additionalParameters = {regionStart:$(this).data("regionStart"),
-                regionEnd:$(this).data("regionEnd"),
+            var additionalParameters = {regionStart:_.minBy(_.flatMap ($(this).data("sourceByTissue")),'START').START,
+                regionEnd:_.maxBy(_.flatMap ($(this).data("sourceByTissue")),'STOP').STOP,
                 stateColorBy:['Flanking TSS'],
             mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
             };
@@ -687,6 +708,7 @@ mpgSoftware.dynamicUi = (function () {
                                     $(this).data('allUniqueTissues'),
                                     dataMatrix,
                                     additionalParameters,
+                                    null,
                 '#graphic_'+$(this).attr('id'));
 
         });
@@ -1441,6 +1463,7 @@ mpgSoftware.dynamicUi = (function () {
                                                 allUniqueTissueNames,
                                                 dataMatrix,
                                                 additionalParams,
+                                                 regionDetails,
                                                 cssSelector ){
         var correlationMatrix = dataMatrix;
         var xlabels = additionalParams.stateColorBy;
@@ -1452,7 +1475,7 @@ mpgSoftware.dynamicUi = (function () {
             .height(height)
             .width(width)
             .margin(margin)
-            .renderCellText(0)
+            .renderCellText(1)
             .xlabelsData(xlabels)
             .ylabelsData(ylabels)
             .startColor('#ffffff')
@@ -1461,6 +1484,7 @@ mpgSoftware.dynamicUi = (function () {
             .startRegion(additionalParams.regionStart)
             .xAxisLabel('genomic position')
             .mappingInfo(additionalParams.mappingInformation)
+            .colorByValue(1)
             .dataHanger(cssSelector, correlationMatrix);
         d3.select(cssSelector).call(multiTrack.render);
     }

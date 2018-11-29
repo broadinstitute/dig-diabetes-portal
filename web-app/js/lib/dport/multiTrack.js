@@ -35,6 +35,7 @@ var baget = baget || {};  // encapsulating variable
             endColor = '#3498db',
             startRegion,
             endRegion,
+            colorByValue=0,
             renderCellText = 1;
 
         // private variables
@@ -55,8 +56,11 @@ var baget = baget || {};  // encapsulating variable
 
             var numrows = data.length;
 
-            var minValue = d3.min(data, function(layer) { return d3.max(layer, function(f) { return f.START; }); });
+            var minValue = d3.min(data, function(layer) { return d3.min(layer, function(f) { return f.START; }); });
             var maxValue = d3.max(data, function(layer) { return d3.max(layer, function(f) { return f.STOP; }); });
+            var minAssayValue = d3.min(data, function(layer) { return d3.min(layer, function(f) { return f.VALUE; }); });
+            var maxAssayValue = d3.max(data, function(layer) { return d3.max(layer, function(f) { return f.VALUE; }); });
+            var color_scale = d3.scale.linear().domain([minAssayValue, maxAssayValue]).range(['blue', 'red']);
 
             var svg = d3.select(container).append("svg")
                 .attr("width", width + margin.left + margin.right)
@@ -102,13 +106,27 @@ var baget = baget || {};  // encapsulating variable
                 .attr("class", "element")
                 .attr("transform", function(d, i) { return "translate(" + xScale(d.START) + ", 0)"; });
 
-            element.append('rect')
-                .attr("width", function(v){
-                    return xScale(v.STOP)-xScale(v.START);})
-                .attr("height", yScale.rangeBand()/2)
-                .style("stroke-width", 1)
-                .style("stroke", "black");
-             //   .style("fill",endColor);
+            if (colorByValue){  // color by scale
+                element.append('rect')
+                    .attr("width", function(v){
+                        return xScale(v.STOP)-xScale(v.START);})
+                    .attr("height", yScale.rangeBand()/2)
+                    .style("stroke-width", 1)
+                    .style("stroke",  function(v) {
+                        return color_scale(v.VALUE);
+                    })
+                    .style('fill', function(v) {
+                        return color_scale(v.VALUE);
+                    });
+            } else { // no color for rectangles at all -- we will instead color on the basis of CSS class assignments
+                element.append('rect')
+                    .attr("width", function(v){
+                        return xScale(v.STOP)-xScale(v.START);})
+                    .attr("height", yScale.rangeBand()/2)
+                    .style("stroke-width", 1)
+                    .style("stroke", "black");
+            }
+
 
             var labels = svg.append('g')
                 .attr('class', "labels");
@@ -344,6 +362,13 @@ var baget = baget || {};  // encapsulating variable
             startRegion = x;
             return instance;
         };
+        instance.colorByValue = function (x) {
+            if (!arguments.length) return colorByValue;
+            colorByValue = x;
+            return instance;
+        };
+
+
 
         /***
          * This is not a standard accessor.  The purpose of this method is to take a DOM element and to
