@@ -139,6 +139,7 @@ mpgSoftware.dynamicUi = (function () {
                     actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForTissuesTable"});
                 } else {
                     var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
+                    geneNameArray = _.map(getAccumulatorObject("geneInfoArray"),function(o){return {gene:o.name}});
                     retrieveRemotedContextInformation(buildRemoteContextArray ({
                         name:"getTissuesFromEqtlsForTissuesTable",
                         retrieveDataUrl:additionalParameters.retrieveEqtlDataUrl,
@@ -296,6 +297,9 @@ mpgSoftware.dynamicUi = (function () {
                     actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromAbcForGenesTable"});
                 } else {
                     var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                        return {gene: o.name}
+                    });
+                    geneNameArray = _.map(getAccumulatorObject("geneInfoArray"), function (o) {
                         return {gene: o.name}
                     });
                     retrieveRemotedContextInformation(buildRemoteContextArray({
@@ -513,7 +517,8 @@ mpgSoftware.dynamicUi = (function () {
             phenotypesForEveryVariant:[],
             variantsForEveryPhenotype:[],
             rawColocalizationInfo:[],
-            rawAbcInfo:[]
+            rawAbcInfo:[],
+            geneInfoArray:[]
         };
     };
 
@@ -658,34 +663,12 @@ mpgSoftware.dynamicUi = (function () {
             $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
             $('#tissues_'+value.geneName).data('regionStart', value.start_pos);
             $('#tissues_'+value.geneName).data('regionEnd', value.stop_pos);
+            $('#tissues_'+value.geneName).data('geneName', value.geneName);
 
         });
 
 
         $('div.openTissues').on('show.bs.collapse', function () {
-
-            // var dataMatrix =
-            //     _.map($(this).data("sourceByTissue"),
-            //         function(v,k){
-            //             return [{
-            //                 CHROM:_.first(_.map(_.uniqBy(v,'CHROM'),function(oo){return oo.CHROM})),
-            //                 STOP:_.maxBy(v,'STOP').STOP,
-            //                 START:_.minBy(v,'START').START,
-            //                 SOURCE: k,
-            //                 ELEMENT:'Flanking TSS'
-            //             }]
-            //         }
-            //     );
-            // var regionDetails =_.map($(this).data("sourceByTissue"),
-            //     function(v,k){
-            //         var retVal = {experiment:k,
-            //             details:[]};
-            //         _.forEach(v,function(oneRec){
-            //             retVal.details.push(oneRec);
-            //         });
-            //         return retVal ;
-            //     }
-            // );
 
             var dataMatrix =
                 _.map($(this).data("sourceByTissue"),
@@ -697,12 +680,24 @@ mpgSoftware.dynamicUi = (function () {
                         return retVal ;
                     }
                 );
+            var geneInfoArray = getAccumulatorObject("geneInfoArray");
+            var geneInfoIndex = _.findIndex( geneInfoArray, { name:$(this).data("geneName") } );
+            var additionalParameters;
+            if (geneInfoIndex < 0){
+                additionalParameters = {regionStart:_.minBy(_.flatMap ($(this).data("sourceByTissue")),'START').START,
+                    regionEnd:_.maxBy(_.flatMap ($(this).data("sourceByTissue")),'STOP').STOP,
+                    stateColorBy:['Flanking TSS'],
+                    mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
+                };
+            } else {
+                additionalParameters = {regionStart:geneInfoArray[geneInfoIndex].startPos,
+                    regionEnd:geneInfoArray[geneInfoIndex].endPos,
+                    stateColorBy:['Flanking TSS'],
+                    mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
+                };
+            }
 
-            var additionalParameters = {regionStart:_.minBy(_.flatMap ($(this).data("sourceByTissue")),'START').START,
-                regionEnd:_.maxBy(_.flatMap ($(this).data("sourceByTissue")),'STOP').STOP,
-                stateColorBy:['Flanking TSS'],
-            mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
-            };
+
 
             buildMultiTissueDisplay(['Flanking TSS'],
                                     $(this).data('allUniqueTissues'),
@@ -985,6 +980,7 @@ mpgSoftware.dynamicUi = (function () {
                 return (this.uniqueGenes.length>0)?[1]:[];
             }
         };
+        var geneInfoArray = [];
         if (( typeof data !== 'undefined') &&
             ( data !== null ) &&
             (data.is_error === false ) &&
@@ -997,12 +993,20 @@ mpgSoftware.dynamicUi = (function () {
                     if (!returnObject.uniqueGenes.includes(geneRec.name2)){
                         returnObject.uniqueGenes.push({name:geneRec.name2});
                         returnObject.genePositions.push({name:geneRec.chromosome +":"+geneRec.addrStart +"-"+geneRec.addrEnd});
+                        var chromosomeString = _.includes(geneRec.chromosome,"chr")?geneRec.chromosome.substr(3):geneRec.chromosome;
+                        geneInfoArray.push({    chromosome:chromosomeString,
+                                                startPos:geneRec.addrStart,
+                                                endPos:geneRec.addrEnd,
+                                                name:geneRec.name2,
+                                                id:geneRec.id }
+                        );
                     };
                 });
             }
         }
         // we have a list of all the genes in the range.  Let's remember that information.
         setAccumulatorObject("geneNameArray",returnObject.uniqueGenes);
+        setAccumulatorObject("geneInfoArray",geneInfoArray);
         return returnObject;
     };
     var displayRefinedGenesInARange = function (idForTheTargetDiv,objectContainingRetrievedRecords){
@@ -1435,6 +1439,7 @@ mpgSoftware.dynamicUi = (function () {
         setAccumulatorObject(storageField,extentBegin);
         $(spanClass).html(""+extentBegin);
         resetAccumulatorObject("geneNameArray");
+        resetAccumulatorObject("geneInfoArray");
         resetAccumulatorObject("tissueNameArray");
     };
 
