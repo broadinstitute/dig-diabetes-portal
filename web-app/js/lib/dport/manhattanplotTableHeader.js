@@ -79,6 +79,7 @@ var mpgSoftware = mpgSoftware || {};
                     if(data.variant.results[0].isClump == false){
                         document.getElementById("r2dropdown").style.display = "none";
                         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,dataset);
+                       // mpgSoftware.manhattanplotTableHeader.
                     }
                     //if(data.isClump) is true then refresh the manhattan plot
                     //else (get the id of the r2 dropdown and disable the dropdown.
@@ -103,12 +104,13 @@ var mpgSoftware = mpgSoftware || {};
         var fillRegionalTraitAnalysis = function (phenotype,sampleGroup) {
             var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var loading = $('#spinner').show();
+            var phenotypeName = phenotype
             $('[data-toggle="popover"]').popover();
             $.ajax({
                 cache: false,
                 type: "post",
                 url:rememVars.phenotypeAjaxUrl,
-                data: { trait: rememVars.phenotypeName,
+                data: { trait: phenotypeName,
                     significance: rememVars.requestedSignificance,
                     sampleGroup: sampleGroup  },
                 async: true,
@@ -133,19 +135,19 @@ var mpgSoftware = mpgSoftware || {};
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
-            var phenotype = $('#phenotypeVFChoser').val();
-            if(phenotype == null){
-                phenotype = mySavedVars.phenotypeName
-            }
-            var dataset = document.getElementById("manhattanSampleGroupChooser").value
+            var selectedPhenotype = $('#phenotypeVFChoser').val();
 
+            //phenotype is null when its not selected from the manhattan plot page
+            if(selectedPhenotype == null){
+                selectedPhenotype = mySavedVars.phenotypeName
+                $("#phenotypeVFChoser").val(selectedPhenotype)
+            }
+            var selectedDataset = document.getElementById("manhattanSampleGroupChooser").value
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
-
-                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(phenotype,dataset,r2);
-
+                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(selectedPhenotype,selectedDataset,r2);
         }
 
 
