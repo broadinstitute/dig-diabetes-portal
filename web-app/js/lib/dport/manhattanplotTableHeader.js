@@ -65,20 +65,20 @@ var mpgSoftware = mpgSoftware || {};
 
 
 
-        var fillClumpVariants = function (phenotypeNamex, dataset, r2) {
+        var fillClumpVariants = function (phenotype, dataset, r2) {
             var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var loading = $('#spinner').show();
             $.ajax({
                 cache: false,
                 type: "post",
                 url: coreVariables.ajaxClumpDataUrl,
-                data: {phenotype: phenotypeNamex, dataset: dataset,r2:r2},
+                data: {phenotype: phenotype, dataset: dataset,r2:r2},
                 async: true,
                 success: function (data) {
                     loading.hide();
                     if(data.variant.results[0].isClump == false){
                         document.getElementById("r2dropdown").style.display = "none";
-                        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotypeNamex,dataset);
+                        mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,dataset);
                     }
                     //if(data.isClump) is true then refresh the manhattan plot
                     //else (get the id of the r2 dropdown and disable the dropdown.
@@ -119,7 +119,7 @@ var mpgSoftware = mpgSoftware || {};
                         mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
                         loading.hide();
                     }
-                    catch (e){console.log("I tried calling refreshManhattanPlotTableView but failed",e)}
+                    catch (e){console.log("fillRegionalTraitAnalysis tried calling refreshManhattanPlotTableView but failed",e)}
 
                 },
                 error: function (jqXHR, exception) {
@@ -129,16 +129,22 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var callFillClumpVariants = function(phenotype) {
+        var callFillClumpVariants = function() {
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
+            var phenotype = $('#phenotypeVFChoser').val();
+            if(phenotype == null){
+                phenotype = mySavedVars.phenotypeName
+            }
+            var dataset = document.getElementById("manhattanSampleGroupChooser").value
+
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
 
-                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(phenotype,document.getElementById("manhattanSampleGroupChooser").value,r2);
+                mpgSoftware.manhattanplotTableHeader.fillClumpVariants(phenotype,dataset,r2);
 
         }
 
