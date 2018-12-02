@@ -105,7 +105,6 @@ var baget = baget || {};  // encapsulating variable
                 .enter().append("g")
                 .attr("class", "element")
                 .attr("transform", function(d, i) { return "translate(" + xScale(d.START) + ", 0)"; });
-
             if (colorByValue){  // color by scale
                 element.append('rect')
                     .attr("width", function(v){
@@ -117,7 +116,25 @@ var baget = baget || {};  // encapsulating variable
                     })
                     .style('fill', function(v) {
                         return color_scale(v.VALUE);
+                    })
+                    .on("mouseover", function(d) {
+
+                        div.transition()
+                            .duration(200)
+                            .style("opacity", .9);
+                        div	.html(formatTime(d.date) + "<br/>"  + d.close)
+                            .style("left", (d3.event.pageX) + "px")
+                            .style("top", (d3.event.pageY - 28) + "px");
+                    })
+                    .on("mouseover", function() {
+                    })
+                    .on("mouseout", function(d) {
+
+                        div.transition()
+                            .duration(500)
+                            .style("opacity", 0);
                     });
+
             } else { // no color for rectangles at all -- we will instead color on the basis of CSS class assignments
                 element.append('rect')
                     .attr("width", function(v){
@@ -229,22 +246,22 @@ var baget = baget || {};  // encapsulating variable
                 .attr("height", height)
                 .on("mouseover", function() {
                     crosshair.style("display", null);
-                })
-                .on("mouseout", function() {
-                    crosshair.style("display", "none");
-                    label.text("");
-                })
-                .on("mousemove", function() {
-                    var mouse = d3.mouse(this);
-                    crosshair.select("#crosshairX")
-                        .attr("x1", mouse[0])
-                        .attr("y1", 0)
-                        .attr("x2", mouse[0])
-                        .attr("y2", height);
-                    label.text(function() {
-                        return "position = "+Math.round(xScale.invert(mouse[0]));
-                    });
                 });
+                //.on("mouseout", function() {
+                //    crosshair.style("display", "none");
+                //    label.text("");
+                //})
+                //.on("mousemove", function() {
+                //    var mouse = d3.mouse(this);
+                //    crosshair.select("#crosshairX")
+                //        .attr("x1", mouse[0])
+                //        .attr("y1", 0)
+                //        .attr("x2", mouse[0])
+                //        .attr("y2", height);
+                //    label.text(function() {
+                //        return "position = "+Math.round(xScale.invert(mouse[0]));
+                //    });
+                //});
 
 
 

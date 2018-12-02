@@ -623,9 +623,27 @@ mpgSoftware.dynamicUi = (function () {
         return rawAbcInfo;
     };
 
+
+
+
+    var retrieveExtents = function(geneName,defaultStart,defaultEnd){
+        var returnValue = {regionStart:defaultStart,regionEnd:defaultEnd};
+        var geneInfoArray = getAccumulatorObject("geneInfoArray");
+        var geneInfoIndex = _.findIndex( geneInfoArray, { name:geneName } );
+        if (geneInfoIndex >= 0) {
+            returnValue.regionStart=geneInfoArray[geneInfoIndex].startPos;
+            returnValue.regionEnd=geneInfoArray[geneInfoIndex].endPos;
+        }
+        return returnValue
+    }
+
+
+
+
     var displayGenesFromAbc = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var returnObject = createNewDisplayReturnObject();
 
+        // for each gene collect up the data we want to display
         _.forEach(_.groupBy(getAccumulatorObject("rawAbcInfo"),'GENE'),function(value,geneName){
             var geneObject = {geneName:geneName};
             geneObject['source'] = _.map(_.uniqBy(value,'SOURCE'),function(o){return o.SOURCE}).sort();
@@ -641,13 +659,18 @@ mpgSoftware.dynamicUi = (function () {
             geneObject['sourceByTissue'] = function(){
                 return _.groupBy(value,'SOURCE');
             };
+            var extents = retrieveExtents(geneName,startPosRec,stopPosRec);
+            geneObject['regionStart'] = extents.regionStart;
+            geneObject['regionEnd'] = extents.regionEnd;
+
             returnObject.genesByAbc.push(geneObject);
 
         });
+
+        // now concoct a few functions that mustache can call
         returnObject['abcGenesExist'] = function(){
             return (this.genesByAbc.length>0)?[1]:[];
         };
-
         returnObject['numberOfTissues'] = function(){
             return (this.source.length);
         };
@@ -658,18 +681,19 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
             returnObject
         ));
+        // and then store up some data that we will use when it's time to drill down
         _.forEach(returnObject.genesByAbc, function (value){
             $('#tissues_'+value.geneName).data('allUniqueTissues', value.abcTissuesVector());
             $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
             $('#tissues_'+value.geneName).data('regionStart', value.start_pos);
             $('#tissues_'+value.geneName).data('regionEnd', value.stop_pos);
             $('#tissues_'+value.geneName).data('geneName', value.geneName);
-
         });
 
 
-        $('div.openTissues').on('show.bs.collapse', function () {
 
+        $('div.openTissues').on('show.bs.collapse', function () {
+            // the user wants to drill down into the tissues. Let's make them a graphic using the data we stored above
             var dataMatrix =
                 _.map($(this).data("sourceByTissue"),
                     function(v,k){
@@ -680,6 +704,7 @@ mpgSoftware.dynamicUi = (function () {
                         return retVal ;
                     }
                 );
+            var extents = retrieveExtents()
             var geneInfoArray = getAccumulatorObject("geneInfoArray");
             var geneInfoIndex = _.findIndex( geneInfoArray, { name:$(this).data("geneName") } );
             var additionalParameters;
@@ -697,13 +722,12 @@ mpgSoftware.dynamicUi = (function () {
                 };
             }
 
-
-
+            //  here comes that D3 graphic!
             buildMultiTissueDisplay(['Flanking TSS'],
                                     $(this).data('allUniqueTissues'),
                                     dataMatrix,
                                     additionalParameters,
-                                    null,
+                '#tooltip_'+$(this).attr('id'),
                 '#graphic_'+$(this).attr('id'));
 
         });
@@ -1468,7 +1492,7 @@ mpgSoftware.dynamicUi = (function () {
                                                 allUniqueTissueNames,
                                                 dataMatrix,
                                                 additionalParams,
-                                                 regionDetails,
+                                                 tooltipLocation,
                                                 cssSelector ){
         var correlationMatrix = dataMatrix;
         var xlabels = additionalParams.stateColorBy;
@@ -1476,7 +1500,7 @@ mpgSoftware.dynamicUi = (function () {
         var margin = {top: 50, right: 50, bottom: 100, left: 250},
             width = 750 - margin.left - margin.right,
             height = 800 - margin.top - margin.bottom;
-        var multiTrack = baget.multiTrack()
+        var varsImpacter = baget.varsImpacter()
             .height(height)
             .width(width)
             .margin(margin)
@@ -1490,8 +1514,9 @@ mpgSoftware.dynamicUi = (function () {
             .xAxisLabel('genomic position')
             .mappingInfo(additionalParams.mappingInformation)
             .colorByValue(1)
+            .tooltipLocation(tooltipLocation)
             .dataHanger(cssSelector, correlationMatrix);
-        d3.select(cssSelector).call(multiTrack.render);
+        d3.select(cssSelector).call(varsImpacter.render);
     }
 
 

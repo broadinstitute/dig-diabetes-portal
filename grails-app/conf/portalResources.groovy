@@ -94,6 +94,12 @@ modules = {
         resource url: 'js/lib/dport/multiTrack.js'
         resource url: 'css/dport/multiTrack.css'
     }
+    varsImpacter {
+        dependsOn "core"
+
+        resource url: 'js/lib/dport/varsImpacter.js'
+        resource url: 'css/dport/varsImpacter.css'
+    }
     boxwhisker {
         dependsOn "d3tooltip"
 
@@ -111,7 +117,7 @@ modules = {
         resource url: 'js/lib/dport/phenotype.js'
     }
     geneInfo {
-        dependsOn "core", "mbar", "multiTrack","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo"
+        dependsOn "core", "mbar", "multiTrack","varsImpacter","bootstrapMultiselect", "igv","burdenTest", "geneSignalSummary", "tableViewer","regionInfo"
 
         resource url: 'css/dport/geneInfo.css'
         resource url: 'css/dport/barchart.css'

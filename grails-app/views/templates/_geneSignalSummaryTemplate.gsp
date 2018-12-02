@@ -15,6 +15,15 @@ button.directorButtonDetails{
 div.holdMultipleElements{
     padding: 4px 0 2px 10px;
 }
+div.geneName {
+    font-weight: bold;
+    color: blue;
+}
+div.genePosition{
+    font-style: italic;
+    font-size: 11px;
+}
+
 </style>
 
 <script id="genomeBrowserTemplate"  type="x-tmpl-mustache">
@@ -1193,7 +1202,7 @@ div.holdMultipleElements{
         <th  scope="row">Genes</th>
         {{/abcGenesExist}}
         {{#genesByAbc}}
-            <th  scope="col">{{geneName}}</th>
+            <th  scope="col"><div class="geneName">{{geneName}}</div><div class="genePosition">chromosome {{chrom}}: {{regionStart}}-{{regionEnd}}</div></th>
         {{/genesByAbc}}
         {{#abcGenesExist}}
     </tr>
@@ -1207,9 +1216,7 @@ div.holdMultipleElements{
             <td >
             <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
-                    {{#source}}
-                       <div>{{.}}</div>
-                    {{/source}}
+                    <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>
                </div>
             </div>
