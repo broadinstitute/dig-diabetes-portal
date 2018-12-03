@@ -1,19 +1,12 @@
 <%@ page import="org.broadinstitute.mpg.diabetes.util.PortalConstants" %>
 
-
-
-
 <!DOCTYPE html>
 <html>
 <head>
-
     <script>
-
         var drivingVariables = {
             phenotypeName: '<%=phenotypeKey%>',
-
             traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
-
             ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
             retrievePhenotypesAjaxUrl: '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
             ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
@@ -23,28 +16,18 @@
             local: "${locale}",
             copyMsg: '<g:message code="table.buttons.copyText" default="Copy" />',
             printMsg: '<g:message code="table.buttons.printText" default="Print me!" />'
-
         }
         mpgSoftware.moduleLaunch.setMySavedVariables(drivingVariables);
 
-
-
-
         $( document ).ready(function() {
-
             mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('T2D');
             mpgSoftware.moduleLaunch.fillPhenotypesDropdown('T2D');
             mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('T2D','');
         });
-
-
-
     </script>
 
     <r:require modules="manhattan"/>
     <r:require modules="mode3"/>
-
-
     <meta name="layout" content="t2dGenesCore"/>
     <r:require modules="core"/>
     <r:require modules="traitsFilter"/>
@@ -52,18 +35,11 @@
 
     <style>
     .modules-table td { vertical-align: middle !important; }
-
     .inactive { background-color: rgba(0,0,0,.15) !important;}
     </style>
-
-
 </head>
 
 <h1 class="dk-page-title" xmlns="http://www.w3.org/1999/html"><%=phenotypeName%></h1>
-
-
-
-
 <body>
 <div id="main">
     <div class="container dk-static-content">
@@ -78,29 +54,6 @@
                 <h5 class="dk-under-header"><g:message code="informational.modules.bellowtitle"></g:message></h5>
             </div>
         </div>
-
-        <!--<div class="row" style="padding-bottom: 30px;">
-            <div class="col-md-12">
-                <h3>Select a trait and a dataset to view available analysis. </h3>
-                <div class="col-md-4">
-                    <select id="phenotype" class="form-control selectpicker" data-live-search="true" style="width: 200px;">
-                        <option>Traits</option>
-                        <option>Type 2 diabetes</option>
-                            <option>BMI</option>
-                    </select>
-                </div>
-
-                    <div class="col-md-4">
-                        <select id="dataset" class="form-control  selectpicker" style="width: 200px;">
-                            <option>Datasets</option>
-                            <option>dataset 1</option>
-                            <option>dataset 2</option>
-                        </select>
-                    </div>
-
-            </div>
-        </div>-->
-
         <div class="row">
             <div class="col-md-12">
 
@@ -119,7 +72,6 @@
                             <p><g:message code="informational.modules.LDClumping.description2"></g:message></td></p>
 
                     </td>
-
                         <td>
 
                             <label>Select phenotype</label>
@@ -137,12 +89,6 @@
                             </td>
                         <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="${createLink(controller:'variantSearch', action:'variantSearchWF')}">Launch Variant Finder</a></div></td>
                     </tr>
-                    <!--<tr>
-                            <td><h4><g:message code="informational.modules.GAIT.title"></g:message></h4></td>
-                            <td><g:message code="informational.modules.GAIT.description"></g:message></td>
-                            <td><div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact"><a href="javascript:;">Launch GAIT</a></div></td>
-                        </tr>-->
-
                     <g:if test="${g.portalTypeString()?.equals('t2d')}">
                         <tr>
                             <td class=""><span class='new-dataset-flag' style="margin-top:-10px; margin-left: 10px;">&nbsp;</span><h4><g:message code="informational.modules.GRS.title"></g:message></h4></td>

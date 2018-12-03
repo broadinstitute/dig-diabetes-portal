@@ -358,15 +358,12 @@ var UTILS = {
             (dataSetJson["is_error"] === false))
         {
             var options = $(phenotypeDropDownIdentifier);
-
             options.empty();
-
            var keys = dataSetJson.datasetOrder;
-
-
             _.forEach(keys,function(key){
                 var groupContents = dataSetJson.dataset[key];
                 options.append("<optgroup label='"+key+"'>");
+               //var selectedPhenotype = "HB1Ac";
                 for (var j = 0; j < groupContents.length; j++) {
                     if(_.includes(phenotypesToOmit, groupContents[j][0])) {
                         continue;
@@ -377,8 +374,38 @@ var UTILS = {
                 }
                 options.append("</optgroup>");
             });
+            // enable the input
+            options.prop('disabled', false);
 
+        }
+    },
 
+    fillPhenotypeCompoundDropdownNew: function (dataSetJson,phenotypeDropDownIdentifier,includeDefault, phenotypesToOmit,portaltype,selectedHomePagePhenotype) { // help text for each row
+        if ((typeof dataSetJson !== 'undefined')  &&
+            (typeof dataSetJson["is_error"] !== 'undefined')&&
+            (dataSetJson["is_error"] === false))
+        {
+            var options = $(phenotypeDropDownIdentifier);
+            options.empty();
+            var keys = dataSetJson.datasetOrder;
+            _.forEach(keys,function(key){
+                var groupContents = dataSetJson.dataset[key];
+                options.append("<optgroup label='"+key+"'>");
+                for (var j = 0; j < groupContents.length; j++) {
+                    if(_.includes(phenotypesToOmit, groupContents[j][0])) {
+                        continue;
+                    }
+                    if(selectedHomePagePhenotype === groupContents[j][0]){
+                        options.append($("<option selected='' />").html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                        // add some whitespace to create indentation
+
+                    }
+                    options.append($("<option />").val(groupContents[j][0])
+                    // add some whitespace to create indentation
+                        .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                }
+                options.append("</optgroup>");
+            });
             // enable the input
             options.prop('disabled', false);
 

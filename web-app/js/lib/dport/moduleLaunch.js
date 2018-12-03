@@ -18,10 +18,8 @@ var mpgSoftware = mpgSoftware || {};
         var launchLDClumping = function() {
             var rememVars = mpgSoftware.moduleLaunch.getMySavedVariables();
             var selectedVal = $('#phenotypeDropdown').val();
-            //var launchLDClumpURL = "/dig-diabetes-portal/trait/traitSearch" + "?trait=" + selectedVal + "&significance=" + 0.0005;
             var launchLDClumpURL = rememVars.traitSearchUrl + "?trait=" + selectedVal + "&significance=" + 0.0005;
             window.location.href = launchLDClumpURL;
-
         }
 
         // called when page loads

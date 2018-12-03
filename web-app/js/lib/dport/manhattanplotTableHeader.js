@@ -79,14 +79,12 @@ var mpgSoftware = mpgSoftware || {};
                     if(data.variant.results[0].isClump == false){
                         document.getElementById("r2dropdown").style.display = "none";
                         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,dataset);
-                       // mpgSoftware.manhattanplotTableHeader.
                     }
                     //if(data.isClump) is true then refresh the manhattan plot
                     //else (get the id of the r2 dropdown and disable the dropdown.
                     else{
                         mpgSoftware.manhattanplotTableHeader.refreshManhattanplotTableView(data);
                         document.getElementById("r2dropdown").style.display = "block";
-                        // $("#r2dropdown").css("display", "block");
                     }
                 },
                 error: function (jqXHR, exception) {
@@ -139,16 +137,15 @@ var mpgSoftware = mpgSoftware || {};
 
             //phenotype is null when its not selected from the manhattan plot page
             if(selectedPhenotype == null){
-                selectedPhenotype = mySavedVars.phenotypeName
-                $("#phenotypeVFChoser").val(selectedPhenotype)
+                selectedPhenotype = mySavedVars.phenotypeName;
             }
-            var selectedDataset = document.getElementById("manhattanSampleGroupChooser").value
+            var selectedDataset = document.getElementById("manhattanSampleGroupChooser").value;
                 $('#manhattanPlot1').empty();
                 $('#traitTableBody').empty();
                 $('#phenotypeTraits').DataTable().rows().remove();
                 $('#phenotypeTraits').dataTable({"retrieve": true}).fnDestroy();
                 mpgSoftware.manhattanplotTableHeader.fillClumpVariants(selectedPhenotype,selectedDataset,r2);
-        }
+        };
 
 
         // called when page loads
@@ -177,6 +174,34 @@ var mpgSoftware = mpgSoftware || {};
                 }
             });
         };
+
+        // called when page loads
+        var fillPhenotypesDropdownNew = function (portaltype, selectedHomePagePhenotype) {
+            var rememVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+            var loading = $('#spinner').show();
+            var rememberportaltype = portaltype;
+            $.ajax({
+                cache: false,
+                type: "post",
+                url: rememVars.retrievePhenotypesAjaxUrl,
+                data: {getNonePhenotype: false},
+                async: true,
+                success: function (data) {
+                    if (( data !== null ) &&
+                        ( typeof data !== 'undefined') &&
+                        ( typeof data.datasets !== 'undefined' ) &&
+                        (  data.datasets !== null )) {
+                        UTILS.fillPhenotypeCompoundDropdownNew(data.datasets, '#phenotypeVFChoser', true, [], rememberportaltype, selectedHomePagePhenotype);
+                    }
+                    loading.hide();
+                },
+                error: function (jqXHR, exception) {
+                    loading.hide();
+                    core.errorReporter(jqXHR, exception);
+                }
+            });
+        };
+
 
 
         var refreshManhattanplotTableView = (function(data) {
@@ -290,8 +315,8 @@ var mpgSoftware = mpgSoftware || {};
             callFillClumpVariants:callFillClumpVariants,
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables,
-            fillPhenotypesDropdown: fillPhenotypesDropdown
-
+            fillPhenotypesDropdown: fillPhenotypesDropdown,
+            fillPhenotypesDropdownNew: fillPhenotypesDropdownNew
         }
 
     }());

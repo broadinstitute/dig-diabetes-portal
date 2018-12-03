@@ -4,8 +4,6 @@
 
 
 <script>
-
-    
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
@@ -20,17 +18,11 @@
     };
     mpgSoftware.manhattanplotTableHeader.setMySavedVariables(drivingVariables);
 
-
-
     $( document ).ready(function() {
-
         mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('<%=phenotypeKey%>');
-        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdown('T2D');
+        mpgSoftware.manhattanplotTableHeader.fillPhenotypesDropdownNew('T2D', '<%=phenotypeKey%>');
         mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('<%=phenotypeKey%>','');
     });
-
-
-
 </script>
 
 <p><g:message code="informational.traitTableHeader.help1"></g:message></p>
@@ -41,7 +33,7 @@
 
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Phenotype</p>
-    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(this.value)">
+    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(this.value)">
     </select>
 </div>
 
@@ -52,10 +44,8 @@
     </select>
 </div>
 
-
 <div id = "r2dropdown" style = "width: auto;" >
     <p class = "dk-footnote" style="width:83%;">r<sup>2</sup> threshold&nbsp;&nbsp;<g:helpText title="r_squared.help.header" placement="bottom" body="r_squared.help.text"/></p>
-    %{--if the dataset selected from user is non-fed--}%
     <select style = "width: 150px; overflow: hidden; text-overflow: ellipsis;" id="rthreshold" name="rthreshold" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
         <option value="0.1000001" >0.1 </option>
         <option value="0.2" >0.2 </option>
@@ -67,16 +57,11 @@
 
 </div>
 
-
-
-
 <style>
 .mychart {width:100% !important; height:740px !important;}
 </style>
 <div style="text-align: right; clear: left">Scroll to zoom. Roll over dots for variant information.</div>
 <div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px; clear:left;"></div>
-
-
 
 <table id="phenotypeTraits" class="table  dk-t2d-general-table basictable table-striped">
     <thead>
@@ -86,7 +71,6 @@
         <th><g:message code="variantTable.columnHeaders.exomeChip.pValue" /></th>
         <th id="effectTypeHeader"></th>
         <th><g:message code="variantTable.columnHeaders.shared.maf" /></th>
-        %{--<th><g:message code="variantTable.columnHeaders.shared.all_p_val" /></th>--}%
     </tr>
     </thead>
     <tbody id="traitTableBody">
