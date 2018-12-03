@@ -845,6 +845,9 @@ div.genePosition{
         <div class="col-sm-2">
             <button id="{{buttonId}}" class="btn btn-success directorButtonDetails"
                                             type="button">{{buttonName}}</button>
+                                            <a href="{{reference}}"  target="_blank">
+                                            <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
+                                            </a>
         </div>
         <div class="col-sm-10">
             {{description}}

@@ -1264,7 +1264,9 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: *[]}}
          */
         var objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'topLevelContextOfTheDynamicUiButton', buttonName: 'Reset context', description: 'Change the locus under consideration', inputBoxId:'inputBoxForDynamicContextId'}]
+            directorButtons: [{buttonId: 'topLevelContextOfTheDynamicUiButton', buttonName: 'Reset context',
+                description: 'Change the locus under consideration',
+                inputBoxId:'inputBoxForDynamicContextId', reference: 'none?' }]
         };
         $("#contextControllersInDynamicUi").empty().append(Mustache.render($('#contextControllerDescriptionSection')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1275,11 +1277,25 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: *[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity', description: 'present all genes overlapping  the specified region'},
-                {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL', description: 'present all genes overlapping  the specified region for which some eQTL relationship exists'},
-                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD', description: 'list mouse knockout annotations  for all genes overlapping the specified region'},
-                {buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC', description: 'get a list of regions associated with a gene via ABC test'},
-                {buttonId: 'getRecordsFromECaviarForGeneTable', buttonName: 'eCaviar', description: 'find all genes for which co-localized variants exist'}]
+            directorButtons: [{buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity',
+                description: 'present all genes overlapping  the specified region',
+                outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder', reference: '#' },
+                {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL',
+                    description: 'present all genes overlapping  the specified region for which some eQTL relationship exists',
+                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                    reference: 'https://www.genome.gov/27543767/genotypetissue-expression-project-gtex'},
+                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD',
+                    description: 'list mouse knockout annotations  for all genes overlapping the specified region',
+                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                    reference: 'http://www.informatics.jax.org/phenotypes.shtml'},
+                {buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC',
+                    description: 'get a list of regions associated with a gene via ABC test',
+                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                    reference: 'http://science.sciencemag.org/content/354/6313/769'},
+                {buttonId: 'getRecordsFromECaviarForGeneTable', buttonName: 'eCaviar',
+                    description: 'find all genes for which co-localized variants exist',
+                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}]
         };
         $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1290,7 +1306,10 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL', description: 'find all variants in the above range with QTL relationship with some phenotype'}]
+            directorButtons: [{buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
+                description: 'find all variants in the above range with QTL relationship with some phenotype',
+                outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
+                reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}]
         };
         $("#dynamicVariantHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1301,9 +1320,16 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL', description: 'find all tissues for which eQTLs exist foraging in the specified range'},
-                {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar', description: 'find all tissues for which co-localized variants exist'},
-                {buttonId: 'getRecordsFromAbcForTissueTable', buttonName: 'ABC', description: 'find all tissues identified in the ABC gene-enhancer screen'}
+            directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL',
+                description: 'find all tissues for which eQTLs exist foraging in the specified range'},
+                {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar',
+                    description: 'find all tissues for which co-localized variants exist',
+                    outputBoxId:'#dynamicTissueHolder div.dynamicUiHolder',
+                    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'},
+                {buttonId: 'getRecordsFromAbcForTissueTable', buttonName: 'ABC',
+                    description: 'find all tissues identified in the ABC gene-enhancer screen',
+                    outputBoxId:'#dynamicTissueHolder div.dynamicUiHolder',
+                    reference: 'http://science.sciencemag.org/content/354/6313/769'}
                 ]
         };
         $("#dynamicTissueHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
@@ -1316,7 +1342,10 @@ mpgSoftware.dynamicUi = (function () {
          */
         objectDescribingDirectorButtons = {
             directorButtons: [{buttonId: 'getPhenotypesFromQtlForPhenotypeTable', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'},
-                {buttonId: 'getPhenotypesFromECaviarForPhenotypeTable', buttonName: 'eCAVIAR', description: 'find all variants which co-localize with eQTLs'}]
+                {buttonId: 'getPhenotypesFromECaviarForPhenotypeTable', buttonName: 'eCAVIAR',
+                    description: 'find all variants which co-localize with eQTLs',
+                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}]
         };
         $("#dynamicPhenotypeHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
