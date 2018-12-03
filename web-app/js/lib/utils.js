@@ -396,7 +396,7 @@ var UTILS = {
                         continue;
                     }
                     if(selectedHomePagePhenotype === groupContents[j][0]){
-                        options.append($("<option selected='' />").html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
+                        options.append($("<option selected='' />").val(groupContents[j][0]).html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
                         // add some whitespace to create indentation
                     }
                     else{
