@@ -71,11 +71,9 @@
                     text-align:left;
                     line-height:26px;
                 }
-
                 a.front-search-example {
                     color:#cce6c3;
                 }
-
             </g:if>
             <g:elseif test="${g.portalTypeString()?.equals('mi')}">
                 a {color:#de8800;}
@@ -93,8 +91,6 @@
                     text-align:left;
                     line-height:26px;
                 }
-
-
             a.front-search-example {
                 color:#ffffb3;
             }
@@ -115,7 +111,6 @@
                 text-align:left;
                 line-height:26px;
             }
-
             a.front-search-example {
                 color:#cccce6;
             }
@@ -136,44 +131,32 @@
                     text-align:left;
                     line-height:26px;
                 }
-
                 a.front-search-example {
                     color:#cce6e6;
                 }
-
             </g:else>
-
-
         </style>
-
         <script>
             $(function () {
                 /*DK: find out if the user is viewing the front page*/
-
                 if ($(".dk-user-name").length) {
                     var userName = $(".dk-user-name").find(".user-name-initial").text();
                     $(".dk-user-name").find(".user-name-initial").html(userName.charAt(0).toUpperCase()).attr("title",userName).css({"display":"block","color":"#fffff", "text-shadow":"none", "text-align":"center","font-size":"12px","width":"22px","padding":"2px 0","border-radius":"5px 0 0 5px"});
                 }
-
                 /* set the visibility of the user notification blob */
                 var warningMessage = "";
                 $("#userNotificationDisplay").text(warningMessage).attr("message",warningMessage);
                 ($("#userNotificationDisplay").text() == "")? $("#userNotificationDisplay").css("display","none") : $("#userNotificationDisplay").css("display","inline-block");
-
                 /* display notification as the mouse pointer rolls over the notification blob */
                 $("#userNotificationDisplay").hover(function(){
                     $(this).append("<div class='user-notification-full' style='position:absolute; right: 15px; top: 35px; padding-top: 10px; width:200px;'><span style='display:block; font-size: 14px; background-color:#fff; box-shadow: 0 2px 3px rgba(0, 0, 0, .5); text-align:left; width: 200px !important; border-radius: 3px; padding: 5px 10px 5px 10px; color:#333;'>"+$(this).attr("message")+"</span></div>");
                 }, function() {$( this ).find('.user-notification-full').remove();});
-
                 var pathFullName = location.pathname.toLowerCase();
                 var pathName = location.pathname.toLowerCase().split("/");
                 var theLastPath = pathName.slice(-1)[0];
-
                 switch(theLastPath){
                     case "":
-
                         var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
-
                         if ($(".portal-front-banner").length){
                             $(".dk-logo-wrapper").css({"display":"none"});
                             setMenuTriangle(".home-btn");
@@ -182,7 +165,6 @@
                             $(".dk-menu-wrapper").css({"width":menuWidth,"margin-top":"0","border-bottom":"none"});
                         }
                         break;
-
                     case "portalhome":
                         $(".dk-logo-wrapper").css({"display":"none"});
                         var menuWidth = $(".dk-user-menu").width() + $(".dk-general-menu").width()+50;
@@ -190,206 +172,133 @@
                         setMenuTriangle(".home-btn");
                         addFilterToTraitslist();
                         break;
-
                     case "variantsearchwf":
                         setMenuTriangle(".variant-search-btn");
                         break;
-
                     case "grsinfo":
                         setMenuTriangle(".grs-btn");
                         break;
-
                     case "data":
                         setMenuTriangle(".data-btn")
                         break;
-
-
                     case "about":
                         setMenuTriangle(".about-btn")
                         break;
-
                     case "policies":
                         setMenuTriangle(".policies-btn")
                         break;
-
                     case "tutorials":
                         setMenuTriangle(".tutorials-btn")
                         break;
-
                     case "contact":
                         setMenuTriangle(".contact-btn")
                         break;
-
                     case "datasubmission":
                         setMenuTriangle(".data-submission-btn")
                         break;
-
                     case "downloads":
                         setMenuTriangle(".downloads-btn")
                         break;
                 }
-
                 menuHeaderSet();
             });
-
             function addFilterToTraitslist() {
-
             }
-
             function setMenuTriangle(SELEVTEDBTN) {$(SELEVTEDBTN).css({"background-image":"url(${resource(dir: 'images', file: 'menu-triangle.svg')})","background-repeat":"no-repeat","background-position":"center bottom","background-size":"18px 9px"})}
-
-
             function menuHeaderSet() {
                 var menuHeaderWidth = $(".dk-logo-wrapper").width() + $(".dk-general-menu").width() + 50;
                 var windowWidth = $(window).width();
-
                 if(menuHeaderWidth > windowWidth) {
-
                     $(".dk-menu-wrapper").css({"margin-top":"0px"});
                     $(".dk-menu-wrapper").find("ul").css({"float":"left"});
                 } else {
                     var pathName = location.pathname.toLowerCase().split("/");
                     var theLastPath = pathName.slice(-1)[0];
-
                     if(theLastPath != "" && theLastPath != "portalhome") {
-
                         $(".dk-menu-wrapper").css({"margin-top":"-50px"});
                         $(".dk-menu-wrapper").find("ul").css({"float":"right"});
                     }
                 }
             }
-
-
-
-
             //turn on/off DK's plot
             var showPhePlot = true;
-
-
             /* GAIT TAB UI */
-
             function checkGaitTabs(event) {
-
                 if($(".modeled-phenotype-div").css('display') == "block") {
-
                     $("#strata1_stratsTabs").css("background-color","#9fd3df");
-
                     if($("#stratifyDesignation").val() == "none") {
-
                         $(".modeled-phenotype-div").find("a").css("background","none");
                         $(".modeled-phenotype-div").find("li.active").find("a").css("background-color","#ffffff");
-
                         $(".modeled-phenotype-div").find("a").click(function() {
-
                             $(".modeled-phenotype-div").find("a").css("background","none");
-
                             $(this).css("background-color","#ffffff");
-
                         })
                     }
-
                 } else {
-
                     $("#strata1_stratsTabs").css("background-color","#bfe3ef");
-
                 }
-
             }
-
             function highlightActiveTabs(event) {
-
                 var filterParmValue = $(event.target).val();
-
                 var tabID = "#"+ $(event.target).closest(".tab-pane").attr("id");
-
                 if(filterParmValue != "") {
-
                     $("li.active").find("a").each(function(){
-
                         if($(this).attr("data-target") == tabID){
-
                             $(this).closest("li.active").addClass("adjusted");
-
                             var scndTabID = "#" + $(this).closest(".tab-pane").attr("id");
-
                             $("li.active").find("a").each(function() {
-
                                 if ($(this).attr("data-target") == scndTabID) {
-
                                     $(this).closest("li.active").addClass("adjusted");
-
                                 }
                             });
                         }
                     });
                 } else {
                     var totalInputNum = $(event.target).closest(".filterHolder").find("input.filterParm").length;
-
                     $(event.target).closest(".filterHolder").find("input.filterParm").each(function() {
-
                         totalInputNum = ($(this).val()) ? totalInputNum : totalInputNum-1;
                     });
-
                     if (totalInputNum == 0){
                         $("li.active").find("a").each(function(){
                             if($(this).attr("data-target") == tabID){$(this).closest("li.active").removeClass("adjusted")}
                         });
-
                         $("li.active").find("a").each(function() {
-
                             if ($(this).attr("data-target") == tabID) {
-
                                 var adjustedTabNum = 0;
-
                                 $(this).closest("ul").find("li").each(function(){
                                     adjustedTabNum = ($(this).hasClass("adjusted"))? adjustedTabNum + 1 : adjustedTabNum;
                                 })
-
                                 if(adjustedTabNum == 0) {
                                     var scndTabID = "#" + $(this).closest(".tab-pane").attr("id");
-
                                     $("li.active").find("a").each(function() {
-
                                         if ($(this).attr("data-target") == scndTabID) {
-
                                             $(this).closest("li.active").removeClass("adjusted");
-
                                         }
                                     });
                                 }
-
                             }
                         });
                     }
                 }
             }
-
             /*temporary placeholder for a function to render VF sear results table.*/
-
             function renderVFSearchResult(DATA) {
-
                 $("#searchResultsHolder").html('<table id="xvariantTableResults" class="table table-striped dk-search-result dk-t2d-table no-footer" style="border-collapse: collapse; width: 100%;" role="grid" aria-describedby="xvariantTableResults_info">\n' +
                     '    <thead></thead>\n' +
                     '    <tbody></tbody>\n' +
                     '</table>');
-
                 var VARIANTS = DATA["variant"]["variants"];
-
                 var VFResultTableHead = '';
                 var VFResultTableBody = '';
-
                 var allDatasets = [];
                 var uniqueDatasets = [];
-
                 var countElement = function(item,array) {
                     var count = 0;
                     $.each(array, function(i,v) { if (v === item) count++; });
                     return count;
                 }
-
                 var massageContent = function(CONTENT) {
                     var returnStr = CONTENT.replace(/_/g, " ");
-
                     switch(returnStr) {
                         case "MINA":
                             returnStr = "Case minor allele counts";
@@ -406,25 +315,17 @@
                     }
                     return returnStr;
                 }
-
-
                 $.each(VARIANTS[0]["entities"], function(index, val) {
                     allDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
                     uniqueDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
                 });
-
                 $.unique(uniqueDatasets);
-
-
                 //render common annotations first
-
                 VFResultTableHead += '<tr><th class="dk-common" colspan="9">Variant annotations</th>';
-
                 $.each(uniqueDatasets, function(index, val) {
                     var uniqueDatasetNum = countElement(val,allDatasets);
                     VFResultTableHead += '<th class="dk-property-10" colspan="'+uniqueDatasetNum+'">'+val+'</th>';
                 });
-
                 VFResultTableHead += '</tr><tr class="vf-table-headers">';
                 VFResultTableHead += '<th class="dk-common">Variant ID</th>';
             	VFResultTableHead += '<th class="dk-common">dbSNP ID</th>';
@@ -435,7 +336,6 @@
             	VFResultTableHead += '<th class="dk-common">Nearest gene</th>';
             	VFResultTableHead += '<th class="dk-common">Protein change</th>';
                 VFResultTableHead += '<th class="dk-common">Consequence</th>';
-
                 $.each(uniqueDatasets, function(index, val) {
                     $.each(VARIANTS[0]["entities"], function(index2, val2) {
                         var datasetName = val2["phenotype"] +" <span style='color:#fff'>("+ val2["dataset"]+")</span>";
@@ -448,12 +348,8 @@
                         }
                     });
                 });
-
-
                 VFResultTableHead += '</tr>';
-
                 $.each(VARIANTS, function(index,val) {
-
                     VFResultTableBody += '<tr>';
                     VFResultTableBody += '<td><a href="<g:createLink controller="variantInfo" action="variantInfo" />/' + val["common_annotation"]["VAR_ID"] + '">' + val["common_annotation"]["CHROM"] +":" +val["common_annotation"]["POS"] + '</a></td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["DBSNP_ID"] + '</td>';
@@ -464,7 +360,6 @@
                     VFResultTableBody += '<td><a href="<g:createLink controller="gene" action="geneInfo" />/' + val["common_annotation"]["CLOSEST_GENE"] + '">' + val["common_annotation"]["CLOSEST_GENE"] + '</a></td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Protein_change"] + '</td>';
                     VFResultTableBody += '<td>' + massageContent(val["common_annotation"]["Consequence"]) + '</td>';
-
                     $.each(val["entities"], function(index2, val2) {
                         for (var key in val2) {
                             if (val2.hasOwnProperty(key)) {
@@ -472,31 +367,17 @@
                             }
                         }
                     })
-
-
-
                     VFResultTableBody += '</tr>';
                 });
-
-
                 $("#xvariantTableResults").find("thead").append(VFResultTableHead);
                 $("#xvariantTableResults").find("tbody").append(VFResultTableBody);
-
-
-
                 //console.log(VARIANTS);
-
                 var initialSort = 0;
-
                 $.each($(".vf-table-headers").find("th"),function(index) {
                     ($(this).text() == "p-Value")? initialSort = index : "";
                 })
-
-
                 $.noConflict();
-
                 $ = jQuery;
-
                 if($("#xvariantTableResults").find("tbody").find("tr").length) {
                     $('#xvariantTableResults').DataTable({"pageLength": 50,
                         "order": [[ initialSort, "asc" ]],
@@ -508,79 +389,48 @@
                         ]});
                 }
             }
-
             /* copy url of variant search result page to clipboard*/
-
             function copyVariantSearchURL() {
                 document.addEventListener('copy', function(e) {
-
                     e.clipboardData.setData('text/plain', $(location).attr("href"));
                     e.preventDefault(); // default behaviour is to copy any selected text
                 });
-
                 document.execCommand('copy');
             }
-
             function addNewDatasetFlag (DATASETSLIST,TGELEMENT,ADDINGFLAG) {
-
                 var newDatasetsList = DATASETSLIST;
                 var TargetElement = $(TGELEMENT);
-
                 for(i=0; i < newDatasetsList.length; i++) {
                     for (j = 0; j < TargetElement.length; j++) {
                         var datasetName = TargetElement.eq(j).text();
-
                         if(datasetName.indexOf(newDatasetsList[i]) != -1){
                             var newDatasetName = TargetElement.eq(j).html() + ADDINGFLAG;
-
                             TargetElement.eq(j).html(newDatasetName);
                         }
                     }
                 }
             }
-
-
             /* copy URL function end */
-
             $( window ).load( function() {
-
             });
-
             $( window ).ready( function() {
-
-
             });
-
-
             $( window ).resize(function() {
                 menuHeaderSet();
-
             })
-
         </script>
-
     </head>
-
 <body>
-
-
 <g:applyLayout name="errorReporter"/>
-
-
 <div id="spinner" class="dk-loading-wheel center-block" style="display:none;">
     <img id="img-spinner" src="${resource(dir: 'images', file: 'ajax-loader.gif')}" alt="Loading"/>
 </div>
 <div id="header">
-
         <g:applyLayout name="headerTopT2dgenes"/>
-
         <g:applyLayout name="headerBottomT2dgenes"/>
-
         <g:applyLayout name="notice"/>
-
 </div>
 </div>
-
 <g:layoutBody/>
 <g:if test="${g.portalTypeString()?.equals('stroke')}">
     <div class="container-fluid dk-stroke-footer"><div class="container">
@@ -591,7 +441,6 @@
 <g:else>
     <div class="container-fluid dk-t2d-footer"><div class="container">
 </g:else>
-
     <div class="row">
         <div class="col-md-12" style="text-align: center;">
             <div style="padding-top:10px;"><span class="glyphicon glyphicon-comment" style="color:#fff"></span> <a href="${createLink(controller:'informational', action:'contact')}"><g:message code="mainpage.send.feedback"/></a><div>
@@ -599,8 +448,6 @@
         </div>
     </div>
         </div></div>
-
 <g:applyLayout name="activatePopups"/>
-
 </body>
 </html>
