@@ -664,7 +664,7 @@ div.genePosition{
                 <div class="row" style="border: none">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li class="nav-item">
+                            <li class="nav-item active">
                                 <a class="nav-link sub-tab active" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
                             </li>
                             <li class="nav-item">
@@ -716,22 +716,15 @@ div.genePosition{
                                     %{--</div>--}%
                                 %{--</div>--}%
 
+                                <h3> Results </h3>
+                                <div class="resultsTableHolder">
+                                    <div class="refinementTable dynamicUiHolder">
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
-                                <div class="row">
-                                   <div class="col-sm-12">
-                                        <h3> Results </h3>
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <div class="refinementTable dynamicUiHolder">
-
-                                        </div>
-                                    </div>
-                               </div>
-
-
-                                        </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
 
                         <div class="row">
