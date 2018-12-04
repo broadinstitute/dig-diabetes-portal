@@ -42,11 +42,9 @@ var mpgSoftware = mpgSoftware || {};
                                 $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
                             }
                             mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(phenotype);
-                            window.history.pushState('page2', 'Title', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
-
+                            window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
                         }
                     }
-
                     loader.hide();
                 },
                 error: function (jqXHR, exception) {
@@ -56,12 +54,6 @@ var mpgSoftware = mpgSoftware || {};
             });
 
         };
-
-
-        var onPageLoad = function() {
-            document.getElementById("clump").checked = true;
-        }
-
 
 
         var fillClumpVariants = function (phenotype, dataset, r2) {
