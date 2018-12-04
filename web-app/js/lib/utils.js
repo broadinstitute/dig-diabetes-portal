@@ -397,14 +397,12 @@ var UTILS = {
                     }
                     if(selectedHomePagePhenotype === groupContents[j][0]){
                         options.append($("<option selected='' />").val(groupContents[j][0]).html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
-                        // add some whitespace to create indentation
                     }
                     else{
                         options.append($("<option />").val(groupContents[j][0])
                         // add some whitespace to create indentation
                             .html("&nbsp;&nbsp;&nbsp;" + groupContents[j][1]));
                     }
-
                 }
                 options.append("</optgroup>");
             });

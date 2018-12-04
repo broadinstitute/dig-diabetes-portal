@@ -21,7 +21,6 @@ var mpgSoftware = mpgSoftware || {};
             var coreVariables = getMySavedVariables();
             var loader = $('#rSpinner');
             loader.show();
-
             $.ajax({
                 cache: false,
                 type: "post",
@@ -30,7 +29,6 @@ var mpgSoftware = mpgSoftware || {};
                 async: false,
                 success: function (data) {
                     loader.hide();
-
                     var rowDataStructure = [];
                     if ((typeof data !== 'undefined') &&
                         (data)) {
@@ -44,6 +42,7 @@ var mpgSoftware = mpgSoftware || {};
                                 $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
                             }
                             mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(phenotype);
+                            window.history.pushState('page2', 'Title', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
 
                         }
                     }

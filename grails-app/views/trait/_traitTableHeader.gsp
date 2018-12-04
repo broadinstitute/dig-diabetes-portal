@@ -7,6 +7,7 @@
     var drivingVariables = {
         phenotypeName: '<%=phenotypeKey%>',
         ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
+        traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
         retrievePhenotypesAjaxUrl:'<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
         ajaxSampleGroupsPerTraitUrl: '${createLink(controller: "trait", action: "ajaxSampleGroupsPerTrait")}',
         phenotypeAjaxUrl: '${createLink(controller: "trait", action: "phenotypeAjax")}',
