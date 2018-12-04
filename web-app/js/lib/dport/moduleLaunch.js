@@ -27,6 +27,7 @@ var mpgSoftware = mpgSoftware || {};
             var rememVars = mpgSoftware.moduleLaunch.getMySavedVariables();
             var loading = $('#spinner').show();
             var rememberportaltype = portaltype;
+
             $.ajax({
                 cache: false,
                 type: "post",

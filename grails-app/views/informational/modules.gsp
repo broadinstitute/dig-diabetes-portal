@@ -21,8 +21,33 @@
 
         $( document ).ready(function() {
             mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('T2D');
-            mpgSoftware.moduleLaunch.fillPhenotypesDropdown('T2D');
+
             mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('T2D','');
+
+            var userLogIn = ($(".login-btn").text().trim().toLowerCase() != "google log in")? true : false;
+
+            if (userLogIn) {
+                mpgSoftware.moduleLaunch.fillPhenotypesDropdown('T2D');
+            } else {
+
+                var loginModal = '<div class="modal fade" id="mode3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
+                    '  <div class="modal-dialog" role="document">\n' +
+                    '    <div class="modal-content">\n' +
+                    '      <div class="modal-body">\n' +
+                    '        <h3>Login required!</h3>To use the analysis modules login is required. You can still learn about the modules. To continue to view the page, please close this modal.\n' +
+                    '      </div>\n' +
+                    '      <div class="modal-footer">\n' +
+                    '<a href=${createLink(controller:"home",action:"portalHome")}><button type="button" class="btn btn-info">Go back to home page</button></a>\n' +
+                    '<oauth:connect provider="google" id="google-connect-link"><button type="button" class="btn btn-primary">Login with Google</button></oauth:connect>\n' +
+                    '<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Close modal</button>\n' +
+                    '      </div>\n' +
+                    '    </div>\n' +
+                    '  </div>\n' +
+                    '</div>';
+                $("body").append(loginModal);
+
+                $('#mode3Modal').modal();
+            }
         });
     </script>
 
