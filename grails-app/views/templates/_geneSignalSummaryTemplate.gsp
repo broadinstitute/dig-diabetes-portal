@@ -625,10 +625,9 @@ div.genePosition{
             </div>
             {{/chromatinConformationTab}}
         </div>
-
         <div role="tabpanel" class="tab-pane exposeDynamicUiChooser" id="exposeDynamicUiTabHolder">
             {{#dynamicUiTab}}
-                <div class="row" style="">
+                <div class="row" style="border: none">
                     <div id="configurableUiTabStorage" style="display: none"></div>
                     <div class="col-sm-12">
                     Current context:
@@ -662,43 +661,40 @@ div.genePosition{
                     </div>
                 </div>
 
-                <div class="row sub-tabs" style="">
+                <div class="row" style="border: none">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link sub-tab active" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
+                                <a class="nav-link active" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link sub-tab" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>
+                                <a class="nav-link" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link sub-tab" href="#dynamicTissueHolder" role="tab" data-toggle="tab">Tissue</a>
+                                <a class="nav-link" href="#dynamicTissueHolder" role="tab" data-toggle="tab">Tissue</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link sub-tab" href="#dynamicPhenotypeHolder" role="tab" data-toggle="tab">Phenotype</a>
+                                <a class="nav-link" href="#dynamicPhenotypeHolder" role="tab" data-toggle="tab">Phenotype</a>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="tab-content sub-tab-content">
+                <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
 
                         <div class="row">
-                            <div class="col-sm-12 sub-content">
-
+                            <div class="col-sm-12">
+                                <h3>Gene directors</h3>
                                 <div class="row">
-
                                     <div class="col-sm-12">
-                                        <h3>Gene directors</h3>
                                         <div class="directorButtonHolder">
 
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="resultsTableHolder">
                                 <h3> Results </h3>
+                                <div class="resultsTableHolder">
                                     <div class="dynamicUiHolder">
                                     </div>
                                 </div>
@@ -707,11 +703,9 @@ div.genePosition{
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicVariantHolder">
-
+                        <h3>Variant directors</h3>
                         <div class="row">
-
-                            <div class="col-sm-12 sub-content">
-                                <h3>Variant directors</h3>
+                            <div class="col-sm-12">
 
                                 <div class="directorButtonHolder">
 
@@ -739,11 +733,9 @@ div.genePosition{
 
                                         </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
-
+                        <h3>Tissue director</h3>
                         <div class="row">
-
-                            <div class="col-sm-12 sub-content">
-                                <h3>Tissue director</h3>
+                            <div class="col-sm-12">
 
                                 <div class="directorButtonHolder">
 
@@ -758,11 +750,9 @@ div.genePosition{
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder">
-
+                        <h3>Phenotype director</h3>
                         <div class="row">
-
-                            <div class="col-sm-12 sub-content">
-                                <h3>Phenotype director</h3>
+                            <div class="col-sm-12">
 
                                 <div class="directorButtonHolder">
 
@@ -856,7 +846,7 @@ div.genePosition{
             <button id="{{buttonId}}" class="btn btn-success directorButtonDetails"
                                             type="button">{{buttonName}}</button>
                                             <a href="{{reference}}"  target="_blank">
-                                            <span class="glyphicon glyphicon-link" aria-hidden="true"></span>
+                                            <span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span>
                                             </a>
         </div>
         <div class="col-sm-10">
