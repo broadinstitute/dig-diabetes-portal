@@ -812,7 +812,7 @@ mpgSoftware.dynamicUi = (function () {
             tissueObject['phenotypes'] = _.map(_.uniqBy(value,'phenotype'),function(o){return o.phenotype}).sort();
             tissueObject['genes'] = _.map(_.uniqBy(value,'gene'),function(o){return o.gene}).sort();
             tissueObject['varId'] = _.map(_.uniqBy(value,'var_id'),function(o){return o.var_id}).sort();
-            returnObject.phenotypesByColocalization.push(tissueObject);
+             returnObject.phenotypesByColocalization.push(tissueObject);
             returnObject.uniqueTissues.push({tissueName:tissueName});
         });
         returnObject['colocsTissuesExist'] = function(){
@@ -839,6 +839,8 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationTissueTable')[0].innerHTML,
             returnObject
         ));
+
+
     };
 
 
@@ -853,6 +855,12 @@ mpgSoftware.dynamicUi = (function () {
             geneObject['phenotypes'] = _.map(_.uniqBy(value,'phenotype'),function(o){return o.phenotype}).sort();
             geneObject['tissues'] = _.map(_.uniqBy(value,'tissue'),function(o){return o.tissue}).sort();
             geneObject['varId'] = _.map(_.uniqBy(value,'var_id'),function(o){return o.var_id}).sort();
+            geneObject['colocTissuesVector'] = function(){
+                return geneObject['tissue'];
+            };
+            geneObject['sourceByTissue'] = function(){
+                return _.groupBy(value,'tissue');
+            };
             returnObject.phenotypesByColocalization.push(geneObject);
         });
         returnObject['colocsExist'] = function(){
@@ -879,6 +887,58 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationGeneTable')[0].innerHTML,
             returnObject
         ));
+
+        _.forEach(returnObject.phenotypesByColocalization, function (value){
+            $('#tissues_'+value.geneName).data('allUniqueTissues', value.colocTissuesVector());
+            $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
+            $('#tissues_'+value.geneName).data('regionStart', value.start_pos);
+            $('#tissues_'+value.geneName).data('regionEnd', value.stop_pos);
+            $('#tissues_'+value.geneName).data('geneName', value.geneName);
+        });
+
+
+
+        $('div.openTissues').on('show.bs.collapse', function () {
+            // the user wants to drill down into the tissues. Let's make them a graphic using the data we stored above
+            var dataMatrix =
+                _.map($(this).data("sourceByTissue"),
+                    function(v,k){
+                        var retVal = [];
+                        _.forEach(v,function(oneRec){
+                            retVal.push(oneRec);
+                        });
+                        return retVal ;
+                    }
+                );
+            var extents = retrieveExtents()
+            var geneInfoArray = getAccumulatorObject("geneInfoArray");
+            var geneInfoIndex = _.findIndex( geneInfoArray, { name:$(this).data("geneName") } );
+            var additionalParameters;
+            if (geneInfoIndex < 0){
+                additionalParameters = {regionStart:_.minBy(_.flatMap ($(this).data("sourceByTissue")),'START').START,
+                    regionEnd:_.maxBy(_.flatMap ($(this).data("sourceByTissue")),'STOP').STOP,
+                    stateColorBy:['Flanking TSS'],
+                    mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
+                };
+            } else {
+                additionalParameters = {regionStart:geneInfoArray[geneInfoIndex].startPos,
+                    regionEnd:geneInfoArray[geneInfoIndex].endPos,
+                    stateColorBy:['Flanking TSS'],
+                    mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
+                };
+            }
+
+            //  here comes that D3 graphic!
+            buildMultiTissueDisplay(['Flanking TSS'],
+                $(this).data('allUniqueTissues'),
+                dataMatrix,
+                additionalParameters,
+                '#tooltip_'+$(this).attr('id'),
+                '#graphic_'+$(this).attr('id'));
+
+        });
+
+
     };
 
 
@@ -1277,9 +1337,10 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: *[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity',
-                description: 'present all genes overlapping  the specified region',
-                outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder', reference: '#' },
+            directorButtons: [
+                {buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity',
+                    description: 'present all genes overlapping  the specified region',
+                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder', reference: '#' },
                 {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL',
                     description: 'present all genes overlapping  the specified region for which some eQTL relationship exists',
                     outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
@@ -1306,10 +1367,11 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
-                description: 'find all variants in the above range with QTL relationship with some phenotype',
-                outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
-                reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}]
+            directorButtons: [
+                {buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
+                    description: 'find all variants in the above range with QTL relationship with some phenotype',
+                    outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
+                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'}]
         };
         $("#dynamicVariantHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1320,8 +1382,11 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: {buttonId: string, buttonName: string, description: string}[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL',
-                description: 'find all tissues for which eQTLs exist foraging in the specified range'},
+            directorButtons: [
+                {buttonId: 'getTissuesFromEqtlsForTissuesTable', buttonName: 'eQTL',
+                    description: 'find all tissues for which eQTLs exist foraging in the specified range',
+                    outputBoxId:'#dynamicTissueHolder div.dynamicUiHolder',
+                    reference: 'https://www.genome.gov/27543767/genotypetissue-expression-project-gtex'},
                 {buttonId: 'getPhenotypesFromECaviarForTissueTable', buttonName: 'eCaviar',
                     description: 'find all tissues for which co-localized variants exist',
                     outputBoxId:'#dynamicTissueHolder div.dynamicUiHolder',
@@ -1341,7 +1406,10 @@ mpgSoftware.dynamicUi = (function () {
          * @type {{directorButtons: *[]}}
          */
         objectDescribingDirectorButtons = {
-            directorButtons: [{buttonId: 'getPhenotypesFromQtlForPhenotypeTable', buttonName: 'QTL', description: 'find all phenotypes for which QTLs exist in the above'},
+            directorButtons: [{buttonId: 'getPhenotypesFromQtlForPhenotypeTable', buttonName: 'QTL',
+                description: 'find all phenotypes for which QTLs exist in the above',
+                outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
                 {buttonId: 'getPhenotypesFromECaviarForPhenotypeTable', buttonName: 'eCAVIAR',
                     description: 'find all variants which co-localize with eQTLs',
                     outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',

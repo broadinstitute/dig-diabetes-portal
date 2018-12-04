@@ -1113,10 +1113,12 @@ div.genePosition{
         {{#phenotypesByColocalization}}
             <td >
             <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
-               <div  class="collapse holdMultipleElements" id="tissues_{{geneName}}">
+               <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     {{#tissues}}
                        <div>{{.}}</div>
                     {{/tissues}}
+                    <div id="tooltip_tissues_{{geneName}}"></div>
+                    <div id="graphic_tissues_{{geneName}}"></div>
                </div>
             </div>
             <div><a data-toggle="collapse" data-target="#phenotypes_{{geneName}}">phenotypes={{numberOfPhenotypes}}</a>

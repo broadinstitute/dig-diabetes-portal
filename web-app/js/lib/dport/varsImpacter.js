@@ -187,9 +187,15 @@ var baget = baget || {};  // encapsulating variable
                         div.transition()
                             .duration(200)
                             .style("opacity", .9);
-                        div	.html("<div>Region "+ d.START+" to "+ d.STOP+"</div>"+
-                                "<div>Changes expression of "+ d.GENE+"in tissue "+ d.SOURCE+"</div>"+
-                            "<div>by "+ d.VALUE+" in experiment "+ d.EXPERIMENT+"</div>")
+                        div	.html("<div>chrom " +
+                            "<span class='empasizeInMouseOver'>"+ d.CHROM+"</span>:"+
+                            "&nbsp;&nbsp;<span class='empasizeInMouseOver'>"+ d.START+
+                            "</span> to   <span class='empasizeInMouseOver'>"+ d.STOP+
+                            "</span></div>"+
+                            "<div>Affects <span class='empasizeInMouseOver'>"+ d.GENE+"</span>"+
+                            " in  <span class='empasizeInMouseOver'>"+ d.SOURCE+"</span></div>"+
+                            "<div>by <span class='empasizeInMouseOver'>"+ d.VALUE+"</span>"+
+                            " in experiment <span class='empasizeInMouseOver'>"+ d.EXPERIMENT+"</span></div>")
                             .style("left", (d3.event.pageX) + "px")
                             .style("top", (d3.event.pageY - 28) + "px");
                     })
