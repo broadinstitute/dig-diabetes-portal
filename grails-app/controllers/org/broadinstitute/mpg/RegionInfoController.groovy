@@ -600,13 +600,17 @@ class RegionInfoController {
         String chromosome = ""
         boolean looksOkay = true
         JSONArray jsonReturn
+        Map ensemblMapper
+        Map geneNameMap = [:]
 
         if (params.gene) {
-            String temporaryGeneName = params.gene
-            if (temporaryGeneName.startsWith("ENSG")){
-                gene = temporaryGeneName
+            String commonName = params.gene
+            if (commonName.startsWith("ENSG")){
+                gene = commonName
             } else {
-                gene = restServerService.convertGeneCommonNameToEnsemblId(temporaryGeneName,true)
+                ensemblMapper = restServerService.convertGeneCommonNameToEnsemblId(commonName,true)
+                geneNameMap[ensemblMapper["GEN_ID"]] = commonName
+                gene = ensemblMapper["GEN_ID"]
             }
         }
 
@@ -645,15 +649,29 @@ class RegionInfoController {
             chromosome = params.chromosome
         }
 
+        if ((startPosition == -1) && (endPosition == -1)){ //if the start position and end position were not explicitly specified
+                                                           // then we will grab those from the database and insert them
+            endPosition = ensemblMapper.END
+            startPosition = ensemblMapper.START
+            chromosome = ensemblMapper.CHROM
+        }
+
+
         if (looksOkay){
-            jsonReturn = restServerService.gatherECaviarData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome )
+            jsonReturn = restServerService.gatherECaviarData( gene, tissue, variant, phenotype,startPosition, endPosition, chromosome)
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
             def slurper = new JsonSlurper()
             jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
 
-        render(status: 200, contentType: "application/json") {jsonReturn}
+        JSONArray jsonArray = new JSONArray()
+        for (JSONObject jsonObject in jsonReturn) {
+            jsonObject.put("common_name", geneNameMap[jsonObject.gene] ?: jsonObject.gene)
+            jsonArray.put(jsonObject)
+        }
+
+        render(status: 200, contentType: "application/json") {jsonArray}
         return
     }
 

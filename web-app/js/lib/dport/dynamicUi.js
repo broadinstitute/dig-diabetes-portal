@@ -704,7 +704,6 @@ mpgSoftware.dynamicUi = (function () {
                         return retVal ;
                     }
                 );
-            var extents = retrieveExtents()
             var geneInfoArray = getAccumulatorObject("geneInfoArray");
             var geneInfoIndex = _.findIndex( geneInfoArray, { name:$(this).data("geneName") } );
             var additionalParameters;
@@ -850,7 +849,7 @@ mpgSoftware.dynamicUi = (function () {
     var displayGenesFromColocalization = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var returnObject = createNewDisplayReturnObject();
 
-        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"),'gene'),function(value,geneName){
+        _.forEach(_.groupBy(getAccumulatorObject("rawColocalizationInfo"),'common_name'),function(value,geneName){
             var geneObject = {geneName:geneName};
             geneObject['phenotypes'] = _.map(_.uniqBy(value,'phenotype'),function(o){return o.phenotype}).sort();
             geneObject['tissues'] = _.map(_.uniqBy(value,'tissue'),function(o){return o.tissue}).sort();
@@ -861,6 +860,10 @@ mpgSoftware.dynamicUi = (function () {
             geneObject['sourceByTissue'] = function(){
                 return _.groupBy(value,'tissue');
             };
+            var extents = retrieveExtents(geneName,startPosRec,stopPosRec);
+            geneObject['regionStart'] = extents.regionStart;
+            geneObject['regionEnd'] = extents.regionEnd;
+
             returnObject.phenotypesByColocalization.push(geneObject);
         });
         returnObject['colocsExist'] = function(){
@@ -910,7 +913,6 @@ mpgSoftware.dynamicUi = (function () {
                         return retVal ;
                     }
                 );
-            var extents = retrieveExtents()
             var geneInfoArray = getAccumulatorObject("geneInfoArray");
             var geneInfoIndex = _.findIndex( geneInfoArray, { name:$(this).data("geneName") } );
             var additionalParameters;

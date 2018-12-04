@@ -664,8 +664,8 @@ div.genePosition{
                 <div class="row" style="border: none">
                     <div class="col-sm-12">
                         <ul class="nav nav-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link sub-tab active" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
+                            <li class="nav-item active">
+                                <a class="nav-link sub-tab" href="#dynamicGeneHolder" role="tab" data-toggle="tab">Gene</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link sub-tab" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>

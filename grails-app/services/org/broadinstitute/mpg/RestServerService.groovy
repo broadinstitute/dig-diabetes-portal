@@ -2322,7 +2322,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public JSONArray gatherECaviarData( String gene, String tissue,
                                          String variant, String phenotype,
-                                         int  startPosition, int  endPosition, String chromosome ) {
+                                         int  startPosition, int  endPosition,
+                                        String chromosome) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
             specifyRequestList << "gene=${gene}"
@@ -2338,7 +2339,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
 
         if ((chromosome) && (chromosome.length() > 0)) {
-            specifyRequestList << "chrom=${tissue}"
+            specifyRequestList << "chrom=${chromosome}"
         }
         if (startPosition > -1) {
             specifyRequestList << "start_pos=${startPosition}"
@@ -2580,8 +2581,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public String convertGeneCommonNameToEnsemblId( String gene, boolean removeTrailingDot ) {
-        String returnValue = ""
+    public Map convertGeneCommonNameToEnsemblId( String gene, boolean removeTrailingDot ) {
+        Map returnValue = [:]
 
         JsonSlurper slurper = new JsonSlurper()
 
@@ -2592,13 +2593,18 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         List retrieveGeneIdArray =   slurper.parseText(retrieveGeneIdJsonAsString) as List
         if (retrieveGeneIdArray.size()>0){
 
+            String ensemblId = ""
             String unmodifiedReturn = (retrieveGeneIdArray[0]["GEN_ID"] as String)
             if (removeTrailingDot){
-                returnValue = unmodifiedReturn - ~/\.([^\.]+)$/
+                ensemblId = unmodifiedReturn - ~/\.([^\.]+)$/
             } else {
-                returnValue = unmodifiedReturn
+                ensemblId = unmodifiedReturn
             }
-
+            returnValue ["GEN_ID"] = ensemblId
+            returnValue ["CHROM"] = retrieveGeneIdArray[0]["CHROM"]
+            returnValue ["START"] = retrieveGeneIdArray[0]["START"]
+            returnValue ["END"] = retrieveGeneIdArray[0]["END"]
+            returnValue ["GENE"] = retrieveGeneIdArray[0]["GENE"]
 
         } else {
             log.error("Problem:  we have an unrecognized gene common name == '${gene}'")
@@ -2614,7 +2620,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         Map retval = [:]
 
-        String ensemblId = convertGeneCommonNameToEnsemblId(gene,false)
+        Map ensemblMapper = convertGeneCommonNameToEnsemblId(gene,false)
+        String ensemblId = ensemblMapper.GEN_ID
 
         if (ensemblId){
             String combinedEnsemblNameUrl = GET_BOTTOM_LINE_VARIANTS_BY_ID_URL +"?id=" + ensemblId
