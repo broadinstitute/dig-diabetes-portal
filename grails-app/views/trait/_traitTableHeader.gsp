@@ -34,7 +34,7 @@
 
 <div style = "width: 30%; float: left; padding-right: 15px">
     <p class= "dk-footnote" style="width:83%;">Phenotype</p>
-    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(this.value)">
+    <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="phenotypeVFChoser" selected = "selected" name="phenotypeVFChoser" onchange="mpgSoftware.manhattanplotTableHeader.onCLickPhenotype(this.value)">
     </select>
 </div>
 

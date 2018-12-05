@@ -50,14 +50,11 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-
         return{
             fillPhenotypesDropdown: fillPhenotypesDropdown,
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables,
             launchLDClumping: launchLDClumping
-
-
         }
     }());
 

@@ -41,10 +41,8 @@ var mpgSoftware = mpgSoftware || {};
                                 var sampleGroup = data.sampleGroups[i];
                                 $('#manhattanSampleGroupChooser').append(new Option(sampleGroup.sgn, sampleGroup.sg, sampleGroup.default))
                             }
-                            mpgSoftware.manhattanplotTableHeader.callFillClumpVariants(phenotype);
-                            window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
-                        }
-                    }
+                            }
+                         }
                     loader.hide();
                 },
                 error: function (jqXHR, exception) {
@@ -55,6 +53,16 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+
+        var onCLickPhenotype = function (phenotype){
+            //on click of phenotype populate the dataset dropdown list again
+            mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(phenotype)
+            var sampleGroup = $('#manhattanSampleGroupChooser').val()
+            mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()
+            // mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,$('#manhattanSampleGroupChooser').val());
+           // window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
+
+        }
 
         var fillClumpVariants = function (phenotype, dataset, r2) {
             var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
@@ -122,7 +130,6 @@ var mpgSoftware = mpgSoftware || {};
 
         var callFillClumpVariants = function() {
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
-            var sampleGroup = $('#manhattanSampleGroupChooser').val();
             var r2 = $('#rthreshold').val();
             var selectedPhenotype = $('#phenotypeVFChoser').val();
 
@@ -307,7 +314,8 @@ var mpgSoftware = mpgSoftware || {};
             setMySavedVariables:setMySavedVariables,
             getMySavedVariables:getMySavedVariables,
             fillPhenotypesDropdown: fillPhenotypesDropdown,
-            fillPhenotypesDropdownNew: fillPhenotypesDropdownNew
+            fillPhenotypesDropdownNew: fillPhenotypesDropdownNew,
+            onCLickPhenotype: onCLickPhenotype
         }
 
     }());
