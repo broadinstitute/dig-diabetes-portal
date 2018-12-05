@@ -169,7 +169,6 @@ class TraitController {
         render(status: 200, contentType: "application/json") {
             [sampleGroups: jsonArray]
         }
-
     }
 
 
