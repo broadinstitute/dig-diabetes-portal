@@ -52,6 +52,7 @@
     </p>
     <p><g:message code="variant.PheWAShelp2"></g:message></p>
     <p><g:message code="variant.PheWAShelp3"></g:message></p>
+    <p><g:message code="variant.PheWAShelp4"></g:message></p>
 </g:if>
 
 
