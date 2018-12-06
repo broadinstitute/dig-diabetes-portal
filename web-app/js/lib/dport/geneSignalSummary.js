@@ -503,6 +503,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
             requestedProperties.push("PVALUE");
             requestedProperties.push("EFFECT");
             requestedProperties.push("AF");
+            requestedProperties.push("GENE");
             requestedProperties.push("dataset");
         }
         var counter = 0;
