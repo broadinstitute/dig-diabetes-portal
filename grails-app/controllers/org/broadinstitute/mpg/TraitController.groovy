@@ -146,15 +146,17 @@ class TraitController {
         String phenotype = params["phenotype"]
         List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupListForPhenotypeAndVersion(phenotype, "", MetaDataService.METADATA_VARIANT)
         List<String> sampleGroupStrings = []
-        List<SampleGroup> sortedSampleGroupStrings = sampleGroupList
-       // List<String> sortedSampleGroupStrings = sampleGroupList.sort { a, b -> return b.subjectsNumber <=> a.subjectsNumber }
-        String largestSampleGroup = sortedSampleGroupStrings?.first()?.getSystemId()
-        for (SampleGroup sampleGroup in sampleGroupList) {
+        List<SampleGroup> sortedSampleGroupStrings = sampleGroupList.sort { a, b -> return b.subjectsNumber <=> a.subjectsNumber }
+        //List<String> sortedSampleGroupStrings =
+        String largestSampleGroup = sortedSampleGroupStrings?.last().getSystemId()
+
+        for (SampleGroup sampleGroup in sortedSampleGroupStrings) {
             String sampleGroupId = sampleGroup.getSystemId()
             String sampleGroupTranslation = g.message(code: "metadata." + sampleGroupId, default: sampleGroupId)
+            Integer sampleSubjectsNumber = sampleGroup.getSubjectsNumber()
             sampleGroupStrings << """{"sg":"${sampleGroupId}","sgn":"${sampleGroupTranslation}","default":${
                 (sampleGroupId == largestSampleGroup) ? 1 : 0
-            }}\n"""
+            },"sgnn":"${sampleSubjectsNumber}"}\n"""
         }
         String rawJson = "[" + sampleGroupStrings.join(",") + "]"
         JsonSlurper slurper = new JsonSlurper()

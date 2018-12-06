@@ -20,9 +20,6 @@
         mpgSoftware.moduleLaunch.setMySavedVariables(drivingVariables);
 
         $( document ).ready(function() {
-            mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown('T2D');
-
-            mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis('T2D','');
 
             var userLogIn = ($(".login-btn").text().trim().toLowerCase() != "google log in")? true : false;
 

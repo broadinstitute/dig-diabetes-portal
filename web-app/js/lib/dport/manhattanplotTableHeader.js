@@ -132,7 +132,6 @@ var mpgSoftware = mpgSoftware || {};
             var mySavedVars = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var r2 = $('#rthreshold').val();
             var selectedPhenotype = $('#phenotypeVFChoser').val();
-
             //phenotype is null when its not selected from the manhattan plot page
             if(selectedPhenotype == null){
                 selectedPhenotype = mySavedVars.phenotypeName;
