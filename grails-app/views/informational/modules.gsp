@@ -36,7 +36,6 @@
                     '      <div class="modal-footer">\n' +
                     '<oauth:connect provider="google" id="google-connect-link"><button type="button" class="btn btn-primary">Login with Google</button></oauth:connect>\n' +
                     '<a href=${createLink(controller:"home",action:"portalHome")}><button type="button" class="btn btn-info">Go back to home page</button></a>\n' +
-                    '<button type="button" class="btn btn-warning">Learn about modules</button>\n' +
                     '      </div>\n' +
                     '    </div>\n' +
                     '  </div>\n' +
