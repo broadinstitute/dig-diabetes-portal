@@ -31,12 +31,12 @@
                     '  <div class="modal-dialog" role="document">\n' +
                     '    <div class="modal-content">\n' +
                     '      <div class="modal-body">\n' +
-                    '        <h3>Login required!</h3>To use the analysis modules login is required. You can still learn about the modules. To continue to view the page, please close this modal.\n' +
+                    '        <h3>Please log in to view the analysis modules.</h3>\n' +
                     '      </div>\n' +
                     '      <div class="modal-footer">\n' +
-                    '<a href=${createLink(controller:"home",action:"portalHome")}><button type="button" class="btn btn-info">Go back to home page</button></a>\n' +
                     '<oauth:connect provider="google" id="google-connect-link"><button type="button" class="btn btn-primary">Login with Google</button></oauth:connect>\n' +
-                    '<button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">Close modal</button>\n' +
+                    '<a href=${createLink(controller:"home",action:"portalHome")}><button type="button" class="btn btn-info">Go back to home page</button></a>\n' +
+                    '<button type="button" class="btn btn-warning">Learn about modules</button>\n' +
                     '      </div>\n' +
                     '    </div>\n' +
                     '  </div>\n' +
