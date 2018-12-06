@@ -1,6 +1,9 @@
 <script class="panel-body" id="GWAS_SIGMA1_script" type="x-tmpl-mustache">
 
-    <h4>Publications</h4>
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.download.sigma"></g:message>
+
+<h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
                       <p><div class="paper">
 <g:message code="informational.shared.publications.SIGMA_2014_Nature"></g:message><br>
@@ -21,12 +24,12 @@
 </div></p>
 
 
-        <h4>Dataset phenotypes</h4>
+<h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
 <li><g:message code="informational.shared.traits.t2d"></g:message></li>
 </ul>
 
-<h4>Dataset subjects</h4>
+<h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
 <table class="table table-condensed table-responsive table-striped">
 <tr><th>Cases</th><th>Controls</th><th>Cohort</th><th>Ancestry</th></tr>
