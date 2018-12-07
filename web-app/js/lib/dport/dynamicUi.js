@@ -860,6 +860,8 @@ mpgSoftware.dynamicUi = (function () {
             geneObject['sourceByTissue'] = function(){
                 return _.groupBy(value,'tissue');
             };
+            var startPosRec = 0;
+            var stopPosRec = 0;
             var extents = retrieveExtents(geneName,startPosRec,stopPosRec);
             geneObject['regionStart'] = extents.regionStart;
             geneObject['regionEnd'] = extents.regionEnd;

@@ -37,7 +37,10 @@ var baget = baget || {};  // encapsulating variable
             endRegion,
             colorByValue=0,
             renderCellText = 1,
-            tooltipLocation = '';
+            tooltipLocation = '',
+            startPositionAccessor = function (x){return x.START}, // by default use field= START
+            stopPositionAccessor = function (x){return x.STOP} // by default use field= START
+        ;
 
         // private variables
         var instance = {};
@@ -416,7 +419,16 @@ var baget = baget || {};  // encapsulating variable
             colorByValue = x;
             return instance;
         };
-
+        instance.startPositionAccessor = function (x) {
+            if (!arguments.length) return startPositionAccessor;
+            startPositionAccessor = x;
+            return instance;
+        };
+        instance.stopPositionAccessor = function (x) {
+            if (!arguments.length) return stopPositionAccessor;
+            stopPositionAccessor = x;
+            return instance;
+        };
 
 
         /***
