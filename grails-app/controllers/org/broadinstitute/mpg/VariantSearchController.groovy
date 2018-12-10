@@ -1254,7 +1254,9 @@ class VariantSearchController {
                      "common-common-Reference_Allele",
                      "common-common-Effect_Allele",
                      "common-common-Allele_Frequency",
-                     "common-common-Allele_Count"].join(":")
+                     "common-common-Allele_Count",
+                     "common-common-SIFT_PRED",
+                     "common-common-PolyPhen_PRED" ].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
