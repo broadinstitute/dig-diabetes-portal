@@ -3,9 +3,17 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+    <r:require modules="manhattan"/>
+    <r:require modules="mode3"/>
+    <meta name="layout" content="t2dGenesCore"/>
+    <r:require modules="core"/>
+    <r:require modules="traitsFilter"/>
+    <r:layoutResources/>
+
     <script>
         var drivingVariables = {
-            phenotypeName: '<%=phenotypeKey%>',
+            phenotypeName: '${g.defaultPhenotype()}',
             traitSearchUrl: "${createLink(controller: 'trait', action: 'traitSearch')}",
             ajaxClumpDataUrl: '${createLink(controller: "trait", action: "ajaxClumpData")}',
             retrievePhenotypesAjaxUrl: '<g:createLink controller="variantSearch" action="retrievePhenotypesAjax" />',
@@ -17,14 +25,17 @@
             copyMsg: '<g:message code="table.buttons.copyText" default="Copy" />',
             printMsg: '<g:message code="table.buttons.printText" default="Print me!" />'
         }
+
         mpgSoftware.moduleLaunch.setMySavedVariables(drivingVariables);
 
         $( document ).ready(function() {
+            
 
-            var userLogIn = ($(".login-btn").text().trim().toLowerCase() != "google log in")? true : false;
+            var userLogIn = ($("#usernameDisplay").length)? true : false;
 
             if (userLogIn) {
-                mpgSoftware.moduleLaunch.fillPhenotypesDropdown('T2D');
+                mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName);
+
             } else {
 
                 var loginModal = '<div class="modal fade" id="mode3Modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\n' +
@@ -46,13 +57,6 @@
             }
         });
     </script>
-
-    <r:require modules="manhattan"/>
-    <r:require modules="mode3"/>
-    <meta name="layout" content="t2dGenesCore"/>
-    <r:require modules="core"/>
-    <r:require modules="traitsFilter"/>
-    <r:layoutResources/>
 
     <style>
     .modules-table td { vertical-align: middle !important; }
