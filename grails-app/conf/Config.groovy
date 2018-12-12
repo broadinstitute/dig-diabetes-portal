@@ -724,7 +724,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           "ALS",
                                           "mdv60",
                                           "ALS", // make sure your default phenotype exists in your default data set
-                                          "ExSeq_ALS2018_mdv60",// used to pick a default data set for a gene query
+                                          "ExSeq_ALS2018_eu_mdv60",// used to pick a default data set for a gene query
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                           ["AnteriorCaudate"],

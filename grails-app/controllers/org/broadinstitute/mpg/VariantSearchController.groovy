@@ -288,7 +288,7 @@ class VariantSearchController {
 
             filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
 //
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"AC","value":"0","comparator":">"}""".toString()
+            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"AC","value":"0","comparator":">"}""".toString()
 //
 //            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
 //
@@ -313,7 +313,7 @@ class VariantSearchController {
                     "ACA_PH", MetaDataService.METADATA_VARIANT)
             org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
                     "ACU_PH", MetaDataService.METADATA_VARIANT)
-            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_mdv60",
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_eu_mdv60",
                     "AC", MetaDataService.METADATA_VARIANT)
 
             if (property1 && property2) {
@@ -321,7 +321,7 @@ class VariantSearchController {
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
             } else {
                 if (property) {
-                    filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
+                    filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_eu_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
                 }
             }
         }
