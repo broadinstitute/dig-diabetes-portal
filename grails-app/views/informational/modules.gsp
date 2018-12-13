@@ -28,13 +28,19 @@
 
         mpgSoftware.moduleLaunch.setMySavedVariables(drivingVariables);
 
+        $(function () {
+
+        });
+
+
         $( document ).ready(function() {
-            
+
 
             var userLogIn = ($("#usernameDisplay").length)? true : false;
 
+
             if (userLogIn) {
-                mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName);
+                    mpgSoftware.moduleLaunch.fillPhenotypesDropdown(drivingVariables.phenotypeName,'phenotypeDropdownWrapper','phenotypeDropdown');
 
             } else {
 
@@ -100,8 +106,10 @@
                         <td>
 
                             <label>Select phenotype</label>
-                            <select class="phenotypeDropdown form-control selectpicker" data-live-search="true" id="phenotypeDropdown" name="phenotypeDropdown">
-                            </select>
+                            <div id="phenotypeDropdownWrapper">
+
+                            </div>
+
                             <div class="btn dk-t2d-blue dk-tutorial-button dk-right-column-buttons-compact" style="margin-top: 10px;" ><a id="launchLDClumping" href="javascript:;" onclick="mpgSoftware.moduleLaunch.launchLDClumping()">Launch Interactive Manhattan plot</a></div>
 
                         </td>
