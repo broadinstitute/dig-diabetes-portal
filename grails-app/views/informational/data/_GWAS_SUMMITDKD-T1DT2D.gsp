@@ -79,7 +79,7 @@
 <p><g:message code="informational.data.exptsumm.DKD2"></g:message></p>
 
 
-<h4>Accessing Diabetic Kidney Disease GWAS data</h4>
+<h4>Accessing SUMMIT Diabetic Kidney Disease GWAS results</h4>
 
     <p><g:message code="informational.data.accessing.DKD1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.DKD2"></g:message></p>
 </script>
