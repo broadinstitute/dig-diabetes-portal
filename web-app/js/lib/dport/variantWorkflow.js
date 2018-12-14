@@ -355,7 +355,7 @@ var mpgSoftware = mpgSoftware || {};
                         var newQuery = {
                             phenotype: phenotype,
                             translatedPhenotype: translatedPhenotype,
-                            dataset: dataset,
+                            dataset_id: dataset,
                             translatedDataset: translatedDataset,
                             operand: input.dataset.prop,
                             translatedName: input.dataset.translatedname,
