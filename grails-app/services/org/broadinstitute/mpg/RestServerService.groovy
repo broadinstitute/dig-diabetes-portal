@@ -3099,21 +3099,21 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             List <String> listOfPhenotype = []
             Map<String, List> datasetPhenotypeMap = new HashMap<>()
             listOfPhenotype.add(listOfInputMap[i]["phenotype"])
-            datasetPhenotypeMap.put(listOfInputMap[i]["dataset"],listOfPhenotype)
+            datasetPhenotypeMap.put(listOfInputMap[i]["dataset_id"],listOfPhenotype)
             operandDatasetPhenotypeMap.put(listOfInputMap[i]["operand"],datasetPhenotypeMap)
             for(int j = 1;j<listOfInputMap.length();j++){
                 //check if the operand is same and club the properties
                 if(listOfInputMap[i]["operand"] == listOfInputMap[j]["operand"]){
                     //if dataset is same or already exists in datasetPhenotypeMap
-                    if(listOfInputMap[i]["dataset"] == listOfInputMap[j]["dataset"] || datasetPhenotypeMap.get(listOfInputMap[j]["dataset"]) != null){
+                    if(listOfInputMap[i]["dataset_id"] == listOfInputMap[j]["dataset_id"] || datasetPhenotypeMap.get(listOfInputMap[j]["dataset_id"]) != null){
                         listOfPhenotype.add(listOfInputMap[j]["phenotype"])
-                        datasetPhenotypeMap[listOfInputMap[i]["dataset"],listOfPhenotype];
+                        datasetPhenotypeMap[listOfInputMap[i]["dataset_id"],listOfPhenotype];
                     }
                         //if the dataset are not same then create a new datasetPhenotypeMap
                     else{
                         listOfPhenotype = []
                         listOfPhenotype.add(listOfInputMap[j]["phenotype"])
-                       datasetPhenotypeMap.put(listOfInputMap[j]["dataset"],listOfPhenotype)
+                       datasetPhenotypeMap.put(listOfInputMap[j]["dataset_id"],listOfPhenotype)
                     }
                     operandDatasetPhenotypeMap.put(listOfInputMap[i]["operand"],datasetPhenotypeMap)
                 }
@@ -3122,7 +3122,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                      listOfPhenotype = []
                      datasetPhenotypeMap = new HashMap<>()
                     listOfPhenotype.add(listOfInputMap[j]["phenotype"])
-                    datasetPhenotypeMap.put(listOfInputMap[j]["dataset"],listOfPhenotype)
+                    datasetPhenotypeMap.put(listOfInputMap[j]["dataset_id"],listOfPhenotype)
                     operandDatasetPhenotypeMap.put(listOfInputMap[j]["operand"],datasetPhenotypeMap)
                 }
             }
