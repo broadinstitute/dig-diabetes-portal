@@ -3,6 +3,7 @@ package org.broadinstitute.mpg
 import grails.plugins.rest.client.RestBuilder
 import grails.plugins.rest.client.RestResponse
 import grails.transaction.Transactional
+import groovy.json.JsonOutput
 import groovy.json.JsonSlurper
 import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.BurdenService
@@ -3066,9 +3067,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         for(int i = 0;i<listOfInputMap.length();i++){
             Map<String, Object> eachFilter = new HashMap<String, Object>();
             for(int j=0;j<listOfInputMap[i].values().size();j++){
-                eachFilter.put(listOfInputMap[i].keys()[j].toString(),listOfInputMap[i].values()[j])
+                if(listOfInputMap[i].keys()[j] == "operator"){
+                    if(listOfInputMap[i].values()[j] == "<"){
+                        eachFilter.put("operator",listOfInputMap[i].values()[j].toString().replace("<","LT"))
+                    }
+                    else {
+                        eachFilter.put("operator", listOfInputMap[i].values()[j].toString().replace(">", "GT")
+                        )
+                    }
+                }
+                else if(listOfInputMap[i].keys()[j] == "dataset"){
+                    eachFilter.put("dataset_id",listOfInputMap[i].values()[j])
+                }
+                else{
+                    eachFilter.put(listOfInputMap[i].keys()[j].toString(),listOfInputMap[i].values()[j])
+                }
                 eachFilter.put("operand_type",listOfInputMap[i]['value'].getClass().getSimpleName())
             }
+            //replace the keyname of dataset to dataset_id
+            //eachFilter[]
             listOfFilterMaps.add(new JSONObject(eachFilter))
         }
 
@@ -3076,41 +3093,41 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
     public Map<String,Map> getPproperties(JSONArray listOfInputMap){
-        Map <String,Object> pPropertyMap = new HashMap<>()
-        List listOfEntityPropertyMap = []
-        Map<String,Map> annotationMap = new HashMap<>()
-        Map<String, List> datasetPhenotypeMap = new HashMap<>()
-        List<String> phenotypeList = []
-        for (int i = 0;i<listOfInputMap.length();i++){
-            phenotypeList.add(listOfInputMap[i]['phenotype'].toString())
-            datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
-            for(int j = 1;j<listOfInputMap.length();j++){
-                //check if two annotations are same in two different maps
-                if(listOfInputMap[i]['operand'] == listOfInputMap[j]['operand']){
-                    //if yes then club them together into annotation map where key would be dataset and value would be list of phenotype
-                 //   List<String> phenotypeList = []
-                    if(listOfInputMap[i]['dataset'] == listOfInputMap[j]['dataset']){
-                        phenotypeList.add(listOfInputMap[j]['phenotype'].toString())
-                        //update the value of the key added above
-                        datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
-                    }
-                    else{
-                        phenotypeList.add(listOfInputMap[i]['phenotype'].toString())
-                    }
-                    datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
-                    annotationMap.put(listOfInputMap[i]['operand'].toString(),datasetPhenotypeMap)
+        Map<String, List> operandDatasetPhenotypeMap = new HashMap<>()
 
+        for (int i = 0;i<listOfInputMap.length();i++){
+            List <String> listOfPhenotype = []
+            Map<String, List> datasetPhenotypeMap = new HashMap<>()
+            listOfPhenotype.add(listOfInputMap[i]["phenotype"])
+            datasetPhenotypeMap.put(listOfInputMap[i]["dataset"],listOfPhenotype)
+            operandDatasetPhenotypeMap.put(listOfInputMap[i]["operand"],datasetPhenotypeMap)
+            for(int j = 1;j<listOfInputMap.length();j++){
+                //check if the operand is same and club the properties
+                if(listOfInputMap[i]["operand"] == listOfInputMap[j]["operand"]){
+                    //if dataset is same or already exists in datasetPhenotypeMap
+                    if(listOfInputMap[i]["dataset"] == listOfInputMap[j]["dataset"] || datasetPhenotypeMap.get(listOfInputMap[j]["dataset"]) != null){
+                        listOfPhenotype.add(listOfInputMap[j]["phenotype"])
+                        datasetPhenotypeMap[listOfInputMap[i]["dataset"],listOfPhenotype];
+                    }
+                        //if the dataset are not same then create a new datasetPhenotypeMap
+                    else{
+                        listOfPhenotype = []
+                        listOfPhenotype.add(listOfInputMap[j]["phenotype"])
+                       datasetPhenotypeMap.put(listOfInputMap[j]["dataset"],listOfPhenotype)
+                    }
+                    operandDatasetPhenotypeMap.put(listOfInputMap[i]["operand"],datasetPhenotypeMap)
                 }
+                    //if operand is not same then create a new operandDatasetPhenotypeMap
                 else{
-                   // List <String> phenotypeList = []
-                    phenotypeList.add(listOfInputMap[i]['phenotype'].toString())
-                    datasetPhenotypeMap.put(listOfInputMap[i]['dataset'].toString(),phenotypeList)
-                    annotationMap.put(listOfInputMap[i]['operand'].toString(),datasetPhenotypeMap)
+                     listOfPhenotype = []
+                     datasetPhenotypeMap = new HashMap<>()
+                    listOfPhenotype.add(listOfInputMap[j]["phenotype"])
+                    datasetPhenotypeMap.put(listOfInputMap[j]["dataset"],listOfPhenotype)
+                    operandDatasetPhenotypeMap.put(listOfInputMap[j]["operand"],datasetPhenotypeMap)
                 }
             }
         }
-
-        return annotationMap
+        return operandDatasetPhenotypeMap
     }
 
     public List<String> getCproperties(JSONArray listOfInputMap){
@@ -3131,16 +3148,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     public Map<String,Object> getDproperies(JSONArray listOfInputMap){
 
      Map<String,Object> dPropertyMap = new HashMap<>()
-        dPropertyMap.put("empty","")
+//        dPropertyMap.put("empty","")
 
         return dPropertyMap
     }
 
 
-    public String generateGetDataJsonInput(JSONArray listOfInputMap){
-//        inputJson = {"passback":"abc123","entity":variant,"filters":listOfFilters}
-//        inputJsonString = inputJson.toString()
-//        def json = JsonOutput.toJson([name: 'John Doe', age: 42])
+    public Map<String,Object> generateGetDataJsonInput(JSONArray listOfInputMap){
 
         Map <String,Object> properties = new HashMap<>()
         Map <String,Object> inputGetDataJsonObject = new HashMap<>()
@@ -3165,8 +3179,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      * this is the core function for making a call to getData and return the data as a map.
      */
     def variantFinderGetDataRestCall(JSONArray listOfInputMap){
-        String inputJson = this.generateGetDataJsonInput(listOfInputMap);
-        JSONObject jsonObject = postGetDataCall(inputJson)
+        Map<String, Object> inputGetDataMap = this.generateGetDataJsonInput(listOfInputMap);
+        inputGetDataMap.toString()
+        def json = JsonOutput.toJson(inputGetDataMap)
+        JSONObject jsonObject = postGetDataCall(json)
         return jsonObject
     }
 
