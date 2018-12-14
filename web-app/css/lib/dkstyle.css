@@ -799,7 +799,7 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
 	background-color: #d5f2f2 !important;
 }
 
-#datasetNamesTabs, #modeledPhenotypeTabs, #stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs {
+#datasetNamesTabs, #modeledPhenotypeTabs, #stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs, #NA_stratsTabs {
 	display: inline-block !important;
 	font-size: 14px !important;
 	padding: 7px 0 1px 10px;
@@ -815,7 +815,7 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
 	color: #333;
 }*/
 
-#datasetNamesTabs li > a, #modeledPhenotypeTabs li > a, #stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
+#datasetNamesTabs li > a, #modeledPhenotypeTabs li > a, #stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #NA_stratsTabs li > a, #strata1_stratsTabs li > a {
 	border-radius: 0;
 	border: none;
 	padding: 5px 15px;
@@ -829,7 +829,7 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
 	padding-top: 20px;*/
 }
 
-#datasetNamesTabs li.adjusted > a::after, #modeledPhenotypeTabs li.adjusted > a::after, #stratsCovTabs li.adjusted > a::after, #CONTROL_stratsTabs li.adjusted > a::after, #CASE_stratsTabs li.adjusted > a::after, #strata1_stratsTabs li.adjusted > a::after {
+#datasetNamesTabs li.adjusted > a::after, #modeledPhenotypeTabs li.adjusted > a::after, #stratsCovTabs li.adjusted > a::after, #CONTROL_stratsTabs li.adjusted > a::after, #CASE_stratsTabs li.adjusted > a::after, #NA_stratsTabs li.adjusted > a::after, #strata1_stratsTabs li.adjusted > a::after {
 	content: ' *';
 	color: #268fcb;
 }
@@ -859,22 +859,22 @@ span.new-dataset-flag {
 #modeledPhenotypeTabs li.active > a {background-color: #9fd3df;}
 
 
-#stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #strata1_stratsTabs { background-color: #9fd3df; padding-left:30px; margin-left:0px; margin-right: 0px; border:none;}
+#stratsCovTabs, #CONTROL_stratsTabs, #CASE_stratsTabs, #NA_stratsTabs, #strata1_stratsTabs { background-color: #9fd3df; padding-left:30px; margin-left:0px; margin-right: 0px; border:none;}
 
-#stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #strata1_stratsTabs li > a {
+#stratsCovTabs li > a, #CONTROL_stratsTabs li > a, #CASE_stratsTabs li > a, #NA_stratsTabs li > a, #strata1_stratsTabs li > a {
 	/*border:solid 1px #ccc;
 	border-radius:3px;
 	padding: 5px 10px;*/
 	border-left:solid 2px #fff; border-right:solid 2px #fff;
 }
 
-#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {}
+#stratsCovTabs li:last-child > a, #CONTROL_stratsTabs li:last-child > a, #CASE_stratsTabs li:last-child > a, #NA_stratsTabs li:last-child > a, #strata1_stratsTabs li:last-child > a {}
 
-#stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
+#stratsCovTabs li.active > a, #CONTROL_stratsTabs li.active > a, #CASE_stratsTabs li.active > a, #NA_stratsTabs li.active > a, #strata1_stratsTabs li.active > a {
 	background-color: #fff;
 }
 
-#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {}
+#stratsCovTabs li:first-child > a, #CONTROL_stratsTabs li:first-child > a, #CASE_stratsTabs li:first-child > a, #NA_stratsTabs li:first-child > a, #strata1_stratsTabs li:first-child > a {}
 
 #modeledPhenotypeTabs li > a {
 	/*text-transform: lowercase;*/
