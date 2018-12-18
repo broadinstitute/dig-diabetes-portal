@@ -288,7 +288,13 @@ class VariantSearchController {
 
             filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
 //
-          //  filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"AC","value":"0","comparator":">"}""".toString()
+            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HETA","value":"0","comparator":">"}""".toString()
+
+            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HETU","value":"0","comparator":">"}""".toString()
+
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HOMA","value":"0","comparator":">"}""".toString()
+
+//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HOMU","value":"0","comparator":">"}""".toString()
 //
 //            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
 //
@@ -298,8 +304,8 @@ class VariantSearchController {
 
         }
         if ((dataSetName!=null) && (phenotypeName!=null)){
-      //      org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
-        //            "AC",MetaDataService.METADATA_VARIANT)
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype,defaultDataSet,
+                    "AC",MetaDataService.METADATA_VARIANT)
             if (property){
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
             }
@@ -313,8 +319,8 @@ class VariantSearchController {
                     "ACA_PH", MetaDataService.METADATA_VARIANT)
             org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
                     "ACU_PH", MetaDataService.METADATA_VARIANT)
-//            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_eu_mdv60",
-//                    "AC", MetaDataService.METADATA_VARIANT)
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_eu_mdv60",
+                    "AC", MetaDataService.METADATA_VARIANT)
 
             if (property1 && property2) {
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
