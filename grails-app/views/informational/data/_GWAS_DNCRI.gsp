@@ -28,7 +28,7 @@
 <li><g:message code="informational.shared.traits.CKDpDKD"></g:message></li>
 <li><g:message code="informational.shared.traits.CKDpDKDAdjHbA1cBMI"></g:message></li>
 
-<li><g:message code="informational.shared.traits.lateDKD"></g:message></li>
+<li><g:message code="informational.shared.traits.lateDKD_T1D"></g:message></li>
 <li><g:message code="informational.shared.traits.lateDKDAdjHbA1cBMI"></g:message></li>
 
 <li><g:message code="informational.shared.traits.allDKD"></g:message></li>
@@ -36,8 +36,10 @@
 
 
 
-
 </ul>
+
+<p><g:message code="informational.data.phenoCriteria_DNCRI"></g:message></p>
+
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 <table class="table table-condensed table-responsive table-striped">
