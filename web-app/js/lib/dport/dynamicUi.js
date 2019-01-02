@@ -138,6 +138,9 @@ mpgSoftware.dynamicUi = (function () {
                 if (accumulatorObjectFieldEmpty("geneNameArray")) {
                     actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForTissuesTable"});
                 } else {
+                    resetAccumulatorObject("tissueNameArray");
+                    resetAccumulatorObject("tissuesForEveryGene");
+                    resetAccumulatorObject("genesForEveryTissue");
                     var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                     geneNameArray = _.map(getAccumulatorObject("geneInfoArray"),function(o){return {gene:o.name}});
                     retrieveRemotedContextInformation(buildRemoteContextArray ({
@@ -157,6 +160,9 @@ mpgSoftware.dynamicUi = (function () {
                 if (accumulatorObjectFieldEmpty("geneNameArray")) {
                     actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForGenesTable"});
                 } else {
+                    resetAccumulatorObject("tissueNameArray");
+                    resetAccumulatorObject("genesForEveryTissue");
+                    resetAccumulatorObject("tissuesForEveryGene");
                     var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                     retrieveRemotedContextInformation(buildRemoteContextArray ({
                         name:"getTissuesFromEqtlsForGenesTable",
@@ -175,6 +181,8 @@ mpgSoftware.dynamicUi = (function () {
                 var chromosome = getAccumulatorObject("chromosome");
                 var startPos = getAccumulatorObject("extentBegin");
                 var endPos = getAccumulatorObject("extentEnd");
+                resetAccumulatorObject("phenotypesForEveryVariant");
+                resetAccumulatorObject("variantsForEveryPhenotype");
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
                     name:"getVariantsFromQtlForContextDescription",
                     retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
@@ -194,6 +202,8 @@ mpgSoftware.dynamicUi = (function () {
                 var chromosome = getAccumulatorObject("chromosome");
                 var startPos = getAccumulatorObject("extentBegin");
                 var endPos = getAccumulatorObject("extentEnd");
+                resetAccumulatorObject("phenotypesForEveryVariant");
+                resetAccumulatorObject("variantsForEveryPhenotype");
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
                     name:"getPhenotypesFromQtlForPhenotypeTable",
                     retrieveDataUrl:additionalParameters.retrieveVariantsWithQtlRelationshipsUrl,
@@ -265,6 +275,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
             case "getAnnotationsFromModForGenesTable":
+                resetAccumulatorObject("modNameArray");
                 var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                 retrieveRemotedContextInformation(buildRemoteContextArray ({
                     name:"getAnnotationsFromModForGenesTable",
@@ -1454,7 +1465,7 @@ mpgSoftware.dynamicUi = (function () {
 
         // pull back mouse annotations
         $('#modAnnotationButtonId').on('click', function () {
-            resetAccumulatorObject("modNameArray");
+      //      resetAccumulatorObject("modNameArray");
 
             actionContainer('getAnnotationsFromModForGenesTable', actionDefaultFollowUp("getAnnotationsFromModForGenesTable"));
 
@@ -1463,9 +1474,9 @@ mpgSoftware.dynamicUi = (function () {
 
         // perform an eQTL based lookup
         $('#getTissuesFromEqtlsForGenesTable').on('click', function () {
-            resetAccumulatorObject("tissueNameArray");
-            resetAccumulatorObject("genesForEveryTissue");
-            resetAccumulatorObject("tissuesForEveryGene");
+            // resetAccumulatorObject("tissueNameArray");
+            // resetAccumulatorObject("genesForEveryTissue");
+            // resetAccumulatorObject("tissuesForEveryGene");
             actionContainer('getTissuesFromEqtlsForGenesTable', actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable"));
         });
 
@@ -1489,8 +1500,8 @@ mpgSoftware.dynamicUi = (function () {
 
         $('#getVariantsFromQtlForContextDescription').on('click', function () {
 
-            resetAccumulatorObject("phenotypesForEveryVariant");
-            resetAccumulatorObject("variantsForEveryPhenotype");
+            // resetAccumulatorObject("phenotypesForEveryVariant");
+            // resetAccumulatorObject("variantsForEveryPhenotype");
 
             actionContainer("getVariantsFromQtlForContextDescription", actionDefaultFollowUp("getVariantsFromQtlForContextDescription"));
 
@@ -1498,9 +1509,9 @@ mpgSoftware.dynamicUi = (function () {
 
 
         $('#getTissuesFromEqtlsForTissuesTable').on('click', function () {
-            resetAccumulatorObject("tissueNameArray");
-            resetAccumulatorObject("tissuesForEveryGene");
-            resetAccumulatorObject("genesForEveryTissue");
+            // resetAccumulatorObject("tissueNameArray");
+            // resetAccumulatorObject("tissuesForEveryGene");
+            // resetAccumulatorObject("genesForEveryTissue");
 
             actionContainer("getTissuesFromEqtlsForTissuesTable", actionDefaultFollowUp("getTissuesFromEqtlsForTissuesTable"));
 
@@ -1509,8 +1520,8 @@ mpgSoftware.dynamicUi = (function () {
 
         $('#getPhenotypesFromQtlForPhenotypeTable').on('click', function () {
 
-            resetAccumulatorObject("phenotypesForEveryVariant");
-            resetAccumulatorObject("variantsForEveryPhenotype");
+            // resetAccumulatorObject("phenotypesForEveryVariant");
+            // resetAccumulatorObject("variantsForEveryPhenotype");
 
             actionContainer("getPhenotypesFromQtlForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromQtlForPhenotypeTable"));
 
