@@ -79,7 +79,30 @@
         mpgSoftware.grsInfo.setGrsInfoData(drivingVariables);
         mpgSoftware.grsInfo.buildGrsDisplay();
 
+
+        /* DK adding the following script to format the page */
+        /*
+        var pageTitle = $(".accordion-toggle").find("h2").text();
+        var textUnderTitle = $(".accordion-inner").find("h5").text();
+        $(".accordion-toggle").remove();
+        $(".accordion-inner").find("h5").remove();
+
+        var PageTitleDiv = '<div class="row">\n'+
+            '<div class="col-md-12">\n'+
+            '<h1 class="dk-page-title">' + pageTitle + '</h1>\n'+
+            '<div class="col-md-12">\n'+
+            '<h5 class="dk-under-header">' + textUnderTitle + '</h5>\n'+
+            '</div></div>';
+
+        $(PageTitleDiv).insertBefore(".gene-info-container");
+        $(".user-interaction").addClass("col-md-12");
+        */
+
+        /* end of DK's script */
+
     });
+
+
 
 </script>
 
