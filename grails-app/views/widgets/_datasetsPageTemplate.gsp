@@ -94,7 +94,7 @@
 <g:render template="./data/WGS_TOPMedAF_eu" />
 <g:render template="./data/GWAS_UKBiobankHRC_eu" />
 <g:render template="./data/GWAS_ADIPOGen" />
-<g:render template="./data/GWAS_CHARGE_eu" />3*
+<g:render template="./data/GWAS_CHARGE_eu" />
 <g:render template="./data/GWAS_GUGC_eu" />
 <g:render template="./data/GWAS_Leptin" />
 <g:render template="./data/GWAS_Leptin_eu" />
