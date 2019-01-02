@@ -1239,6 +1239,30 @@ div.genePosition{
         {{#abcGenesExist}}
     </tr>
     {{/abcGenesExist}}
+
+
+
+
+    {{#geneModsExist}}
+    <tr>
+        <th  scope="row">Associated mouse phenotypes</th>
+        {{/geneModsExist}}
+        {{#geneModTerms}}
+            <td >
+            {{#mods}}
+                <div>
+                    {{modName}}
+                </div>
+            {{/mods}}
+            </td>
+        {{/geneModTerms}}
+       {{#geneModsExist}}
+    </tr>
+    {{/geneModsExist}}
+
+
+
+
     </table>
 </script>
 
