@@ -83,6 +83,12 @@
 
 </script>
 
+<style>
+ul.nav-tabs > li > a { background: none !important; }
+ul.nav-tabs > li.active > a { background-color: #fff !important; }
+#modeledPhenotypeTabs li.active > a { background-color: #9fd3df !important; }
+</style>
+
 <div id="main">
 
     <div class="container">
