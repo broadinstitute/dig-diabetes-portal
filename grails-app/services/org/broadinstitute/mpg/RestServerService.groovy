@@ -3093,41 +3093,30 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
     public Map<String,Map> getPproperties(JSONArray listOfInputMap){
-        Map<String, List> operandDatasetPhenotypeMap = new HashMap<>()
+        Map<String, Map<String,List>> operandMap = new HashMap<>()
+        //iterate over the jsonObject
 
-        for (int i = 0;i<listOfInputMap.length();i++){
-            List <String> listOfPhenotype = []
-            Map<String, List> datasetPhenotypeMap = new HashMap<>()
-            listOfPhenotype.add(listOfInputMap[i]["phenotype"])
-            datasetPhenotypeMap.put(listOfInputMap[i]["dataset_id"],listOfPhenotype)
-            operandDatasetPhenotypeMap.put(listOfInputMap[i]["operand"],datasetPhenotypeMap)
-            for(int j = 1;j<listOfInputMap.length();j++){
-                //check if the operand is same and club the properties
-                if(listOfInputMap[i]["operand"] == listOfInputMap[j]["operand"]){
-                    //if dataset is same or already exists in datasetPhenotypeMap
-                    if(listOfInputMap[i]["dataset_id"] == listOfInputMap[j]["dataset_id"] || datasetPhenotypeMap.get(listOfInputMap[j]["dataset_id"]) != null){
-                        listOfPhenotype.add(listOfInputMap[j]["phenotype"])
-                        datasetPhenotypeMap[listOfInputMap[i]["dataset_id"],listOfPhenotype];
-                    }
-                        //if the dataset are not same then create a new datasetPhenotypeMap
-                    else{
-                        listOfPhenotype = []
-                        listOfPhenotype.add(listOfInputMap[j]["phenotype"])
-                       datasetPhenotypeMap.put(listOfInputMap[j]["dataset_id"],listOfPhenotype)
-                    }
-                    operandDatasetPhenotypeMap.put(listOfInputMap[i]["operand"],datasetPhenotypeMap)
-                }
-                    //if operand is not same then create a new operandDatasetPhenotypeMap
-                else{
-                     listOfPhenotype = []
-                     datasetPhenotypeMap = new HashMap<>()
-                    listOfPhenotype.add(listOfInputMap[j]["phenotype"])
-                    datasetPhenotypeMap.put(listOfInputMap[j]["dataset_id"],listOfPhenotype)
-                    operandDatasetPhenotypeMap.put(listOfInputMap[j]["operand"],datasetPhenotypeMap)
-                }
+        for(int i = 0;i<listOfInputMap.length();i++){
+            def operand = listOfInputMap[i]['operand']
+            def dataset = listOfInputMap[i]['dataset_id']
+            def phenotype = listOfInputMap[i]['phenotype']
+            def datasetMap = operandMap.get(operand)
+            if (datasetMap == null) {
+                datasetMap = new HashMap<String, List>()
+                operandMap.put(operand, datasetMap)
             }
+
+            def phenoList = datasetMap.get(dataset)
+            if (phenoList == null) {
+                phenoList = []
+                datasetMap.put(dataset, phenoList)
+            }
+
+            phenoList.add(phenotype)
+
         }
-        return operandDatasetPhenotypeMap
+
+        return operandMap
     }
 
     public List<String> getCproperties(JSONArray listOfInputMap){
