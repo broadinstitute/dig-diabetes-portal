@@ -2159,7 +2159,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 List<Map> listOfEntitiesMap = []
                 for(int l = 0; l< keys.size();l++){
                     //create new entitiesMap only when the dataset is different
-                    LinkedHashMap<String,Object> entitiesMap = new LinkedHashMap<>()
+
                     def value = apiResults.variants[j][l][keys[l]]
                     if(value instanceof String || value instanceof Integer){
                         commonAnnotationMap.put(keys[l],value)
@@ -2173,11 +2173,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                     if(value instanceof Map){
                         Iterator<String> keysItr = value.keys();
                         while (keysItr.hasNext()) {
+                            LinkedHashMap<String,Object> entitiesMap = new LinkedHashMap<>()
                             String keyOfMap = keysItr.next();
                             Object valueOfMap = value.get(keyOfMap);
                             //get the translated name of the dataset
                             String translatedDatasetName = g.message(code: 'metadata.' + keyOfMap, default: keyOfMap);
-                            entitiesMap.put("dataset",translatedDatasetName)
+                            entitiesMap.put("dataset" ,translatedDatasetName)
                             Iterator<String> nextkeysItr = valueOfMap.keys();
                             while (nextkeysItr.hasNext()) {
                                 String nextkeyOfMap = nextkeysItr.next();
@@ -2187,8 +2188,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                 entitiesMap.put("phenotype", translatedPhenotypeName)
                                 entitiesMap.put(keys[l],nextvalueOfMap)
                             }
+                            listOfEntitiesMap.add(entitiesMap)
                         }
-                        listOfEntitiesMap.add(entitiesMap)
+
                     }
                 }
                 eachVariantInfoMap.put("entities",listOfEntitiesMap)
@@ -3105,17 +3107,13 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 datasetMap = new HashMap<String, List>()
                 operandMap.put(operand, datasetMap)
             }
-
             def phenoList = datasetMap.get(dataset)
             if (phenoList == null) {
                 phenoList = []
                 datasetMap.put(dataset, phenoList)
             }
-
             phenoList.add(phenotype)
-
         }
-
         return operandMap
     }
 
