@@ -283,6 +283,9 @@
             }
             /*temporary placeholder for a function to render VF sear results table.*/
             function renderVFSearchResult(DATA) {
+
+                console.log(DATA);
+
                 $("#searchResultsHolder").html('<table id="xvariantTableResults" class="table table-striped dk-search-result dk-t2d-table no-footer" style="border-collapse: collapse; width: 100%;" role="grid" aria-describedby="xvariantTableResults_info">\n' +
                     '    <thead></thead>\n' +
                     '    <tbody></tbody>\n' +
@@ -292,11 +295,19 @@
                 var VFResultTableBody = '';
                 var allDatasets = [];
                 var uniqueDatasets = [];
+
                 var countElement = function(item,array) {
                     var count = 0;
                     $.each(array, function(i,v) { if (v === item) count++; });
                     return count;
                 }
+
+                var uniqueEntities = function (array){
+                    return array.filter(function(el,index,arr){
+                        return index == arr.indexOf(el);
+                    });
+                }
+
                 var massageContent = function(CONTENT) {
                     var returnStr = CONTENT.replace(/_/g, " ");
                     switch(returnStr) {
@@ -315,17 +326,29 @@
                     }
                     return returnStr;
                 }
+
                 $.each(VARIANTS[0]["entities"], function(index, val) {
-                    allDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
-                    uniqueDatasets.push(val["phenotype"] +" <span style='color:#fff'>("+ val["dataset"]+")</span>");
+
+                    allDatasets.push(val["phenotype"] + "::" + val["dataset"]);
+                    uniqueDatasets.push(val["phenotype"] + "::" + val["dataset"]);
                 });
-                $.unique(uniqueDatasets);
+
+
+
+                uniqueDatasets = uniqueEntities(uniqueDatasets);
+
+                //console.log("all datasets array: " + allDatasets + "\n");
+                //console.log("unique datasets array: " + uniqueDatasets + "\n");
                 //render common annotations first
                 VFResultTableHead += '<tr><th class="dk-common" colspan="9">Variant annotations</th>';
+
                 $.each(uniqueDatasets, function(index, val) {
                     var uniqueDatasetNum = countElement(val,allDatasets);
-                    VFResultTableHead += '<th class="dk-property-10" colspan="'+uniqueDatasetNum+'">'+val+'</th>';
+                    var uniqueDatasetStrArr = val.split("::");
+                    var uniqueDatasetStr = uniqueDatasetStrArr[0] +" <span style='color:#fff'>(" + uniqueDatasetStrArr[1] + ")</span>";
+                    VFResultTableHead += '<th class="dk-property-10" colspan="'+uniqueDatasetNum+'">' + uniqueDatasetStr +'</th>';
                 });
+
                 VFResultTableHead += '</tr><tr class="vf-table-headers">';
                 VFResultTableHead += '<th class="dk-common">Variant ID</th>';
             	VFResultTableHead += '<th class="dk-common">dbSNP ID</th>';
@@ -336,9 +359,10 @@
             	VFResultTableHead += '<th class="dk-common">Nearest gene</th>';
             	VFResultTableHead += '<th class="dk-common">Protein change</th>';
                 VFResultTableHead += '<th class="dk-common">Consequence</th>';
+
                 $.each(uniqueDatasets, function(index, val) {
                     $.each(VARIANTS[0]["entities"], function(index2, val2) {
-                        var datasetName = val2["phenotype"] +" <span style='color:#fff'>("+ val2["dataset"]+")</span>";
+                        var datasetName = val2["phenotype"] + "::" + val2["dataset"];
                         if (datasetName == val) {
                             for (var key in val2) {
                                 if (val2.hasOwnProperty(key)) {
@@ -349,6 +373,7 @@
                     });
                 });
                 VFResultTableHead += '</tr>';
+
                 $.each(VARIANTS, function(index,val) {
                     VFResultTableBody += '<tr>';
                     VFResultTableBody += '<td><a href="<g:createLink controller="variantInfo" action="variantInfo" />/' + val["common_annotation"]["VAR_ID"] + '">' + val["common_annotation"]["CHROM"] +":" +val["common_annotation"]["POS"] + '</a></td>';
@@ -360,13 +385,26 @@
                     VFResultTableBody += '<td><a href="<g:createLink controller="gene" action="geneInfo" />/' + val["common_annotation"]["CLOSEST_GENE"] + '">' + val["common_annotation"]["CLOSEST_GENE"] + '</a></td>';
                     VFResultTableBody += '<td>' + val["common_annotation"]["Protein_change"] + '</td>';
                     VFResultTableBody += '<td>' + massageContent(val["common_annotation"]["Consequence"]) + '</td>';
-                    $.each(val["entities"], function(index2, val2) {
-                        for (var key in val2) {
-                            if (val2.hasOwnProperty(key)) {
-                                (key != "dataset" && key != "phenotype")? VFResultTableBody += '<td>'+val2[key]+'</td>':"";
+
+                    $.each(uniqueDatasets, function(uniqueIndex, uniqueVal) {
+                    $.each(val["entities"], function(entityIndex, entityVal) {
+
+                            var checkPhenotypeDataset = entityVal["phenotype"] + "::" + entityVal["dataset"];
+
+                            if(checkPhenotypeDataset == uniqueVal) {
+                                //console.log(checkPhenotypeDataset +" : " +uniqueVal);
+                                for (var key in entityVal) {
+                                    if (entityVal.hasOwnProperty(key)) {
+                                        (key != "dataset" && key != "phenotype")? VFResultTableBody += '<td>'+entityVal[key]+'</td>':"";
+                                    }
+                                }
                             }
-                        }
+
+                        })
                     })
+
+
+
                     VFResultTableBody += '</tr>';
                 });
                 $("#xvariantTableResults").find("thead").append(VFResultTableHead);
