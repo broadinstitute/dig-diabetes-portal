@@ -387,7 +387,7 @@
                     VFResultTableBody += '<td>' + massageContent(val["common_annotation"]["Consequence"]) + '</td>';
 
                     $.each(uniqueDatasets, function(uniqueIndex, uniqueVal) {
-                    $.each(val["entities"], function(entityIndex, entityVal) {
+                        $.each(val["entities"], function(entityIndex, entityVal) {
 
                             var checkPhenotypeDataset = entityVal["phenotype"] + "::" + entityVal["dataset"];
 
@@ -395,7 +395,12 @@
                                 //console.log(checkPhenotypeDataset +" : " +uniqueVal);
                                 for (var key in entityVal) {
                                     if (entityVal.hasOwnProperty(key)) {
-                                        (key != "dataset" && key != "phenotype")? VFResultTableBody += '<td>'+entityVal[key]+'</td>':"";
+                                        if(key == "ODDS_RATIO") {
+                                            var oddsRatioVal = parseFloat(entityVal[key]).toFixed(3);
+                                            VFResultTableBody += '<td>'+oddsRatioVal+'</td>';
+                                        } else {
+                                            (key != "dataset" && key != "phenotype")? VFResultTableBody += '<td>'+entityVal[key]+'</td>':"";
+                                        }
                                     }
                                 }
                             }
