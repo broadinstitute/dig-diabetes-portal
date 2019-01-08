@@ -2175,19 +2175,28 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                         while (keysItr.hasNext()) {
                             LinkedHashMap<String,Object> entitiesMap = new LinkedHashMap<>()
                             String keyOfMap = keysItr.next();
-                            Object valueOfMap = value.get(keyOfMap);
+                            Object valueOfValueMap = value.get(keyOfMap);
                             //get the translated name of the dataset
                             String translatedDatasetName = g.message(code: 'metadata.' + keyOfMap, default: keyOfMap);
                             entitiesMap.put("dataset" ,translatedDatasetName)
-                            Iterator<String> nextkeysItr = valueOfMap.keys();
-                            while (nextkeysItr.hasNext()) {
-                                String nextkeyOfMap = nextkeysItr.next();
-                                Object nextvalueOfMap = value.get(keyOfMap).get(nextkeyOfMap);
-                                //get the translated name of phenotype
-                                String translatedPhenotypeName = g.message(code: 'metadata.' + nextkeyOfMap, default: nextkeyOfMap);
-                                entitiesMap.put("phenotype", translatedPhenotypeName)
-                                entitiesMap.put(keys[l],nextvalueOfMap)
+                            if(valueOfValueMap instanceof Map){
+                                Iterator<String> nextkeysItr = valueOfValueMap.keys();
+                                while (nextkeysItr.hasNext()) {
+                                    String nextkeyOfMap = nextkeysItr.next();
+                                    Object nextvalueOfMap = value.get(keyOfMap).get(nextkeyOfMap);
+                                    //get the translated name of phenotype
+                                    String translatedPhenotypeName = g.message(code: 'metadata.' + nextkeyOfMap, default: nextkeyOfMap);
+                                    entitiesMap.put("phenotype", translatedPhenotypeName)
+                                    entitiesMap.put(keys[l],nextvalueOfMap)
+                                }
                             }
+                            else{
+
+                                String translatedPhenotypeName = g.message(code: 'metadata.' + "T2D", default: "T2D");
+                                entitiesMap.put("phenotype", translatedPhenotypeName)
+                                entitiesMap.put(keys[l],valueOfValueMap)
+                            }
+
                             listOfEntitiesMap.add(entitiesMap)
                         }
 
@@ -3096,23 +3105,35 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public Map<String,Map> getPproperties(JSONArray listOfInputMap){
         Map<String, Map<String,List>> operandMap = new HashMap<>()
+        List<String> propertiesToFetch = []
         //iterate over the jsonObject
 
         for(int i = 0;i<listOfInputMap.length();i++){
             def operand = listOfInputMap[i]['operand']
             def dataset = listOfInputMap[i]['dataset_id']
             def phenotype = listOfInputMap[i]['phenotype']
+            propertiesToFetch = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(phenotype, dataset, [/^MINA/, /^MINU/, /^(OR|ODDS|BETA)/, /^P_(EMMAX|FIRTH|FE|VALUE)/])
+
             def datasetMap = operandMap.get(operand)
             if (datasetMap == null) {
                 datasetMap = new HashMap<String, List>()
                 operandMap.put(operand, datasetMap)
             }
+//            for(int j = 0;j<propertiesToFetch.size();j++){
+////                if(!operandMap.containsKey(propertiesToFetch[j])){
+////                    if(!datasetMap.get(dataset)){
+////                        operandMap.put(propertiesToFetch[j],datasetMap)
+////                    }
+////
+////                }
+////            }
             def phenoList = datasetMap.get(dataset)
             if (phenoList == null) {
                 phenoList = []
                 datasetMap.put(dataset, phenoList)
             }
             phenoList.add(phenotype)
+
         }
         return operandMap
     }
