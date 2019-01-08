@@ -3105,34 +3105,34 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
     public Map<String,Map> getPproperties(JSONArray listOfInputMap){
         Map<String, Map<String,List>> operandMap = new HashMap<>()
-        List<String> propertiesToFetch = []
+        List<String> operandsToFetch = []
         //iterate over the jsonObject
 
         for(int i = 0;i<listOfInputMap.length();i++){
             def operand = listOfInputMap[i]['operand']
             def dataset = listOfInputMap[i]['dataset_id']
             def phenotype = listOfInputMap[i]['phenotype']
-            propertiesToFetch = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(phenotype, dataset, [/^MINA/, /^MINU/, /^(OR|ODDS|BETA)/, /^P_(EMMAX|FIRTH|FE|VALUE)/])
 
-            def datasetMap = operandMap.get(operand)
-            if (datasetMap == null) {
-                datasetMap = new HashMap<String, List>()
-                operandMap.put(operand, datasetMap)
+            operandsToFetch = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(phenotype, dataset, [/^MINA/, /^MINU/, /^(OR|ODDS|BETA)/, /^P_(EMMAX|FIRTH|FE|VALUE)/])
+            if (operandsToFetch.size() == 0) {
+                operandsToFetch.add(operand);
             }
-//            for(int j = 0;j<propertiesToFetch.size();j++){
-////                if(!operandMap.containsKey(propertiesToFetch[j])){
-////                    if(!datasetMap.get(dataset)){
-////                        operandMap.put(propertiesToFetch[j],datasetMap)
-////                    }
-////
-////                }
-////            }
-            def phenoList = datasetMap.get(dataset)
-            if (phenoList == null) {
-                phenoList = []
-                datasetMap.put(dataset, phenoList)
+
+            for (int j = 0; j < operandsToFetch.size(); j++) {
+                operand = operandsToFetch[j];
+                def datasetMap = operandMap.get(operand)
+                if (datasetMap == null) {
+                    datasetMap = new HashMap<String, List>()
+                    operandMap.put(operand, datasetMap)
+                }
+
+                def phenoList = datasetMap.get(dataset)
+                if (phenoList == null) {
+                    phenoList = []
+                    datasetMap.put(dataset, phenoList)
+                }
+                phenoList.add(phenotype)
             }
-            phenoList.add(phenotype)
 
         }
         return operandMap
