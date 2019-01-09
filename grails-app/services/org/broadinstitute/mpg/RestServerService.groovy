@@ -3113,7 +3113,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             def dataset = listOfInputMap[i]['dataset_id']
             def phenotype = listOfInputMap[i]['phenotype']
 
-            operandsToFetch = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(phenotype, dataset, [/^MINA/, /^MINU/, /^(OR|ODDS|BETA)/, /^P_(EMMAX|FIRTH|FE|VALUE)/])
+            operandsToFetch = metaDataService.getPhenotypeSpecificSampleGroupPropertyList(phenotype, dataset, [/^MINA/,/^MAF/, /^MINU/, /^(OR|ODDS|BETA)/, /^P_(EMMAX|FIRTH|FE|VALUE)/])
             if (operandsToFetch.size() == 0) {
                 operandsToFetch.add(operand);
             }
@@ -3133,7 +3133,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 }
                 phenoList.add(phenotype)
             }
-
         }
         return operandMap
     }
@@ -3244,7 +3243,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                 Gene.refresh(geneName, chromosome, startPosition, endPosition)
             }
         }
-
         return returnValue
     }
 
