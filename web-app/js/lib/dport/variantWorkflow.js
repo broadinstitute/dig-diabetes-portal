@@ -214,14 +214,14 @@ var mpgSoftware = mpgSoftware || {};
                     return $(ele).val();
                 });
 
-                if(availableDatasetOptions.includes(query.dataset)) {
-                    $(targetSelect).val(query.dataset);
+                if(availableDatasetOptions.includes(query.dataset_id)) {
+                    $(targetSelect).val(query.dataset_id);
                 } else {
                     // do string prefix matching. strip off the "_mdv#" from the query.dataset field
-                    var indexOfLastUnderscore = query.dataset.lastIndexOf('_');
+                    var indexOfLastUnderscore = query.dataset_id.lastIndexOf('_');
                     var datasetPrefix = query.dataset.substring(0, indexOfLastUnderscore);
                     // save this for later
-                    var dataVersion = query.dataset.substring(indexOfLastUnderscore);
+                    var dataVersion = query.dataset_id.substring(indexOfLastUnderscore);
                     var trimmedDatasetOptions = _.map(availableDatasetOptions, function(d) {
                         var indexOfLastUnderscore = d.lastIndexOf('_');
                         return d.substring(0, indexOfLastUnderscore);
@@ -240,10 +240,10 @@ var mpgSoftware = mpgSoftware || {};
                     // to get the cohorts to load
                     $(targetSelect).change();
                     var cohortTargetSelect = targetSelect == '#datasetDependent' ? '#datasetCohortDependent' : '#datasetCohortIndependent';
-                    $(cohortTargetSelect).val(query.dataset);
+                    $(cohortTargetSelect).val(query.dataset_id);
                 }
 
-                retrievePropertiesPerDataSet(query.phenotype, query.dataset, target, query);
+                retrievePropertiesPerDataSet(query.phenotype, query.dataset_id, target, query);
             }
         };
         var fillPropertiesDropdown = function (data, target) { // help text for each row
