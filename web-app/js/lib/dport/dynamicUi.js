@@ -582,6 +582,15 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+    var addAdditionalResultsObject =  function(returnObject) {
+        var resultsArray = getAccumulatorObject("resultsArray");
+        if (typeof resultsArray === 'undefined') {
+            setAccumulatorObject("resultsArray", []);
+            resultsArray = getAccumulatorObject("resultsArray");
+        }
+        resultsArray.push(returnObject);
+    }
+
 
     var accumulatorObjectFieldEmpty = function(specificField) {
         var returnValue = true;
@@ -689,6 +698,8 @@ mpgSoftware.dynamicUi = (function () {
             return (this.experiment.length);
         };
 
+        addAdditionalResultsObject(returnObject);
+
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
             returnObject
         ));
@@ -770,6 +781,8 @@ mpgSoftware.dynamicUi = (function () {
             return (this.experiment.length);
         };
 
+        addAdditionalResultsObject(returnObject);
+
         $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicAbcTissueTable')[0].innerHTML,
             returnObject
         ));
@@ -802,6 +815,9 @@ mpgSoftware.dynamicUi = (function () {
         returnObject['numberOfVariants'] = function(){
             return (this.varId.length);
         };
+
+
+        addAdditionalResultsObject(returnObject);
 
 
         $("#dynamicPhenotypeHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationPhenotypeTable')[0].innerHTML,

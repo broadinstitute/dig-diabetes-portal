@@ -1582,7 +1582,7 @@ var mpgSoftware = mpgSoftware || {};
                         "phenotype=" + rawPhenotype + "&" +
                         "dataset=" + dataSetName + "&" +
                         "propertyName=" + propertyName + "&" +
-                        "datatype="+ makeDynamic;
+                        "datatype="+ makeDynamic  ;
 
                     //console.log("position marker?  start=" + state.start  +"end=" + state.end + "&")
 
