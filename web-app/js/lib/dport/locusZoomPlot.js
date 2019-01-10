@@ -9,6 +9,7 @@ var mpgSoftware = mpgSoftware || {};
 
     mpgSoftware.locusZoom = (function (){
         var apiBase = 'https://portaldev.sph.umich.edu/api/v1/';
+        var ldServerApiBase = 'https://portaldev.sph.umich.edu/ld/';
         var currentLzPlotKey = 'lz-47';
         var pageVars = {};
 
@@ -1749,8 +1750,8 @@ var mpgSoftware = mpgSoftware || {};
             var ds = new LocusZoom.DataSources();
             ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
                 .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
-                .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
-                .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+                .add("ld", ["LDLZ2" , { url: ldServerApiBase, params:{ source: '1000G', build: 'GRCh37', population: 'ALL' }} ])
+                .add("gene", ["GeneLZ", { url: apiBase + "annotation/genes/", params: { build: 'GRCh37' } }])
                 .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
                 .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
 
@@ -1774,8 +1775,8 @@ var mpgSoftware = mpgSoftware || {};
                     newLayout = initLocusZoomLayout();
                     ds.add("constraint", ["GeneConstraintLZ", { url: "http://exac.broadinstitute.org/api/constraint" }])
                         .add("assoc", ["AssociationLZ", {url: apiBase + "statistic/single/", params: {analysis: 3, id_field: "variant"}}])
-                        .add("ld", ["LDLZ" , apiBase + "pair/LD/"])
-                        .add("gene", ["GeneLZ", apiBase + "annotation/genes/"])
+                        .add("ld", ["LDLZ2" , { url: ldServerApiBase, params:{ source: '1000G', build: 'GRCh37', population: 'ALL' }} ])
+                        .add("gene", ["GeneLZ", { url: apiBase + "annotation/genes/", params: { build: 'GRCh37' } }])
                         .add("recomb", ["RecombLZ", { url: apiBase + "annotation/recomb/results/", params: {source: 15} }])
                         .add("sig", ["StaticJSON", [{ "x": 0, "y": 4.522 }, { "x": 2881033286, "y": 4.522 }] ]);
                     lzp = LocusZoom.populate(selector, ds, newLayout);
