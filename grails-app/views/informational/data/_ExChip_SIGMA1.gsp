@@ -1,5 +1,8 @@
 <script class="panel-body" id="ExChip_SIGMA1_script" type="x-tmpl-mustache">
 
+<h4><g:message code="informational.shared.headers.dataset"></g:message></h4>
+<p><g:message code="informational.data.download.sigma"></g:message>
+
 <h4><g:message code="informational.shared.headers.publications"></g:message></h4>
 
 

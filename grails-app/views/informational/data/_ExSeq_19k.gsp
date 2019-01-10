@@ -495,6 +495,7 @@
 <h5><b>Slim Initiative in Genomic Medicine for the Americas (SIGMA) <small><a href="http://www.type2diabetesgenetics.org/projects/sigma" target="_blank">Learn more ></a></small>
 </b></h5>
 <p><g:message code="informational.project.descr.SIGMA"></g:message></p>
+<p><g:message code="informational.data.download.sigma_19k"></g:message>
 
 <p>&nbsp;</p>
 <h5><b>Lubeck Foundation Centre for Applied Medical Genomics in Personalised Disease Prediction, Prevention and Care (LuCamp) <small><a href="http://www.lucamp.org/" target="_blank">Learn more ></a></small>
@@ -505,7 +506,7 @@
 <h4>Overview of analysis</h4>
 <p><g:message code="informational.data.overview.19K"></g:message></p>
 <p>&nbsp;</p>
-<h4>Accessing 19K exome sequence analysis data</h4>
+<h4>Accessing 19K exome sequence analysis results</h4>
 <p><g:message code="informational.data.accessing.19K"></g:message></p>
 
 </script>

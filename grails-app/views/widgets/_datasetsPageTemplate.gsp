@@ -92,6 +92,19 @@
 <g:render template="./data/GWAS_DIAMANTE-UKBB_eu_dv2" />
 <g:render template="./data/GWAS_UKBiobankACR_eu" />
 <g:render template="./data/WGS_TOPMedAF_eu" />
+<g:render template="./data/GWAS_UKBiobankHRC_eu" />
+<g:render template="./data/GWAS_ADIPOGen" />
+<g:render template="./data/GWAS_CHARGE_eu" />
+<g:render template="./data/GWAS_GUGC_eu" />
+<g:render template="./data/GWAS_Leptin" />
+<g:render template="./data/GWAS_Leptin_eu" />
+<g:render template="./data/GWAS_MAGIC-A1C_aa" />
+<g:render template="./data/GWAS_MAGIC-A1C_ea" />
+<g:render template="./data/GWAS_MAGIC-A1C_eu" />
+<g:render template="./data/GWAS_MAGIC-A1C_sa" />
+<g:render template="./data/GWAS_DNCRI" />
+
+
 
 <script id="metaData2" type="x-tmpl-mustache">
     <div>

@@ -72,7 +72,7 @@ class TraitController {
 
     def phewasAjaxCallInLzFormat() {
         String varIdInLzFormat = params["filter"]
-        String includeAllVariants = params["includeAllVariants"]
+        String includeAllVariants = params["build"]
         Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
         JSONObject jsonObject = new JSONObject()
         if (!variantPieces.is_error){

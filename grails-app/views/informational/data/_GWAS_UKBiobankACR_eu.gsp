@@ -13,7 +13,7 @@
 
 <h4><g:message code="informational.shared.headers.dataset_pheno"></g:message></h4>
 <ul>
-    <li><g:message code="informational.shared.traits.albuminuria"></g:message></li>
+    <li><g:message code="informational.shared.traits.urinary_atc_ratio"></g:message></li>
 </ul>
 
 <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
@@ -21,7 +21,7 @@
     <table class="table table-condensed table-responsive table-striped">
 
 <tr><th>Subjects</th><th>Cohort</th><th>Ancestry</th></tr>
-<tr><td>nnn</td><td>UK Biobank</td><td>European</td></tr>
+<tr><td>382,500</td><td>UK Biobank</td><td>European</td></tr>
 
 </table>
 
