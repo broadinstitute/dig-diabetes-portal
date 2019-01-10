@@ -55,12 +55,13 @@ var mpgSoftware = mpgSoftware || {};
 
 
         var onCLickPhenotype = function (phenotype){
+            var coreVariables = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             //on click of phenotype populate the dataset dropdown list again
             mpgSoftware.manhattanplotTableHeader.fillSampleGroupDropdown(phenotype)
             var sampleGroup = $('#manhattanSampleGroupChooser').val()
             mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()
             // mpgSoftware.manhattanplotTableHeader.fillRegionalTraitAnalysis(phenotype,$('#manhattanSampleGroupChooser').val());
-           // window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
+           window.history.pushState('page2', 'Type 2 Diabetes', coreVariables.traitSearchUrl + "?trait=" + phenotype + "&significance=" + 0.0005);
 
         }
 
