@@ -63,6 +63,8 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !== null )) {
+
+                        console.log(data);
                         UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#phenotype', true, [], rememberportaltype);
                     }
                     loading.hide();

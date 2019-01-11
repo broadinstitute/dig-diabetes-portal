@@ -6,12 +6,14 @@
     <meta name="layout" content="t2dGenesCore"/>
     <r:require module="core"/>
     <r:require module="variantWF"/>
+    <r:require modules="variantSearchResults"/>
     <r:require module="mustache"/>
 
     <r:layoutResources/>
 </head>
 
 <body>
+<!-- VF UI starts here -->
 <style>
 .redBorder, .redBorder:focus {
     border-color: red !important;
@@ -40,6 +42,8 @@
 <script>
     $(document).ready(function () {
         // load the phenotypes in the phenotype-dependent tab
+
+        console.log('${g.portalTypeString()}');
         mpgSoftware.variantWF.retrievePhenotypes('${g.portalTypeString()}');
         // load the datasets in the phenotype-independent tab
         mpgSoftware.variantWF.retrievePhenotypeIndependentDatasets('${g.portalTypeString()}');
@@ -484,6 +488,7 @@
 </div>
 
 </div>
+<!-- VF UI ends here -->
 </body>
 </html>
 
