@@ -349,7 +349,7 @@ class RestServerService {
                     existingPortalVersionBean.getGenePageWarning(),
                     existingPortalVersionBean.getCredibleSetInfoCode(),
                     existingPortalVersionBean.getBlogId(),
-                    existingPortalVersionBean.getExposeCommonVariantTabs(),
+                    existingPortalVersionBean.getExposeCommonVariantTab(),
                     existingPortalVersionBean.getExposeRareVariantTab(),
                     existingPortalVersionBean.getVariantAssociationsExists(),
                     existingPortalVersionBean.getGeneLevelDataExists(),

@@ -382,6 +382,13 @@ mpgSoftware.dynamicUi = (function () {
         setAccumulatorObject( "extentEnd", objectContainingRetrievedRecords.extentEnd );
         setAccumulatorObject( "chromosome", objectContainingRetrievedRecords.chromosome );
         setAccumulatorObject( "originalGeneName", objectContainingRetrievedRecords.geneName );
+
+        addAdditionalResultsObject({contextDescription:{
+                extentBegin:objectContainingRetrievedRecords.extentBegin,
+                extentEnd:objectContainingRetrievedRecords.extentEnd,
+                chromosome:objectContainingRetrievedRecords.chromosome,
+                geneName:objectContainingRetrievedRecords.geneName
+    }})
     }
 
 
@@ -447,6 +454,8 @@ mpgSoftware.dynamicUi = (function () {
             returnObject.geneModTerms.push(recordToDisplay);
 
         });
+
+        addAdditionalResultsObject({refinedModContext:returnObject});
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             returnObject
         ));
@@ -589,7 +598,7 @@ mpgSoftware.dynamicUi = (function () {
             resultsArray = getAccumulatorObject("resultsArray");
         }
         resultsArray.push(returnObject);
-    }
+    };
 
 
     var accumulatorObjectFieldEmpty = function(specificField) {
@@ -601,7 +610,7 @@ mpgSoftware.dynamicUi = (function () {
             }
         }
         return returnValue;
-    }
+    };
 
 
 
@@ -698,7 +707,7 @@ mpgSoftware.dynamicUi = (function () {
             return (this.experiment.length);
         };
 
-        addAdditionalResultsObject(returnObject);
+        addAdditionalResultsObject({genesFromAbc:returnObject});
 
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
             returnObject
@@ -781,7 +790,7 @@ mpgSoftware.dynamicUi = (function () {
             return (this.experiment.length);
         };
 
-        addAdditionalResultsObject(returnObject);
+        addAdditionalResultsObject({tissuesFromAbc:returnObject});
 
         $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicAbcTissueTable')[0].innerHTML,
             returnObject
@@ -817,7 +826,7 @@ mpgSoftware.dynamicUi = (function () {
         };
 
 
-        addAdditionalResultsObject(returnObject);
+        addAdditionalResultsObject({phenotypesFromColocalizatio:returnObject});
 
 
         $("#dynamicPhenotypeHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationPhenotypeTable')[0].innerHTML,
@@ -861,6 +870,7 @@ mpgSoftware.dynamicUi = (function () {
             return (this.varId.length);
         };
 
+        addAdditionalResultsObject({tissuesFromColocalization:returnObject});
 
         $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationTissueTable')[0].innerHTML,
             returnObject
@@ -915,7 +925,7 @@ mpgSoftware.dynamicUi = (function () {
             return (this.varId.length);
         };
 
-
+        addAdditionalResultsObject({genesFromColocalization:returnObject});
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationGeneTable')[0].innerHTML,
             returnObject
         ));
@@ -1053,6 +1063,7 @@ mpgSoftware.dynamicUi = (function () {
             });
             returnObject.uniqueEqtlGenes.push(recordToDisplay);
         });
+        addAdditionalResultsObject({tissuesPerGeneFromEqtl:returnObject});
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             returnObject
         ));
@@ -1072,7 +1083,7 @@ mpgSoftware.dynamicUi = (function () {
             }
 
         });
-
+        addAdditionalResultsObject({genesPerTissueFromEqtl:returnObject});
         $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicTissueTable')[0].innerHTML,
             returnObject
         ));
@@ -1127,6 +1138,9 @@ mpgSoftware.dynamicUi = (function () {
     var displayRefinedGenesInARange = function (idForTheTargetDiv,objectContainingRetrievedRecords){
         var selectorForIidForTheTargetDiv = idForTheTargetDiv;
         $(selectorForIidForTheTargetDiv).empty();
+
+        addAdditionalResultsObject({refinedGenesInARange:objectContainingRetrievedRecords});
+
         $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
             objectContainingRetrievedRecords
         ));
@@ -1221,6 +1235,7 @@ mpgSoftware.dynamicUi = (function () {
             returnObject.variantPhenotypeQtl.push(recordToDisplay);
 
         });
+        addAdditionalResultsObject({variantRecordsFromVariantQtlSearch:returnObject});
         $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicVariantTable')[0].innerHTML,
             returnObject
         ));
@@ -1245,6 +1260,7 @@ mpgSoftware.dynamicUi = (function () {
             returnObject.phenotypeVariantQtl.push(recordToDisplay);
 
         });
+        addAdditionalResultsObject({phenotypeRecordsFromVariantQtlSearch:returnObject});
         $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicPhenotypeTable')[0].innerHTML,
             returnObject
         ));
@@ -1253,6 +1269,7 @@ mpgSoftware.dynamicUi = (function () {
 
     var displayContext = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
         var contextDescr = objectContainingRetrievedRecords;
+        // Do we actually use this routine?
         $(idForTheTargetDiv).empty().append(Mustache.render($('#contextDescriptionSection')[0].innerHTML,
             contextDescr
         ));
