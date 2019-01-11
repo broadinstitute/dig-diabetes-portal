@@ -21,39 +21,51 @@
 
 <tr><th>Samples</th><th>Cohort</th><th>Ancestry</th></tr>
 
-<tr><td>532</td><td>Baltimore Longitudinal Study on Aging (BLSA)</td><td>European</td></tr>
-<tr><td>4,926</td><td>Cohorte Lausannoise (COLAUS)</td><td>European</td></tr>
-<tr><td>1,957</td><td>Erasmus Rucphen Family Study (ERF)</td><td>European</td></tr>
-<tr><td>1,505</td><td>Family Heart Study (FamHS)</td><td>European</td></tr>
-<tr><td>1,397</td><td>Fenland Study (Fenland)</td><td>European</td></tr>
-<tr><td>520</td><td>The Example Study (FINRISK97)</td><td>European</td></tr>
-<tr><td>1,623</td><td>Genetic Etiology of Metabolic Syndrome (GEMS)</td><td>European</td></tr>
-<tr><td>938</td><td>Gothenburg Osteoporosis and Obesity Determinants study (GOOD)</td><td>European</td></tr>
-<tr><td>991</td><td>Health 2000 cases (H2000 CASES)</td><td>European</td></tr>
-<tr><td>1,032</td><td>Health 2000 controls (H2000 CTRLS)</td><td>European</td></tr>
-<tr><td>1,605</td><td>Helsinki Birth Cohort Study (HBCS)</td><td>European</td></tr>
-<tr><td>2,129</td><td>Nurses' Health Study (NHS)</td><td>European</td></tr>
-<tr><td>583</td><td>Quebec Family Study (QFS)</td><td>European</td></tr>
-<tr><td>1,031</td><td>Relationship between Insulin Sensitivity and Cardiovascular Disease (RISC)</td><td>European</td></tr>
-<tr><td>955</td><td>Rotterdam study (Rotterdam study)</td><td>European</td></tr>
-<tr><td>2,690</td><td>TwinsUK (TwinsUK)</td><td>European</td></tr>
-<tr><td>2,085</td><td>The Cardiovascular Risk in Young Finns Study (YFS)</td><td>European</td></tr>
-<tr><td>500</td><td>British Women's Heart & Health study (BWHHS)</td><td>European</td></tr>
-<tr><td>1,595</td><td>MRC Ely Study (Ely)</td><td>European</td></tr>
-<tr><td>240</td><td>The Genetics osteoARthritis and Progression study (GARP)</td><td>European</td></tr>
-<tr><td>992</td><td>Gene x Lifestyle interactions And Complex traits Involved in Elevated disease Risk (GLACIER)</td><td>European</td></tr>
-<tr><td>467</td><td>Genetics of Extremely Overweight Young Adults (GOYA Male)</td><td>European</td></tr>
+<tr><td>8,429</td><td><a onclick="showSection(event)">UK Biobank</a>
+<div style="display: none;" class="cohortDetail">
+            <table border="1">
+                <tr><th>Inclusion criteria</th><th>Exclusion criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>participants underwent brain MRI</li>
+                            <li>participants had usable T2 fluid- attenuated inversion recovery (FLAIR) or diffusion tensor imaging images</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>participants with a diagnosis of stroke (ICD-9/ICD-10 or self-report or health record linkage) were excluded</li>
+                            <li>participants with a diagnosis of multiple sclerosis, Parkinson disease, dementia, or any other neurodegenerative disease at baseline were excluded</li>
+                            <li>participants with no genetic data were excluded</li>
+                            <ul>
+                    </td></tr>
+    </table></td><td>European</td></tr>
 
-
+<tr><td>2,797</td><td><a onclick="showSection(event)">WMH in Stroke Study</a>
+<div style="display: none;" class="cohortDetail">
+<table border="1">
+                <tr><th>Inclusion criteria</th><th>Exclusion criteria</th></tr>
+                <tr>
+                    <td valign="top">
+                        <ul>
+                            <li>participants had a diagnosis of ischemic stroke</li>
+                        </ul>
+                    </td>
+                    <td valign="top">
+                        <ul>
+                            <li>patients with cerebral autosomal dominant arteriopathy with subcortical infarcts and leukoencephalopathy (CADASIL) or any other suspected monogenic cause of stroke, vasculitis, or any other nonischemic cause of WMH such as demyelinating and mitochondrial disorders, were excluded</li>
+                            <ul>
+                    </td></tr>
+    </table></td><td>European</td></tr>
     </table>
 
 
     <h4><g:message code="informational.shared.headers.exptsumm"></g:message></h4>
-<p><g:message code="informational.data.exptsumm.Leptin_GWAS"></g:message></p>
+<p><g:message code="informational.data.exptsumm.WMH_GWAS"></g:message></p>
 
 
    <h4>Accessing Cerebral WMHV GWAS 2019 results</h4>
-<p><g:message code="informational.data.accessing.Leptin_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.Leptin_GWAS2"></g:message></p>
+<p><g:message code="informational.data.accessing.WMH_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.WMH_GWAS2"></g:message></p>
 
 
 
