@@ -253,6 +253,7 @@
 
 
 
+                <g:render template="../templates/dynamicUiTemplate"/>
                 <g:render template="../templates/geneSignalSummaryTemplate"/>
                 <g:render template="../templates/variantSearchResultsTemplate" />
                 <g:render template="geneSignalSummary"  model="[signalLevel:1,geneToSummarize:geneName]"/>

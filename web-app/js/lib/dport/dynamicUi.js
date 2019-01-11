@@ -383,7 +383,7 @@ mpgSoftware.dynamicUi = (function () {
         setAccumulatorObject( "chromosome", objectContainingRetrievedRecords.chromosome );
         setAccumulatorObject( "originalGeneName", objectContainingRetrievedRecords.geneName );
 
-        addAdditionalResultsObject({contextDescription:{
+        addAdditionalResultsObject({rangeContext:{
                 extentBegin:objectContainingRetrievedRecords.extentBegin,
                 extentEnd:objectContainingRetrievedRecords.extentEnd,
                 chromosome:objectContainingRetrievedRecords.chromosome,
