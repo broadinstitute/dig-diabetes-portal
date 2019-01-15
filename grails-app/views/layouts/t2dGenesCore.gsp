@@ -33,6 +33,11 @@
                 <g:applyLayout name="analyticsMiPortal"/>
             </g:renderT2dGenesSection>
         </g:if>
+        <g:if test="${g.portalTypeString()?.equals('sleep')}">
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsSleepPortal"/>
+            </g:renderT2dGenesSection>
+        </g:if>
 
         <g:else>
             <g:renderT2dGenesSection>
