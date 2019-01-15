@@ -141,7 +141,8 @@ var clearBeforeStarting = false;
             case "getTissuesFromEqtlsForTissuesTable":
                 functionToLaunchDataRetrieval = function() {
                     if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                        actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForTissuesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForTissuesTable"});
+                        actionToUndertake();
                     } else {
                         resetAccumulatorObject("tissueNameArray");
                         resetAccumulatorObject("tissuesForEveryGene");
@@ -164,7 +165,8 @@ var clearBeforeStarting = false;
             case "getTissuesFromEqtlsForGenesTable":
                 functionToLaunchDataRetrieval = function(){
                     if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                        actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromEqtlsForGenesTable"});
+                        actionToUndertake();
                     } else {
                         resetAccumulatorObject("tissueNameArray");
                         resetAccumulatorObject("genesForEveryTissue");
@@ -251,7 +253,8 @@ var clearBeforeStarting = false;
             case "getPhenotypesFromECaviarForTissueTable":
                 functionToLaunchDataRetrieval = function(){
                     if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                        actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getPhenotypesFromECaviarForTissueTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getPhenotypesFromECaviarForTissueTable"});
+                        actionToUndertake();
                     } else {
                         var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                         retrieveRemotedContextInformation(buildRemoteContextArray ({
@@ -271,7 +274,8 @@ var clearBeforeStarting = false;
             case "getRecordsFromECaviarForGeneTable":
                 functionToLaunchDataRetrieval = function(){
                     if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                        actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getRecordsFromECaviarForGeneTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getRecordsFromECaviarForGeneTable"});
+                        actionToUndertake();
                     } else {
                         var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                         retrieveRemotedContextInformation(buildRemoteContextArray ({
@@ -324,7 +328,8 @@ var clearBeforeStarting = false;
             case "getTissuesFromAbcForGenesTable":
                 functionToLaunchDataRetrieval = function(){
                     if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                        actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromAbcForGenesTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getTissuesFromAbcForGenesTable"});
+                        actionToUndertake();
                     } else {
                         var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
                             return {gene: o.name}
@@ -348,7 +353,8 @@ var clearBeforeStarting = false;
             case "getRecordsFromAbcForTissueTable":
                 functionToLaunchDataRetrieval = function(){
                     if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                        actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getRecordsFromAbcForTissueTable"});
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getRecordsFromAbcForTissueTable"});
+                        actionToUndertake();
                     } else {
                         var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
                             return {gene: o.name}
@@ -372,7 +378,7 @@ var clearBeforeStarting = false;
                 break;
         }
 
-        return functionToLaunchDataRetrieval();
+        return functionToLaunchDataRetrieval;
     };
 
 
@@ -1347,7 +1353,8 @@ var clearBeforeStarting = false;
 
             } else if  ( typeof collectionOfRemoteCallingParameters.actionId !== 'undefined')  {
 
-                actionContainer( collectionOfRemoteCallingParameters.actionId, actionDefaultFollowUp(collectionOfRemoteCallingParameters.actionId) );
+                var actionToUndertake = actionContainer( collectionOfRemoteCallingParameters.actionId, actionDefaultFollowUp(collectionOfRemoteCallingParameters.actionId) );
+                actionToUndertake();
 
             } else {
 
@@ -1530,32 +1537,33 @@ var clearBeforeStarting = false;
         // manually set the range
         $('#topLevelContextOfTheDynamicUiButton').on('click', function () {
 
-            actionContainer("replaceGeneContext", actionDefaultFollowUp("replaceGeneContext"));
-
+            var actionToUndertake = actionContainer("replaceGeneContext", actionDefaultFollowUp("replaceGeneContext"));
+            actionToUndertake();
         });
 
         // pull back mouse annotations
         $('#modAnnotationButtonId').on('click', function () {
       //      resetAccumulatorObject("modNameArray");
 
-            actionContainer('getAnnotationsFromModForGenesTable', actionDefaultFollowUp("getAnnotationsFromModForGenesTable"));
+            var actionToUndertake = actionContainer('getAnnotationsFromModForGenesTable', actionDefaultFollowUp("getAnnotationsFromModForGenesTable"));
+            actionToUndertake();
 
 
         });
 
         // perform an eQTL based lookup
         $('#getTissuesFromEqtlsForGenesTable').on('click', function () {
-            // resetAccumulatorObject("tissueNameArray");
-            // resetAccumulatorObject("genesForEveryTissue");
-            // resetAccumulatorObject("tissuesForEveryGene");
-            actionContainer('getTissuesFromEqtlsForGenesTable', actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable"));
+
+            var actionToUndertake = actionContainer('getTissuesFromEqtlsForGenesTable', actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable"));
+            actionToUndertake();
         });
 
 
 
         $('#getTissuesFromAbcForGenesTable').on('click', function () {
 
-            actionContainer("getTissuesFromAbcForGenesTable", actionDefaultFollowUp("getTissuesFromAbcForGenesTable"));
+            var actionToUndertake = actionContainer("getTissuesFromAbcForGenesTable", actionDefaultFollowUp("getTissuesFromAbcForGenesTable"));
+            actionToUndertake();
 
         });
 
@@ -1564,30 +1572,32 @@ var clearBeforeStarting = false;
         // assign the correct response to the proximity range go button
         $('#getTissuesFromProximityForLocusContext').on('click', function () {
 
-            actionContainer("getTissuesFromProximityForLocusContext", actionDefaultFollowUp("getTissuesFromProximityForLocusContext"));
+            var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", actionDefaultFollowUp("getTissuesFromProximityForLocusContext"));
+            actionToUndertake();
 
         });
 
 
         $('#getVariantsFromQtlForContextDescription').on('click', function () {
 
-            // resetAccumulatorObject("phenotypesForEveryVariant");
-            // resetAccumulatorObject("variantsForEveryPhenotype");
-
-            actionContainer("getVariantsFromQtlForContextDescription", actionDefaultFollowUp("getVariantsFromQtlForContextDescription"));
+            var actionToUndertake = actionContainer("getVariantsFromQtlForContextDescription", actionDefaultFollowUp("getVariantsFromQtlForContextDescription"));
+            actionToUndertake();
 
         });
 
 
         $('#getTissuesFromEqtlsForTissuesTable').on('click', function () {
 
-            actionContainer("getTissuesFromEqtlsForTissuesTable", actionDefaultFollowUp("getTissuesFromEqtlsForTissuesTable"));
+            var actionToUndertake = actionContainer("getTissuesFromEqtlsForTissuesTable", actionDefaultFollowUp("getTissuesFromEqtlsForTissuesTable"));
+            actionToUndertake();
 
         });
 
 
         $('#getPhenotypesFromQtlForPhenotypeTable').on('click', function () {
-            actionContainer("getPhenotypesFromQtlForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromQtlForPhenotypeTable"));
+
+            var actionToUndertake = actionContainer("getPhenotypesFromQtlForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromQtlForPhenotypeTable"));
+            actionToUndertake();
 
         });
 
@@ -1595,29 +1605,42 @@ var clearBeforeStarting = false;
 
         $('#getPhenotypesFromECaviarForPhenotypeTable').on('click', function () {
 
-            actionContainer("getPhenotypesFromECaviarForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromECaviarForPhenotypeTable"));
+            var actionToUndertake = actionContainer("getPhenotypesFromECaviarForPhenotypeTable", actionDefaultFollowUp("getPhenotypesFromECaviarForPhenotypeTable"));
+            actionToUndertake();
 
         });
 
         $('#getPhenotypesFromECaviarForTissueTable').on('click', function () {
-            actionContainer("getPhenotypesFromECaviarForTissueTable", actionDefaultFollowUp("getPhenotypesFromECaviarForTissueTable"));
+            var actionToUndertake = actionContainer("getPhenotypesFromECaviarForTissueTable", actionDefaultFollowUp("getPhenotypesFromECaviarForTissueTable"));
+            actionToUndertake();
         });
 
 
 
         $('#getRecordsFromECaviarForGeneTable').on('click', function () {
-            actionContainer("getRecordsFromECaviarForGeneTable", actionDefaultFollowUp("getRecordsFromECaviarForGeneTable"));
+            var actionToUndertake = actionContainer("getRecordsFromECaviarForGeneTable", actionDefaultFollowUp("getRecordsFromECaviarForGeneTable"));
+            actionToUndertake();
         });
 
 
 
         $('#getRecordsFromAbcForTissueTable').on('click', function () {
-            actionContainer("getRecordsFromAbcForTissueTable", actionDefaultFollowUp("getRecordsFromAbcForTissueTable"));
+            var actionToUndertake = actionContainer("getRecordsFromAbcForTissueTable", actionDefaultFollowUp("getRecordsFromAbcForTissueTable"));
+            actionToUndertake();
         });
 
 
         $('#retrieveMultipleRecordsTest').on('click', function () {
-            actionContainer("getRecordsFromAbcForTissueTable", actionDefaultFollowUp("getRecordsFromAbcForTissueTable"));
+            var arrayOfRoutinesToUndertake = [];
+            arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
+                actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
+
+            arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
+                actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
+
+
+
+
         });
 
 
