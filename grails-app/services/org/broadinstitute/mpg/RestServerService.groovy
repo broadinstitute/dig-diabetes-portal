@@ -886,18 +886,28 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
                                 } else { // must merge
                                     if (result[key].getClass().simpleName!="String"){
                                         Map everythingToAdd = result[key] as Map
-                                        List keysToAdd = everythingToAdd?.keySet() as List
-                                        for (def keyToAdd in keysToAdd) {
-                                            if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)){
-                                                List keysToAppend = result[key][keyToAdd].keySet() as List
-                                                for (String keyToAppend in keysToAppend){
-                                                    retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                        try {
+                                            List keysToAdd = everythingToAdd?.keySet() as List
+                                            for (def keyToAdd in keysToAdd) {
+                                                if (retValue['variants'][0][existingIndex][key].containsKey(keyToAdd)) {
+                                                    if (result[key][keyToAdd] == null) {
+                                                        log.error("Map name matching problem in postMultiJoinProtectedDataQueryRestCall")
+                                                    } else {
+                                                        List keysToAppend = result[key][keyToAdd].keySet() as List
+                                                        for (String keyToAppend in keysToAppend) {
+                                                            retValue['variants'][0][existingIndex][key][keyToAdd][keyToAppend] = result[key][keyToAdd][keyToAppend]
+                                                        }
+
+                                                    }
+                                                } else {
+                                                    HashMap newEntryToAdd = [:]
+                                                    newEntryToAdd[keyToAdd] = result[key][keyToAdd]
+                                                    retValue['variants'][0][existingIndex][key] << newEntryToAdd
                                                 }
-                                            } else {
-                                                HashMap newEntryToAdd = [:]
-                                                newEntryToAdd[keyToAdd] = result[key][keyToAdd]
-                                                retValue['variants'][0][existingIndex][key] <<  newEntryToAdd
                                             }
+
+                                        } catch (Exception e) {
+                                            log.error("List casting problem in postMultiJoinProtectedDataQueryRestCall")
                                         }
 
                                     }
