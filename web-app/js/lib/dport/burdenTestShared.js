@@ -1587,6 +1587,11 @@ mpgSoftware.burdenTestShared = (function () {
 
         var phenotypeToPredict = $('#phenotypeFilter').val();
         var datasetUse = $('#datasetFilter').val();
+        var biallelicCheckbox = $('#biallelicCheckbox');
+        var biallelicCheckboxValue = "0";
+        if ((biallelicCheckbox)&&(biallelicCheckbox.is(":checked"))){
+            biallelicCheckboxValue = "1";
+        }
         var listOfVariantsToCheck = [];
         if ($('#gaitTable').children().length > 0) { // check that we have a table
 
@@ -1607,6 +1612,7 @@ mpgSoftware.burdenTestShared = (function () {
                 covariates: covariateValues,
                 samples: "{\"samples\":[]}",
                 filters: "{\"filters\":" + filterValues + "}",
+                biallelicCheckboxValue:biallelicCheckboxValue,
                 compoundedFilterValues: compoundedFilterValues,
                 traitFilterSelectedOption: phenotypeToPredict,
                 dataset: datasetUse,

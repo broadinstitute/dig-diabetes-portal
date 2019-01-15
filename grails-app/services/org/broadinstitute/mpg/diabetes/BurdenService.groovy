@@ -433,7 +433,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
      * @return
      */
     public JSONObject callBurdenTest(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet,
-                                     Boolean explicitlySelectSamples, String portalTypeString, String variantSetId) {
+                                     Boolean explicitlySelectSamples, String portalTypeString, String variantSetId, String biallelicCheckboxValue) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -494,7 +494,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
 
             returnJson = this.getBurdenResultForVariantIdList( "mdv${dataVersionId}".toString(), phenotype, burdenVariantList, covariatesObject, samplesObject, filtersObject, [] as JSONArray,
-                                                               sampleDataSet, explicitlySelectSamples, variantSetId );
+                                                               sampleDataSet, explicitlySelectSamples, variantSetId, biallelicCheckboxValue );
 
         } catch (PortalException exception) {
             log.error("Got error creating burden test for gene: " + geneString + " and phenotype: " + phenotype + ": " + exception.getMessage());
@@ -560,7 +560,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
                                                           JSONObject filtersJsonObject,
                                                           JSONArray phenotypeFilterValues,
                                                           String dataset,
-                                                          String variantSetId ) throws PortalException {
+                                                          String variantSetId,
+                                                          String biallelicCheckboxValue) throws PortalException {
         // local variables
         org.broadinstitute.mpg.Variant burdenVariant;
         JSONObject returnJson = null;
@@ -578,7 +579,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         }
 
         // call shared method
-        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantIds, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset, variantSetId );
+        returnJson = this.callBurdenTestForTraitAndVariantId(traitOption, variantIds, covariateJsonObject, sampleJsonObject, filtersJsonObject,
+                phenotypeFilterValues, dataset, variantSetId, biallelicCheckboxValue );
 
         // return
         return returnJson;
@@ -598,14 +600,15 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
                                                             JSONObject filtersJsonObject,
                                                             JSONArray phenotypeFilterValues,
                                                             String dataset,
-                                                            String variantSetId) throws PortalException {
+                                                            String variantSetId,
+                                                            String biallelicCheckboxValue) throws PortalException {
         // local variables
         JSONObject returnJson = null;
         //int dataVersion = this.sharedToolsService.getDataVersion();
         String stringDataVersion = metaDataService.getDataVersion()
 
         returnJson = this.getBurdenResultForVariantIdList(stringDataVersion , traitOption, burdenVariantList, covariateJsonObject, sampleJsonObject,  filtersJsonObject,
-                phenotypeFilterValues, dataset, false, variantSetId );
+                phenotypeFilterValues, dataset, false, variantSetId, biallelicCheckboxValue );
 
         // return
         return returnJson;
@@ -622,7 +625,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
     protected JSONObject getBurdenResultForVariantIdList(String stringDataVersion, String phenotype, List<String> burdenVariantList,
                                                          JSONObject covariateJsonObject, JSONObject sampleJsonObject, JSONObject filtersJsonObject,
                                                          JSONArray phenotypeFilterValues, String dataset, Boolean explicitlySelectSamples,
-                                                         String variantSetId) throws PortalException {
+                                                         String variantSetId, String biallelicCheckboxValue) throws PortalException {
         // local variables
         JSONObject jsonObject = null;
         JSONObject returnJson = null;
@@ -636,7 +639,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         // an operation that converts multi-allelics broken into bi-jjjallelic
         String alleleType = ""
         SampleGroup sampleGroupObj = metaDataService.getSampleGroupByName(dataset,MetaDataService.METADATA_SAMPLE)
-        if (sampleGroupObj.getMeaningSet().contains(PortalConstants.PROPERTY_MEANING_MULTI_ALLELE_KEY)){
+        if ((sampleGroupObj.getMeaningSet().contains(PortalConstants.PROPERTY_MEANING_MULTI_ALLELE_KEY)) &&
+                (biallelicCheckboxValue == "1")){
             alleleType=  PortalConstants.JSON_BURDEN_OPERATION_ALLELE_TYPE_KEY;
         }
 

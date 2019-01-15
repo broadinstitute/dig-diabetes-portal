@@ -464,6 +464,7 @@ class GeneController {
 
         // cast the parameters
         Boolean explicitlySelectSamples = false
+        String biallelicCheckboxValue = params.biallelicCheckboxValue
         String geneName = params.geneName
         String dataSet = params.dataSet
         String sampleDataSet = params.sampleDataSet
@@ -476,7 +477,7 @@ class GeneController {
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result = this.burdenService.callBurdenTest(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue,
-                dataSet, sampleDataSet, explicitlySelectSamples,portalType,variantSetId);
+                dataSet, sampleDataSet, explicitlySelectSamples,portalType,variantSetId,biallelicCheckboxValue);
 
         // send json response back
         render(status: 200, contentType: "application/json") {result}

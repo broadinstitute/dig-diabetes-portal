@@ -636,6 +636,7 @@ def retrieveSampleSummary (){
         String traitFilterOptionId = (params.traitFilterSelectedOption ? params.traitFilterSelectedOption : "t2d");     // default to t2d if none given
 
         String stratum = params.stratum ?: ''
+        String biallelicCheckboxValue = params.biallelicCheckboxValue
         JsonSlurper slurper = new JsonSlurper()
         JSONObject covariateJsonObject = slurper.parseText(params.covariates)
         JSONObject sampleJsonObject = slurper.parseText(params.samples)
@@ -658,7 +659,8 @@ def retrieveSampleSummary (){
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
         JSONObject result
         try {
-            result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantNameList, covariateJsonObject, sampleJsonObject, filtersJsonObject, phenotypeFilterValues, dataset, variantSetId  );
+            result = this.burdenService.callBurdenTestForTraitAndDbSnpId(traitFilterOptionId, variantNameList, covariateJsonObject, sampleJsonObject,
+                    filtersJsonObject, phenotypeFilterValues, dataset, variantSetId, biallelicCheckboxValue  );
         } catch (Exception e){
             e.printStackTrace()
         }
