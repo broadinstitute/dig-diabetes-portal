@@ -284,22 +284,7 @@ class VariantSearchController {
             String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
 
-            //filtersForQuery << """{"value":"${chromosome}, "pos":${extents.startExtent}-${extents.endExtent}","prop":"chromosome","comparator":"="}""".toString()
-
             filtersForQuery << """{"gene":"${geneName}","prop":"gene","value":"${geneName}","comparator":"="}""".toString()
-//
-            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HETA","value":"0","comparator":">"}""".toString()
-
-            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HETU","value":"0","comparator":">"}""".toString()
-
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HOMA","value":"0","comparator":">"}""".toString()
-
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"HOMU","value":"0","comparator":">"}""".toString()
-//
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACA_PH","value":"0","comparator":">"}""".toString()
-//
-//            filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"ACU_PH","value":"0","comparator":">"}]""".toString()
-
 
 
         }
@@ -315,21 +300,22 @@ class VariantSearchController {
             String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
 
-            org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
-                    "ACA_PH", MetaDataService.METADATA_VARIANT)
-            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
-                    "ACU_PH", MetaDataService.METADATA_VARIANT)
+//            org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
+//                    "ACA_PH", MetaDataService.METADATA_VARIANT)
+//            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
+//                    "ACU_PH", MetaDataService.METADATA_VARIANT)
             org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_eu_mdv60",
-                    "AC", MetaDataService.METADATA_VARIANT)
+                    "AC_PH", MetaDataService.METADATA_VARIANT)
 
-            if (property1 && property2) {
-                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
-                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
-            } else {
-                if (property) {
-                    filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_eu_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
-                }
+            if (property) {
+                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_eu_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
             }
+//            if (property1 && property2) {
+//                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
+//                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
+//            } else {
+//
+//            }
         }
 
         if (filtersForQuery.size()>0) {
@@ -1266,6 +1252,37 @@ class VariantSearchController {
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
+//
+
+
+//        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID", "CHROM"])
+//        List<String> filters = []
+//        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
+//
+//        // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
+//        List <String> piecesOfThePropertyName = propertyName.split("_")
+//        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
+//        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
+//        String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
+//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
+//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
+//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
+//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
+//
+
+
+
+
+       Property macProperty = metaDataService.getSampleGroupProperty("ExSeq_ALS2018_eu_mdv60","MAF",MetaDataService.METADATA_VARIANT)
+        JsonSlurper slurper = new JsonSlurper()
+        //getDataQueryHolder.addProperties(resultColumnsToDisplay)
+
+        if (macProperty != null){
+            getDataQueryHolder.addSpecificProperty(macProperty)
+        }
+
+
+
         if (getDataQueryHolder.isValid()) {
             List<String> encodedFilters = getDataQueryHolder.listOfEncodedFilters()
             List<String> translatedFilters = []
