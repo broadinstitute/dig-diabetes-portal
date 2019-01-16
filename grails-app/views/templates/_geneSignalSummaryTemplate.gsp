@@ -698,6 +698,8 @@ div.genePosition{
                                     <div class="dynamicUiHolder">
                                     </div>
                                 </div>
+                                <table class="combinedTableHolder">
+                                </table>
 
                             </div>
                         </div>

@@ -95,6 +95,33 @@
     </table>
 </script>
 
+
+
+
+%{--a new and reduced form of dynamicGeneTable initially for displayRefinedModContext--}%
+<script id="dynamicGeneTableHeader"  type="x-tmpl-mustache">
+
+            {{name}}
+
+</script>
+
+<script id="dynamicGeneTableBody"  type="x-tmpl-mustache">
+
+
+            {{#mods}}
+                <div>
+                    {{modName}}
+                </div>
+            {{/mods}}
+
+
+
+
+</script>
+
+
+
+
 %{--Called from displayGenesPerTissueFromEqtl--}%
 
 <script id="dynamicTissueTable"  type="x-tmpl-mustache">
@@ -420,6 +447,39 @@
 
     </table>
 </script>
+
+
+
+
+%{--Called from displayGenesFromAbc--}%
+<script id="dynamicAbcGeneTableHeader"  type="x-tmpl-mustache">
+
+            <div class="geneName">{{geneName}}</div><div class="genePosition">chromosome {{chrom}}: {{regionStart}}-{{regionEnd}}</div>
+
+</script>
+<script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
+
+            <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
+                    <div id="tooltip_tissues_{{geneName}}"></div>
+                    <div id="graphic_tissues_{{geneName}}"></div>
+               </div>
+            </div>
+
+            <div><a data-toggle="collapse" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
+               <div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">
+                    {{#experiment}}
+                       <div>{{.}}</div>
+                    {{/experiment}}
+               </div>
+            </div>
+
+</script>
+
+
+
+
+
 
 
 

@@ -475,7 +475,8 @@ var clearBeforeStarting = false;
         _.forEach(getAccumulatorObject("modNameArray"), function (geneWithMods) {
             returnObject.uniqueGenes.push({name:geneWithMods.geneName});
 
-            var recordToDisplay = {mods:[]};
+            var recordToDisplay = { mods:[],
+                                    geneName: geneWithMods.geneName };
             _.forEach(geneWithMods.mods,function(eachMod){
                 recordToDisplay.mods.push({modName:eachMod})
             });
@@ -641,11 +642,70 @@ var clearBeforeStarting = false;
         return returnValue;
     };
 
-
+    /***
+     * Need to build an intermediate data structure. It'll be an object but looks like this:
+     * headerNames: ['Header name 1','header name 2']
+     * headerContents: [' HTML for a header',' HTML for a header']
+     * columnCells: [  {'Header name 1':' HTML for a cell'},
+     *                  {'header name 2':' HTML for a cell'} ]
+     * @param idForTheTargetDiv
+     * @param templateInfo
+     * @param returnObject
+     * @param clearBeforeStarting
+     */
     var prepareToPresentToTheScreen = function(idForTheTargetDiv,templateInfo,returnObject,clearBeforeStarting) {
         if (clearBeforeStarting){
             $(idForTheTargetDiv).empty();
         }
+        var intermediateDataStructure = {   headerNames: [],
+                                            headerContents: [],
+                                            columnCells: []     };
+        //$(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
+        //    returnObject
+        //));
+        if (returnObject.genesExist()){
+            _.forEach(returnObject.uniqueGenes, function (uniqueGene){
+                intermediateDataStructure.headerNames.push (uniqueGene.name);
+                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene));
+                intermediateDataStructure.columnCells.push ("");
+            });
+
+        }
+        if (( typeof returnObject.geneModsExist !== 'undefined') && ( returnObject.geneModsExist())){
+
+            _.forEach(returnObject.geneModTerms, function (recordsPerGene){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                }else {
+                    intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+        }
+
+        if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(returnObject.genesByAbc, function (oneRecord){
+                intermediateDataStructure.headerNames.push (oneRecord.geneName);
+                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
+                intermediateDataStructure.columnCells.push ("");
+            });
+
+                // fill in all of the column cells
+            _.forEach(returnObject.genesByAbc, function (recordsPerGene){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                }else {
+                    recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
+                    recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
+                    intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+            buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
+
+        }
+
         $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
             returnObject
         ));
@@ -736,12 +796,7 @@ var clearBeforeStarting = false;
         returnObject['abcGenesExist'] = function(){
             return (this.genesByAbc.length>0)?[1]:[];
         };
-        returnObject['numberOfTissues'] = function(){
-            return (this.source.length);
-        };
-        returnObject['numberOfExperiments'] = function(){
-            return (this.experiment.length);
-        };
+
 
         addAdditionalResultsObject({genesFromAbc:returnObject});
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicAbcGeneTable',returnObject,clearBeforeStarting);
@@ -1638,7 +1693,7 @@ var clearBeforeStarting = false;
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
                 actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
 
-
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
 
         });
@@ -1724,7 +1779,29 @@ var clearBeforeStarting = false;
 
 
 
-    var addToCombinedTable = function (variantAndDsAjaxUrl, variantInfoUrl,
+
+
+    var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure) {
+        var headerDescriber = {
+            "columns": []
+        };
+        _.forEach(intermediateStructure.headerNames, function (header){
+            headerDescriber.columns.push({"data":header});
+        });
+        var datatable = $(whereTheTableGoes).DataTable(headerDescriber );
+        var rowDescriber = {};
+        _.forEach(intermediateStructure.columnCells, function (val,key){
+            rowDescriber[intermediateStructure.headerNames[key]] = val;
+        });
+        datatable.row.add(rowDescriber).draw(true);
+    };
+
+
+
+
+
+
+        var addToCombinedTable = function (variantAndDsAjaxUrl, variantInfoUrl,
                                        whereTheTableGoes) {
         // var proposedVariant = $('#proposedVariant').val();
         // var metadata = getStoredSampleMetadata();
