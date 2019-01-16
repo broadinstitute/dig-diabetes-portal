@@ -1007,6 +1007,9 @@ class VariantSearchController {
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
         // determine columns to display
         LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
+        LinkedHashMap datasetPpropertiesListMap = new LinkedHashMap()
+        datasetPpropertiesListMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "AC_PH", "ACU_PH"])
+        resultColumnsToDisplay["pproperty"].putAt("ALS",datasetPpropertiesListMap)
 
         int pageStart = Integer.parseInt(params.start)
         int pageSize = Integer.parseInt(params.length)
@@ -1154,10 +1157,28 @@ class VariantSearchController {
 
         // determine columns to display
         LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
+        LinkedHashMap datasetPpropertiesMap = new LinkedHashMap()
+        datasetPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "AC_PH", "ACU_PH"])
+        resultColumnsToDisplay["pproperty"].putAt("ALS",datasetPpropertiesMap)
+
+       // resultColumnsToDisplay["pproperty"].putAt("ACA_PH")
+        //you have to add Properties to resultColumnsToDisplay linkedHashMap so that addProperties can add them
+
         JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
 
         // make the call to REST server
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
+
+        //getDataQueryHolder.addProperties()
+
+//        Property macProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("ACA_PH", "ALS","ExSeq_ALS2018_eu_mdv60",MetaDataService.METADATA_VARIANT)
+//        JsonSlurper slurper = new JsonSlurper()
+//        //getDataQueryHolder.addProperties(resultColumnsToDisplay)
+//
+//        if (macProperty != null){
+//            getDataQueryHolder.addSpecificProperty(macProperty)
+//        }
+
 
         /***
          * Temporary workaround:  the federated KB does not yet support cross institution filtering.  Detect those requests and prohibit them.
@@ -1181,10 +1202,6 @@ class VariantSearchController {
             }
             return
         }
-
-
-
-
 
 
 
@@ -1248,19 +1265,21 @@ class VariantSearchController {
                      "common-common-Allele_Frequency",
                      "common-common-Allele_Count",
                      "common-common-SIFT_PRED",
-                     "common-common-PolyPhen_PRED" ].join(":")
+                     "common-common-PolyPhen_PRED",
+                     "common-common-ACA_PH",
+                     "common-common-ACU_PH"].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
-//
 
 
-//        LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID", "CHROM"])
-//        List<String> filters = []
-//        GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
+
+     //   LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID", "CHROM"])
+
+      //  GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
 //
 //        // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
-//        List <String> piecesOfThePropertyName = propertyName.split("_")
+//          List <String> piecesOfThePropertyName = propertyName.split("_")
 //        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
 //        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
 //        String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
@@ -1269,6 +1288,8 @@ class VariantSearchController {
 //        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
 //        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
 //
+
+
 
 
 
