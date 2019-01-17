@@ -684,6 +684,7 @@ var clearBeforeStarting = false;
                     intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
                 }
             });
+            buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
         }
 
         if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
@@ -1787,47 +1788,43 @@ var clearBeforeStarting = false;
 
 
     var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure) {
-        var headerDescriber = {
-            dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
-            "buttons": [
-                {extend: "copy", text: "Copy all to clipboard"},
-                {extend: "csv", text: "Copy all to csv"},
-                {extend: "pdf", text: "Copy all to pdf"}
-            ],
-            "aLengthMenu": [
-                [10, 50, -1],
-                [10, 50, "All"]
-            ],
-            "bDestroy": true,
-            "bAutoWidth": false,
-            "columnDefs": []
-        };
-        _.forEach(intermediateStructure.headers, function (header,count){
-            headerDescriber.columnDefs.push({"title":header.contents,
+        if (( typeof intermediateStructure !== 'undefined') &&
+            ( typeof intermediateStructure.headers !== 'undefined') &&
+            (intermediateStructure.headers.length > 0)){
+            var datatable;
+            if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ){
+                var headerDescriber = {
+                    dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+                    "buttons": [
+                        {extend: "copy", text: "Copy all to clipboard"},
+                        {extend: "csv", text: "Copy all to csv"},
+                        {extend: "pdf", text: "Copy all to pdf"}
+                    ],
+                    "aLengthMenu": [
+                        [10, 50, -1],
+                        [10, 50, "All"]
+                    ],
+                    "bDestroy": true,
+                    "bAutoWidth": false,
+                    "columnDefs": []
+                };
+                _.forEach(intermediateStructure.headers, function (header,count){
+                    headerDescriber.columnDefs.push({"title":header.contents,
                         "targets": count,
                         "name":header.name});
-        });
-        var datatable = $(whereTheTableGoes).DataTable(headerDescriber );
-        var rowDescriber = [];
-        _.forEach(intermediateStructure.columnCells, function (val,key){
-            rowDescriber.push(val);
-        });
-        $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
-        //datatable.fnAddData(rowDescriber);
+                });
+                 datatable = $(whereTheTableGoes).DataTable( headerDescriber );
+            } else {
+                datatable =  $(whereTheTableGoes).dataTable();
+            }
 
+            var rowDescriber = [];
+            _.forEach(intermediateStructure.columnCells, function (val,key){
+                rowDescriber.push(val);
+            });
+            $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
 
-        // var headerDescriber = {
-        //     "columns": []
-        // };
-        // _.forEach(intermediateStructure.headerNames, function (header){
-        //     headerDescriber.columns.push({"data":header});
-        // });
-        // var datatable = $(whereTheTableGoes).DataTable(headerDescriber );
-        // var rowDescriber = {};
-        // _.forEach(intermediateStructure.columnCells, function (val,key){
-        //     rowDescriber[intermediateStructure.headerNames[key]] = val;
-        // });
-        // datatable.row.add(rowDescriber).draw(true);
+        }
     };
 
 
