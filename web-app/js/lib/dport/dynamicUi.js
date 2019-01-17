@@ -659,6 +659,7 @@ var clearBeforeStarting = false;
         }
         var intermediateDataStructure = {   headerNames: [],
                                             headerContents: [],
+                                            headers: [],
                                             columnCells: []     };
         //$(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
         //    returnObject
@@ -667,6 +668,8 @@ var clearBeforeStarting = false;
             _.forEach(returnObject.uniqueGenes, function (uniqueGene){
                 intermediateDataStructure.headerNames.push (uniqueGene.name);
                 intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene));
+                intermediateDataStructure.headers.push({name:uniqueGene.name,
+                                                   contents:Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene)} );
                 intermediateDataStructure.columnCells.push ("");
             });
 
@@ -688,6 +691,8 @@ var clearBeforeStarting = false;
             _.forEach(returnObject.genesByAbc, function (oneRecord){
                 intermediateDataStructure.headerNames.push (oneRecord.geneName);
                 intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
+                intermediateDataStructure.headers.push({name:oneRecord.geneName,
+                    contents:Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord)} );
                 intermediateDataStructure.columnCells.push ("");
             });
 
@@ -1783,17 +1788,46 @@ var clearBeforeStarting = false;
 
     var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure) {
         var headerDescriber = {
-            "columns": []
+            dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+            "buttons": [
+                {extend: "copy", text: "Copy all to clipboard"},
+                {extend: "csv", text: "Copy all to csv"},
+                {extend: "pdf", text: "Copy all to pdf"}
+            ],
+            "aLengthMenu": [
+                [10, 50, -1],
+                [10, 50, "All"]
+            ],
+            "bDestroy": true,
+            "bAutoWidth": false,
+            "columnDefs": []
         };
-        _.forEach(intermediateStructure.headerNames, function (header){
-            headerDescriber.columns.push({"data":header});
+        _.forEach(intermediateStructure.headers, function (header,count){
+            headerDescriber.columnDefs.push({"title":header.contents,
+                        "targets": count,
+                        "name":header.name});
         });
         var datatable = $(whereTheTableGoes).DataTable(headerDescriber );
-        var rowDescriber = {};
+        var rowDescriber = [];
         _.forEach(intermediateStructure.columnCells, function (val,key){
-            rowDescriber[intermediateStructure.headerNames[key]] = val;
+            rowDescriber.push(val);
         });
-        datatable.row.add(rowDescriber).draw(true);
+        $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
+        //datatable.fnAddData(rowDescriber);
+
+
+        // var headerDescriber = {
+        //     "columns": []
+        // };
+        // _.forEach(intermediateStructure.headerNames, function (header){
+        //     headerDescriber.columns.push({"data":header});
+        // });
+        // var datatable = $(whereTheTableGoes).DataTable(headerDescriber );
+        // var rowDescriber = {};
+        // _.forEach(intermediateStructure.columnCells, function (val,key){
+        //     rowDescriber[intermediateStructure.headerNames[key]] = val;
+        // });
+        // datatable.row.add(rowDescriber).draw(true);
     };
 
 
