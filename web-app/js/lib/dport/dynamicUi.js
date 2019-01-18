@@ -661,9 +661,8 @@ var clearBeforeStarting = false;
                                             headerContents: [],
                                             headers: [],
                                             columnCells: []     };
-        //$(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
-        //    returnObject
-        //));
+
+        // Mod data for the gene table
         if (returnObject.genesExist()){
             _.forEach(returnObject.uniqueGenes, function (uniqueGene){
                 intermediateDataStructure.headerNames.push (uniqueGene.name);
@@ -687,6 +686,7 @@ var clearBeforeStarting = false;
             buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
         }
 
+        //ABC data for the gene table
         if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
             // set up the headers, and give us an empty row of column cells
             _.forEach(returnObject.genesByAbc, function (oneRecord){
@@ -711,6 +711,32 @@ var clearBeforeStarting = false;
             buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
 
         }
+
+        //eQTL data for the gene table
+        if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
+                intermediateDataStructure.headerNames.push (oneRecord.geneName);
+                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
+                intermediateDataStructure.headers.push({name:oneRecord.geneName,
+                    contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
+                intermediateDataStructure.columnCells.push ("");
+            });
+
+            // fill in all of the column cells
+            _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                }else {
+                    intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+            buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
+
+        }
+
+
 
         $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
             returnObject
@@ -1154,7 +1180,8 @@ var clearBeforeStarting = false;
         _.forEach(getAccumulatorObject("tissuesForEveryGene"),function(eachGene){
             returnObject.uniqueGenes.push({name:eachGene.geneName});
 
-            var recordToDisplay = {tissues:[]};
+            var recordToDisplay = {tissues:[],
+                                    geneName:eachGene.geneName};
             _.forEach(eachGene.tissues,function(eachTissue){
                 recordToDisplay.tissues.push({tissueName:eachTissue})
             });
@@ -1693,6 +1720,10 @@ var clearBeforeStarting = false;
 
         $('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
+                actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
+
             arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
                 actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
 

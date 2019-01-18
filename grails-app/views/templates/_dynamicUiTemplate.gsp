@@ -122,6 +122,30 @@
 
 
 
+
+%{--a new and reduced form of dynamicGeneTable initially for displayRefinedModContext--}%
+<script id="dynamicGeneTableEqtlHeader"  type="x-tmpl-mustache">
+
+            {{geneName}}
+
+</script>
+
+<script id="dynamicGeneTableEqtlBody"  type="x-tmpl-mustache">
+
+            {{#tissues}}
+                <div>
+                    {{tissueName}}
+                </div>
+            {{/tissues}}
+
+</script>
+
+
+
+
+
+
+
 %{--Called from displayGenesPerTissueFromEqtl--}%
 
 <script id="dynamicTissueTable"  type="x-tmpl-mustache">
