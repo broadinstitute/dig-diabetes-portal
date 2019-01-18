@@ -31,6 +31,37 @@
     </table>
 </script>
 
+
+
+<script id="dynamicVariantHeader"  type="x-tmpl-mustache">
+
+            {{variantName}}
+
+</script>
+
+<script id="dynamicVariantBody"  type="x-tmpl-mustache">
+
+    {{#variantPhenotypesExist}}
+    <tr>
+        <th  scope="row">Phenotype</th>
+        {{/variantPhenotypesExist}}
+        {{#variantPhenotypeQtl}}
+            <td >{{#phenotypes}}
+            <div>{{phenotypeName}}</div>
+            {{/phenotypes}}
+            </td>
+        {{/variantPhenotypeQtl}}
+        {{#variantPhenotypesExist}}
+    </tr>
+    {{/variantPhenotypesExist}}
+
+
+    </table>
+</script>
+
+
+
+
 %{--Called from displayRefinedModContext, displayTissuesPerGeneFromEqtl, displayRefinedGenesInARange--}%
 <script id="dynamicGeneTable"  type="x-tmpl-mustache">
     <table  class="table">

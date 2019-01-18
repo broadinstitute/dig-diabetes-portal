@@ -698,7 +698,7 @@ div.genePosition{
                                     <div class="dynamicUiHolder">
                                     </div>
                                 </div>
-                                <table class="combinedTableHolder">
+                                <table class="combinedGeneTableHolder">
                                 </table>
 
                             </div>
@@ -729,6 +729,8 @@ div.genePosition{
                                         <div class="refinementTable dynamicUiHolder">
 
                                         </div>
+                                        <table class="combinedVariantTableHolder">
+                                        </table>
                                     </div>
                                </div>
 

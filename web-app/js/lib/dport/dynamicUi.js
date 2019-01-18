@@ -98,6 +98,10 @@ var clearBeforeStarting = false;
                 defaultFollowUp.placeToDisplayData =  '#dynamicTissueHolder div.dynamicUiHolder';
                 break;
 
+            case "getVariantsWeWillUseToBuildTheVariantTable":
+                defaultFollowUp.displayRefinedContextFunction =  displayVariantsForAPhenotype;
+                defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
+
             default:
                 break;
         }
@@ -372,6 +376,40 @@ var clearBeforeStarting = false;
                 };
                 break;
 
+            case "getVariantsWeWillUseToBuildTheVariantTable":
+                functionToLaunchDataRetrieval = function(){
+
+                    var phenotype = $('li.chosenPhenotype').attr('id');
+                    var chromosome = $('span.dynamicUiChromosome').text();
+                    var startExtent = $('span.dynamicUiGeneExtentBegin').text();
+                    var endExtent = $('span.dynamicUiGeneExtentBegin').text();
+                    var dataNecessaryToRetrieveVariantsPerPhenotype;
+                    if (( typeof phenotype === 'undefined') ||
+                        (typeof chromosome === 'undefined') ||
+                        (typeof startExtent === 'undefined') ||
+                        (typeof endExtent === 'undefined') ){
+                        alert(" missing a value when we want to collect variants for a phenotype");
+                    }else{
+                        dataNecessaryToRetrieveVariantsPerPhenotype = {
+                            phenotype: phenotype,
+                            geneToSummarize: "chr"+chromosome+ ":"+startExtent+":"+endExtent
+                        }
+
+                    }
+
+
+                    retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getTissuesFromAbcForGenesTable",
+                            retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
+                            dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
+                            processEachRecord: processRecordsFromQtl,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+
+                };
+                break;
 
 
             default:
@@ -510,6 +548,7 @@ var clearBeforeStarting = false;
             phenotypesByColocalization:[],
             genesByAbc:[],
             tissuesByAbc:[],
+            variantsToAnnotate: [],
             genesPositionsExist:function(){
                 return (this.genePositions.length>0)?[1]:[];
             },
@@ -558,6 +597,7 @@ var clearBeforeStarting = false;
             extentEnd:additionalParameters.geneExtentEnd,
             chromosome:chrom,
             originalGeneName:additionalParameters.geneName,
+            rawQtlInfo:{},
             geneNameArray:[],
             tissueNameArray:[],
             tissuesForEveryGene:[],
@@ -683,7 +723,7 @@ var clearBeforeStarting = false;
                     intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
                 }
             });
-            buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
+            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
         }
 
         //ABC data for the gene table
@@ -708,7 +748,7 @@ var clearBeforeStarting = false;
                     intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
                 }
             });
-            buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
+            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
 
         }
 
@@ -732,10 +772,32 @@ var clearBeforeStarting = false;
                     intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
                 }
             });
-            buildOrExtendDynamicTable("table.combinedTableHolder",intermediateDataStructure);
+            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
 
         }
 
+
+        // variants that we will want to annotate in the variant table
+        if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(returnObject.variantsToAnnotate, function (oneRecord){
+               intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
+                    contents:Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})} );
+                intermediateDataStructure.columnCells.push ("");
+            });
+
+            // fill in all of the column cells
+            _.forEach(returnObject.variantsToAnnotate, function (recordsPerVariant){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerVariant.VAR_ID);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerVariant.VAR_ID.  Shouldn't we?")
+                }else {
+                    intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicVariantBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+
+        }
 
 
         $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
@@ -778,6 +840,27 @@ var clearBeforeStarting = false;
         });
 
         return rawAbcInfo;
+    };
+
+
+
+    var processRecordsFromQtl = function (data){
+        // build up an object to describe this
+        var returnObject = {rawData:[]
+        };
+
+        var rawQtlInfo = getAccumulatorObject('rawQtlInfo');
+        var sampleGroupWithCredibleSetNames = (data.sampleGroupsWithCredibleSetNames.length>0)?data.sampleGroupsWithCredibleSetNames[0]:"";
+        if (sampleGroupWithCredibleSetNames.length>0) {
+                rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
+                rawQtlInfo["variants"] =_.filter(data.variants.variants,function(o){return o.dataset==="GWAS_IBDGenetics_eu_CrdSet_mdv80"});
+        } else {
+            rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
+            rawQtlInfo["variants"] =_.filter(data.variants.variants,function(o,cnt){return cnt<10});
+        }
+
+
+        return rawQtlInfo;
     };
 
 
@@ -1406,6 +1489,21 @@ var clearBeforeStarting = false;
 
 
 
+    var displayVariantsForAPhenotype = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
+        $(idForTheTargetDiv).empty();
+
+        var returnObject = createNewDisplayReturnObject();
+        returnObject.variantsToAnnotate = objectContainingRetrievedRecords;
+
+        addAdditionalResultsObject({variantRecordsForOnePhenotypeQtlSearch:returnObject});
+        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicVariantTable',returnObject,clearBeforeStarting);
+
+
+    };
+
+
+
+
     var retrieveRemotedContextInformation=function(collectionOfRemoteCallingParameters){
 
         var objectContainingRetrievedRecords = [];
@@ -1552,7 +1650,12 @@ var clearBeforeStarting = false;
                 {buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
                     description: 'find all variants in the above range with QTL relationship with some phenotype',
                     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
-                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'}]
+                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
+                {buttonId: 'getVariantsFromQtlAndThenRetrieveEpigeneticData', buttonName: 'multi',
+                    description: 'build a variant based table with a collection of epigenetic data',
+                    outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
+                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'}
+            ]
         };
         $("#dynamicVariantHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
@@ -1729,6 +1832,21 @@ var clearBeforeStarting = false;
 
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
                 actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
+
+            _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
+
+
+        });
+
+
+        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
+            var arrayOfRoutinesToUndertake = [];
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getVariantsWeWillUseToBuildTheVariantTable',
+                actionDefaultFollowUp("getVariantsWeWillUseToBuildTheVariantTable")));
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
+                actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
