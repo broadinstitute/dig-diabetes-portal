@@ -780,15 +780,20 @@ var clearBeforeStarting = false;
         // variants that we will want to annotate in the variant table
         if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
             // set up the headers, and give us an empty row of column cells
-            _.forEach(returnObject.variantsToAnnotate, function (oneRecord){
-               intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
-                    contents:Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})} );
-                intermediateDataStructure.columnCells.push ("");
+            _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord){
+                if( typeof oneRecord !== 'undefined'){
+                    intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
+                        contents:Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})} );
+                    intermediateDataStructure.columnCells.push ("");
+                }
             });
 
             // fill in all of the column cells
             _.forEach(returnObject.variantsToAnnotate, function (recordsPerVariant){
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerVariant.VAR_ID);
+                var headerNames = _.map(intermediateDataStructure.headers, function (headerRecord){
+                    return headerRecord.variantName
+                });
+                var indexOfColumn = _.indexOf(headerNames,recordsPerVariant.VAR_ID);
                 if (indexOfColumn===-1){
                     console.log("Did not find index of recordsPerVariant.VAR_ID.  Shouldn't we?")
                 }else {
