@@ -43,7 +43,15 @@
 <style>
 .mychart {width:100% !important; height:740px !important;}
 </style>
-<div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
+
+<g:if test="${g.portalTypeString()?.equals('als')}">
+<div style="text-align: right;">Scroll to zoom. Roll over dots for gene information.</div>
+    </g:if>
+
+<g:else>
+    <div style="text-align: right;">Scroll to zoom. Roll over dots for variant information.</div>
+</g:else>
+
 <div id="manhattanPlot1" style="border:solid 1px #999; margin-bottom: 30px; min-width:1000px;"></div>
 
 
