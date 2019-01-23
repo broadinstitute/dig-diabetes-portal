@@ -41,25 +41,23 @@
 
 <script id="dynamicVariantBody"  type="x-tmpl-mustache">
 
-    {{#variantPhenotypesExist}}
-    <tr>
-        <th  scope="row">Phenotype</th>
-        {{/variantPhenotypesExist}}
         {{#variantPhenotypeQtl}}
-            <td >{{#phenotypes}}
+           {{#phenotypes}}
             <div>{{phenotypeName}}</div>
             {{/phenotypes}}
-            </td>
-        {{/variantPhenotypeQtl}}
-        {{#variantPhenotypesExist}}
-    </tr>
-    {{/variantPhenotypesExist}}
+        {{/variantPhenotypeQtl}
 
-
-    </table>
 </script>
 
 
+<script id="dynamicVariantCellAnnotations"  type="x-tmpl-mustache">
+      {{#variantAnnotationIsPresent}}
+      <div class="credset.present"></div>
+      {{/variantAnnotationIsPresent}}
+      {{^variantAnnotationIsPresent}}
+      <div class="credset.absent"></div>
+      {{/variantAnnotationIsPresent}}
+</script>
 
 
 %{--Called from displayRefinedModContext, displayTissuesPerGeneFromEqtl, displayRefinedGenesInARange--}%
