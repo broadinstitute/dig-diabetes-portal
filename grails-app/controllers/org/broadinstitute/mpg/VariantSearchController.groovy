@@ -6,10 +6,12 @@ import org.apache.juli.logging.LogFactory
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.metadata.*
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
 import org.broadinstitute.mpg.diabetes.util.PortalConstants
 import org.broadinstitute.mpg.meta.UserQueryContext
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.scribe.builder.api.LinkedInApi
 import org.springframework.web.servlet.support.RequestContextUtils
 
 class VariantSearchController {
@@ -300,27 +302,24 @@ class VariantSearchController {
             String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
             String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
 
-//            org.broadinstitute.mpg.diabetes.metadata.Property property1 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
-//                    "ACA_PH", MetaDataService.METADATA_VARIANT)
-//            org.broadinstitute.mpg.diabetes.metadata.Property property2 = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
-//                    "ACU_PH", MetaDataService.METADATA_VARIANT)
-            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, "ExSeq_ALS2018_eu_mdv60",
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
                     "AC_PH", MetaDataService.METADATA_VARIANT)
 
             if (property) {
                 filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_eu_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
             }
-//            if (property1 && property2) {
-//                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property1.name}","value":"0","comparator":">"}""".toString()
-//                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property2.name}","value":"0","comparator":">"}]""".toString()
-//            } else {
-//
-//            }
         }
+        String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
+        String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
+        //LinkedHashMap<String,String> extraColumns = new LinkedHashMap<>()
+        List <String> extraColumns = []
+
+        extraColumns << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_eu_mdv60","prop":"ACA_PH","value":"0","comparator":">"}]""".toString()
+
 
         if (filtersForQuery.size()>0) {
             if ((geneName!=null)&& (geneName.length()>0)){
-                forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]", specificGene:"${geneName}"]
+                forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]", specificGene:"${geneName}", extraColumns:"[${extraColumns.join(',')}]"]
                 return
             } else {
                 forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
@@ -352,7 +351,7 @@ class VariantSearchController {
      * @return
      */
     def launchAVariantSearch() {
-        displayCombinedVariantSearch(params.filters, params.props, params.specificGene)
+        displayCombinedVariantSearch(params.filters, params.props, params.specificGene, params.extraColumns)
     }
 
     /***
@@ -1003,13 +1002,25 @@ class VariantSearchController {
 
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
 
+        if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
+            LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
+            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA"])
+            requestedProperties.put("pProperty",requestedPpropertiesMap)
+
+        }
+
         // build up filters our data query
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService)
         // determine columns to display
         LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
-        LinkedHashMap datasetPpropertiesListMap = new LinkedHashMap()
-        datasetPpropertiesListMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "AC_PH", "ACU_PH"])
-        resultColumnsToDisplay["pproperty"].putAt("ALS",datasetPpropertiesListMap)
+
+        if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
+            LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
+            datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
+            datasetDpropertiesMap.put("WGS_WgnomAD_ea_mdv60",["AC", "HET", "MAF"] )
+            resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+
+        }
 
         int pageStart = Integer.parseInt(params.start)
         int pageSize = Integer.parseInt(params.length)
@@ -1097,6 +1108,13 @@ class VariantSearchController {
         String properties = URLDecoder.decode(propertiesRaw, "UTF-8")
         LinkedHashMap requestedProperties = sharedToolsService.putPropertiesIntoHierarchy(properties)
 
+        if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
+            LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
+            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA"])
+            requestedProperties.put("pProperty",requestedPpropertiesMap)
+
+        }
+
         /***
          * package up as much of the kludgy workaround needed to avoid cross institution joins as we can
          */
@@ -1155,13 +1173,20 @@ class VariantSearchController {
             return
         }
 
-        // determine columns to display
-        LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
-        LinkedHashMap datasetPpropertiesMap = new LinkedHashMap()
-        datasetPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "AC_PH", "ACU_PH"])
-        resultColumnsToDisplay["pproperty"].putAt("ALS",datasetPpropertiesMap)
 
-       // resultColumnsToDisplay["pproperty"].putAt("ACA_PH")
+        //if filter has more than AC_PH as filter then generate resultsColumnsToDisplay like this:
+
+
+        LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
+
+        if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
+                    LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
+        datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
+        datasetDpropertiesMap.put("WGS_WgnomAD_ea_mdv60",["AC", "HET", "MAF"] )
+        resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+
+        }
+
         //you have to add Properties to resultColumnsToDisplay linkedHashMap so that addProperties can add them
 
         JSONObject resultColumnsJsonObject = resultColumnsToDisplay as JSONObject
@@ -1169,15 +1194,6 @@ class VariantSearchController {
         // make the call to REST server
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
 
-        //getDataQueryHolder.addProperties()
-
-//        Property macProperty = metaDataService.getPropertyByNamePhenotypeAndSampleGroup("ACA_PH", "ALS","ExSeq_ALS2018_eu_mdv60",MetaDataService.METADATA_VARIANT)
-//        JsonSlurper slurper = new JsonSlurper()
-//        //getDataQueryHolder.addProperties(resultColumnsToDisplay)
-//
-//        if (macProperty != null){
-//            getDataQueryHolder.addSpecificProperty(macProperty)
-//        }
 
 
         /***
@@ -1246,9 +1262,15 @@ class VariantSearchController {
 
     }
 
-    private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties,String specificGene) {
+    private void displayCombinedVariantSearch(String filters, String requestForAdditionalProperties,String specificGene, String extraColumns) {
         ArrayList<JSONObject> listOfQueries = (new JsonSlurper()).parseText(filters)
         ArrayList<String> listOfCodedFilters = parseFilterJson(listOfQueries);
+
+        ArrayList<String> listOfExtraColumnsParsed = new ArrayList<>()
+        if(extraColumns != null){
+            ArrayList<JSONObject> listOfExtraColumns = (new JsonSlurper()).parseText(extraColumns)
+            listOfExtraColumnsParsed = parseFilterJson(listOfExtraColumns);
+        }
 
         if (requestForAdditionalProperties == null || "".compareTo(requestForAdditionalProperties) == 0) {
             // if there are no specified properties, dFefault to these
@@ -1266,42 +1288,12 @@ class VariantSearchController {
                      "common-common-Allele_Count",
                      "common-common-SIFT_PRED",
                      "common-common-PolyPhen_PRED",
-                     "common-common-ACA_PH",
-                     "common-common-ACU_PH"].join(":")
+                     "common-common-CADD_RAW",
+                     "common-common-CADD_PHRED"
+                    ].join(":")
         }
 
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService)
-
-
-
-     //   LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsForCProperties([ "GENE", "START" , "END", "GEN_ID", "CHROM"])
-
-      //  GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(listOfCodedFilters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
-//
-//        // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
-//          List <String> piecesOfThePropertyName = propertyName.split("_")
-//        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
-//        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
-//        String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
-//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
-//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
-//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
-//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
-//
-
-
-
-
-
-
-       Property macProperty = metaDataService.getSampleGroupProperty("ExSeq_ALS2018_eu_mdv60","MAF",MetaDataService.METADATA_VARIANT)
-        JsonSlurper slurper = new JsonSlurper()
-        //getDataQueryHolder.addProperties(resultColumnsToDisplay)
-
-        if (macProperty != null){
-            getDataQueryHolder.addSpecificProperty(macProperty)
-        }
-
 
 
         if (getDataQueryHolder.isValid()) {
@@ -1345,6 +1337,7 @@ class VariantSearchController {
                             // used for the adding/removing properties modal,
                             // to know which properties are part of the search
                             listOfQueries       : listOfQueries as JSON,
+                            listOfExtraColumnsParsed: listOfExtraColumnsParsed as JSON,
                             // the URL-encoded parameters to go back to the search builder with the filters saved
                             encodedParameters   : urlEncodedFilters,
                             // all the extra things added

@@ -45,10 +45,10 @@ var mpgSoftware = mpgSoftware || {};
             if (typeof variantIdentifier!=='undefined'){
                 variantNameAbbreviation = (variantIdentifier.length > 14) ?   variantIdentifier.substring(0,13) :   variantIdentifier;
             }
-            retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/" + variantIdentifier + "'>" + variantNameAbbreviation + "</a>");
+           // retVal.push("<a class='boldlink' href='../variantInfo/variantInfo/" + variantIdentifier + "'>" + variantNameAbbreviation + "</a>");
             // we may not have a closest gene; if so, just display an empty string
-            var closestGeneLink = variant.CLOSEST_GENE ? "<a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a>" : ''
-            retVal.push(closestGeneLink);
+            //var closestGeneLink = variant.CLOSEST_GENE ? "<a class='boldItlink' href='../gene/geneInfo/" + variant.CLOSEST_GENE + "'>" + variant.CLOSEST_GENE + "</a>" : ''
+            //retVal.push(closestGeneLink);
             if ($.isNumeric(pValue)){
                 retVal.push("" + pValue.toPrecision(3));
             }else{

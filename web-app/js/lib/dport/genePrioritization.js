@@ -320,7 +320,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 });
                 position = positionIndicator['start']+" - "+positionIndicator['end'];
-                retVal.push( "<a class='boldlink' href='"+launchGeneVariantQueryUrl+"?gene="+geneName+"&phenotype="+phenotype+"&dataset="+dataset+"'>"+geneName+"</a>");
+                retVal.push( "<a class='boldlink' href='"+launchGeneVariantQueryUrl+"?gene="+geneName+"'>"+geneName+"</a>");
                 retVal.push( chromosome );
                 retVal.push(position);
                 retVal.push( pValue );

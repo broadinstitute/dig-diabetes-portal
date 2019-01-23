@@ -57,10 +57,10 @@ var mpgSoftware = mpgSoftware || {};
             $("#positionNumber").append(pos);
             if(gene && gene != 'Outside') {
                 $('#closestToGeneInfo').hide();
-                $('#geneNumber').append('<a href=../../gene/geneInfo/'+gene+'>' + gene + '</a>.');
+                //$('#geneNumber').append('<a href=../../gene/geneInfo/'+gene+'>' + gene + '</a>.');
             } else if (closestGene) {
                 $('#inGeneInfo').hide();
-                $('#geneNumber').append('<a href=../../gene/geneInfo/'+closestGene+'>' + closestGene + '</a>.');
+               // $('#geneNumber').append('<a href=../../gene/geneInfo/'+closestGene+'>' + closestGene + '</a>.');
             } else {
                 // we don't have any gene info, so remove those spans
                 $('#inGeneInfo').hide();

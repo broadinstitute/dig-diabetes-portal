@@ -22,6 +22,7 @@ import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
 import org.codehaus.groovy.grails.web.json.JSONArray
 import org.codehaus.groovy.grails.web.json.JSONObject
+import org.mortbay.util.ajax.JSON
 
 @Transactional
 class RestServerService {
@@ -1815,43 +1816,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
     /***
-     * Add an existing p Property to a column map
-     * @param existingMap
-     * @param phenotype
-     * @param dataSet
-     * @param property
-     * @return
-     */
-    public LinkedHashMap addColumnsForPProperties(LinkedHashMap existingMap, String phenotype, String dataSet, String property) {
-        LinkedHashMap returnValue = [:]
-        LinkedHashMap<String, LinkedHashMap> phenotypeProperties = [:]
-        if (!existingMap) {
-            returnValue.cproperty = []
-            returnValue.dproperty = [:]
-            returnValue.pproperty = [:]
-        } else {
-            returnValue = existingMap
-        }
-        phenotypeProperties = returnValue.pproperty
-
-        if ((phenotype) &&
-                (dataSet) &&
-                (property)) {
-            if (!phenotypeProperties.containsKey(phenotype)) {
-                phenotypeProperties[phenotype] = [:]
-            }
-            if (!phenotypeProperties[phenotype].containsKey(dataSet)) {
-                phenotypeProperties[phenotype][dataSet] = []
-            }
-            if (!(phenotypeProperties[phenotype][dataSet] in property)) {
-                phenotypeProperties[phenotype][dataSet] << property
-            }
-        }
-
-        return returnValue
-    }
-
-    /***
      * Given filters, choose which columns to display by default. Alternatively, if requestedProperties
      * is not empty, then choose only those columns that are specifically requested.
      * Note: this method originally written by JF
@@ -1881,13 +1845,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         //  if we don't have a better idea then launch the search based on the filters.  Otherwise used our stored criteria
 //        if (!requestedProperties) {
-            JsonSlurper slurper = new JsonSlurper()
-            for (def parsedFilter in slurper.parseText(filterJson)) {
-                datasetsToFetch << parsedFilter.dataset_id
-                phenotypesToFetch << parsedFilter.phenotype
-                propertiesToFetch << parsedFilter.operand
-            }
-//        }
+        JsonSlurper slurper = new JsonSlurper()
+        for (def parsedFilter in slurper.parseText(filterJson)) {
+            datasetsToFetch   << parsedFilter.dataset_id
+            phenotypesToFetch << parsedFilter.phenotype
+            propertiesToFetch << parsedFilter.operand
+        }
 
         // if specific data sets are requested then add them to the list
         if (requestedProperties) {
@@ -1969,11 +1932,51 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         // Adding Phenotype specific properties
         propertiesToFetch = expandPropertyList(propertiesToFetch, requestedProperties)
 //        if (!requestedProperties) {
-            commonProperties = expandCommonPropertyList(commonProperties, requestedProperties)
+        commonProperties = expandCommonPropertyList(commonProperties, requestedProperties)
 //        }
 
         LinkedHashMap columnsToDisplayStructure = sharedToolsService.getColumnsToDisplayStructure(phenotypesToFetch, datasetsToFetch, propertiesToFetch, commonProperties)
+
+
+        /**/
         return columnsToDisplayStructure
+    }
+
+    /***
+     * Add an existing p Property to a column map
+     * @param existingMap
+     * @param phenotype
+     * @param dataSet
+     * @param property
+     * @return
+     */
+    public LinkedHashMap addColumnsForPProperties(LinkedHashMap existingMap, String phenotype, String dataSet, String property) {
+        LinkedHashMap returnValue = [:]
+        LinkedHashMap<String, LinkedHashMap> phenotypeProperties = [:]
+        if (!existingMap) {
+            returnValue.cproperty = []
+            returnValue.dproperty = [:]
+            returnValue.pproperty = [:]
+        } else {
+            returnValue = existingMap
+        }
+        phenotypeProperties = returnValue.pproperty
+
+        if ((phenotype) &&
+                (dataSet) &&
+                (property)) {
+            if (!phenotypeProperties.containsKey(phenotype)) {
+                phenotypeProperties[phenotype] = [:]
+            }
+            if (!phenotypeProperties[phenotype].containsKey(dataSet)) {
+                phenotypeProperties[phenotype][dataSet] = []
+            }
+            if (!(phenotypeProperties[phenotype][dataSet] in property)) {
+                phenotypeProperties[phenotype][dataSet] << property
+            }
+        }
+
+        return returnValue
     }
 
 
@@ -2982,6 +2985,9 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         return identifiedGenes
     }
+
+
+
 
 
 

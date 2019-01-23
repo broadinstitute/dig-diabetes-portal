@@ -321,6 +321,7 @@ var baget = baget || {};  // encapsulating variable
         };
 
         var createDots = function (dotHolder,data,chromosomes, radius, xScale,yScale,dataExtent,c,tip) {
+          //  var savedVar = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
             var anchors=dotHolder.selectAll('a.dot')
                 .data(data,function(d){        // merge data sets so that we hold only unique points
                     return(""+ chromosomeAccessor (d)+"_"+ xAxisAccessor (d)+"_"+ yAxisAccessor (d));
@@ -330,7 +331,7 @@ var baget = baget || {};  // encapsulating variable
                 .append('a')
                 .attr('class', 'clickable')
                 .attr("xlink:href", function(d) {
-                    return dotClickLink+"/"+nameAccessor(d) ;
+                    return "variantSearch/findEveryVariantForAGene?gene=" +nameAccessor(d) ;
                 } );
             var dots = anchors.append('circle')
                 .attr('class', 'dot')
@@ -739,7 +740,7 @@ var baget = baget || {};  // encapsulating variable
 
         instance.dotClickLink = function (x) {
             if (!arguments.length) return dotClickLink;
-            dotClickLink = x;
+            dotClickLink = "variantSearch/findEveryVariantForAGene?gene=";
             return instance;
         };
 

@@ -1,0 +1,81 @@
+{
+    "1kg_phase1": {
+        "Download date": "07/26/2015", 
+        "URI": "ftp://ftp.1000genomes.ebi.ac.uk/vol1/ftp/phase1/analysis_results/integrated_call_sets/ALL.wgs.integrated_phase1_v3.20101123.snps_indels_sv.sites.vcf.gz", 
+        "Version": "1000 Genomes Phase 1"
+    }, 
+    "ExChip_CAMP": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP_T2DKP_CAMP_QC_Results.pdf"
+    }, 
+    "ExChip_FUSION": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_FUSION.pdf"
+    }, 
+    "ExSeq_EgnomAD": {
+        "Download date": "04/01/2017", 
+        "URI": "https://storage.googleapis.com/gnomad-public/release/2.0.2/vcf/exomes/gnomad.exomes.r2.0.2.sites.vcf.bgz"
+    }, 
+    "GWAS_BioMe": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf"
+    }, 
+    "GWAS_CAMP": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP_T2DKP_CAMP_QC_Results.pdf"
+    }, 
+    "GWAS_CARDIoGRAM": {
+        "Download date": "10/1/2016", 
+        "URI": "http://www.cardiogramplusc4d.org/data-downloads/"
+    }, 
+    "GWAS_CKDGenConsortium-UACR": {
+        "Download date": "10/1/2016", 
+        "URI": "https://fox.nhlbi.nih.gov/CKDGen/"
+    }, 
+    "GWAS_CKDGenConsortium-eGFRcrea": {
+        "Download date": "10/1/2016", 
+        "URI": "https://fox.nhlbi.nih.gov/CKDGen/"
+    }, 
+    "GWAS_DCSP2": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_NUS.pdf"
+    }, 
+    "GWAS_DCSP2_ea": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_NUS.pdf"
+    }, 
+    "GWAS_DIAGRAM": {
+        "Download date": "5/10/2016", 
+        "URI": "http://diagram-consortium.org/downloads.html"
+    }, 
+    "GWAS_DIAGRAMimputed": {
+        "Download date": "1/1/2018", 
+        "URI": "http://diagram-consortium.org/downloads.html"
+    }, 
+    "GWAS_FUSION": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_FUSION.pdf"
+    }, 
+    "GWAS_FUSIONonlyMetaboChip": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_FUSION.pdf"
+    }, 
+    "GWAS_GIANT": {
+        "URI": "https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files"
+    }, 
+    "GWAS_GIANT-PA": {
+        "URI": "https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files"
+    }, 
+    "GWAS_GLGC": {
+        "URI": "http://csg.sph.umich.edu//abecasis/public/lipids2013/"
+    }, 
+    "GWAS_GiantUKBB": {
+        "URI": "https://www.broadinstitute.org/collaboration/giant/index.php/GIANT_consortium_data_files"
+    }, 
+    "GWAS_MAGIC": {
+        "URI": "https://www.magicinvestigators.org/downloads/"
+    }, 
+    "GWAS_METSIM_eu": {
+        "Genotype Data Quality Control Report": "https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Quality_Control_Report_METSIM.pdf"
+    }, 
+    "GWAS_VATGen": {
+        "Download date": "04/01/2017", 
+        "URI": "https://www.nhlbi.nih.gov/research/intramural/researchers/ckdgen"
+    }, 
+    "WGS_WgnomAD": {
+        "Download date": "04/01/2017", 
+        "URI": "https://storage.googleapis.com/gnomad-public/release/2.0.2/vcf/genomes/gnomad.genomes.r2.0.2.sites.chrXX.vcf.bgz"
+    }
+}

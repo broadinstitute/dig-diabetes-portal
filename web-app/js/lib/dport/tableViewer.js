@@ -478,7 +478,7 @@ var variantProcessing = (function () {
                 return 'Extragenic';
                 // displayField = 'Extragenic';
             }
-            retVal = "<a  href='"+urlRoot+"/"+linkField+"' class='boldItlink'>"+modder(displayField);
+            retVal = modder(displayField);
         }
         return retVal
 
@@ -488,9 +488,9 @@ var variantProcessing = (function () {
         if (contingent){
             if (displayField) {
                 if (displayField.indexOf('undefined') === -1)   {
-                    retVal = "<a  href='" + urlRoot + "/" + linkField + "' class='boldItlink'>" + modder(displayField);
+                    retVal = modder(displayField);
                 }  else {
-                    retVal = "<a  href='" + urlRoot + "/" + linkField + "' class='boldItlink'>" + modder(alternate);
+                    retVal = modder(alternate);
                 }
             }
         }
