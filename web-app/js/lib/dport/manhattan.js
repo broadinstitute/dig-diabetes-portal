@@ -740,7 +740,7 @@ var baget = baget || {};  // encapsulating variable
 
         instance.dotClickLink = function (x) {
             if (!arguments.length) return dotClickLink;
-            dotClickLink = "variantSearch/findEveryVariantForAGene?gene=";
+            dotClickLink = "";
             return instance;
         };
 

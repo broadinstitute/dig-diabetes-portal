@@ -306,7 +306,7 @@ class VariantSearchController {
                     "AC_PH", MetaDataService.METADATA_VARIANT)
 
             if (property) {
-                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"ExSeq_ALS2018_eu_mdv60","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
+                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
             }
         }
         String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
@@ -335,8 +335,18 @@ class VariantSearchController {
         String regionSpecification = params.region
         List <String> filtersForQuery = []
         LinkedHashMap extractedNumbers =  restServerService.parseARange(regionSpecification)
+        String defaultDataSet = restServerService.retrieveBeanForCurrentPortal().dataSet
+        String defaultPhenotype = restServerService.retrieveBeanForCurrentPortal().phenotype
         if ((extractedNumbers.size()>0)&&(!extractedNumbers.error)){
             filtersForQuery << """{"value":"${extractedNumbers.chromosome}:${extractedNumbers.start}-${extractedNumbers.end}","prop":"chromosome","comparator":"="}""".toString()
+
+            org.broadinstitute.mpg.diabetes.metadata.Property property = metaDataService.getPropertyForPhenotypeAndSampleGroupAndMeaning(defaultPhenotype, defaultDataSet,
+                    "AC_PH", MetaDataService.METADATA_VARIANT)
+
+            if (property) {
+                filtersForQuery << """{"phenotype":"${defaultPhenotype}","dataset":"${defaultDataSet}","prop":"${property.name}","value":"0","comparator":">"}]""".toString()
+            }
+
             forward action: "launchAVariantSearch", params:[filters: "[${filtersForQuery.join(',')}]"]
             return
         }
@@ -1015,10 +1025,17 @@ class VariantSearchController {
         LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
+            LinkedHashMap datasetDpropertiesMap2 = new LinkedHashMap()
+            datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HET", "MAF"] )
+            resultColumnsToDisplay["dproperty"].putAt("None",datasetDpropertiesMap2)
+            LinkedHashMap datasetDpropertiesMap3 = new LinkedHashMap()
+            datasetDpropertiesMap3.put("ExSeq_EgnomAD_mdv60",[])
+            resultColumnsToDisplay["pproperty"].putAt("None",datasetDpropertiesMap3)
+
             LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
             datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
-            datasetDpropertiesMap.put("WGS_WgnomAD_ea_mdv60",["AC", "HET", "MAF"] )
             resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+
 
         }
 
@@ -1111,6 +1128,7 @@ class VariantSearchController {
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
             requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA"])
+            //requestedPpropertiesMap.put("gnomad",[])
             requestedProperties.put("pProperty",requestedPpropertiesMap)
 
         }
@@ -1180,10 +1198,18 @@ class VariantSearchController {
         LinkedHashMap resultColumnsToDisplay = restServerService.getColumnsToDisplay("[${getDataQueryHolder.retrieveAllFiltersAsJson()}]", requestedProperties)
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
-                    LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
-        datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
-        datasetDpropertiesMap.put("WGS_WgnomAD_ea_mdv60",["AC", "HET", "MAF"] )
-        resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+            LinkedHashMap datasetDpropertiesMap2 = new LinkedHashMap()
+            datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HET", "MAF"] )
+            resultColumnsToDisplay["dproperty"].putAt("None",datasetDpropertiesMap2)
+            LinkedHashMap datasetDpropertiesMap3 = new LinkedHashMap()
+            datasetDpropertiesMap3.put("ExSeq_EgnomAD_mdv60",[])
+            resultColumnsToDisplay["pproperty"].putAt("None",datasetDpropertiesMap3)
+
+            LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
+            datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
+            resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+
+
 
         }
 
