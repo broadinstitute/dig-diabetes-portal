@@ -523,7 +523,38 @@ var clearBeforeStarting = false;
         });
 
         addAdditionalResultsObject({refinedModContext:returnObject});
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',returnObject,clearBeforeStarting);
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        // Mod data for the gene table
+        if (returnObject.genesExist()){
+            intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+                subcategory: 'MOD',
+                columnCells:  []});
+            _.forEach(returnObject.uniqueGenes, function (uniqueGene){
+                intermediateDataStructure.headerNames.push (uniqueGene.name);
+                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene));
+                intermediateDataStructure.headers.push({name:uniqueGene.name,
+                    contents:Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene)} );
+                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+            });
+
+        }
+        if (( typeof returnObject.geneModsExist !== 'undefined') && ( returnObject.geneModsExist())){
+
+            _.forEach(returnObject.geneModTerms, function (recordsPerGene){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                }else {
+                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+        }
+
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
         // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
         //     returnObject
         // ));
@@ -682,6 +713,14 @@ var clearBeforeStarting = false;
         return returnValue;
     };
 
+    function IntermediateDataStructure()  {
+        this.headerNames = [];
+        this.headerContents = [];
+        this.headers = [];
+        this.rowsToAdd = [];
+    };
+
+
     /***
      * Need to build an intermediate data structure. It'll be an object but looks like this:
      * headerNames: ['Header name 1','header name 2']
@@ -701,66 +740,63 @@ var clearBeforeStarting = false;
         if (clearBeforeStarting){
             $(idForTheTargetDiv).empty();
         }
-        var intermediateDataStructure = {   headerNames: [],
-                                            headerContents: [],
-                                            headers: [],
-                                            rowsToAdd: []     };
+        var intermediateDataStructure = new IntermediateDataStructure();
 
         // Mod data for the gene table
-        if (returnObject.genesExist()){
-            intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-                                                        subcategory: 'MOD',
-                                                        columnCells:  []});
-            _.forEach(returnObject.uniqueGenes, function (uniqueGene){
-                intermediateDataStructure.headerNames.push (uniqueGene.name);
-                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene));
-                intermediateDataStructure.headers.push({name:uniqueGene.name,
-                                                   contents:Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene)} );
-                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-            });
-
-        }
-        if (( typeof returnObject.geneModsExist !== 'undefined') && ( returnObject.geneModsExist())){
-
-            _.forEach(returnObject.geneModTerms, function (recordsPerGene){
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
-                if (indexOfColumn===-1){
-                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-                }else {
-                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
-                }
-            });
-            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
-        }
+        //if (returnObject.genesExist()){
+        //    intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+        //                                                subcategory: 'MOD',
+        //                                                columnCells:  []});
+        //    _.forEach(returnObject.uniqueGenes, function (uniqueGene){
+        //        intermediateDataStructure.headerNames.push (uniqueGene.name);
+        //        intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene));
+        //        intermediateDataStructure.headers.push({name:uniqueGene.name,
+        //                                           contents:Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene)} );
+        //        intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+        //    });
+        //
+        //}
+        //if (( typeof returnObject.geneModsExist !== 'undefined') && ( returnObject.geneModsExist())){
+        //
+        //    _.forEach(returnObject.geneModTerms, function (recordsPerGene){
+        //        var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+        //        if (indexOfColumn===-1){
+        //            console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+        //        }else {
+        //            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
+        //        }
+        //    });
+        //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+        //}
 
         //ABC data for the gene table
-        if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
-            intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-                subcategory: 'ABC',
-                columnCells:  []});
-            // set up the headers, and give us an empty row of column cells
-            _.forEach(returnObject.genesByAbc, function (oneRecord){
-                intermediateDataStructure.headerNames.push (oneRecord.geneName);
-                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
-                intermediateDataStructure.headers.push({name:oneRecord.geneName,
-                    contents:Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord)} );
-                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-            });
-
-                // fill in all of the column cells
-            _.forEach(returnObject.genesByAbc, function (recordsPerGene){
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
-                if (indexOfColumn===-1){
-                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-                }else {
-                    recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
-                    recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
-                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
-                }
-            });
-            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
-
-        }
+        //if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
+        //    intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+        //        subcategory: 'ABC',
+        //        columnCells:  []});
+        //    // set up the headers, and give us an empty row of column cells
+        //    _.forEach(returnObject.genesByAbc, function (oneRecord){
+        //        intermediateDataStructure.headerNames.push (oneRecord.geneName);
+        //        intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
+        //        intermediateDataStructure.headers.push({name:oneRecord.geneName,
+        //            contents:Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord)} );
+        //        intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+        //    });
+        //
+        //        // fill in all of the column cells
+        //    _.forEach(returnObject.genesByAbc, function (recordsPerGene){
+        //        var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+        //        if (indexOfColumn===-1){
+        //            console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+        //        }else {
+        //            recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
+        //            recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
+        //            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
+        //        }
+        //    });
+        //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+        //
+        //}
 
         //eQTL data for the gene table
         if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
@@ -1060,7 +1096,40 @@ var clearBeforeStarting = false;
         };
 
         addAdditionalResultsObject({tissuesFromAbc:returnObject});
-        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicAbcTissueTable',returnObject,clearBeforeStarting);
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
+            intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+                subcategory: 'ABC',
+                columnCells:  []});
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(returnObject.genesByAbc, function (oneRecord){
+                intermediateDataStructure.headerNames.push (oneRecord.geneName);
+                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
+                intermediateDataStructure.headers.push({name:oneRecord.geneName,
+                    contents:Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord)} );
+                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+            });
+
+            // fill in all of the column cells
+            _.forEach(returnObject.genesByAbc, function (recordsPerGene){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                }else {
+                    recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
+                    recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
+                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+
+        }
+
+
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicAbcTissueTable',returnObject,clearBeforeStarting,intermediateDataStructure);
         // $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicAbcTissueTable')[0].innerHTML,
         //     returnObject
         // ));
