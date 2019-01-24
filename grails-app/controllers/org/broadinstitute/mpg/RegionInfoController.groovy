@@ -532,6 +532,38 @@ class RegionInfoController {
 
 
 
+    def retrieveEqtlDataWithVariants() {
+        String gene = ""
+        String tissue = ""
+        List<String> variants = []
+        boolean looksOkay = true
+        JSONArray jsonReturn
+
+        if (params.gene) {
+            gene = params.gene
+        }
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variant) {
+            variants = slurper.parseText( params.variants as String)
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherEqtlData( gene,  variant, tissue)
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
 
 
     def retrieveAbcData() {

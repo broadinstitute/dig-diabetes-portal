@@ -60,6 +60,7 @@ class RestServerService {
     private String GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
     private String GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
     private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
+    private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_HAIL_DATA_URL = "getHailData"
@@ -2271,6 +2272,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+
+    public JSONArray gatherEqtlDataForVariantList( String gene,List <String> variant,
+                                     String tissue ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((variant) && (variant.length() > 0)) {
+            specifyRequestList << "variant=${variant.join(",")}"
+        }
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+        String rawReturnFromApi =  getRestCallBase("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        //String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        return jsonArray
+    }
 
 
 

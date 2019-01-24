@@ -101,6 +101,12 @@ var clearBeforeStarting = false;
             case "getVariantsWeWillUseToBuildTheVariantTable":
                 defaultFollowUp.displayRefinedContextFunction =  displayVariantsForAPhenotype;
                 defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
+                break;
+
+            case "getEqtlsGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction =  displayEqtlsGivenVariantList;
+                defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
+                break;
 
             default:
                 break;
@@ -411,6 +417,28 @@ var clearBeforeStarting = false;
                 };
                 break;
 
+            case "getEqtlsGivenVariantList":
+                functionToLaunchDataRetrieval = function(){
+                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId:"getEqtlsGivenVariantList"});
+                        actionToUndertake();
+                    } else {
+                        var variantNameArray = _.map(getAccumulatorObject("variantNameArray"), function (o) {
+                            return {variant: o.name}
+                        });
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getEqtlsGivenVariantList",
+                            retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
+                            dataForCall: variantNameArray,
+                            processEachRecord: processRecordsFromAbc,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
+                break;
 
             default:
                 break;
@@ -549,7 +577,8 @@ var clearBeforeStarting = false;
                     intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
                 }
             });
-            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+            //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
         }
 
 
@@ -718,6 +747,7 @@ var clearBeforeStarting = false;
         this.headerContents = [];
         this.headers = [];
         this.rowsToAdd = [];
+        this.tableToUpdate = "";
     };
 
 
@@ -736,172 +766,25 @@ var clearBeforeStarting = false;
      * @param returnObject
      * @param clearBeforeStarting
      */
-    var prepareToPresentToTheScreen = function(idForTheTargetDiv,templateInfo,returnObject,clearBeforeStarting) {
+    var prepareToPresentToTheScreen = function(idForTheTargetDiv,templateInfo,returnObject,clearBeforeStarting,intermediateDataStructure) {
         if (clearBeforeStarting){
             $(idForTheTargetDiv).empty();
         }
-        var intermediateDataStructure = new IntermediateDataStructure();
 
-        // Mod data for the gene table
-        //if (returnObject.genesExist()){
-        //    intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-        //                                                subcategory: 'MOD',
-        //                                                columnCells:  []});
-        //    _.forEach(returnObject.uniqueGenes, function (uniqueGene){
-        //        intermediateDataStructure.headerNames.push (uniqueGene.name);
-        //        intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene));
-        //        intermediateDataStructure.headers.push({name:uniqueGene.name,
-        //                                           contents:Mustache.render($("#dynamicGeneTableHeader")[0].innerHTML,uniqueGene)} );
-        //        intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-        //    });
-        //
-        //}
-        //if (( typeof returnObject.geneModsExist !== 'undefined') && ( returnObject.geneModsExist())){
-        //
-        //    _.forEach(returnObject.geneModTerms, function (recordsPerGene){
-        //        var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
-        //        if (indexOfColumn===-1){
-        //            console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-        //        }else {
-        //            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableBody")[0].innerHTML,recordsPerGene);
-        //        }
-        //    });
-        //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
-        //}
+        if ( typeof intermediateDataStructure !== 'undefined'){
 
-        //ABC data for the gene table
-        //if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
-        //    intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-        //        subcategory: 'ABC',
-        //        columnCells:  []});
-        //    // set up the headers, and give us an empty row of column cells
-        //    _.forEach(returnObject.genesByAbc, function (oneRecord){
-        //        intermediateDataStructure.headerNames.push (oneRecord.geneName);
-        //        intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
-        //        intermediateDataStructure.headers.push({name:oneRecord.geneName,
-        //            contents:Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord)} );
-        //        intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-        //    });
-        //
-        //        // fill in all of the column cells
-        //    _.forEach(returnObject.genesByAbc, function (recordsPerGene){
-        //        var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
-        //        if (indexOfColumn===-1){
-        //            console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-        //        }else {
-        //            recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
-        //            recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
-        //            intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
-        //        }
-        //    });
-        //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
-        //
-        //}
+            buildOrExtendDynamicTable(intermediateDataStructure.tableToUpdate,intermediateDataStructure);
 
-        //eQTL data for the gene table
-        if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
-            intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-                subcategory: 'eQTL',
-                columnCells:  []});
-            // set up the headers, and give us an empty row of column cells
-            _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
-                intermediateDataStructure.headerNames.push (oneRecord.geneName);
-                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
-                intermediateDataStructure.headers.push({name:oneRecord.geneName,
-                    contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
-                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-            });
+        } else {
 
-            // fill in all of the column cells
-            _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene){
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
-                if (indexOfColumn===-1){
-                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-                }else {
-                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
-                }
-            });
-            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+            $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
+                returnObject
+            ));
 
         }
 
 
-        var variantAnnotationAppearance = function(annotationName,recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,testToRun){
-            var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
-            if ( typeof row === 'undefined'){
-                intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
-                    subcategory: annotationName,
-                    columnCells:  _.times(numberOfVariants, "")});
-                row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
-            } else {
-                var present = testToRun(recordsPerVariant)?[1]:[];
-                row.columnCells[indexOfColumn] = Mustache.render($("#dynamicVariantCellAnnotations")[0].innerHTML,{"variantAnnotationIsPresent":present});
-            }
-        }
 
-
-
-
-
-
-        // variants that we will want to annotate in the variant table
-        if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
-            // set up the headers, and give us an empty row of column cells
-            intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
-                subcategory: '',
-                columnCells:  []});
-            _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord){
-                if( typeof oneRecord !== 'undefined'){
-                    intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
-                        contents:Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})} );
-                  //  intermediateDataStructure.columnCells.push ("");
-                }
-            });
-
-            var numberOfVariants = returnObject.variantsToAnnotate.variants.length;
-            // fill in all of the column cells covering each of our annotations
-            if ( typeof returnObject.variantsToAnnotate.variants !== 'undefined'){
-                _.forEach(returnObject.variantsToAnnotate.variants, function (recordsPerVariant){
-                    var headerNames = _.map(intermediateDataStructure.headers, function (headerRecord){
-                        return headerRecord.variantName
-                    });
-                    var indexOfColumn = _.indexOf(headerNames,recordsPerVariant.VAR_ID);
-                    if (indexOfColumn===-1){
-                        console.log("Did not find index of recordsPerVariant.VAR_ID.  Shouldn't we?")
-                    }else {
-                        _.forEach([ 'Coding',
-                                    'Splice site',
-                                    'UTR',
-                                    'Promoter' ], function (eachAnnotation){
-                            switch (eachAnnotation){
-                                case 'Coding':
-                                    variantAnnotationAppearance('Coding',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4))});
-                                    break;
-                                case 'Splice site':
-                                    variantAnnotationAppearance('Splice site',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('splice')>-1)});
-                                    break;
-                                case 'UTR':
-                                    variantAnnotationAppearance('UTR',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('UTR')>-1)});
-                                    break;
-                                case 'Promoter':
-                                    variantAnnotationAppearance('Promoter',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('promoter')>-1)});
-                                    break;
-                                default: break;
-                            }
-                        });
-                        //intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicVariantBody")[0].innerHTML,recordsPerVariant);
-                    }
-                });
-
-            }
-            buildOrExtendDynamicTable("table.combinedVariantTableHolder",intermediateDataStructure);
-
-        }
-
-
-        $(idForTheTargetDiv).append(Mustache.render($(templateInfo)[0].innerHTML,
-            returnObject
-        ));
     }
 
 
@@ -1123,7 +1006,8 @@ var clearBeforeStarting = false;
                     intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML,recordsPerGene);
                 }
             });
-            buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+                //buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
 
         }
 
@@ -1403,7 +1287,38 @@ var clearBeforeStarting = false;
             returnObject.uniqueEqtlGenes.push(recordToDisplay);
         });
         addAdditionalResultsObject({tissuesPerGeneFromEqtl:returnObject});
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',returnObject,clearBeforeStarting);
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+        if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
+            intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+                subcategory: 'eQTL',
+                columnCells:  []});
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
+                intermediateDataStructure.headerNames.push (oneRecord.geneName);
+                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
+                intermediateDataStructure.headers.push({name:oneRecord.geneName,
+                    contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
+                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+            });
+
+            // fill in all of the column cells
+            _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene){
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+                if (indexOfColumn===-1){
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                }else {
+                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
+                }
+            });
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+            //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+
+        }
+
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
         // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
         //     returnObject
         // ));
@@ -1577,10 +1492,39 @@ var clearBeforeStarting = false;
 
         });
         addAdditionalResultsObject({variantRecordsFromVariantQtlSearch:returnObject});
+
+        //xxxxxxxxxxxxxxxx
+        // var intermediateDataStructure = new IntermediateDataStructure();
+        // if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
+        //     intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+        //         subcategory: 'eQTL',
+        //         columnCells:  []});
+        //     // set up the headers, and give us an empty row of column cells
+        //     _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
+        //         intermediateDataStructure.headerNames.push (oneRecord.geneName);
+        //         intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
+        //         intermediateDataStructure.headers.push({name:oneRecord.geneName,
+        //             contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
+        //         intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+        //     });
+        //
+        //     // fill in all of the column cells
+        //     _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene){
+        //         var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
+        //         if (indexOfColumn===-1){
+        //             console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+        //         }else {
+        //             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
+        //         }
+        //     });
+        //     intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        //     //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+        //
+        // }
+
+        //xxxxxxxxxxxxxxxx
         prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicPhenotypeTable',returnObject,clearBeforeStarting);
-        // $(idForTheTargetDiv).empty().append(Mustache.render($('#dynamicPhenotypeTable')[0].innerHTML,
-        //     returnObject
-        // ));
+
 
     };
     var displayPhenotypeRecordsFromVariantQtlSearch = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
@@ -1621,14 +1565,106 @@ var clearBeforeStarting = false;
 
 
 
+    var displayEqtlsGivenVariantList = function (idForTheTargetDiv,objectContainingRetrievedRecords) {
+
+    }
+
+
+
+
+
     var displayVariantsForAPhenotype = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
+
+        var variantAnnotationAppearance = function(annotationName,recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,testToRun){
+            var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
+            if ( typeof row === 'undefined'){
+                intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
+                    subcategory: annotationName,
+                    columnCells:  _.times(numberOfVariants, "")});
+                row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
+            } else {
+                var present = testToRun(recordsPerVariant)?[1]:[];
+                row.columnCells[indexOfColumn] = Mustache.render($("#dynamicVariantCellAnnotations")[0].innerHTML,{"variantAnnotationIsPresent":present});
+            }
+        };
+
         $(idForTheTargetDiv).empty();
 
         var returnObject = createNewDisplayReturnObject();
         returnObject.variantsToAnnotate = objectContainingRetrievedRecords;
 
         addAdditionalResultsObject({variantRecordsForOnePhenotypeQtlSearch:returnObject});
-        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicVariantTable',returnObject,clearBeforeStarting);
+
+
+
+
+
+
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+        // variants that we will want to annotate in the variant table
+        if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
+            // set up the headers, and give us an empty row of column cells
+            intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
+                subcategory: '',
+                columnCells:  []});
+            _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord){
+                if( typeof oneRecord !== 'undefined'){
+                    intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
+                        contents:Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})} );
+                    //  intermediateDataStructure.columnCells.push ("");
+                }
+            });
+
+            var numberOfVariants = returnObject.variantsToAnnotate.variants.length;
+            // fill in all of the column cells covering each of our annotations
+            if ( typeof returnObject.variantsToAnnotate.variants !== 'undefined'){
+                _.forEach(returnObject.variantsToAnnotate.variants, function (recordsPerVariant){
+                    var headerNames = _.map(intermediateDataStructure.headers, function (headerRecord){
+                        return headerRecord.variantName
+                    });
+                    var indexOfColumn = _.indexOf(headerNames,recordsPerVariant.VAR_ID);
+                    if (indexOfColumn===-1){
+                        console.log("Did not find index of recordsPerVariant.VAR_ID.  Shouldn't we?")
+                    }else {
+                        _.forEach([ 'Coding',
+                            'Splice site',
+                            'UTR',
+                            'Promoter' ], function (eachAnnotation){
+                            switch (eachAnnotation){
+                                case 'Coding':
+                                    variantAnnotationAppearance('Coding',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4))});
+                                    break;
+                                case 'Splice site':
+                                    variantAnnotationAppearance('Splice site',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('splice')>-1)});
+                                    break;
+                                case 'UTR':
+                                    variantAnnotationAppearance('UTR',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('UTR')>-1)});
+                                    break;
+                                case 'Promoter':
+                                    variantAnnotationAppearance('Promoter',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('promoter')>-1)});
+                                    break;
+                                default: break;
+                            }
+                        });
+                        //intermediateDataStructure.columnCells[indexOfColumn]  = Mustache.render($("#dynamicVariantBody")[0].innerHTML,recordsPerVariant);
+                    }
+                });
+
+            }
+            intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
+            //buildOrExtendDynamicTable("table.combinedVariantTableHolder",intermediateDataStructure);
+
+        }
+
+
+
+
+
+
+
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicVariantTable',returnObject,clearBeforeStarting,intermediateDataStructure);
 
 
     };
@@ -1781,6 +1817,10 @@ var clearBeforeStarting = false;
             directorButtons: [
                 {buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
                     description: 'find all variants in the above range with QTL relationship with some phenotype',
+                    outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
+                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
+                {buttonId: 'getEqtlsGivenVariantList', buttonName: 'eQTL',
+                    description: 'find all eQTL relationships for a given set of variants',
                     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
                     reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
                 {buttonId: 'getVariantsFromQtlAndThenRetrieveEpigeneticData', buttonName: 'multi',
@@ -1977,8 +2017,8 @@ var clearBeforeStarting = false;
             arrayOfRoutinesToUndertake.push( actionContainer('getVariantsWeWillUseToBuildTheVariantTable',
                 actionDefaultFollowUp("getVariantsWeWillUseToBuildTheVariantTable")));
 
-            arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
-                actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
+            arrayOfRoutinesToUndertake.push( actionContainer('getEqtlsGivenVariantList',
+                actionDefaultFollowUp("getEqtlsGivenVariantList")));
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 
