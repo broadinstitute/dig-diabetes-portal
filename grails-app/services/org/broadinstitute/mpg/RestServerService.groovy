@@ -2273,20 +2273,19 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
 
-    public JSONArray gatherEqtlDataForVariantList( String gene,List <String> variant,
+    public JSONArray gatherEqtlDataForVariantList( String gene,List<String> variants,
                                      String tissue ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
             specifyRequestList << "gene=${gene}"
         }
-        if ((variant) && (variant.length() > 0)) {
-            specifyRequestList << "variant=${variant.join(",")}"
+        if ((variants) && (variants.length() > 0)) {
+            specifyRequestList << "var_id=${variants.join(",").replace("\"","")}"
         }
         if ((tissue) && (tissue.length() > 0)) {
             specifyRequestList << "tissue=${tissue}"
         }
-        String rawReturnFromApi =  getRestCallBase("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
-        //String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
+        String rawReturnFromApi =  getRestCallBase("${GET_EQTLS_FOR_A_VARIANT_LIST_URL}?${specifyRequestList.join("&")}", currentRestServer())
         JsonSlurper slurper = new JsonSlurper()
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
         return jsonArray

@@ -32,6 +32,15 @@
 </script>
 
 
+<script id="dynamicEqtlVariantTableBody"  type="x-tmpl-mustache">
+
+{{#.}}
+     {{geneName}}
+     {{value}}
+{{/.}}
+
+</script>
+
 
 <script id="dynamicVariantHeader"  type="x-tmpl-mustache">
 

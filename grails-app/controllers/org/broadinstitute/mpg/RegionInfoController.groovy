@@ -535,9 +535,11 @@ class RegionInfoController {
     def retrieveEqtlDataWithVariants() {
         String gene = ""
         String tissue = ""
-        List<String> variants = []
         boolean looksOkay = true
         JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList
+        def slurper = new JsonSlurper()
 
         if (params.gene) {
             gene = params.gene
@@ -547,15 +549,16 @@ class RegionInfoController {
             tissue = params.tissue
         }
 
-        if (params.variant) {
-            variants = slurper.parseText( params.variants as String)
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
         }
 
         if (looksOkay){
-            jsonReturn = restServerService.gatherEqtlData( gene,  variant, tissue)
+            jsonReturn = restServerService.gatherEqtlDataForVariantList( gene,  variantList, tissue)
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
-            def slurper = new JsonSlurper()
+
             jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
 
