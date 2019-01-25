@@ -330,9 +330,9 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('a')
                 .attr('class', 'clickable')
-                .attr("xlink:href", function(d) {
-                    return "variantSearch/findEveryVariantForAGene?gene=" +nameAccessor(d) ;
-                } );
+                .on("click", function(d) { window.open("http://alsportal.us-east-1.elasticbeanstalk.com/variantSearch/findEveryVariantForAGene?gene=" +nameAccessor(d));
+                });
+
             var dots = anchors.append('circle')
                 .attr('class', 'dot')
                 .attr("r", radius)
