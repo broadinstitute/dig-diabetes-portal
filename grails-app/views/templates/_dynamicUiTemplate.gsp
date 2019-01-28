@@ -32,11 +32,25 @@
 </script>
 
 
+
+
+<script id="dynamicEqtlVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantRecord {{category}}" geneNumber={{geneNumber}}  tissueNumber={{tissueNumber}}>
+     <div>gene={{geneNumber}}</div>
+     <div>tissue={{tissueNumber}}</div>
+     </div>
+</script>
+
+
+
+
 <script id="dynamicEqtlVariantTableBody"  type="x-tmpl-mustache">
 
 {{#.}}
+     <div class="variantRecordExists {{category}}" value={{value}}  geneName="{{geneName}}">
      {{geneName}}
      {{value}}
+     </div>
 {{/.}}
 
 </script>

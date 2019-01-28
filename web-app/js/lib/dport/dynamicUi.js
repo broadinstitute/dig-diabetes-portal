@@ -986,7 +986,9 @@ var clearBeforeStarting = false;
 
         if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())){
             intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
+                displayCategory: 'Annotation',
                 subcategory: 'ABC',
+                displaySubcategory: 'ABC',
                 columnCells:  []});
             // set up the headers, and give us an empty row of column cells
             _.forEach(returnObject.genesByAbc, function (oneRecord){
@@ -1341,8 +1343,10 @@ var clearBeforeStarting = false;
         var intermediateDataStructure = new IntermediateDataStructure();
         if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
             intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-                subcategory: 'eQTL',
-                columnCells:  []});
+                                                        displayCategory:'Annotation',
+                                                        subcategory: 'eQTL',
+                                                        displaySubcategory:   'eQTL',
+                                                        columnCells:  []});
             // set up the headers, and give us an empty row of column cells
             _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
                 intermediateDataStructure.headerNames.push (oneRecord.geneName);
@@ -1623,18 +1627,6 @@ var clearBeforeStarting = false;
         var intermediateDataStructure = new IntermediateDataStructure();
         var eqtlsAggregatedPerVariant = getAccumulatorObject("eqtlsAggregatedPerVariant");
         if (( typeof eqtlsAggregatedPerVariant !== 'undefined') && ( eqtlsAggregatedPerVariant.length > 0)){
-            //intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-            //    subcategory: 'eQTL',
-            //    columnCells:  []});
-            // we can't get here without having already chosen variants and built the table, so I claim that we don't need to set up headers
-            //
-            //_.forEach(returnObject.genesByAbc, function (oneRecord){
-            //    intermediateDataStructure.headerNames.push (oneRecord.geneName);
-            //    intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord));
-            //    intermediateDataStructure.headers.push({name:oneRecord.geneName,
-            //        contents:Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML,oneRecord)} );
-            //    intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-            //});
 
             // fill in all of the column cells
             var variantNameArray = getAccumulatorObject("variantNameArray");
@@ -1642,19 +1634,67 @@ var clearBeforeStarting = false;
             var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
             _.forEach(everyTissueToDisplay, function (aTissue){
                 var tissueRow = { category: 'eQTL',
+                    displayCategory: 'eQTL',
                     subcategory: aTissue,
+                    displaySubcategory: aTissue,
                     columnCells:  []};
                 _.forEach(variantNameArray, function (aVariant,indexOfColumn){
                     var recordsPerVariant = _.find(eqtlsAggregatedPerVariant,{variant:aVariant});
-                    var perTissuePerVariant = _.filter(recordsPerVariant.tissues,{tissueName:aTissue});
-                    if ( typeof perTissuePerVariant === 'undefined'){
-                        tissueRow.columnCells[indexOfColumn] =Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                    var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
+                    if (( typeof perTissuePerVariant === 'undefined')||(perTissuePerVariant[0].value<0.6)){
+                        tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
                     }else{
                         tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
                     }
                 });
                 intermediateDataStructure.rowsToAdd.push (tissueRow);
             });
+
+            // I might need to create a summary line
+            if (intermediateDataStructure.rowsToAdd.length>0){
+                var invertedArray = [];
+                var rememberCategoryFromOneLine = "none";
+                _.map(intermediateDataStructure.rowsToAdd,function (oneRow){
+                    if (invertedArray.length===0){
+                        invertedArray = new Array(oneRow.columnCells.length);
+                        rememberCategoryFromOneLine = oneRow.category;
+                    }
+                    _.forEach(oneRow.columnCells,function (cell,index){
+                        var domVersionOfCell = $(cell);
+                        if (domVersionOfCell.hasClass("variantRecordExists")){
+                            if ( typeof invertedArray[index] === 'undefined' ){
+                                invertedArray[index] = { genes: [], tissues: [] }
+                            }
+                            var geneName = domVersionOfCell.attr('geneName');
+                            if (!invertedArray[index].genes.includes(geneName)){
+                                invertedArray[index].genes.push(geneName);
+                            }
+                            if (!invertedArray[index].tissues.includes(oneRow.subcategory)){
+                                invertedArray[index].tissues.push(oneRow.subcategory);
+                            }
+                        }
+                    });
+                });
+                var summaryRow = {
+                    displayCategory: '<button type="button" class="btn btn-info shower '+rememberCategoryFromOneLine+'" '+
+                        'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')">display tissues</button>'+
+                        '<button type="button" class="btn btn-info hider '+rememberCategoryFromOneLine+'" '+
+                        'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')"  style="display: none">hide tissues</button>',
+                    category: rememberCategoryFromOneLine,
+                    subcategory: rememberCategoryFromOneLine,
+                    displaySubcategory: rememberCategoryFromOneLine,
+                    columnCells:  []};
+                _.forEach(invertedArray,function(summaryColumn,index){
+                    summaryRow.columnCells.push(
+                        Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:summaryColumn.genes.length,
+                                                                                                        tissueNumber:summaryColumn.tissues.length,
+                                                                                                        category:rememberCategoryFromOneLine})
+                    );
+                });
+                intermediateDataStructure.rowsToAdd.push(summaryRow);
+            }
+
+
             intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
 
         }
@@ -1676,7 +1716,9 @@ var clearBeforeStarting = false;
             var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             if ( typeof row === 'undefined'){
                 intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
+                    displayCategory:'annotation',
                     subcategory: annotationName,
+                    displaySubcategory: annotationName,
                     columnCells:  _.times(numberOfVariants, "")});
                 row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             }
@@ -1702,9 +1744,6 @@ var clearBeforeStarting = false;
         // variants that we will want to annotate in the variant table
         if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
             // set up the headers, and give us an empty row of column cells
-            //intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
-            //    subcategory: '',
-            //    columnCells:  []});
             _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord){
                 if( typeof oneRecord !== 'undefined'){
                     intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
@@ -2219,17 +2258,27 @@ var clearBeforeStarting = false;
                         {extend: "pdf", text: "Copy all to pdf"}
                     ],
                     "aLengthMenu": [
-                        [10, 50, -1],
-                        [10, 50, "All"]
+                        [100, 500, -1],
+                        [100, 500, "All"]
                     ],
                     "bDestroy": true,
                     "bAutoWidth": false,
                     "columnDefs": []
                 };
+                headerDescriber.columnDefs.push({
+                    "title": "",
+                    "targets": 0,
+                    "name": "a"
+                });
+                headerDescriber.columnDefs.push({
+                    "title": "",
+                    "targets": 0,
+                    "name": "a"
+                });
                 _.forEach(intermediateStructure.headers, function (header, count) {
                     headerDescriber.columnDefs.push({
                         "title": header.contents,
-                        "targets": count,
+                        "targets": count+2,
                         "name": header.name
                     });
                 });
@@ -2242,11 +2291,15 @@ var clearBeforeStarting = false;
 
         _.forEach(intermediateStructure.rowsToAdd, function (row) {
             var rowDescriber = [];
+            rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
+            rowDescriber.push(row.displaySubcategory);
             _.forEach(row.columnCells, function (val, key) {
                 rowDescriber.push(val);
             })
             $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
         });
+        $('div.noDataHere.eQTL').parent().parent().hide();
+        $('div.variantRecordExists.eQTL').parent().parent().hide();
 
 
 
@@ -2361,11 +2414,26 @@ var clearBeforeStarting = false;
         });
     };
 
+    var displayTissuesForAnnotation = function (annotationId){
+        $('div.noDataHere.eQTL').parent().parent().show();
+        $('div.variantRecordExists.eQTL').parent().parent().show();
+        $('button.shower.eQTL').hide();
+        $('button.hider.eQTL').show();
+
+    };
+    var hideTissuesForAnnotation = function (annotationId){
+        $('div.noDataHere.eQTL').parent().parent().hide();
+        $('div.variantRecordExists.eQTL').parent().parent().hide();
+        $('button.hider.eQTL').hide();
+        $('button.shower.eQTL').show();
+    };
 
 
 
 // public routines are declared below
     return {
+        displayTissuesForAnnotation:displayTissuesForAnnotation,
+        hideTissuesForAnnotation:hideTissuesForAnnotation,
         installDirectorButtonsOnTabs: installDirectorButtonsOnTabs,
         modifyScreenFields: modifyScreenFields,
         adjustLowerExtent: adjustLowerExtent,
