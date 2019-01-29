@@ -1040,7 +1040,6 @@ var clearBeforeStarting = false;
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-                //buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
 
         }
 
@@ -1445,7 +1444,7 @@ var clearBeforeStarting = false;
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-            //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
+
 
         }
 
@@ -1989,7 +1988,6 @@ var clearBeforeStarting = false;
 
             }
             intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
-            //buildOrExtendDynamicTable("table.combinedVariantTableHolder",intermediateDataStructure);
 
         }
 
@@ -2488,13 +2486,33 @@ var clearBeforeStarting = false;
                     });
                 });
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
+                // Make the headers look like we want them to
+                _.forEach(datatable.table().columns().header(),function(o){
+                    var domElement = $(o);
+                    var headerName = domElement.text().trim();
+                    if ((headerName.length >  5) &&
+                        (headerName.split('_').length === 4)){
+                        var partsOfId = headerName.split('_');
+                        domElement.addClass("niceHeadersThatAreLinks");
+                        domElement.addClass("headersWithVarIds");
+                        domElement.attr("defrefa",partsOfId[2]);
+                        domElement.attr("defeffa",partsOfId[3]);
+                        domElement.attr("chrom",partsOfId[0]);
+                        domElement.attr("position",partsOfId[1]);
+                        domElement.attr("varid",partsOfId[0]+":"+partsOfId[1]+"_"+
+                            partsOfId[2]+"/"+partsOfId[3]);
+                        domElement.attr("data-toggle","popover");
+                    }
+                });
             }
         } else {
             datatable =  $(whereTheTableGoes).dataTable();
         }
 
 
+        var rememberCategory = "";
         _.forEach(intermediateStructure.rowsToAdd, function (row) {
+            rememberCategory = row.category;
             var rowDescriber = [];
             rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
             rowDescriber.push(row.displaySubcategory);
@@ -2503,8 +2521,8 @@ var clearBeforeStarting = false;
             })
             $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
         });
-        $('div.noDataHere.eQTL').parent().parent().hide();
-        $('div.variantRecordExists.eQTL').parent().parent().hide();
+        $('div.noDataHere.'+rememberCategory).parent().parent().hide();
+        $('div.variantRecordExists.'+rememberCategory).parent().parent().hide();
 
 
 
@@ -2620,17 +2638,17 @@ var clearBeforeStarting = false;
     };
 
     var displayTissuesForAnnotation = function (annotationId){
-        $('div.noDataHere.eQTL').parent().parent().show();
-        $('div.variantRecordExists.eQTL').parent().parent().show();
-        $('button.shower.eQTL').hide();
-        $('button.hider.eQTL').show();
+        $('div.noDataHere.'+annotationId).parent().parent().show();
+        $('div.variantRecordExists.'+annotationId).parent().parent().show();
+        $('button.shower.'+annotationId).hide();
+        $('button.hider.'+annotationId).show();
 
     };
     var hideTissuesForAnnotation = function (annotationId){
-        $('div.noDataHere.eQTL').parent().parent().hide();
-        $('div.variantRecordExists.eQTL').parent().parent().hide();
-        $('button.hider.eQTL').hide();
-        $('button.shower.eQTL').show();
+        $('div.noDataHere.'+annotationId).parent().parent().hide();
+        $('div.variantRecordExists.'+annotationId).parent().parent().hide();
+        $('button.shower.'+annotationId).hide();
+        $('button.hider.'+annotationId).show();
     };
 
 
