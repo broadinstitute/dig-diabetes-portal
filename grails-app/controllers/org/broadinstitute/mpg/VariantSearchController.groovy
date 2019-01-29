@@ -1014,7 +1014,7 @@ class VariantSearchController {
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
-            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA"])
+            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA", "HETU", "HOMU"])
             requestedProperties.put("pProperty",requestedPpropertiesMap)
         }
 
@@ -1026,14 +1026,19 @@ class VariantSearchController {
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap datasetDpropertiesMap2 = new LinkedHashMap()
             datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HOM", "MAF"] )
-            resultColumnsToDisplay["dproperty"].putAt("None",datasetDpropertiesMap2)
+            datasetDpropertiesMap2.put("WGS_WgnomAD_mdv60",["AC", "HOM", "MAF"] )
+            resultColumnsToDisplay["dproperty"].putAt("Additional controls",datasetDpropertiesMap2)
+
             LinkedHashMap datasetDpropertiesMap3 = new LinkedHashMap()
             datasetDpropertiesMap3.put("ExSeq_EgnomAD_mdv60",[])
-            resultColumnsToDisplay["pproperty"].putAt("None",datasetDpropertiesMap3)
+            datasetDpropertiesMap3.put("WGS_WgnomAD_mdv60",[])
+            resultColumnsToDisplay["pproperty"].putAt("Additional controls",datasetDpropertiesMap3)
 
             LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
             datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
+            datasetDpropertiesMap.put("WGS_WgnomAD_mdv60",[])
             resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+
 
 
         }
@@ -1126,7 +1131,7 @@ class VariantSearchController {
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
-            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA"])
+            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA", "HETU","HOMU"])
             //requestedPpropertiesMap.put("gnomad",[])
             requestedProperties.put("pProperty",requestedPpropertiesMap)
 
@@ -1199,13 +1204,20 @@ class VariantSearchController {
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap datasetDpropertiesMap2 = new LinkedHashMap()
             datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HOM", "MAF"] )
-            resultColumnsToDisplay["dproperty"].putAt("None",datasetDpropertiesMap2)
+            datasetDpropertiesMap2.put("WGS_WgnomAD_mdv60",["AC", "HOM", "MAF"] )
+            resultColumnsToDisplay["dproperty"].putAt("Additional controls",datasetDpropertiesMap2)
+
             LinkedHashMap datasetDpropertiesMap3 = new LinkedHashMap()
             datasetDpropertiesMap3.put("ExSeq_EgnomAD_mdv60",[])
-            resultColumnsToDisplay["pproperty"].putAt("None",datasetDpropertiesMap3)
+            datasetDpropertiesMap3.put("WGS_WgnomAD_mdv60",[])
+            resultColumnsToDisplay["pproperty"].putAt("Additional controls",datasetDpropertiesMap3)
+
             LinkedHashMap datasetDpropertiesMap = new LinkedHashMap()
             datasetDpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",[])
+            datasetDpropertiesMap.put("WGS_WgnomAD_mdv60",[])
             resultColumnsToDisplay["dproperty"].putAt("ALS",datasetDpropertiesMap)
+
+
         }
 
         //you have to add Properties to resultColumnsToDisplay linkedHashMap so that addProperties can add them
@@ -1309,8 +1321,7 @@ class VariantSearchController {
                      "common-common-Allele_Count",
                      "common-common-SIFT_PRED",
                      "common-common-PolyPhen_PRED",
-                     "common-common-CADD_RAW",
-                     "common-common-CADD_PHRED"
+                     "common-common-CADD_RAW"
                     ].join(":")
         }
 
