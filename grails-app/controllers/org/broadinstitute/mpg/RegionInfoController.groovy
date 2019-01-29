@@ -538,7 +538,7 @@ class RegionInfoController {
         boolean looksOkay = true
         JSONArray jsonReturn
         JSONArray variants
-        List <String> variantList
+        List <String> variantList = []
         def slurper = new JsonSlurper()
 
         if (params.gene) {
@@ -577,6 +577,9 @@ class RegionInfoController {
         String chromosome = ""
         boolean looksOkay = true
         JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
 
         if (params.gene) {
             gene = params.gene
@@ -605,15 +608,19 @@ class RegionInfoController {
             }
         }
 
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        }
+
         if (params.chromosome) {
             chromosome = params.chromosome
         }
 
         if (looksOkay){
-            jsonReturn = restServerService.gatherAbcData( gene, tissue, startPosition, endPosition, chromosome )
+            jsonReturn = restServerService.gatherAbcData( gene, tissue, startPosition, endPosition, chromosome, variantList )
         } else {
             String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
-            def slurper = new JsonSlurper()
             jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
         }
 

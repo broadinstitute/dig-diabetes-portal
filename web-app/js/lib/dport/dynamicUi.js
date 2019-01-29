@@ -108,6 +108,11 @@ var clearBeforeStarting = false;
                 defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
                 break;
 
+            case "getABCGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction =  displayAbcGivenVariantList;
+                defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
+                break;
+
             default:
                 break;
         }
@@ -388,7 +393,7 @@ var clearBeforeStarting = false;
                     var phenotype = $('li.chosenPhenotype').attr('id');
                     var chromosome = $('span.dynamicUiChromosome').text();
                     var startExtent = $('span.dynamicUiGeneExtentBegin').text();
-                    var endExtent = $('span.dynamicUiGeneExtentBegin').text();
+                    var endExtent = $('span.dynamicUiGeneExtentEnd').text();
                     var dataNecessaryToRetrieveVariantsPerPhenotype;
                     if (( typeof phenotype === 'undefined') ||
                         (typeof chromosome === 'undefined') ||
@@ -398,7 +403,7 @@ var clearBeforeStarting = false;
                     }else{
                         dataNecessaryToRetrieveVariantsPerPhenotype = {
                             phenotype: phenotype,
-                            geneToSummarize: "chr"+chromosome+ ":"+startExtent+":"+endExtent
+                            geneToSummarize: "chr"+chromosome+ ":"+startExtent+"-"+endExtent
                         }
 
                     }
@@ -440,7 +445,30 @@ var clearBeforeStarting = false;
                     }
                 };
                 break;
+            case "getABCGivenVariantList":
+                functionToLaunchDataRetrieval = function(){
+                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId:"getABCGivenVariantList"});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject("variantNameArray").length>0){
+                            variantsAsJson = "[\""+getAccumulatorObject("variantNameArray").join("\",\"")+"\"]";
+                        }
+                        var dataForCall = {variants:variantsAsJson};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getABCGivenVariantList",
+                            retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: processAbcRecordsFromVariantBasedRequest,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
                 break;
+
 
             default:
                 break;
@@ -670,7 +698,8 @@ var clearBeforeStarting = false;
             rawAbcInfo:[],
             geneInfoArray:[],
             variantNameArray: [],
-            eqtlsAggregatedPerVariant:[]
+            eqtlsAggregatedPerVariant:[],
+            abcAggregatedPerVariant:[]
         };
     };
 
@@ -1258,6 +1287,56 @@ var clearBeforeStarting = false;
 
 
 
+    var processAbcRecordsFromVariantBasedRequest = function (data){
+
+        var tempHolder = []
+        // basic data aggregation
+        _.forEach(data,function(oneRec){
+            var existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
+            if ( typeof existingRecord === 'undefined'){
+                tempHolder.push ({  variant:oneRec.VAR_ID,
+                    genes: [],
+                    uniqueGeneNames:[],
+                    tissues: [],
+                    uniqueTissueNames:[] });
+                existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
+            }
+            var existingGeneRecord = _.find (existingRecord.genes,{ geneName: oneRec.GENE,tissueName: oneRec.SOURCE});
+            if ( typeof existingGeneRecord === 'undefined'){
+                existingRecord.genes.push ({    geneName:oneRec.GENE,
+                    value: oneRec.VALUE,
+                    tissueName: oneRec.SOURCE });;
+            } else {
+                console.log('should I be worried? EQTL record matches gene ("+oneRec.GENE+") tissue ("+oneRec.SOURCE+") for variant="+oneRec.var_id+".');
+            }
+            var existingTissueRecord = _.find (existingRecord.tissues,{ geneName: oneRec.GENE,tissueName: oneRec.SOURCE});
+            if ( typeof existingTissueRecord === 'undefined'){
+                existingRecord.tissues.push ({    geneName:oneRec.GENE,
+                    value: oneRec.VALUE,
+                    tissueName: oneRec.SOURCE });;
+            } else {
+                console.log('should I be worried? ABC record matches gene ("+oneRec.GENE+") tissue ("+oneRec.SOURCE+") for variant="+oneRec.var_id+".');
+            }
+
+        });
+        // extract a few summaries
+        var uniqueVariants = _.map (tempHolder, function (o){return o.variant});
+        var existingRecord;
+        _.forEach(uniqueVariants, function (varId){
+            existingRecord = _.find (tempHolder,{variant: varId});
+            existingRecord.uniqueGeneNames = _.uniq(_.map( existingRecord.genes, function (o){
+                return o.geneName}));
+            existingRecord.uniqueTissueNames = _.uniq(_.map( existingRecord.tissues, function (o){
+                return o.tissueName}));
+        });
+        setAccumulatorObject("abcAggregatedPerVariant", tempHolder);
+        return {};
+    };
+
+
+
+
+
 
 
 
@@ -1640,11 +1719,121 @@ var clearBeforeStarting = false;
                     columnCells:  []};
                 _.forEach(variantNameArray, function (aVariant,indexOfColumn){
                     var recordsPerVariant = _.find(eqtlsAggregatedPerVariant,{variant:aVariant});
-                    var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
-                    if (( typeof perTissuePerVariant === 'undefined')||(perTissuePerVariant[0].value<0.6)){
+                    if ( typeof  recordsPerVariant === 'undefined'){
                         tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
-                    }else{
-                        tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                    } else {
+                        var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
+                        if (( typeof perTissuePerVariant === 'undefined')||(perTissuePerVariant[0].value<0.6)){
+                            tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                        }else{
+                            tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                        }
+                    }
+
+                });
+                intermediateDataStructure.rowsToAdd.push (tissueRow);
+            });
+
+            // I might need to create a summary line
+            if (intermediateDataStructure.rowsToAdd.length>0){
+                var invertedArray = [];
+                var rememberCategoryFromOneLine = "none";
+                _.map(intermediateDataStructure.rowsToAdd,function (oneRow){
+                    if (invertedArray.length===0){
+                        invertedArray = new Array(oneRow.columnCells.length);
+                        rememberCategoryFromOneLine = oneRow.category;
+                    }
+                    _.forEach(oneRow.columnCells,function (cell,index){
+                        var domVersionOfCell = $(cell);
+                        if (domVersionOfCell.hasClass("variantRecordExists")){
+                            if ( typeof invertedArray[index] === 'undefined' ){
+                                invertedArray[index] = { genes: [], tissues: [] }
+                            }
+                            var geneName = domVersionOfCell.attr('geneName');
+                            if (!invertedArray[index].genes.includes(geneName)){
+                                invertedArray[index].genes.push(geneName);
+                            }
+                            if (!invertedArray[index].tissues.includes(oneRow.subcategory)){
+                                invertedArray[index].tissues.push(oneRow.subcategory);
+                            }
+                        }
+                    });
+                });
+                var summaryRow = {
+                    displayCategory: '<button type="button" class="btn btn-info shower '+rememberCategoryFromOneLine+'" '+
+                        'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')">display tissues</button>'+
+                        '<button type="button" class="btn btn-info hider '+rememberCategoryFromOneLine+'" '+
+                        'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')"  style="display: none">hide tissues</button>',
+                    category: rememberCategoryFromOneLine,
+                    subcategory: rememberCategoryFromOneLine,
+                    displaySubcategory: rememberCategoryFromOneLine,
+                    columnCells:  []};
+                _.forEach(invertedArray,function(summaryColumn,index){
+                    if ( typeof summaryColumn === 'undefined'){
+                        summaryRow.columnCells.push(
+                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:0,
+                                tissueNumber:0,
+                                category:rememberCategoryFromOneLine}));
+                    } else {
+                        summaryRow.columnCells.push(
+                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
+                                geneNumber: summaryColumn.genes.length,
+                                tissueNumber: summaryColumn.tissues.length,
+                                category: rememberCategoryFromOneLine
+                            }));
+                    }
+                });
+                intermediateDataStructure.rowsToAdd.push(summaryRow);
+            }
+
+
+            intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
+
+        }
+
+
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicAbcTissueTable',returnObject,clearBeforeStarting,intermediateDataStructure);
+
+
+    }
+
+
+
+
+
+
+
+    var displayAbcGivenVariantList = function (idForTheTargetDiv,objectContainingRetrievedRecords) {
+
+
+        var returnObject = createNewDisplayReturnObject();
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+        var abcAggregatedPerVariant = getAccumulatorObject("abcAggregatedPerVariant");
+        if (( typeof abcAggregatedPerVariant !== 'undefined') && ( abcAggregatedPerVariant.length > 0)){
+
+            // fill in all of the column cells
+            var variantNameArray = getAccumulatorObject("variantNameArray");
+            var allArraysOfTissueNames = _.map (abcAggregatedPerVariant, function (o){return o.uniqueTissueNames});
+            var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
+            _.forEach(everyTissueToDisplay, function (aTissue){
+                var tissueRow = { category: 'ABC',
+                    displayCategory: 'ABC',
+                    subcategory: aTissue,
+                    displaySubcategory: aTissue,
+                    columnCells:  []};
+                _.forEach(variantNameArray, function (aVariant,indexOfColumn){
+                    var recordsPerVariant = _.find(abcAggregatedPerVariant,{variant:aVariant});
+                    if ( typeof  recordsPerVariant === 'undefined'){
+                        tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                    } else {
+                        var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
+                        if ( typeof perTissuePerVariant === 'undefined'){
+                            tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                        }else{
+                            tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                        }
                     }
                 });
                 intermediateDataStructure.rowsToAdd.push (tissueRow);
@@ -1685,11 +1874,19 @@ var clearBeforeStarting = false;
                     displaySubcategory: rememberCategoryFromOneLine,
                     columnCells:  []};
                 _.forEach(invertedArray,function(summaryColumn,index){
-                    summaryRow.columnCells.push(
-                        Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:summaryColumn.genes.length,
-                                                                                                        tissueNumber:summaryColumn.tissues.length,
-                                                                                                        category:rememberCategoryFromOneLine})
-                    );
+                    if ( typeof summaryColumn === 'undefined'){
+                        summaryRow.columnCells.push(
+                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:0,
+                                tissueNumber:0,
+                                category:rememberCategoryFromOneLine}));
+                    } else {
+                        summaryRow.columnCells.push(
+                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:summaryColumn.genes.length,
+                                tissueNumber:summaryColumn.tissues.length,
+                                category:rememberCategoryFromOneLine}));
+                    }
+
+
                 });
                 intermediateDataStructure.rowsToAdd.push(summaryRow);
             }
@@ -1705,6 +1902,9 @@ var clearBeforeStarting = false;
 
 
     }
+
+
+
 
 
 
@@ -2155,6 +2355,11 @@ var clearBeforeStarting = false;
 
             arrayOfRoutinesToUndertake.push( actionContainer('getEqtlsGivenVariantList',
                 actionDefaultFollowUp("getEqtlsGivenVariantList")));
+
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getABCGivenVariantList',
+                actionDefaultFollowUp("getABCGivenVariantList")));
+
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});
 

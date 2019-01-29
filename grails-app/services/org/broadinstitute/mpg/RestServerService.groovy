@@ -2314,7 +2314,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
 
     public JSONArray gatherAbcData( String gene, String tissue,
-                                     int  startPosition, int  endPosition, String chromosome ) {
+                                     int  startPosition, int  endPosition, String chromosome, List <String> variantList ) {
         List<String> specifyRequestList = []
         if ((gene) && (gene.length() > 0)) {
             specifyRequestList << "gene=${gene}"
@@ -2331,6 +2331,10 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         if (endPosition > -1) {
             specifyRequestList << "end_pos=${endPosition}"
         }
+        if ((variantList) && (variantList.length() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
 
         String rawReturnFromApi =  getRestCall("${GET_REGION_FROM_ABC_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()
