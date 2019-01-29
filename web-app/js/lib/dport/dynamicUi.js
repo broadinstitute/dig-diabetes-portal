@@ -2333,8 +2333,8 @@ var clearBeforeStarting = false;
             arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
                 actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
-            arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
-                actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
+            // arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
+            //     actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
 
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
                 actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
