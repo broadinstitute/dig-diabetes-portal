@@ -51,6 +51,12 @@
             </g:renderT2dGenesSection>
         </g:if>
 
+        <g:if test="${g.portalTypeString()?.equals('als')}">
+            <g:renderT2dGenesSection>
+                <g:applyLayout name="analyticsALSKP"/>
+            </g:renderT2dGenesSection>
+        </g:if>
+
         <g:else>
             <g:renderT2dGenesSection>
                 <g:applyLayout name="analyticsT2dGenes"/>
