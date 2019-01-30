@@ -1014,7 +1014,8 @@ class VariantSearchController {
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
-            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA", "HETU", "HOMU"])
+            LinkedList<String> pPropertyList = ["ACU_PH", "ACA_PH","HETA", "HOMA", "HETU", "HOMU", "MAF_PH"]
+            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",pPropertyList)
             requestedProperties.put("pProperty",requestedPpropertiesMap)
         }
 
@@ -1025,8 +1026,8 @@ class VariantSearchController {
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap datasetDpropertiesMap2 = new LinkedHashMap()
-            datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HOM", "MAF"] )
-            datasetDpropertiesMap2.put("WGS_WgnomAD_mdv60",["AC", "HOM", "MAF"] )
+            datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HOM", "HET","MAF"] )
+            datasetDpropertiesMap2.put("WGS_WgnomAD_mdv60",["AC", "HOM","HET" ,"MAF"] )
             resultColumnsToDisplay["dproperty"].putAt("Additional controls",datasetDpropertiesMap2)
 
             LinkedHashMap datasetDpropertiesMap3 = new LinkedHashMap()
@@ -1131,7 +1132,8 @@ class VariantSearchController {
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap<String,List<String>> requestedPpropertiesMap = new LinkedHashMap()
-            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",["ACA_PH", "ACU_PH","HETA", "HOMA", "HETU","HOMU"])
+            LinkedList<String> pPropertyList = ["ACU_PH", "ACA_PH","HETA", "HOMA", "HETU", "HOMU", "MAF_PH"]
+            requestedPpropertiesMap.put("ExSeq_ALS2018_eu_mdv60",pPropertyList)
             //requestedPpropertiesMap.put("gnomad",[])
             requestedProperties.put("pProperty",requestedPpropertiesMap)
 
@@ -1203,8 +1205,8 @@ class VariantSearchController {
 
         if(filters.contains("ALS[ExSeq_ALS2018_eu_mdv60]AC_PH>0")){
             LinkedHashMap datasetDpropertiesMap2 = new LinkedHashMap()
-            datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HOM", "MAF"] )
-            datasetDpropertiesMap2.put("WGS_WgnomAD_mdv60",["AC", "HOM", "MAF"] )
+            datasetDpropertiesMap2.put("ExSeq_EgnomAD_mdv60",["AC", "HOM", "HET","MAF"] )
+            datasetDpropertiesMap2.put("WGS_WgnomAD_mdv60",["AC", "HOM", "HET","MAF"] )
             resultColumnsToDisplay["dproperty"].putAt("Additional controls",datasetDpropertiesMap2)
 
             LinkedHashMap datasetDpropertiesMap3 = new LinkedHashMap()
@@ -1321,7 +1323,7 @@ class VariantSearchController {
                      "common-common-Allele_Count",
                      "common-common-SIFT_PRED",
                      "common-common-PolyPhen_PRED",
-                     "common-common-CADD_RAW"
+                     "common-common-CADD_PHRED"
                     ].join(":")
         }
 
