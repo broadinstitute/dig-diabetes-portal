@@ -324,7 +324,7 @@ environments {
 //        grails.serverURL = "http://mi-qasrvr.us-east-1.elasticbeanstalk.com"// CVDKP (MI portal) test site
 
 //        grails.serverURL = "http://alsportal.us-east-1.elasticbeanstalk.com"
-        grails.serverURL = "http://alskp.org/"
+        grails.serverURL = "http://alskp.org"
 
         //       grails.serverURL = "http://miprodportal.us-east-1.elasticbeanstalk.com"
 //        grails.serverURL = "http://miprod-env.us-east-1.elasticbeanstalk.com"
