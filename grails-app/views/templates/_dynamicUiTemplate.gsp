@@ -526,6 +526,17 @@
 
 
 
+%{--Called from displayGenesFromAbc--}%
+<script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
+
+            <div class="geneName">{{name1}}</div><div class="genePosition">chromosome {{chromosome}}: {{addrStart}}-{{addrEnd}}</div>
+
+</script>
+
+
+
+
+
 
 %{--Called from displayGenesFromAbc--}%
 <script id="dynamicAbcGeneTableHeader"  type="x-tmpl-mustache">

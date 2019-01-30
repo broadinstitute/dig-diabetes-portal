@@ -128,6 +128,13 @@ var clearBeforeStarting = false;
         var displayFunction = ( typeof followUp.displayRefinedContextFunction !== 'undefined') ?  followUp.displayRefinedContextFunction : undefined;
         var displayLocation= ( typeof followUp.placeToDisplayData !== 'undefined') ?  followUp.placeToDisplayData : undefined;
         var nextActionId= ( typeof followUp.actionId !== 'undefined') ?  followUp.actionId : undefined;
+        //if (( typeof displayFunction === 'undefined')&&
+        //    ( typeof displayLocation === 'undefined')&&
+        //    ( typeof nextActionId !== 'undefined')){
+        //    var followupDefaults = actionDefaultFollowUp(nextActionId);
+        //    displayFunction = followupDefaults.displayRefinedContextFunction;
+        //    displayLocation = followupDefaults.placeToDisplayData;
+        //}
         var functionToLaunchDataRetrieval;
 
         switch(actionId){
@@ -375,7 +382,7 @@ var clearBeforeStarting = false;
                             return {gene: o.name}
                         });
                         retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getTissuesFromAbcForGenesTable",
+                            name: "getRecordsFromAbcForTissueTable",
                             retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
                             dataForCall: geneNameArray,
                             processEachRecord: processRecordsFromAbc,
@@ -410,7 +417,7 @@ var clearBeforeStarting = false;
 
 
                     retrieveRemotedContextInformation(buildRemoteContextArray({
-                            name: "getTissuesFromAbcForGenesTable",
+                            name: "getVariantsWeWillUseToBuildTheVariantTable",
                             retrieveDataUrl: additionalParameters.retrieveTopVariantsAcrossSgsUrl,
                             dataForCall: dataNecessaryToRetrieveVariantsPerPhenotype,
                             processEachRecord: processRecordsFromQtl,
@@ -608,7 +615,6 @@ var clearBeforeStarting = false;
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-            //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
         }
 
 
@@ -927,7 +933,63 @@ var clearBeforeStarting = false;
 
 
         addAdditionalResultsObject({genesFromAbc:returnObject});
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicAbcGeneTable',returnObject,clearBeforeStarting);
+
+
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (( typeof returnObject.abcGenesExist !== 'undefined') && ( returnObject.abcGenesExist())) {
+            intermediateDataStructure.rowsToAdd.push({
+                category: 'Annotation',
+                displayCategory: 'Annotation',
+                subcategory: 'ABC',
+                displaySubcategory: 'ABC',
+                columnCells: []
+            });
+
+            // set up the headers, and give us an empty row of column cells
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                _.forEach(returnObject.genesByAbc, function (oneRecord) {
+                    intermediateDataStructure.headerNames.push(oneRecord.geneName);
+                    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
+                    intermediateDataStructure.headers.push({
+                        name: oneRecord.geneName,
+                        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
+                    });
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push("");
+                });
+            } else {
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord){
+                    intermediateDataStructure.headerNames.push (oneRecord.name);
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+                });
+            }
+
+
+
+
+            // set up the headers, and give us an empty row of column cells
+
+
+            // fill in all of the column cells
+            _.forEach(returnObject.genesByAbc, function (recordsPerGene) {
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                } else {
+                    recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
+                    recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
+                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, recordsPerGene);
+                }
+            });
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
+
+
+
+
+
+            prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicAbcGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
         // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
         //     returnObject
         // ));
@@ -1426,13 +1488,20 @@ var clearBeforeStarting = false;
                                                         displaySubcategory:   'eQTL',
                                                         columnCells:  []});
             // set up the headers, and give us an empty row of column cells
-            _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
-                intermediateDataStructure.headerNames.push (oneRecord.geneName);
-                intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
-                intermediateDataStructure.headers.push({name:oneRecord.geneName,
-                    contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
-                intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-            });
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
+                    intermediateDataStructure.headerNames.push (oneRecord.geneName);
+                    intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
+                    intermediateDataStructure.headers.push({name:oneRecord.geneName,
+                        contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+                });
+            } else {
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord){
+                    intermediateDataStructure.headerNames.push (oneRecord.name);
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+                });
+            }
 
             // fill in all of the column cells
             _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene){
@@ -1528,10 +1597,29 @@ var clearBeforeStarting = false;
         $(selectorForIidForTheTargetDiv).empty();
 
         addAdditionalResultsObject({refinedGenesInARange:objectContainingRetrievedRecords});
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',objectContainingRetrievedRecords,clearBeforeStarting);
-        // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
-        //     objectContainingRetrievedRecords
-        // ));
+
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if ( typeof objectContainingRetrievedRecords.rawData !== 'undefined') {
+            // set up the headers, and give us an empty row of column cells
+            _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord) {
+                intermediateDataStructure.headerNames.push(oneRecord.name1);
+                intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
+                intermediateDataStructure.headers.push({
+                    name: oneRecord.name1,
+                    contents: Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord)
+                });
+
+            });
+
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
+
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',objectContainingRetrievedRecords,clearBeforeStarting,intermediateDataStructure);
+
     };
 
 
@@ -2330,6 +2418,11 @@ var clearBeforeStarting = false;
         $('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
 
+
+            arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromProximityForLocusContext",
+                actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
+
+
             arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
                 actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
@@ -2522,9 +2615,16 @@ var clearBeforeStarting = false;
             })
             $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
         });
-        $('div.noDataHere.'+rememberCategory).parent().parent().hide();
-        $('div.variantRecordExists.'+rememberCategory).parent().parent().hide();
-
+        if (rememberCategory.length>0){
+            var elementsToHide = $('div.noDataHere.'+rememberCategory);
+            if (elementsToHide.length>0){
+                elementsToHide.parent().parent().hide();
+            }
+            elementsToHide = $('div.variantRecordExists.'+rememberCategory);
+            if (elementsToHide.length>0){
+                elementsToHide.parent().parent().hide();
+            }
+        }
 
 
     };
