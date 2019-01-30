@@ -86,6 +86,9 @@ class InformationalController {
         render(view: 'dataSubmission')
     }
 
+    def alskpfaq() {
+        render(view: 'alskpfaq')
+    }
     def downloads() {
         render(view: 'downloads')
     }
