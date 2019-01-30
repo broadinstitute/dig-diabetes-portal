@@ -729,7 +729,7 @@ div.genePosition{
                                         <div class="refinementTable dynamicUiHolder">
 
                                         </div>
-                                        <table class="combinedVariantTableHolder">
+                                        <table class="combinedVariantTableHolder" style="border:0">
                                         </table>
                                     </div>
                                </div>

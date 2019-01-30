@@ -2454,7 +2454,8 @@ var clearBeforeStarting = false;
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
                 var headerDescriber = {
-                    dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+                    //dom: '<"#gaitButtons"B><"#gaitVariantTableLength"l>rtip',
+                    dom: '<"top">rt<"bottom"iplB>',
                     "buttons": [
                         {extend: "copy", text: "Copy all to clipboard"},
                         {extend: "csv", text: "Copy all to csv"},

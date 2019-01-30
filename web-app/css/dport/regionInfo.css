@@ -244,25 +244,14 @@ th.niceHeadersThatAreGeneLinks{
     background:rgba(0,0,0,0)
 }
 .combinedVariantTableHolder th.niceHeadersThatAreLinks{
-    background: white;
     transform-origin: left;
     -webkit-transform: rotate(-60deg);
-    transform: rotate(-60deg);
+    transform: translate(20px,30px) rotate(-60deg);
     max-width: 2px;
     font-weight: normal;
     text-align: left;
-    background:rgba(0,0,0,0)
-}
-.combinedVariantTableHolder th.niceHeadersThatAreGeneLinks{
-    background: white;
-    transform-origin: left;
-    -webkit-transform: rotate(-60deg);
-    transform: rotate(-60deg);
-    max-width: 2px;
-    font-weight: normal;
-    font-size: 20px;
-    text-align: left;
-    background:rgba(0,0,0,0)
+    background:rgba(0,0,0,0);
+    border: 0;
 }
 .combinedVariantTableHolder th.niceHeadersThatAreGeneLinks.active{
     font-weight: bold;
