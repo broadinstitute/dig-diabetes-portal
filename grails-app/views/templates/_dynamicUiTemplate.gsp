@@ -36,8 +36,8 @@
 
 <script id="dynamicEqtlVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
      <div class="summaryVariantRecord {{category}}" geneNumber={{geneNumber}}  tissueNumber={{tissueNumber}}>
-     <div>gene={{geneNumber}}</div>
-     <div>tissue={{tissueNumber}}</div>
+     <div>G:{{geneNumber}}</div>
+     <div>T:{{tissueNumber}}</div>
      </div>
 </script>
 
@@ -81,6 +81,10 @@
       <div class="credset.absent"></div>
       {{/variantAnnotationIsPresent}}
 </script>
+
+<script id="dynamicVariantCellAssociations"  type="x-tmpl-mustache">
+      <div>{{valueToDisplay}}</div>
+ </script>
 
 
 %{--Called from displayRefinedModContext, displayTissuesPerGeneFromEqtl, displayRefinedGenesInARange--}%

@@ -977,9 +977,15 @@ var clearBeforeStarting = false;
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
-                    recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
-                    recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
-                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, recordsPerGene);
+                    if ((recordsPerGene.source.length === 0) &&
+                        (recordsPerGene.experiment.length === 0)){
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = "";
+                    }else {
+                        recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
+                        recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, recordsPerGene);
+                    }
+
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -1858,16 +1864,20 @@ var clearBeforeStarting = false;
                 _.forEach(invertedArray,function(summaryColumn,index){
                     if ( typeof summaryColumn === 'undefined'){
                         summaryRow.columnCells.push(
-                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:0,
-                                tissueNumber:0,
-                                category:rememberCategoryFromOneLine}));
+                            "");
                     } else {
-                        summaryRow.columnCells.push(
-                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
-                                geneNumber: summaryColumn.genes.length,
-                                tissueNumber: summaryColumn.tissues.length,
-                                category: rememberCategoryFromOneLine
-                            }));
+
+                            if ((summaryColumn.genes.length===0)&&(summaryColumn.tissues.length===0)){
+                                summaryRow.columnCells.push("");
+                            } else {
+                                summaryRow.columnCells.push(
+                                Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
+                                    geneNumber: summaryColumn.genes.length,
+                                    tissueNumber: summaryColumn.tissues.length,
+                                    category: rememberCategoryFromOneLine
+                                }));
+                            }
+
                     }
                 });
                 intermediateDataStructure.rowsToAdd.push(summaryRow);
@@ -1999,18 +2009,24 @@ var clearBeforeStarting = false;
 
     var displayVariantsForAPhenotype = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
 
-        var variantAnnotationAppearance = function(annotationName,recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,testToRun){
+        var variantAnnotationAppearance = function(annotationName,recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
+                                                   testToRun,category){
             var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             if ( typeof row === 'undefined'){
-                intermediateDataStructure.rowsToAdd.push ({ category: 'annotation',
-                    displayCategory:'annotation',
+                intermediateDataStructure.rowsToAdd.push ({ category: category,
+                    displayCategory:category,
                     subcategory: annotationName,
                     displaySubcategory: annotationName,
                     columnCells:  _.times(numberOfVariants, "")});
                 row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             }
-            var present = testToRun(recordsPerVariant)?[1]:[];
-            row.columnCells[indexOfColumn] = Mustache.render($("#dynamicVariantCellAnnotations")[0].innerHTML,{"variantAnnotationIsPresent":present});
+            if (category ==='annotation'){
+                var present = testToRun(recordsPerVariant)?[1]:[];
+                row.columnCells[indexOfColumn] = Mustache.render($("#dynamicVariantCellAnnotations")[0].innerHTML,{"variantAnnotationIsPresent":present});
+            }else if (category ==='association'){
+                var valueToDisplay = testToRun(recordsPerVariant);
+                row.columnCells[indexOfColumn] = Mustache.render($("#dynamicVariantCellAssociations")[0].innerHTML,{"valueToDisplay":valueToDisplay});
+            }
 
         };
 
@@ -2054,19 +2070,28 @@ var clearBeforeStarting = false;
                         _.forEach([ 'Coding',
                             'Splice site',
                             'UTR',
-                            'Promoter' ], function (eachAnnotation){
+                            'Promoter',
+                            'P-value'], function (eachAnnotation){
                             switch (eachAnnotation){
                                 case 'Coding':
-                                    variantAnnotationAppearance('Coding',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4))});
+                                    variantAnnotationAppearance('Coding',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
+                                        function(v){return ((v.MOST_DEL_SCORE > 0)&&(v.MOST_DEL_SCORE < 4))},'annotation');
                                     break;
                                 case 'Splice site':
-                                    variantAnnotationAppearance('Splice site',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('splice')>-1)});
+                                    variantAnnotationAppearance('Splice site',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
+                                        function(v){return (v.Consequence.indexOf('splice')>-1)},'annotation');
                                     break;
                                 case 'UTR':
-                                    variantAnnotationAppearance('UTR',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('UTR')>-1)});
+                                    variantAnnotationAppearance('UTR',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
+                                        function(v){return (v.Consequence.indexOf('UTR')>-1)},'annotation');
                                     break;
                                 case 'Promoter':
-                                    variantAnnotationAppearance('Promoter',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,function(v){return (v.Consequence.indexOf('promoter')>-1)});
+                                    variantAnnotationAppearance('Promoter',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
+                                        function(v){return (v.Consequence.indexOf('promoter')>-1)},'annotation');
+                                    break;
+                                case 'P-value':
+                                    variantAnnotationAppearance('P-value',recordsPerVariant,indexOfColumn,intermediateDataStructure,numberOfVariants,
+                                        function(v){return UTILS.realNumberFormatter(""+v.P_VALUE)},'association');
                                     break;
                                 default: break;
                             }
@@ -2748,8 +2773,8 @@ var clearBeforeStarting = false;
     var hideTissuesForAnnotation = function (annotationId){
         $('div.noDataHere.'+annotationId).parent().parent().hide();
         $('div.variantRecordExists.'+annotationId).parent().parent().hide();
-        $('button.shower.'+annotationId).hide();
-        $('button.hider.'+annotationId).show();
+        $('button.shower.'+annotationId).show();
+        $('button.hider.'+annotationId).hide();
     };
 
 
