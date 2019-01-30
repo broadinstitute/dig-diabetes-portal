@@ -26,41 +26,41 @@
 
                 <h3><g:message code="informational.als.FAQ.title1"></g:message></h3>
                 <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question1"></g:message></h4>
-                <g:message code="informational.als.FAQ.answer1"></g:message></ul>
+                <g:message code="informational.als.FAQ.answer1"></g:message>
 
-                <h4 class="dk-blue-bordered"><g:message code="informational.dataSubmission.section1title"></g:message></h4>
-                <ul><g:message code="informational.dataSubmission.section1"></g:message></ul>
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question2"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer2"></g:message>
 
-                <h4 class="dk-blue-bordered"><g:message code="informational.dataSubmission.section9title"></g:message></h4>
-                <ul><g:message code="informational.dataSubmission.section9"></g:message></ul>
+                <h3><g:message code="informational.als.FAQ.title2"></g:message></h3>
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question3"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer3"></g:message>
 
-                <h4 class="dk-blue-bordered"><g:message code="informational.dataSubmission.section2title"></g:message></h4>
-                <ul><g:message code="informational.dataSubmission.section2"></g:message></ul>
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question4"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer4"></g:message>
 
-                <h4 class="dk-blue-bordered"><g:message code="informational.dataSubmission.section3title"></g:message></h4>
-                <ul><g:message code="informational.dataSubmission.section3a"></g:message>
-                    <a href="${createLink(controller:'informational', action:'policies')}"><g:message code="portal.home.collaborate"/></a>
-                    <g:message code="informational.dataSubmission.section3b"></g:message>
-                </ul>
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question5"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer5"></g:message>
 
-                <h4 class="dk-blue-bordered"><g:message code="informational.dataSubmission.section5title"></g:message></h4>
-                <ul><g:message code="informational.dataSubmission.section5"></g:message></ul>
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question6"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer6"></g:message>
+
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question7"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer7"></g:message>
+
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.question8"></g:message></h4>
+            <g:message code="informational.als.FAQ.answer8"></g:message>
+<br />
+                <br />
+                <h4 class="dk-blue-bordered"><g:message code="informational.als.FAQ.resources.title"></g:message></h4>
+            <g:message code="informational.als.FAQ.resources"></g:message>
 
 
-                <h4 class="dk-blue-bordered"><g:message code="informational.dataSubmission.section5atitle"></g:message></h4>
-                <ul><g:message code="informational.dataSubmission.section5a"></g:message></ul>
-            </div>
 
-            <div class="col-md-3" style="padding-top:10px;">
-                <div class="dk-notice">
-                    <p class="dk-notice-header"><g:message code="informational.dataSubmission.section7header"></g:message></p>
-                    <p><g:message code="informational.dataSubmission.section7"></g:message></p>
-                </div>
-                <div class="dk-notice">
-                    <p class="dk-notice-header"><g:message code="informational.dataSubmission.section8header"></g:message></p>
-                    <p><g:message code="informational.dataSubmission.section8"></g:message></p>
-                </div>
-            </div>
+
+
+
+
+
         </div>
     </div>
     <!-- Le javascript
