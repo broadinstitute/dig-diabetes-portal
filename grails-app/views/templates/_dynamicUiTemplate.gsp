@@ -197,6 +197,22 @@
 </script>
 
 
+<script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
+
+                <div>
+                    <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+                      <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
+                           {{#tissues}}
+                              <div>{{tissueName}}</div>
+                           {{/tissues}}
+                           <div id="tooltip_tissues_{{geneName}}"></div>
+                           <div id="graphic_tissues_{{geneName}}"></div>
+                      </div>
+                    </div>
+                </div>
+
+
+</script>
 
 
 

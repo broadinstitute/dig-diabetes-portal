@@ -1478,6 +1478,7 @@ var clearBeforeStarting = false;
             returnObject.uniqueGenes.push({name:eachGene.geneName});
 
             var recordToDisplay = {tissues:[],
+                                    numberOfTissues:eachGene.tissues.length,
                                     geneName:eachGene.geneName};
             _.forEach(eachGene.tissues,function(eachTissue){
                 recordToDisplay.tissues.push({tissueName:eachTissue})
@@ -1515,7 +1516,7 @@ var clearBeforeStarting = false;
                 if (indexOfColumn===-1){
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 }else {
-                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
+                    intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlSummaryBody")[0].innerHTML,recordsPerGene);
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -1871,11 +1872,12 @@ var clearBeforeStarting = false;
                                 summaryRow.columnCells.push("");
                             } else {
                                 summaryRow.columnCells.push(
-                                Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
-                                    geneNumber: summaryColumn.genes.length,
-                                    tissueNumber: summaryColumn.tissues.length,
-                                    category: rememberCategoryFromOneLine
-                                }));
+                                    Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
+                                        geneNumber: summaryColumn.genes.length,
+                                        tissueNumber: summaryColumn.tissues.length,
+                                        category: rememberCategoryFromOneLine
+                                    })
+                                );
                             }
 
                     }
@@ -1972,10 +1974,7 @@ var clearBeforeStarting = false;
                     columnCells:  []};
                 _.forEach(invertedArray,function(summaryColumn,index){
                     if ( typeof summaryColumn === 'undefined'){
-                        summaryRow.columnCells.push(
-                            Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:0,
-                                tissueNumber:0,
-                                category:rememberCategoryFromOneLine}));
+                        summaryRow.columnCells.push("");
                     } else {
                         summaryRow.columnCells.push(
                             Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML,{   geneNumber:summaryColumn.genes.length,
@@ -2262,14 +2261,14 @@ var clearBeforeStarting = false;
          */
         objectDescribingDirectorButtons = {
             directorButtons: [
-                {buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
-                    description: 'find all variants in the above range with QTL relationship with some phenotype',
-                    outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
-                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
-                {buttonId: 'getEqtlsGivenVariantList', buttonName: 'eQTL',
-                    description: 'find all eQTL relationships for a given set of variants',
-                    outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
-                    reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
+                // {buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
+                //     description: 'find all variants in the above range with QTL relationship with some phenotype',
+                //     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
+                //     reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
+                // {buttonId: 'getEqtlsGivenVariantList', buttonName: 'eQTL',
+                //     description: 'find all eQTL relationships for a given set of variants',
+                //     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
+                //     reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
                 {buttonId: 'getVariantsFromQtlAndThenRetrieveEpigeneticData', buttonName: 'multi',
                     description: 'build a variant based table with a collection of epigenetic data',
                     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
