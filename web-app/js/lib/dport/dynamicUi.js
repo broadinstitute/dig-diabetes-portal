@@ -128,13 +128,7 @@ var clearBeforeStarting = false;
         var displayFunction = ( typeof followUp.displayRefinedContextFunction !== 'undefined') ?  followUp.displayRefinedContextFunction : undefined;
         var displayLocation= ( typeof followUp.placeToDisplayData !== 'undefined') ?  followUp.placeToDisplayData : undefined;
         var nextActionId= ( typeof followUp.actionId !== 'undefined') ?  followUp.actionId : undefined;
-        //if (( typeof displayFunction === 'undefined')&&
-        //    ( typeof displayLocation === 'undefined')&&
-        //    ( typeof nextActionId !== 'undefined')){
-        //    var followupDefaults = actionDefaultFollowUp(nextActionId);
-        //    displayFunction = followupDefaults.displayRefinedContextFunction;
-        //    displayLocation = followupDefaults.placeToDisplayData;
-        //}
+
         var functionToLaunchDataRetrieval;
 
         switch(actionId){
@@ -475,7 +469,27 @@ var clearBeforeStarting = false;
                     }
                 };
                 break;
-
+            case "getInformationFromDepictForGenesTable":
+                functionToLaunchDataRetrieval = function(){
+                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getInformationFromDepictForGenesTable"});
+                        actionToUndertake();
+                    } else {
+                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {gene: o.name}
+                        });
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getInformationFromDepictForGenesTable",
+                            retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
+                            dataForCall: geneNameArray,
+                            processEachRecord: processRecordsFromAbc,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
 
             default:
                 break;
@@ -2261,14 +2275,6 @@ var clearBeforeStarting = false;
          */
         objectDescribingDirectorButtons = {
             directorButtons: [
-                // {buttonId: 'getVariantsFromQtlForContextDescription', buttonName: 'QTL',
-                //     description: 'find all variants in the above range with QTL relationship with some phenotype',
-                //     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
-                //     reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
-                // {buttonId: 'getEqtlsGivenVariantList', buttonName: 'eQTL',
-                //     description: 'find all eQTL relationships for a given set of variants',
-                //     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
-                //     reference: 'https://s3.amazonaws.com/broad-portal-resources/tutorials/Genetic_association_primer.pdf'},
                 {buttonId: 'getVariantsFromQtlAndThenRetrieveEpigeneticData', buttonName: 'multi',
                     description: 'build a variant based table with a collection of epigenetic data',
                     outputBoxId:'#dynamicVariantHolder div.dynamicUiHolder',
@@ -2449,6 +2455,10 @@ var clearBeforeStarting = false;
 
             arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
                 actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
+
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromDepictForGenesTable',
+                actionDefaultFollowUp("getInformationFromDepictForGenesTable")));
 
             // arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
             //     actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
