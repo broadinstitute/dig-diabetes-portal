@@ -63,6 +63,7 @@ class RestServerService {
     private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
+    private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2287,7 +2288,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         String rawReturnFromApi =  getRestCallBase("${GET_EQTLS_FOR_A_VARIANT_LIST_URL}?${specifyRequestList.join("&")}", currentRestServer())
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
         return jsonArray
     }
 
@@ -2308,7 +2309,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         String rawReturnFromApi =  getRestCallBase("${GET_VARIANT_GTEX_EQTL_FROM_URL}?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
         //String rawReturnFromApi =  getRestCallBase("ledge/gtex_eqtl/object?${specifyRequestList.join("&")}", GET_TEMPORARY_EQTL_URL)
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
         return jsonArray
     }
 
@@ -2323,7 +2324,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             specifyRequestList << "tissue=${tissue}"
         }
         if ((chromosome) && (chromosome.length() > 0)) {
-            specifyRequestList << "chrom=${tissue}"
+            specifyRequestList << "chrom=${chromosome}"
         }
         if (startPosition > -1) {
             specifyRequestList << "start_pos=${startPosition}"
@@ -2338,9 +2339,41 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         String rawReturnFromApi =  getRestCall("${GET_REGION_FROM_ABC_URL}?${specifyRequestList.join("&")}".toString())
         JsonSlurper slurper = new JsonSlurper()
-        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as List
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
         return jsonArray
     }
+
+
+
+
+    public JSONArray gatherDepictData( String gene, String phenotype,
+                                    int  startPosition, int  endPosition, String chromosome ) {
+        List<String> specifyRequestList = []
+        if ((gene) && (gene.length() > 0)) {
+            specifyRequestList << "gene=${gene}"
+        }
+        if ((phenotype) && (phenotype.length() > 0)) {
+            specifyRequestList << "phenotype=${phenotype}"
+        }
+        if ((chromosome) && (chromosome.length() > 0)) {
+            specifyRequestList << "chrom=${chromosome}"
+        }
+        if (startPosition > -1) {
+            specifyRequestList << "start_pos=${startPosition}"
+        }
+        if (endPosition > -1) {
+            specifyRequestList << "end_pos=${endPosition}"
+        }
+
+
+        String rawReturnFromApi =  getRestCall("${GET_GENE_BASED_RECORDS_FROM_DEPICT_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
+
 
 
     public JSONArray gatherECaviarData( String gene, String tissue,

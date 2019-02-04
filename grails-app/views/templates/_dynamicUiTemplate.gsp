@@ -585,6 +585,20 @@
 
 
 
+<script id="depictGeneTableBody"  type="x-tmpl-mustache">
+
+            <div><a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
+               <div  class="collapse holdMultipleElements openDepictInGeneTable" id="depict_data_{{geneName}}">
+                    {{#recordByDataSet}}
+                       <div>pvalue={{formattedPValue}}</div>
+                       <div>from {{dataset}}</div>
+                    {{/recordByDataSet}}
+                    %{--<div id="tooltip_tissues_{{geneName}}"></div>--}%
+                    %{--<div id="graphic_tissues_{{geneName}}"></div>--}%
+               </div>
+            </div>
+
+</script>
 
 
 

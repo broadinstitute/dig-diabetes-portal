@@ -93,6 +93,12 @@ var clearBeforeStarting = false;
                 defaultFollowUp.placeToDisplayData =  '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getInformationFromDepictForGenesTable":
+                defaultFollowUp.displayRefinedContextFunction =  displayGenesFromDepict;
+                defaultFollowUp.placeToDisplayData =  '#dynamicGeneHolder div.dynamicUiHolder';
+                break;
+
+
             case "getRecordsFromAbcForTissueTable":
                 defaultFollowUp.displayRefinedContextFunction =  displayTissuesFromAbc;
                 defaultFollowUp.placeToDisplayData =  '#dynamicTissueHolder div.dynamicUiHolder';
@@ -475,14 +481,17 @@ var clearBeforeStarting = false;
                         var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId:"getInformationFromDepictForGenesTable"});
                         actionToUndertake();
                     } else {
-                        var geneNameArray = _.map(getAccumulatorObject("geneNameArray"), function (o) {
-                            return {gene: o.name}
+                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {gene: o.name,
+                                    phenotype: phenotype}
                         });
+
                         retrieveRemotedContextInformation(buildRemoteContextArray({
                             name: "getInformationFromDepictForGenesTable",
-                            retrieveDataUrl: additionalParameters.retrieveAbcDataUrl,
-                            dataForCall: geneNameArray,
-                            processEachRecord: processRecordsFromAbc,
+                            retrieveDataUrl: additionalParameters.retrieveDepictDataUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: processRecordsFromDepict,
                             displayRefinedContextFunction: displayFunction,
                             placeToDisplayData: displayLocation,
                             actionId: nextActionId
@@ -655,6 +664,7 @@ var clearBeforeStarting = false;
             geneModTerms:[],
             phenotypesByColocalization:[],
             genesByAbc:[],
+            genesByDepict:[],
             tissuesByAbc:[],
             variantsToAnnotate: [],
             genesPositionsExist:function(){
@@ -716,6 +726,7 @@ var clearBeforeStarting = false;
             variantsForEveryPhenotype:[],
             rawColocalizationInfo:[],
             rawAbcInfo:[],
+            rawDepictInfo:[],
             geneInfoArray:[],
             variantNameArray: [],
             eqtlsAggregatedPerVariant:[],
@@ -865,6 +876,24 @@ var clearBeforeStarting = false;
         };
 
         var rawAbcInfo = getAccumulatorObject('rawAbcInfo');
+
+        _.forEach(data,function(oneRec){
+
+            rawAbcInfo.push(oneRec);
+
+        });
+
+        return rawAbcInfo;
+    };
+
+
+
+    var processRecordsFromDepict = function (data){
+        // build up an object to describe this
+        var returnObject = {rawData:[]
+        };
+
+        var rawAbcInfo = getAccumulatorObject('rawDepictInfo');
 
         _.forEach(data,function(oneRec){
 
@@ -1063,6 +1092,114 @@ var clearBeforeStarting = false;
 
         });
     };
+
+
+
+
+
+    var displayGenesFromDepict = function (idForTheTargetDiv,objectContainingRetrievedRecords){
+        var returnObject = createNewDisplayReturnObject();
+
+        // for each gene collect up the data we want to display
+        _.forEach(_.groupBy(getAccumulatorObject("rawDepictInfo"),'gene'),function(value,geneName){
+            var geneObject = {geneName:geneName};
+            geneObject['chrom'] = _.first(_.map(_.uniqBy(value,'region_chr'),function(o){return o.region_chr}).sort());
+            var startPosRec = _.minBy(value,function(o){return o.region_start});
+            geneObject['start_pos'] = (startPosRec)?startPosRec.region_start:0;
+            var stopPosRec = _.maxBy(value,function(o){return o.region_end});
+            geneObject['stop_pos'] = (stopPosRec)?stopPosRec.region_end:0;
+            //geneObject['recordByDataSet'] = function(){
+            //    return _.groupBy(value,'dataset');
+            //};
+            var recordsByDataSet = [];
+            _.forEach( _.groupBy(value,'dataset'),function(recValue,datasetName){
+                var myRecValue = recValue[0];
+                myRecValue["formattedPValue"] = UTILS.realNumberFormatter(myRecValue["pvalue"]);
+                recordsByDataSet.push(myRecValue);
+            });
+
+            geneObject['recordByDataSet'] = recordsByDataSet;
+            returnObject.genesByDepict.push(geneObject);
+
+        });
+
+        addAdditionalResultsObject({genesFromAbc:returnObject});
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (( typeof returnObject.genesByDepict !== 'undefined') && ( returnObject.genesByDepict.length>0)) {
+            intermediateDataStructure.rowsToAdd.push({
+                category: 'Annotation',
+                displayCategory: 'Annotation',
+                subcategory: 'Depict',
+                displaySubcategory: 'Depict',
+                columnCells: []
+            });
+
+            // set up the headers, and give us an empty row of column cells
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                _.forEach(returnObject.genesByDepict, function (oneRecord) {
+                    intermediateDataStructure.headerNames.push(oneRecord.geneName);
+                    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
+                    intermediateDataStructure.headers.push({
+                        name: oneRecord.geneName,
+                        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
+                    });
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push("");
+                });
+            } else {
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord){
+                    intermediateDataStructure.headerNames.push (oneRecord.name);
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
+                });
+            }
+
+
+
+
+            // set up the headers, and give us an empty row of column cells
+
+
+            // fill in all of the column cells
+            _.forEach(returnObject.genesByDepict, function (recordsPerGene) {
+                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                } else {
+                    if ((recordsPerGene.recordByDataSet.length === 0)){
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = "";
+                    }else {
+                        recordsPerGene["numberOfRecords"] = recordsPerGene.recordByDataSet.length;
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = Mustache.render($("#depictGeneTableBody")[0].innerHTML, recordsPerGene);
+                    }
+
+                }
+            });
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
+
+
+
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicAbcGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
+        // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
+        //     returnObject
+        // ));
+        // and then store up some data that we will use when it's time to drill down
+        _.forEach(returnObject.genesByAbc, function (value){
+            $('#tissues_'+value.geneName).data('allUniqueTissues', value.abcTissuesVector());
+            $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
+            $('#tissues_'+value.geneName).data('regionStart', value.start_pos);
+            $('#tissues_'+value.geneName).data('regionEnd', value.stop_pos);
+            $('#tissues_'+value.geneName).data('geneName', value.geneName);
+        });
+
+    };
+
+
+
+
 
 
     var displayTissuesFromAbc = function (idForTheTargetDiv,objectContainingRetrievedRecords){
