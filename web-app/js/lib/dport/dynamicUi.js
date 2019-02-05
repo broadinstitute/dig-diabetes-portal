@@ -2595,6 +2595,8 @@ var clearBeforeStarting = false;
 //
             resetAccumulatorObject("abcAggregatedPerVariant");
 
+            destroySharedTable('table.combinedGeneTableHolder');
+
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromProximityForLocusContext",
                 actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
 
@@ -2811,7 +2813,13 @@ var clearBeforeStarting = false;
 
 
 
-
+var destroySharedTable = function (whereTheTableGoes) {
+    if ( $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
+        var datatable = $(whereTheTableGoes).dataTable();
+        datatable.fnDestroy(false);
+        $(whereTheTableGoes).empty()
+    }
+}
 
 
         var addToCombinedTable = function (variantAndDsAjaxUrl, variantInfoUrl,
