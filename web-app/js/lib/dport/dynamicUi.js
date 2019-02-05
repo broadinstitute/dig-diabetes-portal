@@ -2585,6 +2585,15 @@ var clearBeforeStarting = false;
         $('#retrieveMultipleRecordsTest').on('click', function () {
             var arrayOfRoutinesToUndertake = [];
 
+            resetAccumulatorObject("geneNameArray");
+            resetAccumulatorObject("geneInfoArray");
+//
+            resetAccumulatorObject("tissuesForEveryGene");
+            resetAccumulatorObject("genesForEveryTissue");
+//
+            resetAccumulatorObject("rawDepictInfo");
+//
+            resetAccumulatorObject("abcAggregatedPerVariant");
 
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromProximityForLocusContext",
                 actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
