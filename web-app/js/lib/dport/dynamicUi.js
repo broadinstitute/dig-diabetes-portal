@@ -169,7 +169,6 @@ var clearBeforeStarting = false;
                         resetAccumulatorObject("tissueNameArray");
                         resetAccumulatorObject("tissuesForEveryGene");
                         resetAccumulatorObject("genesForEveryTissue");
-                        //var geneNameArray = _.map(getAccumulatorObject("geneNameArray"),function(o){return {gene:o.name}});
                         var geneNameArray = _.map(getAccumulatorObject("geneInfoArray"),function(o){return {gene:o.name}});
                         retrieveRemotedContextInformation(buildRemoteContextArray ({
                             name:"getTissuesFromEqtlsForTissuesTable",
@@ -702,35 +701,19 @@ var clearBeforeStarting = false;
     };
 
     /***
-     * Default value of the shared accumulator object
+     * Default constructor of the shared accumulator object
      * @param additionalParameters
      * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
      */
-    var sharedAccumulatorObject = function (additionalParameters){
+    var AccumulatorObject = function (additionalParameters){
         var chrom=(additionalParameters.geneChromosome.indexOf('chr')>-1)?
             additionalParameters.geneChromosome.substr(3):
             additionalParameters.geneChromosome;
         return {
-            extentBegin:additionalParameters.geneExtentBegin,
-            extentEnd:additionalParameters.geneExtentEnd,
-            chromosome:chrom,
-            originalGeneName:additionalParameters.geneName,
-            rawQtlInfo:{},
-            geneNameArray:[],
-            tissueNameArray:[],
-            tissuesForEveryGene:[],
-            genesForEveryTissue:[],
-            modNameArray:[],
-            mods:[],
-            phenotypesForEveryVariant:[],
-            variantsForEveryPhenotype:[],
-            rawColocalizationInfo:[],
-            rawAbcInfo:[],
-            rawDepictInfo:[],
-            geneInfoArray:[],
-            variantNameArray: [],
-            eqtlsAggregatedPerVariant:[],
-            abcAggregatedPerVariant:[]
+            extentBegin: additionalParameters.geneExtentBegin,
+            extentEnd: additionalParameters.geneExtentEnd,
+            chromosome: chrom,
+            originalGeneName: additionalParameters.geneName
         };
     };
 
@@ -740,14 +723,24 @@ var clearBeforeStarting = false;
      * @returns {jQuery}
      */
     var getAccumulatorObject = function (chosenField){
-        var returnValue = $("#configurableUiTabStorage").data("dataHolder");
-        if ( typeof returnValue === 'undefined'){
+        var accumulatorObject = $("#configurableUiTabStorage").data("dataHolder");
+        var returnValue;
+        if ( typeof accumulatorObject === 'undefined'){
             alert('Fatal error.  Malfunction is imminent. Missing accumulator object.');
             return;
         }
         if ( typeof chosenField !== 'undefined'){
-            returnValue = returnValue[chosenField];
+            returnValue = accumulatorObject[chosenField];
+            if ( typeof returnValue === 'undefined'){
+                // if someone requests a field that doesn't exist then let's presume that they are going to
+                //  want an array. Create one, add it to the accumulator object, and then give them a pointer to it
+                accumulatorObject[chosenField] = new Array();
+                returnValue = accumulatorObject[chosenField];
+            }
+        } else {
+            returnValue = accumulatorObject;
         }
+
         return returnValue
     };
 
@@ -761,7 +754,8 @@ var clearBeforeStarting = false;
             alert("Serious error.  Attempted assignment of unspecified field.");
             return;
         }
-        getAccumulatorObject()[specificField]=value;
+        var accumulatorObject = getAccumulatorObject();
+        accumulatorObject[specificField]=value;
         return getAccumulatorObject(specificField);
     };
 
@@ -771,12 +765,12 @@ var clearBeforeStarting = false;
      */
     var resetAccumulatorObject =  function(specificField){
         var additionalParameters = getDyanamicUiVariables();
-        var filledOutSharedAccumulatorObject = sharedAccumulatorObject(additionalParameters);
+        var filledOutSharedAccumulatorObject = new AccumulatorObject(additionalParameters);
         if ( typeof specificField !== 'undefined'){
             if ( typeof filledOutSharedAccumulatorObject === 'undefined'){
                 alert(" Unexpected absence of field '"+specificField+"' in shared accumulator object");
             }
-            getAccumulatorObject()[specificField]=filledOutSharedAccumulatorObject[specificField]
+            setAccumulatorObject(specificField,[]);
         } else {
             $("#configurableUiTabStorage").data("dataHolder", filledOutSharedAccumulatorObject);
         }
@@ -2594,8 +2588,12 @@ var clearBeforeStarting = false;
             resetAccumulatorObject("rawDepictInfo");
 //
             resetAccumulatorObject("abcAggregatedPerVariant");
+            
 
             destroySharedTable('table.combinedGeneTableHolder');
+
+            // setAccumulatorObject('fooby',[1,2]);
+            // var testy = getAccumulatorObject('fooby');
 
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromProximityForLocusContext",
                 actionDefaultFollowUp("getTissuesFromProximityForLocusContext")));
