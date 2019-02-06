@@ -125,7 +125,8 @@ ul.nav-tabs > li.active > a { background-color: #fff !important; }
                                                                    'allowExperimentChoice': 1,
                                                                    'allowPhenotypeChoice' : 1,
                                                                    'allowStratificationChoice': 1,
-                                                                   'grsVariantSet':'anuba_T2D']"/>
+                                                                   'grsVariantSet':'anuba_T2D',
+                                                                   'displayBiallelicSwitch':0]"/>
 
         </div>
     </div>

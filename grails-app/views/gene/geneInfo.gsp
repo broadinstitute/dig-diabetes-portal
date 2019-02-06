@@ -319,7 +319,8 @@
                                                                            'allowExperimentChoice': 0,
                                                                            'allowPhenotypeChoice' : 1,
                                                                            'allowStratificationChoice': 1,
-                                                                           'grsVariantSet':'']"/>
+                                                                           'grsVariantSet':'',
+                                                                           'displayBiallelicSwitch':1]"/>
                 </g:if>
 
 

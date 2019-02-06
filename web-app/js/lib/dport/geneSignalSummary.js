@@ -2126,6 +2126,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     allowExperimentChoice: false,
                     allowPhenotypeChoice: true,
                     allowStratificationChoice: true,
+                    displayBiallelicSwitch: true,
                     defaultPhenotype: phenotypeName
                 },
                 additionalParameters.geneName,

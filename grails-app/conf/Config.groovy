@@ -159,7 +159,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digawsqanewKB
+defaultRestServer = digawsdevnewKB
 //defaultRestServer = digawsdevWorkflowKB
 
 
@@ -625,7 +625,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the green boxes on the variant info page
                                                 0, // expose a secondary table and the credible set page built around genes, not just variants
                                                 0, // clicking on a variant can take you to the variant info page, or else to a range page (as in V2F)
-                                                0, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
+                                                1, // utilize bi-allelic gate, as opposed to the version that depends on multi-allelic definitions
                                                 0,  // access UC San Diego data remotely? I'm not sure if this works anymore
                                                 0, // LEDGE tab on the gene page
                                                 0, // Hi-C tab on the gene page

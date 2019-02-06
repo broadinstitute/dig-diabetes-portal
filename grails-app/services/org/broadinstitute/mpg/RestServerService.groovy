@@ -2764,26 +2764,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
             int numberOfVariants = apiResults.numRecords
             for (int j = 0; j < numberOfVariants; j++) {
                 List<String> keys = []
-                if (!retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+                //if (!retrieveBeanForCurrentPortal().utilizeBiallelicGait){
                     for (int i = 0; i < apiResults.variants[j]?.size(); i++) {
                         keys << (new JSONObject(apiResults.variants[j][i]).keys()).next()
                     }
-                }
+               // }
                 def valueToLoopOver
-                if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
-                }else {
+//                if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+//                    valueToLoopOver = (apiResults.variants[j] as Map).keySet()
+//                }else {
                     valueToLoopOver = keys
-                }
+//                }
                 List<String> variantSpecificList = []
                 for (def key in valueToLoopOver) {
                     def value
-                    if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                        value = apiResults.variants[j][key]
-                    } else {
+//                    if (retrieveBeanForCurrentPortal().utilizeBiallelicGait){
+//                        value = apiResults.variants[j][key]
+//                    } else {
                         ArrayList valueArray = apiResults.variants[j][key]
                         value = valueArray.findAll { it }[0]
-                    }
+ //                   }
                     if (value instanceof String) {
                         String stringValue = value as String
                         variantSpecificList << "{\"level\":\"${key}\",\"count\":\"${stringValue}\"}"

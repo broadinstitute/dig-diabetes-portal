@@ -11,7 +11,8 @@ $( document ).ready( function (){
             allowPhenotypeChoice : ${allowPhenotypeChoice},
             allowStratificationChoice: ${allowStratificationChoice},
             grsVariantSet:'${grsVariantSet}',
-            modifiedGaitSummary:'${modifiedGaitSummary}'
+            modifiedGaitSummary:'${modifiedGaitSummary}',
+            displayBiallelicSwitch:${displayBiallelicSwitch}
         },
         '${geneName}',
         true,

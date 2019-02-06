@@ -193,15 +193,6 @@ mpgSoftware.burdenTestShared = (function () {
                                        allowStratificationByAncestry,
                                        selectionForDataSetFilter,
                                        urlHolder) {
-        //sampleMetadataExperimentAjaxUrl,
-        //sampleMetadataAjaxWithAssumedExperimentUrl,
-        //variantOnlyTypeAheadUrl,
-        //sampleMetadataAjaxUrl,
-        //generateListOfVariantsFromFiltersAjaxUrl,
-        //retrieveSampleSummaryUrl,
-        //variantInfoUrl,
-        //variantAndDsAjaxUrl,
-        //burdenTestVariantSelectionOptionsAjaxUrl){
         displayParameters["variantsSetRefinement"] = (( typeof displayParameters.grsVariantSet === 'undefined') ||
             (displayParameters.grsVariantSet.length === 0)) ? [1] : [];
         mpgSoftware.burdenTestShared.initializeGaitUi(selectionToFill,
@@ -212,13 +203,6 @@ mpgSoftware.burdenTestShared = (function () {
         mpgSoftware.burdenTestShared.retrieveExperimentMetadata(selectionForDataSetFilter, urlHolder.sampleMetadataExperimentAjaxUrl,
             geneName, displayParameters.grsVariantSet);
         mpgSoftware.burdenTestShared.preloadInteractiveAnalysisData(urlHolder.sampleMetadataAjaxWithAssumedExperimentUrl, urlHolder,
-            //urlHolder.variantOnlyTypeAheadUrl,
-            //urlHolder.sampleMetadataAjaxUrl,
-            //urlHolder.generateListOfVariantsFromFiltersAjaxUrl,
-            //urlHolder.retrieveSampleSummaryUrl,
-            //urlHolder.variantInfoUrl,
-            //urlHolder.variantAndDsAjaxUrl,
-            //urlHolder.burdenTestVariantSelectionOptionsAjaxUrl,
             displayParameters);
     };
 
@@ -386,24 +370,10 @@ mpgSoftware.burdenTestShared = (function () {
      *  Use this if you have only one data set, since then we don't need to burden the user with the choice
      */
     var preloadInteractiveAnalysisData = function (sampleMetadataAjaxWithAssumedExperimentUrl, urlHolder,
-                                                   //linkToTypeaheadUrl,
-                                                   //sampleMetadataAjaxUrl,
-                                                   //generateListOfVariantsFromFiltersAjaxUrl,
-                                                   //retrieveSampleSummaryUrl,
-                                                   //variantInfoUrl,
-                                                   //variantAndDsAjaxUrl,
-                                                   //burdenTestVariantSelectionOptionsAjaxUrl,
                                                    displayParameters) {
         $('.caatSpinner').show();
         var dropDownSelector = '#phenotypeFilter';
         var strataChooserMarker = [];
-        //var rememberLinkToTypeaheadUrl = linkToTypeaheadUrl;
-        //var rememberSampleMetadataAjaxUrl = sampleMetadataAjaxUrl;
-        //var rememberGenerateListOfVariantsFromFiltersAjaxUrl = generateListOfVariantsFromFiltersAjaxUrl;
-        //var rememberRetrieveSampleSummaryUrl = retrieveSampleSummaryUrl;
-        //var rememberVariantInfoUrl = variantInfoUrl;
-        //var rememberVariantAndDsAjaxUrl = variantAndDsAjaxUrl;
-        //var rememberBurdenTestVariantSelectionOptionsAjaxUrl = burdenTestVariantSelectionOptionsAjaxUrl;
         var rememberDisplayParameters = displayParameters;
         var rememberUrlHolder = urlHolder;
         if (portalTypeWithAncestry) {
@@ -448,15 +418,6 @@ mpgSoftware.burdenTestShared = (function () {
                 }
 
                 refreshGaitDisplay('#datasetFilter', '#phenotypeFilter', '#stratifyDesignation', '#caseControlFiltering', true, rememberUrlHolder);
-                //{
-                //    linkToTypeaheadUrl:rememberLinkToTypeaheadUrl,
-                //    sampleMetadataAjaxUrl:rememberSampleMetadataAjaxUrl,
-                //    generateListOfVariantsFromFiltersAjaxUrl:rememberGenerateListOfVariantsFromFiltersAjaxUrl,
-                //    variantInfoUrl:rememberVariantInfoUrl,
-                //    retrieveSampleSummaryUrl:rememberRetrieveSampleSummaryUrl,
-                //    variantAndDsAjaxUrl:rememberVariantAndDsAjaxUrl,
-                //    burdenTestVariantSelectionOptionsAjaxUrl:rememberBurdenTestVariantSelectionOptionsAjaxUrl
-                //});
                 // make sections visible or invisible
                 if ((typeof rememberDisplayParameters.allowExperimentChoice !== 'undefined') && (rememberDisplayParameters.allowExperimentChoice)) {
                     $(".chooseExperiment").css('display', 'block');
@@ -473,6 +434,12 @@ mpgSoftware.burdenTestShared = (function () {
                 } else {
                     $(".chooseStratification").css('display', 'none');
                 }
+                if ((typeof rememberDisplayParameters.displayBiallelicSwitch !== 'undefined') && (rememberDisplayParameters.displayBiallelicSwitch)) {
+                    $("div.biallelicCheckbox").css('display', 'block');
+                } else {
+                    $("div.biallelicCheckbox").css('display', 'none');
+                }
+
                 // choose default phenotype
                 if (typeof rememberDisplayParameters.defaultPhenotype !== 'undefined') {
                     var defaultPhenotype = rememberDisplayParameters.defaultPhenotype;

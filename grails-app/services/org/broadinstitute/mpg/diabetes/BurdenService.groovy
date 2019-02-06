@@ -132,7 +132,6 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
         int mostDelScore = interpretDeleteriousnessParameterToGenerateMds (variantSelectionOptionId)
         String operand = interpretDeleteriousnessParameterToGenerateHackOperator (variantSelectionOptionId)
 
-        dataSet = "ExSeq_52k_mdv55"
         List <String> filterList = []
 
         filterList << """{"parameter": "most_del_score", "operator": "${operand}", "value": ${mostDelScore}}""".toString()
@@ -146,7 +145,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
         // get the json string to send to the getData call
         try {
-            jsonString = """{   "version": "mdv32",
+            jsonString = """{   "version": "${metaDataService?.getDataVersion()}",
                 "dataset": "${dataSet}",
                 "phenotype": "T2D",
                 "filters": [
@@ -224,7 +223,15 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
     protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
         JSONObject returnValue
 
-        if ( restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait ){
+
+        String alleleType = ""
+        SampleGroup sampleGroupObj = metaDataService.getSampleGroupByName(dataSet,MetaDataService.METADATA_SAMPLE)
+        if (sampleGroupObj?.getMeaningSet()?.contains(PortalConstants.PROPERTY_MEANING_MULTI_ALLELE_KEY)){
+            alleleType=  PortalConstants.JSON_BURDEN_OPERATION_ALLELE_TYPE_KEY;
+        }
+
+        if (( restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait )&&
+                (alleleType ==  PortalConstants.JSON_BURDEN_OPERATION_ALLELE_TYPE_KEY)){
             returnValue = getBiallelicVariantsForGene ( geneString,  variantSelectionOptionId,  additionalQueryFilterList,  dataSet)
         }else{
             returnValue = getMultiallelicVariantsForGene ( geneString,  variantSelectionOptionId,  additionalQueryFilterList,  dataSet)
@@ -382,7 +389,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
             // filter the larger json object based on the variants that passed the above
             if (restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-                jsonObject.variants = jsonObject.variants?.findAll{Map v->return burdenVariantList.contains(v["VAR_ID"])}
+               // jsonObject.variants = jsonObject.variants?.findAll{Map v->return burdenVariantList.contains(v["VAR_ID"])}
+                jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
             } else {
                 jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
             }

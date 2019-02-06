@@ -87,7 +87,7 @@
                 Choose a phenotype and partitioning strategy
             </h3>
         </div>
-        <div class="">
+        <div class="biallelicCheckbox">
             <div class="checkbox">
                  <label><input id="biallelicCheckbox" type="checkbox" value="">Use bi-allelic calculation</label>
             </div>
