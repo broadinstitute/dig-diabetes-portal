@@ -2588,7 +2588,7 @@ var clearBeforeStarting = false;
             resetAccumulatorObject("rawDepictInfo");
 //
             resetAccumulatorObject("abcAggregatedPerVariant");
-            
+
 
             destroySharedTable('table.combinedGeneTableHolder');
 
@@ -2717,7 +2717,20 @@ var clearBeforeStarting = false;
 
 
 
-
+    var storeCellInMemoryRepresentationOfSharedTable = function (   whichTable,
+                                                                    cellContent,
+                                                                    annotation,
+                                                                    rowIndex,
+                                                                    columnIndex,
+                                                                    numberOfColumns ){
+        var indexInOneDimensionalArray = (rowIndex*numberOfColumns)+columnIndex;
+        var sharedTable = getAccumulatorObject("sharedTable_"+whichTable);
+        if (indexInOneDimensionalArray > sharedTable.length){
+            // we must be on a new row. We know that rows are added sequentially
+            sharedTable.push.apply(sharedTable, new Array(numberOfColumns));
+        }
+        sharedTable [indexInOneDimensionalArray] = cellContent;
+    }
 
 
     var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure) {
@@ -2761,7 +2774,7 @@ var clearBeforeStarting = false;
                 });
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
                 // Make the headers look like we want them to
-                _.forEach(datatable.table().columns().header(),function(o){
+                _.forEach(datatable.table().columns().header(),function(o,columnIndex){
                     var domElement = $(o);
                     var headerName = domElement.text().trim();
                     if ((headerName.length >  5) &&
@@ -2777,6 +2790,12 @@ var clearBeforeStarting = false;
                             partsOfId[2]+"/"+partsOfId[3]);
                         domElement.attr("data-toggle","popover");
                     }
+                    storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                        headerName,
+                        'header',
+                        0,
+                        columnIndex,
+                        intermediateStructure.headers.length+2);
                 });
             }
         } else {
@@ -2785,7 +2804,7 @@ var clearBeforeStarting = false;
 
 
         var rememberCategory = "";
-        _.forEach(intermediateStructure.rowsToAdd, function (row) {
+        _.forEach(intermediateStructure.rowsToAdd, function (row,newRowCount) {
             rememberCategory = row.category;
             var rowDescriber = [];
             rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
