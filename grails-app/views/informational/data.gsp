@@ -89,61 +89,94 @@
 
                 </g:if>
                 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Polygenic Risk Scores</h1>
+            <div class="col-md-12">
+                <h1 class="dk-page-title">Polygenic Risk Scores</h1>
 
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS"></g:message></p>
-                    <p style="font-weight: 300; font-size: 15px;">
+                <p style="font-weight: 300; font-size: 18px;"><g:message code="informational.about.PRS"></g:message></p>
+                <p style="font-weight: 300; font-size: 15px;">
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet"></g:message><br>
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet.author"></g:message><g:message code="informational.shared.publications.etal"></g:message><br>
                     <g:message code="informational.shared.publications.Khera_2018_NatGenet.citation"></g:message><br>
                 </p>
-                    <p style="font-weight: 300; font-size: 15px;">
-                        <a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
-                    </p>
-                    <p>
-                        <i><g:message code="informational.mi.prsinfo"></g:message></i>
-                    </p>
-<hr width="70%" size="10">
-                    <p style="font-weight: 300; font-size: 18px;">
-                        <g:message code="informational.data.download.LTRfile2"></g:message></p>
-                        <p style="font-weight: 300; font-size: 15px;">
+                <p style="font-weight: 300; font-size: 15px;">
+                    <a href="https://personal.broadinstitute.org/mvon/AtrialFibrillation_PRS_LDpred_rho0.003_v3.zip" target="_blank">Atrial fibrillation (297.3 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/BreastCancer_PRS_PT_r2_0.2_p_0.0005_v3.zip" target="_blank">Breast cancer (253 KB)</a> | <a href="https://personal.broadinstitute.org/mvon/CoronaryArteryDisease_PRS_LDpred_rho0.001_v3.zip" target="_blank">Coronary artery disease (292.9 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/InflammatoryBowelDisease_PRS_LDpred_rho0.1_v3.zip" target="_blank">Inflammatory bowel disease (305.1 MB)</a> | <a href="https://personal.broadinstitute.org/mvon/Type2Diabetes_PRS_LDpred_rho0.01_v3.zip" target="_blank">Type 2 diabetes (305.6 MB)</a>
+                </p>
+                <p>
+                    <i><g:message code="informational.mi.prsinfo"></g:message></i>
+                </p>
+                <hr width="70%" size="10">
+                <p style="font-weight: 300; font-size: 18px;">
+                    <g:message code="informational.data.download.LTRfile2"></g:message></p>
+                <p style="font-weight: 300; font-size: 15px;">
                     <g:message code="informational.shared.publications.Weng_2017_Circulation"></g:message><br>
                     <g:message code="informational.shared.publications.Weng_2017_SciRep.author"></g:message><g:message code="informational.shared.publications.etal"></g:message>
                     <g:message code="informational.shared.publications.Weng_2017_Circulation.citation"></g:message><br>
                 </p>
-    </div>
+            </div>
 
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Download Summary Statistics</h1>
-                    </div>
-                    <div class="col-md-12">
-                        <table class="table table-condensed table-responsive table-striped" border="1">
-                            <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
-
-
-                            <tr><td><a href="https://jamanetwork.com/journals/jama/article-abstract/2718069" target="_blank">Online in JAMA</a></td><td>Association between titin loss-of-function variants and early-onset atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.AF.WGS.TOPMed.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/AF_WGS_TOPMed_Freeze4_GWAS.README.txt" target="_blank">README</a></td></tr>
-                            <tr><td><a href="https://www.ahajournals.org/doi/10.1161/CIRCULATIONAHA.118.035774" target="_blank">Online in Circulation</a></td><td>Phenotypic Refinement of Heart Failure in a National Biobank Facilitates Genetic Discovery.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.HRC.GWAS.UKBB.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/Heart_failure_GWAS_README.txt" target="_blank">README</a></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure.</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/UKB.v2.albuminuria.n382500.README.txt" target="_blank">README</a></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td><td><g:message code="informational.data.download.QRS_README"></g:message></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/29892015" target="_blank">PMID:29892015</a></td><td>Multi-ethnic genome-wide association study for atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/AF_HRC_GWAS_ALLv11.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.AF_HRC_README"></g:message></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/29748316" target="_blank">PMID:29748316</a></td><td>Common and Rare Coding Genetic Variation Underlying the Electrocardiographic PR Interval.</td><td><a href="https://personal.broadinstitute.org/mvon/29748316.PR.interval.ExomeChip.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.EPRI_README"></g:message></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28794112" target="_blank">PMID:28794112</a></td><td>Fifteen Genetic Loci Associated With the Electrocardiographic P Wave.</td><td><a href="https://personal.broadinstitute.org/mvon/28794112.PWI.GWAS.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.PWI_README"></g:message></td></tr>
-                            <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28416818" target="_blank">PMID:28416818</a></td><td>Large-scale analyses of common and rare variants identify 12 new loci associated with atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/28416818.2017.AFGen.GWAS.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.AFGen2017_README"></g:message></td></tr>
+            <div class="col-md-12">
+                <h1 class="dk-page-title">Download Summary Statistics</h1>
+            </div>
+            <div class="col-md-12">
+                <table class="table table-condensed table-responsive table-striped" border="1">
+                    <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
 
 
-                        </table>
-                    </div>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30535219" target="_blank">PMID:30535219</a></td><td>Association between titin loss-of-function variants and early-onset atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.AF.WGS.TOPMed.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/AF_WGS_TOPMed_Freeze4_GWAS.README.txt" target="_blank">README</a></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30586722" target="_blank">PMID:30586722</a></td><td>Phenotypic Refinement of Heart Failure in a National Biobank Facilitates Genetic Discovery.</td><td><a href="https://personal.broadinstitute.org/mvon/2018.HRC.GWAS.UKBB.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/Heart_failure_GWAS_README.txt" target="_blank">README</a></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30220432" target="_blank">PMID:30220432</a></td><td>Genetic Association of Albuminuria with Cardiometabolic Disease and Blood Pressure.</td><td><a href="https://personal.broadinstitute.org/mvon/UKB.v2.albuminuria.n382500.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/CVDKP/UKB.v2.albuminuria.n382500.README.txt" target="_blank">README</a></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30012220" target="_blank">PMID:30012220</a></td><td>Exome-chip meta-analysis identifies novel loci associated with cardiac conduction, including ADAMTS6.</td><td><a href="https://data.mendeley.com/datasets/7jgbckpdr4/1" target="_blank">Download files</a></td><td><g:message code="informational.data.download.QRS_README"></g:message></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/29892015" target="_blank">PMID:29892015</a></td><td>Multi-ethnic genome-wide association study for atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/AF_HRC_GWAS_ALLv11.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.AF_HRC_README"></g:message></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/29748316" target="_blank">PMID:29748316</a></td><td>Common and Rare Coding Genetic Variation Underlying the Electrocardiographic PR Interval.</td><td><a href="https://personal.broadinstitute.org/mvon/29748316.PR.interval.ExomeChip.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.EPRI_README"></g:message></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28794112" target="_blank">PMID:28794112</a></td><td>Fifteen Genetic Loci Associated With the Electrocardiographic P Wave.</td><td><a href="https://personal.broadinstitute.org/mvon/28794112.PWI.GWAS.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.PWI_README"></g:message></td></tr>
+                    <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/28416818" target="_blank">PMID:28416818</a></td><td>Large-scale analyses of common and rare variants identify 12 new loci associated with atrial fibrillation.</td><td><a href="https://personal.broadinstitute.org/mvon/28416818.2017.AFGen.GWAS.zip" target="_blank">Download files</a></td><td><g:message code="informational.data.download.AFGen2017_README"></g:message></td></tr>
 
-                    <div class="col-md-12">
-                        <h1 class="dk-page-title">Genetic Association Datasets</h1>
-                    </div>
-                    <div class="col-md-12">
-                        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
-                    </div>
+
+                </table>
+            </div>
+
+            <div class="col-md-12">
+                <h1 class="dk-page-title">Genetic Association Datasets</h1>
+            </div>
+            <div class="col-md-12">
+                <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.MI.descr" default="about the data"/></p>
+            </div>
 
 
-                </g:elseif>
+        </g:elseif>
+
+            <g:elseif test="${g.portalTypeString()?.equals('sleep')}">
+
+
+                <div class="col-md-12">
+                    <h1 class="dk-page-title">Download Summary Statistics</h1>
+                </div>
+                <div class="col-md-12">
+                    <table class="table table-condensed table-responsive table-striped" border="1">
+                        <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
+
+
+                        <tr><td>Cade <i>et al</i>. 2019, in press</a></td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
+                            <td>Associations with average oxyhemoglobin saturation of an individual across an entire sleep episode: <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_average_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
+                                Associations with the single pointwise minimum oxyhemoglobin saturation of an individual across an entire sleep episode: <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_minimum_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
+                                Associations with the percentage of a single sleep recording where an individual has hypoxemia (defined as SpO2 &lt; 90%): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_percent_sleep_under_90_percent_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a>
+</td><td><a href="" target="_blank">README</a></td></tr>
+                        <tr><td>Lane <i>et al.</i>, <a href="https://www.biorxiv.org/content/10.1101/257956v1" target="_blank">preprint at bioRxiv</a></td><td>Biological and clinical insights from genetics of insomnia symptoms.</td><td><a href="https://personal.broadinstitute.org/mvon/Saxena_fullUKBB_Insomnia_summary_stats.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Insomnia_summary_stats_README" target="_blank">README</a></td></tr>
+
+
+                    </table>
+                </div>
+
+                <div class="col-md-12">
+                    <h1 class="dk-page-title">Genetic Association Datasets</h1>
+                </div>
+                <div class="col-md-12">
+                    <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.sleep.title" default="about the data"/></p>
+                </div>
+
+
+            </g:elseif>
+
             <g:elseif test="${g.portalTypeString()?.equals('epilepsy')}">
                 <div class="col-md-12">
                     <h1 class="dk-page-title">Data</h1>
@@ -164,15 +197,15 @@
                         <div class="dk-go-button dk-t2d-yellow dk-right-column-buttons"><a target="_blank" href="http://cerebrovascularportal.org/informational/downloads">Visit download page</a></div>
                     </div>
                 </g:elseif>
-<g:elseif test="${g.portalTypeString()?.equals('sleep')}">
-    <div class="col-md-12">
-        <h1 class="dk-page-title">Data</h1>
-    </div>
-    <div class="col-md-12">
-        <p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.sleep.title" default="about the data"/></p>
-    </div>
+%{--<g:elseif test="${g.portalTypeString()?.equals('sleep')}">--}%
+    %{--<div class="col-md-12">--}%
+        %{--<h1 class="dk-page-title">Data</h1>--}%
+    %{--</div>--}%
+    %{--<div class="col-md-12">--}%
+        %{--<p style="font-weight: 300; font-size: 18px;"><g:message code="aboutTheData.sleep.title" default="about the data"/></p>--}%
+    %{--</div>--}%
 
-</g:elseif>
+%{--</g:elseif>--}%
 
 
     </div>
