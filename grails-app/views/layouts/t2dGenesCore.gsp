@@ -191,12 +191,28 @@
                         addFilterToTraitslist();
                         break;
 
-                    case "variantsearchwf":
+                    /*case "variantsearchwf":
                         setMenuTriangle(".variant-search-btn");
                         break;
 
                     case "grsinfo":
                         setMenuTriangle(".grs-btn");
+                        break;*/
+
+                    case "grsinfo":
+                        setMenuTriangle(".analysis-modules-btn");
+                        break;
+
+                    case "variantsearchwf":
+                        setMenuTriangle(".analysis-modules-btn");
+                        break;
+
+                    case "traitSearch":
+                        setMenuTriangle(".analysis-modules-btn");
+                        break;
+
+                    case "modules":
+                        setMenuTriangle(".analysis-modules-btn");
                         break;
 
                     case "data":
