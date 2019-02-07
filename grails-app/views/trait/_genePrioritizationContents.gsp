@@ -9,6 +9,7 @@
         prioritizedGeneInfoAjaxUrl: '${createLink(controller: "trait", action: "prioritizedGeneInfoAjax")}',
         getGeneLevelResultsUrl: '${createLink(controller: "home", action: "getGeneLevelResults")}',
         launchGeneVariantQueryUrl: '${createLink(controller: "variantSearch", action: "findEveryVariantForAGene")}',
+        variantInfoUrl: '${createLink(controller: "variantSearch", action: "findEveryVariantForAGene")}',
         phenotypeDropdownIdentifier:'#phenotypeDropdownIdentifier',
         subphenotypeDropdownIdentifier:'#subphenotypeDropdownIdentifier',
         local:"${locale}",

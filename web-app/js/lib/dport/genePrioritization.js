@@ -221,6 +221,8 @@ var mpgSoftware = mpgSoftware || {};
                 width = 1050 - margin.left - margin.right,
                 height = 600 - margin.top - margin.bottom;
 
+
+            var mySavedVariablesTest = getMySavedVariables();
             var manhattan = baget.manhattan()
                 .width(width)
                 .height(height)
@@ -264,7 +266,7 @@ var mpgSoftware = mpgSoftware || {};
                 })
                 .includeXChromosome(true)
                 .includeYChromosome(false)
-                .dotClickLink(savedVar.variantInfoUrl)
+                .dotClickLink(mySavedVariablesTest.variantInfoUrl)
                 ;
 
             d3.select("#manhattanPlot1").call(manhattan.render);

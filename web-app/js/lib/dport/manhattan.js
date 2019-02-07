@@ -321,7 +321,10 @@ var baget = baget || {};  // encapsulating variable
         };
 
         var createDots = function (dotHolder,data,chromosomes, radius, xScale,yScale,dataExtent,c,tip) {
-          //  var savedVar = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+          var savedVar = mpgSoftware.manhattanplotTableHeader.getMySavedVariables();
+         //  var url =  '${createLink(controller: "trait", action: "ajaxClumpData")}'
+           var href= "${createLink(uri: '/', absolute: true)}"
+
             var anchors=dotHolder.selectAll('a.dot')
                 .data(data,function(d){        // merge data sets so that we hold only unique points
                     return(""+ chromosomeAccessor (d)+"_"+ xAxisAccessor (d)+"_"+ yAxisAccessor (d));
@@ -330,8 +333,11 @@ var baget = baget || {};  // encapsulating variable
                 .enter()
                 .append('a')
                 .attr('class', 'clickable')
-                .on("click", function(d) { window.open("http://alsportal.us-east-1.elasticbeanstalk.com/variantSearch/findEveryVariantForAGene?gene=" +nameAccessor(d));
-                });
+                .attr("xlink:href", function(d) {
+                    return dotClickLink+"/"+nameAccessor(d) ;
+                } );
+            // .on("click", function(d) { window.open ('<g:createLink controller="variantInfo" action="variantInfo" />');
+                // });
 
             var dots = anchors.append('circle')
                 .attr('class', 'dot')
@@ -740,7 +746,7 @@ var baget = baget || {};  // encapsulating variable
 
         instance.dotClickLink = function (x) {
             if (!arguments.length) return dotClickLink;
-            dotClickLink = "";
+            dotClickLink = x;
             return instance;
         };
 
