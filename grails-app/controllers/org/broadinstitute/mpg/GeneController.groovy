@@ -496,13 +496,14 @@ class GeneController {
         Boolean explicitlySelectSamples = false
         String geneName = params.geneName
         String dataSet = params.dataSet
+        String sampleDataSet = params.sampleDataSet
         int variantFilterOptionId = (params.filterNum ? Integer.valueOf(params.filterNum) : 0);     // default to all variants if none given
         String burdenTraitFilterSelectedOption = (params.burdenTraitFilterSelectedOption ? params.burdenTraitFilterSelectedOption : PortalConstants.BURDEN_DEFAULT_PHENOTYPE_KEY);               // default ot t2d if none given
         int mafOption = (params.mafOption ? Integer.valueOf(params.mafOption) : 1);                 // 1 is default, 2 is different ancestries if specified
         Float mafValue = ((params.mafValue && !params.mafValue?.equals("NaN")) ? new Float(params.mafValue) : null);                      // null float if none specified
 
         // TODO - eventually create new bean to hold all the options and have smarts for double checking validity
-        String codedVariantList = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, explicitlySelectSamples);
+        String codedVariantList = this.burdenService.generateListOfVariantsFromFilters(burdenTraitFilterSelectedOption, geneName, variantFilterOptionId, mafOption, mafValue, dataSet, sampleDataSet, explicitlySelectSamples);
 
         if (codedVariantList == null) {
             render(status: 200, contentType: "application/json"){variantInfo:{results:[]}}

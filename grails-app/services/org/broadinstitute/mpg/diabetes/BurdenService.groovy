@@ -220,12 +220,12 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
      * @param mostDelScore
      * @return
      */
-    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet) {
+    protected JSONObject getVariantsForGene(String geneString, int variantSelectionOptionId, List<QueryFilter> additionalQueryFilterList, String dataSet, String sampleDataSet ) {
         JSONObject returnValue
 
 
         String alleleType = ""
-        SampleGroup sampleGroupObj = metaDataService.getSampleGroupByName(dataSet,MetaDataService.METADATA_SAMPLE)
+        SampleGroup sampleGroupObj = metaDataService.getSampleGroupByName(sampleDataSet,MetaDataService.METADATA_SAMPLE)
         if (sampleGroupObj?.getMeaningSet()?.contains(PortalConstants.PROPERTY_MEANING_MULTI_ALLELE_KEY)){
             alleleType=  PortalConstants.JSON_BURDEN_OPERATION_ALLELE_TYPE_KEY;
         }
@@ -341,7 +341,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
 
 
-    public String  generateListOfVariantsFromFilters(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, Boolean explicitlySelectSamples) {
+    public String  generateListOfVariantsFromFilters(String phenotype, String geneString, int variantSelectionOptionId, int mafSampleGroupOption, Float mafValue, String dataSet, String sampleDataSet, Boolean explicitlySelectSamples) {
         // local variables
         JSONObject jsonObject, returnJson;
         List<Variant> variantList;
@@ -375,7 +375,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 
             // get the getData results payload
-            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet, sampleDataSet);
             log.info("got burden getData results: " + jsonObject);
 
 
@@ -389,8 +389,8 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
 
             // filter the larger json object based on the variants that passed the above
             if (restServerService.retrieveBeanForCurrentPortal().utilizeBiallelicGait){
-               // jsonObject.variants = jsonObject.variants?.findAll{Map v->return burdenVariantList.contains(v["VAR_ID"])}
-                jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
+                jsonObject.variants = jsonObject.variants?.findAll{Map v->return burdenVariantList.contains(v["VAR_ID"])}
+               // jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
             } else {
                 jsonObject.variants = jsonObject.variants?.findAll{List vals->vals.find{Map props->burdenVariantList.contains(props.VAR_ID)}}
             }
@@ -473,7 +473,7 @@ private Integer interpretDeleteriousnessParameterToGenerateMds (int variantSelec
             queryFilterList = this.getBurdenJsonBuilder().getMinorAlleleFrequencyFiltersByString(dataVersion, mafSampleGroupOption, mafValue, dataSet, metaDataService);
 
             // get the getData results payload
-            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet);
+            jsonObject = this.getVariantsForGene(geneString, variantSelectionOptionId, queryFilterList, dataSet, sampleDataSet);
             log.info("got burden getData results: " + jsonObject);
 
             // get the list of variants back

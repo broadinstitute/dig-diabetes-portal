@@ -89,7 +89,10 @@
         </div>
         <div class="biallelicCheckbox">
             <div class="checkbox">
-                 <label><input id="biallelicCheckbox" type="checkbox" value="">Use bi-allelic calculation</label>
+                 <label><input id="biallelicCheckbox" type="checkbox" value=""
+                 onchange="mpgSoftware.burdenTestShared.generateListOfVariantsFromFilters({generateListOfVariantsFromFiltersAjaxUrl:'${createLink(controller: 'gene', action: 'generateListOfVariantsFromFiltersAjax')}'},
+                                            mpgSoftware.burdenTestShared.buildVariantTable,
+                                            '${createLink(controller: 'variantInfo', action: 'variantInfo')}')">Use bi-allelic calculation</label>
             </div>
         </div>
 

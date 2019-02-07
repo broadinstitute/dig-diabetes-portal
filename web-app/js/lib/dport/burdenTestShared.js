@@ -671,13 +671,7 @@ mpgSoftware.burdenTestShared = (function () {
      *
      */
     var stratifiedSampleAndCovariateSection = function (dataSetId, phenotype, strataProperty, filterInfo, caseControlFiltering,
-                                                        urlHolder,
-                                                        // linkToTypeaheadUrl,
-                                                        // generateListOfVariantsFromFiltersAjaxUrl,
-                                                        // variantInfoUrl,
-                                                        // retrieveSampleSummaryUrl,
-                                                        // variantAndDsAjaxUrl,
-                                                        burdenTestVariantSelectionOptionsAjaxUrl) {
+                                                        urlHolder) {
         var stratumName;
         var multipleStrataExist = ((strataProperty !== 'none') && ( typeof strataProperty !== 'undefined'));
         if (!multipleStrataExist) {
@@ -1824,11 +1818,19 @@ mpgSoftware.burdenTestShared = (function () {
             _.forEach(variantListHolder, function (variantRec) {
                 //     $('#gaitTableDataHolder').append('<span class="variantsToCheck">'+variantRec.VAR_ID+'</span>')
                 var arrayOfRows = [];
-                var variantID = variantRec.VAR_ID;
-                if ((variantRec.CHROM) && (variantRec.POS)) {
-                    variantID = variantRec.CHROM + ":" + variantRec.POS;
+                var variantID;
+                var variantIdPieces = variantRec.VAR_ID.split("_");
+                if (( typeof variantRec.Reference_allele !== 'undefined') && ( typeof variantRec.Effect_allele !== 'undefined')){
+                    variantID = variantIdPieces[0]+"_"+variantIdPieces[1]+"_"+variantRec.Reference_allele+"_"+variantRec.Effect_allele;
                 }
-                arrayOfRows.push(variantRec.VAR_ID);
+                // else if (( typeof variantRec.Reference_Allele !== 'undefined') && ( typeof variantRec.Effect_Allele !== 'undefined')){
+                //     variantID = variantIdPieces[0]+"_"+variantIdPieces[1]+"_"+variantRec.Reference_Allele+"_"+variantRec.Effect_Allele;
+                // }
+                else {
+                    variantID = variantRec.VAR_ID;
+                }
+
+                arrayOfRows.push(variantID);
                 arrayOfRows.push('<a href="' + parms.variantInfoUrl + '/' + variantRec.VAR_ID + '" class="boldItlink">' + variantID + '</a>');
                 var DBSNP_ID = (variantRec.DBSNP_ID) ? variantRec.DBSNP_ID : '';
                 arrayOfRows.push(DBSNP_ID);
@@ -1885,7 +1887,8 @@ mpgSoftware.burdenTestShared = (function () {
                     burdenTraitFilterSelectedOption: burdenTraitFilterSelectedOption,
                     mafValue: specifiedMafValueId,
                     mafOption: selectedMafOptionId,
-                    dataSet: dataSet
+                    dataSet: dataSet,
+                    sampleDataSet:datasetFilter
                 },
                 async: true
             });
