@@ -113,9 +113,9 @@ div.dk-variant-search-builder div.row {
 }
 
 div.dk-variant-search-builder-title {
-	text-align: right;
-	font-size: 16px;
-	padding: 5px 0 0 0;
+	text-align: left;
+	font-size: 14px;
+	padding: 0 0 0 0;
 }
 
 div.dk-variant-search-builder-ui > div {
@@ -148,7 +148,7 @@ div.dk-t2d-advanced-filter {
 
 div.dk-submit-btn-wrapper {
 	padding: 0 15px 0 15px;
-	text-align: right;
+	text-align: center;
 }
 
 button.dk-search-btn-inactive, button.dk-search-btn-inactive:hover  {
@@ -841,19 +841,6 @@ div#functionalDataTableGoesHere_wrapper div.dataTables_scrollHeadInner {
 #datasetNamesTabs li.active > a { background-color: #bfe3ef;}
 
 
-span.new-dataset-flag {
-	display: inline-block;
-	position: absolute;
-	background-image: url(../images/new_dataset.png);
-	background-size: 46px 18px;
-	background-repeat: no-repeat;
-	background-position: center;
-	width: 65px;
-	height: 20px;
-	transform: rotate(-10deg);
-}
-
-
 #modeledPhenotypeTabs {background-color: #bfe3ef; padding-left:20px; border-top: none; border-bottom: none;}
 #modeledPhenotypeTabs li > a { border-left:solid 2px #9fd3df; border-right:solid 2px #9fd3df;}
 #modeledPhenotypeTabs li.active > a {background-color: #9fd3df;}
@@ -1199,4 +1186,44 @@ select.minimal:focus {
 	border-top: none;
 	border-bottom-left-radius: 5px;
 	border-bottom-right-radius: 5px;
+}
+
+span.new-dataset-flag {
+    display: inline-block;
+    position: absolute;
+    background-image: url(../images/new_dataset.png);
+    background-size: 46px 18px;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 65px;
+    height: 20px;
+    transform: rotate(-10deg);
+}
+
+.analysis-modules-btn ul {
+	display: none;
+	position: absolute;
+	padding: 0;
+	margin: 0;
+}
+
+.analysis-modules-btn ul > li {
+	background-color: rgba(1, 84, 149, .75);
+	font-size: 0.8em;
+	padding: 5px 15px 5px 15px;
+	border-bottom: solid 1px #666;
+	text-align: left;
+	list-style: none;
+}
+
+.analysis-modules-btn ul > li:hover {
+	background-color: rgba(1, 84, 149, 1);
+}
+
+.analysis-modules-btn ul > li:last-child {
+	border-bottom: none;
+}
+
+.analysis-modules-btn:hover ul {
+	display: block;
 }
