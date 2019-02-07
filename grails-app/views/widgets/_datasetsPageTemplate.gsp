@@ -105,6 +105,7 @@
 <g:render template="./data/GWAS_DNCRI" />
 <g:render template="./data/GWAS_ISGC_eu_dv1" />
 <g:render template="./data/GWAS_LOLIPOP" />
+<g:render template="./data/GWAS_MEDIA_aa" />
 
 
 
