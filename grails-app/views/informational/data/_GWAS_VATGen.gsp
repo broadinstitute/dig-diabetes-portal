@@ -2,8 +2,8 @@
 
 <h4>Dataset</h4>
 
-    <p>Download URL: <a href="https://www.nhlbi.nih.gov/research/intramural/researchers/ckdgen" target="_blank">https://www.nhlbi.nih.gov/research/intramural/researchers/ckdgen</a><br/>
-        Download date: 04/01/2017<br/>
+    <p>Download URL: <a href="https://grasp.nhlbi.nih.gov/FullResults.aspx" target="_blank">https://grasp.nhlbi.nih.gov/FullResults.aspx</a><br/>
+        Download date: 02/01/2019<br/>
 
 <h4>Publications</h4>
 
