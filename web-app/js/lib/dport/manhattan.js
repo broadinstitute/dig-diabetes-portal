@@ -334,7 +334,7 @@ var baget = baget || {};  // encapsulating variable
                 .append('a')
                 .attr('class', 'clickable')
                 .attr("xlink:href", function(d) {
-                    return dotClickLink+"/"+nameAccessor(d) ;
+                    return dotClickLink+nameAccessor(d) ;
                 } );
             // .on("click", function(d) { window.open ('<g:createLink controller="variantInfo" action="variantInfo" />');
                 // });
