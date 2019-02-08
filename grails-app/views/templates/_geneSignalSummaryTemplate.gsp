@@ -698,6 +698,17 @@ div.genePosition{
                                     <div class="dynamicUiHolder">
                                     </div>
                                 </div>
+                                <div class="row">
+                                    <div class="col-sm-1">
+                                        <button type="button" class="btn btn-link transpose" title="click to transpose table"
+                                        style="font-size: 32pt"
+                                        onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedGeneTableHolder')">
+                                            T
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-11">
+                                    </div>
+                                </div>
                                 <table class="combinedGeneTableHolder">
                                 </table>
 
@@ -728,6 +739,17 @@ div.genePosition{
                                     <div class="col-sm-12">
                                         <div class="refinementTable dynamicUiHolder">
 
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-1">
+                                                <button type="button" class="btn btn-link transpose" title="click to transpose table"
+                                                style="font-size: 32pt"
+                                                onclick = "mpgSoftware.dynamicUi.transposeThisTable('table.combinedVariantTableHolder')">
+                                                    T
+                                                </button>
+                                            </div>
+                                            <div class="col-sm-11">
+                                            </div>
                                         </div>
                                         <table class="combinedVariantTableHolder" style="border:0">
                                         </table>

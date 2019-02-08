@@ -2798,19 +2798,39 @@ var clearBeforeStarting = false;
                         intermediateStructure.headers.length+2);
                 });
             }
-        } else {
-            datatable =  $(whereTheTableGoes).dataTable();
         }
+        datatable =  $(whereTheTableGoes).dataTable();
+
 
 
         var rememberCategory = "";
         _.forEach(intermediateStructure.rowsToAdd, function (row,newRowCount) {
             rememberCategory = row.category;
             var rowDescriber = [];
+            var numberOfExistingRows = $(whereTheTableGoes+" tr").length;
+            var numberOfColumns  = $(row.columnCells).length;
             rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
+            storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                "<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>",
+                'content',
+                numberOfExistingRows,
+                0,
+                numberOfColumns);
             rowDescriber.push(row.displaySubcategory);
-            _.forEach(row.columnCells, function (val, key) {
+            storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                row.displaySubcategory,
+                'content',
+                numberOfExistingRows,
+                1,
+                numberOfColumns);
+            _.forEach(row.columnCells, function (val, index) {
                 rowDescriber.push(val);
+                storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                    val,
+                    'content',
+                    numberOfExistingRows,
+                    index +2,
+                    numberOfColumns);
             })
             $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
         });
@@ -2827,6 +2847,15 @@ var clearBeforeStarting = false;
 
 
     };
+
+
+
+ var transposeThisTable   = function (whereTheTableGoes) {
+     destroySharedTable(whereTheTableGoes);
+
+ };
+
+
 
 
 
@@ -2961,6 +2990,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 
 // public routines are declared below
     return {
+        transposeThisTable:transposeThisTable,
         displayTissuesForAnnotation:displayTissuesForAnnotation,
         hideTissuesForAnnotation:hideTissuesForAnnotation,
         installDirectorButtonsOnTabs: installDirectorButtonsOnTabs,
