@@ -641,7 +641,13 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders');
 
     };
 
@@ -822,14 +828,23 @@ var clearBeforeStarting = false;
      * @param returnObject
      * @param clearBeforeStarting
      */
-    var prepareToPresentToTheScreen = function(idForTheTargetDiv,templateInfo,returnObject,clearBeforeStarting,intermediateDataStructure) {
+    var prepareToPresentToTheScreen = function(idForTheTargetDiv,
+                                               templateInfo,
+                                               returnObject,
+                                               clearBeforeStarting,
+                                               intermediateDataStructure,
+                                               storeRecords,
+                                               typeOfRecord ) {
         if (clearBeforeStarting){
             $(idForTheTargetDiv).empty();
         }
 
         if ( typeof intermediateDataStructure !== 'undefined'){
 
-            buildOrExtendDynamicTable(intermediateDataStructure.tableToUpdate,intermediateDataStructure);
+            buildOrExtendDynamicTable(  intermediateDataStructure.tableToUpdate,
+                                        intermediateDataStructure,
+                                        storeRecords,
+                                        typeOfRecord );
 
         } else {
 
@@ -1032,11 +1047,15 @@ var clearBeforeStarting = false;
 
 
 
-            prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicAbcGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
-        // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
-        //     returnObject
-        // ));
-        // and then store up some data that we will use when it's time to drill down
+            prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+                                        '#dynamicAbcGeneTable',
+                                        returnObject,
+                                        clearBeforeStarting,
+                                        intermediateDataStructure,
+                                        true,
+                                        'geneTableGeneHeaders');
+
+
         _.forEach(returnObject.genesByAbc, function (value){
             $('#tissues_'+value.geneName).data('allUniqueTissues', value.abcTissuesVector());
             $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
@@ -1176,11 +1195,14 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicAbcGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
-        // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicAbcGeneTable')[0].innerHTML,
-        //     returnObject
-        // ));
-        // and then store up some data that we will use when it's time to drill down
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+                                    '#dynamicAbcGeneTable',
+                                    returnObject,
+                                    clearBeforeStarting,
+                                    intermediateDataStructure,
+                                    true,
+                                    'geneTableGeneHeaders');
+
         _.forEach(returnObject.genesByAbc, function (value){
             $('#tissues_'+value.geneName).data('allUniqueTissues', value.abcTissuesVector());
             $('#tissues_'+value.geneName).data('sourceByTissue', value.sourceByTissue());
@@ -1393,9 +1415,7 @@ var clearBeforeStarting = false;
 
         addAdditionalResultsObject({genesFromColocalization:returnObject});
         prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicColocalizationGeneTable',returnObject,clearBeforeStarting);
-        // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicColocalizationGeneTable')[0].innerHTML,
-        //     returnObject
-        // ));
+
 
         _.forEach(returnObject.phenotypesByColocalization, function (value){
             $('#tissues_'+value.geneName).data('allUniqueTissues', value.colocTissuesVector());
@@ -1403,47 +1423,6 @@ var clearBeforeStarting = false;
             $('#tissues_'+value.geneName).data('regionStart', value.start_pos);
             $('#tissues_'+value.geneName).data('regionEnd', value.stop_pos);
             $('#tissues_'+value.geneName).data('geneName', value.geneName);
-        });
-
-
-
-        $('div.openTissues').on('show.bs.collapse', function () {
-            // the user wants to drill down into the tissues. Let's make them a graphic using the data we stored above
-            var dataMatrix =
-                _.map($(this).data("sourceByTissue"),
-                    function(v,k){
-                        var retVal = [];
-                        _.forEach(v,function(oneRec){
-                            retVal.push(oneRec);
-                        });
-                        return retVal ;
-                    }
-                );
-            var geneInfoArray = getAccumulatorObject("geneInfoArray");
-            var geneInfoIndex = _.findIndex( geneInfoArray, { name:$(this).data("geneName") } );
-            var additionalParameters;
-            if (geneInfoIndex < 0){
-                additionalParameters = {regionStart:_.minBy(_.flatMap ($(this).data("sourceByTissue")),'START').START,
-                    regionEnd:_.maxBy(_.flatMap ($(this).data("sourceByTissue")),'STOP').STOP,
-                    stateColorBy:['Flanking TSS'],
-                    mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
-                };
-            } else {
-                additionalParameters = {regionStart:geneInfoArray[geneInfoIndex].startPos,
-                    regionEnd:geneInfoArray[geneInfoIndex].endPos,
-                    stateColorBy:['Flanking TSS'],
-                    mappingInformation: _.map($(this).data('allUniqueTissues'),function(){return [1]})
-                };
-            }
-
-            //  here comes that D3 graphic!
-            buildMultiTissueDisplay(['Flanking TSS'],
-                $(this).data('allUniqueTissues'),
-                dataMatrix,
-                additionalParameters,
-                '#tooltip_'+$(this).attr('id'),
-                '#graphic_'+$(this).attr('id'));
-
         });
 
 
@@ -1671,10 +1650,13 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',returnObject,clearBeforeStarting,intermediateDataStructure);
-        // $("#dynamicGeneHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicGeneTable')[0].innerHTML,
-        //     returnObject
-        // ));
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders' );
     };
     var displayGenesPerTissueFromEqtl = function (idForTheTargetDiv,objectContainingRetrievedRecords){
 
@@ -1692,10 +1674,13 @@ var clearBeforeStarting = false;
 
         });
         addAdditionalResultsObject({genesPerTissueFromEqtl:returnObject});
-        prepareToPresentToTheScreen("#dynamicTissueHolder div.dynamicUiHolder",'#dynamicTissueTable',returnObject,clearBeforeStarting);
-        // $("#dynamicTissueHolder div.dynamicUiHolder").empty().append(Mustache.render($('#dynamicTissueTable')[0].innerHTML,
-        //     returnObject
-        // ));
+        prepareToPresentToTheScreen("#dynamicTissueHolder div.dynamicUiHolder",
+                                    '#dynamicTissueTable',
+                                    returnObject,
+                                    clearBeforeStarting,null,
+                                    true,
+                                    'geneTableGeneHeaders' );
+
     };
 
     /***
@@ -1770,7 +1755,13 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",'#dynamicGeneTable',objectContainingRetrievedRecords,clearBeforeStarting,intermediateDataStructure);
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+                                    '#dynamicGeneTable',
+                                    objectContainingRetrievedRecords,
+                                    clearBeforeStarting,
+                                    intermediateDataStructure,
+                                    true,
+                                    'geneTableGeneHeaders' );
 
     };
 
@@ -1865,37 +1856,13 @@ var clearBeforeStarting = false;
         });
         addAdditionalResultsObject({variantRecordsFromVariantQtlSearch:returnObject});
 
-        //xxxxxxxxxxxxxxxx
-        // var intermediateDataStructure = new IntermediateDataStructure();
-        // if (( typeof returnObject.eqtlTissuesExist !== 'undefined') && ( returnObject.eqtlTissuesExist())){
-        //     intermediateDataStructure.rowsToAdd.push ({ category: 'Annotation',
-        //         subcategory: 'eQTL',
-        //         columnCells:  []});
-        //     // set up the headers, and give us an empty row of column cells
-        //     _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord){
-        //         intermediateDataStructure.headerNames.push (oneRecord.geneName);
-        //         intermediateDataStructure.headerContents.push (Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord));
-        //         intermediateDataStructure.headers.push({name:oneRecord.geneName,
-        //             contents:Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML,oneRecord)} );
-        //         intermediateDataStructure.rowsToAdd[0].columnCells.push ("");
-        //     });
-        //
-        //     // fill in all of the column cells
-        //     _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene){
-        //         var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames,recordsPerGene.geneName);
-        //         if (indexOfColumn===-1){
-        //             console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
-        //         }else {
-        //             intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn]  = Mustache.render($("#dynamicGeneTableEqtlBody")[0].innerHTML,recordsPerGene);
-        //         }
-        //     });
-        //     intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
-        //     //    buildOrExtendDynamicTable("table.combinedGeneTableHolder",intermediateDataStructure);
-        //
-        // }
 
-        //xxxxxxxxxxxxxxxx
-        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicPhenotypeTable',returnObject,clearBeforeStarting);
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+                                    '#dynamicPhenotypeTable',
+                                    returnObject,
+                                    clearBeforeStarting,null,
+                                    true,
+                                    'variantTableVariantContent');
 
 
     };
@@ -2037,8 +2004,13 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicAbcTissueTable',returnObject,clearBeforeStarting,intermediateDataStructure);
-
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+                                    '#dynamicAbcTissueTable',
+                                    returnObject,
+                                    clearBeforeStarting,
+                                    intermediateDataStructure,
+                                    true,
+                                    'variantTableVariantContent');
 
     }
 
@@ -2139,8 +2111,13 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicAbcTissueTable',returnObject,clearBeforeStarting,intermediateDataStructure);
-
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#dynamicAbcTissueTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantContent');
 
     }
 
@@ -2255,8 +2232,14 @@ var clearBeforeStarting = false;
 
 
 
-        prepareToPresentToTheScreen(idForTheTargetDiv,'#dynamicVariantTable',returnObject,clearBeforeStarting,intermediateDataStructure);
 
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#dynamicVariantTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantContent');
 
     };
 
@@ -2733,10 +2716,22 @@ var clearBeforeStarting = false;
     }
 
 
-    var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure) {
-        if (( typeof intermediateStructure !== 'undefined') &&
-            ( typeof intermediateStructure.headers !== 'undefined') &&
-            (intermediateStructure.headers.length > 0)){
+    /***
+     * Initiate the jQuery data table and build its headers. This routine expects objects
+     * inside each element of the array which will have
+     * {contents:'whatever HTML you want to display in a cell',
+     *  name:'a string which every cell can reference to figure out which column it belongs in'}
+     *
+     *  If the length is zero then don't make a table.
+     *
+     *  Return a pointer to the data table
+     *
+     * @param headerArray
+     */
+    var buildHeadersForTable = function (whereTheTableGoes,headers,
+                                         storeHeadersInDataStructure,typeOfHeader){
+        if (( typeof headers !== 'undefined') &&
+            (headers.length > 0)){
             var datatable;
             if ( ! $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
                 var headerDescriber = {
@@ -2755,95 +2750,169 @@ var clearBeforeStarting = false;
                     "bAutoWidth": false,
                     "columnDefs": []
                 };
-                headerDescriber.columnDefs.push({
-                    "title": "",
-                    "targets": 0,
-                    "name": "a"
+                var addedColumns = [];
+                switch(typeOfHeader){
+                    case 'geneTableGeneHeaders':
+                        addedColumns.push({contents:'',name:'a'});
+                        addedColumns.push({contents:'',name:'b'});
+                        break;
+                    default:
+                        break;
+                }
+                _.forEach(addedColumns, function (column){
+                    headerDescriber.columnDefs.push({
+                        "title": column.contents,
+                        "targets": 0,
+                        "name": column.name
+                    });
                 });
-                headerDescriber.columnDefs.push({
-                    "title": "",
-                    "targets": 0,
-                    "name": "a"
-                });
-                _.forEach(intermediateStructure.headers, function (header, count) {
+                _.forEach(headers, function (header, count) {
                     headerDescriber.columnDefs.push({
                         "title": header.contents,
                         "targets": count+2,
                         "name": header.name
                     });
                 });
-                datatable = $(whereTheTableGoes).DataTable(headerDescriber);
-                // Make the headers look like we want them to
-                _.forEach(datatable.table().columns().header(),function(o,columnIndex){
-                    var domElement = $(o);
-                    var headerName = domElement.text().trim();
-                    if ((headerName.length >  5) &&
-                        (headerName.split('_').length === 4)){
-                        var partsOfId = headerName.split('_');
-                        domElement.addClass("niceHeadersThatAreLinks");
-                        domElement.addClass("headersWithVarIds");
-                        domElement.attr("defrefa",partsOfId[2]);
-                        domElement.attr("defeffa",partsOfId[3]);
-                        domElement.attr("chrom",partsOfId[0]);
-                        domElement.attr("position",partsOfId[1]);
-                        domElement.attr("varid",partsOfId[0]+":"+partsOfId[1]+"_"+
-                            partsOfId[2]+"/"+partsOfId[3]);
-                        domElement.attr("data-toggle","popover");
-                    }
-                    storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                        headerName,
-                        'header',
-                        0,
-                        columnIndex,
-                        intermediateStructure.headers.length+2);
-                });
+                if (storeHeadersInDataStructure){
+                    datatable = $(whereTheTableGoes).DataTable(headerDescriber);
+                    // do we need to store these headers?
+                    var numberOfHeaders = datatable.table().columns().length;
+                    _.forEach(datatable.table().columns().header(),function(o,columnIndex){
+                        var domElement = $(o);
+                        var headerName = domElement.text().trim();
+                        storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                            headerName,
+                            'header',
+                            0,
+                            columnIndex,
+                            numberOfHeaders );
+                    });
+                }
             }
         }
-        datatable =  $(whereTheTableGoes).dataTable();
+        return $(whereTheTableGoes).dataTable();
+
+    };
+
+
+    var refineTableRecords = function (datatable,headerType,adjustVisibilityCategory){
+        if( typeof datatable === 'undefined'){
+            console.log(" ERROR: failed to receive a valid datatable parameter");
+        } else if (( typeof datatable.DataTable() === 'undefined') ||
+            ( typeof datatable.DataTable().columns() === 'undefined') ||
+            ( typeof datatable.DataTable().columns().header() === 'undefined') ) {
+            console.log(" ERROR: invalid parameter in refineTableRecords");
+        } else {
+            switch(headerType){
+                case 'geneTableGeneHeaders':
+                    _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){
+                        var domElement = $(o);
+                        var headerName = domElement.text().trim();
+                        if ((headerName.length >  5) &&
+                            (headerName.split('_').length === 4)){
+                            var partsOfId = headerName.split('_');
+                            domElement.addClass("niceHeadersThatAreLinks");
+                            domElement.addClass("headersWithVarIds");
+                            domElement.attr("defrefa",partsOfId[2]);
+                            domElement.attr("defeffa",partsOfId[3]);
+                            domElement.attr("chrom",partsOfId[0]);
+                            domElement.attr("position",partsOfId[1]);
+                            domElement.attr("varid",partsOfId[0]+":"+partsOfId[1]+"_"+
+                                partsOfId[2]+"/"+partsOfId[3]);
+                            domElement.attr("data-toggle","popover");
+                        }
+                    });
+                    break;
+                case 'variantTableVariantContent':
+                    if (adjustVisibilityCategory.length>0){
+                        var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
+                        if (elementsToHide.length>0){
+                            elementsToHide.parent().parent().hide();
+                        }
+                        elementsToHide = $('div.variantRecordExists.'+adjustVisibilityCategory);
+                        if (elementsToHide.length>0){
+                            elementsToHide.parent().parent().hide();
+                        }
+                    }
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
 
 
 
+
+    var addContentToTable = function (whereTheTableGoes,rowsToAdd,
+                                         storeRecordsInDataStructure,typeOfRecord){
         var rememberCategory = "";
-        _.forEach(intermediateStructure.rowsToAdd, function (row,newRowCount) {
+        _.forEach(rowsToAdd, function (row,newRowCount) {
             rememberCategory = row.category;
             var rowDescriber = [];
             var numberOfExistingRows = $(whereTheTableGoes+" tr").length;
             var numberOfColumns  = $(row.columnCells).length;
-            rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
-            storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                "<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>",
-                'content',
-                numberOfExistingRows,
-                0,
-                numberOfColumns);
-            rowDescriber.push(row.displaySubcategory);
-            storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                row.displaySubcategory,
-                'content',
-                numberOfExistingRows,
-                1,
-                numberOfColumns);
+            var rowDescriber = [];
+            var numberOfColumnsAdded = 0;
+            switch (typeOfRecord) {
+                case 'geneTableGeneHeaders':
+                case 'variantTableVariantContent':
+                    rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
+                    rowDescriber.push(row.displaySubcategory);
+                    numberOfColumnsAdded += rowDescriber.length;
+                    if (storeRecordsInDataStructure){
+                        _.forEach(rowDescriber, function(oneRow){
+                            storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                                oneRow,
+                                'content',
+                                numberOfExistingRows,
+                                0,
+                                numberOfColumns);
+                        });
+
+                    }
+                    break;
+                default:
+                    break;
+            }
             _.forEach(row.columnCells, function (val, index) {
                 rowDescriber.push(val);
-                storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                    val,
-                    'content',
-                    numberOfExistingRows,
-                    index +2,
-                    numberOfColumns);
-            })
+                if (storeRecordsInDataStructure){
+                    storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                        val,
+                        'content',
+                        numberOfExistingRows,
+                        index + numberOfColumnsAdded,
+                        numberOfColumns);
+                }
+            });
             $(whereTheTableGoes).dataTable().fnAddData(rowDescriber);
         });
-        if (rememberCategory.length>0){
-            var elementsToHide = $('div.noDataHere.'+rememberCategory);
-            if (elementsToHide.length>0){
-                elementsToHide.parent().parent().hide();
-            }
-            elementsToHide = $('div.variantRecordExists.'+rememberCategory);
-            if (elementsToHide.length>0){
-                elementsToHide.parent().parent().hide();
-            }
+        return rememberCategory;
+    }
+
+
+
+
+    var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure,
+                                              storeRecords,typeOfRecord) {
+        var datatable;
+        if (( typeof intermediateStructure !== 'undefined') &&
+            ( typeof intermediateStructure.headers !== 'undefined') &&
+            (intermediateStructure.headers.length > 0)){
+
+                datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord);
+                refineTableRecords(datatable,typeOfRecord,"");
+                
         }
+
+
+
+        datatable =  $(whereTheTableGoes).dataTable();
+        var rememberCategory = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
+                                                storeRecords,typeOfRecord);
+        refineTableRecords(datatable,typeOfRecord,rememberCategory);
 
 
     };
