@@ -2898,21 +2898,22 @@ var clearBeforeStarting = false;
     var buildOrExtendDynamicTable = function (whereTheTableGoes,intermediateStructure,
                                               storeRecords,typeOfRecord) {
         var datatable;
+
         if (( typeof intermediateStructure !== 'undefined') &&
             ( typeof intermediateStructure.headers !== 'undefined') &&
             (intermediateStructure.headers.length > 0)){
-
                 datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord);
                 refineTableRecords(datatable,typeOfRecord,"");
-                
         }
 
 
-
-        datatable =  $(whereTheTableGoes).dataTable();
-        var rememberCategory = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
-                                                storeRecords,typeOfRecord);
-        refineTableRecords(datatable,typeOfRecord,rememberCategory);
+        if (( typeof intermediateStructure.rowsToAdd !== 'undefined') &&
+            (intermediateStructure.rowsToAdd.length > 0)){
+            datatable =  $(whereTheTableGoes).dataTable();
+            var rememberCategory = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
+                                                    storeRecords,typeOfRecord);
+            refineTableRecords(datatable,typeOfRecord,rememberCategory);
+        }
 
 
     };
@@ -2921,6 +2922,23 @@ var clearBeforeStarting = false;
 
  var transposeThisTable   = function (whereTheTableGoes) {
      destroySharedTable(whereTheTableGoes);
+
+     var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+     if (( typeof intermediateStructure !== 'undefined') &&
+         ( typeof intermediateStructure.headers !== 'undefined') &&
+         (intermediateStructure.headers.length > 0)){
+         datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord);
+         refineTableRecords(datatable,typeOfRecord,"");
+     }
+
+
+     if (( typeof intermediateStructure.rowsToAdd !== 'undefined') &&
+         (intermediateStructure.rowsToAdd.length > 0)){
+         datatable =  $(whereTheTableGoes).dataTable();
+         var rememberCategory = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
+             storeRecords,typeOfRecord);
+         refineTableRecords(datatable,typeOfRecord,rememberCategory);
+     }
 
  };
 
