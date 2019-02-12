@@ -2712,6 +2712,13 @@ var clearBeforeStarting = false;
             dataCells: new Array()
         };
     };
+    var SharedTableDataCell = function (title,content,annotation){
+        return {
+            title: title,
+            content: content,
+            annotation: annotation
+        };
+    };
 
 
     var storeCellInMemoryRepresentationOfSharedTable = function (   whichTable,
@@ -3003,51 +3010,29 @@ var clearBeforeStarting = false;
              console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sharedTable.dataCells.length % numberOfColumns) === 0) has failed.")
          }
          var numberOfRows= sharedTable.dataCells.length/numberOfColumns;
+         var arrayIndex = 0;
+         var transposedTableDescription = {};
          sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
          if (sharedTable.currentForm !== sharedTable.originalForm){// need to transpose the data
-             var transposedTableDescription = {
+             transposedTableDescription = {
                  numberOfColumns: numberOfRows,
                  numberOfRows: numberOfColumns,
                  dataCells: new Array()
              }
-             var arrayIndex = 0;
+
              for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
                  for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
                      transposedTableDescription.dataCells[arrayIndex++]=sharedTable.dataCells[(j*transposedTableDescription.numberOfRows)+i];
                  }
              }
 
-             // build the headers
-             var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
-                 return {   contents:datacell,
-                            name:datacell.trim() };
-             });
-             var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
-             refineTableRecords(datatable,sharedTable.currentForm,"");
-
-             // build the body
-             var rowsToAdd = [];
-             var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
-
-             var contentSize = content.length;
-             _.forEach(content, function(datacell,index){
-                 var modulus = index%transposedTableDescription.numberOfColumns;
-                 if (modulus===0){
-                     rowsToAdd.push({category:sharedTable.currentForm,columnCells:new Array()});
-                 }
-                 var lastRow  = rowsToAdd[rowsToAdd.length-1];
-                 return lastRow.columnCells.push(datacell);
-             });
-             datatable =  $(whereTheTableGoes).dataTable();
-             var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
-             refineTableRecords(datatable,sharedTable.currentForm,rememberCategory);
          } else { // we're going back to the original form of the table
-             var transposedTableDescription = {
+             transposedTableDescription = {
                  numberOfColumns:  numberOfColumns,
                  numberOfRows: numberOfRows,
                  dataCells: new Array()
-             }
-             var arrayIndex = 0;
+             };
+
              for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
                  for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
                      transposedTableDescription.dataCells[arrayIndex]=sharedTable.dataCells[arrayIndex];
@@ -3055,32 +3040,33 @@ var clearBeforeStarting = false;
                  }
              }
 
-             // build the headers
-             var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
-                 return {   contents:datacell,
-                     name:datacell.trim() };
-             });
-             var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
-             refineTableRecords(datatable,sharedTable.currentForm,"");
-
-             // build the body
-             var rowsToAdd = [];
-             var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
-
-             var contentSize = content.length;
-             _.forEach(content, function(datacell,index){
-                 var modulus = index%transposedTableDescription.numberOfColumns;
-                 if (modulus===0){
-                     rowsToAdd.push({category:sharedTable.currentForm,columnCells:new Array()});
-                 }
-                 var lastRow  = rowsToAdd[rowsToAdd.length-1];
-                 return lastRow.columnCells.push(datacell);
-             });
-             datatable =  $(whereTheTableGoes).dataTable();
-             var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
-             refineTableRecords(datatable,sharedTable.currentForm,rememberCategory);
-
          }
+
+         // build the headers
+         var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
+             return {   contents:datacell,
+                 name:datacell.trim() };
+         });
+         var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
+         refineTableRecords(datatable,sharedTable.currentForm,"");
+
+         // build the body
+         var rowsToAdd = [];
+         var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
+
+         var contentSize = content.length;
+         _.forEach(content, function(datacell,index){
+             var modulus = index%transposedTableDescription.numberOfColumns;
+             if (modulus===0){
+                 rowsToAdd.push({category:sharedTable.currentForm,columnCells:new Array()});
+             }
+             var lastRow  = rowsToAdd[rowsToAdd.length-1];
+             return lastRow.columnCells.push(datacell);
+         });
+         datatable =  $(whereTheTableGoes).dataTable();
+         var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
+         refineTableRecords(datatable,sharedTable.currentForm,rememberCategory);
+
 
 
      }
