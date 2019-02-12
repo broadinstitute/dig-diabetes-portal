@@ -2747,8 +2747,11 @@ var clearBeforeStarting = false;
      *
      * @param headerArray
      */
-    var buildHeadersForTable = function (whereTheTableGoes,headers,
-                                         storeHeadersInDataStructure,typeOfHeader){
+    var buildHeadersForTable = function (   whereTheTableGoes,
+                                            headers,
+                                            storeHeadersInDataStructure,
+                                            typeOfHeader,
+                                            prependColumns ){
         if (( typeof headers !== 'undefined') &&
             (headers.length > 0)){
             var datatable;
@@ -2770,26 +2773,30 @@ var clearBeforeStarting = false;
                     "columnDefs": []
                 };
                 var addedColumns = [];
-                switch(typeOfHeader){
-                    case 'geneTableGeneHeaders':
-                        addedColumns.push({contents:'',name:'a'});
-                        addedColumns.push({contents:'',name:'b'});
-                        break;
-                    case 'variantTableVariantHeaders':
-                        addedColumns.push({contents:'',name:'a'});
-                        addedColumns.push({contents:'',name:'b'});
-                        break;
-                    default:
-                        break;
-                }
-                _.forEach(addedColumns, function (column){
-                    headerDescriber.columnDefs.push({
-                        "title": column.contents,
-                        "targets": 0,
-                        "name": column.name
+                if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
+                                     //  Definitely we don't if we are transposing, however, since we've already built that material
+                    switch(typeOfHeader){
+                        case 'geneTableGeneHeaders':
+                            addedColumns.push({contents:'',name:'a'});
+                            addedColumns.push({contents:'',name:'b'});
+                            break;
+                        case 'variantTableVariantHeaders':
+                            addedColumns.push({contents:'',name:'a'});
+                            addedColumns.push({contents:'',name:'b'});
+                            break;
+                        default:
+                            break;
+                    }
+                    _.forEach(addedColumns, function (column){
+                        headerDescriber.columnDefs.push({
+                            "title": column.contents,
+                            "targets": 0,
+                            "name": column.name
+                        });
                     });
-                });
-                _.forEach(headers, function (header, count) {
+
+                }
+                 _.forEach(headers, function (header, count) {
                     headerDescriber.columnDefs.push({
                         "title": header.contents,
                         "targets": count+addedColumns.length,
@@ -2869,8 +2876,11 @@ var clearBeforeStarting = false;
 
 
 
-    var addContentToTable = function (whereTheTableGoes,rowsToAdd,
-                                         storeRecordsInDataStructure,typeOfRecord){
+    var addContentToTable = function (  whereTheTableGoes,
+                                        rowsToAdd,
+                                        storeRecordsInDataStructure,
+                                        typeOfRecord,
+                                        prependColumns){
         var rememberCategory = "";
         _.forEach(rowsToAdd, function (row,newRowCount) {
             rememberCategory = row.category;
@@ -2886,32 +2896,33 @@ var clearBeforeStarting = false;
             var numberOfColumns  = sharedTable.numberOfColumns;
             var rowDescriber = [];
             var numberOfColumnsAdded = 0;
-            switch (typeOfRecord) {
-                case 'geneTableGeneHeaders':
-                case 'variantTableVariantHeaders':
-                    rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
-                    rowDescriber.push(row.displaySubcategory);
-                    numberOfColumnsAdded += rowDescriber.length;
-                  //  numberOfColumns += numberOfColumnsAdded;
-                    if (storeRecordsInDataStructure){
-                        _.forEach(rowDescriber, function(oneRow,columnIndex){
-                            storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                                oneRow,
-                                'content',
-                                numberOfExistingRows,
-                                columnIndex,
-                                numberOfColumns );
-                        });
+            if (prependColumns){
+                switch (typeOfRecord) {
+                    case 'geneTableGeneHeaders':
+                    case 'variantTableVariantHeaders':
+                        rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
+                        rowDescriber.push(row.displaySubcategory);
+                        numberOfColumnsAdded += rowDescriber.length;
+                        break;
+                    case 'geneTableAnnotationHeaders':
+                        break;
+                    default:
+                        break;
+                }
+                if (storeRecordsInDataStructure){
+                    _.forEach(rowDescriber, function(oneRow,columnIndex){
+                        storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                            oneRow,
+                            'content',
+                            numberOfExistingRows,
+                            columnIndex,
+                            numberOfColumns );
+                    });
 
-                    }
-                    break;
-                case 'geneTableAnnotationHeaders':
-                    //rowDescriber.push(row.columnCells[0]);
-                    //rowDescriber.push(row.columnCells[1]);
-                    break;
-                default:
-                    break;
+                }
+
             }
+
             _.forEach(row.columnCells, function (val, index) {
                 rowDescriber.push(val);
                 if (storeRecordsInDataStructure){
@@ -2938,7 +2949,7 @@ var clearBeforeStarting = false;
         if (( typeof intermediateStructure !== 'undefined') &&
             ( typeof intermediateStructure.headers !== 'undefined') &&
             (intermediateStructure.headers.length > 0)){
-                datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord);
+                datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord, true);
                 refineTableRecords(datatable,typeOfRecord,"");
         }
 
@@ -2947,7 +2958,7 @@ var clearBeforeStarting = false;
             (intermediateStructure.rowsToAdd.length > 0)){
             datatable =  $(whereTheTableGoes).dataTable();
             var rememberCategory = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
-                                                    storeRecords,typeOfRecord);
+                                                    storeRecords,typeOfRecord, true);
             refineTableRecords(datatable,typeOfRecord,rememberCategory);
         }
 
@@ -3011,13 +3022,12 @@ var clearBeforeStarting = false;
                  return {   contents:datacell,
                             name:datacell.trim() };
              });
-             var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm);
+             var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
              refineTableRecords(datatable,sharedTable.currentForm,"");
 
              // build the body
              var rowsToAdd = [];
-             //var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
-             var content = transposedTableDescription.dataCells;
+             var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
 
              var contentSize = content.length;
              _.forEach(content, function(datacell,index){
@@ -3029,8 +3039,47 @@ var clearBeforeStarting = false;
                  return lastRow.columnCells.push(datacell);
              });
              datatable =  $(whereTheTableGoes).dataTable();
-             var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm);
+             var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
              refineTableRecords(datatable,sharedTable.currentForm,rememberCategory);
+         } else { // we're going back to the original form of the table
+             var transposedTableDescription = {
+                 numberOfColumns:  numberOfColumns,
+                 numberOfRows: numberOfRows,
+                 dataCells: new Array()
+             }
+             var arrayIndex = 0;
+             for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
+                 for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
+                     transposedTableDescription.dataCells[arrayIndex]=sharedTable.dataCells[arrayIndex];
+                     arrayIndex++;
+                 }
+             }
+
+             // build the headers
+             var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
+                 return {   contents:datacell,
+                     name:datacell.trim() };
+             });
+             var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
+             refineTableRecords(datatable,sharedTable.currentForm,"");
+
+             // build the body
+             var rowsToAdd = [];
+             var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
+
+             var contentSize = content.length;
+             _.forEach(content, function(datacell,index){
+                 var modulus = index%transposedTableDescription.numberOfColumns;
+                 if (modulus===0){
+                     rowsToAdd.push({category:sharedTable.currentForm,columnCells:new Array()});
+                 }
+                 var lastRow  = rowsToAdd[rowsToAdd.length-1];
+                 return lastRow.columnCells.push(datacell);
+             });
+             datatable =  $(whereTheTableGoes).dataTable();
+             var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
+             refineTableRecords(datatable,sharedTable.currentForm,rememberCategory);
+
          }
 
 
