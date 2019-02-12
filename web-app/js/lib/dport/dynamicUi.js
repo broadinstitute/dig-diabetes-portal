@@ -1862,7 +1862,7 @@ var clearBeforeStarting = false;
                                     returnObject,
                                     clearBeforeStarting,null,
                                     true,
-                                    'variantTableVariantContent');
+                                    'variantTableVariantHeaders');
 
 
     };
@@ -2010,7 +2010,7 @@ var clearBeforeStarting = false;
                                     clearBeforeStarting,
                                     intermediateDataStructure,
                                     true,
-                                    'variantTableVariantContent');
+                                    'variantTableVariantHeaders');
 
     }
 
@@ -2117,7 +2117,7 @@ var clearBeforeStarting = false;
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'variantTableVariantContent');
+            'variantTableVariantHeaders');
 
     }
 
@@ -2239,7 +2239,7 @@ var clearBeforeStarting = false;
             clearBeforeStarting,
             intermediateDataStructure,
             true,
-            'variantTableVariantContent');
+            'variantTableVariantHeaders');
 
     };
 
@@ -2698,6 +2698,20 @@ var clearBeforeStarting = false;
     };
 
 
+    /***
+     * Default constructor of the SharedTableObject
+     * @param additionalParameters
+     * @returns {{extentBegin: (*|jQuery), extentEnd: (*|jQuery), chromosome: string, originalGeneName: *, geneNameArray: Array, tissueNameArray: Array, modNameArray: Array, mods: Array, contextDescr: {chromosome: string, extentBegin: (*|jQuery), extentEnd: (*|jQuery), moreContext: Array}}}
+     */
+    var SharedTableObject = function (annotation,numberOfColumn,numberOfRows){
+        return {
+            originalForm: annotation,
+            currentForm: annotation,
+            numberOfColumns: numberOfColumn,
+            numberOfRows: numberOfRows,
+            dataCells: new Array()
+        };
+    };
 
 
     var storeCellInMemoryRepresentationOfSharedTable = function (   whichTable,
@@ -2708,11 +2722,16 @@ var clearBeforeStarting = false;
                                                                     numberOfColumns ){
         var indexInOneDimensionalArray = (rowIndex*numberOfColumns)+columnIndex;
         var sharedTable = getAccumulatorObject("sharedTable_"+whichTable);
+        if (($.isArray(sharedTable)) && (sharedTable.length === 0)){
+            // data structure is empty.  Let us give it the correct form, and then store it
+            sharedTable = new SharedTableObject(annotation,numberOfColumns,rowIndex);
+            setAccumulatorObject("sharedTable_"+whichTable,sharedTable);
+        }
         if (indexInOneDimensionalArray > sharedTable.length){
             // we must be on a new row. We know that rows are added sequentially
-            sharedTable.push.apply(sharedTable, new Array(numberOfColumns));
+            sharedTable.dataCells.push.apply(sharedTable.dataCells, new Array(numberOfColumns));
         }
-        sharedTable [indexInOneDimensionalArray] = cellContent;
+        sharedTable.dataCells [indexInOneDimensionalArray] = cellContent;
     }
 
 
@@ -2756,6 +2775,10 @@ var clearBeforeStarting = false;
                         addedColumns.push({contents:'',name:'a'});
                         addedColumns.push({contents:'',name:'b'});
                         break;
+                    case 'variantTableVariantHeaders':
+                        addedColumns.push({contents:'',name:'a'});
+                        addedColumns.push({contents:'',name:'b'});
+                        break;
                     default:
                         break;
                 }
@@ -2769,12 +2792,13 @@ var clearBeforeStarting = false;
                 _.forEach(headers, function (header, count) {
                     headerDescriber.columnDefs.push({
                         "title": header.contents,
-                        "targets": count+2,
+                        "targets": count+addedColumns.length,
                         "name": header.name
                     });
                 });
+
+                datatable = $(whereTheTableGoes).DataTable(headerDescriber);
                 if (storeHeadersInDataStructure){
-                    datatable = $(whereTheTableGoes).DataTable(headerDescriber);
                     // do we need to store these headers?
                     var numberOfHeaders = datatable.table().columns().length;
                     _.forEach(datatable.table().columns().header(),function(o,columnIndex){
@@ -2782,10 +2806,10 @@ var clearBeforeStarting = false;
                         var headerName = domElement.text().trim();
                         storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                             headerName,
-                            'header',
+                            typeOfHeader,
                             0,
                             columnIndex,
-                            numberOfHeaders );
+                            headerDescriber.columnDefs.length );
                     });
                 }
             }
@@ -2806,7 +2830,7 @@ var clearBeforeStarting = false;
             switch(headerType){
                 case 'geneTableGeneHeaders':
                   break;
-                case 'variantTableVariantContent':
+                case 'variantTableVariantHeaders':
                     _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){
                         var domElement = $(o);
                         var headerName = domElement.text().trim();
@@ -2858,16 +2882,17 @@ var clearBeforeStarting = false;
                     numberOfExistingRows = 1;
                 }
             }
-            var numberOfColumns  = $(row.columnCells).length;
+            var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+            var numberOfColumns  = sharedTable.numberOfColumns;
             var rowDescriber = [];
             var numberOfColumnsAdded = 0;
             switch (typeOfRecord) {
                 case 'geneTableGeneHeaders':
-                case 'variantTableVariantContent':
+                case 'variantTableVariantHeaders':
                     rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
                     rowDescriber.push(row.displaySubcategory);
                     numberOfColumnsAdded += rowDescriber.length;
-                    numberOfColumns += numberOfColumnsAdded;
+                  //  numberOfColumns += numberOfColumnsAdded;
                     if (storeRecordsInDataStructure){
                         _.forEach(rowDescriber, function(oneRow,columnIndex){
                             storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
@@ -2879,6 +2904,10 @@ var clearBeforeStarting = false;
                         });
 
                     }
+                    break;
+                case 'geneTableAnnotationHeaders':
+                    //rowDescriber.push(row.columnCells[0]);
+                    //rowDescriber.push(row.columnCells[1]);
                     break;
                 default:
                     break;
@@ -2926,26 +2955,88 @@ var clearBeforeStarting = false;
     };
 
 
+ var formConversionOfATranspose = function (originalForm){
+     var currentForm = "";
+     switch (originalForm){
+         case 'geneTableGeneHeaders':
+             currentForm = 'geneTableAnnotationHeaders';
+             break;
+         case 'variantTableVariantHeaders':
+             currentForm = 'variantTableAnnotationHeaders';
+             break;
+         case 'geneTableAnnotationHeaders':
+             currentForm = 'geneTableGeneHeaders';
+             break;
+         case 'variantTableAnnotationHeaders':
+             currentForm = 'variantTableVariantHeaders';
+             break;
+         default:
+             console.log("CRITICAL ERROR: unrecognized table form = "+ originalForm +"." );
+
+     }
+     return currentForm;
+ }
+
+
 
  var transposeThisTable   = function (whereTheTableGoes) {
      destroySharedTable(whereTheTableGoes);
 
      var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
-     if (( typeof intermediateStructure !== 'undefined') &&
-         ( typeof intermediateStructure.headers !== 'undefined') &&
-         (intermediateStructure.headers.length > 0)){
-         datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord);
-         refineTableRecords(datatable,typeOfRecord,"");
+
+     if (( typeof sharedTable !== 'undefined') &&
+         ( typeof sharedTable.dataCells !== 'undefined') &&
+         (sharedTable.dataCells.length > 0)){
+         var numberOfColumns= sharedTable.numberOfColumns;
+         if ((sharedTable.dataCells.length % numberOfColumns) !== 0){
+             console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sharedTable.dataCells.length % numberOfColumns) === 0) has failed.")
+         }
+         var numberOfRows= sharedTable.dataCells.length/numberOfColumns;
+         sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
+         if (sharedTable.currentForm !== sharedTable.originalForm){// need to transpose the data
+             var transposedTableDescription = {
+                 numberOfColumns: numberOfRows,
+                 numberOfRows: numberOfColumns,
+                 dataCells: new Array()
+             }
+             var arrayIndex = 0;
+             for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
+                 for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
+                     transposedTableDescription.dataCells[arrayIndex++]=sharedTable.dataCells[(j*transposedTableDescription.numberOfRows)+i];
+                 }
+             }
+
+             // build the headers
+             var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
+                 return {   contents:datacell,
+                            name:datacell.trim() };
+             });
+             var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm);
+             refineTableRecords(datatable,sharedTable.currentForm,"");
+
+             // build the body
+             var rowsToAdd = [];
+             //var content = _.slice(transposedTableDescription.dataCells,transposedTableDescription.numberOfColumns);
+             var content = transposedTableDescription.dataCells;
+
+             var contentSize = content.length;
+             _.forEach(content, function(datacell,index){
+                 var modulus = index%transposedTableDescription.numberOfColumns;
+                 if (modulus===0){
+                     rowsToAdd.push({category:sharedTable.currentForm,columnCells:new Array()});
+                 }
+                 var lastRow  = rowsToAdd[rowsToAdd.length-1];
+                 return lastRow.columnCells.push(datacell);
+             });
+             datatable =  $(whereTheTableGoes).dataTable();
+             var rememberCategory = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm);
+             refineTableRecords(datatable,sharedTable.currentForm,rememberCategory);
+         }
+
+
      }
 
 
-     if (( typeof intermediateStructure.rowsToAdd !== 'undefined') &&
-         (intermediateStructure.rowsToAdd.length > 0)){
-         datatable =  $(whereTheTableGoes).dataTable();
-         var rememberCategory = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
-             storeRecords,typeOfRecord);
-         refineTableRecords(datatable,typeOfRecord,rememberCategory);
-     }
 
  };
 
