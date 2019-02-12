@@ -2805,6 +2805,8 @@ var clearBeforeStarting = false;
         } else {
             switch(headerType){
                 case 'geneTableGeneHeaders':
+                  break;
+                case 'variantTableVariantContent':
                     _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){
                         var domElement = $(o);
                         var headerName = domElement.text().trim();
@@ -2822,8 +2824,6 @@ var clearBeforeStarting = false;
                             domElement.attr("data-toggle","popover");
                         }
                     });
-                    break;
-                case 'variantTableVariantContent':
                     if (adjustVisibilityCategory.length>0){
                         var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
                         if (elementsToHide.length>0){
@@ -2852,6 +2852,12 @@ var clearBeforeStarting = false;
             rememberCategory = row.category;
             var rowDescriber = [];
             var numberOfExistingRows = $(whereTheTableGoes+" tr").length;
+            if (numberOfExistingRows === 2){ // special case.  When the table is first created a fake row is added by jquery datatable.  Ignore it
+                                             //   for the purposes of building our in memory representation of the table.
+                if ($(whereTheTableGoes+" tr.odd td").hasClass("dataTables_empty")){
+                    numberOfExistingRows = 1;
+                }
+            }
             var numberOfColumns  = $(row.columnCells).length;
             var rowDescriber = [];
             var numberOfColumnsAdded = 0;
@@ -2861,14 +2867,15 @@ var clearBeforeStarting = false;
                     rowDescriber.push("<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>");
                     rowDescriber.push(row.displaySubcategory);
                     numberOfColumnsAdded += rowDescriber.length;
+                    numberOfColumns += numberOfColumnsAdded;
                     if (storeRecordsInDataStructure){
-                        _.forEach(rowDescriber, function(oneRow){
+                        _.forEach(rowDescriber, function(oneRow,columnIndex){
                             storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                                 oneRow,
                                 'content',
                                 numberOfExistingRows,
-                                0,
-                                numberOfColumns);
+                                columnIndex,
+                                numberOfColumns );
                         });
 
                     }
