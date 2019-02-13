@@ -56,6 +56,27 @@
 </script>
 
 
+
+<script id="dynamicDnaselVariantTableBody"  type="x-tmpl-mustache">
+{{#.}}
+     <div class="variantRecordExists {{category}}" value={{value}}  tissueName="{{tissueName}}">
+     {{tissueName}}
+     {{value}}
+     </div>
+{{/.}}
+</script>
+
+
+
+<script id="dynamicDnaselVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}}>
+     <div>T:{{tissueNumber}}</div>
+     </div>
+</script>
+
+
+
+
 <script id="dynamicVariantHeader"  type="x-tmpl-mustache">
 
             {{variantName}}

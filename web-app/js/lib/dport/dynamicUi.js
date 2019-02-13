@@ -119,6 +119,15 @@ var clearBeforeStarting = false;
                 defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
                 break;
 
+            case "getDnaseGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction =  displayDnaseGivenVariantList;
+                defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
+                break;
+            case "getH3k27acGivenVariantList":
+                defaultFollowUp.displayRefinedContextFunction =  displayH3k27acGivenVariantList;
+                defaultFollowUp.placeToDisplayData =  '#dynamicVariantHolder div.dynamicUiHolder';
+                break;
+
             default:
                 break;
         }
@@ -498,6 +507,53 @@ var clearBeforeStarting = false;
                     }
                 };
                 break;
+            case "getDnaseGivenVariantList":
+                functionToLaunchDataRetrieval = function(){
+                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId:"getDnaseGivenVariantList"});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject("variantNameArray").length>0){
+                            variantsAsJson = "[\""+getAccumulatorObject("variantNameArray").join("\",\"")+"\"]";
+                        }
+                        var dataForCall = {variants:variantsAsJson};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getDnaseGivenVariantList",
+                            retrieveDataUrl: additionalParameters.retrieveDnaseDataUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: processDnaseRecordsFromVariantBasedRequest,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
+            case "getH3k27acGivenVariantList":
+                functionToLaunchDataRetrieval = function(){
+                    if (accumulatorObjectFieldEmpty("variantNameArray")) {
+                        var actionToUndertake = actionContainer("getVariantsWeWillUseToBuildTheVariantTable", {actionId:"getH3k27acGivenVariantList"});
+                        actionToUndertake();
+                    } else {
+                        var variantsAsJson = "[]";
+                        if (getAccumulatorObject("variantNameArray").length>0){
+                            variantsAsJson = "[\""+getAccumulatorObject("variantNameArray").join("\",\"")+"\"]";
+                        }
+                        var dataForCall = {variants:variantsAsJson};
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getH3k27acGivenVariantList",
+                            retrieveDataUrl: additionalParameters.retrieveH3k27acDataUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: processH3k27acRecordsFromVariantBasedRequest,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
+
 
             default:
                 break;
@@ -1527,6 +1583,85 @@ var clearBeforeStarting = false;
 
 
 
+    var processDnaseRecordsFromVariantBasedRequest = function (data){
+
+        var tempHolder = []
+        // basic data aggregation
+        _.forEach(data,function(oneRec){
+            var existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
+            if ( typeof existingRecord === 'undefined'){
+                tempHolder.push ({  variant:oneRec.VAR_ID,
+                    tissues: [],
+                    uniqueTissueNames:[],
+                    maximumValue: undefined
+                });
+                existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
+            }
+            var existingTissueRecord = _.find (existingRecord.tissues,{tissueName: oneRec.SOURCE});
+            if ( typeof existingTissueRecord === 'undefined'){
+                existingRecord.tissues.push ({
+                    value: oneRec.VALUE,
+                    tissueName: oneRec.SOURCE });;
+            } else {
+                console.log('should I be worried? Dnase record matches tissue ("+oneRec.SOURCE+") for variant="+oneRec.var_id+".');
+            }
+
+        });
+        // extract a few summaries
+        var uniqueVariants = _.map (tempHolder, function (o){return o.variant});
+        var existingRecord;
+        _.forEach(uniqueVariants, function (varId){
+            existingRecord = _.find (tempHolder,{variant: varId});
+            existingRecord.uniqueTissueNames = _.uniq(_.map( existingRecord.tissues, function (o){
+                return o.tissueName}));
+        });
+        setAccumulatorObject("dnaseAggregatedPerVariant", tempHolder);
+        return {};
+    };
+
+
+
+
+
+    var processH3k27acRecordsFromVariantBasedRequest = function (data){
+
+        var tempHolder = []
+        // basic data aggregation
+        _.forEach(data,function(oneRec){
+            var existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
+            if ( typeof existingRecord === 'undefined'){
+                tempHolder.push ({  variant:oneRec.VAR_ID,
+                    tissues: [],
+                    uniqueTissueNames:[],
+                    maximumValue: undefined
+                });
+                existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
+            }
+            var existingTissueRecord = _.find (existingRecord.tissues,{tissueName: oneRec.SOURCE});
+            if ( typeof existingTissueRecord === 'undefined'){
+                existingRecord.tissues.push ({
+                    value: oneRec.VALUE,
+                    tissueName: oneRec.SOURCE });;
+            } else {
+                console.log('should I be worried? Dnase record matches tissue ("+oneRec.SOURCE+") for variant="+oneRec.var_id+".');
+            }
+
+        });
+        // extract a few summaries
+        var uniqueVariants = _.map (tempHolder, function (o){return o.variant});
+        var existingRecord;
+        _.forEach(uniqueVariants, function (varId){
+            existingRecord = _.find (tempHolder,{variant: varId});
+            existingRecord.uniqueTissueNames = _.uniq(_.map( existingRecord.tissues, function (o){
+                return o.tissueName}));
+        });
+        setAccumulatorObject("h3k27acAggregatedPerVariant", tempHolder);
+        return {};
+    };
+
+
+
+
 
 
 
@@ -2126,6 +2261,215 @@ var clearBeforeStarting = false;
 
 
 
+    var displayDnaseGivenVariantList = function (idForTheTargetDiv,objectContainingRetrievedRecords) {
+
+
+        var returnObject = createNewDisplayReturnObject();
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+        var dnaseAggregatedPerVariant = getAccumulatorObject("dnaseAggregatedPerVariant");
+        if (( typeof dnaseAggregatedPerVariant !== 'undefined') && ( dnaseAggregatedPerVariant.length > 0)){
+
+            // fill in all of the column cells
+            var variantNameArray = getAccumulatorObject("variantNameArray");
+            var allArraysOfTissueNames = _.map (dnaseAggregatedPerVariant, function (o){return o.uniqueTissueNames});
+            var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
+            _.forEach(everyTissueToDisplay, function (aTissue){
+                var tissueRow = { category: 'DNase',
+                    displayCategory: 'DNase',
+                    subcategory: aTissue,
+                    displaySubcategory: aTissue,
+                    columnCells:  []};
+                _.forEach(variantNameArray, function (aVariant,indexOfColumn){
+                    var recordsPerVariant = _.find(dnaseAggregatedPerVariant,{variant:aVariant});
+                    if ( typeof  recordsPerVariant === 'undefined'){
+                        tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                    } else {
+                        var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
+                        if ( typeof perTissuePerVariant === 'undefined'){
+                            tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                        }else{
+                            tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                        }
+                    }
+
+                });
+                intermediateDataStructure.rowsToAdd.push (tissueRow);
+            });
+
+            // I might need to create a summary line
+            if (intermediateDataStructure.rowsToAdd.length>0){
+                var invertedArray = [];
+                var rememberCategoryFromOneLine = "none";
+                _.map(intermediateDataStructure.rowsToAdd,function (oneRow){
+                    if (invertedArray.length===0){
+                        invertedArray = new Array(oneRow.columnCells.length);
+                        rememberCategoryFromOneLine = oneRow.category;
+                    }
+                    _.forEach(oneRow.columnCells,function (cell,index){
+                        var domVersionOfCell = $(cell);
+                        if (domVersionOfCell.hasClass("variantRecordExists")){
+                            if ( typeof invertedArray[index] === 'undefined' ){
+                                invertedArray[index] = {  tissues: [] }
+                            }
+                            if (!invertedArray[index].tissues.includes(oneRow.subcategory)){
+                                invertedArray[index].tissues.push(oneRow.subcategory);
+                            }
+                        }
+                    });
+                });
+                var summaryRow = {
+                    displayCategory: '<button type="button" class="btn btn-info shower '+rememberCategoryFromOneLine+'" '+
+                    'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')">display tissues</button>'+
+                    '<button type="button" class="btn btn-info hider '+rememberCategoryFromOneLine+'" '+
+                    'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')"  style="display: none">hide tissues</button>',
+                    category: rememberCategoryFromOneLine,
+                    subcategory: rememberCategoryFromOneLine,
+                    displaySubcategory: rememberCategoryFromOneLine,
+                    columnCells:  []};
+                _.forEach(invertedArray,function(summaryColumn,index){
+                    if ( typeof summaryColumn === 'undefined'){
+                        summaryRow.columnCells.push(
+                            "");
+                    } else {
+
+                        if (summaryColumn.tissues.length===0){
+                            summaryRow.columnCells.push("");
+                        } else {
+                            summaryRow.columnCells.push(
+                                Mustache.render($("#dynamicDnaselVariantTableBodySummaryRecord")[0].innerHTML, {
+                                    tissueNumber: summaryColumn.tissues.length,
+                                    category: rememberCategoryFromOneLine
+                                })
+                            );
+                        }
+
+                    }
+                });
+                intermediateDataStructure.rowsToAdd.push(summaryRow);
+            }
+
+            intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
+        }
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#unused',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantHeaders');
+
+    };
+
+
+
+
+
+
+
+    var displayH3k27acGivenVariantList = function (idForTheTargetDiv,objectContainingRetrievedRecords) {
+
+
+        var returnObject = createNewDisplayReturnObject();
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+        var h3k27acAggregatedPerVariant = getAccumulatorObject("h3k27acAggregatedPerVariant");
+        if (( typeof h3k27acAggregatedPerVariant !== 'undefined') && ( h3k27acAggregatedPerVariant.length > 0)){
+
+            // fill in all of the column cells
+            var variantNameArray = getAccumulatorObject("variantNameArray");
+            var allArraysOfTissueNames = _.map (h3k27acAggregatedPerVariant, function (o){return o.uniqueTissueNames});
+            var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
+            _.forEach(everyTissueToDisplay, function (aTissue){
+                var tissueRow = { category: 'H3k27ac',
+                    displayCategory: 'H3k27ac',
+                    subcategory: aTissue,
+                    displaySubcategory: aTissue,
+                    columnCells:  []};
+                _.forEach(variantNameArray, function (aVariant,indexOfColumn){
+                    var recordsPerVariant = _.find(h3k27acAggregatedPerVariant,{variant:aVariant});
+                    if ( typeof  recordsPerVariant === 'undefined'){
+                        tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                    } else {
+                        var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
+                        if ( typeof perTissuePerVariant === 'undefined'){
+                            tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
+                        }else{
+                            tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                        }
+                    }
+
+                });
+                intermediateDataStructure.rowsToAdd.push (tissueRow);
+            });
+
+            // I might need to create a summary line
+            if (intermediateDataStructure.rowsToAdd.length>0){
+                var invertedArray = [];
+                var rememberCategoryFromOneLine = "none";
+                _.map(intermediateDataStructure.rowsToAdd,function (oneRow){
+                    if (invertedArray.length===0){
+                        invertedArray = new Array(oneRow.columnCells.length);
+                        rememberCategoryFromOneLine = oneRow.category;
+                    }
+                    _.forEach(oneRow.columnCells,function (cell,index){
+                        var domVersionOfCell = $(cell);
+                        if (domVersionOfCell.hasClass("variantRecordExists")){
+                            if ( typeof invertedArray[index] === 'undefined' ){
+                                invertedArray[index] = {  tissues: [] }
+                            }
+                            if (!invertedArray[index].tissues.includes(oneRow.subcategory)){
+                                invertedArray[index].tissues.push(oneRow.subcategory);
+                            }
+                        }
+                    });
+                });
+                var summaryRow = {
+                    displayCategory: '<button type="button" class="btn btn-info shower '+rememberCategoryFromOneLine+'" '+
+                    'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')">display tissues</button>'+
+                    '<button type="button" class="btn btn-info hider '+rememberCategoryFromOneLine+'" '+
+                    'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\''+rememberCategoryFromOneLine+'\')"  style="display: none">hide tissues</button>',
+                    category: rememberCategoryFromOneLine,
+                    subcategory: rememberCategoryFromOneLine,
+                    displaySubcategory: rememberCategoryFromOneLine,
+                    columnCells:  []};
+                _.forEach(invertedArray,function(summaryColumn,index){
+                    if ( typeof summaryColumn === 'undefined'){
+                        summaryRow.columnCells.push(
+                            "");
+                    } else {
+
+                        if (summaryColumn.tissues.length===0){
+                            summaryRow.columnCells.push("");
+                        } else {
+                            summaryRow.columnCells.push(
+                                Mustache.render($("#dynamicDnaselVariantTableBodySummaryRecord")[0].innerHTML, {
+                                    tissueNumber: summaryColumn.tissues.length,
+                                    category: rememberCategoryFromOneLine
+                                })
+                            );
+                        }
+
+                    }
+                });
+                intermediateDataStructure.rowsToAdd.push(summaryRow);
+            }
+
+            intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
+        }
+
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#unused',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'variantTableVariantHeaders');
+
+    };
+
+
 
 
     var displayVariantsForAPhenotype = function  (idForTheTargetDiv,objectContainingRetrievedRecords) {
@@ -2613,6 +2957,12 @@ var clearBeforeStarting = false;
 
             arrayOfRoutinesToUndertake.push( actionContainer('getABCGivenVariantList',
                 actionDefaultFollowUp("getABCGivenVariantList")));
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getDnaseGivenVariantList',
+                actionDefaultFollowUp("getDnaseGivenVariantList")));
+
+            arrayOfRoutinesToUndertake.push( actionContainer('getH3k27acGivenVariantList',
+                actionDefaultFollowUp("getH3k27acGivenVariantList")));
 
 
             _.forEach(arrayOfRoutinesToUndertake, function(oneFunction){oneFunction()});

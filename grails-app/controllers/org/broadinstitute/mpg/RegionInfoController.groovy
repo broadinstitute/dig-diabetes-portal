@@ -808,5 +808,71 @@ class RegionInfoController {
 
 
 
+    def retrieveDnaseData() {
+        String tissue = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherDnaseData( tissue, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+    def retrieveH3k27acData() {
+        String tissue = ""
+        boolean looksOkay = true
+        JSONArray jsonReturn
+        JSONArray variants
+        List <String> variantList = []
+        def slurper = new JsonSlurper()
+
+        if (params.tissue) {
+            tissue = params.tissue
+        }
+
+        if (params.variants) {
+            variants = slurper.parseText( params.variants as String)  as JSONArray
+            variantList = variants as List <String>
+        } else {
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherH3k27acData( tissue, variantList )
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
+
+
+
 
 }

@@ -64,6 +64,8 @@ class RestServerService {
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
+    private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
+    private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2371,6 +2373,49 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
         return jsonArray
     }
+
+
+
+
+    public JSONArray gatherDnaseData(  String tissue, List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+
+        if ((variantList) && (variantList.length() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_DNASE_RECORDS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
+
+
+
+    public JSONArray gatherH3k27acData( String tissue, List <String> variantList ) {
+        List<String> specifyRequestList = []
+
+        if ((tissue) && (tissue.length() > 0)) {
+            specifyRequestList << "tissue=${tissue}"
+        }
+
+        if ((variantList) && (variantList.length() > 0)) {
+            specifyRequestList << "var_id=${variantList.join(",").replace("\"","")}"
+        }
+
+        String rawReturnFromApi =  getRestCall("${GET_H3K27AC_RECORDS_URL}?${specifyRequestList.join("&")}".toString())
+        JsonSlurper slurper = new JsonSlurper()
+        JSONArray jsonArray = slurper.parseText(rawReturnFromApi) as JSONArray
+        return jsonArray
+    }
+
+
 
 
 
