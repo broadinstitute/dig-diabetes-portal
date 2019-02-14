@@ -1585,7 +1585,8 @@ var clearBeforeStarting = false;
 
     var processDnaseRecordsFromVariantBasedRequest = function (data){
 
-        var tempHolder = []
+        var tempHolder = [];
+        var quantileArray = mpgSoftware.regionInfo.createQuantilesArray(2);
         // basic data aggregation
         _.forEach(data,function(oneRec){
             var existingRecord = _.find (tempHolder,{variant: oneRec.VAR_ID});
@@ -1601,7 +1602,8 @@ var clearBeforeStarting = false;
             if ( typeof existingTissueRecord === 'undefined'){
                 existingRecord.tissues.push ({
                     value: oneRec.VALUE,
-                    tissueName: oneRec.SOURCE });;
+                    tissueName: oneRec.SOURCE,
+                    quantileIndicator:'matchingRegion2_'+mpgSoftware.regionInfo.determineColorIndex(oneRec.VALUE,quantileArray)});
             } else {
                 console.log('should I be worried? Dnase record matches tissue ("+oneRec.SOURCE+") for variant="+oneRec.var_id+".');
             }
@@ -2289,7 +2291,7 @@ var clearBeforeStarting = false;
                         if ( typeof perTissuePerVariant === 'undefined'){
                             tissueRow.columnCells[indexOfColumn] ="<div class='noDataHere "+tissueRow.category+"'></div>";
                         }else{
-                            tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML,perTissuePerVariant);
+                            tissueRow.columnCells[indexOfColumn] = Mustache.render($("#dynamicDnaseVariantTableBody")[0].innerHTML,perTissuePerVariant);
                         }
                     }
 
@@ -2337,7 +2339,7 @@ var clearBeforeStarting = false;
                             summaryRow.columnCells.push("");
                         } else {
                             summaryRow.columnCells.push(
-                                Mustache.render($("#dynamicDnaselVariantTableBodySummaryRecord")[0].innerHTML, {
+                                Mustache.render($("#dynamicDnaseVariantTableBodySummaryRecord")[0].innerHTML, {
                                     tissueNumber: summaryColumn.tissues.length,
                                     category: rememberCategoryFromOneLine
                                 })
@@ -2444,7 +2446,7 @@ var clearBeforeStarting = false;
                             summaryRow.columnCells.push("");
                         } else {
                             summaryRow.columnCells.push(
-                                Mustache.render($("#dynamicDnaselVariantTableBodySummaryRecord")[0].innerHTML, {
+                                Mustache.render($("#dynamicDnaseVariantTableBodySummaryRecord")[0].innerHTML, {
                                     tissueNumber: summaryColumn.tissues.length,
                                     category: rememberCategoryFromOneLine
                                 })
@@ -3211,6 +3213,10 @@ var clearBeforeStarting = false;
                                 partsOfId[2]+"/"+partsOfId[3]);
                             domElement.attr("data-toggle","popover");
                         }
+                        for( var i = 0 ; i < 5 ; i++ ){
+                            $('td:has(div.tissueTable.matchingRegion2_'+i+')').addClass('tissueTable matchingRegion2_'+i);
+                        }
+
                     });
                     if (adjustVisibilityCategory.length>0){
                         var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);

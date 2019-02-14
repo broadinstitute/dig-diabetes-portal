@@ -1629,7 +1629,9 @@ var mpgSoftware = mpgSoftware || {};
             retrieveDesiredAssay:retrieveDesiredAssay,
             displayTissuesForAnnotation: displayTissuesForAnnotation,
             hideTissuesForAnnotation: hideTissuesForAnnotation,
-            getDisplayAssayIds:getDisplayAssayIds
+            getDisplayAssayIds:getDisplayAssayIds,
+            createQuantilesArray:createQuantilesArray,
+            determineColorIndex:determineColorIndex
 
     }
 
