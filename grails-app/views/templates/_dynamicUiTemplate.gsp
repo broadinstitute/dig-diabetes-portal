@@ -77,8 +77,7 @@
 
 <script id="dynamicH3k27acVariantTableBody"  type="x-tmpl-mustache">
 {{#.}}
-     <div class="variantRecordExists {{category}}" value={{value}}  tissueName="{{tissueName}}">
-     {{tissueName}}
+     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}">
      {{value}}
      </div>
 {{/.}}
