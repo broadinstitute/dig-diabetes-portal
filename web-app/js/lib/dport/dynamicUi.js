@@ -1090,19 +1090,19 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, and give us an empty row of column cells
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                _.forEach(returnObject.genesByAbc, function (oneRecord) {
-                    intermediateDataStructure.headerNames.push(oneRecord.geneName);
-                    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
-                    intermediateDataStructure.headers.push({
-                        name: oneRecord.geneName,
-                        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
-                    });
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.geneName, ""));
-                });
+                //_.forEach(returnObject.genesByAbc, function (oneRecord) {
+                //    intermediateDataStructure.headerNames.push(oneRecord.geneName);
+                //    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
+                //    intermediateDataStructure.headers.push({
+                //        name: oneRecord.geneName,
+                //        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
+                //    });
+                //    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.geneName, ""));
+                //});
             } else {
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.headerNames.push(oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("", ""));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("", "", "header of some sort"));
                 });
             }
 
@@ -1118,12 +1118,12 @@ mpgSoftware.dynamicUi = (function () {
                 } else {
                     if ((recordsPerGene.source.length === 0) &&
                         (recordsPerGene.experiment.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName, "");
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName, "","not sure this is ever used?");
                     } else {
                         recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
                         recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, recordsPerGene));
+                            Mustache.render($("#dynamicAbcGeneTableBody")[0].innerHTML, recordsPerGene),"tissue specific");
                     }
 
                 }
@@ -1244,19 +1244,19 @@ mpgSoftware.dynamicUi = (function () {
 
             // set up the headers, and give us an empty row of column cells
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                _.forEach(returnObject.genesByDepict, function (oneRecord) {
-                    intermediateDataStructure.headerNames.push(oneRecord.geneName);
-                    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
-                    intermediateDataStructure.headers.push({
-                        name: oneRecord.geneName,
-                        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
-                    });
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.geneName, ""));
-                });
+                //_.forEach(returnObject.genesByDepict, function (oneRecord) {
+                //    intermediateDataStructure.headerNames.push(oneRecord.geneName);
+                //    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
+                //    intermediateDataStructure.headers.push({
+                //        name: oneRecord.geneName,
+                //        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
+                //    });
+                //    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.geneName, ""));
+                //});
             } else {
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.headerNames.push(oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name, ""));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name, "","header"));
                 });
             }
 
@@ -1271,11 +1271,11 @@ mpgSoftware.dynamicUi = (function () {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
                     if ((recordsPerGene.recordByDataSet.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName, "");
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName, "", "tissue specific");
                     } else {
                         recordsPerGene["numberOfRecords"] = recordsPerGene.recordByDataSet.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
-                            Mustache.render($("#depictGeneTableBody")[0].innerHTML, recordsPerGene));
+                            Mustache.render($("#depictGeneTableBody")[0].innerHTML, recordsPerGene),"tissue specific");
                     }
 
                 }
@@ -1844,21 +1844,21 @@ mpgSoftware.dynamicUi = (function () {
                 displaySubcategory: 'eQTL',
                 columnCells: []
             });
-            // set up the headers, and give us an empty row of column cells
+             //set up the headers, and give us an empty row of column cells
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                _.forEach(returnObject.uniqueEqtlGenes, function (oneRecord) {
-                    intermediateDataStructure.headerNames.push(oneRecord.geneName);
-                    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML, oneRecord));
-                    intermediateDataStructure.headers.push({
-                        name: oneRecord.geneName,
-                        contents: Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML, oneRecord)
-                    });
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', ""));
-                });
+                //_.forEach(returnObject.uniqueEqtlGenes, function (oneRecord) {
+                //    intermediateDataStructure.headerNames.push(oneRecord.geneName);
+                //    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML, oneRecord));
+                //    intermediateDataStructure.headers.push({
+                //        name: oneRecord.geneName,
+                //        contents: Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML, oneRecord)
+                //    });
+                //    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', ""));
+                //});
             } else {
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
                     intermediateDataStructure.headerNames.push(oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', ""));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', "","what the heck is this?"));
                 });
             }
 
@@ -1869,7 +1869,7 @@ mpgSoftware.dynamicUi = (function () {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
                     intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',
-                        Mustache.render($("#dynamicGeneTableEqtlSummaryBody")[0].innerHTML, recordsPerGene));
+                        Mustache.render($("#dynamicGeneTableEqtlSummaryBody")[0].innerHTML, recordsPerGene),'tisseRecord');
                 }
             });
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -1975,7 +1975,7 @@ mpgSoftware.dynamicUi = (function () {
             _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord) {
                 intermediateDataStructure.headerNames.push(oneRecord.name1);
                 intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
-                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1, Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord)));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1, Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader"));
             });
 
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -2133,128 +2133,14 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-    var displayEqtlsGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
-
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"eqtlsAggregatedPerVariant",'eQTL','eQTL',
-            "noRecordTemplate","undefinedTissueRecord","#dynamicEqtlVariantTableBody",
-            "#dynamicEqtlVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
-            undefined, 0.05,
-        true, true);
-        //var returnObject = createNewDisplayReturnObject();
-        //
-        //var intermediateDataStructure = new IntermediateDataStructure();
-        //var eqtlsAggregatedPerVariant = getAccumulatorObject("eqtlsAggregatedPerVariant");
-        //if (( typeof eqtlsAggregatedPerVariant !== 'undefined') && ( eqtlsAggregatedPerVariant.length > 0)) {
-        //
-        //    // fill in all of the column cells
-        //    var variantNameArray = getAccumulatorObject("variantNameArray");
-        //    var allArraysOfTissueNames = _.map(eqtlsAggregatedPerVariant, function (o) {
-        //        return o.uniqueTissueNames
-        //    });
-        //    var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
-        //    _.forEach(everyTissueToDisplay, function (aTissue) {
-        //        var tissueRow = {
-        //            category: 'eQTL',
-        //            displayCategory: 'eQTL',
-        //            subcategory: aTissue,
-        //            displaySubcategory: aTissue,
-        //            columnCells: []
-        //        };
-        //        _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
-        //            var recordsPerVariant = _.find(eqtlsAggregatedPerVariant, {variant: aVariant});
-        //            if (typeof  recordsPerVariant === 'undefined') {
-        //                tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                    "<div class='noDataHere " + tissueRow.category + "'></div>");
-        //            } else {
-        //                var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
-        //                if ( ( typeof perTissuePerVariant === 'undefined')
-        //                    || (perTissuePerVariant[0].value < 0.6)
-        //                ) {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        "<div class='noDataHere " + tissueRow.category + "'></div>");
-        //                } else {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML, perTissuePerVariant));
-        //                }
-        //            }
-        //
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(tissueRow);
-        //    });
-        //
-        //    // I might need to create a summary line
-        //    if (intermediateDataStructure.rowsToAdd.length > 0) {
-        //        var invertedArray = [];
-        //        var rememberCategoryFromOneLine = "none";
-        //        _.map(intermediateDataStructure.rowsToAdd, function (oneRow) {
-        //            if (invertedArray.length === 0) {
-        //                invertedArray = new Array(oneRow.columnCells.length);
-        //                rememberCategoryFromOneLine = oneRow.category;
-        //            }
-        //            _.forEach(oneRow.columnCells, function (cell, index) {
-        //                var domVersionOfCell = $(cell.content);
-        //                if (domVersionOfCell.hasClass("variantRecordExists")) {
-        //                    if (typeof invertedArray[index] === 'undefined') {
-        //                        invertedArray[index] = {genes: [], tissues: []}
-        //                    }
-        //                    var geneName = domVersionOfCell.attr('geneName');
-        //                    if (!invertedArray[index].genes.includes(geneName)) {
-        //                        invertedArray[index].genes.push(geneName);
-        //                    }
-        //                    if (!invertedArray[index].tissues.includes(oneRow.subcategory)) {
-        //                        invertedArray[index].tissues.push(oneRow.subcategory);
-        //                    }
-        //                }
-        //            });
-        //        });
-        //        var summaryRow = {
-        //            displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
-        //            '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
-        //            category: rememberCategoryFromOneLine,
-        //            subcategory: rememberCategoryFromOneLine,
-        //            displaySubcategory: rememberCategoryFromOneLine,
-        //            columnCells: []
-        //        };
-        //        _.forEach(invertedArray, function (summaryColumn, index) {
-        //            if (typeof summaryColumn === 'undefined') {
-        //                summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, ""));
-        //            } else {
-        //
-        //                if ((summaryColumn.genes.length === 0) && (summaryColumn.tissues.length === 0)) {
-        //                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, ""));
-        //                } else {
-        //                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-        //                        Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
-        //                            geneNumber: summaryColumn.genes.length,
-        //                            tissueNumber: summaryColumn.tissues.length,
-        //                            category: rememberCategoryFromOneLine
-        //                        })
-        //                    ));
-        //                }
-        //
-        //            }
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(summaryRow);
-        //    }
-        //
-        //
-        //    intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
-        //
-        //}
-        //
-        //
-        //prepareToPresentToTheScreen(idForTheTargetDiv,
-        //    '#dynamicAbcTissueTable',
-        //    returnObject,
-        //    clearBeforeStarting,
-        //    intermediateDataStructure,
-        //    true,
-        //    'variantTableVariantHeaders');
-
-    };
-
+    /***
+     * constructor we need when inverting an array to figure out what which sells we need to display
+     * @param useGenes
+     * @param useTissues
+     * @param usePhenotypes
+     * @returns {{}}
+     * @constructor
+     */
     var InversionArray = function (useGenes,useTissues,usePhenotypes){
         var returnObject = {};
         if (useGenes){
@@ -2267,121 +2153,29 @@ mpgSoftware.dynamicUi = (function () {
             returnObject['phenotypes'] = [];
         }
         return returnObject;
-    }
+    };
 
+
+
+    var displayEqtlsGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+
+        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"eqtlsAggregatedPerVariant",'eQTL','eQTL',
+            "noRecordTemplate","undefinedTissueRecord","#dynamicEqtlVariantTableBody",
+            "#dynamicEqtlVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
+            undefined, 0.05,
+        true, true);
+
+
+    };
 
     var displayAbcGivenVariantList = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
 
-        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"abcAggregatedPerVariant",'ABC','abcGeneEnhancer',
+        displayVariantDataWithHiddenTissuesAndSummaryLines(idForTheTargetDiv,"abcAggregatedPerVariant",'ABC','ABC',
             "noRecordTemplate","undefinedTissueRecord","#dynamicEqtlVariantTableBody",
             "#dynamicEqtlVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
             undefined, undefined,
         true, true);
-        //var returnObject = createNewDisplayReturnObject();
-        //
-        //var intermediateDataStructure = new IntermediateDataStructure();
-        //var abcAggregatedPerVariant = getAccumulatorObject("abcAggregatedPerVariant");
-        //if (( typeof abcAggregatedPerVariant !== 'undefined') && ( abcAggregatedPerVariant.length > 0)) {
-        //
-        //    // fill in all of the column cells
-        //    var variantNameArray = getAccumulatorObject("variantNameArray");
-        //    var allArraysOfTissueNames = _.map(abcAggregatedPerVariant, function (o) {
-        //        return o.uniqueTissueNames
-        //    });
-        //    var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
-        //    _.forEach(everyTissueToDisplay, function (aTissue) {
-        //        var tissueRow = {
-        //            category: 'ABC',
-        //            displayCategory: 'ABC',
-        //            subcategory: aTissue,
-        //            displaySubcategory: aTissue,
-        //            columnCells: []
-        //        };
-        //        _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
-        //            var recordsPerVariant = _.find(abcAggregatedPerVariant, {variant: aVariant});
-        //            if (typeof  recordsPerVariant === 'undefined') {
-        //                tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                    "<div class='noDataHere " + tissueRow.category + "'></div>");
-        //            } else {
-        //                var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
-        //                if (typeof perTissuePerVariant === 'undefined') {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        "<div class='noDataHere " + tissueRow.category + "'></div>");
-        //                } else {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        Mustache.render($("#dynamicEqtlVariantTableBody")[0].innerHTML, perTissuePerVariant));
-        //                }
-        //            }
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(tissueRow);
-        //    });
-        //
-        //    // I might need to create a summary line
-        //    if (intermediateDataStructure.rowsToAdd.length > 0) {
-        //        var invertedArray = [];
-        //        var rememberCategoryFromOneLine = "none";
-        //        _.map(intermediateDataStructure.rowsToAdd, function (oneRow) {
-        //            if (invertedArray.length === 0) {
-        //                invertedArray = new Array(oneRow.columnCells.length);
-        //                rememberCategoryFromOneLine = oneRow.category;
-        //            }
-        //            _.forEach(oneRow.columnCells, function (cell, index) {
-        //                var domVersionOfCell = $(cell.content);
-        //                if (domVersionOfCell.hasClass("variantRecordExists")) {
-        //                    if (typeof invertedArray[index] === 'undefined') {
-        //                        invertedArray[index] = {genes: [], tissues: []}
-        //                    }
-        //                    var geneName = domVersionOfCell.attr('geneName');
-        //                    if (!invertedArray[index].genes.includes(geneName)) {
-        //                        invertedArray[index].genes.push(geneName);
-        //                    }
-        //                    if (!invertedArray[index].tissues.includes(oneRow.subcategory)) {
-        //                        invertedArray[index].tissues.push(oneRow.subcategory);
-        //                    }
-        //                }
-        //            });
-        //        });
-        //        var summaryRow = {
-        //            displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
-        //            '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
-        //            category: rememberCategoryFromOneLine,
-        //            subcategory: rememberCategoryFromOneLine,
-        //            displaySubcategory: rememberCategoryFromOneLine,
-        //            columnCells: []
-        //        };
-        //        _.forEach(invertedArray, function (summaryColumn, index) {
-        //            if (typeof summaryColumn === 'undefined') {
-        //                summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, ""));
-        //            } else {
-        //                summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-        //                    Mustache.render($("#dynamicEqtlVariantTableBodySummaryRecord")[0].innerHTML, {
-        //                        geneNumber: summaryColumn.genes.length,
-        //                        tissueNumber: summaryColumn.tissues.length,
-        //                        category: rememberCategoryFromOneLine
-        //                    })));
-        //            }
-        //
-        //
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(summaryRow);
-        //    }
-        //
-        //
-        //    intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
-        //
-        //}
-        //
-        //
-        //prepareToPresentToTheScreen(idForTheTargetDiv,
-        //    '#dynamicAbcTissueTable',
-        //    returnObject,
-        //    clearBeforeStarting,
-        //    intermediateDataStructure,
-        //    true,
-        //    'variantTableVariantHeaders');
-        //
+
     }
 
 
@@ -2392,110 +2186,6 @@ mpgSoftware.dynamicUi = (function () {
             "#dynamicDnaseVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
             undefined, undefined,
         false, true);
-
-        //var returnObject = createNewDisplayReturnObject();
-        //
-        //var intermediateDataStructure = new IntermediateDataStructure();
-        //var dnaseAggregatedPerVariant = getAccumulatorObject("dnaseAggregatedPerVariant");
-        //if (( typeof dnaseAggregatedPerVariant !== 'undefined') && ( dnaseAggregatedPerVariant.length > 0)) {
-        //
-        //    // fill in all of the column cells
-        //    var variantNameArray = getAccumulatorObject("variantNameArray");
-        //    var allArraysOfTissueNames = _.map(dnaseAggregatedPerVariant, function (o) {
-        //        return o.uniqueTissueNames
-        //    });
-        //    var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
-        //    _.forEach(everyTissueToDisplay, function (aTissue) {
-        //        var tissueRow = {
-        //            category: 'DNase',
-        //            displayCategory: 'DNase',
-        //            subcategory: aTissue,
-        //            displaySubcategory: aTissue,
-        //            columnCells: []
-        //        };
-        //        _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
-        //            var recordsPerVariant = _.find(dnaseAggregatedPerVariant, {variant: aVariant});
-        //            if (typeof  recordsPerVariant === 'undefined') {
-        //                tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                    "<div class='noDataHere " + tissueRow.category + "'></div>");
-        //            } else {
-        //                var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
-        //                if (typeof perTissuePerVariant === 'undefined') {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        "<div class='noDataHere " + tissueRow.category + "'></div>");
-        //                } else {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        Mustache.render($("#dynamicDnaseVariantTableBody")[0].innerHTML, perTissuePerVariant));
-        //                }
-        //            }
-        //
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(tissueRow);
-        //    });
-        //
-        //    // I might need to create a summary line
-        //    if (intermediateDataStructure.rowsToAdd.length > 0) {
-        //        var invertedArray = [];
-        //        var rememberCategoryFromOneLine = "none";
-        //        _.map(intermediateDataStructure.rowsToAdd, function (oneRow) {
-        //            if (invertedArray.length === 0) {
-        //                invertedArray = new Array(oneRow.columnCells.length);
-        //                rememberCategoryFromOneLine = oneRow.category;
-        //            }
-        //            _.forEach(oneRow.columnCells, function (cell, index) {
-        //                var domVersionOfCell = $(cell.content);
-        //                if (domVersionOfCell.hasClass("variantRecordExists")) {
-        //                    if (typeof invertedArray[index] === 'undefined') {
-        //                        invertedArray[index] = {tissues: []}
-        //                    }
-        //                    if (!invertedArray[index].tissues.includes(oneRow.subcategory)) {
-        //                        invertedArray[index].tissues.push(oneRow.subcategory);
-        //                    }
-        //                }
-        //            });
-        //        });
-        //        var summaryRow = {
-        //            displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
-        //            '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
-        //            category: rememberCategoryFromOneLine,
-        //            subcategory: rememberCategoryFromOneLine,
-        //            displaySubcategory: rememberCategoryFromOneLine,
-        //            columnCells: []
-        //        };
-        //        _.forEach(invertedArray, function (summaryColumn, index) {
-        //            if (typeof summaryColumn === 'undefined') {
-        //                summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, ""));
-        //            } else {
-        //
-        //                if (summaryColumn.tissues.length === 0) {
-        //                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, ""));
-        //                } else {
-        //                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-        //                        Mustache.render($("#dynamicDnaseVariantTableBodySummaryRecord")[0].innerHTML, {
-        //                            tissueNumber: summaryColumn.tissues.length,
-        //                            category: rememberCategoryFromOneLine
-        //                        }))
-        //                    );
-        //                }
-        //
-        //            }
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(summaryRow);
-        //    }
-        //
-        //    intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
-        //}
-        //
-        //prepareToPresentToTheScreen(idForTheTargetDiv,
-        //    '#unused',
-        //    returnObject,
-        //    clearBeforeStarting,
-        //    intermediateDataStructure,
-        //    true,
-        //    'variantTableVariantHeaders');
-
     };
 
 
@@ -2506,240 +2196,157 @@ mpgSoftware.dynamicUi = (function () {
             "#dynamicH3k27acVariantTableBodySummaryRecord", "table.combinedVariantTableHolder",'variantTableVariantHeaders',
             undefined, undefined,
         false, true);
-        //var returnObject = createNewDisplayReturnObject();
-        //
-        //var intermediateDataStructure = new IntermediateDataStructure();
-        //var h3k27acAggregatedPerVariant = getAccumulatorObject("h3k27acAggregatedPerVariant");
-        //if (( typeof h3k27acAggregatedPerVariant !== 'undefined') && ( h3k27acAggregatedPerVariant.length > 0)) {
-        //
-        //    // fill in all of the column cells
-        //    var variantNameArray = getAccumulatorObject("variantNameArray");
-        //    var allArraysOfTissueNames = _.map(h3k27acAggregatedPerVariant, function (o) {
-        //        return o.uniqueTissueNames
-        //    });
-        //    var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
-        //    _.forEach(everyTissueToDisplay, function (aTissue) {
-        //        var tissueRow = {
-        //            category: 'H3k27ac',
-        //            displayCategory: 'H3k27ac',
-        //            subcategory: aTissue,
-        //            displaySubcategory: aTissue,
-        //            columnCells: []
-        //        };
-        //        _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
-        //            var recordsPerVariant = _.find(h3k27acAggregatedPerVariant, {variant: aVariant});
-        //            if (typeof  recordsPerVariant === 'undefined') {
-        //                tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                    "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
-        //            } else {
-        //                var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
-        //                if (typeof perTissuePerVariant === 'undefined') {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
-        //                } else {
-        //                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-        //                        Mustache.render($("#dynamicH3k27acVariantTableBody")[0].innerHTML, perTissuePerVariant), "tissueRecord");
-        //                }
-        //            }
-        //
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(tissueRow);
-        //    });
-        //
-        //    // I might need to create a summary line
-        //    if (intermediateDataStructure.rowsToAdd.length > 0) {
-        //        var invertedArray = [];
-        //        var rememberCategoryFromOneLine = "none";
-        //        _.map(intermediateDataStructure.rowsToAdd, function (oneRow) {
-        //            if (invertedArray.length === 0) {
-        //                invertedArray = new Array(oneRow.columnCells.length);
-        //                rememberCategoryFromOneLine = oneRow.category;
-        //            }
-        //            _.forEach(oneRow.columnCells, function (cell, index) {
-        //                var domVersionOfCell = $(cell.content);
-        //                if (domVersionOfCell.hasClass("variantRecordExists")) {
-        //                    if (typeof invertedArray[index] === 'undefined') {
-        //                        invertedArray[index] = {tissues: []}
-        //                    }
-        //                    if (!invertedArray[index].tissues.includes(oneRow.subcategory)) {
-        //                        invertedArray[index].tissues.push(oneRow.subcategory);
-        //                    }
-        //                }
-        //            });
-        //        });
-        //        var summaryRow = {
-        //            displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
-        //            '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
-        //            'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
-        //            category: rememberCategoryFromOneLine,
-        //            subcategory: rememberCategoryFromOneLine,
-        //            displaySubcategory: rememberCategoryFromOneLine,
-        //            columnCells: []
-        //        };
-        //        _.forEach(invertedArray, function (summaryColumn, index) {
-        //            if (typeof summaryColumn === 'undefined') {
-        //                summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
-        //            } else {
-        //
-        //                if (summaryColumn.tissues.length === 0) {
-        //                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
-        //                } else {
-        //                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-        //                        Mustache.render($("#dynamicH3k27acVariantTableBodySummaryRecord")[0].innerHTML, {
-        //                            tissueNumber: summaryColumn.tissues.length,
-        //                            category: rememberCategoryFromOneLine
-        //                        }), "summary")
-        //                    );
-        //                }
-        //
-        //            }
-        //        });
-        //        intermediateDataStructure.rowsToAdd.push(summaryRow);
-        //    }
-        //
-        //    intermediateDataStructure.tableToUpdate = "table.combinedVariantTableHolder";
-        //}
-        //
-        //prepareToPresentToTheScreen(idForTheTargetDiv,
-        //    '#unused',
-        //    returnObject,
-        //    clearBeforeStarting,
-        //    intermediateDataStructure,
-        //    true,
-        //    'variantTableVariantHeaders');
-        //
     };
 
 
-var displayVariantDataWithHiddenTissuesAndSummaryLines = function(idForTheTargetDiv,nameOfAccumulatorObject,category,displayCategory,
-                                                                  noRecordTemplate,undefinedTissueRecord,cellBodyRecord,
-                                                                    cellBodySummaryRecord,tableToUpdate, typeOfTable,
-                                                                    minimumValue,maximumValue,
-                                                                    matchOnGene,matchOnTissue){
-    var returnObject = createNewDisplayReturnObject();
+    /***
+     * This complicated routine serves as a general-purpose display IF:
+     *      we are considering a variant based table
+     *      Results are to be separated by tissue, but aggregated by Gene
+     * The challenge we try to address here is that we have a long linear list of records, and we need to
+     * convert that list into an array where each cell contains only data that is relevant to its
+     * specific row and column.  Furthermore we may wish to filter out some records based on their
+     * numerical value
+     *
+     * @param idForTheTargetDiv
+     * @param nameOfAccumulatorObject
+     * @param category
+     * @param displayCategory
+     * @param noRecordTemplate
+     * @param undefinedTissueRecord
+     * @param cellBodyRecord
+     * @param cellBodySummaryRecord
+     * @param tableToUpdate
+     * @param typeOfTable
+     * @param minimumValue
+     * @param maximumValue
+     * @param matchOnGene
+     * @param matchOnTissue
+     */
+    var displayVariantDataWithHiddenTissuesAndSummaryLines = function(  idForTheTargetDiv,nameOfAccumulatorObject,category,displayCategory,
+                                                                        noRecordTemplate,undefinedTissueRecord,cellBodyRecord,
+                                                                        cellBodySummaryRecord,tableToUpdate, typeOfTable,
+                                                                        minimumValue,maximumValue,
+                                                                        matchOnGene,matchOnTissue){
+        var returnObject = createNewDisplayReturnObject();
 
-    var intermediateDataStructure = new IntermediateDataStructure();
-    var recordsAggregatedPerVariant = getAccumulatorObject(nameOfAccumulatorObject);
-    if (( typeof recordsAggregatedPerVariant !== 'undefined') && ( recordsAggregatedPerVariant.length > 0)) {
+        var intermediateDataStructure = new IntermediateDataStructure();
+        var recordsAggregatedPerVariant = getAccumulatorObject(nameOfAccumulatorObject);
+        if (( typeof recordsAggregatedPerVariant !== 'undefined') && ( recordsAggregatedPerVariant.length > 0)) {
 
-        // fill in all of the column cells
-        var variantNameArray = getAccumulatorObject("variantNameArray");
-        var allArraysOfTissueNames = _.map(recordsAggregatedPerVariant, function (o) {
-            return o.uniqueTissueNames
-        });
-        var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
-        _.forEach(everyTissueToDisplay, function (aTissue) {
-            var tissueRow = {
-                category: category,
-                displayCategory: displayCategory,
-                subcategory: aTissue,
-                displaySubcategory: aTissue,
-                columnCells: []
-            };
-            var dataWorthDisplayingExists = false;
-            _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
-                var recordsPerVariant = _.find(recordsAggregatedPerVariant, {variant: aVariant});
-                if (typeof  recordsPerVariant === 'undefined') {
-                    tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-                        "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
-                } else {
-                    var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
-                    if ((typeof perTissuePerVariant === 'undefined')||
-                        ((typeof minimumValue !== 'undefined')&&(perTissuePerVariant[0].value<minimumValue))||
-                        ((typeof maximumValue !== 'undefined')&&(perTissuePerVariant[0].value>maximumValue))){
+            // fill in all of the column cells
+            var variantNameArray = getAccumulatorObject("variantNameArray");
+            var allArraysOfTissueNames = _.map(recordsAggregatedPerVariant, function (o) {
+                return o.uniqueTissueNames
+            });
+            var everyTissueToDisplay = _.uniq(_.flatten(_.union(allArraysOfTissueNames))).sort();
+            _.forEach(everyTissueToDisplay, function (aTissue) {
+                var tissueRow = {
+                    category: category,
+                    displayCategory: displayCategory,
+                    subcategory: aTissue,
+                    displaySubcategory: aTissue,
+                    columnCells: []
+                };
+                var dataWorthDisplayingExists = false;
+                _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
+                    var recordsPerVariant = _.find(recordsAggregatedPerVariant, {variant: aVariant});
+                    if (typeof  recordsPerVariant === 'undefined') {
                         tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
                             "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
                     } else {
-                        tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-                            Mustache.render($(cellBodyRecord)[0].innerHTML, perTissuePerVariant), "tissueRecord");
-                        dataWorthDisplayingExists = true;
-                    }
-                }
-
-            });
-            if (dataWorthDisplayingExists){
-                intermediateDataStructure.rowsToAdd.push(tissueRow);
-            }
-
-        });
-
-        // I might need to create a summary line
-        if (intermediateDataStructure.rowsToAdd.length > 0) {
-            var invertedArray = [];
-            var rememberCategoryFromOneLine = "none";
-            _.map(intermediateDataStructure.rowsToAdd, function (oneRow) {
-                if (invertedArray.length === 0) {
-                    invertedArray = new Array(oneRow.columnCells.length);
-                    rememberCategoryFromOneLine = oneRow.category;
-                }
-                _.forEach(oneRow.columnCells, function (cell, index) {
-                    var domVersionOfCell = $(cell.content);
-                    if (domVersionOfCell.hasClass("variantRecordExists")) {
-                        if (typeof invertedArray[index] === 'undefined') {
-                            invertedArray[index] = new InversionArray(matchOnGene,matchOnTissue,false);
-                        }
-                        var geneName = domVersionOfCell.attr('geneName');
-                        if ((matchOnGene) && (!invertedArray[index].genes.includes(geneName))) {
-                            invertedArray[index].genes.push(geneName);
-                        }
-                        if ((matchOnTissue) && (!invertedArray[index].tissues.includes(oneRow.subcategory))) {
-                            invertedArray[index].tissues.push(oneRow.subcategory);
+                        var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
+                        if ((typeof perTissuePerVariant === 'undefined')||
+                            ((typeof minimumValue !== 'undefined')&&(perTissuePerVariant[0].value<minimumValue))||
+                            ((typeof maximumValue !== 'undefined')&&(perTissuePerVariant[0].value>maximumValue))){
+                            tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
+                                "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
+                        } else {
+                            tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
+                                Mustache.render($(cellBodyRecord)[0].innerHTML, perTissuePerVariant), "tissueRecord");
+                            dataWorthDisplayingExists = true;
                         }
                     }
+
                 });
-            });
-            var summaryRow = {
-                displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
-                'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
-                '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
-                'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
-                category: rememberCategoryFromOneLine,
-                subcategory: rememberCategoryFromOneLine,
-                displaySubcategory: rememberCategoryFromOneLine,
-                columnCells: []
-            };
-            _.forEach(invertedArray, function (summaryColumn, index) {
-                if (typeof summaryColumn === 'undefined') {
-                    summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
-                } else {
+                if (dataWorthDisplayingExists){
+                    intermediateDataStructure.rowsToAdd.push(tissueRow);
+                }
 
-                    if (summaryColumn.tissues.length === 0) {
+            });
+
+            // I might need to create a summary line
+            if (intermediateDataStructure.rowsToAdd.length > 0) {
+                var invertedArray = [];
+                var rememberCategoryFromOneLine = "none";
+                _.map(intermediateDataStructure.rowsToAdd, function (oneRow) {
+                    if (invertedArray.length === 0) {
+                        invertedArray = new Array(oneRow.columnCells.length);
+                        rememberCategoryFromOneLine = oneRow.category;
+                    }
+                    _.forEach(oneRow.columnCells, function (cell, index) {
+                        var domVersionOfCell = $(cell.content);
+                        if (domVersionOfCell.hasClass("variantRecordExists")) {
+                            if (typeof invertedArray[index] === 'undefined') {
+                                invertedArray[index] = new InversionArray(matchOnGene,matchOnTissue,false);
+                            }
+                            var geneName = domVersionOfCell.attr('geneName');
+                            if ((matchOnGene) && (!invertedArray[index].genes.includes(geneName))) {
+                                invertedArray[index].genes.push(geneName);
+                            }
+                            if ((matchOnTissue) && (!invertedArray[index].tissues.includes(oneRow.subcategory))) {
+                                invertedArray[index].tissues.push(oneRow.subcategory);
+                            }
+                        }
+                    });
+                });
+                var summaryRow = {
+                    displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
+                    'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
+                    '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
+                    'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
+                    category: rememberCategoryFromOneLine,
+                    subcategory: rememberCategoryFromOneLine,
+                    displaySubcategory: rememberCategoryFromOneLine,
+                    columnCells: []
+                };
+                _.forEach(invertedArray, function (summaryColumn, index) {
+                    if (typeof summaryColumn === 'undefined') {
                         summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
                     } else {
-                        var argumentForMustache = {category: rememberCategoryFromOneLine};
-                        if (matchOnGene){
-                            argumentForMustache["geneNumber"]=  summaryColumn.genes.length;
-                        }
-                        if (matchOnTissue){
-                            argumentForMustache["tissueNumber"]=  summaryColumn.tissues.length;
-                        }
-                        summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-                            Mustache.render($(cellBodySummaryRecord)[0].innerHTML, argumentForMustache
-                            //    {
-                            //    tissueNumber: summaryColumn.tissues.length,
-                            //    category: rememberCategoryFromOneLine
-                            //}
-                            ), "summary")
-                        );
-                    }
 
-                }
-            });
-            intermediateDataStructure.rowsToAdd.push(summaryRow);
+                        if (summaryColumn.tissues.length === 0) {
+                            summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
+                        } else {
+                            var argumentForMustache = {category: rememberCategoryFromOneLine};
+                            if (matchOnGene){
+                                argumentForMustache["geneNumber"]=  summaryColumn.genes.length;
+                            }
+                            if (matchOnTissue){
+                                argumentForMustache["tissueNumber"]=  summaryColumn.tissues.length;
+                            }
+                            summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
+                                Mustache.render($(cellBodySummaryRecord)[0].innerHTML, argumentForMustache
+                                ), "summary")
+                            );
+                        }
+
+                    }
+                });
+                intermediateDataStructure.rowsToAdd.push(summaryRow);
+            }
+
+            intermediateDataStructure.tableToUpdate = tableToUpdate;
         }
 
-        intermediateDataStructure.tableToUpdate = tableToUpdate;
+        prepareToPresentToTheScreen(idForTheTargetDiv,
+            '#unused',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            typeOfTable);
     }
-
-    prepareToPresentToTheScreen(idForTheTargetDiv,
-        '#unused',
-        returnObject,
-        clearBeforeStarting,
-        intermediateDataStructure,
-        true,
-        typeOfTable);
-}
 
 
 
@@ -3201,8 +2808,8 @@ var displayVariantDataWithHiddenTissuesAndSummaryLines = function(idForTheTarget
             arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromDepictForGenesTable',
                 actionDefaultFollowUp("getInformationFromDepictForGenesTable")));
 
-            // arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
-            //     actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
+            //////// arrayOfRoutinesToUndertake.push( actionContainer('getAnnotationsFromModForGenesTable',
+            ////////     actionDefaultFollowUp("getAnnotationsFromModForGenesTable")));
 
             arrayOfRoutinesToUndertake.push( actionContainer("getTissuesFromAbcForGenesTable",
                 actionDefaultFollowUp("getTissuesFromAbcForGenesTable")));
