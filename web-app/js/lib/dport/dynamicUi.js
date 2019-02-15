@@ -1220,7 +1220,7 @@ var clearBeforeStarting = false;
             } else {
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord){
                     intermediateDataStructure.headerNames.push (oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push (new IntermediateStructureDataCell(oneRecord.geneName,""));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push (new IntermediateStructureDataCell(oneRecord.name,""));
                 });
             }
 
@@ -1886,11 +1886,7 @@ var clearBeforeStarting = false;
             _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord) {
                 intermediateDataStructure.headerNames.push(oneRecord.name1);
                 intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
-                intermediateDataStructure.headers.push({
-                    name: oneRecord.name1,
-                    contents: Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord)
-                });
-
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord)));
             });
 
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -2096,7 +2092,7 @@ var clearBeforeStarting = false;
                         rememberCategoryFromOneLine = oneRow.category;
                     }
                     _.forEach(oneRow.columnCells,function (cell,index){
-                        var domVersionOfCell = $(cell.contents);
+                        var domVersionOfCell = $(cell.content);
                         if (domVersionOfCell.hasClass("variantRecordExists")){
                             if ( typeof invertedArray[index] === 'undefined' ){
                                 invertedArray[index] = { genes: [], tissues: [] }
@@ -2213,7 +2209,7 @@ var clearBeforeStarting = false;
                         rememberCategoryFromOneLine = oneRow.category;
                     }
                     _.forEach(oneRow.columnCells,function (cell,index){
-                        var domVersionOfCell = $(cell.contents);
+                        var domVersionOfCell = $(cell.content);
                         if (domVersionOfCell.hasClass("variantRecordExists")){
                             if ( typeof invertedArray[index] === 'undefined' ){
                                 invertedArray[index] = { genes: [], tissues: [] }
@@ -2296,15 +2292,15 @@ var clearBeforeStarting = false;
                 _.forEach(variantNameArray, function (aVariant,indexOfColumn){
                     var recordsPerVariant = _.find(dnaseAggregatedPerVariant,{variant:aVariant});
                     if ( typeof  recordsPerVariant === 'undefined'){
-                        tissueRow.columnCells[indexOfColumn] =new IntermediateStructureDataCell(tissueRow.category,
+                        tissueRow.columnCells[indexOfColumn] =new IntermediateStructureDataCell(aTissue,
                             "<div class='noDataHere "+tissueRow.category+"'></div>");
                     } else {
                         var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues,{tissueName:aTissue}),{category:tissueRow.category});
                         if ( typeof perTissuePerVariant === 'undefined'){
-                            tissueRow.columnCells[indexOfColumn] =new IntermediateStructureDataCell(tissueRow.category,
+                            tissueRow.columnCells[indexOfColumn] =new IntermediateStructureDataCell(aTissue,
                                 "<div class='noDataHere "+tissueRow.category+"'></div>");
                         }else{
-                            tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(tissueRow.category,
+                            tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
                                 Mustache.render($("#dynamicDnaseVariantTableBody")[0].innerHTML,perTissuePerVariant));
                         }
                     }
@@ -2323,7 +2319,7 @@ var clearBeforeStarting = false;
                         rememberCategoryFromOneLine = oneRow.category;
                     }
                     _.forEach(oneRow.columnCells,function (cell,index){
-                        var domVersionOfCell = $(cell.contents);
+                        var domVersionOfCell = $(cell.content);
                         if (domVersionOfCell.hasClass("variantRecordExists")){
                             if ( typeof invertedArray[index] === 'undefined' ){
                                 invertedArray[index] = {  tissues: [] }
@@ -2533,19 +2529,19 @@ var clearBeforeStarting = false;
             // set up the headers, and give us an empty row of column cells
             _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord){
                 if( typeof oneRecord !== 'undefined'){
-                    intermediateDataStructure.headers.push({variantName:oneRecord.VAR_ID,
-                        contents:Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})} );
+                    intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.VAR_ID,
+                        Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID})) );
                     //  intermediateDataStructure.columnCells.push ("");
                 }
             });
-            setAccumulatorObject("variantNameArray", _.map(intermediateDataStructure.headers, function (headerRec){return headerRec.variantName}));
+            setAccumulatorObject("variantNameArray", _.map(intermediateDataStructure.headers, function (headerRec){return headerRec.title}));
             intermediateDataStructure.rowsToAdd = [];
             var numberOfVariants = returnObject.variantsToAnnotate.variants.length;
             // fill in all of the column cells covering each of our annotations
             if ( typeof returnObject.variantsToAnnotate.variants !== 'undefined'){
                 _.forEach(returnObject.variantsToAnnotate.variants, function (recordsPerVariant){
                     var headerNames = _.map(intermediateDataStructure.headers, function (headerRecord){
-                        return headerRecord.variantName
+                        return headerRecord.title
                     });
                     var indexOfColumn = _.indexOf(headerNames,recordsPerVariant.VAR_ID);
                     if (indexOfColumn===-1){
@@ -3091,7 +3087,7 @@ var clearBeforeStarting = false;
     };
     var IntermediateStructureDataCell = function (name,content){
         return {
-            name: name,
+            title: name,
             content: content
         };
     };
@@ -3163,31 +3159,34 @@ var clearBeforeStarting = false;
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push({contents:'',name:'a'});
-                            addedColumns.push({contents:'',name:'b'});
+                            addedColumns.push(new IntermediateStructureDataCell('a',''));
+                            addedColumns.push(new IntermediateStructureDataCell('b',''));
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push({contents:'',name:'a'});
-                            addedColumns.push({contents:'',name:'b'});
+                            addedColumns.push(new IntermediateStructureDataCell('a',''));
+                            addedColumns.push(new IntermediateStructureDataCell('b',''));
                             break;
                         default:
                             break;
                     }
                     _.forEach(addedColumns, function (column){
                         headerDescriber.columnDefs.push({
-                            "title": column.contents,
+                            "title": column.content,
                             "targets": 0,
-                            "name": column.name
+                            "name": column.title
                         });
                     });
 
                 }
+
+                var numberOfAddedColumns = addedColumns.length;
                  _.forEach(headers, function (header, count) {
                     headerDescriber.columnDefs.push({
-                        "title": header.contents,
-                        "targets": count+addedColumns.length,
-                        "name": header.name
+                        "title": header.content,
+                        "targets": count+numberOfAddedColumns,
+                        "name": header.title
                     });
+                     addedColumns.push(new IntermediateStructureDataCell(header.title,header.content));
                 });
 
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
@@ -3198,8 +3197,8 @@ var clearBeforeStarting = false;
                         var domElement = $(o);
                         var headerName = domElement.text().trim();
                         storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                            headerDescriber.columnDefs[columnIndex].name,
-                            headerName,
+                            addedColumns[columnIndex].title,
+                            addedColumns[columnIndex].content,
                             typeOfHeader,
                             0,
                             columnIndex,
@@ -3321,10 +3320,10 @@ var clearBeforeStarting = false;
             }
 
             _.forEach(row.columnCells, function (val, index) {
-                rowDescriber.push({ title:val.name,content:val.content});
+                rowDescriber.push(val);
                 if (storeRecordsInDataStructure){
                     storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                        val.name,
+                        val.title,
                         val.content,
                         'content',
                         numberOfExistingRows,
@@ -3434,10 +3433,11 @@ var clearBeforeStarting = false;
          }
 
          // build the headers
-         var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
-             return {   contents:datacell,
-                 name:datacell.trim() };
-         });
+         //var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
+         //    return {   contents:datacell,
+         //        name:datacell.trim() };
+         //});
+         var headers = _.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns);
          var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
          refineTableRecords(datatable,sharedTable.currentForm,"");
 
