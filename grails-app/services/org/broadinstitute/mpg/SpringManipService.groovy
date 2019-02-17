@@ -48,12 +48,12 @@ class SpringManipService {
      */
     public Boolean forceLogin(JSONObject identityInformation,javax.servlet.http.HttpSession session) {
         if ((!identityInformation) ||
-            (!identityInformation.emails) ||
-            (identityInformation.emails.size()<1) ) {
+            (!identityInformation.email) ||
+            (identityInformation.email.size()<1) ) {
             return  // no email.  This is the one identifier we cannot do without
         }
         Boolean weHaveSeenYouBefore = false
-        String email = identityInformation.emails[0]['value']
+        String email = identityInformation.email
         String username = email
         String password = 'bloodglucose'
         String fullName = "default"
@@ -62,34 +62,30 @@ class SpringManipService {
         String webSiteUrl = "default"
         String preferredLanguage = "en" // default to English
         // find better values if we can
-        if (identityInformation.displayName){
-            fullName = identityInformation.displayName
+
+        if (identityInformation.given_name){
+            nickname = identityInformation.given_name
         }
         if (identityInformation.name){
-            JSONObject nameObject = identityInformation.name
-            if (nameObject?.names()){
-                if (nameObject['givenName']) {
-                   nickname = nameObject['givenName']
-                }
-            }
+            fullName = identityInformation.name
         }
-        if (identityInformation.organizations){
-            JSONArray organizationArray = identityInformation.organizations
-            if (organizationArray.size()>0){
-                for ( int i = 0 ; i < organizationArray.size() ; i++ ){
-                    JSONObject oneOrganization = organizationArray[i]
-                    if ((oneOrganization.primary) &&
-                        (oneOrganization.name)) {
-                        primaryOrganization = oneOrganization.name
-                    }
-                }
-            }
-        }
-        if (identityInformation.url){
-            webSiteUrl = identityInformation.url
-        }
-        if (identityInformation.language){
-            preferredLanguage = identityInformation.language
+//        if (identityInformation.hd){
+//            JSONArray organizationArray = identityInformation.hd
+//            if (organizationArray.size()>0){
+//                for ( int i = 0 ; i < organizationArray.size() ; i++ ){
+//                    JSONObject oneOrganization = organizationArray[i]
+//                    if ((oneOrganization.primary) &&
+//                        (oneOrganization.name)) {
+//                        primaryOrganization = oneOrganization.name
+//                    }
+//                }
+//            }
+//        }
+//        if (identityInformation.url){
+//            webSiteUrl = identityInformation.url
+//        }
+        if (identityInformation.locale){
+            preferredLanguage = identityInformation.locale
         }
         User user = User.findByUsername(email)
         if (user){ // we arty have a user.  Connect to it
