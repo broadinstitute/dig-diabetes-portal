@@ -3121,7 +3121,7 @@ mpgSoftware.dynamicUi = (function () {
                                 }
                             }
                             _.forEach(adjustVisibilityCategories,function(adjustVisibilityCategory){
-                                if (adjustVisibilityCategory.length>0){
+                                if (($.isArray(adjustVisibilityCategory))&&(adjustVisibilityCategory.length>0)){
                                     var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
                                     if (elementsToHide.length>0){
                                         elementsToHide.parent().parent().hide();
@@ -3131,6 +3131,10 @@ mpgSoftware.dynamicUi = (function () {
                                         elementsToHide.parent().parent().hide();
                                     }
                                 }
+
+                            });
+                            _.forEach($('div.tissueRecord'),function(oneRecord){
+                                $(oneRecord).parent().parent().hide();
                             });
 
                         }
