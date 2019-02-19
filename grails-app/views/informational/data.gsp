@@ -157,10 +157,10 @@
 
 
                         <tr><td>Cade <i>et al</i>. 2019, in press</a></td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
-                            <td>Associations with average oxyhemoglobin saturation of an individual across an entire sleep episode: <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_average_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
-                                Associations with the single pointwise minimum oxyhemoglobin saturation of an individual across an entire sleep episode: <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_minimum_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
-                                Associations with the percentage of a single sleep recording where an individual has hypoxemia (defined as SpO2 &lt; 90%): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_percent_sleep_under_90_percent_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a>
-</td><td><a href="" target="_blank">README</a></td></tr>
+                            <td>Associations with average oxyhemoglobin saturation during sleep (average SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_average_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
+                                Associations with minimum oxyhemoglobin saturation during sleep (minimum SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_minimum_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
+                                Associations with the percentage of sleep with SpO2 < 90% (Per90): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_percent_sleep_under_90_percent_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a>
+</td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/README_Cade_et_al.txt" target="_blank">README</a></td></tr>
                         <tr><td>Lane <i>et al.</i>, <a href="https://www.biorxiv.org/content/10.1101/257956v1" target="_blank">preprint at bioRxiv</a></td><td>Biological and clinical insights from genetics of insomnia symptoms.</td><td><a href="https://personal.broadinstitute.org/mvon/Saxena_fullUKBB_Insomnia_summary_stats.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Insomnia_summary_stats_README" target="_blank">README</a></td></tr>
 
 
