@@ -2244,7 +2244,7 @@ mpgSoftware.dynamicUi = (function () {
                 var tissueRow = {
                     category: category,
                     displayCategory: displayCategory,
-                    subcategory: aTissue,
+                    subcategory: "tissueRecord "+aTissue+" "+category,
                     displaySubcategory: aTissue,
                     columnCells: []
                 };
@@ -2302,11 +2302,11 @@ mpgSoftware.dynamicUi = (function () {
                 });
                 var summaryRow = {
                     displayCategory: '<button type="button" class="btn btn-info shower ' + rememberCategoryFromOneLine + '" ' +
-                    'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')">display tissues</button>' +
+                    'onclick="mpgSoftware.dynamicUi.displayTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\',\''+nameOfAccumulatorObject+'\',\''+tableToUpdate+'\')">display tissues</button>' +
                     '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
-                    'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\')"  style="display: none">hide tissues</button>',
+                    'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\',\''+nameOfAccumulatorObject+'\',\''+tableToUpdate+'\')"  style="display: none">hide tissues</button>',
                     category: rememberCategoryFromOneLine,
-                    subcategory: rememberCategoryFromOneLine,
+                    subcategory: "summary",
                     displaySubcategory: rememberCategoryFromOneLine,
                     columnCells: []
                 };
@@ -2945,11 +2945,11 @@ mpgSoftware.dynamicUi = (function () {
             ascensionNumber:ascensionNumber
         };
     };
-    var IntermediateStructureDataCell = function (name,content, purpose){
+    var IntermediateStructureDataCell = function (name,content, annotation){
         return {
             title: name,
             content: content,
-            purpose:  purpose
+            annotation:  annotation
         };
     };
 
@@ -3020,12 +3020,12 @@ mpgSoftware.dynamicUi = (function () {
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('a',''));
-                            addedColumns.push(new IntermediateStructureDataCell('b',''));
+                            addedColumns.push(new IntermediateStructureDataCell('a','','addedColumn1'));
+                            addedColumns.push(new IntermediateStructureDataCell('b','','addedColumn2'));
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('a',''));
-                            addedColumns.push(new IntermediateStructureDataCell('b',''));
+                            addedColumns.push(new IntermediateStructureDataCell('a','','addedColumn1'));
+                            addedColumns.push(new IntermediateStructureDataCell('b','','addedColumn2'));
                             break;
                         default:
                             break;
@@ -3034,20 +3034,24 @@ mpgSoftware.dynamicUi = (function () {
                         headerDescriber.columnDefs.push({
                             "title": column.content,
                             "targets": 0,
-                            "name": column.title
+                            "name": column.title,
+                            "className": column.annotation
                         });
                     });
 
                 }
+
+                var classNamesForHeader = [];
 
                 var numberOfAddedColumns = addedColumns.length;
                  _.forEach(headers, function (header, count) {
                     headerDescriber.columnDefs.push({
                         "title": header.content,
                         "targets": count+numberOfAddedColumns,
-                        "name": header.title
+                        "name": header.title,
+                        "className": header.annotation
                     });
-                     addedColumns.push(new IntermediateStructureDataCell(header.title,header.content));
+                     addedColumns.push(new IntermediateStructureDataCell(header.title,header.content,header.annotation));
                 });
 
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
@@ -3072,7 +3076,7 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
-    var refineTableRecords = function (datatable,headerType,adjustVisibilityCategories){
+    var refineTableRecords = function (datatable,headerType,adjustVisibilityCategories,headerSpecific){
         if( typeof datatable === 'undefined'){
             console.log(" ERROR: failed to receive a valid datatable parameter");
         } else if (( typeof datatable.DataTable() === 'undefined') ||
@@ -3084,42 +3088,71 @@ mpgSoftware.dynamicUi = (function () {
                 case 'geneTableGeneHeaders':
                   break;
                 case 'variantTableVariantHeaders':
-                    _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){
-                        var domElement = $(o);
-                        var headerName = domElement.text().trim();
-                        if ((headerName.length >  5) &&
-                            (headerName.split('_').length === 4)){
-                            var partsOfId = headerName.split('_');
-                            domElement.addClass("niceHeadersThatAreLinks");
-                            domElement.addClass("headersWithVarIds");
-                            domElement.attr("defrefa",partsOfId[2]);
-                            domElement.attr("defeffa",partsOfId[3]);
-                            domElement.attr("chrom",partsOfId[0]);
-                            domElement.attr("position",partsOfId[1]);
-                            domElement.attr("varid",partsOfId[0]+":"+partsOfId[1]+"_"+
-                                partsOfId[2]+"/"+partsOfId[3]);
-                            domElement.attr("data-toggle","popover");
-                        }
-                        for( var i = 0 ; i < 5 ; i++ ){
-                            $('td:has(div.tissueTable.matchingRegion2_'+i+')').addClass('tissueTable matchingRegion2_'+i);
-                            $('td:has(div.tissueTable.matchingRegion1_'+i+')').addClass('tissueTable matchingRegion1_'+i);
+                    if (headerSpecific) {
+                        _.forEach(datatable.DataTable().columns().header(),function(o,columnIndex){ //  make nice headers out of VAR_IDs
+                            var domElement = $(o);
+                            var headerName = domElement.text().trim();
+                            if ((headerName.length >  5) &&
+                                (headerName.split('_').length === 4)){
+                                var partsOfId = headerName.split('_');
+                                domElement.addClass("niceHeadersThatAreLinks");
+                                domElement.addClass("headersWithVarIds");
+                                domElement.attr("defrefa",partsOfId[2]);
+                                domElement.attr("defeffa",partsOfId[3]);
+                                domElement.attr("chrom",partsOfId[0]);
+                                domElement.attr("position",partsOfId[1]);
+                                domElement.attr("varid",partsOfId[0]+":"+partsOfId[1]+"_"+
+                                    partsOfId[2]+"/"+partsOfId[3]);
+                                domElement.attr("data-toggle","popover");
+                            }
+
+
+                        });
+                    } else { // adjust the coloration of selected squares
+                        if (( typeof adjustVisibilityCategories !== 'undefined') &&
+                            (adjustVisibilityCategories.length > 0)){
+                            if (adjustVisibilityCategories[0] === "H3k27ac"){
+                                for( var i = 0 ; i < 5 ; i++ ){
+                                    $('td:has(div.tissueTable.matchingRegion1_'+i+')').addClass('tissueTable matchingRegion1_'+i);
+                                }
+                            } else if (adjustVisibilityCategories[0] === "DNase"){
+                                for( var i = 0 ; i < 5 ; i++ ){
+                                    $('td:has(div.tissueTable.matchingRegion2_'+i+')').addClass('tissueTable matchingRegion2_'+i);
+                                }
+                            }
+                            _.forEach(adjustVisibilityCategories,function(adjustVisibilityCategory){
+                                if (adjustVisibilityCategory.length>0){
+                                    var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
+                                    if (elementsToHide.length>0){
+                                        elementsToHide.parent().parent().hide();
+                                    }
+                                    elementsToHide = $('div.variantRecordExists.'+adjustVisibilityCategory);
+                                    if (elementsToHide.length>0){
+                                        elementsToHide.parent().parent().hide();
+                                    }
+                                }
+                            });
+
                         }
 
-                    });
-                case 'variantTableAnnotationHeaders':
-                    _.forEach(adjustVisibilityCategories,function(adjustVisibilityCategory){
-                        if (adjustVisibilityCategory.length>0){
-                            var elementsToHide = $('div.noDataHere.'+adjustVisibilityCategory);
-                            if (elementsToHide.length>0){
-                                elementsToHide.parent().parent().hide();
-                            }
-                            elementsToHide = $('div.variantRecordExists.'+adjustVisibilityCategory);
-                            if (elementsToHide.length>0){
-                                elementsToHide.parent().parent().hide();
-                            }
-                        }
-                    });
+                    }
                     break;
+                case 'variantTableAnnotationHeaders':
+                    if (headerSpecific) {
+                        ;
+                    } else { // turn off the visibility of tissue specific
+                        var tissueColumnsToHide = $('th.tissueRecord');
+                        _.forEach(tissueColumnsToHide,function(oneColumn){
+                            var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
+                            if (_.includes(classListForColumn,'tissueRecord')){
+                                var buildSelector = 'th.'+classListForColumn.join('.');
+                                datatable.DataTable().column(buildSelector).visible(false);
+                            }
+
+                        });
+                    }
+
+                     break;
 
                 default:
                     break;
@@ -3139,7 +3172,10 @@ mpgSoftware.dynamicUi = (function () {
         _.forEach(rowsToAdd, function (row,newRowCount) {
             if ( !_.includes (rememberCategories,row.category)) {
                 rememberCategories.push(row.category);
+            } else if ( !_.includes (rememberCategories,row.subcategory)) {
+                rememberCategories.push(row.subcategory);
             }
+
             var numberOfExistingRows = $(whereTheTableGoes+" tr").length;
             if (numberOfExistingRows === 2){ // special case.  When the table is first created a fake row is added by jquery datatable.  Ignore it
                                              //   for the purposes of building our in memory representation of the table.
@@ -3155,10 +3191,12 @@ mpgSoftware.dynamicUi = (function () {
                 switch (typeOfRecord) {
                     case 'geneTableGeneHeaders':
                     case 'variantTableVariantHeaders':
-                        rowDescriber.push( { title:row.category,
-                                             content:"<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>" });
-                        rowDescriber.push( { title:row.subcategory,
-                                             content:"<div class='subcategory'>"+row.displaySubcategory+"</div>"});
+                        rowDescriber.push( new IntermediateStructureDataCell(row.category,
+                                               "<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>" ,
+                                                row.subcategory)) ;
+                        rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
+                                             "<div class='subcategory'>"+row.displaySubcategory+"</div>" ,
+                                            "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                     case 'geneTableAnnotationHeaders':
@@ -3169,9 +3207,6 @@ mpgSoftware.dynamicUi = (function () {
 
                 _.forEach(rowDescriber, function(oneRow,columnIndex){
                     if (storeRecordsInDataStructure) {
-                        if ( !_.includes (rememberCategories,oneRow.title)) {
-                            rememberCategories.push(oneRow.title);
-                        }
                         storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                             oneRow,
                             'content',
@@ -3184,6 +3219,12 @@ mpgSoftware.dynamicUi = (function () {
 
 
             }
+            _.forEach(rowDescriber, function(oneRow,columnIndex){
+                if ( !_.includes (rememberCategories,oneRow.title)) {
+                    rememberCategories.push(oneRow.title);
+                }
+            });
+
 
             _.forEach(row.columnCells, function (val, index) {
                 rowDescriber.push(val);
@@ -3212,7 +3253,7 @@ mpgSoftware.dynamicUi = (function () {
             ( typeof intermediateStructure.headers !== 'undefined') &&
             (intermediateStructure.headers.length > 0)){
                 datatable = buildHeadersForTable(whereTheTableGoes,intermediateStructure.headers,storeRecords,typeOfRecord, true);
-                refineTableRecords(datatable,typeOfRecord,[]);
+                refineTableRecords(datatable,typeOfRecord,[], true);
         }
 
 
@@ -3221,7 +3262,7 @@ mpgSoftware.dynamicUi = (function () {
             datatable =  $(whereTheTableGoes).dataTable();
             var rememberCategories = addContentToTable(whereTheTableGoes,intermediateStructure.rowsToAdd,
                                                     storeRecords,typeOfRecord, true);
-            refineTableRecords(datatable,typeOfRecord,rememberCategories);
+            refineTableRecords(datatable,typeOfRecord,rememberCategories, false);
         }
 
 
@@ -3297,14 +3338,10 @@ mpgSoftware.dynamicUi = (function () {
 
          }
 
-         // build the headers
-         //var headers = _.map(_.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns), function(datacell){
-         //    return {   contents:datacell,
-         //        name:datacell.trim() };
-         //});
+
          var headers = _.slice(transposedTableDescription.dataCells,0,transposedTableDescription.numberOfColumns);
          var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,sharedTable.currentForm, false);
-         refineTableRecords(datatable,sharedTable.currentForm,[]);
+         refineTableRecords(datatable,sharedTable.currentForm,[],true);
 
          // build the body
          var rowsToAdd = [];
@@ -3321,7 +3358,7 @@ mpgSoftware.dynamicUi = (function () {
          });
          datatable =  $(whereTheTableGoes).dataTable();
          var rememberCategories = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
-         refineTableRecords(datatable,sharedTable.currentForm,rememberCategories);
+         refineTableRecords(datatable,sharedTable.currentForm,rememberCategories,false);
 
 
 
@@ -3448,19 +3485,60 @@ var destroySharedTable = function (whereTheTableGoes) {
         });
     };
 
-    var displayTissuesForAnnotation = function (annotationId){
-        $('div.noDataHere.'+annotationId).parent().parent().show();
-        $('div.variantRecordExists.'+annotationId).parent().parent().show();
+    var displayTissuesForAnnotation = function (annotationId,nameOfAccumulatorObject,tableToUpdate){
+        var recordsAggregatedPerVariant = getAccumulatorObject("sharedTable_"+tableToUpdate);
+        if (recordsAggregatedPerVariant.currentForm==="variantTableVariantHeaders"){
+            $('div.noDataHere.'+annotationId).parent().parent().show();
+            $('div.variantRecordExists.'+annotationId).parent().parent().show();
+        } else {
+            var dataTable = $(tableToUpdate).DataTable();
+            var tissueColumnsToDisplay = [];
+            var totalNumberOfColumns = $(tableToUpdate).DataTable().columns()[0].length;
+            for ( var i = 0 ; i < totalNumberOfColumns ; i++ ){
+                var classListForColumn = $($(tableToUpdate).DataTable().columns(i).header()[0]).attr('class').split(/\s+/);
+                if (_.includes(classListForColumn,annotationId)){
+                    var buildSelector = 'th.'+classListForColumn.join('.');
+                    dataTable.column(buildSelector).visible(true);
+                }
+
+            }
+        }
         $('button.shower.'+annotationId).hide();
         $('button.hider.'+annotationId).show();
 
     };
-    var hideTissuesForAnnotation = function (annotationId){
-        $('div.noDataHere.'+annotationId).parent().parent().hide();
-        $('div.variantRecordExists.'+annotationId).parent().parent().hide();
+    var hideTissuesForAnnotation = function (annotationId,nameOfAccumulatorObject,tableToUpdate){
+        var recordsAggregatedPerVariant = getAccumulatorObject("sharedTable_"+tableToUpdate);
+        if (recordsAggregatedPerVariant.currentForm==="variantTableVariantHeaders") {
+            $('div.noDataHere.' + annotationId).parent().parent().hide();
+            $('div.variantRecordExists.' + annotationId).parent().parent().hide();
+        } else {
+            var dataTable = $(tableToUpdate).DataTable();
+            var tissueColumnsToHide = $('th.tissueRecord.'+annotationId);
+            _.forEach(tissueColumnsToHide,function(oneColumn){
+                var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
+                if (_.includes(classListForColumn,'tissueRecord')){
+                    var buildSelector = 'th.'+classListForColumn.join('.');
+                    dataTable.column(buildSelector).visible(false);
+                }
+            });
+
+    }
+
+
         $('button.shower.'+annotationId).show();
         $('button.hider.'+annotationId).hide();
     };
+
+
+    //_.forEach(tissueColumnsToHide,function(oneColumn){
+    //    var classListForColumn = $(oneColumn).attr("class").split(/\s+/);
+    //    if (_.includes(classListForColumn,'tissueRecord')){
+    //        var buildSelector = 'th.'+classListForColumn.join('.');
+    //        datatable.DataTable().column(buildSelector).visible(false);
+    //    }
+    //
+    //});
 
 
 
