@@ -2942,6 +2942,7 @@ mpgSoftware.dynamicUi = (function () {
             resetAccumulatorObject("rawDepictInfo");
 //
             resetAccumulatorObject("abcAggregatedPerVariant");
+            resetAccumulatorObject("sharedTable_table.combinedGeneTableHolder");
 
 
             destroySharedTable('table.combinedGeneTableHolder');
@@ -2970,6 +2971,9 @@ mpgSoftware.dynamicUi = (function () {
 
 
         $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
+
+            resetAccumulatorObject("sharedTable_table.combinedVariantTableHolder");
+            destroySharedTable('table.combinedVariantTableHolder');
             var arrayOfRoutinesToUndertake = [];
 
             arrayOfRoutinesToUndertake.push( actionContainer('getVariantsWeWillUseToBuildTheVariantTable',
@@ -3128,18 +3132,25 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+        var generalPurposeSort  = function(a, b){
+            var x = UTILS.extractAnchorTextAsInteger(a);
+            var y = UTILS.extractAnchorTextAsInteger(b);
+            return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+        }
+
+
+
+        jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b) {
+            return generalPurposeSort(a,b);
+        };
+
+        jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
+            return generalPurposeSort(b,a);
+        };
 
 
 
 
-
-    var namesType = $.fn.dataTable.absoluteOrder( [
-        { value: 'Artery_Aorta', position: 'top' }
-    ] );
-
-    var numbersType = $.fn.dataTable.absoluteOrderNumber( [
-        { value: 'N/A', position: 'bottom' }
-    ] );
 
 
 
@@ -3199,10 +3210,11 @@ mpgSoftware.dynamicUi = (function () {
                     _.forEach(addedColumns, function (column, index){
                         headerDescriber.columnDefs.push({
                             "title": column.content,
-                            "targets": index,
+                            "targets": [index],
                             "name": column.title,
                             "className": column.annotation,
-                            "type": "absoluteOrder"
+                            "sortable": true,
+                            "type": "generalSort"
                         });
                     });
 
@@ -3214,10 +3226,11 @@ mpgSoftware.dynamicUi = (function () {
                  _.forEach(headers, function (header, count) {
                     headerDescriber.columnDefs.push({
                         "title": header.content,
-                        "targets": count+numberOfAddedColumns,
+                        "targets": [count+numberOfAddedColumns],
                         "name": header.title,
                         "className": header.annotation,
-                        "type": "absoluteOrder"
+                        "sortable": true,
+                        "type": "generalSort"
                     });
                      addedColumns.push(new IntermediateStructureDataCell(header.title,header.content,header.annotation));
                 });
