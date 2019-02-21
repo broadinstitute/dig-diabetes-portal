@@ -1994,26 +1994,19 @@ mpgSoftware.dynamicUi = (function () {
                 columnCells: []
             });
              //set up the headers, and give us an empty row of column cells
+            var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                //_.forEach(returnObject.uniqueEqtlGenes, function (oneRecord) {
-                //    intermediateDataStructure.headerNames.push(oneRecord.geneName);
-                //    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML, oneRecord));
-                //    intermediateDataStructure.headers.push({
-                //        name: oneRecord.geneName,
-                //        contents: Mustache.render($("#dynamicGeneTableEqtlHeader")[0].innerHTML, oneRecord)
-                //    });
-                //    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', ""));
-                //});
+                console.log("We always have to have a record of the current gene names. We have a problem.")
             } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-                    intermediateDataStructure.headerNames.push(oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', "","what the heck is this?"));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', '','eQTL for genes'));
                 });
             }
 
             // fill in all of the column cells
             _.forEach(returnObject.uniqueEqtlGenes, function (recordsPerGene) {
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.geneName);
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
@@ -2121,10 +2114,11 @@ mpgSoftware.dynamicUi = (function () {
 
         if (typeof objectContainingRetrievedRecords.rawData !== 'undefined') {
             // set up the headers, and give us an empty row of column cells
-            _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord) {
+            _.forEach(objectContainingRetrievedRecords.rawData, function (oneRecord,index) {
                 intermediateDataStructure.headerNames.push(oneRecord.name1);
                 intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
-                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1, Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader"));
+                intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,
+                    Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader columnNumber_"+(index+2)+" asc "));
             });
 
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -3133,6 +3127,18 @@ mpgSoftware.dynamicUi = (function () {
 
 
         var generalPurposeSort  = function(a, b){
+            var currentSortRequest = getAccumulatorObject("currentSortRequest");
+            switch (currentSortRequest.currentSort){
+                case 'geneHeader':
+                    //break;
+                case 'straightAlphabetic':
+                    var textA = a.toUpperCase();
+                    var textB = b.toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
+                default:
+                    break;
+            }
             var x = UTILS.extractAnchorTextAsInteger(a);
             var y = UTILS.extractAnchorTextAsInteger(b);
             return ((x < y) ? -1 : ((x > y) ? 1 : 0));
@@ -3197,12 +3203,12 @@ mpgSoftware.dynamicUi = (function () {
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('a','','addedColumn1'));
-                            addedColumns.push(new IntermediateStructureDataCell('b','','addedColumn2'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','geneFarLeftCorner columnNumber_0'));
+                            addedColumns.push(new IntermediateStructureDataCell('b','','geneMethods columnNumber_1'));
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('a','','addedColumn1'));
-                            addedColumns.push(new IntermediateStructureDataCell('b','','addedColumn2'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','variant columnNumber_0'));
+                            addedColumns.push(new IntermediateStructureDataCell('b','','methods columnNumber_1'));
                             break;
                         default:
                             break;
@@ -3236,6 +3242,61 @@ mpgSoftware.dynamicUi = (function () {
                 });
 
                 datatable = $(whereTheTableGoes).DataTable(headerDescriber);
+
+
+                $(whereTheTableGoes+' th').unbind('click.DT');
+
+                //create your own click handler for the header
+                $(whereTheTableGoes+' th').click(function(e) {
+                    var classList = $(this).attr("class").split(/\s+/);
+                    var columnNumberValue = -1;
+                    var sortOrder =  'asc';
+                    var currentSortRequestObject = {};
+                    _.forEach(classList, function (oneClass){
+                        var columnNumber = "columnNumber_";
+                        var sortOrderDesignation = "sorting_";
+                        if ( oneClass.substr(0,columnNumber.length) === columnNumber ){
+                            columnNumberValue =   parseInt(oneClass.substr(columnNumber.length));
+                        }
+                        if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
+                            sortOrder =   oneClass.substr(sortOrderDesignation.length);
+                        }
+                        switch (oneClass){
+                            case 'geneHeader':
+                                currentSortRequestObject = {
+                                    'currentSort':'geneHeader',
+                                    'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
+                            case 'geneFarLeftCorner':
+                                currentSortRequestObject = {
+                                    'currentSort':'straightAlphabetic',
+                                    'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
+                            case 'geneMethods':
+                                currentSortRequestObject = {
+                                    'currentSort':'straightAlphabetic',
+                                    'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+                    var actualColumnIndex = columnNumberValue;
+                    currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
+                    currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
+                    setAccumulatorObject("currentSortRequest", currentSortRequestObject );
+                    //alert('Header '+$(this).attr('id')+' clicked');
+                   // var table = $('#example').DataTable();
+
+                    datatable
+                        .order( [ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ] )
+                        .draw();
+                });
+
+
                 if (storeHeadersInDataStructure){
                     // do we need to store these headers?
                     var numberOfHeaders = datatable.table().columns().length;
@@ -3375,6 +3436,14 @@ mpgSoftware.dynamicUi = (function () {
             if (prependColumns){
                 switch (typeOfRecord) {
                     case 'geneTableGeneHeaders':
+                        rowDescriber.push( new IntermediateStructureDataCell(row.category,
+                            "<div class='"+row.subcategory+"' sortStrategy='compound'  class='geneRow'>"+row.displayCategory+"</div>" ,
+                            row.subcategory)) ;
+                        rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
+                            "<div class='subcategory'>"+row.displaySubcategory+"</div>" ,
+                            "insertedColumn2"));
+                        numberOfColumnsAdded += rowDescriber.length;
+                        break;
                     case 'variantTableVariantHeaders':
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
                                                "<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>" ,

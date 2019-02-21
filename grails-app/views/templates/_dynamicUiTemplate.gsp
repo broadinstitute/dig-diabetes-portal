@@ -587,7 +587,7 @@
 %{--Called from displayGenesFromAbc--}%
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
 
-            <div class="geneName">{{name1}}</div><div class="genePosition">chromosome {{chromosome}}: {{addrStart}}-{{addrEnd}}</div>
+            <div sortStrategy="alphabetical"  sortTerm="{{name1}}" class="geneName">{{name1}}</div><div class="genePosition">chromosome {{chromosome}}: {{addrStart}}-{{addrEnd}}</div>
 
 </script>
 
