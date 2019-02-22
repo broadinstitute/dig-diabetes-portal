@@ -3118,7 +3118,7 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var generalPurposeSort  = function(a, b){
+        var generalPurposeSort  = function(a, b, direction){
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
             switch (currentSortRequest.currentSort){
                 case 'geneMethods':
@@ -3126,14 +3126,74 @@ mpgSoftware.dynamicUi = (function () {
                     var textB = $(b).attr('sortField').toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case 'eQTL':
+                case 'Depict':
+                case 'ABC':
+                    var x = parseInt($(a).attr('sortField'));
+                    if (isNaN(x)){
+                        x = parseInt($(a).attr('subSortField'));
+                    }
+                    var y = parseInt($(b).attr('sortField'));
+                    if (isNaN(y)){
+                        y = parseInt($(b).attr('subSortField'));
+                    }
+                    if ( (-1===x) && (-1===y) ) {
+                        return 0;
+                    }
+                    else if (-1===x) {
+                        if (direction==='asc') {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }else if (-1===y)
+                    {
+                        if (direction==='asc') {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                    break;
                 case 'geneHeader':
                     var x = parseInt($(a).attr('sortField'));
+                    if (isNaN(x)){
+                        x = parseInt($(a).attr('subSortField'));
+                    }
                     var y = parseInt($(b).attr('sortField'));
+                    if (isNaN(y)){
+                        y = parseInt($(b).attr('subSortField'));
+                    }
                     return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-                    //break;
+                    break;
                 case 'straightAlphabetic':
-                    var textA = a.toUpperCase();
-                    var textB = b.toUpperCase();
+                    var textA = a.trim().toUpperCase();
+                    var textB = b.trim().toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
+                case 'straightAlphabeticWithSpacesOnTop':
+                    var textA = a.trim().toUpperCase();
+                    var textAEmpty = (textA.length===0);
+                    var textB = b.trim().toUpperCase();
+                    var textBEmpty = (textB.length===0);
+                    if ( textAEmpty && textBEmpty ) {
+                        return 0;
+                    }
+                    else if ( textAEmpty ) {
+                        if (direction==='asc') {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }else if ( textBEmpty )
+                    {
+                        if (direction==='asc') {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
                 default:
@@ -3146,12 +3206,12 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b) {
-            return generalPurposeSort(a,b);
+        jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b ) {
+            return generalPurposeSort(a,b,'asc');
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
-            return generalPurposeSort(b,a);
+            return generalPurposeSort(b,a,'desc');
         };
 
 
@@ -3231,16 +3291,33 @@ mpgSoftware.dynamicUi = (function () {
 
                 }
 
-                var classNamesForHeader = [];
+
 
                 var numberOfAddedColumns = addedColumns.length;
                  _.forEach(headers, function (header, count) {
-                    headerDescriber.columnDefs.push({
+                     var classesToPromote = [];
+                     // first let us extract any classes that we need to promote to the header
+                     if (header.content.length>0){
+                         var classList = $(header.content).attr("class").split(/\s+/);
+                         var currentSortRequestObject = {};
+                         _.forEach(classList, function (oneClass){
+                             var columnNumber = "columnNumber_";
+                             var sortOrderDesignation = "sorting_";
+                             if ( oneClass.substr(0,columnNumber.length) === columnNumber ){
+                                 classesToPromote.push (oneClass);
+                             }
+                             if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
+                                 classesToPromote.push (oneClass);
+                             }
+                         });
+                     }
+                     var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
+                      headerDescriber.columnDefs.push({
                         "title": header.content,
-                        "targets": [count+numberOfAddedColumns],
+                        "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
-                        "className": header.annotation,
-                        "sortable": true,
+                        "className": header.annotation+" "+classesToPromote.join(" "),
+                        "sortable": !noSorting,
                         "type": "generalSort"
                     });
                      addedColumns.push(new IntermediateStructureDataCell(header.title,header.content,header.annotation));
@@ -3267,6 +3344,24 @@ mpgSoftware.dynamicUi = (function () {
                             sortOrder =   oneClass.substr(sortOrderDesignation.length);
                         }
                         switch (oneClass){
+                            case 'eQTL':
+                                currentSortRequestObject = {
+                                    'currentSort':'eQTL',
+                                    'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
+                            case 'Depict':
+                                currentSortRequestObject = {
+                                    'currentSort':'Depict',
+                                    'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
+                            case 'ABC':
+                                currentSortRequestObject = {
+                                    'currentSort':'ABC',
+                                    'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
                             case 'geneHeader':
                                 currentSortRequestObject = {
                                     'currentSort':'geneHeader',
@@ -3275,13 +3370,13 @@ mpgSoftware.dynamicUi = (function () {
                                 break;
                             case 'geneFarLeftCorner':
                                 currentSortRequestObject = {
-                                    'currentSort':'straightAlphabetic',
+                                    'currentSort':'straightAlphabeticWithSpacesOnTop',
                                     'table':'table.combinedGeneTableHolder'
                                 };
                                 break;
                             case 'geneMethods':
                                 currentSortRequestObject = {
-                                    'currentSort':'straightAlphabetic',
+                                    'currentSort':'geneMethods',
                                     'table':'table.combinedGeneTableHolder'
                                 };
                                 break;
@@ -3293,8 +3388,6 @@ mpgSoftware.dynamicUi = (function () {
                     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
                     currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
                     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
-                    //alert('Header '+$(this).attr('id')+' clicked');
-                   // var table = $('#example').DataTable();
 
                     datatable
                         .order( [ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ] )
@@ -3442,10 +3535,10 @@ mpgSoftware.dynamicUi = (function () {
                 switch (typeOfRecord) {
                     case 'geneTableGeneHeaders':
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            "<div class='"+row.subcategory+"' sortStrategy='compound'  class='geneRow'>"+row.displayCategory+"</div>" ,
+                            "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+"'  class='geneRow'>"+row.displayCategory+"</div>" ,
                             row.subcategory)) ;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                            "<div class='subcategory' sortField='"+row.displaySubcategory+"'>"+row.displaySubcategory+"</div>" ,
+                            "<div class='subcategory' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
                             "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
