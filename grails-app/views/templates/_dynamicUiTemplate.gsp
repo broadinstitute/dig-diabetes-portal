@@ -235,9 +235,19 @@
 </script>
 
 
+<script id="dynamicGeneTableEmptyRecord"  type="x-tmpl-mustache">
+
+                <div sortField=0>
+                </div>
+
+
+</script>
+
+
+
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
 
-                <div>
+                <div sortField={{numberOfTissues}}>
                     <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
                       <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                            {{#tissues}}
@@ -604,7 +614,8 @@
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
 
-            <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+            <div sortField={{numberOfTissues}}>
+               <a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>
@@ -625,7 +636,8 @@
 
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
 
-            <div><a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
+            <div sortField={{numberOfRecords}}>
+               <a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
                <div  class="collapse holdMultipleElements openDepictInGeneTable" id="depict_data_{{geneName}}">
                     {{#recordByDataSet}}
                        <div>pvalue={{formattedPValue}}</div>

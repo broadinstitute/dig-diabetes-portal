@@ -1238,20 +1238,14 @@ mpgSoftware.dynamicUi = (function () {
             });
 
             // set up the headers, and give us an empty row of column cells
+            var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                //_.forEach(returnObject.genesByAbc, function (oneRecord) {
-                //    intermediateDataStructure.headerNames.push(oneRecord.geneName);
-                //    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
-                //    intermediateDataStructure.headers.push({
-                //        name: oneRecord.geneName,
-                //        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
-                //    });
-                //    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.geneName, ""));
-                //});
+                console.log("We always have to have a record of the current gene names in ABC display. We have a problem.");
             } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-                    intermediateDataStructure.headerNames.push(oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("", "", "header of some sort"));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell("",
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "header of some sort"));
                 });
             }
 
@@ -1261,13 +1255,15 @@ mpgSoftware.dynamicUi = (function () {
 
             // fill in all of the column cells
             _.forEach(returnObject.genesByAbc, function (recordsPerGene) {
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.geneName);
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
+
                     if ((recordsPerGene.source.length === 0) &&
                         (recordsPerGene.experiment.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName, "","not sure this is ever used?");
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"not sure this is ever used?");
                     } else {
                         recordsPerGene["numberOfTissues"] = recordsPerGene.source.length;
                         recordsPerGene["numberOfExperiments"] = recordsPerGene.experiment.length;
@@ -1392,20 +1388,14 @@ mpgSoftware.dynamicUi = (function () {
             });
 
             // set up the headers, and give us an empty row of column cells
+            var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                //_.forEach(returnObject.genesByDepict, function (oneRecord) {
-                //    intermediateDataStructure.headerNames.push(oneRecord.geneName);
-                //    intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord));
-                //    intermediateDataStructure.headers.push({
-                //        name: oneRecord.geneName,
-                //        contents: Mustache.render($("#dynamicAbcGeneTableHeader")[0].innerHTML, oneRecord)
-                //    });
-                //    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.geneName, ""));
-                //});
+                console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
             } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-                    intermediateDataStructure.headerNames.push(oneRecord.name);
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name, "","header"));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
                 });
             }
 
@@ -1415,12 +1405,13 @@ mpgSoftware.dynamicUi = (function () {
 
             // fill in all of the column cells
             _.forEach(returnObject.genesByDepict, function (recordsPerGene) {
-                var indexOfColumn = _.indexOf(intermediateDataStructure.headerNames, recordsPerGene.geneName);
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.geneName);
                 if (indexOfColumn === -1) {
                     console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
                 } else {
                     if ((recordsPerGene.recordByDataSet.length === 0)) {
-                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName, "", "tissue specific");
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
+                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
                         recordsPerGene["numberOfRecords"] = recordsPerGene.recordByDataSet.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.geneName,
@@ -1996,11 +1987,12 @@ mpgSoftware.dynamicUi = (function () {
              //set up the headers, and give us an empty row of column cells
             var headerNames = [];
             if (accumulatorObjectFieldEmpty("geneNameArray")) {
-                console.log("We always have to have a record of the current gene names. We have a problem.")
+                console.log("We always have to have a record of the current gene names in eqtl display. We have a problem.");
             } else {
                 headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
                 _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
-                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL', '','eQTL for genes'));
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell('eQTL',
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),'eQTL for genes'));
                 });
             }
 
@@ -2720,25 +2712,25 @@ mpgSoftware.dynamicUi = (function () {
          */
         objectDescribingDirectorButtons = {
             directorButtons: [
-                {buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity',
-                    description: 'present all genes overlapping  the specified region',
-                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder', reference: '#' },
-                {buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL',
-                    description: 'present all genes overlapping  the specified region for which some eQTL relationship exists',
-                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
-                    reference: 'https://www.genome.gov/27543767/genotypetissue-expression-project-gtex'},
-                {buttonId: 'modAnnotationButtonId', buttonName: 'MOD',
-                    description: 'list mouse knockout annotations  for all genes overlapping the specified region',
-                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
-                    reference: 'http://www.informatics.jax.org/phenotypes.shtml'},
-                {buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC',
-                    description: 'get a list of regions associated with a gene via ABC test',
-                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
-                    reference: 'http://science.sciencemag.org/content/354/6313/769'},
-                {buttonId: 'getRecordsFromECaviarForGeneTable', buttonName: 'eCaviar',
-                    description: 'find all genes for which co-localized variants exist',
-                    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
-                    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'},
+                //{buttonId: 'getTissuesFromProximityForLocusContext', buttonName: 'proximity',
+                //    description: 'present all genes overlapping  the specified region',
+                //    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder', reference: '#' },
+                //{buttonId: 'getTissuesFromEqtlsForGenesTable', buttonName: 'eQTL',
+                //    description: 'present all genes overlapping  the specified region for which some eQTL relationship exists',
+                //    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                //    reference: 'https://www.genome.gov/27543767/genotypetissue-expression-project-gtex'},
+                //{buttonId: 'modAnnotationButtonId', buttonName: 'MOD',
+                //    description: 'list mouse knockout annotations  for all genes overlapping the specified region',
+                //    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                //    reference: 'http://www.informatics.jax.org/phenotypes.shtml'},
+                //{buttonId: 'getTissuesFromAbcForGenesTable', buttonName: 'ABC',
+                //    description: 'get a list of regions associated with a gene via ABC test',
+                //    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                //    reference: 'http://science.sciencemag.org/content/354/6313/769'},
+                //{buttonId: 'getRecordsFromECaviarForGeneTable', buttonName: 'eCaviar',
+                //    description: 'find all genes for which co-localized variants exist',
+                //    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
+                //    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'},
                 {buttonId: 'retrieveMultipleRecordsTest', buttonName: 'multi',
                     description: 'combine multiple epigenetic record types',
                     outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
@@ -3129,7 +3121,15 @@ mpgSoftware.dynamicUi = (function () {
         var generalPurposeSort  = function(a, b){
             var currentSortRequest = getAccumulatorObject("currentSortRequest");
             switch (currentSortRequest.currentSort){
+                case 'geneMethods':
+                    var textA = $(a).attr('sortField').toUpperCase();
+                    var textB = $(b).attr('sortField').toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
                 case 'geneHeader':
+                    var x = parseInt($(a).attr('sortField'));
+                    var y = parseInt($(b).attr('sortField'));
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
                     //break;
                 case 'straightAlphabetic':
                     var textA = a.toUpperCase();
@@ -3201,14 +3201,19 @@ mpgSoftware.dynamicUi = (function () {
                 var addedColumns = [];
                 if (prependColumns){ // we may wish to add in some columns based on metadata about a row.
                                      //  Definitely we don't if we are transposing, however, since we've already built that material
+                    var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','geneFarLeftCorner columnNumber_0'));
+                            sortability.push(false);
                             addedColumns.push(new IntermediateStructureDataCell('b','','geneMethods columnNumber_1'));
+                            sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
                             addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','variant columnNumber_0'));
+                            sortability.push(false);
                             addedColumns.push(new IntermediateStructureDataCell('b','','methods columnNumber_1'));
+                            sortability.push(true);
                             break;
                         default:
                             break;
@@ -3216,10 +3221,10 @@ mpgSoftware.dynamicUi = (function () {
                     _.forEach(addedColumns, function (column, index){
                         headerDescriber.columnDefs.push({
                             "title": column.content,
-                            "targets": [index],
+                            "targets": (sortability[index])?[index]:'nosort',
                             "name": column.title,
                             "className": column.annotation,
-                            "sortable": true,
+                            "sortable": sortability[index],
                             "type": "generalSort"
                         });
                     });
@@ -3440,7 +3445,7 @@ mpgSoftware.dynamicUi = (function () {
                             "<div class='"+row.subcategory+"' sortStrategy='compound'  class='geneRow'>"+row.displayCategory+"</div>" ,
                             row.subcategory)) ;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                            "<div class='subcategory'>"+row.displaySubcategory+"</div>" ,
+                            "<div class='subcategory' sortField='"+row.displaySubcategory+"'>"+row.displaySubcategory+"</div>" ,
                             "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
