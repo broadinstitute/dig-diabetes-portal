@@ -670,10 +670,10 @@ div.genePosition{
                             <li class="nav-item">
                                 <a class="nav-link sub-tab" href="#dynamicVariantHolder" role="tab" data-toggle="tab">Variant</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item"  style="display: none">
                                 <a class="nav-link sub-tab" href="#dynamicTissueHolder" role="tab" data-toggle="tab">Tissue</a>
                             </li>
-                            <li class="nav-item">
+                            <li class="nav-item"  style="display: none">
                                 <a class="nav-link sub-tab" href="#dynamicPhenotypeHolder" role="tab" data-toggle="tab">Phenotype</a>
                             </li>
                         </ul>
@@ -706,7 +706,16 @@ div.genePosition{
                                             T
                                         </button>
                                     </div>
-                                    <div class="col-sm-11">
+                                    <div class="col-sm-3">
+                                        <div class="datatable-zoom-control">
+                                            Zoom control:
+                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','0');">0</span>  >
+                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','1');">1</span>  >
+                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','2');">2</span>  >
+                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet(#dynamicGeneHolder','3');">3</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
                                     </div>
                                 </div>
                                 <table class="combinedGeneTableHolder">
@@ -723,11 +732,6 @@ div.genePosition{
                                 <div class="directorButtonHolder">
 
                                 </div>
-
-                                %{--<div class="resultsTableHolder">--}%
-                                    %{--<div class="multipleElementScrolledBox dynamicUiHolder" style="width:180px">--}%
-                                    %{--</div>--}%
-                                %{--</div>--}%
 
                             </div>
                         </div>
@@ -748,7 +752,16 @@ div.genePosition{
                                                     T
                                                 </button>
                                             </div>
-                                            <div class="col-sm-11">
+                                            <div class="col-sm-3">
+                                                <div class="datatable-zoom-control">
+                                                    Zoom control:
+                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','0');">0</span>  >
+                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','1');">1</span>  >
+                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','2');">2</span>  >
+                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','3');">3</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-8">
                                             </div>
                                         </div>
                                         <table class="combinedVariantTableHolder" style="border:0">
@@ -758,7 +771,7 @@ div.genePosition{
 
 
                                         </div>
-                    <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder">
+                    <div role="tabpanel" class="tab-pane" id="dynamicTissueHolder" style="display: none">
 
                         <div class="row">
                             <div class="col-sm-12 sub-content">
@@ -775,7 +788,7 @@ div.genePosition{
                             </div>
                         </div>
                     </div>
-                    <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder">
+                    <div role="tabpanel" class="tab-pane " id="dynamicPhenotypeHolder"  style="display: none">
 
                         <div class="row">
                             <div class="col-sm-12 sub-content">

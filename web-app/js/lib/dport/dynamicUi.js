@@ -3629,6 +3629,11 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+var  dataTableZoomSet =    function (TGWRAPPER,TGZOOM) {
+
+        $(TGWRAPPER).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+TGZOOM);
+
+}
 
 
 var destroySharedTable = function (whereTheTableGoes) {
@@ -3804,6 +3809,7 @@ var destroySharedTable = function (whereTheTableGoes) {
 // public routines are declared below
     return {
         transposeThisTable:transposeThisTable,
+        dataTableZoomSet:dataTableZoomSet,
         displayTissuesForAnnotation:displayTissuesForAnnotation,
         hideTissuesForAnnotation:hideTissuesForAnnotation,
         installDirectorButtonsOnTabs: installDirectorButtonsOnTabs,
