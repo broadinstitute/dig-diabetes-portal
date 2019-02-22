@@ -33,9 +33,17 @@
 
 
 
+<script id="emptySummaryVariantAnnotationRecord"  type="x-tmpl-mustache">
+     <div class="summaryVariantAnnotationRecord" sortField=0>
+     </div>
+</script>
+
+
+
+
 
 <script id="dynamicEqtlVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
-     <div class="summaryVariantRecord {{category}}" geneNumber={{geneNumber}}  tissueNumber={{tissueNumber}}>
+     <div class="summaryVariantRecord {{category}}" geneNumber={{geneNumber}}  tissueNumber={{tissueNumber}} sortField={{tissueNumber}}>
      <div>G:{{geneNumber}}</div>
      <div>T:{{tissueNumber}}</div>
      </div>
@@ -47,29 +55,34 @@
 <script id="dynamicEqtlVariantTableBody"  type="x-tmpl-mustache">
 
 {{#.}}
-     <div class="variantRecordExists {{category}}" value={{value}}  geneName="{{geneName}}">
+     <div class="variantRecordExists {{category}}" value={{value}}  geneName="{{geneName}}" sortField=1>
      {{geneName}}
      {{value}}
      </div>
 {{/.}}
-
+{{^.}}
+     <div class="individualTissueRecord"   sortField=0>
+{{/.}}
 </script>
 
 
 
 <script id="dynamicDnaseVariantTableBody"  type="x-tmpl-mustache">
 {{#.}}
-     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}">
+     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}" sortField=1>
      {{tissueName}}
      {{value}}
      </div>
+{{/.}}
+{{^.}}
+     <div class="individualTissueRecord"   sortField=0>
 {{/.}}
 </script>
 
 
 
 <script id="dynamicDnaseVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
-     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}}>
+     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}} sortField={{tissueNumber}}>
      <div>T:{{tissueNumber}}</div>
      </div>
 </script>
@@ -77,16 +90,20 @@
 
 <script id="dynamicH3k27acVariantTableBody"  type="x-tmpl-mustache">
 {{#.}}
-     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}">
+     <div class="variantRecordExists {{category}} tissueTable {{quantileIndicator}}" value={{value}}  tissueName="{{tissueName}}" sortField=1>
      {{value}}
      </div>
 {{/.}}
+{{^.}}
+     <div class="individualTissueRecord"   sortField=0>
+{{/.}}
+
 </script>
 
 
 
 <script id="dynamicH3k27acVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
-     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}}>
+     <div class="summaryVariantRecord {{category}}"   tissueNumber={{tissueNumber}} sortField={{tissueNumber}}>
      <div>T:{{tissueNumber}}</div>
      </div>
 </script>
@@ -96,7 +113,7 @@
 
 <script id="dynamicVariantHeader"  type="x-tmpl-mustache">
 
-            {{variantName}}
+            <div class="variantTableVarHeader columnNumber_{{index}}" sortterm="{{variantName}}">{{variantName}}</div>
 
 </script>
 
@@ -121,7 +138,7 @@
 </script>
 
 <script id="dynamicVariantCellAssociations"  type="x-tmpl-mustache">
-      <div>{{valueToDisplay}}</div>
+      <div sortField="-1">{{valueToDisplay}}</div>
  </script>
 
 

@@ -2388,14 +2388,14 @@ mpgSoftware.dynamicUi = (function () {
                     var recordsPerVariant = _.find(recordsAggregatedPerVariant, {variant: aVariant});
                     if (typeof  recordsPerVariant === 'undefined') {
                         tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-                            "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
+                            "<div class='noDataHere" + tissueRow.category + "' sortField=0></div>", "tissueRecord");
                     } else {
                         var perTissuePerVariant = _.merge(_.filter(recordsPerVariant.tissues, {tissueName: aTissue}), {category: tissueRow.category});
                         if ((typeof perTissuePerVariant === 'undefined')||
                             ((typeof minimumValue !== 'undefined')&&(perTissuePerVariant[0].value<minimumValue))||
                             ((typeof maximumValue !== 'undefined')&&(perTissuePerVariant[0].value>maximumValue))){
                             tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
-                                "<div class='noDataHere " + tissueRow.category + "'></div>", "tissueRecord");
+                                "<div class='noDataHere " + tissueRow.category + "' sortField=0></div>", "tissueRecord");
                         } else {
                             tissueRow.columnCells[indexOfColumn] = new IntermediateStructureDataCell(aTissue,
                                 Mustache.render($(cellBodyRecord)[0].innerHTML, perTissuePerVariant), "tissueRecord");
@@ -2447,11 +2447,13 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 _.forEach(invertedArray, function (summaryColumn, index) {
                     if (typeof summaryColumn === 'undefined') {
-                        summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
+                        summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
+                            Mustache.render($('#emptySummaryVariantAnnotationRecord')[0].innerHTML), "summary"));
                     } else {
 
                         if (summaryColumn.tissues.length === 0) {
-                            summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine, "", "summary"));
+                            summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
+                                Mustache.render($('#emptySummaryVariantAnnotationRecord')[0].innerHTML), "summary"));
                         } else {
                             var argumentForMustache = {category: rememberCategoryFromOneLine};
                             if (matchOnGene){
@@ -2527,10 +2529,10 @@ mpgSoftware.dynamicUi = (function () {
         // variants that we will want to annotate in the variant table
         if (( typeof returnObject.variantsToAnnotate !== 'undefined') && (!$.isEmptyObject(returnObject.variantsToAnnotate))){
             // set up the headers, and give us an empty row of column cells
-            _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord){
+            _.forEach(returnObject.variantsToAnnotate.variants, function (oneRecord, index){
                 if( typeof oneRecord !== 'undefined'){
                     intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.VAR_ID,
-                        Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID}),"variantHeader") );
+                        Mustache.render($("#dynamicVariantHeader")[0].innerHTML,{variantName:oneRecord.VAR_ID, index: index+2}),"variantHeader") );
                     //  intermediateDataStructure.columnCells.push ("");
                 }
             });
@@ -2734,11 +2736,13 @@ mpgSoftware.dynamicUi = (function () {
                 {buttonId: 'retrieveMultipleRecordsTest', buttonName: 'multi',
                     description: 'combine multiple epigenetic record types',
                     outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
-                    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}]
+                    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}
+            ]
         };
         $("#dynamicGeneHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
         ));
+        //$("#dynamicGeneHolder div.directorButtonHolder").style('display','none');
 
         /***
          * variant tab
@@ -2755,6 +2759,7 @@ mpgSoftware.dynamicUi = (function () {
         $("#dynamicVariantHolder div.directorButtonHolder").empty().append(Mustache.render($('#templateForDirectorButtonsOnATab')[0].innerHTML,
             objectDescribingDirectorButtons
         ));
+        //$("#dynamicVariantHolder div.directorButtonHolder").style('display','none');
 
         /***
          * tissue tab
@@ -2956,6 +2961,7 @@ mpgSoftware.dynamicUi = (function () {
         });
 
 
+
         $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').on('click', function () {
 
             resetAccumulatorObject("sharedTable_table.combinedVariantTableHolder");
@@ -2989,7 +2995,11 @@ mpgSoftware.dynamicUi = (function () {
 
         resetAccumulatorObject();
 
+
         displayContext('#contextDescription',getAccumulatorObject());
+
+        $('#retrieveMultipleRecordsTest').click();
+        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
 
     };
 
@@ -3126,6 +3136,28 @@ mpgSoftware.dynamicUi = (function () {
                     var textB = $(b).attr('sortField').toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
                     break;
+                case 'variantHeader':
+                    var x = parseInt($(a).attr('sortField'));
+                    var y = parseInt($(b).attr('sortField'));
+                    if ( (-1===x) && (-1===y) ) {
+                        return 0;
+                    }
+                    else if (-1===x) {
+                        if (direction==='asc') {
+                            return -1;
+                        } else {
+                            return 1;
+                        }
+                    }else if (-1===y)
+                    {
+                        if (direction==='asc') {
+                            return 1;
+                        } else {
+                            return -1;
+                        }
+                    }
+                    return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                break;
                 case 'eQTL':
                 case 'Depict':
                 case 'ABC':
@@ -3378,6 +3410,18 @@ mpgSoftware.dynamicUi = (function () {
                                 currentSortRequestObject = {
                                     'currentSort':'geneMethods',
                                     'table':'table.combinedGeneTableHolder'
+                                };
+                                break;
+                            case 'variantTableVarHeader':
+                                currentSortRequestObject = {
+                                    'currentSort':'variantTableVarHeader',
+                                    'table':'table.combinedVariantTableHolder'
+                                };
+                                break;
+                            case 'variantHeader':
+                                currentSortRequestObject = {
+                                    'currentSort':'variantHeader',
+                                    'table':'table.combinedVariantTableHolder'
                                 };
                                 break;
                             default:
