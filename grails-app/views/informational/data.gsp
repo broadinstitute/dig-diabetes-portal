@@ -161,7 +161,7 @@
                                 Associations with minimum oxyhemoglobin saturation during sleep (minimum SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_minimum_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
                                 Associations with the percentage of sleep with SpO2 < 90% (Per90): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_percent_sleep_under_90_percent_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a>
 </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/README_Cade_et_al.txt" target="_blank">README</a></td></tr>
-                        <tr><td>Lane <i>et al.</i>, <a href="https://www.biorxiv.org/content/10.1101/257956v1" target="_blank">preprint at bioRxiv</a></td><td>Biological and clinical insights from genetics of insomnia symptoms.</td><td><a href="https://personal.broadinstitute.org/mvon/Saxena_fullUKBB_Insomnia_summary_stats.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Insomnia_summary_stats_README" target="_blank">README</a></td></tr>
+                        <tr><td><a href="https://www.nature.com/articles/s41588-019-0361-7" target="_blank">Lane <i>et al.</i></a></td><td>Biological and clinical insights from genetics of insomnia symptoms.</td><td><a href="https://personal.broadinstitute.org/mvon/Saxena_fullUKBB_Insomnia_summary_stats.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Insomnia_summary_stats_README" target="_blank">README</a></td></tr>
 
 
                     </table>
