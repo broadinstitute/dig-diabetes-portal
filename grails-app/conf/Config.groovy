@@ -641,7 +641,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
-                                                          "mdv74",
+                                                          "mdv75",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],

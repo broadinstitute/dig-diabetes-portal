@@ -49,7 +49,12 @@
 <li><g:message code="informational.shared.traits.BMI"></g:message></li>
 <li><g:message code="informational.shared.traits.eGFR-creat"></g:message></li>
 </ul>
-
+<h5><g:message code="informational.shared.headers.phase3"></g:message></h5>
+<ul>
+<li><g:message code="metadata.CKDinT2D"></g:message></li>
+<li><g:message code="metadata.ESRDinT2D"></g:message></li>
+<li><g:message code="metadata.NeuropathyinT2D"></g:message></li>
+</ul>
 
     <h4><g:message code="informational.shared.headers.dataset_subjects"></g:message></h4>
 
@@ -82,6 +87,7 @@
 <p><g:message code="informational.data.exptsumm.BioMe3"></g:message></p>
 <p><g:message code="informational.data.exptsumm.BioMe4"></g:message></p>
 <p><g:message code="informational.data.exptsumm.BioMe5"></g:message></p>
+<p><g:message code="informational.data.exptsumm.BioMe6"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.overview"></g:message></h4>
 <p><g:message code="informational.data.overview.BioMe1a"></g:message></p>
@@ -109,25 +115,25 @@
 
 <p><g:message code="informational.data.overview.BioMe8"></g:message></p>
 <p><g:message code="informational.data.overview.BioMe9"></g:message></p>
+<p><g:message code="informational.data.overview.BioMe10"></g:message></p>
 
 <h4><g:message code="informational.shared.headers.reports"></g:message></h4>
 
-<p>Genotype Data Quality Control Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf" target="_blank">download PDF</a>)</p>
-
-<h5><g:message code="informational.shared.headers.phase1"></g:message></h5>
-
+<p>Genotype Data Quality Control Report for Phase 1 and 2 analysis (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC+Quality+Control+Report+BioMe_2016_1102.pdf" target="_blank">download PDF</a>)</p>
 
 <p>BioMe Phase 1 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase1_2017_0101.pdf" target="_blank">download PDF</a>)</p>
 
-
-<h5><g:message code="informational.shared.headers.phase2"></g:message></h5>
-
 <p>BioMe Phase 2 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP-DCC_Data_Analysis_Report_BIOME_Phase2.pdf" target="_blank">download PDF</a>)</p>
 
-<h4>Accessing BioMe AMP T2D GWAS data</h4>
+<p>Genotype Data Quality Control Report for Diabetic Complications Phase 1 analysis (<a href="" target="_blank">download PDF</a>)</p>
+
+<p>BioMe Diabetic Complications Phase 1 AMP-DCC Data Analysis Report (<a href="https://s3.amazonaws.com/broad-portal-resources/AMP_DCC_QCR_BioMe.v2.2.20190121.2303.pdf" target="_blank">download PDF</a>)</p>
+
+
+<h4>Accessing BioMe AMP T2D GWAS results</h4>
 <p><g:message code="informational.data.accessing.BioMe"></g:message></p>
 
 
-<h4>External Links to BioMe AMP T2D GWAS data</h4>
+<h4>External Links to BioMe AMP T2D GWAS results</h4>
 <p><g:message code="informational.data.external.BioMe"></g:message></p>
 </script>
