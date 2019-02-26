@@ -26,7 +26,8 @@ class GoogleRestService {
      *
      */
     Map buildCallToRetrieveOneTimeCode(String oneTimeCode) {
-        String destination =   "https://oauth2.googleapis.com/token"
+
+        String destination =   "${grailsApplication.config.googleapi.oauth2AccessIdTokenDomain}"
         log.debug("Google authentication callback==>${grailsApplication.config.oauth.providers.google.callback}")
         String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.callback, "UTF-8")
         String contents = "code=${oneTimeCode}&"+
@@ -37,11 +38,10 @@ class GoogleRestService {
         JSONObject jsonObject = postGoogleRestCallBase (contents,destination)
         String idToken = jsonObject?.id_token
         String accessToken = jsonObject?.access_token
-        JSONObject identityInformation =  postAuthorizedGoogleRestCall(accessToken,"https://openidconnect.googleapis.com/v1/userinfo")
+        JSONObject identityInformation =  postAuthorizedGoogleRestCall(accessToken,"${grailsApplication.config.googleapi.openIdConnectUserInfoDomain}")
         return [identityInformation:identityInformation,
                 accessToken:accessToken,
                 idToken:idToken]
-
     }
 
 
@@ -89,11 +89,6 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
 
 
 
-
-
-
-
-
 /***
  * This call is different from all the other posts because of the header line
  * that describes 'authorization' and 'bearer'
@@ -137,8 +132,5 @@ time required=${(afterCall.time-beforeCall.time)/1000} seconds
         log.info(logStatus)
         return returnValue
     }
-
-
-
 
 }

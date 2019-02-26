@@ -412,6 +412,8 @@ oauth {
 
 googleapi {
     baseGoogleUrl = 'www.googleapis.com'
+    openIdConnectUserInfoDomain = 'https://openidconnect.googleapis.com/v1/userinfo'
+    oauth2AccessIdTokenDomain   = 'https://oauth2.googleapis.com/token'
 }
 
 
