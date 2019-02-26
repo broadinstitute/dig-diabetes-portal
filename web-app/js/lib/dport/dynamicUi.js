@@ -2381,7 +2381,8 @@ mpgSoftware.dynamicUi = (function () {
                     displayCategory: displayCategory,
                     subcategory: "tissueRecord "+aTissue+" "+category,
                     displaySubcategory: aTissue,
-                    columnCells: []
+                    columnCells: [],
+                    sortField: "summary "+category+"x"
                 };
                 var dataWorthDisplayingExists = false;
                 _.forEach(variantNameArray, function (aVariant, indexOfColumn) {
@@ -2441,19 +2442,20 @@ mpgSoftware.dynamicUi = (function () {
                     '<button type="button" class="btn btn-info hider ' + rememberCategoryFromOneLine + '" ' +
                     'onclick="mpgSoftware.dynamicUi.hideTissuesForAnnotation(\'' + rememberCategoryFromOneLine + '\',\''+nameOfAccumulatorObject+'\',\''+tableToUpdate+'\')"  style="display: none">hide tissues</button>',
                     category: rememberCategoryFromOneLine,
-                    subcategory: "summary",
+                    sortField: "summary "+rememberCategoryFromOneLine,
+                    subcategory: rememberCategoryFromOneLine,
                     displaySubcategory: rememberCategoryFromOneLine,
                     columnCells: []
                 };
                 _.forEach(invertedArray, function (summaryColumn, index) {
                     if (typeof summaryColumn === 'undefined') {
                         summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-                            Mustache.render($('#emptySummaryVariantAnnotationRecord')[0].innerHTML), "summary"));
+                            Mustache.render($('#emptySummaryVariantAnnotationRecord')[0].innerHTML), "zzzsummary"));
                     } else {
 
                         if (summaryColumn.tissues.length === 0) {
                             summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
-                                Mustache.render($('#emptySummaryVariantAnnotationRecord')[0].innerHTML), "summary"));
+                                Mustache.render($('#emptySummaryVariantAnnotationRecord')[0].innerHTML), "zzzsummary"));
                         } else {
                             var argumentForMustache = {category: rememberCategoryFromOneLine};
                             if (matchOnGene){
@@ -2464,7 +2466,7 @@ mpgSoftware.dynamicUi = (function () {
                             }
                             summaryRow.columnCells.push(new IntermediateStructureDataCell(rememberCategoryFromOneLine,
                                 Mustache.render($(cellBodySummaryRecord)[0].innerHTML, argumentForMustache
-                                ), "summary")
+                                ), "zzzsummary")
                             );
                         }
 
@@ -3128,10 +3130,16 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
-        var generalPurposeSort  = function(a, b, direction){
-            var currentSortRequest = getAccumulatorObject("currentSortRequest");
-            switch (currentSortRequest.currentSort){
+        var generalPurposeSort  = function(a, b, direction, currentSort ){
+
+            switch (currentSort){
                 case 'geneMethods':
+                    var textA = $(a).attr('sortField').toUpperCase();
+                    var textB = $(b).attr('sortField').toUpperCase();
+                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                    break;
+                case 'variantAnnotationCategory':
+                case 'methods':
                     var textA = $(a).attr('sortField').toUpperCase();
                     var textB = $(b).attr('sortField').toUpperCase();
                     return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
@@ -3239,11 +3247,17 @@ mpgSoftware.dynamicUi = (function () {
 
 
         jQuery.fn.dataTableExt.oSort['generalSort-asc'] = function (a, b ) {
-            return generalPurposeSort(a,b,'asc');
+            var currentSortRequest = getAccumulatorObject("currentSortRequest");
+            return generalPurposeSort(a,b,'asc',currentSortRequest.currentSort);
         };
 
         jQuery.fn.dataTableExt.oSort['generalSort-desc'] = function (a, b) {
-            return generalPurposeSort(b,a,'desc');
+            var currentSortRequest = getAccumulatorObject("currentSortRequest");
+            if (currentSortRequest.currentSort === "variantAnnotationCategory"){
+                return generalPurposeSort(a,b,'desc',currentSortRequest.currentSort);
+            } else {
+                return generalPurposeSort(b,a,'desc',currentSortRequest.currentSort);
+            }
         };
 
 
@@ -3302,8 +3316,8 @@ mpgSoftware.dynamicUi = (function () {
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','variant columnNumber_0'));
-                            sortability.push(false);
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','variantAnnotationCategory columnNumber_0'));
+                            sortability.push(true);
                             addedColumns.push(new IntermediateStructureDataCell('b','','methods columnNumber_1'));
                             sortability.push(true);
                             break;
@@ -3361,6 +3375,7 @@ mpgSoftware.dynamicUi = (function () {
                 $(whereTheTableGoes+' th').unbind('click.DT');
 
                 //create your own click handler for the header
+
                 $(whereTheTableGoes+' th').click(function(e) {
                     var classList = $(this).attr("class").split(/\s+/);
                     var columnNumberValue = -1;
@@ -3412,6 +3427,13 @@ mpgSoftware.dynamicUi = (function () {
                                     'table':'table.combinedGeneTableHolder'
                                 };
                                 break;
+                            case 'methods':
+                                currentSortRequestObject = {
+                                    'currentSort':'methods',
+                                    'table':'table.combinedVariantTableHolder'
+                                };
+                                break;
+
                             case 'variantTableVarHeader':
                                 currentSortRequestObject = {
                                     'currentSort':'variantTableVarHeader',
@@ -3424,6 +3446,12 @@ mpgSoftware.dynamicUi = (function () {
                                     'table':'table.combinedVariantTableHolder'
                                 };
                                 break;
+                            case 'variantAnnotationCategory':
+                                currentSortRequestObject = {
+                                    'currentSort':'variantAnnotationCategory',
+                                    'table':'table.combinedVariantTableHolder'
+                                };
+                                break;
                             default:
                                 break;
                         }
@@ -3431,10 +3459,17 @@ mpgSoftware.dynamicUi = (function () {
                     var actualColumnIndex = columnNumberValue;
                     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
                     currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
+                    var setOfColumnsToSort = [];
+                    if ((typeOfHeader === "variantTableVariantHeaders")&&
+                        ( currentSortRequestObject.currentSort !== "variantAnnotationCategory")){
+                        setOfColumnsToSort.push([0,'asc']);
+                    }
+                    setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
                     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
 
                     datatable
-                        .order( [ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ] )
+                        .order( setOfColumnsToSort )
+                       // .order( [ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ] )
                         .draw();
                 });
 
@@ -3579,7 +3614,7 @@ mpgSoftware.dynamicUi = (function () {
                 switch (typeOfRecord) {
                     case 'geneTableGeneHeaders':
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+"'  class='geneRow'>"+row.displayCategory+"</div>" ,
+                            "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+" geneRow'>"+row.displayCategory+"</div>" ,
                             row.subcategory)) ;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
                             "<div class='subcategory' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
@@ -3587,12 +3622,15 @@ mpgSoftware.dynamicUi = (function () {
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                     case 'variantTableVariantHeaders':
+                        var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                                               "<div class='"+row.subcategory+"'>"+row.displayCategory+"</div>" ,
+                                               "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+" variantRow' sortField='"+primarySortField+"'>"+
+                                                row.displayCategory+"</div>" ,
                                                 row.subcategory)) ;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                                             "<div class='subcategory'>"+row.displaySubcategory+"</div>" ,
-                                            "insertedColumn2"));
+                                                "<div class='subcategory columnNumber_"+numberOfExistingRows+" variantRow' sortField='"+row.subcategory+"'>"+
+                                                row.displaySubcategory+"</div>" ,
+                                                "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                     case 'geneTableAnnotationHeaders':
