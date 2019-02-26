@@ -26,7 +26,7 @@ class GoogleRestService {
      *
      */
     Map buildCallToRetrieveOneTimeCode(String oneTimeCode) {
-        String destination =   "https://${grailsApplication.config.googleapi.baseGoogleUrl}/oauth2/v3/token"
+        String destination =   "${grailsApplication.config.googleapi.oauth2AccessIdTokenDomain}"
         log.debug("Google authentication callback==>${grailsApplication.config.oauth.providers.google.callback}")
         String encodedRedirectUrl=URLEncoder.encode(grailsApplication.config.oauth.providers.google.callback, "UTF-8")
         String contents = "code=${oneTimeCode}&"+
@@ -37,7 +37,7 @@ class GoogleRestService {
         JSONObject jsonObject = postGoogleRestCallBase (contents,destination)
         String idToken = jsonObject?.id_token
         String accessToken = jsonObject?.access_token
-        JSONObject identityInformation =  postAuthorizedGoogleRestCall(accessToken,"https://${grailsApplication.config.googleapi.baseGoogleUrl}/plus/v1/people/me")
+        JSONObject identityInformation =  postAuthorizedGoogleRestCall(accessToken,"${grailsApplication.config.googleapi.openIdConnectUserInfoDomain}")
         return [identityInformation:identityInformation,
                 accessToken:accessToken,
                 idToken:idToken]

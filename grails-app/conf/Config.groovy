@@ -393,7 +393,7 @@ oauth {
             successUri = "${baseURL}/springSecurityOAuth/onSuccess"   // never used?
             failureUri = "${baseURL}/springSecurityOAuth/onFailure"   // never used?
             callback = "${baseURL}/springSecurityOAuth/codeExchange?provider=google"
-            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+            scope = 'openid email profile'
         }
 
     }
@@ -401,6 +401,8 @@ oauth {
 
 googleapi {
     baseGoogleUrl = 'www.googleapis.com'
+    openIdConnectUserInfoDomain = 'https://openidconnect.googleapis.com/v1/userinfo'
+    oauth2AccessIdTokenDomain   = 'https://oauth2.googleapis.com/token'
 }
 
 
