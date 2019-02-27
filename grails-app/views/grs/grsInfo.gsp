@@ -80,8 +80,6 @@
         mpgSoftware.grsInfo.buildGrsDisplay();
 
 
-        /* DK adding the following script to format the page */
-        /*
         var pageTitle = $(".accordion-toggle").find("h2").text();
         var textUnderTitle = $(".accordion-inner").find("h5").text();
         $(".accordion-toggle").remove();
@@ -96,7 +94,7 @@
 
         $(PageTitleDiv).insertBefore(".gene-info-container");
         $(".user-interaction").addClass("col-md-12");
-        */
+
 
         /* end of DK's script */
 

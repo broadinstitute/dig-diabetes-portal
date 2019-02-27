@@ -398,12 +398,14 @@ oauth {
     providers {
 
         google {
+            //to-do Preeti - create a custom google api wrapper https://accounts.google.com/.well-known/openid-configuration
+            //extract endpoints from response - auth-endpoint, userinfo_endpoint
             api = org.grails.plugin.springsecurity.oauth.GoogleApi20
             key = '975413760331-d2nr5vq7sbbppjfog0cp9j4agesbeovt.apps.googleusercontent.com'
             successUri = "${baseURL}/springSecurityOAuth/onSuccess"   // never used?
             failureUri = "${baseURL}/springSecurityOAuth/onFailure"   // never used?
             callback = "${baseURL}/springSecurityOAuth/codeExchange?provider=google"
-            scope = 'https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/userinfo.email'
+            scope = 'openid email profile'
         }
 
     }
@@ -411,6 +413,8 @@ oauth {
 
 googleapi {
     baseGoogleUrl = 'www.googleapis.com'
+    openIdConnectUserInfoDomain = 'https://openidconnect.googleapis.com/v1/userinfo'
+    oauth2AccessIdTokenDomain   = 'https://oauth2.googleapis.com/token'
 }
 
 
@@ -640,13 +644,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
 ), // default data set used for a LocusZoom plot
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
-                                                          "mdv73",
+                                                          "mdv75",
                                                           "Stroke_all",
                                                           "GWAS_Stroke_mdv70",
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["8_Genic_enhancer","9_Active_enhancer_1","10_Active_enhancer_2","11_Weak_enhancer"],
                                                           ["InferiorTemporalLobe","AnteriorCaudate"],
-                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "CARDIOVASCULAR", "LIPIDS"], // most important phenotype group name
+                                                          ["STROKE", "ISCHEMIC STROKE", "HEMORRHAGIC STROKE", "MRI TRAITS", "CARDIOVASCULAR", "LIPIDS"], // most important phenotype group name
                                                           ["SIGN", "MetaStroke"], // any data sets that should be omitted from LZ display
                                                           "[3]",
                                                           "ExSeq_13k_mdv23",

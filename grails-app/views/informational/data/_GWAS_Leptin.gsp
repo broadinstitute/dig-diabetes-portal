@@ -53,7 +53,7 @@
 <p><g:message code="informational.data.exptsumm.Leptin_GWAS"></g:message></p>
 
 
-   <h4>Accessing Leptin GWAS data</h4>
+   <h4>Accessing Leptin GWAS results</h4>
 <p><g:message code="informational.data.accessing.Leptin_GWAS1"></g:message> <a href="${createLink(controller: 'variantSearch', action: 'variantSearchWF')}">Variant Finder</a> <g:message code="informational.data.accessing.Leptin_GWAS2"></g:message></p>
 
 

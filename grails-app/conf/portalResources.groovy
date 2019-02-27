@@ -82,6 +82,15 @@ modules = {
         resource url: 'js/lib/dport/manhattanplotTableHeader.js'
         resource url: 'js/lib/dport/genePrioritization.js'
     }
+    mode3 {
+        dependsOn "d3tooltip"
+        dependsOn "manhattan"
+        dependsOn "traitsFilter"
+
+        resource url: 'js/lib/dport/moduleLaunch.js'
+        resource url: 'js/lib/dport/manhattanplotTableHeader.js'
+        resource url: 'js/lib/dport/traitsFilter.js'
+    }
     matrix {
         dependsOn "d3tooltip"
 
@@ -217,7 +226,6 @@ modules = {
         resource url: 'js/lib/lodash.min.js'
 
 
-
     }
     igvNarrow {  // IGV on a page with core
         resource url: 'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
@@ -251,6 +259,9 @@ modules = {
         resource url: 'js/lib/dport/traitSample.js'
     }
     traitsFilter {
+
+        resource url: 'css/lib/bootstrap-select.css'
+        resource url: 'js/lib/bootstrap-select.js'
         resource url: 'js/lib/dport/traitsFilter.js'
     }
     higlass {
