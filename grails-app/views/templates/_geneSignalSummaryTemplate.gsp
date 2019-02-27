@@ -648,7 +648,7 @@ span.credSetLevelHere{
                     <ul class="nav nav-tabs" role="tablist">
                         {{#commonTab}}
                             <li role="presentation" class="active variantTableLabels commonVariantChooser">
-                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Common variants: {{pName}}</a>
+                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
                             </li>
                         {{/commonTab}}
                         {{#highImpactTab}}
@@ -698,7 +698,7 @@ span.credSetLevelHere{
                                             <ul style="margin: 0 0 0 10px">
                                                  <li>located on chromosome {{chromosome}} between {{geneExtentBegin}} and {{geneExtentEnd}}</li>
                                                  <li>associated with {{pname}}</li>
-                                                 <li>with allele frequency (MAF) greater than 5%</li>
+
                                             </ul>
                                          </div>
                                     </div>
@@ -728,7 +728,7 @@ span.credSetLevelHere{
                                              <li>predicted to cause missense or protein-truncating mutations in the encoded protein</li>
                                         </ul>
                                      </div>
-                                     Note: high-impact variants with MAF > 5% will also be shown on the Common variants tab.
+                                     Note: high-impact variants are also shown on the Top variants tab.
                                 </div>
 
                                 <div id="highImpactVariantsLocation"></div>
@@ -1046,7 +1046,7 @@ span.credSetLevelHere{
             <div class="row">
                 <div class="col-xs-12">
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Common variants: {{pName}}</a></li>
+                        <li role="presentation" class="variantTableLabels commonVariantChooser"><a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab">Top variants: {{pName}}</a></li>
                         <li role="presentation" class="active variantTableLabels highImpacVariantChooser"><a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab">High-impact variants: {{pName}}</a></li>
                     </ul>
                 </div>
