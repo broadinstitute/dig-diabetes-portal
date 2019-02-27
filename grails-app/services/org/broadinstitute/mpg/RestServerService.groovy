@@ -11,7 +11,9 @@ import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
+import org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
@@ -2688,6 +2690,71 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         return postRestCall("{${specifyRequestList.join(",")}}", GET_DATA_AGGREGATION_PHEWAS_URL)
     }
+
+
+
+
+    /***
+     * We want to be able to pull back all of the gene level associations for a given phenotype/gene/desiredMeaning.  We will accept
+     * all of the properties that have their meaning matching the desiredMeaning parameter, which should give us back all of the different
+     * variant groupings used for burden testing, or alternatively all of the different tissues if we are pulling back
+     * metaXcan data.
+     *
+     * @param phenotypeName
+     * @return
+     */
+    public JSONObject gatherGenePhenotypeAssociations (String phenotypeName,String geneName,String desiredMeaning) {
+
+        // Now we need to find the data sets that contain the phenotype we are interested in.  If I end up with more than one data set than
+        // I'll ignore everyone other than the one with the largest sample size.
+        SampleGroup sampleGroupToWorkWith = null
+        List<SampleGroup> sampleGroupList = metaDataService.getSampleGroupsBasedOnPhenotypeAndMeaning(phenotypeName,desiredMeaning,
+                MetaDataService.METADATA_GENE)
+        sampleGroupList = sampleGroupList?.sort{SampleGroup a,SampleGroup b->b.subjectsNumber<=>a.subjectsNumber}
+        if ((sampleGroupList)&&(sampleGroupList.size()>0)){
+            sampleGroupToWorkWith = sampleGroupList?.first()
+        }
+
+        // we might legitimately have no Gene level data for this phenotype
+        String dataJsonObjectString
+        if (sampleGroupToWorkWith==null){
+            dataJsonObjectString = """{
+            "is_error": true,
+            "error_message": "No gene level data for phenotype ${phenotypeName}"
+        }""".toString()
+        } else { // we have a sample group to work with
+            // Let's start putting together the query. We can use existing machinery for this work
+            LinkedHashMap resultColumnsToDisplay = getColumnsForCProperties(["GENE" ])
+            List<String> codedFilters = ["7=${geneName}".toString()]
+            GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(codedFilters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
+
+            // now let's find our chosen phenotype in the sample group, and then stroll through that phenotypes properties and pull back every name
+            // which has our chosen meaning
+            PhenotypeBean phenotype = sampleGroupToWorkWith.getPhenotypes().find{PhenotypeBean p->p.getName() == phenotypeName}
+            List<PropertyBean> properties = phenotype.getProperties().findAll{ PropertyBean property->property.hasMeaning(desiredMeaning)}
+            for(Property property in properties){
+                addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, sampleGroupToWorkWith.getSystemId(), property.getName())
+            }
+            getDataQueryHolder.addProperties(resultColumnsToDisplay)
+            getDataQueryHolder.getDataQuery.setLimit(5000)
+            // go and get the data from the KB
+            dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
+        }
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
+        return dataJsonObject
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

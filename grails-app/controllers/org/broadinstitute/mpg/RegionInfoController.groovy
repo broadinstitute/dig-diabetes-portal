@@ -726,7 +726,7 @@ class RegionInfoController {
         }
 
         if (params.phenotype) {
-            phenotype = params.variant
+            phenotype = params.phenotype
         }
 
         if (params.startPos) {
@@ -777,6 +777,44 @@ class RegionInfoController {
         render(status: 200, contentType: "application/json") {jsonArray}
         return
     }
+
+
+
+
+
+    def retrieveGeneLevelAssociations() {
+        String gene = ""
+        String phenotype = ""
+        boolean looksOkay = true
+        JSONObject jsonReturn
+
+        if (params.gene) {
+            gene = params.gene
+        } else {
+            log.error("retrieveGeneLevelAssociations: did not receive the required gene parameter")
+            looksOkay = false
+        }
+
+        if (params.phenotype) {
+            phenotype = params.phenotype
+        } else {
+            log.error("retrieveGeneLevelAssociations: did not receive the required phenotype parameter")
+            looksOkay = false
+        }
+
+        if (looksOkay){
+            jsonReturn = restServerService.gatherGenePhenotypeAssociations( phenotype, gene, "P_VALUE")
+        } else {
+            String proposedJsonString = new JsonBuilder( "[is_error: true, error_message: \"calling parameter problem\"]" ).toPrettyString()
+            def slurper = new JsonSlurper()
+            jsonReturn =  slurper.parseText(proposedJsonString) as JSONArray;
+        }
+
+        render(status: 200, contentType: "application/json") {jsonReturn}
+        return
+    }
+
+
 
 
 

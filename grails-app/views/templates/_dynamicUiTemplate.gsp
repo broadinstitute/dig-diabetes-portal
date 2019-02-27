@@ -262,6 +262,7 @@
 
 
 
+
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
 
                 <div sortField={{numberOfTissues}}>
@@ -667,6 +668,22 @@
 
 </script>
 
+
+
+
+<script id="geneAssociationTableBody"  type="x-tmpl-mustache">
+
+            <div sortField={{numberOfRecords}}>
+               <a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
+               <div  class="collapse holdMultipleElements openDepictInGeneTable" id="depict_data_{{geneName}}">
+                    {{#tissues}}
+                       <div>pvalue={{value}}</div>
+                       <div>from {{tissue}}</div>
+                    {{/tissues}}
+               </div>
+            </div>
+
+</script>
 
 
 

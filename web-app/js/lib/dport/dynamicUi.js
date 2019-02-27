@@ -241,6 +241,10 @@ mpgSoftware.dynamicUi = (function () {
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
                 break;
 
+            case "getGeneAssociationsForGenesTable":
+                defaultFollowUp.displayRefinedContextFunction = displayGenePhenotypeAssociations;
+                defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
+                break;
             case "getInformationFromDepictForGenesTable":
                 defaultFollowUp.displayRefinedContextFunction = displayGenesFromDepict;
                 defaultFollowUp.placeToDisplayData = '#dynamicGeneHolder div.dynamicUiHolder';
@@ -364,6 +368,31 @@ mpgSoftware.dynamicUi = (function () {
                 };
                 break;
 
+            case "getGeneAssociationsForGenesTable":
+                functionToLaunchDataRetrieval = function () {
+                    if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                        var actionToUndertake = actionContainer("getTissuesFromProximityForLocusContext", {actionId: "getGeneAssociationsForGenesTable"});
+                        actionToUndertake();
+                    } else {
+                        var phenotype = $('li.chosenPhenotype').attr('id');
+                        var dataForCall = _.map(getAccumulatorObject("geneNameArray"), function (o) {
+                            return {
+                                gene: o.name,
+                                phenotype: phenotype
+                            }
+                        });
+                        retrieveRemotedContextInformation(buildRemoteContextArray({
+                            name: "getGeneAssociationsForGenesTable",
+                            retrieveDataUrl: additionalParameters.retrieveGeneLevelAssociationsUrl,
+                            dataForCall: dataForCall,
+                            processEachRecord: processGeneAssociationRecords,
+                            displayRefinedContextFunction: displayFunction,
+                            placeToDisplayData: displayLocation,
+                            actionId: nextActionId
+                        }));
+                    }
+                };
+                break;
             case "getVariantsFromQtlForContextDescription":
                 functionToLaunchDataRetrieval = function () {
                     var chromosome = getAccumulatorObject("chromosome");
@@ -902,6 +931,7 @@ mpgSoftware.dynamicUi = (function () {
             genesByAbc: [],
             genesByDepict: [],
             tissuesByAbc: [],
+            geneAssociations: [],
             variantsToAnnotate: [],
             genesPositionsExist: function () {
                 return (this.genePositions.length > 0) ? [1] : [];
@@ -1087,6 +1117,52 @@ mpgSoftware.dynamicUi = (function () {
 
 
     }
+
+
+
+    var processGeneAssociationRecords = function (data) {
+        // build up an object to describe this
+        var returnObject = {
+            rawData: []
+        };
+
+        var rawGeneAssociationRecords = getAccumulatorObject('rawGeneAssociationRecords');
+
+        if ( ( typeof data !== 'undefined') &&
+             (  data.is_error !== true ) &&
+             (  data.numRecords > 0 ) &&
+             ( typeof data.variants !== 'undefined' ) )
+
+            var geneRecord = {};
+            _.forEach(data.variants[0], function (oneRec) {
+                _.forEach(oneRec, function(sampleRecord,tissue){
+                    if (tissue==='GENE') {
+                        geneRecord['gene'] = sampleRecord;
+                        geneRecord['tissues'] = [];
+                    } else {
+                        _.forEach(sampleRecord, function (phenotypeRecord, dataset) {
+                            _.forEach(phenotypeRecord, function (number, phenotypeString) {
+                                console.log("phenotypeString=" + phenotypeString + ", number, " + number);
+                                if (number !== null) {
+                                    geneRecord['tissues'].push({tissue: tissue, value: number});
+
+                                }
+                            })
+                        });
+                    }
+                });
+            });
+        if (typeof geneRecord.gene !== 'undefined'){
+            rawGeneAssociationRecords.push(geneRecord);
+        }
+
+        return rawGeneAssociationRecords;
+
+    };
+
+
+
+
 
 
     var processRecordsFromColocalization = function (data) {
@@ -1441,6 +1517,92 @@ mpgSoftware.dynamicUi = (function () {
         });
 
     };
+
+
+
+
+
+
+    var displayGenePhenotypeAssociations = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
+        var returnObject = createNewDisplayReturnObject();
+
+        // for each gene collect up the data we want to display
+        _.forEach(getAccumulatorObject("rawGeneAssociationRecords"), function (value) {
+
+            returnObject.geneAssociations.push(value);
+
+        });
+
+        var intermediateDataStructure = new IntermediateDataStructure();
+
+        if (( typeof returnObject.geneAssociations !== 'undefined') && ( returnObject.geneAssociations.length > 0)) {
+            intermediateDataStructure.rowsToAdd.push({
+                category: 'Annotation',
+                displayCategory: 'Annotation',
+                subcategory: 'MetaXcan',
+                displaySubcategory: 'MetaXcan',
+                columnCells: []
+            });
+
+            // set up the headers, and give us an empty row of column cells
+            var headerNames = [];
+            if (accumulatorObjectFieldEmpty("geneNameArray")) {
+                console.log("We always have to have a record of the current gene names in depict display. We have a problem.");
+            } else {
+                headerNames  = _.map(getAccumulatorObject("geneNameArray"),'name');
+                _.forEach(getAccumulatorObject("geneNameArray"), function (oneRecord) {
+                    intermediateDataStructure.rowsToAdd[0].columnCells.push(new IntermediateStructureDataCell(oneRecord.name,
+                        Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML),"header"));
+                });
+            }
+
+
+            // set up the headers, and give us an empty row of column cells
+
+
+            // fill in all of the column cells
+            _.forEach(returnObject.geneAssociations, function (recordsPerGene) {
+                var indexOfColumn = _.indexOf(headerNames, recordsPerGene.gene);
+                if (indexOfColumn === -1) {
+                    console.log("Did not find index of recordsPerGene.geneName.  Shouldn't we?")
+                } else {
+                    if ((recordsPerGene.tissues.length === 0)) {
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+                            Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
+                    } else {
+                        recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
+                        intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
+                            Mustache.render($("#geneAssociationTableBody")[0].innerHTML, recordsPerGene),"tissue specific");
+                    }
+
+                }
+            });
+            intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
+        }
+
+
+        prepareToPresentToTheScreen("#dynamicGeneHolder div.dynamicUiHolder",
+            '#dynamicAbcGeneTable',
+            returnObject,
+            clearBeforeStarting,
+            intermediateDataStructure,
+            true,
+            'geneTableGeneHeaders');
+
+        //_.forEach(returnObject.genesByAbc, function (value) {
+        //    $('#tissues_' + value.geneName).data('allUniqueTissues', value.abcTissuesVector());
+        //    $('#tissues_' + value.geneName).data('sourceByTissue', value.sourceByTissue());
+        //    $('#tissues_' + value.geneName).data('regionStart', value.start_pos);
+        //    $('#tissues_' + value.geneName).data('regionEnd', value.stop_pos);
+        //    $('#tissues_' + value.geneName).data('geneName', value.geneName);
+        //});
+
+    };
+
+
+
+
+
 
 
     var displayTissuesFromAbc = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
@@ -1890,6 +2052,8 @@ mpgSoftware.dynamicUi = (function () {
     };
 
 
+
+
     /***
      * gene eQTL search
      * @param data
@@ -1958,6 +2122,11 @@ mpgSoftware.dynamicUi = (function () {
 
         return returnObject;
     };
+
+
+
+
+
     var displayTissuesPerGeneFromEqtl = function (idForTheTargetDiv, objectContainingRetrievedRecords) {
         var returnObject = createNewDisplayReturnObject();
         _.forEach(getAccumulatorObject("tissuesForEveryGene"), function (eachGene) {
@@ -2947,6 +3116,8 @@ mpgSoftware.dynamicUi = (function () {
             arrayOfRoutinesToUndertake.push( actionContainer('getTissuesFromEqtlsForGenesTable',
                 actionDefaultFollowUp("getTissuesFromEqtlsForGenesTable")));
 
+            arrayOfRoutinesToUndertake.push( actionContainer('getGeneAssociationsForGenesTable',
+                actionDefaultFollowUp("getGeneAssociationsForGenesTable")));
 
             arrayOfRoutinesToUndertake.push( actionContainer('getInformationFromDepictForGenesTable',
                 actionDefaultFollowUp("getInformationFromDepictForGenesTable")));
