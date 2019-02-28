@@ -261,7 +261,6 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.is_error !== 'undefined' ) &&
                         (  !data.is_error ) ) {
-
                         fillGenePhenotypeCompoundDropdown(data,homePageVars.geneTraitInput,undefined,undefined,homePageVars.defaultPhenotype);
                         var availPhenotypes = [];
                         _.forEach( $("select"+homePageVars.geneTraitInput+"  option"), function(a){
@@ -387,6 +386,9 @@ var mpgSoftware = mpgSoftware || {};
             });
 
         };
+
+
+
 
 
         return {

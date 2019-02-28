@@ -203,9 +203,9 @@ var mpgSoftware = mpgSoftware || {};
                             }
 
                         }
-                        if (!skipIt){
-                            collector.push(d);
-                        }
+
+                        collector.push(d);
+
 
                     }
 
