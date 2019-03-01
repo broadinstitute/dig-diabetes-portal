@@ -233,8 +233,12 @@ var mpgSoftware = mpgSoftware || {};
                     if (groupContents.length > 0){
                         options.append("<optgroup label='"+key+"'>");
                         _.forEach (groupContents, function (oneElement){
-                            options.append($("<option />").val(oneElement.name)
-                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
+                            if(oneElement.technology == "GEN"){
+                                options.append($("<option />").val(oneElement.name)
+                                    .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
+                            }
+                            // options.append($("<option />").val(oneElement.name)
+                            //     .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
                         });
                         options.append("</optgroup label='"+key+"'>");;
                     }

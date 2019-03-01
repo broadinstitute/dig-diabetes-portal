@@ -102,8 +102,11 @@ var mpgSoftware = mpgSoftware || {};
                 var dataSetRecordsForPhenotype = _.uniqBy(matchingPhenotypeRecords,'systemId');
                 if (dataSetRecordsForPhenotype.length > 0){
                     _.forEach (dataSetRecordsForPhenotype, function (oneElement){
-                        options.append($("<option />").val(oneElement.systemId)
-                            .html(oneElement.translatedSystemId));
+                        if(oneElement.technology == "ExSeq"){
+                            options.append($("<option />").val(oneElement.systemId)
+                                .html(oneElement.translatedSystemId));
+                        }
+
                     });
                 }
 
@@ -217,57 +220,61 @@ var mpgSoftware = mpgSoftware || {};
                 $('#manhattanSampleGroupChooser').val(data.variant.dataset);
             }
 
-            var margin = {top: 0, right: 20, bottom: 0, left: 70},
-                width = 1050 - margin.left - margin.right,
-                height = 600 - margin.top - margin.bottom;
+            //HACK - Do this only when the portal type is T2D - you can create a portalVersionBean
 
-            var manhattan = baget.manhattan()
-                .width(width)
-                .height(height)
-                .dataHanger("#manhattanPlot1", collector)
-                .crossChromosomePlot(true)
-                //                    .overrideYMinimum (0)
-                //                    .overrideYMaximum (10)
-                //                .overrideXMinimum (0)
-                //                .overrideXMaximum (1000000000)
-                .dotRadius(3)
-                //.blockColoringThreshold(0.5)
-                .significanceThreshold(undefined)
-                .xAxisAccessor(function (d) {
-                    return d.POS
-                })
-                .yAxisAccessor(function (d) {
-                    var retVal;
-                    // if (d.P_VALUE > 0) {
-                    //     return (0 - Math.log10(d.P_VALUE));
-                    // } else {
-                    //     return 0
-                    // }
-                    if (d.P_VALUE > 0) {
-                        retVal = (0 - Math.log10(d.P_VALUE));
-                    } else {
-                        retVal = 0;
-                    }
-                    if (isNaN(retVal)){
-                        console.log('isNaN=true for Manhattan data!');
-                        return 0;
-                    } else {
-                        return retVal;
-                    }
 
-                })
-                .nameAccessor(function (d) {
-                    return d.GENE
-                })
-                .chromosomeAccessor(function (d) {
-                    return d.CHROM
-                })
-                .includeXChromosome(true)
-                .includeYChromosome(false)
-                .dotClickLink(savedVar.variantInfoUrl)
-                ;
+            // var margin = {top: 0, right: 20, bottom: 0, left: 70},
+            //     width = 1050 - margin.left - margin.right,
+            //     height = 600 - margin.top - margin.bottom;
+            //
+            // var manhattan = baget.manhattan()
+            //     .width(width)
+            //     .height(height)
+            //     .dataHanger("#manhattanPlot1", collector)
+            //     .crossChromosomePlot(true)
+            //     //                    .overrideYMinimum (0)
+            //     //                    .overrideYMaximum (10)
+            //     //                .overrideXMinimum (0)
+            //     //                .overrideXMaximum (1000000000)
+            //     .dotRadius(3)
+            //     //.blockColoringThreshold(0.5)
+            //     .significanceThreshold(undefined)
+            //     .xAxisAccessor(function (d) {
+            //         return d.POS
+            //     })
+            //     .yAxisAccessor(function (d) {
+            //         var retVal;
+            //         // if (d.P_VALUE > 0) {
+            //         //     return (0 - Math.log10(d.P_VALUE));
+            //         // } else {
+            //         //     return 0
+            //         // }
+            //         if (d.P_VALUE > 0) {
+            //             retVal = (0 - Math.log10(d.P_VALUE));
+            //         } else {
+            //             retVal = 0;
+            //         }
+            //         if (isNaN(retVal)){
+            //             console.log('isNaN=true for Manhattan data!');
+            //             return 0;
+            //         } else {
+            //             return retVal;
+            //         }
+            //
+            //     })
+            //     .nameAccessor(function (d) {
+            //         return d.GENE
+            //     })
+            //     .chromosomeAccessor(function (d) {
+            //         return d.CHROM
+            //     })
+            //     .includeXChromosome(true)
+            //     .includeYChromosome(false)
+            //     .dotClickLink(savedVar.variantInfoUrl)
+            //     ;
 
-            d3.select("#manhattanPlot1").call(manhattan.render);
+            //d3.select("#manhattanPlot1").call(manhattan.render);
+
             var mySavedVariables = getMySavedVariables();
             iterativeTableFiller(collector,
                 effectType,
