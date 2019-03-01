@@ -191,9 +191,9 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
-                    console.log(data)
+                    //console.log(data)
 
-                    mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
+                    //mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
