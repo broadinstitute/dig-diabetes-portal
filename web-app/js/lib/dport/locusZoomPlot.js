@@ -1792,8 +1792,11 @@ var mpgSoftware = mpgSoftware || {};
                         includeAllDatasetsRequest = "true";
                     }
                     var urlForPhewas = pageVars.phewasAjaxCallInLzFormatUrl;
+                    var useBottomLineResults="false";
+                    if ($('#phewasBottomLineResults').is(":checked")){
+                        useBottomLineResults="true";
+                    }
                     if ($('#phewasUseUKBB').is(":checked")) {
-                        //urlForPhewas = 'http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant%20eq%20%277:90350840_C/T%27&format=objects&build=GRCh37';
                         urlForPhewas = encodeURI('http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant eq \''+convertVarIdToUmichFavoredForm(variantIdString)+'\''+
                         '&format=objects&build=GRCh37');
                         includeAllDatasetsRequest="GRCh37";
@@ -1802,10 +1805,12 @@ var mpgSoftware = mpgSoftware || {};
                     ds
                         .add("phewas", ["PheWASLZ", {
                             url: urlForPhewas,
-                            params: { build: [includeAllDatasetsRequest],
-                                includeAllVariants:[includeAllDatasetsRequest]} //work around.  we don't see this
-                                                                                // parm in Grails phewasAjaxCallInLzFormat
-                                                                                // we should.  for now, pass data in build
+                            params: { build: [includeAllDatasetsRequest+"_"+useBottomLineResults],
+                                includeAllVariants:[includeAllDatasetsRequest],
+                                phewasBottomLineResults:useBottomLineResults
+                            } //work around.  we don't see this
+                            // I'm not sure why these parms do not get passed to phewasAjaxCallInLzFormat
+                            // as I wish they would.  for now, pass data in build
                         }]);
                         console.log('selector='+selector+'.');
                         lzp = LocusZoom.populate(selector, ds, newLayout);

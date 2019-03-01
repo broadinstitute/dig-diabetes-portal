@@ -68,6 +68,7 @@ class RestServerService {
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
     private String GET_H3K27AC_RECORDS_URL= "testcalls/region/h3k27ac/object"
+    private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2641,6 +2642,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+    public JSONObject gatherBottomLineResultsByVarId( String variantId ) {
+        String rawReturnFromApi =  getRestCall("${GET_BOTTOM_LINE_RESULTS_URL}?var_id=${variantId}")
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(rawReturnFromApi) as JSONObject
+        return jsonObject
+    }
 
 
 

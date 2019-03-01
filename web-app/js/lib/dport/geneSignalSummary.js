@@ -6,6 +6,7 @@ var mpgSoftware = mpgSoftware || {};
 mpgSoftware.geneSignalSummaryMethods = (function () {
     var loading = $('#rSpinner');
     var commonTable;
+    var minimumMafForCommonTab = 0;
     var signalSummarySectionVariables;
 
     var setSignalSummarySectionVariables = function(incomingSignalSummarySectionVariables){
@@ -821,7 +822,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                     rvart.push(v);
                 }
             }
-            if ((typeof mafValue !== 'undefined') && (mafValue !== '') && (mafValue > 0.05) &&
+            if ((typeof mafValue !== 'undefined') && (mafValue !== '') && (mafValue > minimumMafForCommonTab) &&
                 (typeof pValue !== 'undefined') && (pValue <= pValueCutoffCommon)) {
                 if (cvart.length < maxNumberOfVariants) {
                     if (pValue < 0.00000005) {
