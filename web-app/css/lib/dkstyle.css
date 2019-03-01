@@ -1227,3 +1227,11 @@ span.new-dataset-flag {
 .analysis-modules-btn:hover ul {
 	display: block;
 }
+
+.variant-association-ui > .btn-group, .gene-association-ui > .btn-group {
+	width: 84% !important; height: 35px;
+}
+
+.variant-association-ui > .btn-group > button, .gene-association-ui > .btn-group > button {
+	height: 35px; border-radius: 5px; border: none;
+}

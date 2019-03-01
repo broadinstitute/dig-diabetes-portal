@@ -391,8 +391,16 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+        var switchVisibility = function( TOVISIBLE, TOINVISIBLE) {
 
+            $.each(TOVISIBLE, function(index, value) {
+                $("."+value).css("display","block");
+            })
 
+            $.each(TOINVISIBLE, function(index, value) {
+                $("."+value).css("display","none");
+            })
+        }
 
 
         return {
@@ -402,7 +410,8 @@ var mpgSoftware = mpgSoftware || {};
             setSlideWindows: setSlideWindows,
             setHomePageVariables:setHomePageVariables,
             retrieveGenePhenotypes:retrieveGenePhenotypes,
-            retrievePhenotypes:retrievePhenotypes
+            retrievePhenotypes:retrievePhenotypes,
+            switchVisibility:switchVisibility,
         }
     })();
 })();
