@@ -58,23 +58,27 @@
         <div role="tabpanel" class="active tab-pane " id="phewasTabHolder">
             <div class="row"   style="border: none">
                 <div class="container content-wrapper text-right">
-                   <div id="phewas" class="btn-group btn-group-vertical text-left" data-toggle="buttons">
-                        <div>
-                            <label  class="">
-                               <input id="phewasBottomLineResults" name="options" type="radio">Bottom line variants
+                   <div id="phewas" class="btn-group btn-group-vertical text-left">
+
+                            <label  for="phewasBottomLineResults" class="radio">
+                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
+                                Bottom line variants
                             </label>
-                        </div>
-                        <div>
-                            <label  class="">
-                               <input id="phewasAllDatasets" name="options" type="radio">Include all datasets
+
+
+                            <label  for="phewasAllDatasets" class="radio">
+                                <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">
+                                Include all datasets
                             </label>
-                        </div>
-                        <div>
-                            <label  class="">
-                               <input id="phewasUseUKBB" name="options" type="radio">Use UKBB data
-                               <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
+
+
+                            <label  for="phewasUseUKBB" class="radio">
+                                <input class="radio" id="phewasUseUKBB" name="optRadio" type="radio">
+                                Use UKBB data</label>
+                                <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
                             </label>
-                        </div>
+
+
                          </div>
                     </div>
                     <div id="phewasplot"></div>
