@@ -64,6 +64,7 @@ class RestServerService {
     private String GET_VARIANT_GTEX_EQTL_FROM_URL= "ledge/gtex_eqtl/object"
     private String GET_EQTLS_FOR_A_VARIANT_LIST_URL= "testcalls/ledge/eqtl/object"
     private String GET_VARIANT_ECAVIAR_COLOCALIZATION_FROM_URL= "testcalls/ecaviar/colocalization/object"
+    private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_REGION_FROM_ABC_URL= "testcalls/abc/region/object"
     private String GET_GENE_BASED_RECORDS_FROM_DEPICT_URL= "testcalls/depict/region/object"
     private String GET_DNASE_RECORDS_URL= "testcalls/region/dnase/object"
@@ -2638,6 +2639,17 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         }
         String specifyRequest = "{${restApiParameterList.join(",")}}"
         return postRestCall(specifyRequest, GET_REGION_URL)
+    }
+
+
+
+
+
+    public JSONObject gatherBottomLineResultsByVarId( String variantId ) {
+        String rawReturnFromApi =  getRestCall("${GET_BOTTOM_LINE_RESULTS_URL}?var_id=${variantId}")
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(rawReturnFromApi) as JSONObject
+        return jsonObject
     }
 
 

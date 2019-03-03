@@ -57,18 +57,29 @@
     {{#phewasTab}}
         <div role="tabpanel" class="active tab-pane " id="phewasTabHolder">
             <div class="row"   style="border: none">
-                <div class="container content-wrapper">
-                    <div id="phewas">
-                        <div class="text-right">
-                            <input id="phewasAllDatasets" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
-                            <label for="phewasAllDatasets">Include all datasets</label>
-                        </div>
-                                                <div class="text-right">
-                                             
-                            <input id="phewasUseUKBB" type="checkbox">%{--onClick generalizedInitLocusZoom added later--}%
-                            <label for="phewasUseUKBB">Use UKBB data</label> <span class='new-dataset-flag' style="margin: -3px 0 0 5px; background-size: 40px;">&nbsp;</span>
-                            <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
-                        </div>
+                <div class="container content-wrapper text-right">
+                   <div id="phewas" class="btn-group btn-group-vertical text-left">
+
+                            <label  for="phewasBottomLineResults" class="radio">
+                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
+                                Bottom line variants
+                            </label>
+
+
+                            <label  for="phewasAllDatasets" class="radio">
+                                <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">
+                                Include all datasets
+                            </label>
+
+
+                            <label  for="phewasUseUKBB" class="radio">
+                                <input class="radio" id="phewasUseUKBB" name="optRadio" type="radio">
+                                Use UKBB data</label>
+                                <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
+                            </label>
+
+
+                         </div>
                     </div>
                     <div id="phewasplot"></div>
                 </div>

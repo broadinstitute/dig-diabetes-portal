@@ -72,7 +72,19 @@ class TraitController {
 
     def phewasAjaxCallInLzFormat() {
         String varIdInLzFormat = params["filter"]
-        String includeAllVariants = params["build"]
+        //String includeAllVariants = params["build"]
+        String codedParameters = params["build"]
+        String includeAllVariants = "false"
+        String phewasBottomLineResults = "false"
+        if ((codedParameters) &&
+                (codedParameters.contains("_"))){
+            List<String> parameterList = codedParameters.split("_")
+            includeAllVariants = parameterList[0]
+            phewasBottomLineResults = parameterList[1]
+        }
+
+
+        //String phewasBottomLineResults = params["phewasBottomLineResults"]
         Map variantPieces = sharedToolsService.purseVarIdReturnedFromLzCaller(varIdInLzFormat)
         JSONObject jsonObject = new JSONObject()
         if (!variantPieces.is_error){
@@ -82,7 +94,11 @@ class TraitController {
             if ((includeAllVariants)&&(includeAllVariants=="true")){
                 includeVariantsAcrossCohorts = true
             }
-            jsonObject = widgetService.generatePhewasDataForLz( varId, includeVariantsAcrossCohorts )
+            if ((phewasBottomLineResults)&&(phewasBottomLineResults=="true")){
+                jsonObject = widgetService.generateBottomlinePhewasDataForLz( varId )
+            } else {
+                jsonObject = widgetService.generatePhewasDataForLz( varId, includeVariantsAcrossCohorts )
+            }
         }
         jsonObject.data=jsonObject.data.sort{a,b->a.trait_group<=>b.trait_group ?: a.trait<=>b.trait ?: a.log_pvalue<=>b.log_pvalue}
         render(status: 200, contentType: "application/json") { jsonObject }
