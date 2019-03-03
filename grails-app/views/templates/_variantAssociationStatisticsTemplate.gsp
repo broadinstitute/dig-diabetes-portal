@@ -60,15 +60,19 @@
                 <div class="container content-wrapper text-right">
                    <div id="phewas" class="btn-group btn-group-vertical text-left">
 
-                            <label  for="phewasBottomLineResults" class="radio">
-                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
-                                Bottom line variants
+                            <label  for="phewasTopVariants" class="radio">
+                                <input class="radio" id="phewasTopVariants" name="optRadio" type="radio" checked>
+                                Top variants only
                             </label>
-
 
                             <label  for="phewasAllDatasets" class="radio">
                                 <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">
                                 Include all datasets
+                            </label>
+
+                            <label  for="phewasBottomLineResults" class="radio">
+                                <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
+                                Bottom line variants
                             </label>
 
 
