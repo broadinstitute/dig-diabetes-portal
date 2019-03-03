@@ -156,6 +156,8 @@ var mpgSoftware = mpgSoftware || {};
 
             var args = _.flatten([{}, data.variant.variants[0]]);
             var variantObject = _.merge.apply(_, args);
+
+            $('#phewasTopVariants').on('click',function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
             $('#phewasBottomLineResults').on('click',function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
             $('#phewasAllDatasets').on('click',function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
             $('#phewasUseUKBB').on('click',function(){mpgSoftware.locusZoom.generalizedInitLocusZoom('#phewasplot', variantObject.VAR_ID , 2);});
