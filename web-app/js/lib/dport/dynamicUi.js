@@ -3978,8 +3978,29 @@ mpgSoftware.dynamicUi = (function () {
  }
 
 
+    var extractSortedDataFromTable  = function (whereTheTableGoes){
+        var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+        var numberOfColumns= sharedTable.numberOfColumns;
+        var numberOfRows= sharedTable.dataCells.length/numberOfColumns;
+        var fullDataVector = [];
+        for ( var j = 0 ; j < numberOfColumns ; j++ ){
+            fullDataVector.push(sharedTable.dataCells[j]);
+        }
+        var dataFromTable = $(whereTheTableGoes).dataTable().DataTable().rows().data();
+        _.forEach(dataFromTable, function (row,rowIndex){
+            _.forEach(row, function (cell,columnIndex){
+                fullDataVector.push(cell);
+            });
+        });
+        return fullDataVector;
+    }
+
+
+
+
 
  var transposeThisTable   = function (whereTheTableGoes) {
+     var dataVector = extractSortedDataFromTable (whereTheTableGoes);
      destroySharedTable(whereTheTableGoes);
 
      var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
