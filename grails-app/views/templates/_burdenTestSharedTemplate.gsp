@@ -610,7 +610,7 @@ the individual filters themselves. That work is handled later as part of a loop-
                                             {{/variantsSetRefinement}}
                                             {{^variantsSetRefinement}}
                                             <select id= "variantSetFilter" class="variantSetFilter form-control">
-                                                <option>Mahajan T2D variant set (243)</option>
+                                                <option>Mahajan T2D variant set (European ancestry)</option>
                                             </select>
                                             {{/variantsSetRefinement}}
                                         </label>
