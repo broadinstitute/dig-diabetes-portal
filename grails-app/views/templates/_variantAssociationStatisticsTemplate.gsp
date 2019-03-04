@@ -86,7 +86,6 @@
                          </div>
                     </div>
                     <div id="phewasplot"></div>
-                </div>
             </div>
         </div>
 
