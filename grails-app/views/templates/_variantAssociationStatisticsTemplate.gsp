@@ -62,23 +62,26 @@
 
                             <label  for="phewasTopVariants" class="radio">
                                 <input class="radio" id="phewasTopVariants" name="optRadio" type="radio" checked>
-                                Top variants only
+                                Top variants only&nbsp;
+                            <g:helpText title="geneTable.TopVar.phewas.help.header" placement="bottom" body="geneTable.TopVar.phewas.help.text"/>
                             </label>
 
                             <label  for="phewasAllDatasets" class="radio">
                                 <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">
-                                Include all datasets
+                                Include all datasets&nbsp;
+                            <g:helpText title="geneTable.AllDatasets.phewas.help.header" placement="bottom" body="geneTable.AllDatasets.phewas.help.text"/>
                             </label>
 
                             <label  for="phewasBottomLineResults" class="radio">
                                 <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
-                                Bottom line variants
+                                Bottom line variants&nbsp;
+                                <g:helpText title="geneTable.BottomLine.phewas.help.header" placement="bottom" body="geneTable.BottomLine.phewas.help.text"/>
                             </label>
 
 
                             <label  for="phewasUseUKBB" class="radio">
                                 <input class="radio" id="phewasUseUKBB" name="optRadio" type="radio">
-                                Use UKBB data</label>
+                                Use UKBB data&nbsp;
                                 <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
                             </label>
 
