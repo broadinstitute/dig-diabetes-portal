@@ -3520,7 +3520,7 @@ mpgSoftware.dynamicUi = (function () {
                             "title": contentOfHeader,
                             "targets": (sortability[index])?[index]:'nosort',
                             "name": column.title,
-                            "className": column.annotation,
+                            "className": column.annotation+" initialLinearIndex_"+index,
                             "sortable": sortability[index],
                             "type": "generalSort"
                         });
@@ -3558,7 +3558,7 @@ mpgSoftware.dynamicUi = (function () {
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
-                        "className": header.annotation+" "+classesToPromote.join(" "),
+                        "className": header.annotation+" "+classesToPromote.join(" ")+" initialLinearIndex_"+index,
                         "sortable": !noSorting,
                         "type": "generalSort"
                     });
@@ -3978,8 +3978,39 @@ mpgSoftware.dynamicUi = (function () {
  }
 
 
+    /***
+     * This operation can extract everything that's in the table in the form of HTML.  However we store a little additional information
+     * about each cell as well, and this is particularly useful when a cell becomes a header upon transposition. Can we put an index
+     * on every cell that would allow us to match it up with the original information that we store?
+     *
+     * @param whereTheTableGoes
+     * @returns {Array}
+     */
+    var extractSortedDataFromTable = function (whereTheTableGoes) {
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
+        var numberOfColumns = sharedTable.numberOfColumns;
+        var numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+        var fullDataVector = [];
+        for (var j = 0; j < numberOfColumns; j++) {
+            fullDataVector.push(sharedTable.dataCells[j]);
+        }
+        var dataFromTable = $(whereTheTableGoes).dataTable().DataTable().rows().data();
+        _.forEach(dataFromTable, function (row, rowIndex) {
+            _.forEach(row, function (cell, columnIndex) {
+                fullDataVector.push(cell);
+            });
+        });
+        return fullDataVector;
+    }
+
+
+
+
 
  var transposeThisTable   = function (whereTheTableGoes) {
+
+     var sortedData = extractSortedDataFromTable(whereTheTableGoes);
+
      destroySharedTable(whereTheTableGoes);
 
      var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
