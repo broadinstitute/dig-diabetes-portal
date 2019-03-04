@@ -46,7 +46,7 @@
                 {{/forestTab}}
                 {{#exposeGreenBoxes}}
                 <li role="presentation" class="variantTableLabels highImpacVariantChooser">
-                    <a href="#exposeGreenBoxesHolder" aria-controls="forestTabHolder" role="tab" data-toggle="tab">Dataset specific details</a>
+                    <a href="#exposeGreenBoxesHolder" aria-controls="exposeGreenBoxesHolder" role="tab" data-toggle="tab">Dataset specific details</a>
                 </li>
                 {{/exposeGreenBoxes}}
             </ul>
@@ -82,32 +82,30 @@
                                 <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
                             </label>
 
-
-                         </div>
                     </div>
                     <div id="phewasplot"></div>
                 </div>
             </div>
         </div>
 
-{{/phewasTab}}
+    {{/phewasTab}}
 
-{{#forestTab}}
-        <div role="tabpanel" class="tab-pane active" id="forestTabHolder">
+    {{#forestTab}}
+        <div role="tabpanel" class="active tab-pane" id="forestTabHolder">
             <div class="row"   style="border: none">
                 <div class="container content-wrapper">
                     <div id="forestPlot"></div>
                 </div>
             </div>
         </div>
-{{/forestTab}}
+    {{/forestTab}}
 
 {{#forestTab}}
-        <div role="tabpanel" class="tab-pane" id="exposeGreenBoxesHolder">
+   <div role="tabpanel" class="tab-pane" id="exposeGreenBoxesHolder">
     <div class="container content-wrapper">
         <g:if test="${g.portalTypeString()?.equals('stroke')}">
-    <h5><g:message code="variant.info.stroke.associations.description"/></h5>
-</g:if>
+              <h5><g:message code="variant.info.stroke.associations.description"/></h5>
+        </g:if>
 <g:elseif test="${g.portalTypeString()?.equals('mi')}">
     <h5><g:message code="variant.info.mi.associations.description"/></h5>
 </g:elseif>
