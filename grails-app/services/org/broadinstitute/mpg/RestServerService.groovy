@@ -2054,27 +2054,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
 
         // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
-//        List <String> piecesOfThePropertyName = propertyName.split("_")
+      List <String> piecesOfThePropertyName = propertyName.split("_")
 
         //HACK EXPERIMENT - checking if given property for Exeq shows data or not.
 
-        List <String> piecesOfThePropertyName = []
-        piecesOfThePropertyName.add("MINA")
-        piecesOfThePropertyName.add("NS_STRICT")
 
-        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
-        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
         String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
-        String propertyNameForMINARatio = "MINA_"+piecesOfThePropertyName[1]
+        String propertyNameForPvalue = "P_"+piecesOfThePropertyName[2]
+
+        String propertyNameForMINARatio = "MINA_"+piecesOfThePropertyName[2]
+
+
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForPvalue)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINARatio)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
+//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
-        getDataQueryHolder.getDataQuery.setLimit(7000)
+        getDataQueryHolder.getDataQuery.setLimit(1000)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
