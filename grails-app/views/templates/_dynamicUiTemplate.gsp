@@ -39,7 +39,10 @@
 </script>
 
 
-
+<script id="emptyRecord"  type="x-tmpl-mustache">
+     <div class="initialLinearIndex_{{initialLinearIndex}}">
+     </div>
+</script>
 
 
 <script id="dynamicEqtlVariantTableBodySummaryRecord"  type="x-tmpl-mustache">
@@ -61,7 +64,7 @@
      </div>
 {{/.}}
 {{^.}}
-     <div class="individualTissueRecord"   sortField=0>
+     <div class="individualTissueRecord"   sortField=0></div>
 {{/.}}
 </script>
 
@@ -75,7 +78,7 @@
      </div>
 {{/.}}
 {{^.}}
-     <div class="individualTissueRecord"   sortField=0>
+     <div class="individualTissueRecord"   sortField=0></div>
 {{/.}}
 </script>
 
@@ -95,7 +98,7 @@
      </div>
 {{/.}}
 {{^.}}
-     <div class="individualTissueRecord"   sortField=0>
+     <div class="individualTissueRecord"   sortField=0></div>
 {{/.}}
 
 </script>

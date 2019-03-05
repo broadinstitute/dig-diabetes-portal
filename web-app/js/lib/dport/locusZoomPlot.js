@@ -1784,7 +1784,7 @@ var mpgSoftware = mpgSoftware || {};
                 case 2: // pheWAS plot
                     newLayout = initLocusZoomPheWASLayout(convertVarIdToUmichFavoredForm(variantIdString));
                     var includeAllDatasets=false;
-                    if ($('#phewasAllDatasets').is(":checked")){
+                     if ($('#phewasAllDatasets').is(":checked")){
                         includeAllDatasets=true;
                     }
                     var includeAllDatasetsRequest = "false";
@@ -1796,16 +1796,17 @@ var mpgSoftware = mpgSoftware || {};
                     if ($('#phewasBottomLineResults').is(":checked")){
                         useBottomLineResults="true";
                     }
+                    var buildParameter=includeAllDatasetsRequest+"_"+useBottomLineResults;
                     if ($('#phewasUseUKBB').is(":checked")) {
                         urlForPhewas = encodeURI('http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant eq \''+convertVarIdToUmichFavoredForm(variantIdString)+'\''+
                         '&format=objects&build=GRCh37');
-                        includeAllDatasetsRequest="GRCh37";
+                        buildParameter="GRCh37";
                     }
 
                     ds
                         .add("phewas", ["PheWASLZ", {
                             url: urlForPhewas,
-                            params: { build: [includeAllDatasetsRequest+"_"+useBottomLineResults],
+                            params: { build: [buildParameter],
                                 includeAllVariants:[includeAllDatasetsRequest],
                                 phewasBottomLineResults:useBottomLineResults
                             } //work around.  we don't see this

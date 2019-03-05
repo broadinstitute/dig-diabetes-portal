@@ -3171,8 +3171,8 @@ mpgSoftware.dynamicUi = (function () {
 
         displayContext('#contextDescription',getAccumulatorObject());
 
-        $('#retrieveMultipleRecordsTest').click();
-        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
+        //$('#retrieveMultipleRecordsTest').click();
+        //$('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
 
     };
 
@@ -3257,6 +3257,13 @@ mpgSoftware.dynamicUi = (function () {
             numberOfColumns: numberOfColumn,
             numberOfRows: numberOfRows,
             dataCells: new Array()
+        };
+    };
+    var TempSharedTableObject = function (numberOfRows,numberOfColumn,dataCells){
+        return {
+            numberOfColumns: numberOfColumn,
+            numberOfRows: numberOfRows,
+            dataCells: dataCells
         };
     };
     var SharedTableDataCell = function (title,content,annotation, ascensionNumber){
@@ -3498,15 +3505,15 @@ mpgSoftware.dynamicUi = (function () {
                     var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','geneFarLeftCorner columnNumber_0'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0}),'geneFarLeftCorner columnNumber_0'));
                             sortability.push(false);
-                            addedColumns.push(new IntermediateStructureDataCell('b','','geneMethods columnNumber_1'));
+                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1}),'geneMethods columnNumber_1'));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner','','variantAnnotationCategory columnNumber_0'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0}),'variantAnnotationCategory columnNumber_0'));
                             sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b','','methods columnNumber_1'));
+                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1}),'methods columnNumber_1'));
                             sortability.push(true);
                             break;
                         case 'variantTableAnnotationHeaders':
@@ -3534,7 +3541,8 @@ mpgSoftware.dynamicUi = (function () {
                  _.forEach(headers, function (header, count) {
                      var classesToPromote = [];
                      // first let us extract any classes that we need to promote to the header
-                     if (header.content.length>0){
+                     if ((header.content.length>0)&&
+                         ( typeof  $(header.content).attr("class") !== 'undefined')){
                          var classList = $(header.content).attr("class").split(/\s+/);
                          var currentSortRequestObject = {};
                          _.forEach(classList, function (oneClass){
@@ -3553,12 +3561,22 @@ mpgSoftware.dynamicUi = (function () {
                          (additionalDetailsForHeaders.length > 0)){
                          contentOfHeader += additionalDetailsForHeaders[count].content;
                      }
+
+                     var initialLinearIndex = extractClassBasedIndex(header.content,"initialLinearIndex_");
+                     if (initialLinearIndex === -1){
+                         var domContent = $(header.content);
+                         indexInOneDimensionalArray = count+numberOfAddedColumns;
+                         domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
+                         header.content = domContent[0].outerHTML;
+                     }
+
+
                      var noSorting = (((count+numberOfAddedColumns)===0)&&(typeOfHeader==='geneTableGeneHeaders'));
                       headerDescriber.columnDefs.push({
                         "title": contentOfHeader,
                         "targets": noSorting?'nosort':[count+numberOfAddedColumns],
                         "name": header.title,
-                        "className": header.annotation+" "+classesToPromote.join(" ")+" initialLinearIndex_"+index,
+                        "className": header.annotation+" "+classesToPromote.join(" "),
                         "sortable": !noSorting,
                         "type": "generalSort"
                     });
@@ -3832,6 +3850,25 @@ mpgSoftware.dynamicUi = (function () {
                     break;
             }
         }
+    };
+
+
+
+
+    var extractClassBasedIndex = function (domString,classNameToExtract) {
+        var numberToExtract = -1;
+        var classes = $(domString).attr("class");
+        if ( typeof classes !== 'undefined'){
+            var classList = classes.split(/\s+/);
+            _.forEach(classList, function (oneClass) {
+                var columnNumber = "columnNumber_";
+                var sortOrderDesignation = "sorting_";
+                if (oneClass.substr(0, classNameToExtract.length) === classNameToExtract) {
+                    numberToExtract = parseInt(oneClass.substr(classNameToExtract.length));
+                }
+            });
+        }
+        return numberToExtract;
     }
 
 
@@ -3861,25 +3898,34 @@ mpgSoftware.dynamicUi = (function () {
             var numberOfColumns  = sharedTable.numberOfColumns;
             var rowDescriber = [];
             var numberOfColumnsAdded = 0;
+            var indexInOneDimensionalArray;
             if (prependColumns){
-                switch (typeOfRecord) {
+                 switch (typeOfRecord) {
                     case 'geneTableGeneHeaders':
+                        indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+" geneRow'>"+row.displayCategory+"</div>" ,
+                            "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+
+                            " initialLinearIndex_"+indexInOneDimensionalArray+" geneRow'>"+row.displayCategory+"</div>" ,
                             row.subcategory)) ;
+                        indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                            "<div class='subcategory' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
+                            "<div class='subcategory "+
+                            " initialLinearIndex_"+indexInOneDimensionalArray+"' sortField='"+row.displaySubcategory+"' subSortField='-1'>"+row.displaySubcategory+"</div>" ,
                             "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
                         break;
                     case 'variantTableVariantHeaders':
+                        indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                                               "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+" variantRow' sortField='"+primarySortField+"'>"+
+                                               "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+
+                                               " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+primarySortField+"'>"+
                                                 row.displayCategory+"</div>" ,
                                                 row.subcategory)) ;
+                        indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                                                "<div class='subcategory columnNumber_"+numberOfExistingRows+" variantRow' sortField='"+row.subcategory+"'>"+
+                                                "<div class='subcategory columnNumber_"+numberOfExistingRows+
+                                                " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+row.subcategory+"'>"+
                                                 row.displaySubcategory+"</div>" ,
                                                 "insertedColumn2"));
                         numberOfColumnsAdded += rowDescriber.length;
@@ -3912,16 +3958,26 @@ mpgSoftware.dynamicUi = (function () {
 
 
             _.forEach(row.columnCells, function (val, index) {
+                var initialLinearIndex = extractClassBasedIndex(val.content,"initialLinearIndex_");
+                if (initialLinearIndex === -1){
+                    var domContent = $(val.content);
+                    indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
+                    domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
+                    val.content = domContent[0].outerHTML;
+                }
                 rowDescriber.push(val);
                 if (storeRecordsInDataStructure){
+                    console.log('wtf 1?');
                     storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
                         val,
                         'content',
                         numberOfExistingRows,
                         index + numberOfColumnsAdded,
                         numberOfColumns);
+                    console.log('wtf 2?');
                 }
             });
+            console.log('wtf?');
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
         });
         return rememberCategories;
@@ -3992,7 +4048,7 @@ mpgSoftware.dynamicUi = (function () {
         var numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         var fullDataVector = [];
         for (var j = 0; j < numberOfColumns; j++) {
-            fullDataVector.push(sharedTable.dataCells[j]);
+            fullDataVector.push(sharedTable.dataCells[j].content);
         }
         var dataFromTable = $(whereTheTableGoes).dataTable().DataTable().rows().data();
         _.forEach(dataFromTable, function (row, rowIndex) {
@@ -4000,14 +4056,44 @@ mpgSoftware.dynamicUi = (function () {
                 fullDataVector.push(cell);
             });
         });
-        return fullDataVector;
+        var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+        var returnValue = [];
+        _.forEach(fullDataVector,function(oneCell){
+            var initialLinearIndex = extractClassBasedIndex(oneCell,"initialLinearIndex_");
+            var associatedData = _.find(sharedTable.dataCells,{ascensionNumber:initialLinearIndex})
+            returnValue.push(associatedData);
+        });
+        return returnValue;
     }
 
 
+    var linearDataTransposor = function (linearArray,numberOfRows,numberOfColumns,mapper){
+        var temporaryArray = [];
+        _.forEach(linearArray, function (oneCell, linearIndex){
+            var xIndex = linearIndex%numberOfColumns;
+            var yIndex = linearIndex%numberOfColumns;
+            var newIndex = mapper(xIndex,yIndex,numberOfRows,numberOfColumns);//(yIndex*numberOfRows)+xIndex;
+            temporaryArray.push({newIndex:newIndex,cell: (new SharedTableDataCell(oneCell.title,oneCell.content,oneCell.annotation,oneCell.ascensionNumber))});
+        });
+        var nowTransposed = _.sortBy(temporaryArray,['newIndex']);
+        return _.map(nowTransposed,'cell');
+    }
 
 
+    //var linearDataRegularize = function (linearArray,numberOfRows,numberOfColumns){
+    //    var temporaryArray = [];
+    //    _.forEach(linearArray, function (oneCell, linearIndex){
+    //        var xIndex = linearIndex%numberOfColumns;
+    //        var yIndex = linearIndex%numberOfColumns;
+    //        var newIndex = (xIndex*numberOfColumns)+yIndex;
+    //        temporaryArray.push({newIndex:newIndex,cell: (new SharedTableDataCell(oneCell.title,oneCell.content,oneCell.annotation,oneCell.ascensionNumber))});
+    //    });
+    //    var nowTransposed = _.sortBy(temporaryArray,['newIndex']);
+    //    return _.map(nowTransposed,'cell');
+    //}
 
- var transposeThisTable   = function (whereTheTableGoes) {
+
+    var transposeThisTable   = function (whereTheTableGoes) {
 
      var sortedData = extractSortedDataFromTable(whereTheTableGoes);
 
@@ -4016,45 +4102,44 @@ mpgSoftware.dynamicUi = (function () {
      var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
 
      if (( typeof sharedTable !== 'undefined') &&
-         ( typeof sharedTable.dataCells !== 'undefined') &&
-         (sharedTable.dataCells.length > 0)){
+         ( typeof sortedData !== 'undefined') &&
+         (sortedData.length > 0)){
          var numberOfColumns= sharedTable.numberOfColumns;
-         if ((sharedTable.dataCells.length % numberOfColumns) !== 0){
-             console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sharedTable.dataCells.length % numberOfColumns) === 0) has failed.")
+         if ((sortedData.length % numberOfColumns) !== 0){
+             console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sortedData.length % numberOfColumns) === 0) has failed.")
          }
-         var numberOfRows= sharedTable.dataCells.length/numberOfColumns;
+         var numberOfRows= sortedData.length/numberOfColumns;
+
+         var transposedData = linearDataTransposor(sortedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (y*rows)+x});
+         var backToWhereWeStarted = linearDataTransposor(transposedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (x*cols)+y});
+
          var arrayIndex = 0;
          var transposedTableDescription = {};
          sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
-         if (sharedTable.currentForm !== sharedTable.originalForm){// need to transpose the data
-             transposedTableDescription = {
-                 numberOfColumns: numberOfRows,
-                 numberOfRows: numberOfColumns,
-                 dataCells: new Array()
-             }
-
-             for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
-                 for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
-                     transposedTableDescription.dataCells[arrayIndex++]=sharedTable.dataCells[(j*transposedTableDescription.numberOfRows)+i];
-                 }
-             }
+         if (sharedTable.currentForm !== sharedTable.originalForm){ // need to transpose the data
+                                                                    // so build a data structure with the data organized in the transposed form
+             transposedTableDescription = new TempSharedTableObject(numberOfColumns,numberOfRows,new Array(numberOfColumns*numberOfRows));
+             transposedTableDescription.dataCells = linearDataTransposor(sortedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (y*rows)+x});
+             //for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
+             //    for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
+             //        transposedTableDescription.dataCells[arrayIndex++]=sortedData[(j*transposedTableDescription.numberOfRows)+i];
+             //    }
+             //}
 
          } else { // we're going back to the original form of the table
-             transposedTableDescription = {
-                 numberOfColumns:  numberOfColumns,
-                 numberOfRows: numberOfRows,
-                 dataCells: new Array()
-             };
+                  // so we will build a data structure in the canonical format
+             transposedTableDescription = new TempSharedTableObject(numberOfRows,numberOfColumns,new Array(numberOfColumns*numberOfRows));
+             transposedTableDescription.dataCells = linearDataTransposor(transposedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (x*cols)+y});
 
-             for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
-                 for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
-                     transposedTableDescription.dataCells[arrayIndex]=sharedTable.dataCells[arrayIndex];
-                     arrayIndex++;
-                 }
-             }
-
+             //for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
+             //    for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
+             //        transposedTableDescription.dataCells[arrayIndex]=sortedData[arrayIndex];
+             //        arrayIndex++;
+             //    }
+             //}
          }
 
+         //  Now we should be all done fiddling with the data order.
          var additionalDetailsForHeaders = [];
          var currentLocationInArray = 0;
          var headers = _.slice(transposedTableDescription.dataCells,currentLocationInArray,transposedTableDescription.numberOfColumns);
