@@ -2054,22 +2054,35 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
 
         // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
-      List <String> piecesOfThePropertyName = propertyName.split("_")
+      //List <String> piecesOfThePropertyName = propertyName.split("_")
+        List<String> nameOfColumnsString = []
 
         //HACK EXPERIMENT - checking if given property for Exeq shows data or not.
 
+       if(propertyName.startsWith("OR_FIRTH")){
+           List<String> splitsOfPropertyName = propertyName.split("OR_FIRTH_")
+           nameOfColumnsString.add(splitsOfPropertyName[0])
+           nameOfColumnsString.add(splitsOfPropertyName[1])
+       }
+        else{
+           List<String> splitsOfPropertyName1 = propertyName.split("OR_")
+           List<String> splitsOfPropertyName2 = splitsOfPropertyName1[1].split("_FIRTH_")
+           nameOfColumnsString.add(splitsOfPropertyName2[0])
+           nameOfColumnsString.add(splitsOfPropertyName2[1])
+       }
 
-        String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
-        String propertyNameForPvalue = "P_"+piecesOfThePropertyName[2]
-
-        String propertyNameForMINARatio = "MINA_"+piecesOfThePropertyName[2]
-
+        String propertyNameForMINARatio   = "MINA_" + nameOfColumnsString[1]
+        String propertyNameForMINURatio   = "MINU_"+ nameOfColumnsString[1]
+        String propertyNameForOddsRatio   = "OR"+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
+        String propertyNameForPFirthvalue = "P"+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
+        String propertyNameForSkatValue   = "P"+ nameOfColumnsString[0] + "_SKAT_" + nameOfColumnsString[1]
 
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForPvalue)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForPFirthvalue)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForSkatValue)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINARatio)
-//        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINURatio)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
@@ -2113,14 +2126,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
-
-//       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-//        JSONObject apiResults = this.getClumpDataRestCall(phenotypeName, dataSetName)
-//
-//        //JSONObject processedapiResults = getChromPos(apiResults);
-//        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
-//        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
-//
 
 
 

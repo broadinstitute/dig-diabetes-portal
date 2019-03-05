@@ -69,7 +69,6 @@
 
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.mina" />
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.minu" />
-        <g:helpText title="geneTable.columnHeaders.shared.acu.help.header" placement="bottom" body="geneTable.columnHeaders.shared.acu.help.text"/>
         </th>
 
     </tr>

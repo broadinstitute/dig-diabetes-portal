@@ -101,17 +101,18 @@ class HomeController {
             phenoRecord['group'] = phenotype.group
             JSONArray propertyArray = new JSONArray()
             for (org.broadinstitute.mpg.diabetes.metadata.PropertyBean property in phenotype.propertyList) {
-                if ( property.hasMeaning("P_VALUE") ){
-                    JSONObject propertyRecord = new JSONObject()
-                    propertyRecord['name'] = property.name
-                    propertyRecord['translatedProperty'] = g.message(code: "metadata." + property.name, default: property.name)
-                    propertyRecord['meaning'] = "P_VALUE"
-                    propertyArray.add(propertyRecord)
-                }
+//                if ( property.hasMeaning("P_VALUE") ){
+//                    JSONObject propertyRecord = new JSONObject()
+//                    propertyRecord['name'] = property.name
+//                    propertyRecord['translatedProperty'] = g.message(code: "metadata." + property.name, default: property.name)
+//                    propertyRecord['meaning'] = "P_VALUE"
+//                    propertyArray.add(propertyRecord)
+//                }
                 if ( property.hasMeaning("ODDS_RATIO") ){
                     JSONObject propertyRecord = new JSONObject()
                     propertyRecord["name"] = property.name
                     propertyRecord['translatedProperty'] = g.message(code: "metadata." + property.name, default: property.name)
+
                     propertyRecord["meaning"] = "ODDS_RATIO"
                     propertyArray.add(propertyRecord)}
             }

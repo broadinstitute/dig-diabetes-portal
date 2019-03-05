@@ -64,7 +64,7 @@ var mpgSoftware = mpgSoftware || {};
                                 selectorOption = " selected";
                             }
                             options.append($("<option "+selectorOption+"/>").val(subElement.name)
-                                .html(subElement.translatedProperty));
+                                .html(subElement.translatedProperty.replace('OR_','').replace('FIRTH_','')));
                         });
                     });
                 }
@@ -192,12 +192,22 @@ var mpgSoftware = mpgSoftware || {};
                                     effectType = 'odds ratio'
                                 } else if ( (splitKey[2]!==null)&&
                                             (splitKey[2].length>3)&&
-                                            (splitKey[2].substring(0, 3)==='ACA')) {
-                                    d['ACA'] = value;
+                                            (splitKey[2] ==='MINA_LOFTEE')) {
+                                    d["MINA_LOFTEE"] = value;
                                 } else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
-                                    (splitKey[2].substring(0, 3)==='ACU')) {
-                                    d['ACU'] = value;
+                                    (splitKey[2] ==='MINU_LOFTEE')) {
+                                    d["MINU_LOFTEE"] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[2] ==='P_FIRTH_LOFTEE')) {
+                                    d["P_FIRTH_LOFTEE"] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[2] ==='P_SKAT_LOFTEE')) {
+                                    d["P_SKAT_LOFTEE"] = value;
                                 }
                             } else if (key==='START') {
                                 d['POS'] = parseInt(value);
@@ -289,8 +299,8 @@ var mpgSoftware = mpgSoftware || {};
                 var pValueGreyedOut = (variant.P_VALUE > .05) ? "greyedout" : "normal";
                 var pValue='';
                 var orValue='';
-                var acaValue='';
-                var acuValue='';
+                var minaValue='';
+                var minuValue='';
                 var geneName='';
                 var position='';
                 var chromosome = '';
@@ -302,19 +312,22 @@ var mpgSoftware = mpgSoftware || {};
 
                     }   else if (key === 'P_VALUE')  {
                         pValue=UTILS.realNumberFormatter(value);
-                    } else if  (key==='ACA'){
+                    } else if  (key==='MINA_LOFTEE'){
                         if (value===null){
-                            acaValue=0;
+                            minaValue=0;
                         } else {
-                            acaValue=value;
+                            minaValue=value;
                         }
-                    } else if (key==='ACU'){
+                    } else if (key==='MINU_LOFTEE'){
                         if (value===null){
-                            acuValue=0;
+                            minuValue=0;
                         } else {
-                            acuValue=value;
+                            minuValue=value;
                         }
-                    } else if (key === 'ODDS_RATIO'){
+
+                    }
+
+                    else if (key === 'OR_FIRTH_LOFTEE'){
                         orValue=UTILS.realNumberFormatter(value);
                     } else if (key === 'GENE'){
                         geneName=value;
@@ -332,8 +345,8 @@ var mpgSoftware = mpgSoftware || {};
                 retVal.push(position);
                 retVal.push( pValue );
                 retVal.push( orValue );
-                retVal.push(acuValue);
-                retVal.push(acaValue);
+                retVal.push(minaValue);
+                retVal.push(minuValue);
                 return retVal;
             };
 
