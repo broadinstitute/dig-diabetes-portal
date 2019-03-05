@@ -155,13 +155,18 @@
                     <table class="table table-condensed table-responsive table-striped" border="1">
                         <tr><th><b>PubMed ID</b></th><th><b>Title</b></th><th><b>Download files</b></th><th><b>README files</b></th></tr>
 
+                        <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30696823" target="_blank">PMID:30696823</a></td><td>Genome-wide association analyses of chronotype in 697,828 individuals provides insights into circadian rhythms.</td>
+                            <td>Chronotype associations: <a href="https://personal.broadinstitute.org/mvon/chronotype_raw_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3.txt.gz" target="_blank">Download</a><br>
+                                Morning person associations: <a href="https://personal.broadinstitute.org/mvon/morning_person_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3_logORs.txt.gz" target="_blank">Download</a><br>
+                                </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/chronotype_raw_README" target="_blank">Chronotype README</a><br><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/morning_person_README.txt" target="_blank">Morning person README</a></td></tr>
 
-                        <tr><td>Cade <i>et al</i>. 2019, in press</a></td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
+                        <tr><td>Cade <i>et al</i>. 2019, in press</td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
                             <td>Associations with average oxyhemoglobin saturation during sleep (average SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_average_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
                                 Associations with minimum oxyhemoglobin saturation during sleep (minimum SpO2): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_minimum_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a><br>
                                 Associations with the percentage of sleep with SpO2 < 90% (Per90): <a href="https://personal.broadinstitute.org/mvon/cade_et_al_2018_percent_sleep_under_90_percent_spo2_multiethnic_discovery_replication.txt.zip" target="_blank">Download</a>
 </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/README_Cade_et_al.txt" target="_blank">README</a></td></tr>
-                        <tr><td><a href="https://www.nature.com/articles/s41588-019-0361-7" target="_blank">Lane <i>et al.</i></a></td><td>Biological and clinical insights from genetics of insomnia symptoms.</td><td><a href="https://personal.broadinstitute.org/mvon/Saxena_fullUKBB_Insomnia_summary_stats.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Insomnia_summary_stats_README" target="_blank">README</a></td></tr>
+
+                        <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30804566" target="_blank">PMID:30804566</a></td><td>Biological and clinical insights from genetics of insomnia symptoms.</td><td><a href="https://personal.broadinstitute.org/mvon/Saxena_fullUKBB_Insomnia_summary_stats.zip" target="_blank">Download files</a></td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/Saxena_fullUKBB_Insomnia_summary_stats_README" target="_blank">README</a></td></tr>
 
 
                     </table>
