@@ -57,31 +57,32 @@
     {{#phewasTab}}
         <div role="tabpanel" class="active tab-pane " id="phewasTabHolder">
             <div class="row"   style="border: none">
-                <div class="container content-wrapper text-right">
-                   <div id="phewas" class="btn-group btn-group-vertical text-left">
 
+                <div class="container content-wrapper text-right">
+
+                   <div id="phewas" class="btn-group btn-group-vertical text-left">
+Choose associations to view:
                             <label  for="phewasTopVariants" class="radio">
                                 <input class="radio" id="phewasTopVariants" name="optRadio" type="radio" checked>
-                                Top variants only&nbsp;
+                                Smallest p-value&nbsp;
                             <g:helpText title="geneTable.TopVar.phewas.help.header" placement="bottom" body="geneTable.TopVar.phewas.help.text"/>
-                            </label>
-
-                            <label  for="phewasAllDatasets" class="radio">
-                                <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">
-                                Include all datasets&nbsp;
-                            <g:helpText title="geneTable.AllDatasets.phewas.help.header" placement="bottom" body="geneTable.AllDatasets.phewas.help.text"/>
                             </label>
 
                             <label  for="phewasBottomLineResults" class="radio">
                                 <input class="radio" id="phewasBottomLineResults" name="optRadio" type="radio">
-                                Bottom line variants&nbsp;
+                                Bottom line analysis&nbsp;
                                 <g:helpText title="geneTable.BottomLine.phewas.help.header" placement="bottom" body="geneTable.BottomLine.phewas.help.text"/>
                             </label>
 
+                            <label  for="phewasAllDatasets" class="radio">
+                                <input class="radio" id="phewasAllDatasets" name="optRadio" type="radio">
+                                All datasets&nbsp;
+                            <g:helpText title="geneTable.AllDatasets.phewas.help.header" placement="bottom" body="geneTable.AllDatasets.phewas.help.text"/>
+                            </label>
 
                             <label  for="phewasUseUKBB" class="radio">
                                 <input class="radio" id="phewasUseUKBB" name="optRadio" type="radio">
-                                Use UKBB data&nbsp;
+                                UK Biobank analysis&nbsp;
                                 <g:helpText title="geneTable.ukbb.phewas.help.header" placement="bottom" body="geneTable.ukbb.phewas.help.text"/>
                             </label>
 
