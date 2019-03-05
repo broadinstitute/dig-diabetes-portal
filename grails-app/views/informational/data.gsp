@@ -157,7 +157,7 @@
 
                         <tr><td><a href="https://www.ncbi.nlm.nih.gov/pubmed/30696823" target="_blank">PMID:30696823</a></td><td>Genome-wide association analyses of chronotype in 697,828 individuals provides insights into circadian rhythms.</td>
                             <td>Chronotype associations: <a href="https://personal.broadinstitute.org/mvon/chronotype_raw_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3.txt.gz" target="_blank">Download</a><br>
-                                Morning person associations: <a href="https://personal.broadinstitute.org/mvon/morning_person_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3_logORs.txt.gz" target="_blank">Download</a><br>
+                                Morning person (binary chronotype) associations: <a href="https://personal.broadinstitute.org/mvon/morning_person_BOLT.output_HRC.only_plus.metrics_maf0.001_hwep1em12_info0.3_logORs.txt.gz" target="_blank">Download</a><br>
                                 </td><td><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/chronotype_raw_README" target="_blank">Chronotype README</a><br><a href="https://s3.amazonaws.com/broad-portal-resources/sleep/morning_person_README.txt" target="_blank">Morning person README</a></td></tr>
 
                         <tr><td>Cade <i>et al</i>. 2019, in press</td><td>Associations of Variants In the Hexokinase 1 and Interleukin 18 Receptor Regions with Oxyhemoglobin Saturation During Sleep.</td>
