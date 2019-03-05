@@ -233,7 +233,7 @@ var mpgSoftware = mpgSoftware || {};
                     if (groupContents.length > 0){
                         options.append("<optgroup label='"+key+"'>");
                         _.forEach (groupContents, function (oneElement){
-                            if(oneElement.technology == "GEN"){
+                            if(oneElement.technology == "ExSeq"){
                                 options.append($("<option />").val(oneElement.name)
                                     .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
                             }

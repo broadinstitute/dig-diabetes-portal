@@ -62,16 +62,15 @@
     <thead>
     <tr>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.gene" /></th>
-        <th width="6%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
-        <th width="19%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.all_p_val" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.oddsRatio" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.acu" />
-        <g:helpText title="geneTable.columnHeaders.shared.acu.help.header" placement="bottom" body="geneTable.columnHeaders.shared.acu.help.text"/>
+
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.mina" />
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.minu" />
         </th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.aca" />
-        <g:helpText title="geneTable.columnHeaders.shared.aca.help.header" placement="bottom" body="geneTable.columnHeaders.shared.aca.help.text"/>
-        </th>
+
     </tr>
     </thead>
     <tbody id="traitTableBody">
