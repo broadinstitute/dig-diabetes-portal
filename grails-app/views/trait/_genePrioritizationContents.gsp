@@ -66,9 +66,9 @@
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.mina" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.minu" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.orfirth" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.pfirth" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.pSkat" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.orfirth" /></th>
 
 
 

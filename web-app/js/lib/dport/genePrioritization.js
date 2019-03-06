@@ -191,33 +191,41 @@ var mpgSoftware = mpgSoftware || {};
 
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('OR_MIN_P_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
                                     (splitKey[0].includes('P_MIN_P_FIRTH'))) {
                                     d[splitKey[0]] = value;
                                 }
+
 
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
                                     (splitKey[0].includes('P_MIN_P_SKAT'))) {
                                     d[splitKey[0]] = value;
                                 }
-                                //Cases for OR_MIN_P or
-                                else if ( (splitKey[2]!==null)&&
-                                    (splitKey[2].length>3)&&
-                                    (splitKey[0].includes('OR_MIN_P'))) {
-                                    d[splitKey[0]] = value;
-                                }
 
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
-                                    (splitKey[0].includes('OR_WEIGHTED'))) {
+                                    (splitKey[0].includes('OR_WEIGHTED_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_WEIGHTED_FIRTH'))) {
                                     d[splitKey[0]] = value;
                                 }
 
+
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
-                                    (splitKey[0].includes('P_WEIGHTED'))) {
+                                    (splitKey[0].includes('P_WEIGHTED_SKAT'))) {
                                     d[splitKey[0]] = value;
                                 }
+
 
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
@@ -351,8 +359,14 @@ var mpgSoftware = mpgSoftware || {};
                     }   else if (key === 'P_VALUE')  {
                         pValue=UTILS.realNumberFormatter(value);
                     }
-
-                    else if  (key.includes('OR_MIN_P') ){
+                    else if  (key.includes('P_MIN_P_FIRTH') ){
+                        if (value===null){
+                            pFirthLofteeValue=0;
+                        } else {
+                            pFirthLofteeValue=value;
+                        }
+                    }
+                    else if  (key.includes('OR_MIN_P_FIRTH') ){
                         if (value===null){
                             orFirthLofteeValue=0;
                         } else {
@@ -360,13 +374,39 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
-                    else if  (key.includes('OR_WEIGHTED') ){
+
+
+                    else if  (key.includes('P_MIN_P_SKAT') ){
+                        if (value===null){
+                            pSkatLofteeValue=0;
+                        } else {
+                            pSkatLofteeValue=value;
+                        }
+                    }
+
+                    else if  (key.includes('OR_WEIGHTED_FIRTH') ){
                         if (value===null){
                             orFirthLofteeValue=0;
                         } else {
                             orFirthLofteeValue=value;
                         }
                     }
+
+                    else if  (key.includes('P_WEIGHTED_FIRTH') ){
+                        if (value===null){
+                            pFirthLofteeValue=0;
+                        } else {
+                            pFirthLofteeValue=value;
+                        }
+                    }
+                    else if  (key.includes('P_WEIGHTED_SKAT') ){
+                        if (value===null){
+                            pSkatLofteeValue=0;
+                        } else {
+                            pSkatLofteeValue=value;
+                        }
+                    }
+
 
                     else if  (key.includes('OR_FIRTH') ){
                         if (value===null){
@@ -383,13 +423,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
-                    else if  (key.includes('P_MIN_P_FIRTH')){
-                        if (value===null){
-                            pFirthLofteeValue=0;
-                        } else {
-                            pFirthLofteeValue=value;
-                        }
-                    }
+
                     else if  (key.includes('P_SKAT') ){
                         if (value===null){
                             pSkatLofteeValue=0;
@@ -398,13 +432,8 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
-                    else if  (key.includes('P_MIN_P_SKAT') ){
-                        if (value===null){
-                            pSkatLofteeValue=0;
-                        } else {
-                            pSkatLofteeValue=value;
-                        }
-                    }
+
+
                     else if  (key.includes('MINA')){
                         if (value===null){
                             minaValue=0;
