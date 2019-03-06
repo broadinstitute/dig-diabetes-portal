@@ -141,7 +141,7 @@
 </script>
 
 <script id="dynamicVariantCellAssociations"  type="x-tmpl-mustache">
-      <div sortField="-1">{{valueToDisplay}}</div>
+      <div sortField="{{valueToDisplay}}">{{valueToDisplay}}</div>
  </script>
 
 

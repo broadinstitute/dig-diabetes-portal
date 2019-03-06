@@ -3467,9 +3467,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     //  cell (initialLinearIndex_) out, and then march across every header and compare its unique
     //  number, and when we find a match then we know the index of our column.
     var columnNumberValue = -1;
-  //  var divClasses = $($(callingObject)[0].innerHTML).attr('class');
     var initialLinearIndex = extractClassBasedIndex($(callingObject)[0].innerHTML,"initialLinearIndex_");
-  //  var dataTable = $(whereTheTableGoes).dataTable().DataTable();
     var numberOfHeaders = dataTable.table().columns()[0].length;
     if (initialLinearIndex !== -1){
         _.each(_.range(0,numberOfHeaders),function(index){
@@ -3482,15 +3480,10 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             }
         });
     }
-//    var columnNumberValue = -1;
     var sortOrder =  'asc';
     var currentSortRequestObject = {};
     _.forEach(classList, function (oneClass){
-        //var columnNumber = "columnNumber_";
         var sortOrderDesignation = "sorting_";
-        //if ( oneClass.substr(0,columnNumber.length) === columnNumber ){
-        //    columnNumberValue =   parseInt(oneClass.substr(columnNumber.length));
-        //}
         if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
             sortOrder =   oneClass.substr(sortOrderDesignation.length);
         }
@@ -3619,9 +3612,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
     currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
     currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
     var setOfColumnsToSort = [];
+    //setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
     if ((typeOfHeader === "variantTableVariantHeaders")&&
         ( currentSortRequestObject.currentSort !== "variantAnnotationCategory")){
         setOfColumnsToSort.push([0,'asc']);
+        if ( currentSortRequestObject.currentSort !== 'methods'){
+            setOfColumnsToSort.push([1,'asc']);
+        }
     }
     setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
     setAccumulatorObject("currentSortRequest", currentSortRequestObject );
@@ -3678,15 +3675,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0,otherClasses:'geneFarLeftCorner columnNumber_0'})));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0,otherClasses:'columnNumber_0'}),'geneFarLeftCorner'));
                             sortability.push(false);
-                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1,otherClasses:'geneMethods columnNumber_1'})));
+                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1,otherClasses:'columnNumber_1'}),'geneMethods'));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0,otherClasses:'variantAnnotationCategory columnNumber_0'})));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0,otherClasses:'columnNumber_0'}),'variantAnnotationCategory'));
                             sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1,otherClasses:'methods columnNumber_1'})));
+                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1,otherClasses:'columnNumber_1'}),'methods'));
                             sortability.push(true);
                             break;
                         case 'variantTableAnnotationHeaders':
@@ -3886,8 +3883,6 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
         if ( typeof classes !== 'undefined'){
             var classList = classes.split(/\s+/);
             _.forEach(classList, function (oneClass) {
-                var columnNumber = "columnNumber_";
-                var sortOrderDesignation = "sorting_";
                 if (oneClass.substr(0, classNameToExtract.length) === classNameToExtract) {
                     numberToExtract = parseInt(oneClass.substr(classNameToExtract.length));
                 }
