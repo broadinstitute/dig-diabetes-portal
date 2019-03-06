@@ -3741,7 +3741,6 @@ mpgSoftware.dynamicUi = (function () {
 
                     datatable
                         .order( setOfColumnsToSort )
-                       // .order( [ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ] )
                         .draw();
                 });
 
@@ -4045,23 +4044,32 @@ mpgSoftware.dynamicUi = (function () {
      * @param whereTheTableGoes
      * @returns {Array}
      */
-    var extractSortedDataFromTable = function (whereTheTableGoes,numberOfRows,numberOfColumns) {
+    var extractSortedDataFromTable = function (whereTheTableGoes,numberOfRows,numberOfColumns,tableAndOrientation) {
         var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         // var numberOfColumns = sharedTable.numberOfColumns;
         // var numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         var fullDataVector = [];
-        if ($(whereTheTableGoes+' th>div').length<numberOfColumns){
-            fullDataVector.push('<div class="initialLinearIndex_0 geneFarLeftCorner columnNumber_0"></div>');
-            for (var j = 0; j < numberOfColumns-1; j++) {
-                fullDataVector.push($($(whereTheTableGoes+' th>div')[j]).context.outerHTML);
+        var dataTable = $(whereTheTableGoes).dataTable().DataTable();
+        var numberOfHeaders = dataTable.table().columns()[0].length;
+        _.each(_.range(0,numberOfHeaders),function(index){
+            var header=dataTable.table().column(index).header();
+            var divContents;
+            if ( typeof header.children[0] === 'undefined'){
+                // I'm completely unclear about why this special case is required.  It seems as if the first header in
+                // the gene table has no div.  But why?  All the other headers have DIVs.  Here's a workaround until I can figure it out.
+                divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner columnNumber_0"></div>'
+            } else {
+                divContents = header.children[0].outerHTML;
             }
-        } else {
-            for (var j = 0; j < numberOfColumns; j++) {
-
-                fullDataVector.push($($(whereTheTableGoes+' th>div')[j]).context.outerHTML);
-            }
+            fullDataVector.push(divContents);
+        });
+        if (tableAndOrientation ==='variantTableAnnotationHeaders'){// in this case we collapse the first row into the header, so we now need to re-extracted into data
+            _.each(_.range(0,numberOfHeaders),function(index){
+                var header=dataTable.table().column(index).header();
+                fullDataVector.push(header.children[1].outerHTML);
+            });
         }
-        var dataFromTable = $(whereTheTableGoes).dataTable().DataTable().rows().data();
+        var dataFromTable = dataTable.rows().data();
         _.forEach(dataFromTable, function (row, rowIndex) {
             _.forEach(row, function (cell, columnIndex) {
                 fullDataVector.push(cell);
@@ -4082,7 +4090,8 @@ mpgSoftware.dynamicUi = (function () {
         var temporaryArray = [];
         _.forEach(linearArray, function (oneCell, linearIndex){
             var xIndex = linearIndex%numberOfColumns;
-            var yIndex = linearIndex%numberOfRows;
+            //var yIndex = linearIndex%numberOfRows;
+            var yIndex = Math.floor(linearIndex/numberOfRows);
             var newIndex = mapper(xIndex,yIndex,numberOfRows,numberOfColumns);//(yIndex*numberOfRows)+xIndex;
             temporaryArray.push({newIndex:newIndex,cell: (new SharedTableDataCell(oneCell.title,oneCell.content,oneCell.annotation,oneCell.ascensionNumber))});
         });
@@ -4105,7 +4114,7 @@ mpgSoftware.dynamicUi = (function () {
              numberOfColumns = sharedTable.numberOfRows;
              numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         }
-        var sortedData = extractSortedDataFromTable(whereTheTableGoes,numberOfRows,numberOfColumns);
+        var sortedData = extractSortedDataFromTable(whereTheTableGoes,numberOfRows,numberOfColumns,sharedTable.currentForm);
 
      destroySharedTable(whereTheTableGoes);
 
@@ -4114,40 +4123,18 @@ mpgSoftware.dynamicUi = (function () {
      if (( typeof sharedTable !== 'undefined') &&
          ( typeof sortedData !== 'undefined') &&
          (sortedData.length > 0)){
-         //var numberOfColumns= sharedTable.numberOfColumns;
+
          if ((sortedData.length % numberOfColumns) !== 0){
              console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sortedData.length % numberOfColumns) === 0) has failed.")
          }
-         //var numberOfRows= sortedData.length/numberOfColumns;
 
-         // var transposedData = linearDataTransposor(sortedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (y*rows)+x});
-         // var backToWhereWeStarted = linearDataTransposor(transposedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (x*cols)+y});
 
          var arrayIndex = 0;
          var transposedTableDescription = {};
          sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
-         if (sharedTable.currentForm !== sharedTable.originalForm){ // need to transpose the data
-                                                                    // so build a data structure with the data organized in the transposed form
-             transposedTableDescription = new TempSharedTableObject(numberOfColumns,numberOfRows,new Array(numberOfColumns*numberOfRows));
-             transposedTableDescription.dataCells = linearDataTransposor(sortedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (y*cols)+x});
-             //for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
-             //    for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
-             //        transposedTableDescription.dataCells[arrayIndex++]=sortedData[(j*transposedTableDescription.numberOfRows)+i];
-             //    }
-             //}
+         transposedTableDescription = new TempSharedTableObject(numberOfColumns,numberOfRows,new Array(numberOfColumns*numberOfRows));
+         transposedTableDescription.dataCells = linearDataTransposor(sortedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (x*cols)+y});
 
-         } else { // we're going back to the original form of the table
-                  // so we will build a data structure in the canonical format
-             transposedTableDescription = new TempSharedTableObject(numberOfRows,numberOfColumns,new Array(numberOfColumns*numberOfRows));
-             transposedTableDescription.dataCells = linearDataTransposor(sortedData,numberOfColumns,numberOfRows,function(x,y,rows,cols){return (y*cols)+x});
-
-             //for ( var i = 0 ; i < transposedTableDescription.numberOfRows ; i++ ){
-             //    for ( var j = 0 ; j < transposedTableDescription.numberOfColumns ; j++ ){
-             //        transposedTableDescription.dataCells[arrayIndex]=sortedData[arrayIndex];
-             //        arrayIndex++;
-             //    }
-             //}
-         }
 
          //  Now we should be all done fiddling with the data order.
          var additionalDetailsForHeaders = [];
