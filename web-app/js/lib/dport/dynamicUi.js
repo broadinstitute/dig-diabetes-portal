@@ -3460,7 +3460,176 @@ mpgSoftware.dynamicUi = (function () {
 
 
 
+var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
+    var classList = $(callingObject).attr("class").split(/\s+/);
+    // we need to find out the index of this column, which is potentially tricky, since after
+    //  a transposed sorting the column may have moved. So we pull our unique identifier for every
+    //  cell (initialLinearIndex_) out, and then march across every header and compare its unique
+    //  number, and when we find a match then we know the index of our column.
+    var columnNumberValue = -1;
+  //  var divClasses = $($(callingObject)[0].innerHTML).attr('class');
+    var initialLinearIndex = extractClassBasedIndex($(callingObject)[0].innerHTML,"initialLinearIndex_");
+  //  var dataTable = $(whereTheTableGoes).dataTable().DataTable();
+    var numberOfHeaders = dataTable.table().columns()[0].length;
+    if (initialLinearIndex !== -1){
+        _.each(_.range(0,numberOfHeaders),function(index){
+            var header=dataTable.table().column(index).header();
+            if ( typeof header.children[0] !== 'undefined'){
+                var divDom = $(header.children[0].outerHTML);
+                if (extractClassBasedIndex(divDom,"initialLinearIndex_")===initialLinearIndex){
+                    columnNumberValue = index;
+                }
+            }
+        });
+    }
+//    var columnNumberValue = -1;
+    var sortOrder =  'asc';
+    var currentSortRequestObject = {};
+    _.forEach(classList, function (oneClass){
+        //var columnNumber = "columnNumber_";
+        var sortOrderDesignation = "sorting_";
+        //if ( oneClass.substr(0,columnNumber.length) === columnNumber ){
+        //    columnNumberValue =   parseInt(oneClass.substr(columnNumber.length));
+        //}
+        if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
+            sortOrder =   oneClass.substr(sortOrderDesignation.length);
+        }
+        switch (oneClass){
+            case 'eQTL':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'Depict':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'ABC':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'geneHeader':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'geneFarLeftCorner':
+                currentSortRequestObject = {
+                    'currentSort':'straightAlphabeticWithSpacesOnTop',
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'geneMethods':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedGeneTableHolder'
+                };
+                break;
+            case 'methods':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
 
+            case 'variantTableVarHeader':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'variantHeader':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'variantAnnotationCategory':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'Coding':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'Splice_site':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'UTR':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'Promoter':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'P-value':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'H3k27ac':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'DNase':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'ABC':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+            case 'eQTL':
+                currentSortRequestObject = {
+                    'currentSort':oneClass,
+                    'table':'table.combinedVariantTableHolder'
+                };
+                break;
+
+            default:
+                break;
+        }
+    });
+    var actualColumnIndex = columnNumberValue;
+    currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
+    currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
+    var setOfColumnsToSort = [];
+    if ((typeOfHeader === "variantTableVariantHeaders")&&
+        ( currentSortRequestObject.currentSort !== "variantAnnotationCategory")){
+        setOfColumnsToSort.push([0,'asc']);
+    }
+    setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
+    setAccumulatorObject("currentSortRequest", currentSortRequestObject );
+
+    dataTable
+        .order( setOfColumnsToSort )
+        .draw();
+};
 
 
 
@@ -3593,156 +3762,7 @@ mpgSoftware.dynamicUi = (function () {
 
                 //create your own click handler for the header
 
-                $(whereTheTableGoes+' th').click(function(e) {
-                    var classList = $(this).attr("class").split(/\s+/);
-                    var columnNumberValue = -1;
-                    var sortOrder =  'asc';
-                    var currentSortRequestObject = {};
-                    _.forEach(classList, function (oneClass){
-                        var columnNumber = "columnNumber_";
-                        var sortOrderDesignation = "sorting_";
-                        if ( oneClass.substr(0,columnNumber.length) === columnNumber ){
-                            columnNumberValue =   parseInt(oneClass.substr(columnNumber.length));
-                        }
-                        if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
-                            sortOrder =   oneClass.substr(sortOrderDesignation.length);
-                        }
-                        switch (oneClass){
-                            case 'eQTL':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedGeneTableHolder'
-                                };
-                                break;
-                            case 'Depict':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedGeneTableHolder'
-                                };
-                                break;
-                            case 'ABC':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedGeneTableHolder'
-                                };
-                                break;
-                            case 'geneHeader':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedGeneTableHolder'
-                                };
-                                break;
-                            case 'geneFarLeftCorner':
-                                currentSortRequestObject = {
-                                    'currentSort':'straightAlphabeticWithSpacesOnTop',
-                                    'table':'table.combinedGeneTableHolder'
-                                };
-                                break;
-                            case 'geneMethods':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedGeneTableHolder'
-                                };
-                                break;
-                            case 'methods':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-
-                            case 'variantTableVarHeader':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'variantHeader':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'variantAnnotationCategory':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'Coding':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'Splice_site':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'UTR':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'Promoter':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'P-value':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'H3k27ac':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'DNase':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'ABC':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-                            case 'eQTL':
-                                currentSortRequestObject = {
-                                    'currentSort':oneClass,
-                                    'table':'table.combinedVariantTableHolder'
-                                };
-                                break;
-
-                            default:
-                                break;
-                        }
-                    });
-                    var actualColumnIndex = columnNumberValue;
-                    currentSortRequestObject['sortOrder'] = (sortOrder === 'asc')?'desc':'asc';
-                    currentSortRequestObject['columnNumberValue'] = actualColumnIndex;
-                    var setOfColumnsToSort = [];
-                    if ((typeOfHeader === "variantTableVariantHeaders")&&
-                        ( currentSortRequestObject.currentSort !== "variantAnnotationCategory")){
-                        setOfColumnsToSort.push([0,'asc']);
-                    }
-                    setOfColumnsToSort.push([ currentSortRequestObject.columnNumberValue, currentSortRequestObject.sortOrder ]);
-                    setAccumulatorObject("currentSortRequest", currentSortRequestObject );
-
-                    datatable
-                        .order( setOfColumnsToSort )
-                        .draw();
-                });
+                $(whereTheTableGoes+' th').click(function(e){howToHandleSorting(e,this,typeOfHeader,datatable)});
 
 
                 if (storeHeadersInDataStructure){
@@ -4045,9 +4065,6 @@ mpgSoftware.dynamicUi = (function () {
      * @returns {Array}
      */
     var extractSortedDataFromTable = function (whereTheTableGoes,numberOfRows,numberOfColumns,tableAndOrientation) {
-        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
-        // var numberOfColumns = sharedTable.numberOfColumns;
-        // var numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         var fullDataVector = [];
         var dataTable = $(whereTheTableGoes).dataTable().DataTable();
         var numberOfHeaders = dataTable.table().columns()[0].length;
@@ -4103,77 +4120,86 @@ mpgSoftware.dynamicUi = (function () {
     // var matrixMultiply
 
 
-    var transposeThisTable   = function (whereTheTableGoes) {
-        var sharedTable = getAccumulatorObject("sharedTable_"+whereTheTableGoes);
+    /***
+     *   Give this function a table, and it will transpose it.  The basic parts of this routine are:
+     *     Look at the current form, and decide whether we need to switch the number of cols and rows
+     *     Once we know, then pull all the data (including headers) out of the Jquery datatable. This gives us the cells and their sorted order
+     *     Use the sorted cell information to retrieve the original data in each cell from a place where we stored it. (extractSortedDataFromTable)
+     *     Destroy the old table
+     *     Now we have the data from the original table data. Transpose it using linearDataTransposor
+     *     Build the new table
+     *
+     * @param whereTheTableGoes
+     */
+    var transposeThisTable = function (whereTheTableGoes) {
+        var sharedTable = getAccumulatorObject("sharedTable_" + whereTheTableGoes);
         var numberOfColumns;
         var numberOfRows;
-        if ((sharedTable.currentForm === 'geneTableGeneHeaders')||(sharedTable.currentForm === 'variantTableVariantHeaders')) {
+        if ((sharedTable.currentForm === 'geneTableGeneHeaders') || (sharedTable.currentForm === 'variantTableVariantHeaders')) {
             numberOfColumns = sharedTable.numberOfColumns;
             numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         } else {
-             numberOfColumns = sharedTable.numberOfRows;
-             numberOfRows = sharedTable.dataCells.length / numberOfColumns;
+            numberOfColumns = sharedTable.numberOfRows;
+            numberOfRows = sharedTable.dataCells.length / numberOfColumns;
         }
-        var sortedData = extractSortedDataFromTable(whereTheTableGoes,numberOfRows,numberOfColumns,sharedTable.currentForm);
+        var sortedData = extractSortedDataFromTable(whereTheTableGoes, numberOfRows, numberOfColumns, sharedTable.currentForm);
 
-     destroySharedTable(whereTheTableGoes);
-
-
-
-     if (( typeof sharedTable !== 'undefined') &&
-         ( typeof sortedData !== 'undefined') &&
-         (sortedData.length > 0)){
-
-         if ((sortedData.length % numberOfColumns) !== 0){
-             console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sortedData.length % numberOfColumns) === 0) has failed.")
-         }
+        destroySharedTable(whereTheTableGoes);
 
 
-         var arrayIndex = 0;
-         var transposedTableDescription = {};
-         sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
-         transposedTableDescription = new TempSharedTableObject(numberOfColumns,numberOfRows,new Array(numberOfColumns*numberOfRows));
-         transposedTableDescription.dataCells = linearDataTransposor(sortedData,numberOfRows,numberOfColumns,function(x,y,rows,cols){return (x*cols)+y});
+        if (( typeof sharedTable !== 'undefined') &&
+            ( typeof sortedData !== 'undefined') &&
+            (sortedData.length > 0)) {
+
+            if ((sortedData.length % numberOfColumns) !== 0) {  // sanity check 1
+                console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sortedData.length % numberOfColumns) === 0) has failed.")
+            }
+            if ((sortedData.length % numberOfRows) !== 0) {  // sanity check 2
+                console.log(" CRITICAL ERROR in TRANSPOSITION.  Consistency check (sortedData.length % numberOfRows) === 0) has failed.")
+            }
+
+            var arrayIndex = 0;
+            var transposedTableDescription = {};
+            sharedTable.currentForm = formConversionOfATranspose(sharedTable.currentForm);
+            transposedTableDescription = new TempSharedTableObject(numberOfColumns, numberOfRows, new Array(numberOfColumns * numberOfRows));
+            transposedTableDescription.dataCells = linearDataTransposor(sortedData, numberOfRows, numberOfColumns, function (x, y, rows, cols) {
+                return (x * cols) + y
+            });
 
 
-         //  Now we should be all done fiddling with the data order.
-         var additionalDetailsForHeaders = [];
-         var currentLocationInArray = 0;
-         var headers = _.slice(transposedTableDescription.dataCells,currentLocationInArray,transposedTableDescription.numberOfColumns);
-         currentLocationInArray +=  transposedTableDescription.numberOfColumns;
-         if (sharedTable.currentForm === 'variantTableAnnotationHeaders'){
-             additionalDetailsForHeaders = _.slice( transposedTableDescription.dataCells,currentLocationInArray,
-                                                    (currentLocationInArray+transposedTableDescription.numberOfColumns));
-             currentLocationInArray += transposedTableDescription.numberOfColumns;
-         }
-         var datatable = buildHeadersForTable(whereTheTableGoes, headers,false,
-             sharedTable.currentForm, false, additionalDetailsForHeaders);
-         refineTableRecords(datatable,sharedTable.currentForm,[],true);
+            //  Now we should be all done fiddling with the data order.
+            var additionalDetailsForHeaders = [];
+            var currentLocationInArray = 0;
+            var headers = _.slice(transposedTableDescription.dataCells, currentLocationInArray, transposedTableDescription.numberOfColumns);
+            currentLocationInArray += transposedTableDescription.numberOfColumns;
+            if (sharedTable.currentForm === 'variantTableAnnotationHeaders') { // collapse the first row into the header
+                additionalDetailsForHeaders = _.slice(transposedTableDescription.dataCells, currentLocationInArray,
+                    (currentLocationInArray + transposedTableDescription.numberOfColumns));
+                currentLocationInArray += transposedTableDescription.numberOfColumns;
+            }
+            var datatable = buildHeadersForTable(whereTheTableGoes, headers, false,
+                sharedTable.currentForm, false, additionalDetailsForHeaders);
+            refineTableRecords(datatable, sharedTable.currentForm, [], true);
 
-         // build the body
-         var rowsToAdd = [];
-         var content = _.slice(transposedTableDescription.dataCells,currentLocationInArray);
+            // build the body
+            var rowsToAdd = [];
+            var content = _.slice(transposedTableDescription.dataCells, currentLocationInArray);
 
-         var contentSize = content.length;
-         _.forEach(content, function(datacell,index){
-             var modulus = index%transposedTableDescription.numberOfColumns;
-             if (modulus===0){
-                 rowsToAdd.push({category:datacell.title,columnCells:new Array()});
-             }
-             var lastRow  = rowsToAdd[rowsToAdd.length-1];
-             return lastRow.columnCells.push(datacell);
-         });
-         datatable =  $(whereTheTableGoes).dataTable();
-         var rememberCategories = addContentToTable(whereTheTableGoes,rowsToAdd,false,sharedTable.currentForm, false);
-         refineTableRecords(datatable,sharedTable.currentForm,rememberCategories,false);
+            _.forEach(content, function (datacell, index) {
+                var modulus = index % transposedTableDescription.numberOfColumns;
+                if (modulus === 0) {
+                    rowsToAdd.push({category: datacell.title, columnCells: new Array()});
+                }
+                var lastRow = rowsToAdd[rowsToAdd.length - 1];
+                return lastRow.columnCells.push(datacell);
+            });
+            datatable = $(whereTheTableGoes).dataTable();
+            var rememberCategories = addContentToTable(whereTheTableGoes, rowsToAdd, false, sharedTable.currentForm, false);
+            refineTableRecords(datatable, sharedTable.currentForm, rememberCategories, false);
 
+        }
 
-
-     }
-
-
-
- };
+    };
 
 
 
