@@ -2063,19 +2063,26 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
            List<String> splitsOfPropertyName = propertyName.split("OR_FIRTH_")
            nameOfColumnsString.add(splitsOfPropertyName[0])
            nameOfColumnsString.add(splitsOfPropertyName[1])
+           nameOfColumnsString.add("OR")
+           nameOfColumnsString.add("P")
        }
         else{
            List<String> splitsOfPropertyName1 = propertyName.split("OR_")
            List<String> splitsOfPropertyName2 = splitsOfPropertyName1[1].split("_FIRTH_")
            nameOfColumnsString.add(splitsOfPropertyName2[0])
            nameOfColumnsString.add(splitsOfPropertyName2[1])
+           if((splitsOfPropertyName2[0] == "WEIGHTED") || (splitsOfPropertyName2[0] == "MIN_P")){
+               nameOfColumnsString.add("OR_")
+               nameOfColumnsString.add("P_")
+           }
+
        }
 
         String propertyNameForMINARatio   = "MINA_" + nameOfColumnsString[1]
         String propertyNameForMINURatio   = "MINU_"+ nameOfColumnsString[1]
-        String propertyNameForOddsRatio   = "OR"+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
-        String propertyNameForPFirthvalue = "P"+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
-        String propertyNameForSkatValue   = "P"+ nameOfColumnsString[0] + "_SKAT_" + nameOfColumnsString[1]
+        String propertyNameForOddsRatio   = nameOfColumnsString[2]+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
+        String propertyNameForPFirthvalue = nameOfColumnsString[3] + nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
+        String propertyNameForSkatValue   = nameOfColumnsString[3] + nameOfColumnsString[0] + "_SKAT_" + nameOfColumnsString[1]
 
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
