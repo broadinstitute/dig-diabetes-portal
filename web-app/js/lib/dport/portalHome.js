@@ -191,9 +191,9 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
-                    console.log(data)
+                    //console.log(data)
 
-                    mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
+                    //mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                 },
                 error: function (jqXHR, exception) {
                     loading.hide();
@@ -233,8 +233,12 @@ var mpgSoftware = mpgSoftware || {};
                     if (groupContents.length > 0){
                         options.append("<optgroup label='"+key+"'>");
                         _.forEach (groupContents, function (oneElement){
-                            options.append($("<option />").val(oneElement.name)
-                                .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
+                            if(oneElement.technology == "GEN"){
+                                options.append($("<option />").val(oneElement.name)
+                                    .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
+                            }
+                            // options.append($("<option />").val(oneElement.name)
+                            //     .html("&nbsp;&nbsp;&nbsp;" + oneElement.translatedPhenotype));
                         });
                         options.append("</optgroup label='"+key+"'>");;
                     }
@@ -261,7 +265,6 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.is_error !== 'undefined' ) &&
                         (  !data.is_error ) ) {
-
                         fillGenePhenotypeCompoundDropdown(data,homePageVars.geneTraitInput,undefined,undefined,homePageVars.defaultPhenotype);
                         var availPhenotypes = [];
                         _.forEach( $("select"+homePageVars.geneTraitInput+"  option"), function(a){
@@ -388,6 +391,17 @@ var mpgSoftware = mpgSoftware || {};
 
         };
 
+        var switchVisibility = function( TOVISIBLE, TOINVISIBLE) {
+
+            $.each(TOVISIBLE, function(index, value) {
+                $("."+value).css("display","block");
+            })
+
+            $.each(TOINVISIBLE, function(index, value) {
+                $("."+value).css("display","none");
+            })
+        }
+
 
         return {
             initializeInputFields:initializeInputFields,
@@ -396,7 +410,8 @@ var mpgSoftware = mpgSoftware || {};
             setSlideWindows: setSlideWindows,
             setHomePageVariables:setHomePageVariables,
             retrieveGenePhenotypes:retrieveGenePhenotypes,
-            retrievePhenotypes:retrievePhenotypes
+            retrievePhenotypes:retrievePhenotypes,
+            switchVisibility:switchVisibility,
         }
     })();
 })();

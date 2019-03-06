@@ -94,6 +94,7 @@ class HomeController {
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in phenotypeList.sort{it.sortOrder}) {
             JSONObject phenoRecord = new JSONObject()
             phenoRecord['systemId'] = phenotype.parent.systemId
+            phenoRecord['technology'] = phenotype.parent.parent.technology
             phenoRecord['translatedSystemId'] = g.message(code: "metadata." + phenotype.parent.systemId, default: phenotype.parent.systemId)
             phenoRecord['name'] = phenotype.name
             phenoRecord['translatedPhenotype'] = g.message(code: "metadata." + phenotype.name, default: phenotype.name)
