@@ -166,6 +166,7 @@ var mpgSoftware = mpgSoftware || {};
         };
 
         var retrievePhenotypes = function () {
+            var loading = $('#spinner').show();
             var homePageVars = getHomePageVariables();
             $.ajax({
                 cache: false,
