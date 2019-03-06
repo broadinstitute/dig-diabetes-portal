@@ -182,32 +182,30 @@ var mpgSoftware = mpgSoftware || {};
                             var value = data.variant.results[i].pVals[j].count;
                             var splitKey = key.split('^');
                             if (splitKey.length>3) {
-                                if (splitKey[2]=='P_VALUE') {
+                                if (splitKey[0].includes('P_FIRTH')) {
                                     if (value===null) {
                                         skipIt=true;
                                     }
-                                    d['P_VALUE'] = value;
-                                } else if (splitKey[2]=='ODDS_RATIO') {
-                                    d['ODDS_RATIO'] = value;
-                                    effectType = 'odds ratio'
-                                } else if ( (splitKey[2]!==null)&&
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('OR_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
                                             (splitKey[2].length>3)&&
-                                            (splitKey[2] ==='MINA_LOFTEE')) {
-                                    d["MINA_LOFTEE"] = value;
+                                            (splitKey[0].includes('MINA'))) {
+                                    d[splitKey[0]] = value;
                                 } else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
-                                    (splitKey[2] ==='MINU_LOFTEE')) {
-                                    d["MINU_LOFTEE"] = value;
+                                    (splitKey[0].includes('MINU'))) {
+                                    d[splitKey[0]] = value;
                                 }
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
-                                    (splitKey[2] ==='P_FIRTH_LOFTEE')) {
-                                    d["P_FIRTH_LOFTEE"] = value;
-                                }
-                                else if ( (splitKey[2]!==null)&&
-                                    (splitKey[2].length>3)&&
-                                    (splitKey[2] ==='P_SKAT_LOFTEE')) {
-                                    d["P_SKAT_LOFTEE"] = value;
+                                    (splitKey[0].includes('P_SKAT'))) {
+                                    d[splitKey[0]] = value;
                                 }
                             } else if (key==='START') {
                                 d['POS'] = parseInt(value);
@@ -303,6 +301,10 @@ var mpgSoftware = mpgSoftware || {};
                 var minuValue='';
                 var geneName='';
                 var position='';
+                var orFirthLofteeValue = '';
+                var pFirthLofteeValue = '';
+                var pSkatLofteeValue = '';
+
                 var chromosome = '';
                 var positionIndicator = {'start':'','end':'','chrom':''};
                 _.forEach(variant, function(value, key) {
@@ -312,13 +314,42 @@ var mpgSoftware = mpgSoftware || {};
 
                     }   else if (key === 'P_VALUE')  {
                         pValue=UTILS.realNumberFormatter(value);
-                    } else if  (key==='MINA_LOFTEE'){
+                    }
+                    else if  (key.includes('OR_FIRTH')){
+                        if (value===null){
+                            orFirthLofteeValue=0;
+                        } else {
+                            orFirthLofteeValue=value;
+                        }
+                    }
+                    else if  (key.includes('P_FIRTH')){
+                        if (value===null){
+                            pFirthLofteeValue=0;
+                        } else {
+                            pFirthLofteeValue=value;
+                        }
+                    }
+                    else if  (key.includes('P_SKAT')){
+                        if (value===null){
+                            pSkatLofteeValue=0;
+                        } else {
+                            pSkatLofteeValue=value;
+                        }
+                    }
+                    else if  (key.includes('MINA')){
                         if (value===null){
                             minaValue=0;
                         } else {
                             minaValue=value;
                         }
-                    } else if (key==='MINU_LOFTEE'){
+                    }
+                    else if  (key.includes('MINA')){
+                        if (value===null){
+                            minaValue=0;
+                        } else {
+                            minaValue=value;
+                        }
+                    } else if (key.includes('MINU')){
                         if (value===null){
                             minuValue=0;
                         } else {
@@ -326,10 +357,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
 
                     }
-
-                    else if (key === 'OR_FIRTH_LOFTEE'){
-                        orValue=UTILS.realNumberFormatter(value);
-                    } else if (key === 'GENE'){
+                    else if (key === 'GENE'){
                         geneName=value;
                     } else if (key === 'POS'){
                         positionIndicator['start']=value;
@@ -347,6 +375,9 @@ var mpgSoftware = mpgSoftware || {};
                 retVal.push( orValue );
                 retVal.push(minaValue);
                 retVal.push(minuValue);
+                retVal.push(orFirthLofteeValue);
+                retVal.push(pFirthLofteeValue);
+                retVal.push(pSkatLofteeValue);
                 return retVal;
             };
 
@@ -361,10 +392,10 @@ var mpgSoftware = mpgSoftware || {};
                 var table = $('#phenotypeTraits').dataTable({
                     pageLength: 25,
                     filter: false,
-                    order: [[3, "asc"]],
-                    columnDefs: [ {type: "scientific", targets: [3, 4]},
-                        {type: "allnumeric", targets: [5, 6]},
-                        {"className": "dt-center", targets: [1,2,3,4,5,6]}],
+                    order: [[4, "asc"]],
+                    columnDefs: [ {type: "scientific", targets: [3, 4,5,6,7]},
+                        {type: "double", targets: [7]},
+                        {"className": "dt-center", targets: [1,2,3,4,5,6,7]}],
                     language: languageSetting,
                     buttons: [
                         { extend: 'copy', text: copyText },

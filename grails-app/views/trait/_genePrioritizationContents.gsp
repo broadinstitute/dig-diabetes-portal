@@ -39,7 +39,7 @@
         </select>
     </div>
     <div class="col-md-6">
-        <label>Variants: </label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
+        <label>Masks: </label><select id="subphenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
         </select>
     </div>
 
@@ -58,18 +58,19 @@
 <input id="get clump" type="button" value="Get clump" onclick="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants();" style="display: none;"/>
 
 
-<table id="phenotypeTraits" class="table dk-t2d-general-table basictable table-striped">
+<table id="phenotypeTraits"  class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.gene" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.all_p_val" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.oddsRatio" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.ploftee" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.mina" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.minu" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.pSkat" /></th>
 
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.mina" />
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.minu" />
-        </th>
+
 
     </tr>
     </thead>
