@@ -182,7 +182,7 @@ var mpgSoftware = mpgSoftware || {};
                             var value = data.variant.results[i].pVals[j].count;
                             var splitKey = key.split('^');
                             if (splitKey.length>3) {
-                                if (splitKey[0].includes('P_FIRTH')) {
+                                if (splitKey[0].includes('P_VALUE')) {
                                     if (value===null) {
                                         skipIt=true;
                                     }
@@ -191,6 +191,11 @@ var mpgSoftware = mpgSoftware || {};
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
                                     (splitKey[0].includes('OR_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_FIRTH'))) {
                                     d[splitKey[0]] = value;
                                 }
                                 else if ( (splitKey[2]!==null)&&
@@ -343,19 +348,12 @@ var mpgSoftware = mpgSoftware || {};
                             minaValue=value;
                         }
                     }
-                    else if  (key.includes('MINA')){
-                        if (value===null){
-                            minaValue=0;
-                        } else {
-                            minaValue=value;
-                        }
-                    } else if (key.includes('MINU')){
+                    else if (key.includes('MINU')){
                         if (value===null){
                             minuValue=0;
                         } else {
                             minuValue=value;
                         }
-
                     }
                     else if (key === 'GENE'){
                         geneName=value;
@@ -371,8 +369,6 @@ var mpgSoftware = mpgSoftware || {};
                 retVal.push( "<a class='boldlink' href='"+launchGeneVariantQueryUrl+"?gene="+geneName+"&phenotype="+phenotype+"&dataset="+dataset+"'>"+geneName+"</a>");
                 retVal.push( chromosome );
                 retVal.push(position);
-                retVal.push( pValue );
-                retVal.push( orValue );
                 retVal.push(minaValue);
                 retVal.push(minuValue);
                 retVal.push(orFirthLofteeValue);
@@ -393,8 +389,8 @@ var mpgSoftware = mpgSoftware || {};
                     pageLength: 25,
                     filter: false,
                     order: [[4, "asc"]],
-                    columnDefs: [ {type: "scientific", targets: [3, 4,5,6,7]},
-                        {type: "double", targets: [7]},
+                    columnDefs: [ {type: "scientific", targets: [3,4,5,6,7]},
+                        {type: "double", targets: [6,7]},
                         {"className": "dt-center", targets: [1,2,3,4,5,6,7]}],
                     language: languageSetting,
                     buttons: [
@@ -408,7 +404,7 @@ var mpgSoftware = mpgSoftware || {};
                 //var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
                 var mySavedVars = getMySavedVariables();
                 for (var i = 0; i < dataLength; i++) {
-                    var array = convertLineForPhenotypicTraitTable( variant[i],
+                    var array = convertLineForPhenotypicTraitTable(variant[i],
                                                         mySavedVars.phenotypeName,
                                                         $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
                                                         mySavedVars.launchGeneVariantQueryUrl );
