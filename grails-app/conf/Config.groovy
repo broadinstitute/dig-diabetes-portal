@@ -866,3 +866,5 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose an accordion section with the burden test on the gene page
                                   )
 ]
+
+

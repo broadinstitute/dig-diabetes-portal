@@ -202,6 +202,7 @@ var mpgSoftware = mpgSoftware || {};
 
                         $('#trait-input').addClass("selectpicker").attr("data-live-search","true");
                     }
+                   // loading.hide();
 
                     console.log("variant phenotype list loaded");
                     $('#spinner').hide();
@@ -209,7 +210,7 @@ var mpgSoftware = mpgSoftware || {};
                     //mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                 },
                 error: function (jqXHR, exception) {
-                    loading.hide();
+                   // loading.hide();
                     core.errorReporter(jqXHR, exception);
                 }
             });
@@ -305,7 +306,7 @@ var mpgSoftware = mpgSoftware || {};
                         $('#home_spinner').hide();
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
-                    loading.hide();
+                    //loading.hide();
                     core.errorReporter(jqXHR, errorThrown)
                 }
             );

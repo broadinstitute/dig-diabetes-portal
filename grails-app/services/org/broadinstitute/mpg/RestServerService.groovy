@@ -1654,7 +1654,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public String getMetadata() {
         String retdat;
-        retdat = getRestCallBase(METADATA_URL, REST_SERVER?.url);
+        retdat = getRestCallBase("${METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer());
         return retdat;
     }
 
@@ -2092,7 +2092,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINURatio)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyNameForPFirthvalue, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
         getDataQueryHolder.getDataQuery.setLimit(1000)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
