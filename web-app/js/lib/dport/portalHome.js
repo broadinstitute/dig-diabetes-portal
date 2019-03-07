@@ -206,6 +206,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     console.log("variant phenotype list loaded");
                     $('#spinner').hide();
+                    $(wrapper).css("opacity","1");
 
                     //mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                 },
@@ -303,6 +304,7 @@ var mpgSoftware = mpgSoftware || {};
                         }
 
                         console.log("gene phenotype list loaded");
+                        $(wrapper).css("opacity","1");
                         $('#home_spinner').hide();
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
