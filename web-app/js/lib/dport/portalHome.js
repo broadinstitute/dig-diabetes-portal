@@ -165,9 +165,11 @@ var mpgSoftware = mpgSoftware || {};
             });
         };
 
-        var retrievePhenotypes = function () {
+        var retrievePhenotypes = function (WRAPPER,DROPDOWNNAME,LAUNCHBUTTON) {
             var loading = $('#spinner').show();
             var homePageVars = getHomePageVariables();
+            var wrapper = '.' + WRAPPER;
+            var launchButton = '#' + LAUNCHBUTTON;
             $.ajax({
                 cache: false,
                 type: "post",
@@ -180,7 +182,14 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data.datasets !== 'undefined' ) &&
                         (  data.datasets !== null )) {
 
-                        UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#trait-input', undefined, undefined, homePageVars.defaultPhenotype);
+                        $('<select class="'+ DROPDOWNNAME +' form-control selectpicker" data-live-search="true" id="'+ DROPDOWNNAME +'" name="'+ DROPDOWNNAME +'"></select>').insertBefore(launchButton);
+
+                        while ($("#"+ DROPDOWNNAME).length) {
+                            UTILS.fillPhenotypeCompoundDropdown(data.datasets, "#" + DROPDOWNNAME, undefined, undefined, homePageVars.defaultPhenotype);
+
+                            break;
+                        }
+                        //UTILS.fillPhenotypeCompoundDropdown(data.datasets, '#trait-input', undefined, undefined, homePageVars.defaultPhenotype);
                         var availPhenotypes = [];
                         _.forEach($("select#trait-input option"), function (a) {
                             availPhenotypes.push($(a).val());
@@ -190,9 +199,12 @@ var mpgSoftware = mpgSoftware || {};
                         } else if (availPhenotypes.length > 0) {
                             $('#trait-input').val(availPhenotypes[0]);
                         }
+
+                        $('#trait-input').addClass("selectpicker").attr("data-live-search","true");
                     }
 
-                    //console.log(data)
+                    console.log("variant phenotype list loaded");
+                    $('#spinner').hide();
 
                     //mpgSoftware.traitsFilter.setTraitsFilter(data.datasets,"home");
                 },
@@ -252,8 +264,10 @@ var mpgSoftware = mpgSoftware || {};
             }
         }
 
-        var retrieveGenePhenotypes = function () {
+        var retrieveGenePhenotypes = function (WRAPPER,DROPDOWNNAME,LAUNCHBUTTON) {
             var homePageVars = getHomePageVariables();
+            var wrapper = '.' + WRAPPER;
+            var launchButton = '#' + LAUNCHBUTTON;
             $.ajax({
                 cache: false,
                 type: "get",
@@ -266,7 +280,17 @@ var mpgSoftware = mpgSoftware || {};
                         ( typeof data !== 'undefined') &&
                         ( typeof data.is_error !== 'undefined' ) &&
                         (  !data.is_error ) ) {
-                        fillGenePhenotypeCompoundDropdown(data,homePageVars.geneTraitInput,undefined,undefined,homePageVars.defaultPhenotype);
+
+                        $('<select class="'+ DROPDOWNNAME +' form-control selectpicker" data-live-search="true" id="'+ DROPDOWNNAME +'" name="'+ DROPDOWNNAME +'"></select>').insertBefore(launchButton);
+
+                        while ($("#"+ DROPDOWNNAME).length) {
+
+                            fillGenePhenotypeCompoundDropdown(data,"#"+ DROPDOWNNAME,undefined,undefined,homePageVars.defaultPhenotype);
+
+                            break;
+                        }
+
+                        //fillGenePhenotypeCompoundDropdown(data,homePageVars.geneTraitInput,undefined,undefined,homePageVars.defaultPhenotype);
                         var availPhenotypes = [];
                         _.forEach( $("select"+homePageVars.geneTraitInput+"  option"), function(a){
                             availPhenotypes.push($(a).val());
@@ -276,6 +300,9 @@ var mpgSoftware = mpgSoftware || {};
                         } else if (availPhenotypes.length>0){
                             $(homePageVars.geneTraitInput).val(availPhenotypes[0]);
                         }
+
+                        console.log("gene phenotype list loaded");
+                        $('#home_spinner').hide();
                     }
                 }).fail(function (jqXHR, textStatus, errorThrown) {
                     loading.hide();

@@ -1235,3 +1235,5 @@ span.new-dataset-flag {
 .variant-association-ui > .btn-group > button, .gene-association-ui > .btn-group > button {
 	height: 35px; border-radius: 5px; border: none;
 }
+
+.variant-association-ui > div.trait-input, .gene-association-ui > div.gene-trait-input { width: 83% !important; height: 35px; background-color:#fff; border:none; border-radius: 5px; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; margin-right: 0.5%; font-size: 16px; }

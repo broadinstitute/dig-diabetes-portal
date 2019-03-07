@@ -54,8 +54,8 @@
         $(document).ready(function(){
             mpgSoftware.homePage.loadNewsFeed(newsItems.posts);
             mpgSoftware.homePage.setSlideWindows();
-            mpgSoftware.homePage.retrievePhenotypes();
-            mpgSoftware.homePage.retrieveGenePhenotypes();
+            mpgSoftware.homePage.retrievePhenotypes('variant-association-ui','trait-input','traitSearchLaunch');
+            mpgSoftware.homePage.retrieveGenePhenotypes('gene-association-ui','gene-trait-input','geneTraitSearchLaunch');
             mpgSoftware.homePage.initializeInputFields ();
         });
     });
@@ -207,8 +207,8 @@
                                 <div style="float: right; font-size: 20px; padding: 5px 0 1px 0; color: #666; background-color: #fff; width: 10%; height: 35px; border-bottom-right-radius: 5px; border-top-right-radius: 5px; text-align: center; margin-right: 1%" onclick="mpgSoftware.traitsFilter.clearTraitsSearch()" onmouseover="mpgSoftware.traitsFilter.setBtnOver(this)" onmouseout="mpgSoftware.traitsFilter.setBtnOut(this)" ><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
                             </div>-->
                             <div class="traits-select-ui variant-association-ui" style="">
-                                <select name="" id="trait-input" class="form-control input-sm selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
-                                </select>
+                                <!--<select name="" id="trait-input" class="form-control input-sm selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                                </select>-->
                                 <button id="traitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                             </div>
                         </div>
@@ -216,8 +216,8 @@
                     <g:if test="${portalVersionBean.geneLevelDataExists}">
                         <div class="form-inline gene-association-ui-wrapper" style="display:none;">
                             <div class="gene-association-ui">
-                                <select name="" id="gene-trait-input" class="form-control input-sm selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
-                                </select>
+                                <!--<select name="" id="gene-trait-input" class="form-control input-sm selectpicker" data-live-search="true" style="width: 83%; height: 35px; background-color:#fff; border:none; border-radius: 0; border-top-left-radius: 3px; border-bottom-left-radius: 3px; margin:0; font-size: 16px;">
+                                </select>-->
                                 <button id="geneTraitSearchLaunch" class="btn btn-primary btn-sm" type="button" style="width:15%; height: 35px; background-color:#fff; color: #000; border:none; border-radius: 5px; margin:0; background-image:url(${resource(dir: 'images', file: 'button_arrow.svg')}); background-repeat: no-repeat; background-position: center right;"><g:message code="mainpage.button.imperative"/>&nbsp;&nbsp;&nbsp;</button>
                             </div>
                         </div>
