@@ -681,12 +681,28 @@
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
             <div sortField={{numberOfRecords}}>
-               <a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
-               <div  class="collapse holdMultipleElements openDepictInGeneTable" id="depict_data_{{geneName}}">
+               <a data-toggle="collapse" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
+               <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
+                    {{#tissuesExist}}
+                    <table class="openMetaXcanInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0">pValue</th>
+                        <th style="border-top: 0;border-right: 0;">tissue</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
                     {{#tissues}}
-                       <div>pvalue={{value}}</div>
-                       <div>from {{tissue}}</div>
+                       <tr role="row">
+                           <td>{{value}}</td>
+                           <td style="border-right: 0">{{tissue}}</td>
+                       </tr>
                     {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
                </div>
             </div>
 

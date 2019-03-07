@@ -1796,7 +1796,7 @@ var mpgSoftware = mpgSoftware || {};
                     if ($('#phewasBottomLineResults').is(":checked")){
                         useBottomLineResults="true";
                     }
-                    var buildParameter=includeAllDatasetsRequest+"_"+useBottomLineResults;
+                    var buildParameter = includeAllDatasetsRequest+"_"+useBottomLineResults;
                     if ($('#phewasUseUKBB').is(":checked")) {
                         urlForPhewas = encodeURI('http://portaldev.sph.umich.edu/ukbb/v1/statistic/phewas/?filter=variant eq \''+convertVarIdToUmichFavoredForm(variantIdString)+'\''+
                         '&format=objects&build=GRCh37');

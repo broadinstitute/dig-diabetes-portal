@@ -33,3 +33,10 @@ div.contextHolder{
 .dataTables_wrapper.dk-zoom-1 thead th, .dataTables_wrapper.dk-zoom-1 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-2 thead th, .dataTables_wrapper.dk-zoom-2 thead td { padding: 10px 18px; }
 .dataTables_wrapper.dk-zoom-3 thead th, .dataTables_wrapper.dk-zoom-3 thead td { padding: 10px 18px; }
+
+div.openMetaXcanInGeneTable {
+    font-size: 10px;
+}
+table.openMetaXcanInGeneTable {
+    background-color: #bce8f1;
+}

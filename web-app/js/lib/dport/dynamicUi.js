@@ -1131,8 +1131,7 @@ mpgSoftware.dynamicUi = (function () {
         if ( ( typeof data !== 'undefined') &&
              (  data.is_error !== true ) &&
              (  data.numRecords > 0 ) &&
-             ( typeof data.variants !== 'undefined' ) )
-
+             ( typeof data.variants !== 'undefined' ) ){
             var geneRecord = {};
             _.forEach(data.variants[0], function (oneRec) {
                 _.forEach(oneRec, function(sampleRecord,tissue){
@@ -1152,9 +1151,12 @@ mpgSoftware.dynamicUi = (function () {
                     }
                 });
             });
-        if (typeof geneRecord.gene !== 'undefined'){
-            rawGeneAssociationRecords.push(geneRecord);
+            if ((typeof geneRecord !== 'undefined')&&(typeof geneRecord.gene !== 'undefined')){
+                rawGeneAssociationRecords.push(geneRecord);
+            }
         }
+
+
 
         return rawGeneAssociationRecords;
 
@@ -1570,9 +1572,17 @@ mpgSoftware.dynamicUi = (function () {
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
                             Mustache.render($("#dynamicGeneTableEmptyRecord")[0].innerHTML), "tissue specific");
                     } else {
+                        var renderData = {  numberOfRecords:recordsPerGene.tissues.length,
+                                            tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
+                                            gene:recordsPerGene.gene,
+                                            tissues:_.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
+                                                return {    value:UTILS.realNumberFormatter(''+tissueRecord.value),
+                                                            tissue: tissueRecord.tissue };
+                                            })
+                        };
                         recordsPerGene["numberOfRecords"] = recordsPerGene.tissues.length;
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell(recordsPerGene.gene,
-                            Mustache.render($("#geneAssociationTableBody")[0].innerHTML, recordsPerGene),"tissue specific");
+                            Mustache.render($("#geneAssociationTableBody")[0].innerHTML, renderData),"tissue specific");
                     }
 
                 }
@@ -1589,13 +1599,7 @@ mpgSoftware.dynamicUi = (function () {
             true,
             'geneTableGeneHeaders');
 
-        //_.forEach(returnObject.genesByAbc, function (value) {
-        //    $('#tissues_' + value.geneName).data('allUniqueTissues', value.abcTissuesVector());
-        //    $('#tissues_' + value.geneName).data('sourceByTissue', value.sourceByTissue());
-        //    $('#tissues_' + value.geneName).data('regionStart', value.start_pos);
-        //    $('#tissues_' + value.geneName).data('regionEnd', value.stop_pos);
-        //    $('#tissues_' + value.geneName).data('geneName', value.geneName);
-        //});
+
 
     };
 
@@ -2279,7 +2283,7 @@ mpgSoftware.dynamicUi = (function () {
                 intermediateDataStructure.headerNames.push(oneRecord.name1);
                 intermediateDataStructure.headerContents.push(Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord));
                 intermediateDataStructure.headers.push(new IntermediateStructureDataCell(oneRecord.name1,
-                    Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader columnNumber_"+(index+2)+" asc "));
+                    Mustache.render($("#dynamicGeneTableHeaderV2")[0].innerHTML, oneRecord),"geneHeader asc "));
             });
 
             intermediateDataStructure.tableToUpdate = "table.combinedGeneTableHolder";
@@ -3675,15 +3679,15 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     var sortability = [];
                     switch(typeOfHeader){
                         case 'geneTableGeneHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0,otherClasses:'columnNumber_0'}),'geneFarLeftCorner'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0}),'geneFarLeftCorner'));
                             sortability.push(false);
-                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1,otherClasses:'columnNumber_1'}),'geneMethods'));
+                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1}),'geneMethods'));
                             sortability.push(true);
                             break;
                         case 'variantTableVariantHeaders':
-                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0,otherClasses:'columnNumber_0'}),'variantAnnotationCategory'));
+                            addedColumns.push(new IntermediateStructureDataCell('farLeftCorner',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:0}),'variantAnnotationCategory'));
                             sortability.push(true);
-                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1,otherClasses:'columnNumber_1'}),'methods'));
+                            addedColumns.push(new IntermediateStructureDataCell('b',Mustache.render($('#emptyRecord')[0].innerHTML,{initialLinearIndex:1}),'methods'));
                             sortability.push(true);
                             break;
                         case 'variantTableAnnotationHeaders':
@@ -3716,11 +3720,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                          var classList = $(header.content).attr("class").split(/\s+/);
                          var currentSortRequestObject = {};
                          _.forEach(classList, function (oneClass){
-                             var columnNumber = "columnNumber_";
                              var sortOrderDesignation = "sorting_";
-                             if ( oneClass.substr(0,columnNumber.length) === columnNumber ){
-                                 classesToPromote.push (oneClass);
-                             }
                              if ( oneClass.substr(0,sortOrderDesignation.length) === sortOrderDesignation ){
                                  classesToPromote.push (oneClass);
                              }
@@ -3924,7 +3924,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                     case 'geneTableGeneHeaders':
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                            "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+
+                            "<div class='"+row.subcategory+
                             " initialLinearIndex_"+indexInOneDimensionalArray+" geneRow'>"+row.displayCategory+"</div>" ,
                             row.subcategory)) ;
                         indexInOneDimensionalArray++;
@@ -3938,13 +3938,13 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
                         indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns);
                         var primarySortField =  ( typeof row.sortField === 'undefined') ? row.category : row.sortField;
                         rowDescriber.push( new IntermediateStructureDataCell(row.category,
-                                               "<div class='"+row.subcategory+" columnNumber_"+numberOfExistingRows+
+                                               "<div class='"+row.subcategory+
                                                " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+primarySortField+"'>"+
                                                 row.displayCategory+"</div>" ,
                                                 row.subcategory)) ;
                         indexInOneDimensionalArray++;
                         rowDescriber.push( new IntermediateStructureDataCell(row.subcategory,
-                                                "<div class='subcategory columnNumber_"+numberOfExistingRows+
+                                                "<div class='subcategory "+
                                                 " initialLinearIndex_"+indexInOneDimensionalArray+" variantRow' sortField='"+row.subcategory+"'>"+
                                                 row.displaySubcategory+"</div>" ,
                                                 "insertedColumn2"));
@@ -4069,7 +4069,7 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
             if ( typeof header.children[0] === 'undefined'){
                 // I'm completely unclear about why this special case is required.  It seems as if the first header in
                 // the gene table has no div.  But why?  All the other headers have DIVs.  Here's a workaround until I can figure it out.
-                divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner columnNumber_0"></div>'
+                divContents = '<div class="initialLinearIndex_0 geneFarLeftCorner"></div>'
             } else {
                 divContents = header.children[0].outerHTML;
             }
@@ -4208,7 +4208,11 @@ var  dataTableZoomSet =    function (TGWRAPPER,TGZOOM) {
 var destroySharedTable = function (whereTheTableGoes) {
     if ( $.fn.DataTable.isDataTable( whereTheTableGoes ) ) {
         var datatable = $(whereTheTableGoes).dataTable();
-        datatable.fnDestroy(false);
+        try{
+            datatable.fnDestroy(false);
+        } catch (e){
+            // this routine throws a JavaScript error, but doesn't seem to indicate any trouble
+        }
         $(whereTheTableGoes).empty()
     }
 }
