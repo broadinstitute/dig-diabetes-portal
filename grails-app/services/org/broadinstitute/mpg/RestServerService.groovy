@@ -1629,7 +1629,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public String getMetadata() {
         String retdat;
-        retdat = getRestCallBase(METADATA_URL, REST_SERVER?.url);
+        retdat = getRestCallBase("${METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer());
         return retdat;
     }
 
