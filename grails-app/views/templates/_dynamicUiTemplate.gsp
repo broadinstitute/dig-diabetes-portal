@@ -267,20 +267,29 @@
 
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
-
-                <div sortField={{numberOfTissues}}>
-                    <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
-                      <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
-                           {{#tissues}}
-                              <div>{{tissueName}}</div>
-                           {{/tissues}}
-                           <div id="tooltip_tissues_{{geneName}}"></div>
-                           <div id="graphic_tissues_{{geneName}}"></div>
-                      </div>
-                    </div>
-                </div>
-
-
+            <div sortField={{numberOfTissues}}>
+               <a data-toggle="collapse" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
+               <div  class="collapse openEqtlInGeneTable" id="eqtl_{{geneName}}">
+                    {{#tissuesExist}}
+                    <table class="openEqtlInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;border-right: 0;">tissue</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="border-right: 0; padding: 3px">{{tissueName}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
+               </div>
+            </div>
 </script>
 
 
@@ -554,7 +563,7 @@
         <th  scope="row">Genes</th>
         {{/abcGenesExist}}
         {{#genesByAbc}}
-            <th  scope="col"><div class="geneName">{{geneName}}</div><div class="genePosition">chromosome {{chrom}}: {{regionStart}}-{{regionEnd}}</div></th>
+            <th  scope="col"><div class="geneName text-center">{{geneName}}</div><div class="genePosition">chromosome {{chrom}}: {{regionStart}}-{{regionEnd}}</div></th>
         {{/genesByAbc}}
         {{#abcGenesExist}}
     </tr>
@@ -618,12 +627,12 @@
 %{--Called from displayGenesFromAbc--}%
 <script id="dynamicGeneTableHeaderV2"  type="x-tmpl-mustache">
 
-            <div sortStrategy="alphabetical"  sortTerm="{{name1}}" class="geneName">
-             {{name1}}</br>
-             %{--<div class="genePosition">--}%
-             chromosome {{chromosome}}: {{addrStart}}-{{addrEnd}}
+            <div sortStrategy="alphabetical"  sortTerm="{{name1}}" class="geneName text-center">
+             {{name1}}</div>
+             <div class="genePosition text-center">
+             {{chromosome}}: {{addrStart}}-{{addrEnd}}
              </div>
-
+ </div>
 </script>
 
 
@@ -639,21 +648,57 @@
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
 
+            %{--<div sortField={{numberOfTissues}}>--}%
+               %{--<a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>--}%
+               %{--<div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">--}%
+                    %{--<div id="tooltip_tissues_{{geneName}}"></div>--}%
+                    %{--<div id="graphic_tissues_{{geneName}}"></div>--}%
+               %{--</div>--}%
+            %{--</div>--}%
+
+            %{--<div><a data-toggle="collapse" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>--}%
+               %{--<div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">--}%
+                    %{--{{#experiment}}--}%
+                       %{--<div>{{.}}</div>--}%
+                    %{--{{/experiment}}--}%
+               %{--</div>--}%
+            %{--</div>--}%
+
+
             <div sortField={{numberOfTissues}}>
-               <a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+
+
+               <a data-toggle="collapse" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <a data-toggle="collapse" data-target="#tissues_{{geneName}}">view graphic</a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>
                </div>
-            </div>
+               <div  class="collapse openAbcInGeneTable" id="abc_{{geneName}}">
 
-            <div><a data-toggle="collapse" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
-               <div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">
-                    {{#experiment}}
-                       <div>{{.}}</div>
-                    {{/experiment}}
+                    {{#tissuesExist}}
+                    <table class="openAbcInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0;border-right: 0;">tissue</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/tissuesExist}}
+                    {{#tissues}}
+                       <tr role="row">
+                           <td style="border-right: 0; padding: 3px">{{tissueName}}</td>
+                       </tr>
+                    {{/tissues}}
+                    {{#tissuesExist}}
+                     </tbody>
+                    </table>
+                    {{/tissuesExist}}
                </div>
             </div>
+
+
+
 
 </script>
 
@@ -661,17 +706,34 @@
 
 <script id="depictGeneTableBody"  type="x-tmpl-mustache">
 
-            <div sortField={{numberOfRecords}}>
+
+             <div sortField={{numberOfRecords}}>
                <a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
-               <div  class="collapse holdMultipleElements openDepictInGeneTable" id="depict_data_{{geneName}}">
-                    {{#recordByDataSet}}
-                       <div>pvalue={{formattedPValue}}</div>
-                       <div>from {{dataset}}</div>
-                    {{/recordByDataSet}}
-                    %{--<div id="tooltip_tissues_{{geneName}}"></div>--}%
-                    %{--<div id="graphic_tissues_{{geneName}}"></div>--}%
+               <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
+                    {{#recordsExist}}
+                    <table class="openDepictInGeneTable" style="border: 0">
+                     <thead>
+                      <tr role="row">
+                        <th style="border-top: 0">pValue</th>
+                        <th style="border-top: 0;border-right: 0;">data set</th>
+                      </tr>
+                     </thead>
+                     <tbody>
+                    {{/recordsExist}}
+                    {{#records}}
+                       <tr role="row">
+                           <td style="padding: 3px">{{value}}</td>
+                           <td style="border-right: 0; padding: 3px">{{dataset}}</td>
+                       </tr>
+                    {{/records}}
+                    {{#recordsExist}}
+                     </tbody>
+                    </table>
+                    {{/recordsExist}}
                </div>
             </div>
+
+
 
 </script>
 

@@ -40,3 +40,12 @@ div.openMetaXcanInGeneTable {
 table.openMetaXcanInGeneTable {
     background-color: #bce8f1;
 }
+div.openDepictInGeneTable {
+    font-size: 10px;
+}
+div.openEqtlInGeneTable{
+    font-size: 10px;
+}
+div.openAbcInGeneTable{
+    font-size: 10px;
+}
