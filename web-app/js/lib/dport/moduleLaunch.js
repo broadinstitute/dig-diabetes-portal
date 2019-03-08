@@ -83,6 +83,8 @@ var mpgSoftware = mpgSoftware || {};
                         break;
                     }
 
+                    $('.'+PHENOTYPELIST+'.selectpicker').selectpicker('refresh');
+
 
                 },
                 error: function (jqXHR, exception) {
