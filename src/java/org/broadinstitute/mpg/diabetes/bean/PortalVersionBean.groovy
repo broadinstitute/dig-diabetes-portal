@@ -63,6 +63,7 @@ class PortalVersionBean {
     private Integer exposeVariantAndAssociationTable=0
     private Integer exposeIgvDisplay=0
     private Integer exposeIndependentBurdenTest=0
+    private Integer exposeGenesInRegionTab=0
 
 
 
@@ -114,7 +115,8 @@ class PortalVersionBean {
                              Integer exposeDatasetHierarchy,
                              Integer exposeVariantAndAssociationTable,
                              Integer exposeIgvDisplay,
-                             Integer exposeIndependentBurdenTest
+                             Integer exposeIndependentBurdenTest,
+                             Integer exposeGenesInRegionTab
     ){
         this.portalType = portalType;
         this.portalDescription = portalDescription;
@@ -165,6 +167,7 @@ class PortalVersionBean {
         this.exposeVariantAndAssociationTable = exposeVariantAndAssociationTable
         this.exposeIgvDisplay = exposeIgvDisplay
         this.exposeIndependentBurdenTest = exposeIndependentBurdenTest
+        this.exposeGenesInRegionTab = exposeGenesInRegionTab
     }
 
 
@@ -371,6 +374,9 @@ class PortalVersionBean {
     }
     public Integer getExposeIndependentBurdenTest(){
         return exposeIndependentBurdenTest
+    }
+    public Integer getExposeGenesInRegionTab(){
+        return exposeGenesInRegionTab
     }
 
 

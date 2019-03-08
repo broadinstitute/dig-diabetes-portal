@@ -49,3 +49,9 @@ div.openEqtlInGeneTable{
 div.openAbcInGeneTable{
     font-size: 10px;
 }
+a.cellExpander {
+    text-decoration: underline;
+}
+a.top-level {
+    font-size: 22px;
+}

@@ -1232,7 +1232,8 @@ mpgSoftware.dynamicUi = (function () {
         if (sampleGroupWithCredibleSetNames.length > 0) {
             rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
             rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o) {
-                return o.dataset === "GWAS_IBDGenetics_eu_CrdSet_mdv80"
+                return o.dataset === sampleGroupWithCredibleSetNames;
+               // return o.dataset === "GWAS_IBDGenetics_eu_CrdSet_mdv80"
             });
         } else {
             rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;

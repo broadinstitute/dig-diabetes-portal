@@ -640,8 +640,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the data set hierarchy in the sunburst visualization on the data page
                                                 0, // expose the old school variant and association table.  Potentially useful for debugging
                                                 0, // expose the IGV interface in its own accordion section
-                                                0  // expose an accordion section with the burden test on the gene page
-), // default data set used for a LocusZoom plot
+                                                0,  // expose an accordion section with the burden test on the gene page
+                                                0 ), // expose the 'genes in region' tab on the gene page
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv75",
@@ -686,7 +686,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0  // expose the 'genes in region' tab on the gene page
                                   ),
                                   new PortalVersionBean("mi",
                                                           "Myocardial Infarction",
@@ -733,12 +734,13 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0  // expose the 'genes in region' tab on the gene page
                                   ),
                                   new PortalVersionBean("ibd",
                                           //"Inflammatory Bowel Disease",
                                           "Variant to Function",
-                                                          "mdv80",
+                                                          "mdv37",//"mdv80",
                                                           "CD",// another option would be "IBD"
                                                             "GWAS_IBDGenomics_eu_mdv80",
                                                           ["UCSC annotation","ATACSeq_QTL","Enhancer-gene link"],
@@ -783,7 +785,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          1  // expose the 'genes in region' tab on the gene page
                                   ),
                                   new PortalVersionBean("epilepsy",
                                           "Epilepsy",
@@ -830,7 +833,8 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0  // expose the 'genes in region' tab on the gene page
                                   ),
                                   new PortalVersionBean("sleep",
                                           "Sleep",
@@ -876,6 +880,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0, // expose the data set hierarchy in the sunburst visualization on the data page
                                           0, // expose the old school variant and association table.  Potentially useful for debugging
                                           0, // expose the IGV interface in its own accordion section
-                                          0  // expose an accordion section with the burden test on the gene page
+                                          0,  // expose an accordion section with the burden test on the gene page
+                                          0  // expose the 'genes in region' tab on the gene page
                                   )
 ]

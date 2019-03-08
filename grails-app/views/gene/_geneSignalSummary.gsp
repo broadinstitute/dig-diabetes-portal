@@ -196,7 +196,8 @@ td.tissueTable.informationIsPresent{
                     exposeHiCData:"${portalVersionBean.getExposeHiCData()}",
                     exposeDynamicUi:"${portalVersionBean.getExposeDynamicUi()}",
                     exposeCommonVariantTab:"${portalVersionBean.getExposeCommonVariantTab()}",
-                    exposeRareVariantTab:"${portalVersionBean.getExposeRareVariantTab()}"
+                    exposeRareVariantTab:"${portalVersionBean.getExposeRareVariantTab()}",
+                    exposeGenesInRegionTab:"${portalVersionBean.getExposeGenesInRegionTab()}"
                 };
                 mpgSoftware.geneSignalSummaryMethods.setSignalSummarySectionVariables(drivingVariables);
                 mpgSoftware.geneSignalSummaryMethods.initialPageSetUp(drivingVariables);

@@ -1913,6 +1913,7 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         var exposeGeneComparisonIndicator = [];
         var exposeVariantComparisonIndicator = [];
         var exposeDynamicUiIndicator = [];
+        var exposeGenesInRegionTab = [];
 
         if (additionalParameters.exposePredictedGeneAssociations === "1"){
             genePrioritizationIndicator.push(1);
@@ -1948,6 +1949,10 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         if ((true) &&(additionalParameters.exposeGeneComparisonTable === "1")) { // we only need tabs if we have both jeans and variant tables
              weNeedToPutTablesInTabs.push(1);
         }
+        if (additionalParameters.exposeGenesInRegionTab === "1"){
+            exposeGenesInRegionTab.push(1);
+        }
+
 
     return {commonTab: displayCommonTab,
         highImpactTab: displayHighImpactTab,
@@ -1959,7 +1964,8 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
         exposeGeneComparisonSubTab:exposeGeneComparisonIndicator,
         exposeVariantComparisonSubTab:exposeVariantComparisonIndicator,
         dynamicUiTab:exposeDynamicUiIndicator,
-        weNeedToPutTablesInTabs:weNeedToPutTablesInTabs};
+        weNeedToPutTablesInTabs:weNeedToPutTablesInTabs,
+        exposeGenesInRegionTab:exposeGenesInRegionTab};
 
     }
 
@@ -2102,6 +2108,21 @@ mpgSoftware.geneSignalSummaryMethods = (function () {
                 genePageConfigurationParameters
                     ));
         }
+        $("ul.nav a.top-level").click(function (e) {
+            //$(this).tab('show');
+            if ($(this).attr('href') === "#generalRangeHolder"){
+                _.forEach($('div.generalRangeHolder ul li a'), function (element){
+                    var domElement = $(element);
+                    if (!domElement.hasClass('active')){
+                        domElement.click();
+                    }
+                });
+                $($('div.generalRangeHolder ul li.active a')).click();
+            } else if ($(this).attr('href') === "#geneSpecificHolder"){
+                $($('div.geneSpecificHolder ul li a')).click();
+                $($('div.geneSpecificHolder ul li.active a')).click();
+            }
+        });
 
         mpgSoftware.dynamicUi.installDirectorButtonsOnTabs(additionalParameters);
         mpgSoftware.dynamicUi.modifyScreenFields({},additionalParameters);

@@ -377,7 +377,8 @@ class RestServerService {
                     existingPortalVersionBean.getExposeDatasetHierarchy(),
                     existingPortalVersionBean.getExposeVariantAndAssociationTable(),
                     existingPortalVersionBean.getExposeIgvDisplay(),
-                    existingPortalVersionBean.getExposeIndependentBurdenTest())
+                    existingPortalVersionBean.getExposeIndependentBurdenTest(),
+                    existingPortalVersionBean.getExposeGenesInRegionTab()           )
 
             removePortalVersion(portalType)
         } else {

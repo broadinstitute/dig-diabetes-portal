@@ -268,7 +268,7 @@
 
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
             <div sortField={{numberOfTissues}}>
-               <a data-toggle="collapse" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
+               <a data-toggle="collapse" class="cellExpander" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
                <div  class="collapse openEqtlInGeneTable" id="eqtl_{{geneName}}">
                     {{#tissuesExist}}
                     <table class="openEqtlInGeneTable" style="border: 0">
@@ -364,7 +364,7 @@
         {{/colocsExist}}
         {{#phenotypesByColocalization}}
             <td >
-            <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     {{#tissues}}
                        <div>{{.}}</div>
@@ -373,14 +373,14 @@
                     <div id="graphic_tissues_{{geneName}}"></div>
                </div>
             </div>
-            <div><a data-toggle="collapse" data-target="#phenotypes_{{geneName}}">phenotypes={{numberOfPhenotypes}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#phenotypes_{{geneName}}">phenotypes={{numberOfPhenotypes}}</a>
                <div  class="collapse holdMultipleElements" id="phenotypes_{{geneName}}">
                     {{#phenotypes}}
                        <div>{{.}}</div>
                     {{/phenotypes}}
                </div>
             </div>
-            <div><a data-toggle="collapse" data-target="#varId_{{geneName}}">variants={{numberOfVariants}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#varId_{{geneName}}">variants={{numberOfVariants}}</a>
                <div  class="collapse holdMultipleElements" id="varId_{{geneName}}">
                     {{#varId}}
                        <div>{{.}}</div>
@@ -420,21 +420,21 @@
         {{/phenotypeColocsExist}}
         {{#phenotypesByColocalization}}
             <td >
-            <div><a data-toggle="collapse" data-target="#tissues_{{tissueName}}">phenotypes={{numberOfPhenotypes}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{tissueName}}">phenotypes={{numberOfPhenotypes}}</a>
                <div  class="collapse holdMultipleElements" id="tissues_{{tissueName}}">
                     {{#phenotypes}}
                        <div>{{.}}</div>
                     {{/phenotypes}}
                </div>
             </div>
-            <div><a data-toggle="collapse" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
                <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
                     {{#genes}}
                        <div>{{.}}</div>
                     {{/genes}}
                </div>
             </div>
-            <div><a data-toggle="collapse" data-target="#varId_{{tissueName}}">variants={{numberOfVariants}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#varId_{{tissueName}}">variants={{numberOfVariants}}</a>
                <div  class="collapse holdMultipleElements" id="varId_{{tissueName}}">
                     {{#varId}}
                        <div>{{.}}</div>
@@ -474,21 +474,21 @@
         {{/phenotypeColocsExist}}
         {{#phenotypesByColocalization}}
             <td >
-            <div><a data-toggle="collapse" data-target="#tissues_{{phenotypeName}}">tissues={{numberOfTissues}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{phenotypeName}}">tissues={{numberOfTissues}}</a>
                <div  class="collapse holdMultipleElements" id="tissues_{{phenotypeName}}">
                     {{#tissues}}
                        <div>{{.}}</div>
                     {{/tissues}}
                </div>
             </div>
-            <div><a data-toggle="collapse" data-target="#genes_{{phenotypeName}}">genes={{numberOfGenes}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#genes_{{phenotypeName}}">genes={{numberOfGenes}}</a>
                <div  class="collapse holdMultipleElements" id="genes_{{phenotypeName}}">
                     {{#genes}}
                        <div>{{.}}</div>
                     {{/genes}}
                </div>
             </div>
-            <div><a data-toggle="collapse" data-target="#varId_{{phenotypeName}}">variants={{numberOfVariants}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#varId_{{phenotypeName}}">variants={{numberOfVariants}}</a>
                <div  class="collapse holdMultipleElements" id="varId_{{phenotypeName}}">
                     {{#varId}}
                        <div>{{.}}</div>
@@ -528,7 +528,7 @@
         {{/abcTissuesExist}}
         {{#tissuesByAbc}}
             <td >
-            <div><a data-toggle="collapse" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#genes_{{tissueName}}">genes={{numberOfGenes}}</a>
                <div  class="collapse holdMultipleElements" id="genes_{{tissueName}}">
                     {{#gene}}
                        <div>{{.}}</div>
@@ -536,7 +536,7 @@
                </div>
             </div>
 
-            <div><a data-toggle="collapse" data-target="#experiments_{{tissueName}}">experiments={{numberOfExperiments}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#experiments_{{tissueName}}">experiments={{numberOfExperiments}}</a>
                <div  class="collapse holdMultipleElements" id="experiments_{{tissueName}}">
                     {{#experiment}}
                        <div>{{.}}</div>
@@ -575,14 +575,14 @@
         {{/abcGenesExist}}
         {{#genesByAbc}}
             <td >
-            <div><a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>
                </div>
             </div>
 
-            <div><a data-toggle="collapse" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
+            <div><a data-toggle="collapse" class="cellExpander" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>
                <div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">
                     {{#experiment}}
                        <div>{{.}}</div>
@@ -647,29 +647,10 @@
 
 </script>
 <script id="dynamicAbcGeneTableBody"  type="x-tmpl-mustache">
-
-            %{--<div sortField={{numberOfTissues}}>--}%
-               %{--<a data-toggle="collapse" data-target="#tissues_{{geneName}}">tissues={{numberOfTissues}}</a>--}%
-               %{--<div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">--}%
-                    %{--<div id="tooltip_tissues_{{geneName}}"></div>--}%
-                    %{--<div id="graphic_tissues_{{geneName}}"></div>--}%
-               %{--</div>--}%
-            %{--</div>--}%
-
-            %{--<div><a data-toggle="collapse" data-target="#experiments_{{geneName}}">experiments={{numberOfExperiments}}</a>--}%
-               %{--<div  class="collapse holdMultipleElements" id="experiments_{{geneName}}">--}%
-                    %{--{{#experiment}}--}%
-                       %{--<div>{{.}}</div>--}%
-                    %{--{{/experiment}}--}%
-               %{--</div>--}%
-            %{--</div>--}%
-
-
             <div sortField={{numberOfTissues}}>
-
-
-               <a data-toggle="collapse" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
-               <a data-toggle="collapse" data-target="#tissues_{{geneName}}">view graphic</a>
+               <a data-toggle="collapse" class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
+               <a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">
+               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span></a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>
@@ -708,7 +689,7 @@
 
 
              <div sortField={{numberOfRecords}}>
-               <a data-toggle="collapse" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
+               <a data-toggle="collapse" class="cellExpander" data-target="#depict_data_{{geneName}}">records={{numberOfRecords}}</a>
                <div  class="collapse openDepictInGeneTable" id="depict_data_{{geneName}}">
                     {{#recordsExist}}
                     <table class="openDepictInGeneTable" style="border: 0">
@@ -743,7 +724,7 @@
 <script id="geneAssociationTableBody"  type="x-tmpl-mustache">
 
             <div sortField={{numberOfRecords}}>
-               <a data-toggle="collapse" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
+               <a data-toggle="collapse" class="cellExpander" data-target="#MetaXcan_{{gene}}">records={{numberOfRecords}}</a>
                <div  class="collapse openMetaXcanInGeneTable" id="MetaXcan_{{gene}}">
                     {{#tissuesExist}}
                     <table class="openMetaXcanInGeneTable" style="border: 0">

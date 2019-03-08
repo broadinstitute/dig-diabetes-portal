@@ -902,54 +902,186 @@ div.genePosition{
 
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
 
+            %{--<div class="text-right" id="phenotypeLabel">{{pName}}</div>--}%
+            %{--<div class="row">--}%
+                %{--<div class="col-xs-12">--}%
+                    %{--<ul class="nav nav-tabs" role="tablist">--}%
+                        %{--{{#commonTab}}--}%
+                            %{--<li role="presentation" class="active variantTableLabels commonVariantChooser">--}%
+                                %{--<a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>--}%
+                            %{--</li>--}%
+                        %{--{{/commonTab}}--}%
+                        %{--{{#highImpactTab}}--}%
+                            %{--<li role="presentation" class="variantTableLabels highImpacVariantChooser">--}%
+                                %{--<a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>--}%
+                            %{--</li>--}%
+                        %{--{{/highImpactTab}}--}%
+                        %{--{{#credibleSetTab}}--}%
+                            %{--<li role="presentation" class="variantTableLabels credibleSetChooser">--}%
+                               %{--<a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->--}%
+                            %{--</li>--}%
+                        %{--{{/credibleSetTab}}--}%
+                        %{--{{#incredibleSetTab}}--}%
+                            %{--<li role="presentation" class="variantTableLabels credibleSetChooser">--}%
+                               %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>--}%
+                            %{--</li>--}%
+                        %{--{{/incredibleSetTab}}--}%
+                        %{--{{#genePrioritizationTab}}--}%
+                            %{--<li role="presentation" class="variantTableLabels genePrioritizationChooser">--}%
+                               %{--<a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>--}%
+                            %{--</li>--}%
+                        %{--{{/genePrioritizationTab}}--}%
+                        %{--{{#chromatinConformationTab}}--}%
+                            %{--<li role="presentation" class="variantTableLabels chromatinConformationChooser">--}%
+                               %{--<a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>--}%
+                            %{--</li>--}%
+                        %{--{{/chromatinConformationTab}}--}%
+                        %{--{{#dynamicUiTab}}--}%
+                            %{--<li role="presentation" class="variantTableLabels chromatinConformationChooser">--}%
+                               %{--<a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Configurable UI</a>--}%
+                            %{--</li>--}%
+                        %{--{{/dynamicUiTab}}--}%
+                    %{--</ul>--}%
+                %{--</div>--}%
+            %{--</div>--}%
+            %{--<div id="cDataModalGoesHere"></div>--}%
+
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <ul class="nav nav-tabs" role="tablist">
-                        {{#commonTab}}
-                            <li role="presentation" class="active variantTableLabels commonVariantChooser">
-                                <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
-                            </li>
-                        {{/commonTab}}
-                        {{#highImpactTab}}
-                            <li role="presentation" class="variantTableLabels highImpacVariantChooser">
-                                <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
-                            </li>
-                        {{/highImpactTab}}
-                        {{#credibleSetTab}}
-                            <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
-                            </li>
-                        {{/credibleSetTab}}
-                        {{#incredibleSetTab}}
-                            <li role="presentation" class="variantTableLabels credibleSetChooser">
-                               <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
-                            </li>
-                        {{/incredibleSetTab}}
-                        {{#genePrioritizationTab}}
-                            <li role="presentation" class="variantTableLabels genePrioritizationChooser">
-                               <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
-                            </li>
-                        {{/genePrioritizationTab}}
-                        {{#chromatinConformationTab}}
-                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
-                               <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
-                            </li>
-                        {{/chromatinConformationTab}}
-                        {{#dynamicUiTab}}
-                            <li role="presentation" class="variantTableLabels chromatinConformationChooser">
-                               <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Configurable UI</a>
-                            </li>
-                        {{/dynamicUiTab}}
-                    </ul>
+            {{#exposeGenesInRegionTab}}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row" style="margin-bottom: 20px">
+                            <div class="col-xs-2"></div>
+                            <div class="col-xs-8">
+                                <ul class="nav nav-justified nav-tabs" role="tablist">
+                                    <li role="presentation" class="active variantTableLabels geneSpecificChooser">
+                                         <a href="#geneSpecificHolder" aria-controls="geneSpecificHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Gene specific tabs</a>
+                                    </li>
+                                    <li role="presentation" class=" variantTableLabels generalRangeChooser">
+                                           <a href="#generalRangeHolder" aria-controls="generalRangeHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Genomic region</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="tab-content">
+
+                            <div role="tabpanel" class="active tab-pane geneSpecificHolder" id="geneSpecificHolder">
+
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {{#commonTab}}
+                                        <li role="presentation" class="active variantTableLabels commonVariantChooser">
+                                            <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
+                                        </li>
+                                    {{/commonTab}}
+                                    {{#highImpactTab}}
+                                        <li role="presentation" class="variantTableLabels highImpacVariantChooser">
+                                            <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab"
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
+                                        </li>
+                                    {{/highImpactTab}}
+                                </ul>
+
+                            </div>
+
+                            <div role="tabpanel" class="tab-pane generalRangeHolder" id="generalRangeHolder">
+
+                                <ul class="nav nav-tabs" role="tablist">
+                                    {{#credibleSetTab}}
+                                        <li role="presentation" class="active variantTableLabels credibleSetChooser">
+                                           <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab"
+                                           onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                           <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
+                                        </li>
+                                    {{/credibleSetTab}}
+                                    {{#incredibleSetTab}}
+                                        <li role="presentation" class="variantTableLabels credibleSetChooser">
+                                           <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab"
+                                           onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                        </li>
+                                    {{/incredibleSetTab}}
+                                    {{#genePrioritizationTab}}
+                                        <li role="presentation" class="variantTableLabels genePrioritizationChooser">
+                                           <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab"
+                                           data-toggle="tab">Gene prioritization</a>
+                                        </li>
+                                    {{/genePrioritizationTab}}
+                                    {{#chromatinConformationTab}}
+                                        <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                           <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab"
+                                           data-toggle="tab">Chromatin conformation</a>
+                                        </li>
+                                    {{/chromatinConformationTab}}
+                                    {{#dynamicUiTab}}
+                                        <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                           <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab"
+                                           data-toggle="tab">Genes in region: {{pName}}</a>
+                                        </li>
+                                    {{/dynamicUiTab}}
+                                </ul>
+
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
+
+            {{/exposeGenesInRegionTab}}
+            {{^exposeGenesInRegionTab}}
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="nav nav-tabs" role="tablist">
+                            {{#commonTab}}
+                                <li role="presentation" class="active variantTableLabels commonVariantChooser">
+                                    <a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>
+                                </li>
+                            {{/commonTab}}
+                            {{#highImpactTab}}
+                                <li role="presentation" class="variantTableLabels highImpacVariantChooser">
+                                    <a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>
+                                </li>
+                            {{/highImpactTab}}
+                            {{#credibleSetTab}}
+                                <li role="presentation" class="variantTableLabels credibleSetChooser">
+                                   <a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->
+                                </li>
+                            {{/credibleSetTab}}
+                            {{#incredibleSetTab}}
+                                <li role="presentation" class="variantTableLabels credibleSetChooser">
+                                   <a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>
+                                </li>
+                            {{/incredibleSetTab}}
+                            {{#genePrioritizationTab}}
+                                <li role="presentation" class="variantTableLabels genePrioritizationChooser">
+                                   <a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>
+                                </li>
+                            {{/genePrioritizationTab}}
+                            {{#chromatinConformationTab}}
+                                <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                   <a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>
+                                </li>
+                            {{/chromatinConformationTab}}
+                            {{#dynamicUiTab}}
+                                <li role="presentation" class="variantTableLabels chromatinConformationChooser">
+                                   <a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Genes in region: {{pName}}</a>
+                                </li>
+                            {{/dynamicUiTab}}
+                        </ul>
+                    </div>
+                </div>
+            {{/exposeGenesInRegionTab}}
             <div id="cDataModalGoesHere"></div>
+
+
+
+
+
 </script>
 <script id="organizeSignalSummaryCommon"  type="x-tmpl-mustache">
 
                 {{#commonTab}}
-
                         <div class="row"   style="border: none">
                             <div class="col-xs-12">
                                 <div class="variantCategoryHolder">
