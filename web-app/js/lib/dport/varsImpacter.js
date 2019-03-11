@@ -144,8 +144,11 @@ var baget = baget || {};  // encapsulating variable
             var div = d3.select(tooltipLocation).append("div")
                 .attr("class", "tooltipbox")
                 .attr("id", "tipbox")
-                .style("width", "500px")
+                .style("width", "400px")
                 .style("height", "100px")
+                .style("position","relative")
+                .style("padding","10px")
+                .style("background","#fff")
                 .style("opacity", 1);
 
             var row = svg.selectAll(".row")
@@ -189,7 +192,8 @@ var baget = baget || {};  // encapsulating variable
 
                         div.transition()
                             .duration(200)
-                            .style("opacity", .9);
+                            .style("opacity", .95)
+                            .style("background","#eee");
                         div	.html("<div>chrom " +
                             "<span class='empasizeInMouseOver'>"+ d.CHROM+"</span>:"+
                             "&nbsp;&nbsp;<span class='empasizeInMouseOver'>"+ d.START+
@@ -199,13 +203,16 @@ var baget = baget || {};  // encapsulating variable
                             " in  <span class='empasizeInMouseOver'>"+ d.SOURCE+"</span></div>"+
                             "<div>by <span class='empasizeInMouseOver'>"+ d.VALUE+"</span>"+
                             " in experiment <span class='empasizeInMouseOver'>"+ d.EXPERIMENT+"</span></div>")
-                            .style("left", (d3.event.pageX) + "px")
-                            .style("top", (d3.event.pageY - 28) + "px");
+                            //.style("left", (d3.event.pageX) + "px")
+                            //.style("top", (d3.event.pageY) + "px");
+                            .style("left", (20) + "px")
+                            .style("top", (d3.event.pageY/2-800) + "px");
                     })
                     .on("mousein", function() {
                         div.transition()
                             .duration(500)
-                            .style("opacity", 1);
+                            .style("opacity", 1)
+                            .style("background","#fff");
                     })
                     .on("mouseout", function(d) {
                         div.html("").transition()

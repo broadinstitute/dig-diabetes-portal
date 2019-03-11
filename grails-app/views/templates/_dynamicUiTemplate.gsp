@@ -650,7 +650,9 @@
             <div sortField={{numberOfTissues}}>
                <a data-toggle="collapse" class="cellExpander" data-target="#abc_{{geneName}}">tissues={{numberOfTissues}}</a>
                <a data-toggle="collapse" class="cellExpander" data-target="#tissues_{{geneName}}">
-               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span></a>
+               <span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span>
+               &nbsp;
+               </a>
                <div  class="collapse holdMultipleElements openTissues" id="tissues_{{geneName}}">
                     <div id="tooltip_tissues_{{geneName}}"></div>
                     <div id="graphic_tissues_{{geneName}}"></div>

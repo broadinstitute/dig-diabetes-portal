@@ -685,19 +685,19 @@ div.genePosition{
 
                         <div class="row">
                             <div class="col-sm-12 sub-content">
-                                <h3>Gene directors</h3>
-                                <div class="row">
+                                %{--<h3>Gene directors</h3>--}%
+                                <div class="row" style="display:none">
                                     <div class="col-sm-12">
                                         <div class="directorButtonHolder">
 
                                         </div>
                                     </div>
                                 </div>
-                                <h3> Results </h3>
-                                <div class="resultsTableHolder">
-                                    <div class="dynamicUiHolder">
-                                    </div>
-                                </div>
+                                %{--<h3> Results </h3>--}%
+                                %{--<div class="resultsTableHolder">--}%
+                                    %{--<div class="dynamicUiHolder">--}%
+                                    %{--</div>--}%
+                                %{--</div>--}%
                                 <div class="row">
                                     <div class="col-sm-1">
                                         <button type="button" class="btn btn-link transpose" title="click to transpose table"
@@ -735,9 +735,9 @@ div.genePosition{
                     </div>
                     <div role="tabpanel" class="tab-pane" id="dynamicVariantHolder">
 
-                        <div class="row">
+                        <div class="row" style="display:none">
                             <div class="col-sm-12 sub-content">
-                                <h3>Variant directors</h3>
+                                %{--<h3>Variant directors</h3>--}%
                                 <div class="directorButtonHolder">
 
                                 </div>
@@ -746,13 +746,13 @@ div.genePosition{
                         </div>
 
                                 <div class="row">
-                                   <div class="col-sm-12">
-                                        <h3> Results </h3>
-                                    </div>
+                                   %{--<div class="col-sm-12">--}%
+                                        %{--<h3> Results </h3>--}%
+                                    %{--</div>--}%
                                     <div class="col-sm-12">
-                                        <div class="refinementTable dynamicUiHolder">
+                                        %{--<div class="refinementTable dynamicUiHolder">--}%
 
-                                        </div>
+                                        %{--</div>--}%
                                         <div class="row">
                                             <div class="col-sm-1">
                                                 <button type="button" class="btn btn-link transpose" title="click to transpose table"
@@ -962,14 +962,14 @@ div.genePosition{
                         <div class="row" style="margin-bottom: 20px">
                             <div class="col-xs-2"></div>
                             <div class="col-xs-8">
-                                <ul class="nav nav-justified nav-tabs" role="tablist">
+                                <ul class="nav nav-justified nav-pills" role="tablist">
                                     <li role="presentation" class="active variantTableLabels geneSpecificChooser">
                                          <a href="#geneSpecificHolder" aria-controls="geneSpecificHolder" role="tab" data-toggle="tab"
-                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Gene specific tabs</a>
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Gene specific data</a>
                                     </li>
                                     <li role="presentation" class=" variantTableLabels generalRangeChooser">
                                            <a href="#generalRangeHolder" aria-controls="generalRangeHolder" role="tab" data-toggle="tab"
-                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Genomic region</a>
+                                            onclick="mpgSoftware.traitsFilter.massageLZ();" class="top-level" style="margin: 20px">Analyze genomic region</a>
                                     </li>
                                 </ul>
                             </div>
@@ -1081,7 +1081,7 @@ div.genePosition{
                     </div>
                 </div>
             {{/exposeGenesInRegionTab}}
-            <div id="cDataModalGoesHere"></div>
+            %{--<div id="cDataModalGoesHere"></div>--}%
 
 
 

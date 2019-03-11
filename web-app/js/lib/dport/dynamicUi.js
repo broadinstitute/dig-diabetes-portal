@@ -3204,9 +3204,8 @@ mpgSoftware.dynamicUi = (function () {
 
         displayContext('#contextDescription',getAccumulatorObject());
 
-        //$('#retrieveMultipleRecordsTest').click();
-        //$('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
-
+        $('#retrieveMultipleRecordsTest').click();
+        $('#getVariantsFromQtlAndThenRetrieveEpigeneticData').click();
     };
 
 
