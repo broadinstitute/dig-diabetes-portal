@@ -140,7 +140,7 @@
             </g:if>
 
 
-            <g:if test="${portalVersionBean.geneLevelDataExists}">
+            <g:if test="${g.portalTypeString()?.equals('als')}">
             %{--only useful if we have gene-level associations--}%
                 <div class="gene-search-wrapper" style="padding-bottom:20px; font-weight: 300;">
                     <h2 style="font-size:20px; font-weight:300;"><g:message code="primary.text.input.header"/></h2>
