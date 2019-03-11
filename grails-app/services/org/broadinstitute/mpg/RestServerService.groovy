@@ -10,13 +10,16 @@ import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.metadata.DataSet
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilterBean
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -2093,6 +2096,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyNameForPFirthvalue, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
+
+        PropertyBean pb = new PropertyBean()
+        pb.setName("AC_" + nameOfColumnsString[1])
+        pb.setVariableType("INTEGER")
+        pb.addMeaning("AC_" + nameOfColumnsString[1])
+        pb.searchable = "true"
+        pb.setRequestedPhenotype(phenotypeName)
+        pb.setRequestedDataset(dataSetName)
+        pb.setGeneTablemdv37(true)
+
+
+       // pb.setParent(DataSet)
+
+        QueryFilterBean qb = new QueryFilterBean(pb, "GT","0",phenotypeName,dataSetName,true)
+
+        if(filters.isEmpty()){
+            getDataQueryHolder.getDataQuery.addQueryFilter(qb)
+        }
+
         getDataQueryHolder.getDataQuery.setLimit(1000)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)

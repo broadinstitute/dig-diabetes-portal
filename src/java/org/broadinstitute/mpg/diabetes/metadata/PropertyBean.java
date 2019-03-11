@@ -18,10 +18,14 @@ public class PropertyBean implements Property, Comparable {
     private String name;
     private String description;
     private String variableType;
+    private String requestedPhenotype;
+    private String requestedDataset;
     private int sortOrder;
     private boolean searchable;
     private DataSet parent;
+    private  boolean geneTablemdv37;
     private Set<String> meaningSet = new HashSet<String>();     // hashset will take care of accidental duplicate insertions
+
 
     /**
      * return a list of all the object's dataset children
@@ -67,6 +71,30 @@ public class PropertyBean implements Property, Comparable {
         } else {
             return this.meaningSet.contains(meaningValue);
         }
+    }
+
+    public String getRequestedPhenotype() {
+        return requestedPhenotype;
+    }
+
+    public void setRequestedPhenotype(String requestedPhenotype) {
+        this.requestedPhenotype = requestedPhenotype;
+    }
+
+    public String getRequestedDataset() {
+        return requestedDataset;
+    }
+
+    public void setRequestedDataset(String requestedDataset) {
+        this.requestedDataset = requestedDataset;
+    }
+
+    public boolean isGeneTablemdv37() {
+        return geneTablemdv37;
+    }
+
+    public void setGeneTablemdv37(boolean geneTablemdv37) {
+        this.geneTablemdv37 = geneTablemdv37;
     }
 
     /**
@@ -246,6 +274,84 @@ public class PropertyBean implements Property, Comparable {
         // return the string
         return builder.toString();
     }
+
+
+
+    /**
+     * returns the filter string based on what type of property it is (common, dataset or phenotype property)
+     *
+     * @param operator
+     * @param value
+     * @return
+     */
+    public String getWebServiceFilterString(String operator, String value, String requestedPhenotype, String requestedDataset) {
+        // local variables
+        StringBuilder builder = new StringBuilder();
+        String dataset = "blah";
+        String phenotype = "blah";
+
+        // based on what type of property you are, add in dataset and phenotype
+        if (this.getPropertyType() == PortalConstants.TYPE_SAMPLE_GROUP_PROPERTY_KEY) {
+            if (this.getParent() != null) {
+                SampleGroup parentGroup = (SampleGroup)this.getParent();
+                dataset = parentGroup.getSystemId();
+                if ((requestedPhenotype !=  null ) && (requestedPhenotype.length()>0)){
+                    phenotype = requestedPhenotype;
+                }
+            }
+
+        } else if (this.getPropertyType() == PortalConstants.TYPE_PHENOTYPE_PROPERTY_KEY) {
+            if (this.getParent().getParent() != null) {
+                SampleGroup parentGroup = (SampleGroup)this.getParent().getParent();
+                dataset = parentGroup.getSystemId();
+            }
+            phenotype = (this.getParent() != null ? this.getParent().getName() : "blah");
+        }
+
+        //HACK ALERT: for adding phenotype and dataset in filter list for getGeneData for mdv37
+        //Ideally we should have got this property from the geneMetadata but since we don't have getGeneMetadataRoot implemented
+        // I had to do this.
+        if(requestedPhenotype != null && requestedDataset != null){
+            phenotype = requestedPhenotype;
+            dataset = requestedDataset;
+        }
+
+        // build the filter string
+        builder.append("{\"dataset_id\": \"");
+        builder.append(dataset);
+        builder.append("\", \"phenotype\": \"");
+        builder.append(phenotype);
+        builder.append("\", \"operand\": \"");
+        builder.append(this.getName());
+        builder.append("\", \"operator\": \"");
+        builder.append(operator);
+        builder.append("\", \"value\": ");
+
+        // no quotes for numbers
+        if (this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_FLOAT) ||
+                this.getVariableType().equals(PortalConstants.OPERATOR_TYPE_INTEGER) ||
+                this.getVariableType().equals(PortalConstants.NAME_COMMON_METAFILTER_OR)  ||
+                this.getVariableType().equals(PortalConstants.NAME_COMMON_METAFILTER_AND)
+                ) {
+            builder.append(value);
+            builder.append(", ");
+
+        } else {
+            builder.append("\"");
+            builder.append(value);
+            builder.append("\", ");
+        }
+
+        builder.append("\"operand_type\": \"");
+        builder.append(this.getVariableType());
+        builder.append("\"}");
+
+        // return the string
+        return builder.toString();
+    }
+
+
+
 
     /**
      * returns the property query string in json format
