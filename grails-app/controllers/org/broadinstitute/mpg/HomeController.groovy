@@ -94,24 +94,27 @@ class HomeController {
         for (org.broadinstitute.mpg.diabetes.metadata.PhenotypeBean phenotype in phenotypeList.sort{it.sortOrder}) {
             JSONObject phenoRecord = new JSONObject()
             phenoRecord['systemId'] = phenotype.parent.systemId
+            phenoRecord['technology'] = phenotype.parent.parent.technology
             phenoRecord['translatedSystemId'] = g.message(code: "metadata." + phenotype.parent.systemId, default: phenotype.parent.systemId)
             phenoRecord['name'] = phenotype.name
             phenoRecord['translatedPhenotype'] = g.message(code: "metadata." + phenotype.name, default: phenotype.name)
             phenoRecord['group'] = phenotype.group
             JSONArray propertyArray = new JSONArray()
             for (org.broadinstitute.mpg.diabetes.metadata.PropertyBean property in phenotype.propertyList) {
-                if ( property.hasMeaning("P_VALUE") ){
-                    JSONObject propertyRecord = new JSONObject()
-                    propertyRecord['name'] = property.name
-                    propertyRecord['translatedProperty'] = g.message(code: "metadata." + property.name, default: property.name)
-                    propertyRecord['meaning'] = "P_VALUE"
-                    propertyArray.add(propertyRecord)
-                }
-//                if ( property.hasMeaning("ODDS_RATIO") ){
+//                if ( property.hasMeaning("P_VALUE") ){
 //                    JSONObject propertyRecord = new JSONObject()
-//                    propertyRecord["name"] = property.name
-//                    propertyRecord["meaning"] = "ODDS_RATIO"
-//                    propertyArray.add(propertyRecord)}
+//                    propertyRecord['name'] = property.name
+//                    propertyRecord['translatedProperty'] = g.message(code: "metadata." + property.name, default: property.name)
+//                    propertyRecord['meaning'] = "P_VALUE"
+//                    propertyArray.add(propertyRecord)
+//                }
+                if ( property.hasMeaning("ODDS_RATIO") ){
+                    JSONObject propertyRecord = new JSONObject()
+                    propertyRecord["name"] = property.name
+                    propertyRecord['translatedProperty'] = g.message(code: "metadata." + property.name, default: property.name)
+
+                    propertyRecord["meaning"] = "ODDS_RATIO"
+                    propertyArray.add(propertyRecord)}
             }
             phenoRecord['properties'] = propertyArray
             phenotypeArray.add(phenoRecord)

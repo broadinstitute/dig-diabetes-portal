@@ -64,7 +64,7 @@ var mpgSoftware = mpgSoftware || {};
                                 selectorOption = " selected";
                             }
                             options.append($("<option "+selectorOption+"/>").val(subElement.name)
-                                .html(subElement.translatedProperty));
+                                .html(subElement.translatedProperty.replace('OR_','').replace('FIRTH_','')));
                         });
                     });
                 }
@@ -102,8 +102,11 @@ var mpgSoftware = mpgSoftware || {};
                 var dataSetRecordsForPhenotype = _.uniqBy(matchingPhenotypeRecords,'systemId');
                 if (dataSetRecordsForPhenotype.length > 0){
                     _.forEach (dataSetRecordsForPhenotype, function (oneElement){
-                        options.append($("<option />").val(oneElement.systemId)
-                            .html(oneElement.translatedSystemId));
+                        if(oneElement.technology == "ExSeq"){
+                            options.append($("<option />").val(oneElement.systemId)
+                                .html(oneElement.translatedSystemId));
+                        }
+
                     });
                 }
 
@@ -179,22 +182,74 @@ var mpgSoftware = mpgSoftware || {};
                             var value = data.variant.results[i].pVals[j].count;
                             var splitKey = key.split('^');
                             if (splitKey.length>3) {
-                                if (splitKey[2]=='P_VALUE') {
+                                if (splitKey[0].includes('P_VALUE')) {
                                     if (value===null) {
                                         skipIt=true;
                                     }
-                                    d['P_VALUE'] = value;
-                                } else if (splitKey[2]=='ODDS_RATIO') {
-                                    d['ODDS_RATIO'] = value;
-                                    effectType = 'odds ratio'
-                                } else if ( (splitKey[2]!==null)&&
+                                    d[splitKey[0]] = value;
+                                }
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('OR_MIN_P_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_MIN_P_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_MIN_P_SKAT'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('OR_WEIGHTED_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_WEIGHTED_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_WEIGHTED_SKAT'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
+
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('OR_FIRTH'))) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_FIRTH')) ) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
                                             (splitKey[2].length>3)&&
-                                            (splitKey[2].substring(0, 3)==='ACA')) {
-                                    d['ACA'] = value;
+                                            (splitKey[0].includes('MINA'))) {
+                                    d[splitKey[0]] = value;
                                 } else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
-                                    (splitKey[2].substring(0, 3)==='ACU')) {
-                                    d['ACU'] = value;
+                                    (splitKey[0].includes('MINU'))) {
+                                    d[splitKey[0]] = value;
+                                }
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('P_SKAT'))) {
+                                    d[splitKey[0]] = value;
                                 }
                             } else if (key==='START') {
                                 d['POS'] = parseInt(value);
@@ -203,9 +258,9 @@ var mpgSoftware = mpgSoftware || {};
                             }
 
                         }
-                        if (!skipIt){
-                            collector.push(d);
-                        }
+
+                        collector.push(d);
+
 
                     }
 
@@ -217,57 +272,61 @@ var mpgSoftware = mpgSoftware || {};
                 $('#manhattanSampleGroupChooser').val(data.variant.dataset);
             }
 
-            var margin = {top: 0, right: 20, bottom: 0, left: 70},
-                width = 1050 - margin.left - margin.right,
-                height = 600 - margin.top - margin.bottom;
+            //HACK - Do this only when the portal type is T2D - you can create a portalVersionBean
 
-            var manhattan = baget.manhattan()
-                .width(width)
-                .height(height)
-                .dataHanger("#manhattanPlot1", collector)
-                .crossChromosomePlot(true)
-                //                    .overrideYMinimum (0)
-                //                    .overrideYMaximum (10)
-                //                .overrideXMinimum (0)
-                //                .overrideXMaximum (1000000000)
-                .dotRadius(3)
-                //.blockColoringThreshold(0.5)
-                .significanceThreshold(undefined)
-                .xAxisAccessor(function (d) {
-                    return d.POS
-                })
-                .yAxisAccessor(function (d) {
-                    var retVal;
-                    // if (d.P_VALUE > 0) {
-                    //     return (0 - Math.log10(d.P_VALUE));
-                    // } else {
-                    //     return 0
-                    // }
-                    if (d.P_VALUE > 0) {
-                        retVal = (0 - Math.log10(d.P_VALUE));
-                    } else {
-                        retVal = 0;
-                    }
-                    if (isNaN(retVal)){
-                        console.log('isNaN=true for Manhattan data!');
-                        return 0;
-                    } else {
-                        return retVal;
-                    }
 
-                })
-                .nameAccessor(function (d) {
-                    return d.GENE
-                })
-                .chromosomeAccessor(function (d) {
-                    return d.CHROM
-                })
-                .includeXChromosome(true)
-                .includeYChromosome(false)
-                .dotClickLink(savedVar.variantInfoUrl)
-                ;
+            // var margin = {top: 0, right: 20, bottom: 0, left: 70},
+            //     width = 1050 - margin.left - margin.right,
+            //     height = 600 - margin.top - margin.bottom;
+            //
+            // var manhattan = baget.manhattan()
+            //     .width(width)
+            //     .height(height)
+            //     .dataHanger("#manhattanPlot1", collector)
+            //     .crossChromosomePlot(true)
+            //     //                    .overrideYMinimum (0)
+            //     //                    .overrideYMaximum (10)
+            //     //                .overrideXMinimum (0)
+            //     //                .overrideXMaximum (1000000000)
+            //     .dotRadius(3)
+            //     //.blockColoringThreshold(0.5)
+            //     .significanceThreshold(undefined)
+            //     .xAxisAccessor(function (d) {
+            //         return d.POS
+            //     })
+            //     .yAxisAccessor(function (d) {
+            //         var retVal;
+            //         // if (d.P_VALUE > 0) {
+            //         //     return (0 - Math.log10(d.P_VALUE));
+            //         // } else {
+            //         //     return 0
+            //         // }
+            //         if (d.P_VALUE > 0) {
+            //             retVal = (0 - Math.log10(d.P_VALUE));
+            //         } else {
+            //             retVal = 0;
+            //         }
+            //         if (isNaN(retVal)){
+            //             console.log('isNaN=true for Manhattan data!');
+            //             return 0;
+            //         } else {
+            //             return retVal;
+            //         }
+            //
+            //     })
+            //     .nameAccessor(function (d) {
+            //         return d.GENE
+            //     })
+            //     .chromosomeAccessor(function (d) {
+            //         return d.CHROM
+            //     })
+            //     .includeXChromosome(true)
+            //     .includeYChromosome(false)
+            //     .dotClickLink(savedVar.variantInfoUrl)
+            //     ;
 
-            d3.select("#manhattanPlot1").call(manhattan.render);
+            //d3.select("#manhattanPlot1").call(manhattan.render);
+
             var mySavedVariables = getMySavedVariables();
             iterativeTableFiller(collector,
                 effectType,
@@ -282,10 +341,14 @@ var mpgSoftware = mpgSoftware || {};
                 var pValueGreyedOut = (variant.P_VALUE > .05) ? "greyedout" : "normal";
                 var pValue='';
                 var orValue='';
-                var acaValue='';
-                var acuValue='';
+                var minaValue='';
+                var minuValue='';
                 var geneName='';
                 var position='';
+                var orFirthLofteeValue = '';
+                var pFirthLofteeValue = '';
+                var pSkatLofteeValue = '';
+
                 var chromosome = '';
                 var positionIndicator = {'start':'','end':'','chrom':''};
                 _.forEach(variant, function(value, key) {
@@ -295,21 +358,98 @@ var mpgSoftware = mpgSoftware || {};
 
                     }   else if (key === 'P_VALUE')  {
                         pValue=UTILS.realNumberFormatter(value);
-                    } else if  (key==='ACA'){
+                    }
+                    else if  (key.includes('P_MIN_P_FIRTH') ){
                         if (value===null){
-                            acaValue=0;
+                            pFirthLofteeValue="";
                         } else {
-                            acaValue=value;
+                            pFirthLofteeValue=value;
                         }
-                    } else if (key==='ACU'){
+                    }
+                    else if  (key.includes('OR_MIN_P_FIRTH') ){
                         if (value===null){
-                            acuValue=0;
+                            orFirthLofteeValue="";
                         } else {
-                            acuValue=value;
+                            orFirthLofteeValue=value;
                         }
-                    } else if (key === 'ODDS_RATIO'){
-                        orValue=UTILS.realNumberFormatter(value);
-                    } else if (key === 'GENE'){
+                    }
+
+
+
+                    else if  (key.includes('P_MIN_P_SKAT') ){
+                        if (value===null){
+                            pSkatLofteeValue="";
+                        } else {
+                            pSkatLofteeValue=value;
+                        }
+                    }
+
+                    else if  (key.includes('OR_WEIGHTED_FIRTH') ){
+                        if (value===null){
+                            orFirthLofteeValue="";
+                        } else {
+                            orFirthLofteeValue=value;
+                        }
+                    }
+
+                    else if  (key.includes('P_WEIGHTED_FIRTH') ){
+                        if (value===null){
+                            pFirthLofteeValue="";
+                        } else {
+                            pFirthLofteeValue=value;
+                        }
+                    }
+                    else if  (key.includes('P_WEIGHTED_SKAT') ){
+                        if (value===null){
+                            pSkatLofteeValue="";
+                        } else {
+                            pSkatLofteeValue=value;
+                        }
+                    }
+
+
+                    else if  (key.includes('OR_FIRTH') ){
+                        if (value===null){
+                            orFirthLofteeValue="";
+                        } else {
+                            orFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
+
+                        }
+                    }
+                    else if  (key.includes('P_FIRTH')){
+                        if (value===null){
+                            pFirthLofteeValue="";
+                        } else {
+                            pFirthLofteeValue=value;
+                        }
+                    }
+
+
+                    else if  (key.includes('P_SKAT') ){
+                        if (value===null){
+                            pSkatLofteeValue="";
+                        } else {
+                            pSkatLofteeValue=value;
+                        }
+                    }
+
+
+
+                    else if  (key.includes('MINA')){
+                        if (value===null){
+                            minaValue="";
+                        } else {
+                            minaValue=value;
+                        }
+                    }
+                    else if (key.includes('MINU')){
+                        if (value===null){
+                            minuValue="";
+                        } else {
+                            minuValue=value;
+                        }
+                    }
+                    else if (key === 'GENE'){
                         geneName=value;
                     } else if (key === 'POS'){
                         positionIndicator['start']=value;
@@ -323,10 +463,11 @@ var mpgSoftware = mpgSoftware || {};
                 retVal.push( "<a class='boldlink' href='"+launchGeneVariantQueryUrl+"?gene="+geneName+"&phenotype="+phenotype+"&dataset="+dataset+"'>"+geneName+"</a>");
                 retVal.push( chromosome );
                 retVal.push(position);
-                retVal.push( pValue );
-                retVal.push( orValue );
-                retVal.push(acuValue);
-                retVal.push(acaValue);
+                retVal.push(minaValue);
+                retVal.push(minuValue);
+                retVal.push(orFirthLofteeValue);
+                retVal.push(pFirthLofteeValue);
+                retVal.push(pSkatLofteeValue);
                 return retVal;
             };
 
@@ -341,10 +482,10 @@ var mpgSoftware = mpgSoftware || {};
                 var table = $('#phenotypeTraits').dataTable({
                     pageLength: 25,
                     filter: false,
-                    order: [[3, "asc"]],
-                    columnDefs: [ {type: "scientific", targets: [3, 4]},
-                        {type: "allnumeric", targets: [5, 6]},
-                        {"className": "dt-center", targets: [1,2,3,4,5,6]}],
+                    order: [[6, "asc"]],
+                    columnDefs: [ {type: "scientific", targets: [3,4,5,6,7]},
+                        {type: "double", targets: [6,7]},
+                        {"className": "dt-center", targets: [1,2,3,4,5,6,7]}],
                     language: languageSetting,
                     buttons: [
                         { extend: 'copy', text: copyText },
@@ -357,7 +498,7 @@ var mpgSoftware = mpgSoftware || {};
                 //var effectsField = UTILS.determineEffectsTypeString('#phenotypeTraits');
                 var mySavedVars = getMySavedVariables();
                 for (var i = 0; i < dataLength; i++) {
-                    var array = convertLineForPhenotypicTraitTable( variant[i],
+                    var array = convertLineForPhenotypicTraitTable(variant[i],
                                                         mySavedVars.phenotypeName,
                                                         $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
                                                         mySavedVars.launchGeneVariantQueryUrl );

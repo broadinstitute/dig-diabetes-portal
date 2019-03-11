@@ -10,13 +10,16 @@ import org.broadinstitute.mpg.diabetes.BurdenService
 import org.broadinstitute.mpg.diabetes.MetaDataService
 import org.broadinstitute.mpg.diabetes.bean.PortalVersionBean
 import org.broadinstitute.mpg.diabetes.bean.ServerBean
+import org.broadinstitute.mpg.diabetes.metadata.DataSet
 import org.broadinstitute.mpg.diabetes.metadata.Experiment
 import org.broadinstitute.mpg.diabetes.metadata.Property
+import org.broadinstitute.mpg.diabetes.metadata.PropertyBean
 import org.broadinstitute.mpg.diabetes.metadata.SampleGroup
 import org.broadinstitute.mpg.diabetes.metadata.parser.JsonParser
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryBean
 import org.broadinstitute.mpg.diabetes.metadata.query.GetDataQueryHolder
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilter
+import org.broadinstitute.mpg.diabetes.metadata.query.QueryFilterBean
 import org.broadinstitute.mpg.diabetes.metadata.query.QueryJsonBuilder
 import org.broadinstitute.mpg.diabetes.util.PortalException
 import org.codehaus.groovy.grails.commons.GrailsApplication
@@ -1655,7 +1658,7 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
      */
     public String getMetadata() {
         String retdat;
-        retdat = getRestCallBase(METADATA_URL, REST_SERVER?.url);
+        retdat = getRestCallBase("${METADATA_URL}?mdv=${this.metaDataService?.getDataVersion()}", currentRestServer());
         return retdat;
     }
 
@@ -2055,18 +2058,76 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         GetDataQueryHolder getDataQueryHolder = GetDataQueryHolder.createGetDataQueryHolder(filters, searchBuilderService, metaDataService,MetaDataService.METADATA_GENE)
 
         // for now let's make the assumption that we always want to look at case and control counts for this phenotype.  We can manufacture those if we cut some corners
-        List <String> piecesOfThePropertyName = propertyName.split("_")
-        String propertyNameForCaseCount = "ACA_PH_"+piecesOfThePropertyName[1]
-        String propertyNameForControlCount = "ACU_PH_"+piecesOfThePropertyName[1]
-        String propertyNameForOddsRatio = "OR_"+piecesOfThePropertyName[1]
+      //List <String> piecesOfThePropertyName = propertyName.split("_")
+        List<String> nameOfColumnsString = []
+
+        //HACK EXPERIMENT - checking if given property for Exeq shows data or not.
+
+       if(propertyName.startsWith("OR_FIRTH")){
+           List<String> splitsOfPropertyName = propertyName.split("OR_FIRTH_")
+           nameOfColumnsString.add(splitsOfPropertyName[0])
+           nameOfColumnsString.add(splitsOfPropertyName[1])
+           nameOfColumnsString.add("OR")
+           nameOfColumnsString.add("P")
+       }
+        else{
+           List<String> splitsOfPropertyName1 = propertyName.split("OR_")
+           List<String> splitsOfPropertyName2 = splitsOfPropertyName1[1].split("_FIRTH_")
+           nameOfColumnsString.add(splitsOfPropertyName2[0])
+           nameOfColumnsString.add(splitsOfPropertyName2[1])
+           if((splitsOfPropertyName2[0] == "WEIGHTED") || (splitsOfPropertyName2[0] == "MIN_P")){
+               nameOfColumnsString.add("OR_")
+               nameOfColumnsString.add("P_")
+           }
+
+       }
+
+        String propertyNameForMINARatio   = "MINA_" + nameOfColumnsString[1]
+        String propertyNameForMINURatio   = "MINU_"+ nameOfColumnsString[1]
+        String propertyNameForOddsRatio   = nameOfColumnsString[2]+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
+        String propertyNameForPFirthvalue = nameOfColumnsString[3] + nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
+        String propertyNameForSkatValue   = nameOfColumnsString[3] + nameOfColumnsString[0] + "_SKAT_" + nameOfColumnsString[1]
+
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyName)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForOddsRatio)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForCaseCount)
-        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForControlCount)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForPFirthvalue)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForSkatValue)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINARatio)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINURatio)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
-        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyName, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
-        getDataQueryHolder.getDataQuery.setLimit(7000)
+        getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyNameForPFirthvalue, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
+
+        PropertyBean pb = new PropertyBean()
+        pb.setName("AC_" + nameOfColumnsString[1])
+        pb.setVariableType("INTEGER")
+        pb.addMeaning("AC_" + nameOfColumnsString[1])
+        pb.searchable = "true"
+        pb.setRequestedPhenotype(phenotypeName)
+        pb.setRequestedDataset(dataSetName)
+        pb.setGeneTablemdv37(true)
+
+        PropertyBean pb2 = new PropertyBean()
+        pb2.setName("P_FIRTH_" + nameOfColumnsString[1])
+        pb2.setVariableType("INTEGER")
+        pb2.addMeaning("P_FIRTH_" + nameOfColumnsString[1])
+        pb2.searchable = "true"
+        pb2.setRequestedPhenotype(phenotypeName)
+        pb2.setRequestedDataset(dataSetName)
+        pb2.setGeneTablemdv37(true)
+
+       // pb.setParent(DataSet)
+
+        QueryFilterBean qb = new QueryFilterBean(pb, "GT","0",phenotypeName,dataSetName,true)
+
+        QueryFilterBean qb2 = new QueryFilterBean(pb2, "GT","0",phenotypeName,dataSetName,true)
+
+        if(filters.isEmpty()){
+            getDataQueryHolder.getDataQuery.addQueryFilter(qb)
+            getDataQueryHolder.getDataQuery.addQueryFilter(qb2)
+        }
+
+        getDataQueryHolder.getDataQuery.setLimit(1000)
         JsonSlurper slurper = new JsonSlurper()
         String dataJsonObjectString = postGeneDataQueryRestCall(getDataQueryHolder)
         JSONObject dataJsonObject = slurper.parseText(dataJsonObjectString)
@@ -2106,14 +2167,6 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         returnValue = slurper.parseText(jsonParsedFromApi)
         return returnValue
     }
-
-//       // JSONObject apiResults = gatherTraitSpecificResults(phenotypeName, dataSet, properties, maximumPValue, minimumPValue)
-//        JSONObject apiResults = this.getClumpDataRestCall(phenotypeName, dataSetName)
-//
-//        //JSONObject processedapiResults = getChromPos(apiResults);
-//        String jsonParsedFromApi = processInfoFromGetClumpDataCall( apiResults, "", ",\n\"dataset\":\"${dataSetName}\"" )
-//        JSONObject dataJsonObject = slurper.parseText(jsonParsedFromApi)
-//
 
 
 

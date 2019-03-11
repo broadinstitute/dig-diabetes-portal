@@ -159,7 +159,7 @@ digawsqanewKB_fed_dedicated_EBIv2 = new ServerBean("Dedicated EBI QA fed KB - Us
 
 
 // this will be your default
-defaultRestServer = digawsqanewKB
+defaultRestServer = digdevlocalServer
 //defaultRestServer = digawsdevWorkflowKB
 
 
@@ -619,7 +619,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 "",
                                                 '5010306206573083521',
                                                 1, // do we have parent level associations to show
-                                                0, // Do we have gene level associations to show?
+                                                1, // Do we have gene level associations to show?
                                                 1, // add a link to the GRS module into the headers. Note that the GRS module is available whether or not the link is in place
                                                 1, // no longer used?
                                                 0, // if true then entering a gene takes you to a region page around that chain
@@ -866,3 +866,5 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                           0  // expose an accordion section with the burden test on the gene page
                                   )
 ]
+
+
