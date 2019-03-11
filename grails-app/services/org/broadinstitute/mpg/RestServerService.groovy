@@ -61,6 +61,7 @@ class RestServerService {
     private String  GET_BOTTOM_LINE_VARIANTS_BY_ID_URL= "gene/gtex_by_id"
     private String  GET_BOTTOM_LINE_PHENOTYPES_VIA_VARIANTS_URL= "variant/phenotype/array"
     private String  GET_TISSUE_ASSOCIATION_BASED_ON_LDSR_URL= "ld_score/by_phenotype/object"
+    private String GET_BOTTOM_LINE_RESULTS_URL= "graph/meta/variant/object"
     private String GET_HAIL_DATA_URL = "getHailData"
     private String GET_SAMPLE_DATA_URL = "getSampleData"
     private String GET_SAMPLE_METADATA_URL = "getSampleMetadata"
@@ -2491,6 +2492,12 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
     }
 
 
+    public JSONObject gatherBottomLineResultsByVarId( String variantId ) {
+        String rawReturnFromApi =  getRestCall("${GET_BOTTOM_LINE_RESULTS_URL}?var_id=${variantId}")
+        JsonSlurper slurper = new JsonSlurper()
+        JSONObject jsonObject = slurper.parseText(rawReturnFromApi) as JSONObject
+        return jsonObject
+    }
 
 
 

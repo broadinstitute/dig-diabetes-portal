@@ -617,6 +617,85 @@ class WidgetService {
 
 
 
+    public JSONObject generateBottomlinePhewasDataForLz(String varId){
+        def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')
+        JSONObject jsonObject = restServerService.gatherBottomLineResultsByVarId( varId )
+        List<String> dataFromQuery = []
+        if ((jsonObject)&&(jsonObject.data)){
+            int id = 1
+            for (Map variant in jsonObject.data){
+
+                List<String> singleVariantData = []
+                String retrievedVarId = ""
+                List<String> varIdParts = []
+                String phenotype = ""
+                String phenotypeDescription = ""
+                String phenotypeGroup = "unknown phenotype group"
+                int subjectNumber = 1000
+                String pValueAsString = "0"
+                Double pValue =0d
+                Double logPValue =0d
+
+                retrievedVarId = varId
+                pValueAsString = variant."p_value"
+                phenotype = variant."phenotype"
+                phenotypeDescription =  g.message(code: "metadata." + phenotype, default: phenotype)
+                phenotypeGroup = variant.phenotype_group
+                varIdParts = retrievedVarId.split("_")
+                if (pValueAsString){
+                    try{
+                        pValue = Double.parseDouble(pValueAsString)
+                        if (pValue>0){
+                            logPValue = 0-Math.log10(pValue)
+                        }
+                    }catch(e){
+                        log.error("we have a P value that's nonnumeric, which is bad news")
+                    }
+                }
+
+                singleVariantData<<"\"build\": \"GRCh37\""
+                singleVariantData<<"\"chromosome\": \"${varIdParts[0]}\""
+                singleVariantData<<"\"description\": \"${phenotypeDescription}\""
+                singleVariantData<<"\"id\": \"${id++}\""
+                singleVariantData<<"\"log_pvalue\": ${logPValue}"
+                singleVariantData<<"\"position\": ${varIdParts[1]}"
+                singleVariantData<<"\"ref_allele\": \"${varIdParts[2]}\""
+                singleVariantData<<"\"score_test_stat\": ${4}"
+                singleVariantData<<"\"study\": \"Bottom line analysis\""
+                singleVariantData<<"\"pmid\": \"28566273\""
+                singleVariantData<<"\"trait\": \"${phenotype}\""
+                singleVariantData<<"\"trait_group\": \"${phenotypeGroup}\""
+                singleVariantData<<"\"trait_label\": \"${phenotypeDescription}\""
+                singleVariantData<<"\"subject_number\": \"${subjectNumber}\""
+                singleVariantData<<"\"variant\": \"${varIdParts[0]}:${varIdParts[1]}_${varIdParts[2]}/${varIdParts[3]}\""
+
+                dataFromQuery << "{${singleVariantData.join(",")}}"
+
+            }
+
+        }
+        String returnJson = """{
+            "data": [
+                ${dataFromQuery.join(",")}
+        ],
+            "lastPage": null,
+            "meta": {
+            "build": [
+                    "GRCh37"
+            ]
+        }
+        }""".toString()
+        JsonSlurper slurper = new JsonSlurper()
+        return slurper.parseText(returnJson)
+
+    }
+
+
+
+
+
+
+
 
     public JSONObject generatePhewasDataForLz(String varId, Boolean includeAllVariants){
         def g = grailsApplication.mainContext.getBean('org.codehaus.groovy.grails.plugins.web.taglib.ApplicationTagLib')

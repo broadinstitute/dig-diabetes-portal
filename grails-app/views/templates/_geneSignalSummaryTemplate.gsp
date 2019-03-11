@@ -325,7 +325,7 @@ span.credSetLevelHere{
 
 <script id="aggregateVariantsTemplate"  type="x-tmpl-mustache">
                             <div class="row" style="margin: 15px 0 0 15px;">
-                                <h4>Aggregate variants</h4>
+                                <h4>Aggregate variants&nbsp;<g:helpText title="AggregateVariants.help.header" placement="right" body="AggregateVariants.help.text"/></h4>
                             </div>
 
                             <div class="row">
