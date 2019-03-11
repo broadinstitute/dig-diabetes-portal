@@ -706,16 +706,25 @@ div.genePosition{
                                             T
                                         </button>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <div class="datatable-zoom-control">
+                                    <div class="col-sm-9">
+
+                                    </div>
+                                    <div class="col-sm-2">
+                                            <div class="datatable-zoom-control">
+                                            <div class="btn-vert-block">
                                             Zoom control:
+                                            <button type="button" class="btn btn-default" aria-label="Zoom in">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                            </button>
+                                            <button type="button" class="btn btn-default" aria-label="Zoom out">
+                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                            </button>
+                                            </div>
                                             <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','0');">0</span>  >
                                             <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','1');">1</span>  >
                                             <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','2');">2</span>  >
                                             <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet(#dynamicGeneHolder','3');">3</span>
                                         </div>
-                                    </div>
-                                    <div class="col-sm-8">
                                     </div>
                                 </div>
                                 <table class="combinedGeneTableHolder">
