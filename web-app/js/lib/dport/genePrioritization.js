@@ -226,6 +226,12 @@ var mpgSoftware = mpgSoftware || {};
                                     d[splitKey[0]] = value;
                                 }
 
+                                else if ( (splitKey[2]!==null)&&
+                                    (splitKey[2].length>3)&&
+                                    (splitKey[0].includes('NUM_PASS_VARS'))) {
+                                    d[splitKey[0]] = value;
+                                }
+
 
                                 else if ( (splitKey[2]!==null)&&
                                     (splitKey[2].length>3)&&
@@ -336,7 +342,7 @@ var mpgSoftware = mpgSoftware || {};
 
         });
 
-        var convertLineForPhenotypicTraitTable = function (variant, phenotype, dataset,launchGeneVariantQueryUrl) {
+        var convertLineForPhenotypicTraitTable = function (variant, phenotype, dataset,geneInfoUrl) {
                 var retVal = [];
                 var pValueGreyedOut = (variant.P_VALUE > .05) ? "greyedout" : "normal";
                 var pValue='';
@@ -348,6 +354,7 @@ var mpgSoftware = mpgSoftware || {};
                 var orFirthLofteeValue = '';
                 var pFirthLofteeValue = '';
                 var pSkatLofteeValue = '';
+                var numPassVarsValue = '';
 
                 var chromosome = '';
                 var positionIndicator = {'start':'','end':'','chrom':''};
@@ -373,8 +380,6 @@ var mpgSoftware = mpgSoftware || {};
                             orFirthLofteeValue=value;
                         }
                     }
-
-
 
                     else if  (key.includes('P_MIN_P_SKAT') ){
                         if (value===null){
@@ -407,6 +412,13 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
+                    else if  (key.includes('NUM_PASS_VARS') ){
+                        if (value===null){
+                            numPassVarsValue="";
+                        } else {
+                            numPassVarsValue=value;
+                        }
+                    }
 
                     else if  (key.includes('OR_FIRTH') ){
                         if (value===null){
@@ -433,8 +445,6 @@ var mpgSoftware = mpgSoftware || {};
                         }
                     }
 
-
-
                     else if  (key.includes('MINA')){
                         if (value===null){
                             minaValue="";
@@ -460,7 +470,7 @@ var mpgSoftware = mpgSoftware || {};
                     }
                 });
                 position = positionIndicator['start']+" - "+positionIndicator['end'];
-                retVal.push( "<a class='boldlink' href='"+launchGeneVariantQueryUrl+"?gene="+geneName+"&phenotype="+phenotype+"&dataset="+dataset+"'>"+geneName+"</a>");
+                retVal.push( "<a class='boldlink' href='"+geneInfoUrl+"/"+geneName+"'>"+geneName+"</a>");
                 retVal.push( chromosome );
                 retVal.push(position);
                 retVal.push(minaValue);
@@ -468,6 +478,7 @@ var mpgSoftware = mpgSoftware || {};
                 retVal.push(orFirthLofteeValue);
                 retVal.push(pFirthLofteeValue);
                 retVal.push(pSkatLofteeValue);
+                retVal.push(numPassVarsValue);
                 return retVal;
             };
 
@@ -483,9 +494,9 @@ var mpgSoftware = mpgSoftware || {};
                     pageLength: 25,
                     filter: false,
                     order: [[6, "asc"]],
-                    columnDefs: [ {type: "scientific", targets: [3,4,5,6,7]},
-                        {type: "double", targets: [6,7]},
-                        {"className": "dt-center", targets: [1,2,3,4,5,6,7]}],
+                    columnDefs: [ {type: "scientific", targets: [3,4,5,6,7,8]},
+                        {type: "double", targets: [7,8]},
+                        {"className": "dt-center", targets: [1,2,3,4,5,6,7,8]}],
                     language: languageSetting,
                     buttons: [
                         { extend: 'copy', text: copyText },
@@ -501,7 +512,7 @@ var mpgSoftware = mpgSoftware || {};
                     var array = convertLineForPhenotypicTraitTable(variant[i],
                                                         mySavedVars.phenotypeName,
                                                         $(mySavedVars.phenotypeDropdownIdentifier+' option:selected').val(),
-                                                        mySavedVars.launchGeneVariantQueryUrl );
+                                                        mySavedVars.geneInfoUrl );
                     $('#phenotypeTraits').dataTable().fnAddData(array, (i == 25) || (i == (dataLength - 1)));
                 }
             };
