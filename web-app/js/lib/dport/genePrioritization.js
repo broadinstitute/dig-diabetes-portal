@@ -412,7 +412,10 @@ var mpgSoftware = mpgSoftware || {};
                         if (value===null){
                             orFirthLofteeValue="";
                         } else {
-                            orFirthLofteeValue=value;
+                            // parseFloat(value).toFixed(2);
+                            parseFloat(Math.round(value * 100) / 100).toFixed(2);
+                            orFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
+
                         }
                     }
                     else if  (key.includes('P_FIRTH')){
