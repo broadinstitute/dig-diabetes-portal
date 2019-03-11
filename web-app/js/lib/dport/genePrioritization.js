@@ -412,8 +412,6 @@ var mpgSoftware = mpgSoftware || {};
                         if (value===null){
                             orFirthLofteeValue="";
                         } else {
-                            // parseFloat(value).toFixed(2);
-                            parseFloat(Math.round(value * 100) / 100).toFixed(2);
                             orFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
 
                         }
@@ -422,7 +420,7 @@ var mpgSoftware = mpgSoftware || {};
                         if (value===null){
                             pFirthLofteeValue="";
                         } else {
-                            pFirthLofteeValue=value;
+                            pFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
                         }
                     }
 
