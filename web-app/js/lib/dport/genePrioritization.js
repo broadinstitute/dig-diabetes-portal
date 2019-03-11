@@ -420,7 +420,7 @@ var mpgSoftware = mpgSoftware || {};
                         if (value===null){
                             pFirthLofteeValue="";
                         } else {
-                            pFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
+                            pFirthLofteeValue=value;
                         }
                     }
 
