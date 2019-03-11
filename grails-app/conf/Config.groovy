@@ -169,7 +169,7 @@ getRestServerList = [
         digdevlocalFederatedServer,
         digAWSKBV2prodServer,
         federatedAwsProdKBV2Server,
-        digawsdevnewKB,
+        //digawsdevnewKB,
         digawsqanewKB,
         digawsdevWorkflowKB,
         digawsdevWorkflowKBrevised,
@@ -641,7 +641,7 @@ portal.data.versionDesignator = [ new PortalVersionBean("t2d",      // label for
                                                 0, // expose the old school variant and association table.  Potentially useful for debugging
                                                 0, // expose the IGV interface in its own accordion section
                                                 0,  // expose an accordion section with the burden test on the gene page
-                                                0 ), // expose the 'genes in region' tab on the gene page
+                                                1 ), // expose the 'genes in region' tab on the gene page
                                   new PortalVersionBean("stroke",
                                                           "Stroke",
                                                           "mdv75",

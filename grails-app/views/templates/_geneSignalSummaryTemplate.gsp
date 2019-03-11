@@ -686,7 +686,7 @@ div.genePosition{
                         <div class="row">
                             <div class="col-sm-12 sub-content">
                                 %{--<h3>Gene directors</h3>--}%
-                                <div class="row" style="display:none">
+                                <div class="row" style="display:block">
                                     <div class="col-sm-12">
                                         <div class="directorButtonHolder">
 
@@ -711,19 +711,22 @@ div.genePosition{
                                     </div>
                                     <div class="col-sm-2">
                                             <div class="datatable-zoom-control">
-                                            <div class="btn-vert-block">
-                                            Zoom control:
-                                            <button type="button" class="btn btn-default" aria-label="Zoom in">
-                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                                            <div class="btn-vert-block" style="margin-top: 30px">
+                                            <button type="button" class="btn btn-default" aria-label="Zoom in"  title="click to zoom in"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)">
+                                                <span class="glyphicon glyphicon-plus" aria-hidden="true"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',true)"></span>
                                             </button>
-                                            <button type="button" class="btn btn-default" aria-label="Zoom out">
-                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                            <button type="button" class="btn btn-default" aria-label="Zoom out"  title="click to zoom out"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)">
+                                                <span class="glyphicon glyphicon-minus" aria-hidden="true"
+                                                onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)"></span>
                                             </button>
                                             </div>
-                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','0');">0</span>  >
-                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','1');">1</span>  >
-                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','2');">2</span>  >
-                                            <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet(#dynamicGeneHolder','3');">3</span>
+                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','0');">0</span>  >--}%
+                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','1');">1</span>  >--}%
+                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','2');">2</span>  >--}%
+                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet(#dynamicGeneHolder','3');">3</span>--}%
                                         </div>
                                     </div>
                                 </div>
@@ -761,16 +764,22 @@ div.genePosition{
                                                     T
                                                 </button>
                                             </div>
-                                            <div class="col-sm-3">
-                                                <div class="datatable-zoom-control">
-                                                    Zoom control:
-                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','0');">0</span>  >
-                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','1');">1</span>  >
-                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','2');">2</span>  >
-                                                    <span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicVariantHolder','3');">3</span>
-                                                </div>
+                                            <div class="col-sm-9">
+
                                             </div>
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-2">
+                                                <div class="datatable-zoom-control btn-vert-block">
+                                                    <button type="button" class="btn btn-default" aria-label="Zoom in"  title="click to zoom in"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',true)">
+                                                        <span class="glyphicon glyphicon-plus" aria-hidden="true"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',true)"></span>
+                                                    </button>
+                                                    <button type="button" class="btn btn-default" aria-label="Zoom out"  title="click to zoom out"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',false)">
+                                                        <span class="glyphicon glyphicon-minus" aria-hidden="true"
+                                                        onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicVariantHolder',false)"></span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                         <table class="combinedVariantTableHolder" style="border:0">

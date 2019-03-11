@@ -1229,6 +1229,7 @@ mpgSoftware.dynamicUi = (function () {
 
         var rawQtlInfo = getAccumulatorObject('rawQtlInfo');
         var sampleGroupWithCredibleSetNames = (data.sampleGroupsWithCredibleSetNames.length > 0) ? data.sampleGroupsWithCredibleSetNames[0] : "";
+        var  uniqueVariants = [];
         if (sampleGroupWithCredibleSetNames.length > 0) {
             rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
             rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o) {
@@ -1238,7 +1239,12 @@ mpgSoftware.dynamicUi = (function () {
         } else {
             rawQtlInfo["credSetDataset"] = sampleGroupWithCredibleSetNames;
             rawQtlInfo["variants"] = _.filter(data.variants.variants, function (o, cnt) {
-                return cnt < 10
+                var skipIt = true;
+                if (!uniqueVariants.includes(o.VAR_ID)){
+                    uniqueVariants.push(o.VAR_ID);
+                    skipIt = false;
+                }
+                return ((uniqueVariants.length < 11)&&(!skipIt));
             });
         }
 
@@ -2697,11 +2703,16 @@ mpgSoftware.dynamicUi = (function () {
                                                    testToRun,category){
             var row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             if ( typeof row === 'undefined'){
+                var colCells = [];
+                for (var i=0;i<numberOfVariants;i++){
+                    colCells.push(new IntermediateStructureDataCell(annotationName,
+                        Mustache.render($("#dynamicVariantCellAssociations")[0].innerHTML,{"variantAnnotationIsPresent":false}),category));
+                }
                 intermediateDataStructure.rowsToAdd.push ({ category: category,
                     displayCategory:category,
                     subcategory: annotationName,
                     displaySubcategory: annotationName,
-                    columnCells:  _.times(numberOfVariants, "")});
+                    columnCells:  colCells});
                 row = _.find(intermediateDataStructure.rowsToAdd,{'subcategory':annotationName});
             }
             if (category ==='annotation'){
@@ -2712,6 +2723,8 @@ mpgSoftware.dynamicUi = (function () {
                 var valueToDisplay = testToRun(recordsPerVariant);
                 row.columnCells[indexOfColumn] = new IntermediateStructureDataCell(annotationName,
                         Mustache.render($("#dynamicVariantCellAssociations")[0].innerHTML,{"valueToDisplay":valueToDisplay}),category);
+            } else {
+                alert('foo!');
             }
 
         };
@@ -2937,8 +2950,8 @@ mpgSoftware.dynamicUi = (function () {
                 //    description: 'find all genes for which co-localized variants exist',
                 //    outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
                 //    reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'},
-                {buttonId: 'retrieveMultipleRecordsTest', buttonName: 'multi',
-                    description: 'combine multiple epigenetic record types',
+                {buttonId: 'retrieveMultipleRecordsTest', buttonName: 'redraw',
+                    description: 'redraw table',
                     outputBoxId:'#dynamicGeneHolder div.dynamicUiHolder',
                     reference: 'https://www.ncbi.nlm.nih.gov/pubmed/27866706'}
             ]
@@ -4012,22 +4025,26 @@ var howToHandleSorting = function(e,callingObject,typeOfHeader,dataTable) {
 
 
             _.forEach(row.columnCells, function (val, index) {
-                var initialLinearIndex = extractClassBasedIndex(val.content,"initialLinearIndex_");
-                if (initialLinearIndex === -1){
-                    var domContent = $(val.content);
-                    indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
-                    domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
-                    val.content = domContent[0].outerHTML;
-                }
-                rowDescriber.push(val);
-                if (storeRecordsInDataStructure){
-                    storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
-                        val,
-                        'content',
-                        numberOfExistingRows,
-                        index + numberOfColumnsAdded,
-                        numberOfColumns);
-                }
+                // if (( typeof val !== 'undefined') &&
+                //     ( typeof val.content !== 'undefined')){
+                    var initialLinearIndex = extractClassBasedIndex(val.content,"initialLinearIndex_");
+                    if (initialLinearIndex === -1){
+                        var domContent = $(val.content);
+                        indexInOneDimensionalArray = (numberOfExistingRows*numberOfColumns)+index + numberOfColumnsAdded;
+                        domContent.addClass("initialLinearIndex_"+indexInOneDimensionalArray);
+                        val.content = domContent[0].outerHTML;
+                    }
+                    rowDescriber.push(val);
+                    if (storeRecordsInDataStructure){
+                        storeCellInMemoryRepresentationOfSharedTable(whereTheTableGoes,
+                            val,
+                            'content',
+                            numberOfExistingRows,
+                            index + numberOfColumnsAdded,
+                            numberOfColumns);
+                    }
+
+                // }
             });
             $(whereTheTableGoes).dataTable().fnAddData(_.map(rowDescriber,function(o){return o.content}));
         });
@@ -4248,6 +4265,26 @@ var  dataTableZoomSet =    function (TGWRAPPER,TGZOOM) {
         $(TGWRAPPER).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+TGZOOM);
 
 }
+    var  dataTableZoomDynaSet =    function (zoomWrapper,getBigger) {
+        if (typeof $(zoomWrapper).data("zoomParmHolder") === 'undefined') {
+            $(zoomWrapper).data("zoomParmHolder",1);
+        }
+        var currentSize = $(zoomWrapper).data("zoomParmHolder");
+        if (getBigger) {
+            if (currentSize > 0){
+                currentSize--;
+            }
+        } else {
+            if (currentSize < 3){
+                currentSize++;
+            }
+        }
+        $(zoomWrapper).data("zoomParmHolder",currentSize);
+
+        $(zoomWrapper).find(".dataTables_wrapper").removeClass("dk-zoom-0 dk-zoom-1 dk-zoom-2 dk-zoom-3").addClass("dk-zoom-"+currentSize);
+
+    }
+
 
 
 var destroySharedTable = function (whereTheTableGoes) {
@@ -4428,6 +4465,7 @@ var destroySharedTable = function (whereTheTableGoes) {
     return {
         transposeThisTable:transposeThisTable,
         dataTableZoomSet:dataTableZoomSet,
+        dataTableZoomDynaSet:dataTableZoomDynaSet,
         displayTissuesForAnnotation:displayTissuesForAnnotation,
         hideTissuesForAnnotation:hideTissuesForAnnotation,
         installDirectorButtonsOnTabs: installDirectorButtonsOnTabs,
