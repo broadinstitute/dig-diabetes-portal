@@ -361,14 +361,14 @@ var mpgSoftware = mpgSoftware || {};
                     }
                     else if  (key.includes('P_MIN_P_FIRTH') ){
                         if (value===null){
-                            pFirthLofteeValue=0;
+                            pFirthLofteeValue="";
                         } else {
                             pFirthLofteeValue=value;
                         }
                     }
                     else if  (key.includes('OR_MIN_P_FIRTH') ){
                         if (value===null){
-                            orFirthLofteeValue=0;
+                            orFirthLofteeValue="";
                         } else {
                             orFirthLofteeValue=value;
                         }
@@ -378,7 +378,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     else if  (key.includes('P_MIN_P_SKAT') ){
                         if (value===null){
-                            pSkatLofteeValue=0;
+                            pSkatLofteeValue="";
                         } else {
                             pSkatLofteeValue=value;
                         }
@@ -386,7 +386,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     else if  (key.includes('OR_WEIGHTED_FIRTH') ){
                         if (value===null){
-                            orFirthLofteeValue=0;
+                            orFirthLofteeValue="";
                         } else {
                             orFirthLofteeValue=value;
                         }
@@ -394,14 +394,14 @@ var mpgSoftware = mpgSoftware || {};
 
                     else if  (key.includes('P_WEIGHTED_FIRTH') ){
                         if (value===null){
-                            pFirthLofteeValue=0;
+                            pFirthLofteeValue="";
                         } else {
                             pFirthLofteeValue=value;
                         }
                     }
                     else if  (key.includes('P_WEIGHTED_SKAT') ){
                         if (value===null){
-                            pSkatLofteeValue=0;
+                            pSkatLofteeValue="";
                         } else {
                             pSkatLofteeValue=value;
                         }
@@ -410,14 +410,14 @@ var mpgSoftware = mpgSoftware || {};
 
                     else if  (key.includes('OR_FIRTH') ){
                         if (value===null){
-                            orFirthLofteeValue=0;
+                            orFirthLofteeValue="";
                         } else {
                             orFirthLofteeValue=value;
                         }
                     }
                     else if  (key.includes('P_FIRTH')){
                         if (value===null){
-                            pFirthLofteeValue=0;
+                            pFirthLofteeValue="";
                         } else {
                             pFirthLofteeValue=value;
                         }
@@ -426,7 +426,7 @@ var mpgSoftware = mpgSoftware || {};
 
                     else if  (key.includes('P_SKAT') ){
                         if (value===null){
-                            pSkatLofteeValue=0;
+                            pSkatLofteeValue="";
                         } else {
                             pSkatLofteeValue=value;
                         }
@@ -436,14 +436,14 @@ var mpgSoftware = mpgSoftware || {};
 
                     else if  (key.includes('MINA')){
                         if (value===null){
-                            minaValue=0;
+                            minaValue="";
                         } else {
                             minaValue=value;
                         }
                     }
                     else if (key.includes('MINU')){
                         if (value===null){
-                            minuValue=0;
+                            minuValue="";
                         } else {
                             minuValue=value;
                         }

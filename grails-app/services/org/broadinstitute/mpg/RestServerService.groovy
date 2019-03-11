@@ -2107,13 +2107,24 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         pb.setRequestedDataset(dataSetName)
         pb.setGeneTablemdv37(true)
 
+        PropertyBean pb2 = new PropertyBean()
+        pb2.setName("P_FIRTH_" + nameOfColumnsString[1])
+        pb2.setVariableType("INTEGER")
+        pb2.addMeaning("P_FIRTH_" + nameOfColumnsString[1])
+        pb2.searchable = "true"
+        pb2.setRequestedPhenotype(phenotypeName)
+        pb2.setRequestedDataset(dataSetName)
+        pb2.setGeneTablemdv37(true)
 
        // pb.setParent(DataSet)
 
         QueryFilterBean qb = new QueryFilterBean(pb, "GT","0",phenotypeName,dataSetName,true)
 
+        QueryFilterBean qb2 = new QueryFilterBean(pb2, "GT","0",phenotypeName,dataSetName,true)
+
         if(filters.isEmpty()){
             getDataQueryHolder.getDataQuery.addQueryFilter(qb)
+            getDataQueryHolder.getDataQuery.addQueryFilter(qb2)
         }
 
         getDataQueryHolder.getDataQuery.setLimit(1000)
