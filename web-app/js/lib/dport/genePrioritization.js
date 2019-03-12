@@ -377,7 +377,7 @@ var mpgSoftware = mpgSoftware || {};
                         if (value===null){
                             orFirthLofteeValue="";
                         } else {
-                            orFirthLofteeValue=value;
+                            orFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
                         }
                     }
 
@@ -393,7 +393,7 @@ var mpgSoftware = mpgSoftware || {};
                         if (value===null){
                             orFirthLofteeValue="";
                         } else {
-                            orFirthLofteeValue=value;
+                            orFirthLofteeValue=parseFloat(Math.round(value * 100) / 100).toFixed(2);
                         }
                     }
 
@@ -473,12 +473,13 @@ var mpgSoftware = mpgSoftware || {};
                 retVal.push( "<a class='boldlink' href='"+geneInfoUrl+"/"+geneName+"'>"+geneName+"</a>");
                 retVal.push( chromosome );
                 retVal.push(position);
+                retVal.push(numPassVarsValue);
                 retVal.push(minaValue);
                 retVal.push(minuValue);
                 retVal.push(orFirthLofteeValue);
                 retVal.push(pFirthLofteeValue);
                 retVal.push(pSkatLofteeValue);
-                retVal.push(numPassVarsValue);
+
                 return retVal;
             };
 
