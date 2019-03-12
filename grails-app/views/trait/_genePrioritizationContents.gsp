@@ -32,9 +32,11 @@
 
 <div class="form-group row">
 
-    <!--<h3><g:message code="traitTable.messages.results" /></h3>
-    <span id="traitTableDescription"></span>-->
+    <!--<h3><g:message code="traitTable.messages.results" /></h3>-->
+    %{--<span id="traitTableDescription"></span>--}%
 
+<p><g:message code="genetable.interface"></g:message></p>
+    &nbsp;<br>
     <div class="col-md-6">
         <label>Dataset: </label><select id="phenotypeDropdownIdentifier" class="form-control" name="manhattanSampleGroupChooser" onchange="mpgSoftware.genePrioritization.pickNewGeneInfo()">
         </select>
