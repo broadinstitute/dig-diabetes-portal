@@ -39,7 +39,7 @@
 </div>
 
 <div style = "width: 30%; float: left; padding-right: 15px">
-    <p class= "dk-footnote" style="width:83%;">Dataset</p>
+    <p class= "dk-footnote" style="width:83%;">Dataset&nbsp;&nbsp;<g:helpText title="manhattan_datasets_help.header" placement="bottom" body="manhattan_datasets_help.text"/></p>
     <span id="traitTableDescription"></span>
     <select  style = " width:100%; overflow: hidden; text-overflow: ellipsis;" id="manhattanSampleGroupChooser" name="manhattanSampleGroupChooser" onchange="mpgSoftware.manhattanplotTableHeader.callFillClumpVariants()">
     </select>
