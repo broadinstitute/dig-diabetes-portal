@@ -269,11 +269,13 @@
 <script id="dynamicGeneTableEqtlSummaryBody"  type="x-tmpl-mustache">
             <div sortField={{numberOfTissues}}>
                <a data-toggle="collapse" class="cellExpander" data-target="#eqtl_{{geneName}}">records={{numberOfTissues}}</a>
-               <div  class="collapse openEqtlInGeneTable" id="eqtl_{{geneName}}">
+               %{--<div  class="popup">--}%
+               <div  class="collapse openEqtlInGeneTable popuptext" id="eqtl_{{geneName}}">
                     {{#tissuesExist}}
                     <table class="openEqtlInGeneTable" style="border: 0">
                      <thead>
                       <tr role="row">
+                        <th style="border-top: 0;border-right: 0;">value</th>
                         <th style="border-top: 0;border-right: 0;">tissue</th>
                       </tr>
                      </thead>
@@ -281,6 +283,7 @@
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
+                           <td style="border-right: 0; padding: 3px">{{value}}</td>
                            <td style="border-right: 0; padding: 3px">{{tissueName}}</td>
                        </tr>
                     {{/tissues}}
@@ -289,6 +292,7 @@
                     </table>
                     {{/tissuesExist}}
                </div>
+               %{--</div>--}%
             </div>
 </script>
 
@@ -740,8 +744,8 @@
                     {{/tissuesExist}}
                     {{#tissues}}
                        <tr role="row">
-                           <td>{{value}}</td>
-                           <td style="border-right: 0">{{tissue}}</td>
+                           <td style="padding: 3px">{{value}}</td>
+                           <td style="border-right: 0; padding: 3px">{{tissue}}</td>
                        </tr>
                     {{/tissues}}
                     {{#tissuesExist}}

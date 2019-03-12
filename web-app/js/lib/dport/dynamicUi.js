@@ -2122,12 +2122,16 @@ mpgSoftware.dynamicUi = (function () {
             var geneIndex = _.findIndex(getAccumulatorObject("tissuesForEveryGene"), {geneName: oneRec.gene});
             if (geneIndex < 0) {
                 var accumulatorArray = getAccumulatorObject("tissuesForEveryGene");
-                accumulatorArray.push({geneName: oneRec.gene, tissues: [oneRec.tissue]});
+                //accumulatorArray.push({geneName: oneRec.gene, tissues: [oneRec.tissue]});
+                accumulatorArray.push({geneName: oneRec.gene, tissues: [{tissue:oneRec.tissue,value:oneRec.value}]});
                 setAccumulatorObject("tissuesForEveryGene", accumulatorArray);
             } else {
                 var accumulatorElement = getAccumulatorObject("tissuesForEveryGene")[geneIndex];
-                if (!accumulatorElement.tissues.includes(oneRec.tissue)) {
-                    accumulatorElement.tissues.push(oneRec.tissue);
+                // if (!accumulatorElement.tissues.includes(oneRec.tissue)) {
+                //     accumulatorElement.tissues.push(oneRec.tissue);
+                // }
+                if (_.findIndex(accumulatorElement.tissues, {'tissue':oneRec.tissue})===-1) {
+                    accumulatorElement.tissues.push({tissue:oneRec.tissue,value:oneRec.value});
                 }
             }
 
@@ -2164,7 +2168,7 @@ mpgSoftware.dynamicUi = (function () {
                 geneName: eachGene.geneName
             };
             _.forEach(eachGene.tissues, function (eachTissue) {
-                recordToDisplay.tissues.push({tissueName: eachTissue})
+                recordToDisplay.tissues.push({tissueName: eachTissue.tissue,value:eachTissue.value})
             });
             returnObject.uniqueEqtlGenes.push(recordToDisplay);
         });
@@ -2205,7 +2209,7 @@ mpgSoftware.dynamicUi = (function () {
                             tissuesExist:(recordsPerGene.tissues.length)?[1]:[],
                             geneName:recordsPerGene.geneName,
                             tissues:_.map(_.sortBy(recordsPerGene.tissues,['value']),function(tissueRecord){
-                                return {  tissueName: tissueRecord.tissueName  };
+                                return {  tissueName: tissueRecord.tissueName, value: tissueRecord.value };
                             })
                         };
                         intermediateDataStructure.rowsToAdd[0].columnCells[indexOfColumn] = new IntermediateStructureDataCell('eQTL',

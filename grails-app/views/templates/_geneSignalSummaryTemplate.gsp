@@ -682,7 +682,9 @@ div.genePosition{
 
                 <div class="tab-content sub-tab-content">
                     <div role="tabpanel" class="tab-pane active" id="dynamicGeneHolder">
-
+<div class="popup">Click me!
+  <span class="popuptext" id="myPopup"></span>
+</div>
                         <div class="row">
                             <div class="col-sm-12 sub-content">
                                 %{--<h3>Gene directors</h3>--}%
@@ -693,11 +695,6 @@ div.genePosition{
                                         </div>
                                     </div>
                                 </div>
-                                %{--<h3> Results </h3>--}%
-                                %{--<div class="resultsTableHolder">--}%
-                                    %{--<div class="dynamicUiHolder">--}%
-                                    %{--</div>--}%
-                                %{--</div>--}%
                                 <div class="row">
                                     <div class="col-sm-1">
                                         <button type="button" class="btn btn-link transpose" title="click to transpose table"
@@ -723,10 +720,6 @@ div.genePosition{
                                                 onclick="mpgSoftware.dynamicUi.dataTableZoomDynaSet('#dynamicGeneHolder',false)"></span>
                                             </button>
                                             </div>
-                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','0');">0</span>  >--}%
-                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','1');">1</span>  >--}%
-                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet('#dynamicGeneHolder','2');">2</span>  >--}%
-                                            %{--<span onclick="mpgSoftware.dynamicUi.dataTableZoomSet(#dynamicGeneHolder','3');">3</span>--}%
                                         </div>
                                     </div>
                                 </div>
@@ -919,51 +912,6 @@ div.genePosition{
 
 
 <script id="organizeSignalSummaryHeader"  type="x-tmpl-mustache">
-
-            %{--<div class="text-right" id="phenotypeLabel">{{pName}}</div>--}%
-            %{--<div class="row">--}%
-                %{--<div class="col-xs-12">--}%
-                    %{--<ul class="nav nav-tabs" role="tablist">--}%
-                        %{--{{#commonTab}}--}%
-                            %{--<li role="presentation" class="active variantTableLabels commonVariantChooser">--}%
-                                %{--<a href="#commonVariantTabHolder" aria-controls="commonVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">Top variants: {{pName}}</a>--}%
-                            %{--</li>--}%
-                        %{--{{/commonTab}}--}%
-                        %{--{{#highImpactTab}}--}%
-                            %{--<li role="presentation" class="variantTableLabels highImpacVariantChooser">--}%
-                                %{--<a href="#highImpactVariantTabHolder" aria-controls="highImpactVariantTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">High-impact variants: {{pName}}</a>--}%
-                            %{--</li>--}%
-                        %{--{{/highImpactTab}}--}%
-                        %{--{{#credibleSetTab}}--}%
-                            %{--<li role="presentation" class="variantTableLabels credibleSetChooser">--}%
-                               %{--<a style="float:left;" href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a> <!--<span class='new-dataset-flag' style="display: inline-flex; margin:-3px 0 0 -30px">&nbsp;</span>-->--}%
-                            %{--</li>--}%
-                        %{--{{/credibleSetTab}}--}%
-                        %{--{{#incredibleSetTab}}--}%
-                            %{--<li role="presentation" class="variantTableLabels credibleSetChooser">--}%
-                               %{--<a href="#credibleSetTabHolder" aria-controls="credibleSetTabHolder" role="tab" data-toggle="tab" onclick="mpgSoftware.traitsFilter.massageLZ();">{{pName}}</a>--}%
-                            %{--</li>--}%
-                        %{--{{/incredibleSetTab}}--}%
-                        %{--{{#genePrioritizationTab}}--}%
-                            %{--<li role="presentation" class="variantTableLabels genePrioritizationChooser">--}%
-                               %{--<a href="#genePrioritizationTabHolder" aria-controls="genePrioritizationTabHolder" role="tab" data-toggle="tab">Gene prioritization</a>--}%
-                            %{--</li>--}%
-                        %{--{{/genePrioritizationTab}}--}%
-                        %{--{{#chromatinConformationTab}}--}%
-                            %{--<li role="presentation" class="variantTableLabels chromatinConformationChooser">--}%
-                               %{--<a href="#chromatinConformationTabHolder" aria-controls="chromatinConformationTabHolder" role="tab" data-toggle="tab">Chromatin conformation</a>--}%
-                            %{--</li>--}%
-                        %{--{{/chromatinConformationTab}}--}%
-                        %{--{{#dynamicUiTab}}--}%
-                            %{--<li role="presentation" class="variantTableLabels chromatinConformationChooser">--}%
-                               %{--<a href="#exposeDynamicUiTabHolder" aria-controls="exposeDynamicUiTabHolder" role="tab" data-toggle="tab">Configurable UI</a>--}%
-                            %{--</li>--}%
-                        %{--{{/dynamicUiTab}}--}%
-                    %{--</ul>--}%
-                %{--</div>--}%
-            %{--</div>--}%
-            %{--<div id="cDataModalGoesHere"></div>--}%
-
             <div class="text-right" id="phenotypeLabel">{{pName}}</div>
             {{#exposeGenesInRegionTab}}
                 <div class="row">
