@@ -9,6 +9,7 @@
         prioritizedGeneInfoAjaxUrl: '${createLink(controller: "trait", action: "prioritizedGeneInfoAjax")}',
         getGeneLevelResultsUrl: '${createLink(controller: "home", action: "getGeneLevelResults")}',
         launchGeneVariantQueryUrl: '${createLink(controller: "variantSearch", action: "findEveryVariantForAGene")}',
+        geneInfoUrl: '${createLink(controller: "gene", action: "geneInfo")}',
         phenotypeDropdownIdentifier:'#phenotypeDropdownIdentifier',
         subphenotypeDropdownIdentifier:'#subphenotypeDropdownIdentifier',
         local:"${locale}",
@@ -61,14 +62,15 @@
 <table id="phenotypeTraits"  class="table dk-t2d-general-table basictable table-striped">
     <thead>
     <tr>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.gene" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.mina" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.minu" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.orfirth" /></th>
-        <th width="15%"><g:message code="geneTable.columnHeaders.shared.pfirth" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.gene" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.chromosome" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.position" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.mina" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.minu" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.orfirth" /></th>
+        <th width="10%"><g:message code="geneTable.columnHeaders.shared.pfirth" /></th>
         <th width="15%"><g:message code="geneTable.columnHeaders.shared.pSkat" /></th>
+        <th width="15%"><g:message code="geneTable.columnHeaders.shared.numVars" /></th>
 
 
 

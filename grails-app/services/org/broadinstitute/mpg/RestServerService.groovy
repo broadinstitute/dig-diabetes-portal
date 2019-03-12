@@ -2061,6 +2061,8 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
       //List <String> piecesOfThePropertyName = propertyName.split("_")
         List<String> nameOfColumnsString = []
 
+        String filter1 = ""
+        String filter2 = ""
         //HACK EXPERIMENT - checking if given property for Exeq shows data or not.
 
        if(propertyName.startsWith("OR_FIRTH")){
@@ -2069,21 +2071,28 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
            nameOfColumnsString.add(splitsOfPropertyName[1])
            nameOfColumnsString.add("OR")
            nameOfColumnsString.add("P")
+           filter1 = "AC_" + nameOfColumnsString[1]
+           filter2 = "P_FIRTH_" + nameOfColumnsString[1]
+
        }
         else{
            List<String> splitsOfPropertyName1 = propertyName.split("OR_")
            List<String> splitsOfPropertyName2 = splitsOfPropertyName1[1].split("_FIRTH_")
            nameOfColumnsString.add(splitsOfPropertyName2[0])
            nameOfColumnsString.add(splitsOfPropertyName2[1])
+           filter1 = "AC_" + nameOfColumnsString[1]
+           filter2 = "P_FIRTH_" + nameOfColumnsString[1]
            if((splitsOfPropertyName2[0] == "WEIGHTED") || (splitsOfPropertyName2[0] == "MIN_P")){
                nameOfColumnsString.add("OR_")
                nameOfColumnsString.add("P_")
+               filter2 = nameOfColumnsString[3] + nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
            }
 
        }
 
         String propertyNameForMINARatio   = "MINA_" + nameOfColumnsString[1]
         String propertyNameForMINURatio   = "MINU_"+ nameOfColumnsString[1]
+        String propertyNameForNumberOfVariants = "NUM_PASS_VARS_" + nameOfColumnsString[1]
         String propertyNameForOddsRatio   = nameOfColumnsString[2]+ nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
         String propertyNameForPFirthvalue = nameOfColumnsString[3] + nameOfColumnsString[0] + "_FIRTH_" + nameOfColumnsString[1]
         String propertyNameForSkatValue   = nameOfColumnsString[3] + nameOfColumnsString[0] + "_SKAT_" + nameOfColumnsString[1]
@@ -2094,23 +2103,25 @@ time required=${(afterCall.time - beforeCall.time) / 1000} seconds
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForSkatValue)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINARatio)
         addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForMINURatio)
+        addColumnsForPProperties(resultColumnsToDisplay, phenotypeName, dataSetName, propertyNameForNumberOfVariants)
 
         getDataQueryHolder.addProperties(resultColumnsToDisplay)
         getDataQueryHolder.addOrderByProperty(metaDataService.getPropertyByNamePhenotypeAndSampleGroup(propertyNameForPFirthvalue, phenotypeName, dataSetName,MetaDataService.METADATA_GENE), '1')
 
         PropertyBean pb = new PropertyBean()
-        pb.setName("AC_" + nameOfColumnsString[1])
+        pb.setName(filter1)
         pb.setVariableType("INTEGER")
-        pb.addMeaning("AC_" + nameOfColumnsString[1])
+        pb.addMeaning(filter1)
         pb.searchable = "true"
         pb.setRequestedPhenotype(phenotypeName)
         pb.setRequestedDataset(dataSetName)
         pb.setGeneTablemdv37(true)
 
+        String propertyFilter2 = ""
         PropertyBean pb2 = new PropertyBean()
-        pb2.setName("P_FIRTH_" + nameOfColumnsString[1])
+        pb2.setName(filter2)
         pb2.setVariableType("INTEGER")
-        pb2.addMeaning("P_FIRTH_" + nameOfColumnsString[1])
+        pb2.addMeaning(filter2)
         pb2.searchable = "true"
         pb2.setRequestedPhenotype(phenotypeName)
         pb2.setRequestedDataset(dataSetName)
